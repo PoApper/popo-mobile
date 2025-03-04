@@ -1,130 +1,244 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
+ * POPO Mobile Login Page
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useState } from 'react';
 import {
-  ScrollView,
+  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  TextInput,
+  TouchableOpacity,
   View,
+  useColorScheme,
+  Alert,
 } from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? '#121212' : '#F3F4F6',
+    flex: 1,
   };
 
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the reccomendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
-  const safePadding = '5%';
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('오류', '이메일과 비밀번호를 모두 입력해주세요.');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // const POPO_API_URL = 'https://localhost:4000'; // 로컬 호스트는 사용 불가능함.
+      const POPO_API_URL = 'https://api.popo-dev.poapper.club';
+      const response = await fetch(`${POPO_API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(`[${response.status}] ${data.message || '로그인에 실패했습니다.'}`);
+      }
+
+      // 로그인 성공
+      Alert.alert('로그인 성공', '환영합니다!');
+      console.log('로그인 성공:', data);
+
+      // 여기서 받은 토큰이나 사용자 정보를 저장할 수 있습니다
+      // 예: AsyncStorage.setItem('userToken', data.token);
+    } catch (err) {
+      console.error('로그인 오류:', err);
+
+      // 네트워크 오류와 서버 오류 구분
+      if (err instanceof TypeError && err.message.includes('Network request failed')) {
+        const errorMsg = '서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.';
+        setError(errorMsg);
+        Alert.alert('연결 오류', errorMsg);
+      } else {
+        setError(err instanceof Error ? err.message : '로그인 중 오류가 발생했습니다.');
+        Alert.alert('로그인 실패', err instanceof Error ? err.message : '로그인 중 오류가 발생했습니다.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <View style={backgroundStyle}>
+    <SafeAreaView style={backgroundStyle}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
-        style={backgroundStyle}>
-        <View style={{paddingRight: safePadding}}>
-          <Header/>
+      <View style={styles.container}>
+        <View style={styles.logoContainer}>
+          <Text style={[styles.logoText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
+            POPO
+          </Text>
         </View>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            paddingHorizontal: safePadding,
-            paddingBottom: safePadding,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+
+        <View style={styles.formContainer}>
+          <Text style={[styles.label, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
+            이메일
+          </Text>
+          <TextInput
+            style={[
+              styles.input,
+              {
+                backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
+                color: isDarkMode ? '#FFFFFF' : '#000000',
+                borderColor: isDarkMode ? '#555555' : '#E5E7EB',
+              }
+            ]}
+            placeholder="이메일 주소를 입력하세요"
+            placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
+          />
+
+          <Text style={[styles.label, { color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16 }]}>
+            비밀번호
+          </Text>
+          <TextInput
+            style={[
+              styles.input,
+              {
+                backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
+                color: isDarkMode ? '#FFFFFF' : '#000000',
+                borderColor: isDarkMode ? '#555555' : '#E5E7EB',
+              }
+            ]}
+            placeholder="비밀번호를 입력하세요"
+            placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+
+          <TouchableOpacity
+            style={[
+              styles.loginButton,
+              isLoading && styles.loginButtonDisabled
+            ]}
+            onPress={handleLogin}
+            disabled={isLoading}
+          >
+            <Text style={styles.loginButtonText}>
+              {isLoading ? '로그인 중...' : '로그인'}
+            </Text>
+          </TouchableOpacity>
+
+          {error && (
+            <Text style={styles.errorText}>{error}</Text>
+          )}
+
+          <TouchableOpacity style={styles.forgotPassword}>
+            <Text style={[styles.forgotPasswordText, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+              비밀번호를 잊으셨나요?
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.signupContainer}>
+            <Text style={[styles.signupText, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+              계정이 없으신가요?
+            </Text>
+            <TouchableOpacity>
+              <Text style={styles.signupLink}>회원가입</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    padding: 24,
+    justifyContent: 'center',
   },
-  sectionTitle: {
-    fontSize: 24,
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 48,
+  },
+  logoText: {
+    fontSize: 42,
+    fontWeight: 'bold',
+  },
+  formContainer: {
+    width: '100%',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  input: {
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    fontSize: 16,
+  },
+  loginButton: {
+    backgroundColor: '#4F46E5',
+    height: 50,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  loginButtonDisabled: {
+    backgroundColor: '#9BA3AF',
+  },
+  loginButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
     fontWeight: '600',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  forgotPassword: {
+    alignItems: 'center',
+    marginTop: 16,
   },
-  highlight: {
-    fontWeight: '700',
+  forgotPasswordText: {
+    fontSize: 14,
+  },
+  signupContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 24,
+  },
+  signupText: {
+    fontSize: 14,
+    marginRight: 4,
+  },
+  signupLink: {
+    fontSize: 14,
+    color: '#4F46E5',
+    fontWeight: '600',
+  },
+  errorText: {
+    color: '#EF4444',
+    marginTop: 12,
+    textAlign: 'center',
   },
 });
 
