@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,11 +8,13 @@ import {
   Image,
   useColorScheme,
   StatusBar,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
+import axios from 'axios';
 
 type UserDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserDetail'>;
@@ -22,6 +24,7 @@ type UserDetailScreenProps = {
 const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   const { userId, userData } = route.params;
   const isDarkMode = useColorScheme() === 'dark';
+  const [isLoading, setIsLoading] = useState(false);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#F3F4F6',
@@ -31,6 +34,56 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const cardBgColor = isDarkMode ? '#1E1E1E' : '#FFFFFF';
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';
+
+  // 사용자 프로필 정보를 가져오는 함수
+  const fetchUserProfile = async () => {
+    try {
+      const POPO_API_URL = 'https://api.popo-dev.poapper.club';
+      const response = await axios.get(`${POPO_API_URL}/auth/me`, {
+        headers: {
+          'Content-Type': 'application/json',
+          // 여기에 토큰이 필요하면 추가할 수 있습니다
+          // 'Authorization': `Bearer ${token}`
+        }
+      });
+
+      // 최신 사용자 데이터 활용 로직을 여기서 구현할 수 있습니다
+      console.log('사용자 프로필 데이터:', response.data);
+    } catch (error) {
+      console.error('프로필 가져오기 오류:', error);
+    }
+  };
+
+  // 컴포넌트 마운트 시 사용자 정보 가져오기 (필요한 경우)
+  useEffect(() => {
+    // 필요한 경우 활성화
+    // fetchUserProfile();
+  }, []);
+
+  // 로그아웃 처리 함수
+  const handleLogout = async () => {
+    setIsLoading(true);
+    try {
+      const POPO_API_URL = 'https://api.popo-dev.poapper.club';
+      await axios.post(`${POPO_API_URL}/auth/logout`, {}, {
+        headers: {
+          'Content-Type': 'application/json',
+          // 여기에 토큰이 필요하면 추가할 수 있습니다
+          // 'Authorization': `Bearer ${token}`
+        }
+      });
+
+      // 로그아웃 성공 후 처리
+      // AsyncStorage.removeItem('userToken');
+      Alert.alert('로그아웃', '성공적으로 로그아웃되었습니다.');
+      navigation.replace('Login');
+    } catch (error) {
+      console.error('로그아웃 오류:', error);
+      Alert.alert('오류', '로그아웃 처리 중 문제가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -108,13 +161,12 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
 
         <TouchableOpacity
           style={styles.logoutButton}
-          onPress={() => {
-            // 로그아웃 처리
-            // AsyncStorage.removeItem('userToken');
-            navigation.replace('Login');
-          }}
+          onPress={handleLogout}
+          disabled={isLoading}
         >
-          <Text style={styles.logoutButtonText}>로그아웃</Text>
+          <Text style={styles.logoutButtonText}>
+            {isLoading ? '처리 중...' : '로그아웃'}
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

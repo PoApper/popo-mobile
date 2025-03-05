@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
+import axios from 'axios';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -41,22 +42,18 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     try {
       // const POPO_API_URL = 'https://localhost:4000'; // 로컬 호스트는 사용 불가능함.
       const POPO_API_URL = 'https://api.popo-dev.poapper.club';
-      const response = await fetch(`${POPO_API_URL}/auth/login`, {
-        method: 'POST',
+
+      const response = await axios.post(`${POPO_API_URL}/auth/login`, {
+        email,
+        password
+      }, {
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password
-        }),
+        }
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(`[${response.status}] ${data.message || '로그인에 실패했습니다.'}`);
-      }
+      // axios는 response.data에 응답 데이터를 제공합니다
+      const data = response.data;
 
       // 로그인 성공
       Alert.alert('로그인 성공', '환영합니다!');
@@ -73,12 +70,20 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     } catch (err) {
       console.error('로그인 오류:', err);
 
-      // 네트워크 오류와 서버 오류 구분
-      if (err instanceof TypeError && err.message.includes('Network request failed')) {
-        const errorMsg = '서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.';
-        setError(errorMsg);
-        Alert.alert('연결 오류', errorMsg);
+      // axios 오류 처리
+      if (axios.isAxiosError(err)) {
+        if (err.code === 'ERR_NETWORK') {
+          const errorMsg = '서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.';
+          setError(errorMsg);
+          Alert.alert('연결 오류', errorMsg);
+        } else {
+          // 서버 응답 오류
+          const errorMsg = err.response?.data?.message || err.message || '로그인 중 오류가 발생했습니다.';
+          setError(errorMsg);
+          Alert.alert('로그인 실패', errorMsg);
+        }
       } else {
+        // 기타 오류
         setError(err instanceof Error ? err.message : '로그인 중 오류가 발생했습니다.');
         Alert.alert('로그인 실패', err instanceof Error ? err.message : '로그인 중 오류가 발생했습니다.');
       }
