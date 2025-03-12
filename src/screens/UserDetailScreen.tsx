@@ -94,7 +94,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
     setIsLoading(true);
     try {
       // 공통 API 유틸리티 사용
-      await api.post('/auth/logout');
+      await api.get('/auth/logout');
 
       // 인증 정보 초기화
       await EncryptedStorage.removeItem('auth_token');
