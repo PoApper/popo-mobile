@@ -19,13 +19,20 @@ type SignupScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Signup'>;
 };
 
+// 유저 타입 enum
+enum UserType {
+  student = 'STUDENT',
+  faculty = 'FACULTY', // 교직원
+  others = 'OTHERS',
+}
+
 const SignupScreen = ({ navigation }: SignupScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [userType, setUserType] = useState<UserType | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,9 +41,23 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
     flex: 1,
   };
 
+  // 사용자 타입에 대한 한글 이름
+  const getUserTypeName = (type: UserType | null): string => {
+    switch (type) {
+      case UserType.student:
+        return '학생';
+      case UserType.faculty:
+        return '교직원';
+      case UserType.others:
+        return '기타';
+      default:
+        return '';
+    }
+  };
+
   const handleSignup = () => {
     // 기본적인 유효성 검사
-    if (!email || !password || !confirmPassword || !name) {
+    if (!email || !password || !confirmPassword || !name || !userType) {
       setError('모든 필수 항목을 입력해주세요.');
       return;
     }
@@ -62,7 +83,7 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
     // API 연동은 추후에 구현 예정
     Alert.alert(
       '회원가입 성공',
-      '회원가입이 완료되었습니다. 로그인 화면으로 이동합니다.',
+      `회원가입이 완료되었습니다.\n사용자 타입: ${getUserTypeName(userType)}\n로그인 화면으로 이동합니다.`,
       [
         {
           text: '확인',
@@ -152,7 +173,7 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
                   borderColor: isDarkMode ? '#555555' : '#E5E7EB',
                 }
               ]}
-              placeholder="비밀번호를 입력하세요 (6자 이상)"
+              placeholder="8자리 이상, 16자리 이하"
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
               secureTextEntry
               value={password}
@@ -179,23 +200,90 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
             />
 
             <Text style={[styles.label, { color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16 }]}>
-              전화번호
+              사용자 유형 *
             </Text>
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
-                  color: isDarkMode ? '#FFFFFF' : '#000000',
-                  borderColor: isDarkMode ? '#555555' : '#E5E7EB',
-                }
-              ]}
-              placeholder="전화번호를 입력하세요 (선택사항)"
-              placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
-              keyboardType="phone-pad"
-              value={phone}
-              onChangeText={setPhone}
-            />
+            <View style={styles.userTypeContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.userTypeButton,
+                  userType === UserType.student ? styles.selectedUserType : {},
+                  {
+                    backgroundColor: userType === UserType.student
+                      ? '#4F46E5'
+                      : isDarkMode ? '#333333' : '#FFFFFF',
+                    borderColor: isDarkMode ? '#555555' : '#E5E7EB',
+                  }
+                ]}
+                onPress={() => setUserType(UserType.student)}
+              >
+                <Text
+                  style={[
+                    styles.userTypeText,
+                    {
+                      color: userType === UserType.student
+                        ? '#FFFFFF'
+                        : isDarkMode ? '#FFFFFF' : '#000000',
+                    }
+                  ]}
+                >
+                  학생
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.userTypeButton,
+                  userType === UserType.faculty ? styles.selectedUserType : {},
+                  {
+                    backgroundColor: userType === UserType.faculty
+                      ? '#4F46E5'
+                      : isDarkMode ? '#333333' : '#FFFFFF',
+                    borderColor: isDarkMode ? '#555555' : '#E5E7EB',
+                  }
+                ]}
+                onPress={() => setUserType(UserType.faculty)}
+              >
+                <Text
+                  style={[
+                    styles.userTypeText,
+                    {
+                      color: userType === UserType.faculty
+                        ? '#FFFFFF'
+                        : isDarkMode ? '#FFFFFF' : '#000000',
+                    }
+                  ]}
+                >
+                  교직원
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.userTypeButton,
+                  userType === UserType.others ? styles.selectedUserType : {},
+                  {
+                    backgroundColor: userType === UserType.others
+                      ? '#4F46E5'
+                      : isDarkMode ? '#333333' : '#FFFFFF',
+                    borderColor: isDarkMode ? '#555555' : '#E5E7EB',
+                  }
+                ]}
+                onPress={() => setUserType(UserType.others)}
+              >
+                <Text
+                  style={[
+                    styles.userTypeText,
+                    {
+                      color: userType === UserType.others
+                        ? '#FFFFFF'
+                        : isDarkMode ? '#FFFFFF' : '#000000',
+                    }
+                  ]}
+                >
+                  기타
+                </Text>
+              </TouchableOpacity>
+            </View>
 
             <Text style={[styles.requiredNote, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
               * 필수 항목
@@ -276,6 +364,27 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 16,
     fontSize: 16,
+  },
+  userTypeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  userTypeButton: {
+    flex: 1,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginHorizontal: 4,
+  },
+  selectedUserType: {
+    borderColor: '#4F46E5',
+  },
+  userTypeText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
   requiredNote: {
     fontSize: 12,
