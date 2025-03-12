@@ -206,7 +206,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
             <Text style={[styles.signupText, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
               계정이 없으신가요?
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
               <Text style={styles.signupLink}>회원가입</Text>
             </TouchableOpacity>
           </View>

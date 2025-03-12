@@ -12,4 +12,5 @@ export type RootStackParamList = {
     };
   };
   Reservation: any;
+  Signup: undefined;  // 회원가입 화면 추가
 };
