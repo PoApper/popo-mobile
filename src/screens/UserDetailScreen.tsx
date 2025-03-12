@@ -241,6 +241,14 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
           </View>
         </View>
 
+        {/* 내 예약 확인하기 버튼 */}
+        <TouchableOpacity
+          style={[styles.reservationButton, { backgroundColor: '#4F46E5' }]}
+          onPress={() => navigation.navigate('Reservation')}
+        >
+          <Text style={styles.reservationButtonText}>내 예약 확인하기</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.logoutButton}
           onPress={handleLogout}
@@ -349,12 +357,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
+  reservationButton: {
+    borderRadius: 8,
+    padding: 16,
+    alignItems: 'center',
+    marginVertical: 6,
+  },
+  reservationButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   logoutButton: {
     backgroundColor: '#EF4444',
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 10,
   },
   logoutButtonText: {
     color: '#FFFFFF',

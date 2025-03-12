@@ -11,5 +11,5 @@ export type RootStackParamList = {
       [key: string]: any;
     };
   };
-  // 추후 추가될 수 있는 다른 화면들
+  Reservation: any;
 };
