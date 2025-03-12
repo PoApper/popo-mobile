@@ -12,6 +12,9 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
+import CookieManager from '@react-native-cookies/cookies';
+import EncryptedStorage from 'react-native-encrypted-storage';
+import api from '../utils/api';
 import axios from 'axios';
 
 type LoginScreenProps = {
@@ -40,34 +43,61 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     setError(null);
 
     try {
-      // const POPO_API_URL = 'https://localhost:4000'; // 로컬 호스트는 사용 불가능함.
-      const POPO_API_URL = 'https://api.popo-dev.poapper.club';
-
-      const response = await axios.post(`${POPO_API_URL}/auth/login`, {
+      const response = await api.post('/auth/login', {
         email,
         password
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        }
       });
 
-      // axios는 response.data에 응답 데이터를 제공합니다
+      // 응답 데이터
       const data = response.data;
+
+      // 서버에서 받은 쿠키 확인 및 저장
+      const setCookie = response.headers['set-cookie'];
+      if (setCookie) {
+        console.log('서버에서 받은 쿠키:', setCookie);
+
+        // 쿠키 파싱 (예: Authentication=value;)
+        const authCookie = setCookie.find(cookie => cookie.includes('Authentication='));
+        if (authCookie) {
+          const tokenValue = authCookie.split('Authentication=')[1].split(';')[0];
+
+          // 1. 쿠키를 RN 쿠키 저장소에 저장
+          await CookieManager.set(
+            'https://api.popo-dev.poapper.club',
+            {
+              name: 'Authentication',
+              value: tokenValue,
+              path: '/',
+              secure: true,
+              httpOnly: true
+            }
+          );
+
+          // 2. 안전한 저장소에 토큰 저장 (앱 재시작 시 사용)
+          await EncryptedStorage.setItem('auth_token', tokenValue);
+
+          console.log('인증 토큰 저장 완료');
+        }
+      }
+
+      // 사용자 정보 저장 (필요시)
+      if (data.user) {
+        await EncryptedStorage.setItem('user_info', JSON.stringify(data.user));
+      }
+
+      // 로그인 상태 저장
+      await EncryptedStorage.setItem('isAuthenticated', 'true');
 
       // 로그인 성공
       Alert.alert('로그인 성공', '환영합니다!');
       console.log('로그인 성공:', data);
-
-      // 여기서 받은 토큰이나 사용자 정보를 저장할 수 있습니다
-      // 예: AsyncStorage.setItem('userToken', data.token);
 
       // 사용자 상세 정보 페이지로 이동
       navigation.navigate('UserDetail', {
         userId: data.user?.id || 'unknown',
         userData: data.user || {}
       });
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('로그인 오류:', err);
 
       // axios 오류 처리
@@ -84,8 +114,9 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         }
       } else {
         // 기타 오류
-        setError(err instanceof Error ? err.message : '로그인 중 오류가 발생했습니다.');
-        Alert.alert('로그인 실패', err instanceof Error ? err.message : '로그인 중 오류가 발생했습니다.');
+        const errorMessage = err instanceof Error ? err.message : '로그인 중 오류가 발생했습니다.';
+        setError(errorMessage);
+        Alert.alert('로그인 실패', errorMessage);
       }
     } finally {
       setIsLoading(false);
