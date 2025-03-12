@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
   useColorScheme,
   Alert,
   StatusBar,
@@ -131,9 +132,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       />
       <View style={styles.container}>
         <View style={styles.logoContainer}>
-          <Text style={[styles.logoText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
-            POPO
-          </Text>
+          <Image
+            source={require('../../assets/popo.png')}
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
         </View>
 
         <View style={styles.formContainer}>
@@ -222,6 +225,10 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     marginBottom: 48,
+  },
+  logoImage: {
+    width: 3000,
+    height: 120,
   },
   logoText: {
     fontSize: 42,
