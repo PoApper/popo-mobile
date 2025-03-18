@@ -1,16 +1,16 @@
 export type RootStackParamList = {
+  Auth: undefined;
+  Main: undefined;
+  Signup: undefined;
+};
+
+export type AuthStackParamList = {
   Login: undefined;
-  UserDetail: {
-    userId: string;
-    userData: {
-      id?: string;
-      name?: string;
-      email?: string;
-      profileImage?: string;
-      // 기타 사용자 데이터 필드 추가 가능
-      [key: string]: any;
-    };
-  };
-  Reservation: any;
-  Signup: undefined;  // 회원가입 화면 추가
+};
+
+export type MainTabParamList = {
+  Home: undefined;
+  Paxi: undefined;
+  MyReservation: undefined;
+  MyInfo: undefined;
 };
