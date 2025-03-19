@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RootStackParamList } from './types';
 
 // 화면 컴포넌트 가져오기
+import LandingScreen from '../screens/LandingScreen';
 import LoginScreen from '../screens/LoginScreen';
 import UserDetailScreen from '../screens/UserDetailScreen';
 import ReservationScreen from '../screens/ReservationScreen';
@@ -17,11 +18,12 @@ const AppNavigator = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Login"
+          initialRouteName="Landing"
           screenOptions={{
             headerShown: false,
           }}
         >
+          <Stack.Screen name="Landing" component={LandingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="UserDetail" component={UserDetailScreen} />
           <Stack.Screen name="Reservation" component={ReservationScreen} />
