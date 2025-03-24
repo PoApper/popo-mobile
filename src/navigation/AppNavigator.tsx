@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useColorScheme } from 'react-native';
 
 import { RootStackParamList, AuthStackParamList, MainTabParamList } from './types';
+import LandingScreen from '../screens/LandingScreen';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SignupScreen from '../screens/SignupScreen';
@@ -83,16 +84,24 @@ const MainNavigator = () => {
 
 const AppNavigator = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Main"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="Auth" component={AuthNavigator} />
-        <Stack.Screen name="Main" component={MainNavigator} />
-        <Stack.Screen name="Signup" component={SignupScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Landing"
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="Landing" component={LandingScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="UserDetail" component={UserDetailScreen} />
+          <Stack.Screen name="Reservation" component={ReservationScreen} />
+          <Stack.Screen name="Signup" component={SignupScreen} />
+          <Stack.Screen name="Auth" component={AuthNavigator} />
+          <Stack.Screen name="Main" component={MainNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 };
 
