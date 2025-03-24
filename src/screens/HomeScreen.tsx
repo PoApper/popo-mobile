@@ -102,7 +102,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         {/* 환영 메시지 */}
         <View style={styles.welcomeSection}>
           <Text style={[styles.welcomeText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
-            문소울님, 안녕하세요! 👋
+            문소율님, 안녕하세요! 👋
           </Text>
         </View>
 
@@ -112,7 +112,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
             다가오는 일정
           </Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scheduleScroll}>
-            <View style={[styles.scheduleCard, { backgroundColor: '#6366F1' }]}>
+            <View style={[styles.scheduleCard, { backgroundColor: '#4D61DD' }]}>
               <View style={styles.scheduleInfo}>
                 <Icon name="place" size={20} color="#FFFFFF" />
                 <Text style={styles.scheduleLocation}>커뮤니터센터 GSR B</Text>
@@ -121,7 +121,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
               <Text style={styles.scheduleTitle}>POPO 회의</Text>
             </View>
 
-            <View style={[styles.scheduleCard, { backgroundColor: '#06B6D4' }]}>
+            <View style={[styles.scheduleCard, { backgroundColor: '#10ADB6' }]}>
               <View style={styles.scheduleInfo}>
                 <Icon name="place" size={20} color="#FFFFFF" />
                 <Text style={styles.scheduleLocation}>커뮤니터센터 GSR B</Text>
@@ -130,7 +130,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
               <Text style={styles.scheduleTitle}>POPO 회의</Text>
             </View>
 
-            <View style={[styles.scheduleCard, { backgroundColor: '#06B6D4' }]}>
+            <View style={[styles.scheduleCard, { backgroundColor: '#4D61DD' }]}>
               <View style={styles.scheduleInfo}>
                 <Icon name="place" size={20} color="#FFFFFF" />
                 <Text style={styles.scheduleLocation}>커뮤니터센터 GSR B</Text>
