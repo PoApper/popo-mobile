@@ -25,10 +25,9 @@ type UserDetailScreenProps = {
 };
 
 const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
-  const { userId, userData } = route.params;
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(false);
-  const [userDataState, setUserData] = useState(userData);
+  const [userDataState, setUserData] = useState<any>(null);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#F3F4F6',
@@ -39,37 +38,19 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   const cardBgColor = isDarkMode ? '#1E1E1E' : '#FFFFFF';
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';
 
-  // 사용자 프로필 정보를 가져오는 함수
+  // 사용자 프로필 정보 가져오기
   const fetchUserProfile = async () => {
     setIsLoading(true);
     try {
-      // 공통 API 유틸리티 사용
       const response = await api.get('/auth/myInfo');
-
-      console.log('사용자 프로필 데이터:', response.data);
-
-      // 사용자 데이터 업데이트
-      if (response.data) {
-        // 상태 업데이트
-        setUserData(response.data);
-
-        // 저장소에도 최신 정보 저장
-        await EncryptedStorage.setItem('user_info', JSON.stringify(response.data));
-      }
-    } catch (error: unknown) {
-      console.error('프로필 가져오기 오류:', error);
-
-      if (axios.isAxiosError(error)) {
-        console.error('response data', error.response?.data);
-
-        if (error.response?.status === 401) {
-          // 인증 오류인 경우
-          await handleAuthError();
-        } else {
-          Alert.alert('오류', '사용자 정보를 가져오는데 실패했습니다.');
-        }
-      } else {
-        Alert.alert('오류', '사용자 정보를 가져오는데 실패했습니다.');
+      const userData = response.data;
+      setUserData(userData);
+    } catch (err) {
+      console.error('프로필 정보 조회 오류:', err);
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        Alert.alert('인증 만료', '다시 로그인해주세요.', [
+          { text: '확인', onPress: () => navigation.navigate('Login') }
+        ]);
       }
     } finally {
       setIsLoading(false);
@@ -121,9 +102,8 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
     }
   };
 
-  // 컴포넌트 마운트 시 사용자 정보 가져오기
+  // 컴포넌트 마운트 시 프로필 정보 가져오기
   useEffect(() => {
-    // 서버에서 최신 사용자 정보 가져오기
     fetchUserProfile();
   }, []);
 
@@ -164,24 +144,24 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
       <ScrollView style={styles.container}>
         <View style={[styles.profileCard, { backgroundColor: cardBgColor, borderColor }]}>
           <View style={styles.profileHeader}>
-            {userDataState.profileImage ? (
+            {userDataState?.profileImage ? (
               <Image
-                source={{ uri: userDataState.profileImage }}
+                source={{ uri: userDataState?.profileImage }}
                 style={styles.profileImage}
               />
             ) : (
               <View style={[styles.profileImagePlaceholder, { backgroundColor: '#4F46E5' }]}>
                 <Text style={styles.profileImagePlaceholderText}>
-                  {userDataState.name?.substring(0, 1) || userDataState.email?.substring(0, 1) || '?'}
+                  {userDataState?.name?.substring(0, 1) || userDataState?.email?.substring(0, 1) || '?'}
                 </Text>
               </View>
             )}
             <View style={styles.profileInfo}>
               <Text style={[styles.userName, { color: textColor }]}>
-                {userDataState.name || '사용자'}
+                {userDataState?.name || '사용자'}
               </Text>
               <Text style={[styles.userEmail, { color: isDarkMode ? '#AAAAAA' : '#6B7280' }]}>
-                {userDataState.email || '이메일 없음'}
+                {userDataState?.email || '이메일 없음'}
               </Text>
             </View>
           </View>
@@ -193,7 +173,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
                 이메일
               </Text>
               <Text style={[styles.detailValue, { color: textColor }]}>
-                {userDataState.email || '정보 없음'}
+                {userDataState?.email || '정보 없음'}
               </Text>
             </View>
 
@@ -202,7 +182,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
                 이름
               </Text>
               <Text style={[styles.detailValue, { color: textColor }]}>
-                {userDataState.name || '정보 없음'}
+                {userDataState?.name || '정보 없음'}
               </Text>
             </View>
 
@@ -211,7 +191,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
                 회원 유형
               </Text>
               <Text style={[styles.detailValue, { color: textColor }]}>
-                {userDataState.userType || '정보 없음'}
+                {userDataState?.userType || '정보 없음'}
               </Text>
             </View>
 
@@ -220,7 +200,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
                 계정 상태
               </Text>
               <Text style={[styles.detailValue, { color: textColor }]}>
-                {userDataState.userStatus || '정보 없음'}
+                {userDataState?.userStatus || '정보 없음'}
               </Text>
             </View>
 
@@ -229,8 +209,8 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
                 가입일
               </Text>
               <Text style={[styles.detailValue, { color: textColor }]}>
-                {userDataState.createdAt
-                  ? new Date(userDataState.createdAt).toLocaleDateString('ko-KR', {
+                {userDataState?.createdAt
+                  ? new Date(userDataState?.createdAt).toLocaleDateString('ko-KR', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric',

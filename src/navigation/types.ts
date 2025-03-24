@@ -1,7 +1,14 @@
 export type RootStackParamList = {
   Auth: undefined;
-  Main: undefined;
+  Main: {
+    userId: string;
+    userData: any;
+  };
   Signup: undefined;
+  Landing: undefined;
+  Login: undefined;
+  UserDetail: undefined;
+  Reservation: undefined;
 };
 
 export type AuthStackParamList = {

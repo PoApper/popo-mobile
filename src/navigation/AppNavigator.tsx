@@ -4,12 +4,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useColorScheme } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { RootStackParamList, AuthStackParamList, MainTabParamList } from './types';
 import LandingScreen from '../screens/LandingScreen';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SignupScreen from '../screens/SignupScreen';
+import UserDetailScreen from '../screens/UserDetailScreen';
+import ReservationScreen from '../screens/ReservationScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -60,7 +63,7 @@ const MainNavigator = () => {
       />
       <Tab.Screen
         name="MyReservation"
-        component={HomeScreen} // 임시로 HomeScreen 사용
+        component={ReservationScreen} // 임시로 HomeScreen 사용
         options={{
           tabBarLabel: '내 예약',
           tabBarIcon: ({ color, size }) => (
@@ -70,7 +73,7 @@ const MainNavigator = () => {
       />
       <Tab.Screen
         name="MyInfo"
-        component={HomeScreen} // 임시로 HomeScreen 사용
+        component={UserDetailScreen} // 임시로 HomeScreen 사용
         options={{
           tabBarLabel: '내 정보',
           tabBarIcon: ({ color, size }) => (
