@@ -93,7 +93,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       console.log('로그인 성공:', data);
 
       // 사용자 상세 정보 페이지로 이동
-      navigation.navigate('UserDetail', {
+      navigation.navigate('Main', {
         userId: data.user?.id || 'unknown',
         userData: data.user || {}
       });
