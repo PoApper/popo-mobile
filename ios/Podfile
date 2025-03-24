@@ -1,3 +1,5 @@
+source 'https://cdn.cocoapods.org/'
+
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
@@ -11,15 +13,6 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
-# 아이콘 폰트 추가
-pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
-
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
-
 target 'popoMobile' do
   config = use_native_modules!
 
@@ -30,11 +23,43 @@ target 'popoMobile' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  # 아이콘 폰트 추가
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  linkage = ENV['USE_FRAMEWORKS']
+  if linkage != nil
+    Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+    use_frameworks! :linkage => linkage.to_sym
+  end
+
   post_install do |installer|
     react_native_post_install(
       installer,
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
+
+    # 🔥 privacy 번들 관련된 모든 타겟 제거
+    installer.pods_project.targets.each do |target|
+      if target.name.include?("React-Core") && target.name.include?("privacy")
+        puts "⚠️ Cleaning resources from target: #{target.name}"
+
+        target.build_phases.each do |phase|
+          next unless phase.respond_to?(:files)
+
+          phase.files.each do |file|
+            if file.display_name.include?("PrivacyInfo.xcprivacy") || file.display_name.include?("React-Core_privacy.bundle")
+              puts "  🚫 Removing file: #{file.display_name}"
+              file.remove_from_project
+            end
+          end
+        end
+
+        # 💥 아예 resource bundle 생성 자체를 막는다 (Create Directory 명령 방지)
+        target.build_phases.delete_if do |phase|
+          phase.respond_to?(:name) && phase.name.include?("Resources")
+        end
+      end
+    end
   end
 end
