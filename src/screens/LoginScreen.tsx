@@ -150,6 +150,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
             autoCapitalize="none"
             value={email}
             onChangeText={setEmail}
+            autoComplete="email"
+            textContentType="emailAddress"
+            autoCorrect={false}
+            importantForAutofill="yes"
+            accessibilityLabel="popo.poapper.club email"
           />
 
           <TextInput
@@ -159,6 +164,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
             secureTextEntry
             value={password}
             onChangeText={setPassword}
+            autoComplete="password"
+            textContentType="password"
+            autoCorrect={false}
+            importantForAutofill="yes"
+            accessibilityLabel="popo.poapper.club password"
           />
 
           <TouchableOpacity

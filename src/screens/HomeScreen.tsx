@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import EncryptedStorage from 'react-native-encrypted-storage';
+import api from '../utils/api';
+import DdayInfoBox from '../components/DdayInfoBox';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -21,64 +24,92 @@ type ServiceItem = {
   id: string;
   icon: string;
   title: string;
+  active: boolean;
   onPress: () => void;
 };
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+  const [userName, setUserName] = useState<string>('');
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#F3F4F6',
     flex: 1,
   };
 
+  // 사용자 정보 가져오기
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const storedUserInfo = await EncryptedStorage.getItem('user_info');
+        if (storedUserInfo) {
+          const userInfo = JSON.parse(storedUserInfo);
+          setUserName(userInfo.name || '사용자');
+        }
+      } catch (error) {
+        console.error('저장된 사용자 정보 로드 오류:', error);
+        setUserName('사용자');
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
   const services: ServiceItem[] = [
     {
       id: '1',
       icon: 'place',
       title: '정소예약',
+      active: false,
       onPress: () => navigation.navigate('Login'),
     },
     {
       id: '2',
       icon: 'computer',
       title: '장비예약',
+      active: false,
       onPress: () => navigation.navigate('Login'),
     },
     {
       id: '3',
       icon: 'account-balance',
       title: '자치단체',
+      active: false,
       onPress: () => navigation.navigate('Login'),
     },
     {
       id: '4',
       icon: 'store',
       title: '제휴업체',
+      active: false,
       onPress: () => navigation.navigate('Login'),
     },
     {
       id: '5',
       icon: 'description',
       title: '기록물',
+      active: false,
       onPress: () => navigation.navigate('Login'),
     },
     {
       id: '6',
       icon: 'people',
       title: '동아리',
+      active: false,
       onPress: () => navigation.navigate('Login'),
     },
     {
       id: '7',
       icon: 'menu-book',
       title: '생활백서',
+      active: false,
       onPress: () => navigation.navigate('Login'),
     },
     {
       id: '8',
       icon: 'dining',
       title: '배달업체',
+      active: false,
       onPress: () => navigation.navigate('Login'),
     },
   ];
@@ -90,19 +121,13 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <ScrollView style={styles.container}>
-        {/* 위치 정보 */}
-        <View style={styles.locationHeader}>
-          <View style={[styles.locationBox, { backgroundColor: isDarkMode ? '#2D3748' : '#E6EAF5' }]}>
-            <Text style={[styles.locationText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
-              🗓️ 수강과목 포기 기간 시작 D-5
-            </Text>
-          </View>
-        </View>
+        {/* D-day 정보 */}
+        <DdayInfoBox />
 
         {/* 환영 메시지 */}
         <View style={styles.welcomeSection}>
           <Text style={[styles.welcomeText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
-            문소율님, 안녕하세요! 👋
+            {userName}님, 안녕하세요! 👋
           </Text>
         </View>
 
@@ -152,19 +177,23 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
                 key={service.id}
                 style={[
                   styles.serviceItem,
-                  { backgroundColor: isDarkMode ? '#333333' : '#FFFFFF' }
+                  { backgroundColor: isDarkMode ? '#333333' : '#FFFFFF' },
                 ]}
-                onPress={service.onPress}
+                onPress={service.active ? service.onPress : undefined}
               >
                 <Icon
                   name={service.icon}
                   size={24}
                   color={isDarkMode ? '#FFFFFF' : '#000000'}
+                  style={{ opacity: service.active ? 1 : 0.5 }}
                 />
                 <Text
                   style={[
                     styles.serviceTitle,
-                    { color: isDarkMode ? '#FFFFFF' : '#000000' }
+                    {
+                      color: isDarkMode ? '#FFFFFF' : '#000000',
+                      opacity: service.active ? 1 : 0.5
+                    }
                   ]}
                 >
                   {service.title}
@@ -181,23 +210,6 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  locationHeader: {
-    padding: 16,
-  },
-  locationBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    borderRadius: 12,
-    marginHorizontal: 8,
-  },
-  calendarIcon: {
-    marginRight: 8,
-  },
-  locationText: {
-    fontSize: 14,
-    fontWeight: '500',
   },
   welcomeSection: {
     padding: 24,
