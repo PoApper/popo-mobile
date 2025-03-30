@@ -142,7 +142,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         </View>
 
         <View style={styles.formContainer}>
-          <TextInput
+        <TextInput
             style={[styles.input]}
             placeholder="POPO에 가입된 이메일"
             placeholderTextColor='#9CA3AF'
@@ -197,10 +197,21 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={styles.needHelp}>
+          <TouchableOpacity
+            style={styles.needHelp}
+            onPress={() => {}}
+          >
             <Text style={[styles.needHelpText]}>
               도움이 필요하세요?
             </Text>
+          </TouchableOpacity>
+
+          <Text>Temporary Screen Navigator</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('NewPaxiRoom')}>
+            <Text>Goto NewPaxiRoomScreen</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('PaxiRoomList')}>
+            <Text>Goto PaxiRoomListScreen</Text>
           </TouchableOpacity>
         </View>
       </View>

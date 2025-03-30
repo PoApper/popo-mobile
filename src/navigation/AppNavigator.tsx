@@ -10,6 +10,8 @@ import LoginScreen from '../screens/LoginScreen';
 import UserDetailScreen from '../screens/UserDetailScreen';
 import ReservationScreen from '../screens/ReservationScreen';
 import SignupScreen from '../screens/SignupScreen';
+import NewPaxiRoomScreen from '../screens/NewPaxiRoomScreen';
+import PaxiRoomListScreen from '../screens/PaxiRoomListScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,6 +25,8 @@ const AppNavigator = () => {
             headerShown: false,
           }}
         >
+          <Stack.Screen name="PaxiRoomList" component={PaxiRoomListScreen} />
+          <Stack.Screen name="NewPaxiRoom" component={NewPaxiRoomScreen} />
           <Stack.Screen name="Landing" component={LandingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="UserDetail" component={UserDetailScreen} />

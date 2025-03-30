@@ -1,5 +1,7 @@
 export type RootStackParamList = {
   Landing: undefined;
+  PaxiRoomList: undefined;
+  NewPaxiRoom: undefined;
   Login: undefined;
   UserDetail: {
     userId: string;
