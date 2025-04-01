@@ -77,3 +77,10 @@ yarn-error.log
 **/*.xcworkspace
 
 Podfile.lock
+
+# Xcode 빌드 로그 폴더 무시
+ios/*/Packaging.log
+ios/*/build/
+*.plist
+*.log
+
