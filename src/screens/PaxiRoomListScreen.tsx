@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/types';
+import { MainTabParamList } from '../navigation/types';
 
 
 type PaxiRoomListScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'PaxiRoomList'>;
+  navigation: NativeStackNavigationProp<MainTabParamList, 'Paxi'>;
 };
 
 interface RoomContainerProps {
@@ -49,7 +49,7 @@ const RoomContainer: React.FC<RoomContainerProps> = ({ title, departureTime, rem
 
 const RefreshButton = ({ onPress }: { onPress: () => void }) => {
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={{
         width: 38,
         height: 38,
@@ -121,7 +121,7 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
           <Text>시간</Text>
         </TouchableOpacity>
       </View>
-      
+
       <TouchableOpacity
         style={styles.checkboxContainer}
         onPress={() => setIsChecked(!isChecked)}
@@ -146,7 +146,7 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
           total={4}
           departure="포항역"
           destination="지곡회관"/>
-        
+
         <RoomContainer
           title="포항역 카풀"
           departureTime="3월 14일 오전 7시 출발"

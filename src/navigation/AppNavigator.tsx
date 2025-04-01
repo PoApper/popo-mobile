@@ -13,7 +13,6 @@ import HomeScreen from '../screens/HomeScreen';
 import SignupScreen from '../screens/SignupScreen';
 import UserDetailScreen from '../screens/UserDetailScreen';
 import ReservationScreen from '../screens/ReservationScreen';
-import SignupScreen from '../screens/SignupScreen';
 import NewPaxiRoomScreen from '../screens/NewPaxiRoomScreen';
 import PaxiRoomListScreen from '../screens/PaxiRoomListScreen';
 
@@ -56,7 +55,7 @@ const MainNavigator = () => {
       />
       <Tab.Screen
         name="Paxi"
-        component={HomeScreen} // 임시로 HomeScreen 사용
+        component={PaxiRoomListScreen}
         options={{
           tabBarLabel: 'Paxi',
           tabBarIcon: ({ color, size }) => (
