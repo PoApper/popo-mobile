@@ -67,11 +67,21 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     }
   };
 
+  const handleDeliveryPress = async () => {
+    const url = 'https://www.postechdorm.com/delivery';
+    try {
+      await Linking.openURL(url);
+    } catch (error) {
+      Alert.alert('오류', '링크를 열 수 없습니다.');
+      console.error('링크 열기 오류:', error);
+    }
+  };
+
   const services: ServiceItem[] = [
     {
       id: '1',
       icon: 'place',
-      title: '정소예약',
+      title: '장소예약',
       active: false,
       onPress: () => navigation.navigate('Login'),
     },
@@ -121,8 +131,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
       id: '8',
       icon: 'dining',
       title: '배달업체',
-      active: false,
-      onPress: () => navigation.navigate('Login'),
+      active: true,
+      onPress: handleDeliveryPress,
     },
   ];
 
