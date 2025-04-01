@@ -1,70 +1,96 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, useColorScheme } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import axios from 'axios';
+import api from '../utils/api';
 
-type CalendarEvent = {
-  id: number;
-  title: string;
-  event_date: string;
+interface Place {
+  uuid: string;
+  name: string;
+  description: string;
   location: string;
-  createdAt: string;
-  updatedAt: string;
+  region: string;
+  staff_email: string;
+  image_url: string;
+}
+
+interface PlaceReservation {
+  uuid: string;
+  place_id: string;
+  booker_id: string;
+  phone: string;
+  title: string;
+  description: string;
+  date: string; // YYYYMMDD
+  start_time: string; // HHmm
+  end_time: string; // HHmm
+  status: '심사중' | '통과' | '거절';
+  created_at: Date;
+  place: Place;
+}
+
+type PaginatedResponse = {
+  items: Reservation[];
+  total: number;
+  page: number;
+  take: number;
 };
 
 const UpcomingEvents = () => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [reservations, setReservations] = useState<PlaceReservation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchReservations = async () => {
       try {
-        const response = await axios.get('https://api.popo-dev.poapper.club/calendar/get-upcoming-events');
-        setEvents(response.data);
+        const response = await api.get<PaginatedResponse>('https://api.popo-dev.poapper.club/reservation-place/user', {
+          params: {
+            skip: 0,
+            take: 5
+          }
+        });
+        setReservations(response.data.items);
       } catch (error) {
-        console.error('일정 정보 조회 오류:', error);
+        console.error('예약 정보 조회 오류:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchEvents();
+    fetchReservations();
   }, []);
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
+    const year = dateString.substring(0, 4);
+    const month = dateString.substring(4, 6);
+    const day = dateString.substring(6, 8);
+    return `${year}-${month}-${day}`;
   };
 
   if (isLoading) {
     return (
       <View style={styles.upcomingSection}>
         <Text style={[styles.sectionTitle, { color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24 }]}>
-          다가오는 일정
+          나의 최근 예약
         </Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scheduleScroll}>
           <View style={[styles.scheduleCard, { backgroundColor: '#4D61DD' }]}>
-            <Text style={styles.scheduleTitle}>일정을 불러오는 중...</Text>
+            <Text style={styles.scheduleTitle}>예약 정보를 불러오는 중...</Text>
           </View>
         </ScrollView>
       </View>
     );
   }
 
-  if (events.length === 0) {
+  if (reservations.length === 0) {
     return (
       <View style={styles.upcomingSection}>
         <Text style={[styles.sectionTitle, { color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24 }]}>
-          다가오는 일정
+          나의 최근 예약
         </Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scheduleScroll}>
           <View style={[styles.scheduleCard, { backgroundColor: '#4D61DD' }]}>
-            <Text style={styles.scheduleTitle}>예정된 일정이 없습니다</Text>
+            <Text style={styles.scheduleTitle}>최근 예약 내역이 없습니다</Text>
           </View>
         </ScrollView>
       </View>
@@ -74,23 +100,26 @@ const UpcomingEvents = () => {
   return (
     <View style={styles.upcomingSection}>
       <Text style={[styles.sectionTitle, { color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24 }]}>
-        다가오는 일정
+        나의 최근 예약
       </Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scheduleScroll}>
-        {events.map((event, index) => (
+        {reservations.map((reservation, index) => (
           <View
-            key={event.id}
+            key={reservation.uuid}
             style={[
               styles.scheduleCard,
               { backgroundColor: index % 2 === 0 ? '#4D61DD' : '#10ADB6' }
             ]}
           >
+            <Text style={styles.scheduleTitle}>{reservation.title}</Text>
             <View style={styles.scheduleInfo}>
-              <Icon name="place" size={20} color="#FFFFFF" />
-              <Text style={styles.scheduleLocation}>{event.location || '장소 미정'}</Text>
-              <Text style={styles.scheduleDate}>{formatDate(event.event_date)}</Text>
+              <Icon name="place" size={20} color="#FFFFFF" style={styles.icon} />
+              <Text style={styles.scheduleLocation}>{reservation.place.name || '장소 미정'}</Text>
             </View>
-            <Text style={styles.scheduleTitle}>{event.title}</Text>
+            <View style={styles.scheduleInfo}>
+              <Icon name="event" size={20} color="#FFFFFF" style={styles.icon} />
+              <Text style={styles.scheduleDate}>{formatDate(reservation.date)}</Text>
+            </View>
           </View>
         ))}
       </ScrollView>
@@ -118,24 +147,26 @@ const styles = StyleSheet.create({
     height: 140,
     justifyContent: 'space-between',
   },
+  scheduleTitle: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
   scheduleInfo: {
     flexDirection: 'row',
     alignItems: 'center',
   },
+  icon: {
+    marginRight: 4,
+  },
   scheduleLocation: {
     color: '#FFFFFF',
-    marginLeft: 8,
     fontSize: 14,
   },
   scheduleDate: {
     color: '#FFFFFF',
-    marginLeft: 'auto',
     fontSize: 14,
-  },
-  scheduleTitle: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 
