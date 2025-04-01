@@ -7,14 +7,16 @@ import {
   ScrollView,
   useColorScheme,
   StatusBar,
+  Linking,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import api from '../utils/api';
 import DdayInfoBox from '../components/DdayInfoBox';
+import UpcomingEvents from '../components/UpcomingEvents';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -55,6 +57,16 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     fetchUserInfo();
   }, []);
 
+  const handleRecordPress = async () => {
+    const url = 'https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD';
+    try {
+      await Linking.openURL(url);
+    } catch (error) {
+      Alert.alert('오류', '링크를 열 수 없습니다.');
+      console.error('링크 열기 오류:', error);
+    }
+  };
+
   const services: ServiceItem[] = [
     {
       id: '1',
@@ -88,8 +100,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
       id: '5',
       icon: 'description',
       title: '기록물',
-      active: false,
-      onPress: () => navigation.navigate('Login'),
+      active: true,
+      onPress: handleRecordPress,
     },
     {
       id: '6',
@@ -132,39 +144,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         </View>
 
         {/* 다가오는 일정 */}
-        <View style={styles.upcomingSection}>
-          <Text style={[styles.sectionTitle, { color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24 }]}>
-            다가오는 일정
-          </Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scheduleScroll}>
-            <View style={[styles.scheduleCard, { backgroundColor: '#4D61DD' }]}>
-              <View style={styles.scheduleInfo}>
-                <Icon name="place" size={20} color="#FFFFFF" />
-                <Text style={styles.scheduleLocation}>커뮤니터센터 GSR B</Text>
-                <Text style={styles.scheduleDate}>2025.03.05</Text>
-              </View>
-              <Text style={styles.scheduleTitle}>POPO 회의</Text>
-            </View>
-
-            <View style={[styles.scheduleCard, { backgroundColor: '#10ADB6' }]}>
-              <View style={styles.scheduleInfo}>
-                <Icon name="place" size={20} color="#FFFFFF" />
-                <Text style={styles.scheduleLocation}>커뮤니터센터 GSR B</Text>
-                <Text style={styles.scheduleDate}>2025.03.05</Text>
-              </View>
-              <Text style={styles.scheduleTitle}>POPO 회의</Text>
-            </View>
-
-            <View style={[styles.scheduleCard, { backgroundColor: '#4D61DD' }]}>
-              <View style={styles.scheduleInfo}>
-                <Icon name="place" size={20} color="#FFFFFF" />
-                <Text style={styles.scheduleLocation}>커뮤니터센터 GSR B</Text>
-                <Text style={styles.scheduleDate}>2025.03.05</Text>
-              </View>
-              <Text style={styles.scheduleTitle}>POPO 회의</Text>
-            </View>
-          </ScrollView>
-        </View>
+        <UpcomingEvents />
 
         {/* 서비스 그리드 */}
         <View style={styles.servicesSection}>
@@ -216,39 +196,6 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 24,
-    fontWeight: 'bold',
-  },
-  upcomingSection: {
-    paddingVertical: 24,
-  },
-  scheduleScroll: {
-    paddingHorizontal: 16,
-  },
-  scheduleCard: {
-    padding: 16,
-    borderRadius: 12,
-    marginRight: 12,
-    width: 280,
-    height: 140,
-    justifyContent: 'space-between',
-  },
-  scheduleInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  scheduleLocation: {
-    color: '#FFFFFF',
-    marginLeft: 8,
-    fontSize: 14,
-  },
-  scheduleDate: {
-    color: '#FFFFFF',
-    marginLeft: 'auto',
-    fontSize: 14,
-  },
-  scheduleTitle: {
-    color: '#FFFFFF',
-    fontSize: 16,
     fontWeight: 'bold',
   },
   servicesSection: {
