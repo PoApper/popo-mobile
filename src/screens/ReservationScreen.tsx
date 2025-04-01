@@ -49,11 +49,19 @@ interface PlaceReservation {
   place: Place;
 }
 
+interface PaginatedResponse {
+  items: PlaceReservation[];
+  total: number;
+}
+
 const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reservations, setReservations] = useState<PlaceReservation[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#F3F4F6',
@@ -65,24 +73,31 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';
 
   // 서버에서 예약 정보 가져오기
-  const fetchReservations = async () => {
+  const fetchReservations = async (page: number = 1) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await api.get('/reservation-place/user');
-      const data: PlaceReservation[] = response.data;
+      const response = await api.get<PaginatedResponse>('/reservation-place/user', {
+        params: {
+          skip: (page - 1) * itemsPerPage,
+          take: itemsPerPage
+        }
+      });
+      const { items, total } = response.data;
 
-      console.log('서버 응답 데이터:', data);
+      console.log('서버 응답 데이터:', items);
 
       // 날짜 기준으로 정렬 (최신 날짜가 먼저 오도록)
-      const sortedReservations = [...data].sort((a, b) => {
+      const sortedReservations = [...items].sort((a, b) => {
         const dateA = new Date(formatDate(a.date));
         const dateB = new Date(formatDate(b.date));
         return dateB.getTime() - dateA.getTime();
       });
 
       setReservations(sortedReservations);
+      setCurrentPage(page);
+      setTotalPages(Math.ceil(total / itemsPerPage));
     } catch (err) {
       console.error('예약 정보 조회 오류:', err);
 
@@ -252,7 +267,70 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
 
   // 새로고침 처리
   const handleRefresh = () => {
-    fetchReservations();
+    fetchReservations(1);
+  };
+
+  // 페이지네이션 버튼 렌더링
+  const renderPaginationButtons = () => {
+    const buttons = [];
+    const maxVisibleButtons = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
+
+    if (endPage - startPage + 1 < maxVisibleButtons) {
+      startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+    }
+
+    // 이전 페이지 버튼
+    if (currentPage > 1) {
+      buttons.push(
+        <TouchableOpacity
+          key="prev"
+          style={[styles.pageButton, { backgroundColor: cardBgColor, borderColor }]}
+          onPress={() => fetchReservations(currentPage - 1)}
+        >
+          <Text style={[styles.pageButtonText, { color: textColor }]}>이전</Text>
+        </TouchableOpacity>
+      );
+    }
+
+    // 페이지 번호 버튼들
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+        <TouchableOpacity
+          key={i}
+          style={[
+            styles.pageButton,
+            { backgroundColor: cardBgColor, borderColor },
+            currentPage === i && styles.activePageButton
+          ]}
+          onPress={() => fetchReservations(i)}
+        >
+          <Text style={[
+            styles.pageButtonText,
+            { color: textColor },
+            currentPage === i && styles.activePageButtonText
+          ]}>
+            {i}
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+
+    // 다음 페이지 버튼
+    if (currentPage < totalPages) {
+      buttons.push(
+        <TouchableOpacity
+          key="next"
+          style={[styles.pageButton, { backgroundColor: cardBgColor, borderColor }]}
+          onPress={() => fetchReservations(currentPage + 1)}
+        >
+          <Text style={[styles.pageButtonText, { color: textColor }]}>다음</Text>
+        </TouchableOpacity>
+      );
+    }
+
+    return buttons;
   };
 
   return (
@@ -296,12 +374,17 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
           </TouchableOpacity>
         </View>
       ) : reservations.length > 0 ? (
-        <FlatList
-          data={reservations}
-          renderItem={renderReservationItem}
-          keyExtractor={(item) => item.uuid}
-          contentContainerStyle={styles.listContainer}
-        />
+        <>
+          <View style={[styles.paginationContainer, { backgroundColor: cardBgColor }]}>
+            {renderPaginationButtons()}
+          </View>
+          <FlatList
+            data={reservations}
+            renderItem={renderReservationItem}
+            keyExtractor={(item) => item.uuid}
+            contentContainerStyle={styles.listContainer}
+          />
+        </>
       ) : (
         <View style={styles.emptyContainer}>
           <Image
@@ -487,6 +570,32 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
+  },
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+  },
+  pageButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginHorizontal: 4,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  activePageButton: {
+    backgroundColor: '#4F46E5',
+    borderColor: '#4F46E5',
+  },
+  pageButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  activePageButtonText: {
+    color: '#FFFFFF',
   },
 });
 
