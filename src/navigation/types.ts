@@ -1,9 +1,13 @@
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
+
 export type RootStackParamList = {
   Auth: undefined;
   Main: {
     userId: string;
     userData: any;
   };
+  Home: undefined;
   Signup: undefined;
   Landing: undefined;
   Login: undefined;
@@ -19,6 +23,12 @@ export type AuthStackParamList = {
 export type MainTabParamList = {
   Home: undefined;
   Paxi: undefined;
-  MyReservation: undefined;
-  MyInfo: undefined;
+  MyReservation: {
+    navigation: NativeStackNavigationProp<RootStackParamList>;
+    route: RouteProp<MainTabParamList, 'MyReservation'>;
+  };
+  MyInfo: {
+    navigation: NativeStackNavigationProp<RootStackParamList>;
+    route: RouteProp<MainTabParamList, 'MyInfo'>;
+  };
 };

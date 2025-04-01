@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 import { RootStackParamList, AuthStackParamList, MainTabParamList } from './types';
 import LandingScreen from '../screens/LandingScreen';
@@ -53,7 +54,7 @@ const MainNavigator = () => {
       />
       <Tab.Screen
         name="Paxi"
-        component={HomeScreen} // 임시로 HomeScreen 사용
+        component={HomeScreen}
         options={{
           tabBarLabel: 'Paxi',
           tabBarIcon: ({ color, size }) => (
@@ -63,7 +64,7 @@ const MainNavigator = () => {
       />
       <Tab.Screen
         name="MyReservation"
-        component={ReservationScreen} // 임시로 HomeScreen 사용
+        component={ReservationScreen}
         options={{
           tabBarLabel: '내 예약',
           tabBarIcon: ({ color, size }) => (
@@ -73,7 +74,7 @@ const MainNavigator = () => {
       />
       <Tab.Screen
         name="MyInfo"
-        component={UserDetailScreen} // 임시로 HomeScreen 사용
+        component={UserDetailScreen}
         options={{
           tabBarLabel: '내 정보',
           tabBarIcon: ({ color, size }) => (
@@ -86,11 +87,32 @@ const MainNavigator = () => {
 };
 
 const AppNavigator = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const authToken = await EncryptedStorage.getItem('auth_token');
+        const isAuth = await EncryptedStorage.getItem('isAuthenticated');
+        setIsAuthenticated(!!authToken && isAuth === 'true');
+      } catch (error) {
+        console.error('인증 상태 확인 오류:', error);
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
+
+  if (isAuthenticated === null) {
+    return null; // 로딩 중
+  }
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Landing"
+          initialRouteName={isAuthenticated ? "Main" : "Landing"}
           screenOptions={{
             headerShown: false,
           }}
