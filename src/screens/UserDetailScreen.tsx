@@ -117,11 +117,8 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   useEffect(() => {
     const loadStoredUserInfo = async () => {
       try {
-        const storedUserInfo = await EncryptedStorage.getItem('user_info');
-        if (storedUserInfo) {
-          const userInfo = JSON.parse(storedUserInfo);
-          setUserData(userInfo);
-        }
+        const res = await api.get('/auth/myInfo');
+        setUserData(res.data);
       } catch (error) {
         console.error('저장된 사용자 정보 로드 오류:', error);
       }
