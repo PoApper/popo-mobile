@@ -88,7 +88,6 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
       // 로그인 성공
       Alert.alert('로그인 성공', '환영합니다!');
-      console.log('로그인 성공:', data);
 
       // 사용자 상세 정보 페이지로 이동
       navigation.navigate('Main', {
