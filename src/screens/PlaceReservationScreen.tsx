@@ -56,8 +56,6 @@ const locationsData: { [key: string]: Location[] } = {
   ],
 };
 
-const backIcon = require("../../assets/backward.png");
-
 const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [selectedBuilding, setSelectedBuilding] = useState("학생회관");
