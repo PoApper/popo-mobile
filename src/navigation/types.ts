@@ -13,6 +13,7 @@ export type RootStackParamList = {
   Login: undefined;
   UserDetail: undefined;
   Reservation: undefined;
+  PlaceReservation: undefined;
 };
 
 export type AuthStackParamList = {
