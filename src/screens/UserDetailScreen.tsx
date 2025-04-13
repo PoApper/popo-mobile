@@ -78,9 +78,15 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
       await api.get('/auth/logout');
 
       // 인증 정보 초기화
-      await EncryptedStorage.removeItem('auth_token');
-      await EncryptedStorage.removeItem('isAuthenticated');
-      await EncryptedStorage.removeItem('user_info');
+      if (await EncryptedStorage.getItem('auth_token')) {
+        await EncryptedStorage.removeItem('auth_token');
+      }
+      if (await EncryptedStorage.getItem('isAuthenticated')) {
+        await EncryptedStorage.removeItem('isAuthenticated');
+      }
+      if (await EncryptedStorage.getItem('user_info')) {
+        await EncryptedStorage.removeItem('user_info');
+      }
       await CookieManager.clearAll();
 
       // 로그아웃 성공 후 처리
