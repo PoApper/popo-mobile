@@ -10,7 +10,7 @@ type Location = {
     image: any;
   };
 
-const locationsData: { [key: string]: Location[] } = { 
+const locationsData: { [key: string]: Location[] } = {
   학생회관: [
     { id: "1", name: "1층 홀", description: "학생회관 1층", image: require("../../assets/hall1.png") },
     { id: "2", name: "2층 홀", description: "학생회관 2층", image: require("../../assets/hall1.png") },
@@ -66,9 +66,9 @@ const PlaceReservationScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
-      <TouchableOpacity>
-          <Image source={backIcon} style={styles.backIcon} />
-        </TouchableOpacity>
+        <TouchableOpacity>
+            <Image source={backIcon} style={styles.backIcon} />
+          </TouchableOpacity>
 
         <Text style={styles.title}>장소 예약</Text>
       </View>
@@ -98,7 +98,7 @@ const PlaceReservationScreen = () => {
 
                 {selectedBuilding === building && <View style={[
                   styles.underline,
-                  { width: (textWidths[building] || 0) + 8 }, 
+                  { width: (textWidths[building] || 0) + 8 },
                 ]} />}
               </View>
             </View>
@@ -158,21 +158,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 2
   },
-  
+
   buildingTabInner: {
     alignItems: "center",
-    paddingHorizontal: 2, 
+    paddingHorizontal: 2,
   },
 
   textWithUnderline: {
     paddingHorizontal: 6,
     alignItems: "center",
   },
-  
+
   buildingTab: {
     fontSize: 16,
     color: "#999",
-    lineHeight: 20, 
+    lineHeight: 20,
   },
 
   selectedBuildingText: {
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     lineHeight: 20,
   },
-  
+
   underline: {
     marginTop: 4,
     height: 2,
@@ -211,14 +211,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: "#fff",
   },
-  
+
   locationImage: {
     width: 60,
     height: 60,
     borderRadius: 30,
     marginRight: 20,
   },
-  
+
   locationInfo: {
     flex: 1,
   },

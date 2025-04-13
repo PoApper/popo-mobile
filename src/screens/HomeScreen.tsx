@@ -14,7 +14,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import EncryptedStorage from 'react-native-encrypted-storage';
 import DdayInfoBox from '../components/DdayInfoBox';
 import UpcomingEvents from '../components/UpcomingEvents';
 import api from '../utils/api';
@@ -81,8 +80,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
       id: '1',
       icon: 'place',
       title: '장소예약',
-      active: false,
-      onPress: () => navigation.navigate('Login'),
+      active: true,
+      onPress: () => navigation.navigate('PlaceReservation'),
     },
     {
       id: '2',
