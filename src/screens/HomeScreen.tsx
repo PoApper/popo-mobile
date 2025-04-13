@@ -111,8 +111,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
       id: '7',
       icon: 'menu-book',
       title: '생활백서',
-      active: false,
-      onPress: () => navigation.navigate('Login'),
+      active: true,
+      onPress: () => navigation.navigate('Whitebook'),
     },
     {
       id: '8',
