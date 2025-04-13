@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   View,
   Image,
-  useColorScheme,
   Alert,
   StatusBar,
 } from 'react-native';
@@ -15,7 +14,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import api from '../utils/api';
+import api, { POPO_API_URL } from '../utils/api';
 import axios from 'axios';
 
 type LoginScreenProps = {
@@ -23,14 +22,14 @@ type LoginScreenProps = {
 };
 
 const LoginScreen = ({ navigation }: LoginScreenProps) => {
-  const isDarkMode = useColorScheme() === 'dark';
+  // const isDarkMode = useColorScheme() === 'dark';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#121212' : '#F3F4F6',
+    backgroundColor: '#ffffff',
     flex: 1,
   };
 
@@ -55,8 +54,6 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       // 서버에서 받은 쿠키 확인 및 저장
       const setCookie = response.headers['set-cookie'];
       if (setCookie) {
-        console.log('서버에서 받은 쿠키:', setCookie);
-
         // 쿠키 파싱 (예: Authentication=value;)
         const authCookie = setCookie.find(cookie => cookie.includes('Authentication='));
         if (authCookie) {
@@ -64,7 +61,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
           // 1. 쿠키를 RN 쿠키 저장소에 저장
           await CookieManager.set(
-            'https://api.popo-dev.poapper.club',
+            POPO_API_URL,
             {
               name: 'Authentication',
               value: tokenValue,
@@ -78,7 +75,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           await EncryptedStorage.setItem('auth_token', tokenValue);
 
           console.log('인증 토큰 저장 완료');
+        } else {
+          Alert.alert('오류', '인증 토큰을 찾을 수 없습니다.');
         }
+      } else {
+        Alert.alert('오류', '쿠키를 찾을 수 없습니다.');
       }
 
       // 사용자 정보 저장 (필요시)
@@ -91,10 +92,9 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
       // 로그인 성공
       Alert.alert('로그인 성공', '환영합니다!');
-      console.log('로그인 성공:', data);
 
       // 사용자 상세 정보 페이지로 이동
-      navigation.navigate('UserDetail', {
+      navigation.navigate('Main', {
         userId: data.user?.id || 'unknown',
         userData: data.user || {}
       });
@@ -127,7 +127,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        barStyle='light-content'
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <View style={styles.container}>
@@ -137,58 +137,52 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
             style={styles.logoImage}
             resizeMode="contain"
           />
+          <Text style={styles.loginScreenTitle}>
+            로그인/회원가입
+          </Text>
         </View>
 
         <View style={styles.formContainer}>
-          <Text style={[styles.label, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
-            이메일
-          </Text>
           <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
-                color: isDarkMode ? '#FFFFFF' : '#000000',
-                borderColor: isDarkMode ? '#555555' : '#E5E7EB',
-              }
-            ]}
-            placeholder="이메일 주소를 입력하세요"
-            placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
+            style={[styles.input]}
+            placeholder="POPO 가입 이메일(POSTECH)"
+            placeholderTextColor='#9CA3AF'
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
             onChangeText={setEmail}
+            autoComplete="email"
+            textContentType="emailAddress"
+            autoCorrect={false}
+            importantForAutofill="yes"
+            accessibilityLabel="popo.poapper.club email"
           />
 
-          <Text style={[styles.label, { color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16 }]}>
-            비밀번호
-          </Text>
           <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
-                color: isDarkMode ? '#FFFFFF' : '#000000',
-                borderColor: isDarkMode ? '#555555' : '#E5E7EB',
-              }
-            ]}
-            placeholder="비밀번호를 입력하세요"
-            placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
+            style={[styles.input, {marginTop: 11, color: '#000000'}]}
+            placeholder="비밀번호"
+            placeholderTextColor='#9CA3AF'
             secureTextEntry
             value={password}
             onChangeText={setPassword}
+            autoComplete="password"
+            textContentType="password"
+            autoCorrect={false}
+            importantForAutofill="yes"
+            accessibilityLabel="popo.poapper.club password"
           />
 
           <TouchableOpacity
             style={[
               styles.loginButton,
+              {marginTop: 11},
               isLoading && styles.loginButtonDisabled
             ]}
             onPress={handleLogin}
             disabled={isLoading}
           >
             <Text style={styles.loginButtonText}>
-              {isLoading ? '로그인 중...' : '로그인'}
+              {isLoading ? '로그인 중...' : '계속하기'}
             </Text>
           </TouchableOpacity>
 
@@ -196,20 +190,29 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
             <Text style={styles.errorText}>{error}</Text>
           )}
 
-          <TouchableOpacity style={styles.forgotPassword}>
-            <Text style={[styles.forgotPasswordText, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
-              비밀번호를 잊으셨나요?
-            </Text>
-          </TouchableOpacity>
+          <View style={[styles.splitterContainer]}>
+            <View style={styles.lineView} />
+            <Text style={styles.splitterText}>또는</Text>
+            <View style={styles.lineView} />
+      		</View>
 
           <View style={styles.signupContainer}>
-            <Text style={[styles.signupText, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
-              계정이 없으신가요?
-            </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-              <Text style={styles.signupLink}>회원가입</Text>
+            <TouchableOpacity
+              style={[styles.signupButton]}
+              onPress={() => navigation.navigate('Signup')}
+              disabled={isLoading}
+            >
+              <Text style={styles.signupButtonText}>
+                회원가입
+              </Text>
             </TouchableOpacity>
           </View>
+
+          <TouchableOpacity style={styles.needHelp}>
+            <Text style={[styles.needHelpText]}>
+              도움이 필요하세요?
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
@@ -221,70 +224,108 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     justifyContent: 'center',
+    backgroundColor: '#ffffff',
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 48,
   },
   logoImage: {
-    width: 3000,
-    height: 120,
+    width: 500,
+    height: 100,
   },
-  logoText: {
-    fontSize: 42,
-    fontWeight: 'bold',
+  loginScreenTitle: {
+    fontSize: 22,
+    letterSpacing: -0.2,
+    fontWeight: "600",
+    fontFamily: "Pretendard",
+    color: "#000",
+    textAlign: "center",
+    width: 169
   },
   formContainer: {
     width: '100%',
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
+    marginTop: 34,
   },
   input: {
-    height: 50,
+    backgroundColor: '#FFFFFF',
+    height: 42,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 6,
+    borderColor: "#D0D0D0",
     paddingHorizontal: 16,
     fontSize: 16,
   },
   loginButton: {
-    backgroundColor: '#4F46E5',
-    height: 50,
-    borderRadius: 8,
+    borderRadius: 6,
+    backgroundColor: '#0B0B0B',
+    width: '100%',
+    height: 38,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 24,
   },
   loginButtonDisabled: {
     backgroundColor: '#9BA3AF',
   },
   loginButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: "500",
+    fontFamily: "Pretendard",
+    color: "#ffffff",
+    textAlign: "center"
   },
-  forgotPassword: {
+  splitterContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    marginTop: 18,
+  },
+  lineView: {
+    borderStyle: "solid",
+    borderColor: "#9b9b9b",
+    borderTopWidth: 1,
+    flex: 1,
+    height: 2,
+    width: "100%",
+  },
+  splitterText: {
+    fontSize: 10,
+    fontWeight: "600",
+    fontFamily: "Pretendard",
+    color: "#9b9b9b",
+    textAlign: "center",
+    width: 25
+  },
+  needHelp: {
     alignItems: 'center',
     marginTop: 16,
   },
-  forgotPasswordText: {
-    fontSize: 14,
+  needHelpText: {
+    fontSize: 13,
+    fontWeight: "500",
+    fontFamily: "Pretendard",
+    color: "#3b82f6",
+    textAlign: "center",
+    width: 101,
   },
   signupContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 24,
+    marginTop: 23,
   },
-  signupText: {
-    fontSize: 14,
-    marginRight: 4,
+  signupButton: {
+    borderRadius: 6,
+    backgroundColor: "#f2f3f5",
+    flex: 1,
+    width: "100%",
+    height: 38,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  signupLink: {
-    fontSize: 14,
-    color: '#4F46E5',
-    fontWeight: '600',
+  signupButtonText: {
+    fontSize: 13,
+    fontWeight: "500",
+    color: "#262626",
+    fontFamily: "Pretendard",
   },
   errorText: {
     color: '#EF4444',

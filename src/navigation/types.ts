@@ -1,16 +1,34 @@
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
+
 export type RootStackParamList = {
-  Login: undefined;
-  UserDetail: {
+  Auth: undefined;
+  Main: {
     userId: string;
-    userData: {
-      id?: string;
-      name?: string;
-      email?: string;
-      profileImage?: string;
-      // 기타 사용자 데이터 필드 추가 가능
-      [key: string]: any;
-    };
+    userData: any;
   };
-  Reservation: any;
-  Signup: undefined;  // 회원가입 화면 추가
+  Home: undefined;
+  Signup: undefined;
+  Landing: undefined;
+  Login: undefined;
+  UserDetail: undefined;
+  Reservation: undefined;
+};
+
+export type AuthStackParamList = {
+  Landing: undefined;
+  Login: undefined;
+};
+
+export type MainTabParamList = {
+  Home: undefined;
+  Paxi: undefined;
+  MyReservation: {
+    navigation: NativeStackNavigationProp<RootStackParamList>;
+    route: RouteProp<MainTabParamList, 'MyReservation'>;
+  };
+  MyInfo: {
+    navigation: NativeStackNavigationProp<RootStackParamList>;
+    route: RouteProp<MainTabParamList, 'MyInfo'>;
+  };
 };
