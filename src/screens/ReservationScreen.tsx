@@ -86,8 +86,6 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
       });
       const { items, total } = response.data;
 
-      console.log('서버 응답 데이터:', items);
-
       // 날짜 기준으로 정렬 (최신 날짜가 먼저 오도록)
       const sortedReservations = [...items].sort((a, b) => {
         const dateA = new Date(formatDate(a.date));
