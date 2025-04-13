@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import DdayInfoBox from '../components/DdayInfoBox';
 import UpcomingEvents from '../components/UpcomingEvents';
+import api from '../utils/api';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -43,11 +44,9 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const storedUserInfo = await EncryptedStorage.getItem('user_info');
-        if (storedUserInfo) {
-          const userInfo = JSON.parse(storedUserInfo);
-          setUserName(userInfo.name || '사용자');
-        }
+        const response = await api.get('/auth/myInfo');
+        const userData = response.data;
+        setUserName(userData.name || '사용자');
       } catch (error) {
         console.error('저장된 사용자 정보 로드 오류:', error);
         setUserName('사용자');
