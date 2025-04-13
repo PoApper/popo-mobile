@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, useColorScheme, StatusBar } from "react-native";
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/types';
+
+type PlaceReservationScreenProps = {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'PlaceReservation'>;
+};
 
 const buildings = ["학생회관", "지곡회관", "커뮤니티센터", "RC", "기타"];
 
@@ -52,10 +58,18 @@ const locationsData: { [key: string]: Location[] } = {
 
 const backIcon = require("../../assets/backward.png");
 
-const PlaceReservationScreen = () => {
+const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => {
+  const isDarkMode = useColorScheme() === 'dark';
   const [selectedBuilding, setSelectedBuilding] = useState("학생회관");
   const [textWidths, setTextWidths] = useState<{ [key: string]: number }>({});
   const [sortType, setSortType] = useState("가나다순");
+
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? '#121212' : '#fff',
+    flex: 1,
+  };
+
+  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
 
   const locations = [...(locationsData[selectedBuilding] || [])];
 
@@ -64,13 +78,20 @@ const PlaceReservationScreen = () => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={backgroundStyle}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
       <View style={styles.header}>
-        <TouchableOpacity>
-            <Image source={backIcon} style={styles.backIcon} />
-          </TouchableOpacity>
-
-        <Text style={styles.title}>장소 예약</Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+        </TouchableOpacity>
+        <Text style={[styles.headerTitle, { color: textColor }]}>장소 예약</Text>
+        <View style={styles.placeholderButton} />
       </View>
 
       {/* 건물 선택 네비게이션 */}
@@ -126,7 +147,7 @@ const PlaceReservationScreen = () => {
         style={{ flex: 1 }}
         contentContainerStyle={{ paddingBottom: 20, paddingTop: 0, justifyContent: 'flex-start' }}
         data={locations}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id + item.name}
         renderItem={({ item }) => (
           <View style={styles.locationItem}>
             <Image source={item.image} style={styles.locationImage} />
@@ -145,12 +166,29 @@ const PlaceReservationScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  backButton: {
+    padding: 8,
+  },
+  backButtonText: {
+    fontSize: 16,
+  },
+  placeholderButton: {
+    width: 40,
+  },
   safeArea: { flex: 1, backgroundColor: "#fff" },
-  header: { flexDirection: "row", alignItems: "center", padding: 15 },
-  backButton: { fontSize: 24, fontWeight: "bold", color: "#000", marginRight: 10 },
-  backIcon: { width: 24, height: 24, resizeMode: "contain", marginRight: 10  },
-  title: { fontSize: 20, fontWeight: "bold" },
-
   buildingNav: { flexDirection: "row", paddingHorizontal: 15, marginTop: 20},
   selectedBuilding: { color: "#000", fontWeight: "bold", borderBottomWidth: 2, borderBottomColor: "#000" },
 
