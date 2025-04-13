@@ -54,8 +54,6 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       // 서버에서 받은 쿠키 확인 및 저장
       const setCookie = response.headers['set-cookie'];
       if (setCookie) {
-        console.log('서버에서 받은 쿠키:', setCookie);
-
         // 쿠키 파싱 (예: Authentication=value;)
         const authCookie = setCookie.find(cookie => cookie.includes('Authentication='));
         if (authCookie) {
