@@ -1,7 +1,16 @@
 import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import { Alert } from 'react-native';
 import { API_URL } from '@env';
+import { navigationRef } from '../navigation/RootNavigation';
+
+// EventEmitter 타입 선언
+declare global {
+  var eventEmitter: {
+    emit: (event: string, ...args: any[]) => void;
+  } | undefined;
+}
 
 // API 기본 URL
 const POPO_API_URL = API_URL || 'https://api.popo-dev.poapper.club';
@@ -26,6 +35,7 @@ api.interceptors.request.use(
 
       // 쿠키가 없으면 EncryptedStorage에서 가져오기
       if (!authToken) {
+        console.log("저장된 쿠키에 authToken 없음");
         const storedToken = await EncryptedStorage.getItem('auth_token');
 
         // 저장된 토큰이 있으면 쿠키 저장소에도 다시 설정
@@ -68,20 +78,37 @@ api.interceptors.response.use(
     return response;
   },
   async (error) => {
-    // 401 인증 오류 처리
-    // if (error.response && error.response.status === 401) {
-    //   try {
-    //     // 인증 정보 초기화
-    //     await EncryptedStorage.removeItem('auth_token');
-    //     await EncryptedStorage.removeItem('isAuthenticated');
-    //     await EncryptedStorage.removeItem('user_info');
-    //     await CookieManager.clearAll();
+    if (error.response && error.response.status === 401) {
+      try {
+        // 인증 정보 초기화
+        if (await EncryptedStorage.getItem('auth_token')) {
+          await EncryptedStorage.removeItem('auth_token');
+        }
+        if (await EncryptedStorage.getItem('isAuthenticated')) {
+          await EncryptedStorage.removeItem('isAuthenticated');
+        }
+        if (await EncryptedStorage.getItem('user_info')) {
+          await EncryptedStorage.removeItem('user_info');
+        }
+        await CookieManager.clearAll();
 
-    //     // 여기서 로그인 화면으로 이동하는 로직은 컴포넌트에서 처리해야 함
-    //   } catch (clearError) {
-    //     console.error('인증 정보 초기화 오류:', clearError);
-    //   }
-    // }
+        Alert.alert(
+          "로그인 필요",
+          "로그인이 필요한 서비스입니다.",
+          [
+            {
+              text: "확인",
+              onPress: () => {
+                // 로그인 스크린으로 이동
+                navigationRef.current?.navigate('Login');
+              }
+            }
+          ]
+        );
+      } catch (clearError) {
+        console.error('인증 정보 초기화 오류:', clearError);
+      }
+    }
 
     return Promise.reject(error);
   }
