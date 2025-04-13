@@ -16,6 +16,7 @@ import UserDetailScreen from '../screens/UserDetailScreen';
 import ReservationScreen from '../screens/ReservationScreen';
 import PlaceReservationScreen from '../screens/PlaceReservationScreen';
 import WhitebookScreen from '../screens/WhitebookScreen';
+import BenefitsScreen from '../screens/BenefitsScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -126,6 +127,7 @@ const AppNavigator = () => {
           <Stack.Screen name="PlaceReservation" component={PlaceReservationScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="Whitebook" component={WhitebookScreen} />
+          <Stack.Screen name="Benefits" component={BenefitsScreen} />
           <Stack.Screen name="Auth" component={AuthNavigator} />
           <Stack.Screen name="Main" component={MainNavigator} />
         </Stack.Navigator>

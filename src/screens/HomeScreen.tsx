@@ -90,8 +90,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
       id: '4',
       icon: 'store',
       title: '제휴업체',
-      active: false,
-      onPress: () => navigation.navigate('Login'),
+      active: true,
+      onPress: () => navigation.navigate('Benefits'),
     },
     {
       id: '5',

@@ -15,6 +15,7 @@ export type RootStackParamList = {
   Reservation: undefined;
   PlaceReservation: undefined;
   Whitebook: undefined;
+  Benefits: undefined;
 };
 
 export type AuthStackParamList = {
