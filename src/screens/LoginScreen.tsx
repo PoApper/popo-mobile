@@ -14,7 +14,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import api from '../utils/api';
+import api, { POPO_API_URL } from '../utils/api';
 import axios from 'axios';
 
 type LoginScreenProps = {
@@ -54,8 +54,6 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       // 서버에서 받은 쿠키 확인 및 저장
       const setCookie = response.headers['set-cookie'];
       if (setCookie) {
-        console.log('서버에서 받은 쿠키:', setCookie);
-
         // 쿠키 파싱 (예: Authentication=value;)
         const authCookie = setCookie.find(cookie => cookie.includes('Authentication='));
         if (authCookie) {
@@ -63,7 +61,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
           // 1. 쿠키를 RN 쿠키 저장소에 저장
           await CookieManager.set(
-            'https://api.popo-dev.poapper.club',
+            POPO_API_URL,
             {
               name: 'Authentication',
               value: tokenValue,
@@ -77,7 +75,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           await EncryptedStorage.setItem('auth_token', tokenValue);
 
           console.log('인증 토큰 저장 완료');
+        } else {
+          Alert.alert('오류', '인증 토큰을 찾을 수 없습니다.');
         }
+      } else {
+        Alert.alert('오류', '쿠키를 찾을 수 없습니다.');
       }
 
       // 사용자 정보 저장 (필요시)
@@ -90,7 +92,6 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
       // 로그인 성공
       Alert.alert('로그인 성공', '환영합니다!');
-      console.log('로그인 성공:', data);
 
       // 사용자 상세 정보 페이지로 이동
       navigation.navigate('Main', {
@@ -144,12 +145,17 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         <View style={styles.formContainer}>
           <TextInput
             style={[styles.input]}
-            placeholder="POPO에 가입된 이메일"
+            placeholder="POPO 가입 이메일(POSTECH)"
             placeholderTextColor='#9CA3AF'
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
             onChangeText={setEmail}
+            autoComplete="email"
+            textContentType="emailAddress"
+            autoCorrect={false}
+            importantForAutofill="yes"
+            accessibilityLabel="popo.poapper.club email"
           />
 
           <TextInput
@@ -159,6 +165,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
             secureTextEntry
             value={password}
             onChangeText={setPassword}
+            autoComplete="password"
+            textContentType="password"
+            autoCorrect={false}
+            importantForAutofill="yes"
+            accessibilityLabel="popo.poapper.club password"
           />
 
           <TouchableOpacity
