@@ -64,7 +64,7 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
   const itemsPerPage = 10;
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#121212' : '#F3F4F6',
+    backgroundColor: isDarkMode ? '#121212' : '#fff',
     flex: 1,
   };
 

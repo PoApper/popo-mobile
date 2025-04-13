@@ -36,7 +36,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const [userName, setUserName] = useState<string>('');
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#121212' : '#F3F4F6',
+    backgroundColor: isDarkMode ? '#121212' : '#fff',
     flex: 1,
   };
 
@@ -165,8 +165,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
               <TouchableOpacity
                 key={service.id}
                 style={[
-                  styles.serviceItem,
-                  { backgroundColor: isDarkMode ? '#333333' : '#FFFFFF' },
+                  styles.serviceItem
                 ]}
                 onPress={service.active ? service.onPress : undefined}
               >
@@ -219,14 +218,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    backgroundColor: '#F6F7F9',
+    borderRadius: 12,
+    padding: 12,
   },
   serviceItem: {
     width: '23%',
-    aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 12,
-    marginBottom: 16,
+    marginBottom: 24,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

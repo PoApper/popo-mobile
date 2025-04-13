@@ -30,7 +30,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   const [userDataState, setUserData] = useState<any>(null);
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#121212' : '#F3F4F6',
+    backgroundColor: isDarkMode ? '#121212' : '#fff',
     flex: 1,
   };
 
