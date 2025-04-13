@@ -14,7 +14,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import api from '../utils/api';
+import api, { POPO_API_URL } from '../utils/api';
 import axios from 'axios';
 
 type LoginScreenProps = {
@@ -61,7 +61,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
           // 1. 쿠키를 RN 쿠키 저장소에 저장
           await CookieManager.set(
-            'https://api.popo-dev.poapper.club',
+            POPO_API_URL,
             {
               name: 'Authentication',
               value: tokenValue,
@@ -75,7 +75,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           await EncryptedStorage.setItem('auth_token', tokenValue);
 
           console.log('인증 토큰 저장 완료');
+        } else {
+          Alert.alert('오류', '인증 토큰을 찾을 수 없습니다.');
         }
+      } else {
+        Alert.alert('오류', '쿠키를 찾을 수 없습니다.');
       }
 
       // 사용자 정보 저장 (필요시)

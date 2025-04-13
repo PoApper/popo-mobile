@@ -2,7 +2,6 @@ import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { Alert } from 'react-native';
-import { API_URL } from '@env';
 import { navigationRef } from '../navigation/RootNavigation';
 
 // EventEmitter 타입 선언
@@ -13,7 +12,7 @@ declare global {
 }
 
 // API 기본 URL
-const POPO_API_URL = API_URL || 'https://api.popo-dev.poapper.club';
+export const POPO_API_URL = 'https://api.popo-dev.poapper.club';
 
 console.log('현재 API URL:', POPO_API_URL);
 
@@ -54,13 +53,6 @@ api.interceptors.request.use(
         }
       }
 
-      // 인증 토큰이 있으면 요청 헤더에 쿠키 추가
-      // if (authToken && config.headers) {
-      //   console.error("set cookie errr!");
-      //   console.log("authToken", authToken);
-      //   config.headers.Cookie = `Authentication=${authToken};`;
-      // }
-
       return config;
     } catch (error) {
       console.error('API 요청 인터셉터 오류:', error);
@@ -78,6 +70,7 @@ api.interceptors.response.use(
     return response;
   },
   async (error) => {
+    const url = error.config.url;
     if (error.response && error.response.status === 401) {
       try {
         // 인증 정보 초기화
@@ -92,19 +85,35 @@ api.interceptors.response.use(
         }
         await CookieManager.clearAll();
 
-        Alert.alert(
-          "로그인 필요",
-          "로그인이 필요한 서비스입니다.",
-          [
-            {
-              text: "확인",
-              onPress: () => {
-                // 로그인 스크린으로 이동
-                navigationRef.current?.navigate('Login');
+        if (error.response.data.detail) {
+          Alert.alert(
+            "로그인 필요",
+            error.response.data.detail + url,
+            [
+              {
+                text: "확인",
+                onPress: () => {
+                  // 로그인 스크린으로 이동
+                  navigationRef.current?.navigate('Login');
+                }
               }
-            }
-          ]
-        );
+            ]
+          );
+        } else {
+          Alert.alert(
+            "로그인 필요",
+            "로그인이 필요한 서비스입니다." + url,
+            [
+              {
+                text: "확인",
+                onPress: () => {
+                  // 로그인 스크린으로 이동
+                  navigationRef.current?.navigate('Login');
+                }
+              }
+            ]
+          );
+        }
       } catch (clearError) {
         console.error('인증 정보 초기화 오류:', clearError);
       }
