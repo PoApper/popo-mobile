@@ -68,6 +68,8 @@ const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => 
   };
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
+  const backgroundSecondary = isDarkMode ? '#2C2C2C' : '#F3F3F3';
 
   const locations = [...(locationsData[selectedBuilding] || [])];
 
@@ -81,7 +83,7 @@ const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => 
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={styles.header}>
+      <View style={[styles.header, { borderBottomColor: borderColor }]}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}
@@ -105,7 +107,11 @@ const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => 
               <Text
                 style={[
                   styles.buildingTab,
-                  selectedBuilding === building && styles.selectedBuildingText,
+                  { color: isDarkMode ? '#888' : '#999' },
+                  selectedBuilding === building && [
+                    styles.selectedBuildingText,
+                    { color: textColor }
+                  ],
                 ]}
                 onLayout={(e) => {
                   const width = e.nativeEvent.layout.width;
@@ -117,7 +123,7 @@ const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => 
 
                 {selectedBuilding === building && <View style={[
                   styles.underline,
-                  { width: (textWidths[building] || 0) + 8 },
+                  { width: (textWidths[building] || 0) + 8, backgroundColor: textColor },
                 ]} />}
               </View>
             </View>
@@ -130,10 +136,18 @@ const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => 
         {["가나다순", "예약 많은 순"].map((type) => (
           <TouchableOpacity
             key={type}
-            style={[styles.sortButton, sortType === type && styles.activeSort]}
+            style={[
+              styles.sortButton,
+              { borderColor: isDarkMode ? '#555' : '#ccc' },
+              sortType === type && [styles.activeSort, { backgroundColor: textColor }]
+            ]}
             onPress={() => setSortType(type)}
           >
-            <Text style={[styles.sortButtonText, sortType === type && styles.activeSortText]}>
+            <Text style={[
+              styles.sortButtonText,
+              { color: textColor },
+              sortType === type && { color: isDarkMode ? '#000' : '#fff' }
+            ]}>
               {type}
             </Text>
           </TouchableOpacity>
@@ -147,14 +161,14 @@ const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => 
         data={locations}
         keyExtractor={(item) => item.id + item.name}
         renderItem={({ item }) => (
-          <View style={styles.locationItem}>
+          <View style={[styles.locationItem, { backgroundColor: isDarkMode ? '#121212' : '#fff' }]}>
             <Image source={item.image} style={styles.locationImage} />
             <View style={styles.locationInfo}>
-              <Text style={styles.locationName}>{item.name}</Text>
-              <Text style={styles.locationDescription}>{item.description}</Text>
+              <Text style={[styles.locationName, { color: textColor }]}>{item.name}</Text>
+              <Text style={[styles.locationDescription, { color: isDarkMode ? '#888' : '#777' }]}>{item.description}</Text>
             </View>
-            <TouchableOpacity style={styles.reserveButton}>
-              <Text style={styles.reserveButtonText}>예약</Text>
+            <TouchableOpacity style={[styles.reserveButton, { backgroundColor: backgroundSecondary }]}>
+              <Text style={[styles.reserveButtonText, { color: textColor }]}>예약</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -171,7 +185,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
   },
   headerTitle: {
     fontSize: 18,
@@ -220,7 +233,6 @@ const styles = StyleSheet.create({
   underline: {
     marginTop: 4,
     height: 2,
-    backgroundColor: "#000",
     borderRadius: 1,
     alignSelf: "center",
   },
@@ -232,12 +244,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#ccc",
     marginRight: 10,
   },
-  activeSort: { backgroundColor: "#000", borderColor: "#000" },
-  sortButtonText: { fontSize: 14, color: "#000" },
-  activeSortText: { color: "#fff" },
+  activeSort: { borderColor: "#000" },
+  sortButtonText: { fontSize: 14 },
 
   /* 장소 리스트 */
   locationItem: {
@@ -245,7 +255,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 15,
     paddingHorizontal: 20,
-    backgroundColor: "#fff",
   },
 
   locationImage: {
@@ -259,16 +268,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   locationName: { fontSize: 16, fontWeight: "bold", marginBottom: 5 },
-  locationDescription: { fontSize: 14, color: "#777" },
+  locationDescription: { fontSize: 14 },
   reserveButton: {
-    backgroundColor: "#F3F3F3",
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 20,
     alignSelf: "center",
     marginLeft: 10,
   },
-  reserveButtonText: { fontSize: 14, fontWeight: "600", color: "#000" },
+  reserveButtonText: { fontSize: 14, fontWeight: "600" },
 });
 
 export default PlaceReservationScreen;

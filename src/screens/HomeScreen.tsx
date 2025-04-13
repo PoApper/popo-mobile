@@ -55,18 +55,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     fetchUserInfo();
   }, []);
 
-  const handleRecordPress = async () => {
-    const url = 'https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD';
-    try {
-      await Linking.openURL(url);
-    } catch (error) {
-      Alert.alert('오류', '링크를 열 수 없습니다.');
-      console.error('링크 열기 오류:', error);
-    }
-  };
-
-  const handleDeliveryPress = async () => {
-    const url = 'https://www.postechdorm.com/delivery';
+  const handleMoveSite = async (url: string) => {
     try {
       await Linking.openURL(url);
     } catch (error) {
@@ -109,7 +98,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
       icon: 'description',
       title: '기록물',
       active: true,
-      onPress: handleRecordPress,
+      onPress: () => handleMoveSite('https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD'),
     },
     {
       id: '6',
@@ -130,7 +119,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
       icon: 'dining',
       title: '배달업체',
       active: true,
-      onPress: handleDeliveryPress,
+      onPress: () => handleMoveSite('https://www.postechdorm.com/delivery'),
     },
   ];
 
@@ -159,7 +148,10 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           <Text style={[styles.sectionTitle, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
             다양한 서비스 이용하기
           </Text>
-          <View style={styles.servicesGrid}>
+          <View style={[
+            styles.servicesGrid,
+            { backgroundColor: isDarkMode ? '#2C2C2C' : '#F6F7F9' }
+          ]}>
             {services.map((service) => (
               <TouchableOpacity
                 key={service.id}
@@ -217,7 +209,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    backgroundColor: '#F6F7F9',
     borderRadius: 12,
     padding: 12,
   },
