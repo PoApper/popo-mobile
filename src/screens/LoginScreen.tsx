@@ -141,7 +141,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         <View style={styles.formContainer}>
           <TextInput
             style={[styles.input]}
-            placeholder="POPO에 가입된 이메일"
+            placeholder="POPO 가입 이메일(POSTECH)"
             placeholderTextColor='#9CA3AF'
             keyboardType="email-address"
             autoCapitalize="none"
