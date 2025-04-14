@@ -205,14 +205,6 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
               도움이 필요하세요?
             </Text>
           </TouchableOpacity>
-
-          <Text>Temporary Screen Navigator</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('NewPaxiRoom')}>
-            <Text>Goto NewPaxiRoomScreen</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('PaxiRoomList')}>
-            <Text>Goto PaxiRoomListScreen</Text>
-          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>

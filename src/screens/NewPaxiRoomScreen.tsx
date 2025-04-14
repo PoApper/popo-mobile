@@ -23,6 +23,7 @@ const nextWeekDate = '2022-07-14';
 const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
   const horizontalView = navigation;
   const [roomName, setRoomName] = useState("");
+  const [roomDetails, setRoomDetails] = useState("");
   const [departureName, setDepartureName] = useState("");
   const [arrivalName, setArrivalName] = useState("");
   
@@ -56,7 +57,9 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
           fontWeight: "600",
           fontFamily: "Pretendard",
           textAlign: 'center',
-          color: '#3E3E40'
+          color: '#3E3E40',
+          marginTop: 5,
+          marginBottom: 10,
         }}
       >방 생성하기</Text>
 
@@ -119,36 +122,48 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
           <Text style={[styles.titleText, {marginBottom: 0}]}>일정 선택</Text>
         </View>
       </View>
+
       <CalendarList
-            current={initialDate}
-            pastScrollRange={RANGE}
-            futureScrollRange={RANGE}
-            onDayPress={onDayPress}
-            markedDates={marked}
-            renderHeader={renderCustomHeader}
-            calendarHeight={320}  // 수평 레이아웃에 맞게 달력 높이 설정
-            theme={calendarTheme}
-            horizontal={true}
-            pagingEnabled={true}
-            style={{
-              marginTop: 0,
-              paddingTop: 0,
-              transform: [{ scale: 0.9 }],
-              borderStyle: "solid",
-              borderWidth: 1,
-              borderRadius: 6,
-              borderColor: "#D0D0D0",
-            }}
-          />
+        current={initialDate}
+        pastScrollRange={RANGE}
+        futureScrollRange={RANGE}
+        onDayPress={onDayPress}
+        markedDates={marked}
+        renderHeader={renderCustomHeader}
+        calendarHeight={320}  // 수평 레이아웃에 맞게 달력 높이 설정
+        theme={calendarTheme}
+        horizontal={true}
+        pagingEnabled={true}
+        style={{
+          marginTop: 0,
+          paddingTop: 0,
+          transform: [{ scale: 0.9 }],
+          borderStyle: "solid",
+          borderWidth: 1,
+          borderRadius: 6,
+          borderColor: "#D0D0D0",
+        }}
+      />
       
+      <View
+        style={styles.container}
+      >
+        <Text style={styles.titleText}>상세내용</Text>
+        <TextInput
+          style={[styles.roomInput]}
+          placeholder="세부사항을 입력해주세요."
+          placeholderTextColor='#d0d0d0'
+          value={roomDetails}
+          onChangeText={setRoomDetails}
+        />
+      </View>
+
       <TouchableOpacity
         style={styles.nextButton}
         onPress={() => {}}
       >
         <Text style={styles.nextButtonText}>방 등록하기</Text>
       </TouchableOpacity>
-
-      <Text>{selected}</Text>
     </SafeAreaView>
   );
 };

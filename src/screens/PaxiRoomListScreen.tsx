@@ -77,9 +77,50 @@ const RefreshButton = ({ onPress }: { onPress: () => void }) => {
 const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
   const [isChecked, setIsChecked] = useState(false);
 
-  const clicking = () => {
+  const clicking = () => {}
 
-  }
+  const roomData = [
+    {
+      title: '포항역 카풀',
+      departureTime: '3월 14일 오전 7시 출발',
+      remain: 2,
+      total: 4,
+      departure: '포항역',
+      destination: '지곡회관',
+    },
+    {
+      title: '서울역 카풀',
+      departureTime: '3월 15일 오후 5시 출발',
+      remain: 1,
+      total: 3,
+      departure: '서울역',
+      destination: '강남역',
+    },
+    {
+      title: '포항역 카풀',
+      departureTime: '3월 14일 오전 7시 출발',
+      remain: 2,
+      total: 4,
+      departure: '포항역',
+      destination: '지곡회관',
+    },
+    {
+      title: '포항역 카풀',
+      departureTime: '3월 14일 오전 7시 출발',
+      remain: 2,
+      total: 4,
+      departure: '포항역',
+      destination: '지곡회관',
+    },
+    {
+      title: '포항역 카풀',
+      departureTime: '3월 14일 오전 7시 출발',
+      remain: 2,
+      total: 4,
+      departure: '포항역',
+      destination: '지곡회관',
+    },
+  ];
 
   return (
     <SafeAreaView style={[styles.backgroundStyle]}>
@@ -139,54 +180,30 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
         contentContainerStyle={{padding: 8}}
         showsVerticalScrollIndicator={false}
       >
-        <RoomContainer
-          title="포항역 카풀"
-          departureTime="3월 14일 오전 7시 출발"
-          remain={2}
-          total={4}
-          departure="포항역"
-          destination="지곡회관"/>
-
-        <RoomContainer
-          title="포항역 카풀"
-          departureTime="3월 14일 오전 7시 출발"
-          remain={4}
-          total={4}
-          departure="포항역"
-          destination="지곡회관"/>
-
-        <RoomContainer
-          title="포항역 카풀"
-          departureTime="3월 14일 오전 7시 출발"
-          remain={2}
-          total={4}
-          departure="포항역"
-          destination="지곡회관"/>
-
-        <RoomContainer
-          title="포항역 카풀"
-          departureTime="3월 14일 오전 7시 출발"
-          remain={2}
-          total={4}
-          departure="포항역"
-          destination="지곡회관"/>
-
-        <RoomContainer
-          title="포항역 카풀"
-          departureTime="3월 14일 오전 7시 출발"
-          remain={2}
-          total={4}
-          departure="포항역"
-          destination="지곡회관"/>
-
-        <RoomContainer
-          title="포항역 카풀"
-          departureTime="3월 14일 오전 7시 출발"
-          remain={2}
-          total={4}
-          departure="포항역"
-          destination="지곡회관"/>
+        <View style={{ padding: 16 }}>
+          {roomData.length > 0 ? (
+            roomData.map((room, index) => (
+              <RoomContainer
+                key={index}
+                title={room.title}
+                departureTime={room.departureTime}
+                remain={room.remain}
+                total={room.total}
+                departure={room.departure}
+                destination={room.destination}
+              />
+            ))
+          ) : (
+            <Text style={{ fontSize: 16, textAlign: 'center' }}>
+              현재 등록된 카풀이 없습니다.
+            </Text>
+          )}
+        </View>
       </ScrollView>
+
+      <TouchableOpacity style={styles.floatingButton} onPress={() => navigation.navigate('NewPaxiRoom')}>
+        <Text style={{ color: 'white', fontSize: 35, fontWeight: 'bold' }}>+</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -197,6 +214,17 @@ const styles = StyleSheet.create({
   backgroundStyle: {
     backgroundColor: '#ffffff',
     flex: 1,
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    backgroundColor: 'black',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
     borderRadius: 100,
