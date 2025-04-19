@@ -142,7 +142,7 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({ navigation }) => 
                     style={[styles.associationDescription, { color: isDarkMode ? '#888' : '#666' }]}
                     numberOfLines={2}
                   >
-                    {association.short_desc}
+                    {association.content}
                   </Text>
                 </View>
               </View>
