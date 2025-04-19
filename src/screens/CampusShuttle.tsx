@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, useColorScheme, StatusBar } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, useColorScheme, StatusBar, Modal, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
@@ -10,12 +10,20 @@ type CampusShuttleScreenProps = {
 
 const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({ navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
+  const [selectedImage, setSelectedImage] = useState<number | null>(null);
+
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
     flex: 1,
   };
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
+
+  const images = [
+    require('../../assets/shuttle-faculty-apartment-area.png'),
+    require('../../assets/shuttle-campus.png'),
+    require('../../assets/shuttle-bus-stop.png'),
+  ];
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -41,13 +49,15 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({ navigation }) => {
               교수 아파트
             </Text>
             <Text style={[styles.subtitle, { color: textColor }]}>
-                Faculty Apartment Area
-              </Text>
-            <Image
-              source={require('../../assets/shuttle-faculty-apartment-area.png')}
-              style={styles.image1}
-              resizeMode="contain"
-            />
+              Faculty Apartment Area
+            </Text>
+            <TouchableOpacity onPress={() => setSelectedImage(0)}>
+              <Image
+                source={require('../../assets/shuttle-faculty-apartment-area.png')}
+                style={styles.image1}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
           </View>
 
           <View style={[styles.scheduleSection, styles.marginTop]}>
@@ -57,11 +67,13 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({ navigation }) => {
             <Text style={[styles.subtitle, { color: textColor }]}>
               POSTECH Campus Area
             </Text>
-            <Image
-              source={require('../../assets/shuttle-campus.png')}
-              style={styles.image2}
-              resizeMode="contain"
-            />
+            <TouchableOpacity onPress={() => setSelectedImage(1)}>
+              <Image
+                source={require('../../assets/shuttle-campus.png')}
+                style={styles.image2}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
           </View>
 
           <View style={[styles.scheduleSection, styles.marginTop]}>
@@ -71,14 +83,15 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({ navigation }) => {
             <Text style={[styles.subtitle, { color: textColor }]}>
               Shuttle Bus Stop
             </Text>
-            <Image
-              source={require('../../assets/shuttle-bus-stop.png')}
-              style={styles.image3}
-              resizeMode="contain"
-            />
+            <TouchableOpacity onPress={() => setSelectedImage(2)}>
+              <Image
+                source={require('../../assets/shuttle-bus-stop.png')}
+                style={styles.image3}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
           </View>
         </View>
-
 
         <View style={[styles.section]}>
           <View style={styles.textContainer}>
@@ -103,6 +116,28 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>
+
+      <Modal
+        visible={selectedImage !== null}
+        transparent={true}
+        onRequestClose={() => setSelectedImage(null)}
+      >
+        <TouchableOpacity
+          style={styles.modalBackground}
+          activeOpacity={1}
+          onPress={() => setSelectedImage(null)}
+        >
+          <View style={styles.modalContent}>
+            {selectedImage !== null && (
+              <Image
+                source={images[selectedImage]}
+                style={styles.modalImage}
+                resizeMode="contain"
+              />
+            )}
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -178,6 +213,22 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     marginBottom: 8,
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalImage: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height * 0.8,
   },
 });
 
