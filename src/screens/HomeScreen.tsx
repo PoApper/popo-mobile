@@ -104,8 +104,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
       id: '6',
       icon: 'people',
       title: '동아리',
-      active: false,
-      onPress: () => navigation.navigate('Login'),
+      active: true,
+      onPress: () => navigation.navigate('Club'),
     },
     {
       id: '7',

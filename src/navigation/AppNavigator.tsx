@@ -17,6 +17,7 @@ import ReservationScreen from '../screens/ReservationScreen';
 import PlaceReservationScreen from '../screens/PlaceReservationScreen';
 import WhitebookScreen from '../screens/WhitebookScreen';
 import BenefitsScreen from '../screens/BenefitsScreen';
+import ClubScreen from '../screens/ClubScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -69,7 +70,7 @@ const MainNavigator = () => {
         name="MyReservation"
         component={ReservationScreen}
         options={{
-          tabBarLabel: '내 예약',
+          tabBarLabel: '내 일정',
           tabBarIcon: ({ color, size }) => (
             <Icon name="event" size={size} color={color} />
           ),
@@ -128,6 +129,7 @@ const AppNavigator = () => {
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="Whitebook" component={WhitebookScreen} />
           <Stack.Screen name="Benefits" component={BenefitsScreen} />
+          <Stack.Screen name="Club" component={ClubScreen} />
           <Stack.Screen name="Auth" component={AuthNavigator} />
           <Stack.Screen name="Main" component={MainNavigator} />
         </Stack.Navigator>
