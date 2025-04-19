@@ -184,9 +184,13 @@ const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
           </View>
         ) : (
           filteredClubs.map((club) => (
-            <View
+            <TouchableOpacity
               key={club.uuid}
               style={[styles.clubCard, { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' }]}
+              onPress={() => navigation.navigate('ClubDetail', {
+                clubId: club.uuid,
+                clubName: club.name,
+              })}
             >
               <View style={styles.cardContent}>
                 <View style={styles.imageContainer}>
@@ -208,7 +212,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
                   </Text>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
           ))
         )}
       </ScrollView>
@@ -329,11 +333,12 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
   },
   clubImage: {
+    padding: 5,
     width: '100%',
     height: '100%',
   },

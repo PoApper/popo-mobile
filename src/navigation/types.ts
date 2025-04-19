@@ -17,6 +17,10 @@ export type RootStackParamList = {
   Whitebook: undefined;
   Benefits: undefined;
   Club: undefined;
+  ClubDetail: {
+    clubId: string;
+    clubName: string;
+  };
 };
 
 export type AuthStackParamList = {
