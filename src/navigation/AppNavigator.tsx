@@ -19,6 +19,7 @@ import WhitebookScreen from '../screens/WhitebookScreen';
 import BenefitsScreen from '../screens/BenefitsScreen';
 import ClubScreen from '../screens/ClubScreen';
 import ClubDetailScreen from '../screens/ClubDetailScreen';
+import AssociationScreen from '../screens/AssociationScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -132,6 +133,7 @@ const AppNavigator = () => {
           <Stack.Screen name="Benefits" component={BenefitsScreen} />
           <Stack.Screen name="Club" component={ClubScreen} />
           <Stack.Screen name="ClubDetail" component={ClubDetailScreen} />
+          <Stack.Screen name="Association" component={AssociationScreen} />
           <Stack.Screen name="Auth" component={AuthNavigator} />
           <Stack.Screen name="Main" component={MainNavigator} />
         </Stack.Navigator>

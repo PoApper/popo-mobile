@@ -83,8 +83,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
       id: '3',
       icon: 'account-balance',
       title: '자치단체',
-      active: false,
-      onPress: () => navigation.navigate('Login'),
+      active: true,
+      onPress: () => navigation.navigate('Association'),
     },
     {
       id: '4',

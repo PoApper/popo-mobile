@@ -21,6 +21,11 @@ export type RootStackParamList = {
     clubId: string;
     clubName: string;
   };
+  Association: undefined;
+  AssociationDetail: {
+    associationId: string;
+    associationName: string;
+  };
 };
 
 export type AuthStackParamList = {
