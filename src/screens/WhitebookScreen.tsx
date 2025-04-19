@@ -133,7 +133,13 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({ navigation }) => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={[styles.itemContainer, { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' }]}
-            onPress={() => handleLinkPress(item.link, item.title)}
+            onPress={() => {
+              if (item.title === "교내 셔틀버스 시간표") {
+                navigation.navigate('CampusShuttle');
+              } else {
+                handleLinkPress(item.link, item.title)
+              }
+            }}
           >
             <View style={styles.textContainer}>
               <Text style={[styles.itemTitle, { color: textColor }]}>{item.title}</Text>

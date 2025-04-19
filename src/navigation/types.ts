@@ -26,6 +26,7 @@ export type RootStackParamList = {
     associationId: string;
     associationName: string;
   };
+  CampusShuttle: undefined;
 };
 
 export type AuthStackParamList = {
