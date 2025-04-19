@@ -22,6 +22,7 @@
 		2D633737940FD849852E0384 /* libPods-popoMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-popoMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = popoMobile/AppDelegate.swift; sourceTree = "<group>"; };
 		7A5171C2A8952B65FCB30EA3 /* Pods-popoMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-popoMobile.debug.xcconfig"; path = "Target Support Files/Pods-popoMobile/Pods-popoMobile.debug.xcconfig"; sourceTree = "<group>"; };
+		7D79F28A2DABDE7200E84AD5 /* popoMobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = popoMobile.entitlements; path = popoMobile/popoMobile.entitlements; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = popoMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BF2B8274F71534EE56C5F221 /* Pods-popoMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-popoMobile.release.xcconfig"; path = "Target Support Files/Pods-popoMobile/Pods-popoMobile.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -42,6 +43,7 @@
 		13B07FAE1A68108700A75B9A /* popoMobile */ = {
 			isa = PBXGroup;
 			children = (
+				7D79F28A2DABDE7200E84AD5 /* popoMobile.entitlements */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -259,6 +261,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = popoMobile/popoMobile.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4K2LW3A9X8;
 				ENABLE_BITCODE = NO;
@@ -293,6 +296,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = popoMobile/popoMobile.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4K2LW3A9X8;
 				INFOPLIST_FILE = popoMobile/Info.plist;

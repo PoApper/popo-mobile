@@ -30,7 +30,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   const [userDataState, setUserData] = useState<any>(null);
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#121212' : '#F3F4F6',
+    backgroundColor: isDarkMode ? '#121212' : '#fff',
     flex: 1,
   };
 
@@ -78,9 +78,15 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
       await api.get('/auth/logout');
 
       // 인증 정보 초기화
-      await EncryptedStorage.removeItem('auth_token');
-      await EncryptedStorage.removeItem('isAuthenticated');
-      await EncryptedStorage.removeItem('user_info');
+      if (await EncryptedStorage.getItem('auth_token')) {
+        await EncryptedStorage.removeItem('auth_token');
+      }
+      if (await EncryptedStorage.getItem('isAuthenticated')) {
+        await EncryptedStorage.removeItem('isAuthenticated');
+      }
+      if (await EncryptedStorage.getItem('user_info')) {
+        await EncryptedStorage.removeItem('user_info');
+      }
       await CookieManager.clearAll();
 
       // 로그아웃 성공 후 처리
@@ -111,11 +117,8 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   useEffect(() => {
     const loadStoredUserInfo = async () => {
       try {
-        const storedUserInfo = await EncryptedStorage.getItem('user_info');
-        if (storedUserInfo) {
-          const userInfo = JSON.parse(storedUserInfo);
-          setUserData(userInfo);
-        }
+        const res = await api.get('/auth/myInfo');
+        setUserData(res.data);
       } catch (error) {
         console.error('저장된 사용자 정보 로드 오류:', error);
       }
