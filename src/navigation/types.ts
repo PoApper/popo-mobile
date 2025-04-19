@@ -14,6 +14,19 @@ export type RootStackParamList = {
   UserDetail: undefined;
   Reservation: undefined;
   PlaceReservation: undefined;
+  Whitebook: undefined;
+  Benefits: undefined;
+  Club: undefined;
+  ClubDetail: {
+    clubId: string;
+    clubName: string;
+  };
+  Association: undefined;
+  AssociationDetail: {
+    associationId: string;
+    associationName: string;
+  };
+  CampusShuttle: undefined;
 };
 
 export type AuthStackParamList = {
