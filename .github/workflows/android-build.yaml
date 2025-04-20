@@ -1,9 +1,11 @@
-name: Android Build
+name: Android APK Build
 on:
   push:
+    branches:
+      - main
 
 jobs:
-  build:
+  build_apk:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
