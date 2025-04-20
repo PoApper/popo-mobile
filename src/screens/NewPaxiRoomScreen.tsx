@@ -10,44 +10,43 @@ import {
   StatusBar,
   ScrollView,
 } from 'react-native';
-import { CalendarList, DateData } from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
+
+LocaleConfig.locales['kr'] = {
+  monthNames: [
+    '1월', '2월', '3월', '4월', '5월', '6월',
+    '7월', '8월', '9월', '10월', '11월', '12월'
+  ],
+  monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+  dayNames: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+  dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+  today: '오늘'
+};
+LocaleConfig.defaultLocale = 'kr';
 
 type NewPaxiRoomScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewPaxiRoom'>;
 };
 
-const RANGE = 24;
-const initialDate = '2025-03-31';
-const nextWeekDate = '2022-07-14';
-
 const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
-  const horizontalView = navigation;
   const [roomName, setRoomName] = useState("");
   const [roomDetails, setRoomDetails] = useState("");
   const [departureName, setDepartureName] = useState("");
   const [arrivalName, setArrivalName] = useState("");
 
-  const [selected, setSelected] = useState(initialDate);
-  const marked = useMemo(() => {
-    return {
-      [nextWeekDate]: {
-        selected: selected === nextWeekDate,
-        selectedTextColor: '#FB5353',
-        marked: true
-      },
-      [selected]: {
-        selected: true,
-        disableTouchEvent: true,
-        selectedColor: '#FB5353',
-        selectedTextColor: 'white'
-      }
-    };
-  }, [selected]);
+  const [selected, setSelected] = useState(new Date().toISOString().split('T')[0]);
+  const marked = useMemo(() => ({
+    [selected]: {
+      selected: true,
+      selectedColor: '#FB5353',
+      selectedTextColor: 'white'
+    }
+  }), [selected]);
 
-  const onDayPress = useCallback((day: DateData) => {
+  const onDayPress = useCallback((day: any) => {
     setSelected(day.dateString);
   }, []);
 
@@ -57,6 +56,10 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
     flex: 1,
+  };
+
+  const textStyle: TextStyle = {
+    color: textColor,
   };
 
   return (
@@ -142,38 +145,41 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
           </View>
         </View>
 
-        <CalendarList
-          current={initialDate}
-          pastScrollRange={RANGE}
-          futureScrollRange={RANGE}
-          onDayPress={onDayPress}
-          markedDates={marked}
-          renderHeader={renderCustomHeader}
-          calendarHeight={320}  // 수평 레이아웃에 맞게 달력 높이 설정
-          theme={{
-            ...calendarTheme,
-            calendarBackground: isDarkMode ? '#1A1A1A' : '#fff',
-            todayTextColor: textColor,
-            monthTextColor: textColor,
-            dayTextColor: textColor,
-            textDisabledColor: isDarkMode ? '#555' : '#d0d0d0',
-            selectedDayBackgroundColor: '#FB5353',
-            selectedDayTextColor: '#FFFFFF',
-          }}
-          horizontal={true}
-          pagingEnabled={true}
-          style={{
-            marginTop: 0,
-            paddingTop: 0,
-            paddingBottom: 8,
-            transform: [{ scale: 0.9 }],
-            borderStyle: "solid",
-            borderWidth: 1,
-            borderRadius: 6,
-            borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-            backgroundColor: isDarkMode ? '#1A1A1A' : '#fff',
-          }}
-        />
+        <View style={{
+          marginHorizontal: 16,
+          marginVertical: 8,
+          borderWidth: 1,
+          borderRadius: 6,
+          borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+          backgroundColor: isDarkMode ? '#1A1A1A' : '#fff',
+          overflow: 'hidden',
+          height: 370
+        }}>
+          <Calendar
+            current={selected}
+            onDayPress={onDayPress}
+            markedDates={marked}
+            hideExtraDays={true}
+            firstDay={0}
+            monthFormat={'yyyy년 MM월'}
+            theme={{
+              calendarBackground: isDarkMode ? '#1A1A1A' : '#fff',
+              textSectionTitleColor: isDarkMode ? '#FFFFFF' : '#000000',
+              selectedDayBackgroundColor: '#FB5353',
+              selectedDayTextColor: '#FFFFFF',
+              todayTextColor: '#FB5353',
+              dayTextColor: isDarkMode ? '#FFFFFF' : '#000000',
+              textDisabledColor: isDarkMode ? '#555' : '#d0d0d0',
+              monthTextColor: isDarkMode ? '#FFFFFF' : '#000000',
+              textMonthFontSize: 16,
+              textDayFontSize: 16,
+              textDayHeaderFontSize: 14,
+            }}
+            style={{
+              height: 370
+            }}
+          />
+        </View>
 
         <View style={styles.container}>
           <Text style={[styles.titleText, { color: textColor }]}>상세내용</Text>
@@ -196,14 +202,24 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
         <TouchableOpacity
           style={[
             styles.nextButton,
-            { backgroundColor: isDarkMode ? '#FFFFFF' : '#0B0B0B' }
+            {
+              backgroundColor: 'black'
+            }
           ]}
-          onPress={() => {}}
+          onPress={() => {
+            if (roomName && departureName && arrivalName) {
+              navigation.navigate('NewPaxiRoomNext', {
+                roomName,
+                roomDetails,
+                departureName,
+                arrivalName,
+                selectedDate: selected,
+              });
+            }
+          }}
+          disabled={!roomName || !departureName || !arrivalName}
         >
-          <Text style={[
-            styles.nextButtonText,
-            { color: isDarkMode ? '#0B0B0B' : '#ffffff' }
-          ]}>방 등록하기</Text>
+          <Text style={styles.nextButtonText}>방 생성하기</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -229,25 +245,6 @@ const calendarTheme = {
   },
   textDayFontSize: 18,
   textDayHeaderFontSize: 16,
-};
-
-// custom header를 "Month"와 "Year"만 나오도록 수정
-function renderCustomHeader(date: any) {
-  const header = date.toString('MMMM yyyy');
-  const [month, year] = header.split(' ');
-  const textStyle: TextStyle = {
-    fontSize: 22,
-    fontWeight: 'bold',
-    paddingTop: 10,
-    paddingBottom: 10,
-    color: '#4a5660'
-  };
-
-  return (
-    <View style={styles.header}>
-      <Text style={[textStyle]}>{month}  {year}</Text>
-    </View>
-  );
 };
 
 export default NewPaxiRoomScreen;
@@ -291,7 +288,7 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     borderRadius: 6,
-    backgroundColor: '#0B0B0B',
+    backgroundColor: '#FB5353',
     width: '90%',
     marginLeft: '5%',
     marginTop: 20,

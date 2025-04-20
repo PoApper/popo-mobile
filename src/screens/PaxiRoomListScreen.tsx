@@ -234,11 +234,11 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
         }]}
         onPress={() => navigation.navigate('NewPaxiRoom')}
       >
-        <Text style={{
-          color: isDarkMode ? '#000000' : 'white',
-          fontSize: 35,
-          fontWeight: 'bold'
-        }}>+</Text>
+        <Icon
+          name="add"
+          size={30}
+          color={isDarkMode ? '#000000' : 'white'}
+        />
       </TouchableOpacity>
     </SafeAreaView>
   );
