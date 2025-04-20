@@ -17,6 +17,13 @@ import ReservationScreen from '../screens/ReservationScreen';
 import NewPaxiRoomScreen from '../screens/NewPaxiRoomScreen';
 import PaxiRoomListScreen from '../screens/PaxiRoomListScreen';
 import PlaceReservationScreen from '../screens/PlaceReservationScreen';
+import WhitebookScreen from '../screens/WhitebookScreen';
+import BenefitsScreen from '../screens/BenefitsScreen';
+import ClubScreen from '../screens/ClubScreen';
+import ClubDetailScreen from '../screens/ClubDetailScreen';
+import AssociationScreen from '../screens/AssociationScreen';
+import AssociationDetailScreen from '../screens/AssociationDetailScreen';
+import CampusShuttleScreen from '../screens/CampusShuttle';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -69,7 +76,7 @@ const MainNavigator = () => {
         name="MyReservation"
         component={ReservationScreen}
         options={{
-          tabBarLabel: '내 예약',
+          tabBarLabel: '내 일정',
           tabBarIcon: ({ color, size }) => (
             <Icon name="event" size={size} color={color} />
           ),
@@ -128,6 +135,13 @@ const AppNavigator = () => {
           <Stack.Screen name="Reservation" component={ReservationScreen} />
           <Stack.Screen name="PlaceReservation" component={PlaceReservationScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
+          <Stack.Screen name="Whitebook" component={WhitebookScreen} />
+          <Stack.Screen name="Benefits" component={BenefitsScreen} />
+          <Stack.Screen name="Club" component={ClubScreen} />
+          <Stack.Screen name="ClubDetail" component={ClubDetailScreen} />
+          <Stack.Screen name="Association" component={AssociationScreen} />
+          <Stack.Screen name="AssociationDetail" component={AssociationDetailScreen} />
+          <Stack.Screen name="CampusShuttle" component={CampusShuttleScreen} />
           <Stack.Screen name="Auth" component={AuthNavigator} />
           <Stack.Screen name="Main" component={MainNavigator} />
         </Stack.Navigator>
