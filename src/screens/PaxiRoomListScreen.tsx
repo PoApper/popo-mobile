@@ -5,10 +5,13 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  StatusBar,
+  useColorScheme,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainTabParamList } from '../navigation/types';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
 type PaxiRoomListScreenProps = {
@@ -25,50 +28,48 @@ interface RoomContainerProps {
 }
 
 const RoomContainer: React.FC<RoomContainerProps> = ({ title, departureTime, remain, total, departure, destination }) => {
+  const isDarkMode = useColorScheme() === 'dark';
+  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const backgroundColor = isDarkMode ? '#1A1A1A' : '#fff';
+  const subTextColor = isDarkMode ? '#888' : '#666';
+
   return (
-    <View style={styles.roomContainer}>
-      <View style={{
-        marginTop: 7,
-        marginLeft: 7,
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 5,
-      }}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={remain < total ? styles.possible : styles.impossible}>{remain < total ? "참여 가능" : "마감"}</Text>
+    <TouchableOpacity style={[styles.roomContainer, { backgroundColor }]}>
+      <View style={styles.cardContent}>
+        <View style={styles.mainInfo}>
+          <View style={styles.titleContainer}>
+            <Text style={[styles.title, { color: textColor }]}>{title}</Text>
+            <Text style={remain < total ? styles.possible : styles.impossible}>
+              {remain < total ? "참여 가능" : "마감"}
+            </Text>
+          </View>
+          <View style={styles.details}>
+            <Text style={[styles.detailsText, { color: textColor }]}>{departure}</Text>
+            <Text style={[styles.arrow, { color: textColor }]}>{"  - - - - >  "}</Text>
+            <Text style={[styles.detailsText, { color: textColor }]}>{destination}</Text>
+          </View>
+          <Text style={[styles.departureTime, { color: subTextColor }]}>{departureTime}</Text>
+        </View>
       </View>
-      <View style={styles.details}>
-        <Text style={styles.detailsText}>{departure}</Text>
-        <Text style={{fontSize: 25,}}>{"  - - - - >  "}</Text>
-        <Text style={styles.detailsText}>{destination}</Text>
-      </View>
-      <Text style={styles.departureTime}>{departureTime}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
 const RefreshButton = ({ onPress }: { onPress: () => void }) => {
+  const isDarkMode = useColorScheme() === 'dark';
   return (
     <TouchableOpacity
-      style={{
-        width: 38,
-        height: 38,
-        borderRadius: 19,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F4F4F6',
-      }}
+      style={[styles.refreshButton, {
+        backgroundColor: isDarkMode ? '#2C2C2C' : '#F4F4F6',
+      }]}
       onPress={onPress}
       activeOpacity={0.7}
     >
-      <Text style={{
-        fontSize: 30,
-        lineHeight: 30,
-        fontWeight: "bold",
-        textAlign: 'center',
-        color: "black",
-        includeFontPadding: false,
-      }}>↺</Text>
+      <Icon
+        name="refresh"
+        size={24}
+        color={isDarkMode ? '#FFFFFF' : '#000000'}
+      />
     </TouchableOpacity>
   );
 };
@@ -76,6 +77,13 @@ const RefreshButton = ({ onPress }: { onPress: () => void }) => {
 
 const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
   const [isChecked, setIsChecked] = useState(false);
+  const isDarkMode = useColorScheme() === 'dark';
+  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? '#121212' : '#fff',
+    flex: 1,
+  };
 
   const clicking = () => {}
 
@@ -123,43 +131,61 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
   ];
 
   return (
-    <SafeAreaView style={[styles.backgroundStyle]}>
-      <Text style={{
-        margin: 20,
-        marginLeft: 30,
-        fontSize: 30,
-        fontWeight: "bold",
-        fontFamily: "Pretendard",
-        color: 'black'
-      }}>Paxi</Text>
+    <SafeAreaView style={[backgroundStyle]}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
+      <View style={[styles.header, { borderBottomColor: borderColor }]}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+        </TouchableOpacity>
+        <Text style={[styles.headerTitle, { color: textColor }]}>Paxi</Text>
+        <View style={styles.placeholderButton} />
+      </View>
 
       <View style={[styles.conditionNavigator]}>
         <RefreshButton
           onPress={() => {}} />
 
         <TouchableOpacity
-          style={[styles.button]}
+          style={[styles.button, {
+            borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
+            backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
+          }]}
           onPress={clicking}
         >
-          <Text>출발지</Text>
+          <Text style={{ color: textColor }}>출발지</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button]}
+          style={[styles.button, {
+            borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
+            backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
+          }]}
           onPress={clicking}
         >
-          <Text>도착지</Text>
+          <Text style={{ color: textColor }}>도착지</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button]}
+          style={[styles.button, {
+            borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
+            backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
+          }]}
           onPress={clicking}
         >
-          <Text>날짜</Text>
+          <Text style={{ color: textColor }}>날짜</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button]}
+          style={[styles.button, {
+            borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
+            backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
+          }]}
           onPress={clicking}
         >
-          <Text>시간</Text>
+          <Text style={{ color: textColor }}>시간</Text>
         </TouchableOpacity>
       </View>
 
@@ -169,15 +195,16 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
       >
         <View style={[
           styles.checkbox,
-          isChecked && styles.checked
+          { borderColor: isDarkMode ? '#555' : '#D0D0D0' },
+          isChecked && { backgroundColor: isDarkMode ? '#FFFFFF' : 'black', borderColor: isDarkMode ? '#FFFFFF' : 'black' }
         ]}>
-          {isChecked && <Text style={styles.checkmark}>✓</Text>}
+          {isChecked && <Text style={[styles.checkmark, { color: isDarkMode ? '#000000' : '#FFFFFF' }]}>✓</Text>}
         </View>
-        <Text style={{fontSize: 15}}>빈 방만 보기</Text>
+        <Text style={{ fontSize: 15, color: textColor }}>빈 방만 보기</Text>
       </TouchableOpacity>
 
       <ScrollView
-        contentContainerStyle={{padding: 8}}
+        contentContainerStyle={{ padding: 4 }}
         showsVerticalScrollIndicator={false}
       >
         <View style={{ padding: 16 }}>
@@ -194,15 +221,24 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
               />
             ))
           ) : (
-            <Text style={{ fontSize: 16, textAlign: 'center' }}>
+            <Text style={{ fontSize: 16, textAlign: 'center', color: textColor }}>
               현재 등록된 카풀이 없습니다.
             </Text>
           )}
         </View>
       </ScrollView>
 
-      <TouchableOpacity style={styles.floatingButton} onPress={() => navigation.navigate('NewPaxiRoom')}>
-        <Text style={{ color: 'white', fontSize: 35, fontWeight: 'bold' }}>+</Text>
+      <TouchableOpacity
+        style={[styles.floatingButton, {
+          backgroundColor: isDarkMode ? '#FFFFFF' : 'black'
+        }]}
+        onPress={() => navigation.navigate('NewPaxiRoom')}
+      >
+        <Text style={{
+          color: isDarkMode ? '#000000' : 'white',
+          fontSize: 35,
+          fontWeight: 'bold'
+        }}>+</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -212,116 +248,128 @@ export default PaxiRoomListScreen;
 
 const styles = StyleSheet.create({
   backgroundStyle: {
-    backgroundColor: '#ffffff',
     flex: 1,
   },
-  floatingButton: {
-    position: 'absolute',
-    bottom: 30,
-    right: 30,
-    backgroundColor: 'black',
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
+  container: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
-  button: {
-    borderRadius: 100,
-    borderWidth: 1.5,
-    borderStyle: "solid",
-    borderColor: '#f4f4f6',
-    backgroundColor: 'white',
-    height: 38,
-    justifyContent: 'center',
+  header: {
+    flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: "flex-start",
-    paddingLeft: 20,
-    paddingRight: 20,
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    flex: 1,
+    textAlign: 'center',
+  },
+  backButton: {
+    padding: 8,
+  },
+  backButtonText: {
+    fontSize: 16,
+  },
+  placeholderButton: {
+    width: 40,
   },
   conditionNavigator: {
     paddingLeft: 15,
     flexDirection: "row",
-    gap: 5
+    gap: 5,
+    marginTop: 10,
+    marginBottom: 10,
   },
   roomContainer: {
-    shadowColor: "rgba(0, 0, 0, 0.3)",
+    marginBottom: 12,
+    borderRadius: 12,
+    overflow: 'hidden',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowRadius: 7,
-    elevation: 7,
-    shadowOpacity: 2,
-    borderRadius: 15,
-    backgroundColor: "#fff",
-    padding: 5,
-    marginTop: 10,
-    paddingBottom: 20,
-    marginLeft: "5%",
-    width: "90%",
-    height: "auto",
-    flexDirection: "column",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    padding: 12,
+  },
+  cardContent: {
+    flexDirection: 'column',
+  },
+  mainInfo: {
+    flex: 1,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 12,
   },
   title: {
-    fontSize: 14,
-    letterSpacing: -0.4,
-    fontWeight: "500",
-    fontFamily: "Pretendard",
-    color: "#9b9b9b",
-    textAlign: "left",
-    lineHeight: 20,
+    fontSize: 16,
+    fontWeight: '600',
   },
   possible: {
     fontSize: 13,
     letterSpacing: -0.1,
     fontWeight: "700",
-    fontFamily: "Pretendard",
     color: "#fb5353",
     borderRadius: 3,
     backgroundColor: "#fff3f3",
-    textAlign: "center",
-    paddingLeft: 5,
-    paddingRight: 5,
-    lineHeight: 20,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
   },
   impossible: {
     fontSize: 13,
     letterSpacing: -0.1,
     fontWeight: "700",
-    fontFamily: "Pretendard",
     color: "#909090",
     borderRadius: 3,
     backgroundColor: "rgba(217, 217, 217, 0.83)",
-    textAlign: "center",
-    paddingLeft: 5,
-    paddingRight: 5,
-    lineHeight: 20,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
   },
   departureTime: {
     fontSize: 14,
-    textAlign: "center",
-    letterSpacing: -0.4,
-    fontWeight: "500",
-    fontFamily: "Pretendard",
-    color: "#4f4f4f",
+    marginTop: 4,
+    textAlign: 'center',
   },
   details: {
-    width: "100%",
-    marginTop: 10,
-    marginBottom: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
     flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginBottom: 12,
   },
   detailsText: {
+    fontSize: 18,
+  },
+  arrow: {
     fontSize: 20,
-    color: "#333",
-    alignSelf: 'flex-start',
+  },
+  button: {
+    borderRadius: 20,
+    borderWidth: 1,
+    height: 38,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+  },
+  refreshButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   checkboxContainer: {
     flexDirection: 'row',
-    margin: "5%",
+    marginHorizontal: 20,
     alignItems: 'center',
     marginVertical: 8,
   },
@@ -329,7 +377,6 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: '#D0D0D0',
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
@@ -342,6 +389,24 @@ const styles = StyleSheet.create({
   checkmark: {
     color: 'white',
     fontSize: 12,
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
 });
 

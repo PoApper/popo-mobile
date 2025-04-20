@@ -5,7 +5,10 @@ import {
   View,
   TextInput,
   TextStyle,
-  TouchableOpacity
+  TouchableOpacity,
+  useColorScheme,
+  StatusBar,
+  ScrollView,
 } from 'react-native';
 import { CalendarList, DateData } from 'react-native-calendars';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -26,7 +29,7 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
   const [roomDetails, setRoomDetails] = useState("");
   const [departureName, setDepartureName] = useState("");
   const [arrivalName, setArrivalName] = useState("");
-  
+
   const [selected, setSelected] = useState(initialDate);
   const marked = useMemo(() => {
     return {
@@ -48,122 +51,161 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
     setSelected(day.dateString);
   }, []);
 
+  const isDarkMode = useColorScheme() === 'dark';
+  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? '#121212' : '#fff',
+    flex: 1,
+  };
+
   return (
-    <SafeAreaView style={styles.backgroundStyle}>
-      <Text
-        style={{
-          fontSize: 25,
-          letterSpacing: -0.7,
-          fontWeight: "600",
-          fontFamily: "Pretendard",
-          textAlign: 'center',
-          color: '#3E3E40',
-          marginTop: 5,
-          marginBottom: 10,
-        }}
-      >방 생성하기</Text>
-
-      <View style={styles.separator} />
-
-      <View
-        style={styles.container}
-      >
-        <Text style={styles.titleText}>방 제목</Text>
-        <TextInput
-          style={[styles.roomInput, { marginBottom: 10 }]}
-          placeholder="제목을 입력해주세요."
-          placeholderTextColor='#d0d0d0'
-          value={roomName}
-          onChangeText={setRoomName}
-        />
-
-        <View
-          style={{
-            width: '100%',
-          }}
+    <SafeAreaView style={backgroundStyle}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
+      <View style={[styles.header, { borderBottomColor: borderColor }]}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
         >
-          <Text style={styles.titleText}>위치 지정</Text>
-          <View style={[styles.inputWrapper, { marginBottom: 10 }]}>
-            <View style={styles.inputWithDot}>
-              <View style={styles.dotBlack} />
-              <TextInput
-                style={{
-                  width: '90%',
-                }}
-                placeholder="어디서 출발하시나요?"
-                placeholderTextColor="#d0d0d0"
-                value={departureName}
-                onChangeText={setDepartureName}
-              />
+          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+        </TouchableOpacity>
+        <Text style={[styles.headerTitle, { color: textColor }]}>방 생성하기</Text>
+        <View style={styles.placeholderButton} />
+      </View>
+
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={{ width: '100%', marginBottom: 8 }}>
+            <Text style={[styles.titleText, { color: textColor }]}>방 제목</Text>
+            <TextInput
+            style={[
+              styles.roomInput,
+              {
+                marginBottom: 10,
+                borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+                color: textColor
+              }
+            ]}
+            placeholder="제목을 입력해주세요."
+            placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+              value={roomName}
+              onChangeText={setRoomName}
+            />
+          </View>
+
+          <View style={{ width: '100%', marginBottom: 8 }}>
+            <Text style={[styles.titleText, { color: textColor }]}>위치 지정</Text>
+            <View style={[
+              styles.inputWrapper,
+              {
+                marginBottom: 10,
+                borderColor: isDarkMode ? '#2C2C2C' : '#d0d0d0',
+                backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'
+              }
+            ]}>
+              <View style={styles.inputWithDot}>
+                <View style={styles.dotBlack} />
+                <TextInput
+                  style={{
+                    width: '90%',
+                    color: textColor
+                  }}
+                  placeholder="어디서 출발하시나요?"
+                  placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+                  value={departureName}
+                  onChangeText={setDepartureName}
+                />
+              </View>
+              <View style={[styles.separator, { backgroundColor: isDarkMode ? '#2C2C2C' : '#d0d0d0' }]} />
+              <View style={styles.inputWithDot}>
+                <View style={styles.dotRed} />
+                <TextInput
+                  style={{
+                    width: '90%',
+                    color: textColor
+                  }}
+                  placeholder="어디로 떠나시나요?"
+                  placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+                  value={arrivalName}
+                  onChangeText={setArrivalName}
+                />
+              </View>
             </View>
-            <View style={styles.separator} />
-            <View style={styles.inputWithDot}>
-              <View style={styles.dotRed} />
-              <TextInput
-                style={{
-                  width: '90%',
-                }}
-                placeholder="어디로 떠나시나요?"
-                placeholderTextColor="#d0d0d0"
-                value={arrivalName}
-                onChangeText={setArrivalName}
-              />
-            </View>
+          </View>
+
+          <View style={{ width: '100%', marginBottom: 0, paddingBottom: 0 }}>
+            <Text style={[styles.titleText, { marginBottom: 0, color: textColor }]}>일정 선택</Text>
           </View>
         </View>
 
-        <View
-          style={{
-            width: '100%',
-            marginBottom: 0,
-            paddingBottom: 0,
+        <CalendarList
+          current={initialDate}
+          pastScrollRange={RANGE}
+          futureScrollRange={RANGE}
+          onDayPress={onDayPress}
+          markedDates={marked}
+          renderHeader={renderCustomHeader}
+          calendarHeight={320}  // 수평 레이아웃에 맞게 달력 높이 설정
+          theme={{
+            ...calendarTheme,
+            calendarBackground: isDarkMode ? '#1A1A1A' : '#fff',
+            todayTextColor: textColor,
+            monthTextColor: textColor,
+            dayTextColor: textColor,
+            textDisabledColor: isDarkMode ? '#555' : '#d0d0d0',
+            selectedDayBackgroundColor: '#FB5353',
+            selectedDayTextColor: '#FFFFFF',
           }}
-        >
-          <Text style={[styles.titleText, {marginBottom: 0}]}>일정 선택</Text>
-        </View>
-      </View>
-
-      <CalendarList
-        current={initialDate}
-        pastScrollRange={RANGE}
-        futureScrollRange={RANGE}
-        onDayPress={onDayPress}
-        markedDates={marked}
-        renderHeader={renderCustomHeader}
-        calendarHeight={320}  // 수평 레이아웃에 맞게 달력 높이 설정
-        theme={calendarTheme}
-        horizontal={true}
-        pagingEnabled={true}
-        style={{
-          marginTop: 0,
-          paddingTop: 0,
-          transform: [{ scale: 0.9 }],
-          borderStyle: "solid",
-          borderWidth: 1,
-          borderRadius: 6,
-          borderColor: "#D0D0D0",
-        }}
-      />
-      
-      <View
-        style={styles.container}
-      >
-        <Text style={styles.titleText}>상세내용</Text>
-        <TextInput
-          style={[styles.roomInput]}
-          placeholder="세부사항을 입력해주세요."
-          placeholderTextColor='#d0d0d0'
-          value={roomDetails}
-          onChangeText={setRoomDetails}
+          horizontal={true}
+          pagingEnabled={true}
+          style={{
+            marginTop: 0,
+            paddingTop: 0,
+            paddingBottom: 8,
+            transform: [{ scale: 0.9 }],
+            borderStyle: "solid",
+            borderWidth: 1,
+            borderRadius: 6,
+            borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+            backgroundColor: isDarkMode ? '#1A1A1A' : '#fff',
+          }}
         />
-      </View>
 
-      <TouchableOpacity
-        style={styles.nextButton}
-        onPress={() => {}}
-      >
-        <Text style={styles.nextButtonText}>방 등록하기</Text>
-      </TouchableOpacity>
+        <View style={styles.container}>
+          <Text style={[styles.titleText, { color: textColor }]}>상세내용</Text>
+          <TextInput
+            style={[
+              styles.roomInput,
+              {
+                borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+                color: textColor
+              }
+            ]}
+            placeholder="세부사항을 입력해주세요."
+            placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+            value={roomDetails}
+            onChangeText={setRoomDetails}
+          />
+        </View>
+
+        <TouchableOpacity
+          style={[
+            styles.nextButton,
+            { backgroundColor: isDarkMode ? '#FFFFFF' : '#0B0B0B' }
+          ]}
+          onPress={() => {}}
+        >
+          <Text style={[
+            styles.nextButtonText,
+            { color: isDarkMode ? '#0B0B0B' : '#ffffff' }
+          ]}>방 등록하기</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -211,14 +253,32 @@ function renderCustomHeader(date: any) {
 export default NewPaxiRoomScreen;
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    flex: 1,
+    textAlign: 'center',
+  },
+  backButton: {
+    padding: 8,
+  },
+  backButtonText: {
+    fontSize: 16,
+  },
+  placeholderButton: {
+    width: 40,
+  },
   backgroundStyle: {
     backgroundColor: '#ffffff',
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'center',
   },
   titleText: {
     fontSize: 15,
