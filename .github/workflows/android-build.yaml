@@ -24,6 +24,9 @@ jobs:
       run: npm ci
     - name: Make Gradlew Executable
       run: chmod +x android/gradlew
+    - name: Decode Keystore File
+      run: |
+        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/popo-release-key.keystore
     - name: Build Release APK
       env:
         POPO_KEY_PASSWORD: ${{ secrets.KEYSTORE_BASE64 }}
