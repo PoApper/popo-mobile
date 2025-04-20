@@ -29,8 +29,8 @@ jobs:
         echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/popo-release-key.keystore
     - name: Build Release APK
       env:
-        POPO_KEY_PASSWORD: ${{ secrets.KEYSTORE_BASE64 }}
-        POPO_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_BASE64 }}
+        POPO_KEY_PASSWORD: ${{ secrets.POPO_KEY_PASSWORD }}
+        POPO_KEYSTORE_PASSWORD: ${{ secrets.POPO_KEY_PASSWORD }}
       run: |
         cd android
         ./gradlew assembleRelease
