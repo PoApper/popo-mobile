@@ -10,6 +10,15 @@ export type RootStackParamList = {
   Home: undefined;
   Signup: undefined;
   Landing: undefined;
+  PaxiRoomList: undefined;
+  NewPaxiRoom: undefined;
+  NewPaxiRoomNext: {
+    roomName: string;
+    roomDetails: string;
+    departureName: string;
+    arrivalName: string;
+    selectedDate: string;
+  };
   Login: undefined;
   UserDetail: undefined;
   Reservation: undefined;

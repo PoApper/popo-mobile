@@ -143,7 +143,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         </View>
 
         <View style={styles.formContainer}>
-          <TextInput
+        <TextInput
             style={[styles.input]}
             placeholder="POPO 가입 이메일(POSTECH)"
             placeholderTextColor='#9CA3AF'
@@ -208,7 +208,10 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={styles.needHelp}>
+          <TouchableOpacity
+            style={styles.needHelp}
+            onPress={() => {}}
+          >
             <Text style={[styles.needHelpText]}>
               도움이 필요하세요?
             </Text>
