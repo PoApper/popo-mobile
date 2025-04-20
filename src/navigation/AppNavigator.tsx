@@ -14,6 +14,8 @@ import HomeScreen from '../screens/HomeScreen';
 import SignupScreen from '../screens/SignupScreen';
 import UserDetailScreen from '../screens/UserDetailScreen';
 import ReservationScreen from '../screens/ReservationScreen';
+import NewPaxiRoomScreen from '../screens/NewPaxiRoomScreen';
+import PaxiRoomListScreen from '../screens/PaxiRoomListScreen';
 import PlaceReservationScreen from '../screens/PlaceReservationScreen';
 import WhitebookScreen from '../screens/WhitebookScreen';
 import BenefitsScreen from '../screens/BenefitsScreen';
@@ -62,7 +64,7 @@ const MainNavigator = () => {
       />
       <Tab.Screen
         name="Paxi"
-        component={HomeScreen}
+        component={PaxiRoomListScreen}
         options={{
           tabBarLabel: 'Paxi',
           tabBarIcon: ({ color, size }) => (
@@ -125,6 +127,8 @@ const AppNavigator = () => {
             headerShown: false,
           }}
         >
+          <Stack.Screen name="PaxiRoomList" component={PaxiRoomListScreen} />
+          <Stack.Screen name="NewPaxiRoom" component={NewPaxiRoomScreen} />
           <Stack.Screen name="Landing" component={LandingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="UserDetail" component={UserDetailScreen} />
