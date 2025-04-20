@@ -84,3 +84,6 @@ ios/*/build/
 *.plist
 *.log
 
+.env
+.env*
+!.env.example
