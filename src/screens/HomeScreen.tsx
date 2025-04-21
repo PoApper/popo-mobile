@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,9 +10,9 @@ import {
   Linking,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/types';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DdayInfoBox from '../components/DdayInfoBox';
 import UpcomingEvents from '../components/UpcomingEvents';
@@ -30,7 +30,7 @@ type ServiceItem = {
   onPress: () => void;
 };
 
-const HomeScreen = ({ navigation }: HomeScreenProps) => {
+const HomeScreen = ({navigation}: HomeScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [userName, setUserName] = useState<string>('');
 
@@ -98,7 +98,10 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
       icon: 'description',
       title: '기록물',
       active: true,
-      onPress: () => handleMoveSite('https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD'),
+      onPress: () =>
+        handleMoveSite(
+          'https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD',
+        ),
     },
     {
       id: '6',
@@ -135,7 +138,11 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
         {/* 환영 메시지 */}
         <View style={styles.welcomeSection}>
-          <Text style={[styles.welcomeText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
+          <Text
+            style={[
+              styles.welcomeText,
+              {color: isDarkMode ? '#FFFFFF' : '#000000'},
+            ]}>
             {userName}님, 안녕하세요! 👋
           </Text>
         </View>
@@ -145,36 +152,37 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
         {/* 서비스 그리드 */}
         <View style={styles.servicesSection}>
-          <Text style={[styles.sectionTitle, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
+          <Text
+            style={[
+              styles.sectionTitle,
+              {color: isDarkMode ? '#FFFFFF' : '#000000'},
+            ]}>
             다양한 서비스 이용하기
           </Text>
-          <View style={[
-            styles.servicesGrid,
-            { backgroundColor: isDarkMode ? '#2C2C2C' : '#F6F7F9' }
-          ]}>
-            {services.map((service) => (
+          <View
+            style={[
+              styles.servicesGrid,
+              {backgroundColor: isDarkMode ? '#2C2C2C' : '#F6F7F9'},
+            ]}>
+            {services.map(service => (
               <TouchableOpacity
                 key={service.id}
-                style={[
-                  styles.serviceItem
-                ]}
-                onPress={service.active ? service.onPress : undefined}
-              >
+                style={[styles.serviceItem]}
+                onPress={service.active ? service.onPress : undefined}>
                 <Icon
                   name={service.icon}
                   size={24}
                   color={isDarkMode ? '#FFFFFF' : '#000000'}
-                  style={{ opacity: service.active ? 1 : 0.5 }}
+                  style={{opacity: service.active ? 1 : 0.5}}
                 />
                 <Text
                   style={[
                     styles.serviceTitle,
                     {
                       color: isDarkMode ? '#FFFFFF' : '#000000',
-                      opacity: service.active ? 1 : 0.5
-                    }
-                  ]}
-                >
+                      opacity: service.active ? 1 : 0.5,
+                    },
+                  ]}>
                   {service.title}
                 </Text>
               </TouchableOpacity>

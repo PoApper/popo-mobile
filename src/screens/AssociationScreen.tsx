@@ -1,8 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, useColorScheme, StatusBar, TouchableOpacity, Image } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/types';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  useColorScheme,
+  StatusBar,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/types';
 import api from '../utils/api';
 
 type AssociationScreenProps = {
@@ -24,11 +33,11 @@ interface AssociationItem {
   youtube_url: string;
 }
 
-const sortTypes = ["가나다순", "조회순"];
+const sortTypes = ['가나다순', '조회순'];
 
-const AssociationScreen: React.FC<AssociationScreenProps> = ({ navigation }) => {
+const AssociationScreen: React.FC<AssociationScreenProps> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [sortType, setSortType] = useState("가나다순");
+  const [sortType, setSortType] = useState('가나다순');
   const [isLoading, setIsLoading] = useState(true);
   const [associations, setAssociations] = useState<AssociationItem[]>([]);
 
@@ -41,7 +50,7 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({ navigation }) => 
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
 
   const getSortedAssociations = (items: AssociationItem[]) => {
-    if (sortType === "가나다순") {
+    if (sortType === '가나다순') {
       return [...items].sort((a, b) => a.name.localeCompare(b.name));
     } else {
       return [...items].sort((a, b) => b.views - a.views);
@@ -51,7 +60,9 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({ navigation }) => 
   useEffect(() => {
     const fetchAssociations = async () => {
       try {
-        const response = await api.get<AssociationItem[]>('/introduce/association');
+        const response = await api.get<AssociationItem[]>(
+          '/introduce/association',
+        );
         setAssociations(response.data);
       } catch (error) {
         console.error('자치단체 데이터 로드 오류:', error);
@@ -69,33 +80,35 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({ navigation }) => 
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, { borderBottomColor: borderColor }]}>
+      <View style={[styles.header, {borderBottomColor: borderColor}]}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+          onPress={() => navigation.goBack()}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: textColor }]}>자치단체</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>자치단체</Text>
         <View style={styles.placeholderButton} />
       </View>
 
       <View style={styles.sortButtons}>
-        {sortTypes.map((type) => (
+        {sortTypes.map(type => (
           <TouchableOpacity
             key={type}
             style={[
               styles.sortButton,
-              { borderColor: isDarkMode ? '#555' : '#ccc' },
-              sortType === type && [styles.activeSort, { backgroundColor: textColor }]
+              {borderColor: isDarkMode ? '#555' : '#ccc'},
+              sortType === type && [
+                styles.activeSort,
+                {backgroundColor: textColor},
+              ],
             ]}
-            onPress={() => setSortType(type)}
-          >
-            <Text style={[
-              styles.sortButtonText,
-              { color: textColor },
-              sortType === type && { color: isDarkMode ? '#000' : '#fff' }
-            ]}>
+            onPress={() => setSortType(type)}>
+            <Text
+              style={[
+                styles.sortButtonText,
+                {color: textColor},
+                sortType === type && {color: isDarkMode ? '#000' : '#fff'},
+              ]}>
               {type}
             </Text>
           </TouchableOpacity>
@@ -106,42 +119,59 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({ navigation }) => 
         style={styles.container}
         contentContainerStyle={{
           paddingBottom: 20,
-        }}
-      >
+        }}>
         {isLoading ? (
-          <View style={[styles.contentContainer, { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' }]}>
-            <Text style={[styles.tempText, { color: textColor }]}>로딩중...</Text>
+          <View
+            style={[
+              styles.contentContainer,
+              {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
+            ]}>
+            <Text style={[styles.tempText, {color: textColor}]}>로딩중...</Text>
           </View>
         ) : associations.length === 0 ? (
-          <View style={[styles.contentContainer, { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' }]}>
-            <Text style={[styles.tempText, { color: textColor }]}>등록된 자치단체가 없습니다.</Text>
+          <View
+            style={[
+              styles.contentContainer,
+              {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
+            ]}>
+            <Text style={[styles.tempText, {color: textColor}]}>
+              등록된 자치단체가 없습니다.
+            </Text>
           </View>
         ) : (
-          getSortedAssociations(associations).map((association) => (
+          getSortedAssociations(associations).map(association => (
             <TouchableOpacity
               key={association.uuid}
-              style={[styles.associationCard, { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' }]}
-              onPress={() => navigation.navigate('AssociationDetail', {
-                associationId: association.uuid,
-                associationName: association.name,
-              })}
-            >
+              style={[
+                styles.associationCard,
+                {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
+              ]}
+              onPress={() =>
+                navigation.navigate('AssociationDetail', {
+                  associationId: association.uuid,
+                  associationName: association.name,
+                })
+              }>
               <View style={styles.cardContent}>
                 <View style={styles.imageContainer}>
                   <Image
-                    source={{ uri: association.image_url }}
+                    source={{uri: association.image_url}}
                     style={styles.associationImage}
                     resizeMode="contain"
                   />
                 </View>
                 <View style={styles.associationInfo}>
-                  <Text style={[styles.associationName, { color: textColor }]} numberOfLines={1}>
+                  <Text
+                    style={[styles.associationName, {color: textColor}]}
+                    numberOfLines={1}>
                     {association.name}
                   </Text>
                   <Text
-                    style={[styles.associationDescription, { color: isDarkMode ? '#888' : '#666' }]}
-                    numberOfLines={2}
-                  >
+                    style={[
+                      styles.associationDescription,
+                      {color: isDarkMode ? '#888' : '#666'},
+                    ]}
+                    numberOfLines={2}>
                     {association.content}
                   </Text>
                 </View>
@@ -183,9 +213,9 @@ const styles = StyleSheet.create({
     width: 40,
   },
   sortButtons: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingHorizontal: 15,
-    marginVertical: 10
+    marginVertical: 10,
   },
   sortButton: {
     paddingHorizontal: 15,

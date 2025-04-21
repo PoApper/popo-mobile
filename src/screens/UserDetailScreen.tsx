@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,10 +10,9 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../navigation/types';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/types';
 import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -21,10 +20,10 @@ import api from '../utils/api';
 
 type UserDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserDetail'>;
-  route: RouteProp<RootStackParamList, 'UserDetail'>;
+  // route: RouteProp<RootStackParamList, 'UserDetail'>;
 };
 
-const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
+const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(false);
   const [userDataState, setUserData] = useState<any>(null);
@@ -49,7 +48,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
       console.error('프로필 정보 조회 오류:', err);
       if (axios.isAxiosError(err) && err.response?.status === 401) {
         Alert.alert('인증 만료', '다시 로그인해주세요.', [
-          { text: '확인', onPress: () => navigation.navigate('Login') }
+          {text: '확인', onPress: () => navigation.navigate('Login')},
         ]);
       }
     } finally {
@@ -58,17 +57,17 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   };
 
   // 인증 오류 처리
-  const handleAuthError = async () => {
-    // 인증 정보 초기화
-    await EncryptedStorage.removeItem('auth_token');
-    await EncryptedStorage.removeItem('isAuthenticated');
-    await EncryptedStorage.removeItem('user_info');
-    await CookieManager.clearAll();
+  // const handleAuthError = async () => {
+  //   // 인증 정보 초기화
+  //   await EncryptedStorage.removeItem('auth_token');
+  //   await EncryptedStorage.removeItem('isAuthenticated');
+  //   await EncryptedStorage.removeItem('user_info');
+  //   await CookieManager.clearAll();
 
-    Alert.alert('인증 오류', '세션이 만료되었습니다. 다시 로그인해주세요.', [
-      { text: '확인', onPress: () => navigation.replace('Login') }
-    ]);
-  };
+  //   Alert.alert('인증 오류', '세션이 만료되었습니다. 다시 로그인해주세요.', [
+  //     { text: '확인', onPress: () => navigation.replace('Login') },
+  //   ]);
+  // };
 
   // 로그아웃 처리 함수
   const handleLogout = async () => {
@@ -111,6 +110,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   // 컴포넌트 마운트 시 프로필 정보 가져오기
   useEffect(() => {
     fetchUserProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 로컬에 저장된 사용자 정보로 UI 초기화
@@ -136,88 +136,128 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+          onPress={() => navigation.goBack()}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: textColor }]}>사용자 정보</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>
+          사용자 정보
+        </Text>
         <View style={styles.placeholderButton} />
       </View>
 
       <ScrollView style={styles.container}>
-        <View style={[styles.profileCard, { backgroundColor: cardBgColor, borderColor }]}>
+        <View
+          style={[
+            styles.profileCard,
+            {backgroundColor: cardBgColor, borderColor},
+          ]}>
           <View style={styles.profileHeader}>
             {userDataState?.profileImage ? (
               <Image
-                source={{ uri: userDataState?.profileImage }}
+                source={{uri: userDataState?.profileImage}}
                 style={styles.profileImage}
               />
             ) : (
-              <View style={[styles.profileImagePlaceholder, { backgroundColor: '#4F46E5' }]}>
+              <View
+                style={[
+                  styles.profileImagePlaceholder,
+                  {backgroundColor: '#4F46E5'},
+                ]}>
                 <Text style={styles.profileImagePlaceholderText}>
-                  {userDataState?.name?.substring(0, 1) || userDataState?.email?.substring(0, 1) || '?'}
+                  {userDataState?.name?.substring(0, 1) ||
+                    userDataState?.email?.substring(0, 1) ||
+                    '?'}
                 </Text>
               </View>
             )}
             <View style={styles.profileInfo}>
-              <Text style={[styles.userName, { color: textColor }]}>
+              <Text style={[styles.userName, {color: textColor}]}>
                 {userDataState?.name || '사용자'}
               </Text>
-              <Text style={[styles.userEmail, { color: isDarkMode ? '#AAAAAA' : '#6B7280' }]}>
+              <Text
+                style={[
+                  styles.userEmail,
+                  {color: isDarkMode ? '#AAAAAA' : '#6B7280'},
+                ]}>
                 {userDataState?.email || '이메일 없음'}
               </Text>
             </View>
           </View>
 
           <View style={styles.detailSection}>
-            <Text style={[styles.sectionTitle, { color: textColor }]}>계정 정보</Text>
-            <View style={[styles.detailItem, { borderBottomColor: borderColor }]}>
-              <Text style={[styles.detailLabel, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+            <Text style={[styles.sectionTitle, {color: textColor}]}>
+              계정 정보
+            </Text>
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+              <Text
+                style={[
+                  styles.detailLabel,
+                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                ]}>
                 이메일
               </Text>
-              <Text style={[styles.detailValue, { color: textColor }]}>
+              <Text style={[styles.detailValue, {color: textColor}]}>
                 {userDataState?.email || '정보 없음'}
               </Text>
             </View>
 
-            <View style={[styles.detailItem, { borderBottomColor: borderColor }]}>
-              <Text style={[styles.detailLabel, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+              <Text
+                style={[
+                  styles.detailLabel,
+                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                ]}>
                 이름
               </Text>
-              <Text style={[styles.detailValue, { color: textColor }]}>
+              <Text style={[styles.detailValue, {color: textColor}]}>
                 {userDataState?.name || '정보 없음'}
               </Text>
             </View>
 
-            <View style={[styles.detailItem, { borderBottomColor: borderColor }]}>
-              <Text style={[styles.detailLabel, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+              <Text
+                style={[
+                  styles.detailLabel,
+                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                ]}>
                 회원 유형
               </Text>
-              <Text style={[styles.detailValue, { color: textColor }]}>
+              <Text style={[styles.detailValue, {color: textColor}]}>
                 {userDataState?.userType || '정보 없음'}
               </Text>
             </View>
 
-            <View style={[styles.detailItem, { borderBottomColor: borderColor }]}>
-              <Text style={[styles.detailLabel, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+              <Text
+                style={[
+                  styles.detailLabel,
+                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                ]}>
                 계정 상태
               </Text>
-              <Text style={[styles.detailValue, { color: textColor }]}>
+              <Text style={[styles.detailValue, {color: textColor}]}>
                 {userDataState?.userStatus || '정보 없음'}
               </Text>
             </View>
 
-            <View style={[styles.detailItem, { borderBottomColor: borderColor }]}>
-              <Text style={[styles.detailLabel, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+              <Text
+                style={[
+                  styles.detailLabel,
+                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                ]}>
                 가입일
               </Text>
-              <Text style={[styles.detailValue, { color: textColor }]}>
+              <Text style={[styles.detailValue, {color: textColor}]}>
                 {userDataState?.createdAt
-                  ? new Date(userDataState?.createdAt).toLocaleDateString('ko-KR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })
+                  ? new Date(userDataState?.createdAt).toLocaleDateString(
+                      'ko-KR',
+                      {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      },
+                    )
                   : '정보 없음'}
               </Text>
             </View>
@@ -226,17 +266,15 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
 
         {/* 내 예약 확인하기 버튼 */}
         <TouchableOpacity
-          style={[styles.reservationButton, { backgroundColor: '#4F46E5' }]}
-          onPress={() => navigation.navigate('Reservation')}
-        >
+          style={[styles.reservationButton, {backgroundColor: '#4F46E5'}]}
+          onPress={() => navigation.navigate('Reservation')}>
           <Text style={styles.reservationButtonText}>내 예약 확인하기</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.logoutButton}
           onPress={handleLogout}
-          disabled={isLoading}
-        >
+          disabled={isLoading}>
           <Text style={styles.logoutButtonText}>
             {isLoading ? '처리 중...' : '로그아웃'}
           </Text>
@@ -279,7 +317,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 1,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 2,

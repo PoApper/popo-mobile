@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, useColorScheme, StatusBar, Modal, Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/types';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  useColorScheme,
+  StatusBar,
+  Modal,
+  Dimensions,
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/types';
 
 type CampusShuttleScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'CampusShuttle'>;
 };
 
-const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({ navigation }) => {
+const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
@@ -31,24 +42,23 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({ navigation }) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, { borderBottomColor: borderColor }]}>
+      <View style={[styles.header, {borderBottomColor: borderColor}]}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+          onPress={() => navigation.goBack()}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: textColor }]}>셔틀버스 시간표</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>
+          셔틀버스 시간표
+        </Text>
         <View style={styles.placeholderButton} />
       </View>
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.section}>
           <View style={styles.scheduleSection}>
-            <Text style={[styles.title, { color: textColor }]}>
-              교수 아파트
-            </Text>
-            <Text style={[styles.subtitle, { color: textColor }]}>
+            <Text style={[styles.title, {color: textColor}]}>교수 아파트</Text>
+            <Text style={[styles.subtitle, {color: textColor}]}>
               Faculty Apartment Area
             </Text>
             <TouchableOpacity onPress={() => setSelectedImage(0)}>
@@ -61,10 +71,8 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({ navigation }) => {
           </View>
 
           <View style={[styles.scheduleSection, styles.marginTop]}>
-            <Text style={[styles.title, { color: textColor }]}>
-              교내 셔틀
-            </Text>
-            <Text style={[styles.subtitle, { color: textColor }]}>
+            <Text style={[styles.title, {color: textColor}]}>교내 셔틀</Text>
+            <Text style={[styles.subtitle, {color: textColor}]}>
               POSTECH Campus Area
             </Text>
             <TouchableOpacity onPress={() => setSelectedImage(1)}>
@@ -77,10 +85,10 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({ navigation }) => {
           </View>
 
           <View style={[styles.scheduleSection, styles.marginTop]}>
-            <Text style={[styles.title, { color: textColor }]}>
+            <Text style={[styles.title, {color: textColor}]}>
               셔틀버스 정류장
             </Text>
-            <Text style={[styles.subtitle, { color: textColor }]}>
+            <Text style={[styles.subtitle, {color: textColor}]}>
               Shuttle Bus Stop
             </Text>
             <TouchableOpacity onPress={() => setSelectedImage(2)}>
@@ -95,24 +103,45 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({ navigation }) => {
 
         <View style={[styles.section]}>
           <View style={styles.textContainer}>
-            <Text style={[styles.text, { color: textColor }]}>주중(월~금)에만 운행</Text>
-            <Text style={[styles.englishText, { color: textColor }]}>Shuttle bus operates only on weekdays</Text>
+            <Text style={[styles.text, {color: textColor}]}>
+              주중(월~금)에만 운행
+            </Text>
+            <Text style={[styles.englishText, {color: textColor}]}>
+              Shuttle bus operates only on weekdays
+            </Text>
           </View>
           <View style={styles.textContainer}>
-            <Text style={[styles.text, { color: textColor }]}>휴일 및 주말에는 차량 운행 없음.</Text>
-            <Text style={[styles.englishText, { color: textColor }]}>There is no campus shuttle bus support on holidays and weekends</Text>
+            <Text style={[styles.text, {color: textColor}]}>
+              휴일 및 주말에는 차량 운행 없음.
+            </Text>
+            <Text style={[styles.englishText, {color: textColor}]}>
+              There is no campus shuttle bus support on holidays and weekends
+            </Text>
           </View>
           <View style={styles.textContainer}>
-            <Text style={[styles.text, { color: textColor }]}>학기중 운행 기간: 2025.02.17(월) ~ 2025.06.05(목)</Text>
-            <Text style={[styles.englishText, { color: textColor }]}>The campus shuttle bus support period: 2025.02.17(Mon) ~ 2025.06.05(Thu)</Text>
+            <Text style={[styles.text, {color: textColor}]}>
+              학기중 운행 기간: 2025.02.17(월) ~ 2025.06.05(목)
+            </Text>
+            <Text style={[styles.englishText, {color: textColor}]}>
+              The campus shuttle bus support period: 2025.02.17(Mon) ~
+              2025.06.05(Thu)
+            </Text>
           </View>
           <View style={styles.textContainer}>
-            <Text style={[styles.text, { color: textColor }]}>시행일자: 2025.02.17(월)</Text>
-            <Text style={[styles.englishText, { color: textColor }]}>Implementation date: 2025.02.17(Mon)</Text>
+            <Text style={[styles.text, {color: textColor}]}>
+              시행일자: 2025.02.17(월)
+            </Text>
+            <Text style={[styles.englishText, {color: textColor}]}>
+              Implementation date: 2025.02.17(Mon)
+            </Text>
           </View>
           <View style={styles.textContainer}>
-            <Text style={[styles.text, { color: textColor }]}>문의처: 054-279-3536 (차량반)</Text>
-            <Text style={[styles.englishText, { color: textColor }]}>Contact: 054-279-3536 (Vehicle Division)</Text>
+            <Text style={[styles.text, {color: textColor}]}>
+              문의처: 054-279-3536 (차량반)
+            </Text>
+            <Text style={[styles.englishText, {color: textColor}]}>
+              Contact: 054-279-3536 (Vehicle Division)
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -120,13 +149,11 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({ navigation }) => {
       <Modal
         visible={selectedImage !== null}
         transparent={true}
-        onRequestClose={() => setSelectedImage(null)}
-      >
+        onRequestClose={() => setSelectedImage(null)}>
         <TouchableOpacity
           style={styles.modalBackground}
           activeOpacity={1}
-          onPress={() => setSelectedImage(null)}
-        >
+          onPress={() => setSelectedImage(null)}>
           <View style={styles.modalContent}>
             {selectedImage !== null && (
               <Image

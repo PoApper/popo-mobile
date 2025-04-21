@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, useColorScheme } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View, useColorScheme} from 'react-native';
 import axios from 'axios';
 
 type CalendarEvent = {
@@ -18,7 +18,9 @@ const DdayInfoBox = () => {
   useEffect(() => {
     const fetchLatestEvent = async () => {
       try {
-        const response = await axios.get('https://api.popo-dev.poapper.club/calendar/get-next-event');
+        const response = await axios.get(
+          'https://api.popo-dev.poapper.club/calendar/get-next-event',
+        );
         const event = response.data;
 
         if (event) {
@@ -45,8 +47,16 @@ const DdayInfoBox = () => {
   if (isLoading) {
     return (
       <View style={styles.locationHeader}>
-        <View style={[styles.locationBox, { backgroundColor: isDarkMode ? '#2D3748' : '#E6EAF5' }]}>
-          <Text style={[styles.locationText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
+        <View
+          style={[
+            styles.locationBox,
+            {backgroundColor: isDarkMode ? '#2D3748' : '#E6EAF5'},
+          ]}>
+          <Text
+            style={[
+              styles.locationText,
+              {color: isDarkMode ? '#FFFFFF' : '#000000'},
+            ]}>
             일정 정보를 불러오는 중...
           </Text>
         </View>
@@ -57,8 +67,16 @@ const DdayInfoBox = () => {
   if (!latestEvent) {
     return (
       <View style={styles.locationHeader}>
-        <View style={[styles.locationBox, { backgroundColor: isDarkMode ? '#2D3748' : '#E6EAF5' }]}>
-          <Text style={[styles.locationText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
+        <View
+          style={[
+            styles.locationBox,
+            {backgroundColor: isDarkMode ? '#2D3748' : '#E6EAF5'},
+          ]}>
+          <Text
+            style={[
+              styles.locationText,
+              {color: isDarkMode ? '#FFFFFF' : '#000000'},
+            ]}>
             예정된 일정이 없습니다
           </Text>
         </View>
@@ -67,12 +85,21 @@ const DdayInfoBox = () => {
   }
 
   const dday = calculateDday(latestEvent.event_date);
-  const ddayText = dday > 0 ? `D-${dday}` : dday === 0 ? 'D-day' : `D+${Math.abs(dday)}`;
+  const ddayText =
+    dday > 0 ? `D-${dday}` : dday === 0 ? 'D-day' : `D+${Math.abs(dday)}`;
 
   return (
     <View style={styles.locationHeader}>
-      <View style={[styles.locationBox, { backgroundColor: isDarkMode ? '#2D3748' : '#E6EAF5' }]}>
-        <Text style={[styles.locationText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
+      <View
+        style={[
+          styles.locationBox,
+          {backgroundColor: isDarkMode ? '#2D3748' : '#E6EAF5'},
+        ]}>
+        <Text
+          style={[
+            styles.locationText,
+            {color: isDarkMode ? '#FFFFFF' : '#000000'},
+          ]}>
           🗓️ {latestEvent.title} {ddayText}
         </Text>
       </View>

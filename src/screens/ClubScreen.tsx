@@ -1,9 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, useColorScheme, StatusBar, TouchableOpacity, Image } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/types';
-import { ClubType } from '../types/club';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  useColorScheme,
+  StatusBar,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/types';
+import {ClubType} from '../types/club';
 import api from '../utils/api';
 
 type ClubScreenProps = {
@@ -20,15 +29,15 @@ const clubCategories = [
 ];
 
 const clubCategoryMap = {
-  "performance1": "공연1",
-  "performance2": "공연2",
-  "sports": "체육",
-  "hobbyAndExhibition": "취미전시",
-  "study": "학술",
-  "societyAndReligion": "사회종교",
-}
+  performance1: '공연1',
+  performance2: '공연2',
+  sports: '체육',
+  hobbyAndExhibition: '취미전시',
+  study: '학술',
+  societyAndReligion: '사회종교',
+};
 
-const sortTypes = ["가나다순", "조회순"];
+const sortTypes = ['가나다순', '조회순'];
 
 interface ClubItem {
   uuid: string;
@@ -47,12 +56,14 @@ interface ClubItem {
   youtube_url: string;
 }
 
-const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
+const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [selectedCategory, setSelectedCategory] = useState<ClubType>(ClubType.performance1);
-  const [textWidths, setTextWidths] = useState<{ [key: string]: number }>({});
+  const [selectedCategory, setSelectedCategory] = useState<ClubType>(
+    ClubType.performance1,
+  );
+  const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
   const [clubs, setClubs] = useState<ClubItem[]>([]);
-  const [sortType, setSortType] = useState("가나다순");
+  const [sortType, setSortType] = useState('가나다순');
   const [isLoading, setIsLoading] = useState(true);
 
   const backgroundStyle = {
@@ -79,7 +90,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
   }, []);
 
   const getSortedClubs = (clubs: ClubItem[]) => {
-    if (sortType === "가나다순") {
+    if (sortType === '가나다순') {
       return [...clubs].sort((a, b) => a.name.localeCompare(b.name));
     } else {
       return [...clubs].sort((a, b) => b.views - a.views);
@@ -87,7 +98,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
   };
 
   const filteredClubs = getSortedClubs(clubs).filter(
-    (club) => clubCategoryMap[club.clubType] === selectedCategory
+    club => clubCategoryMap[club.clubType] === selectedCategory,
   );
 
   return (
@@ -96,47 +107,48 @@ const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, { borderBottomColor: borderColor }]}>
+      <View style={[styles.header, {borderBottomColor: borderColor}]}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+          onPress={() => navigation.goBack()}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: textColor }]}>동아리</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>동아리</Text>
         <View style={styles.placeholderButton} />
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.typeNav}>
-        {clubCategories.map((category) => (
-          <View
-            key={category}
-            style={styles.typeTabWrapper}
-          >
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.typeNav}>
+        {clubCategories.map(category => (
+          <View key={category} style={styles.typeTabWrapper}>
             <View style={styles.typeTabInner}>
               <View style={styles.textWithUnderline}>
                 <Text
                   style={[
                     styles.typeTab,
-                    { color: isDarkMode ? '#888' : '#999' },
+                    {color: isDarkMode ? '#888' : '#999'},
                     selectedCategory === category && [
                       styles.selectedTypeText,
-                      { color: textColor }
+                      {color: textColor},
                     ],
                   ]}
                   onPress={() => setSelectedCategory(category)}
-                  onLayout={(e) => {
+                  onLayout={e => {
                     const width = e.nativeEvent.layout.width;
-                    setTextWidths((prev) => ({ ...prev, [category]: width }));
-                  }}
-                >
+                    setTextWidths(prev => ({...prev, [category]: width}));
+                  }}>
                   {category}
                 </Text>
                 {selectedCategory === category && (
                   <View
                     style={[
                       styles.underline,
-                      { width: (textWidths[category] || 0) + 8, backgroundColor: textColor },
+                      {
+                        width: (textWidths[category] || 0) + 8,
+                        backgroundColor: textColor,
+                      },
                     ]}
                   />
                 )}
@@ -147,21 +159,24 @@ const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
       </ScrollView>
 
       <View style={styles.sortButtons}>
-        {sortTypes.map((type) => (
+        {sortTypes.map(type => (
           <TouchableOpacity
             key={type}
             style={[
               styles.sortButton,
-              { borderColor: isDarkMode ? '#555' : '#ccc' },
-              sortType === type && [styles.activeSort, { backgroundColor: textColor }]
+              {borderColor: isDarkMode ? '#555' : '#ccc'},
+              sortType === type && [
+                styles.activeSort,
+                {backgroundColor: textColor},
+              ],
             ]}
-            onPress={() => setSortType(type)}
-          >
-            <Text style={[
-              styles.sortButtonText,
-              { color: textColor },
-              sortType === type && { color: isDarkMode ? '#000' : '#fff' }
-            ]}>
+            onPress={() => setSortType(type)}>
+            <Text
+              style={[
+                styles.sortButtonText,
+                {color: textColor},
+                sortType === type && {color: isDarkMode ? '#000' : '#fff'},
+              ]}>
               {type}
             </Text>
           </TouchableOpacity>
@@ -172,42 +187,59 @@ const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
         style={styles.container}
         contentContainerStyle={{
           paddingBottom: 20,
-        }}
-      >
+        }}>
         {isLoading ? (
-          <View style={[styles.contentContainer, { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' }]}>
-            <Text style={[styles.tempText, { color: textColor }]}>로딩중...</Text>
+          <View
+            style={[
+              styles.contentContainer,
+              {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
+            ]}>
+            <Text style={[styles.tempText, {color: textColor}]}>로딩중...</Text>
           </View>
         ) : filteredClubs.length === 0 ? (
-          <View style={[styles.contentContainer, { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' }]}>
-            <Text style={[styles.tempText, { color: textColor }]}>등록된 동아리가 없습니다.</Text>
+          <View
+            style={[
+              styles.contentContainer,
+              {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
+            ]}>
+            <Text style={[styles.tempText, {color: textColor}]}>
+              등록된 동아리가 없습니다.
+            </Text>
           </View>
         ) : (
-          filteredClubs.map((club) => (
+          filteredClubs.map(club => (
             <TouchableOpacity
               key={club.uuid}
-              style={[styles.clubCard, { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' }]}
-              onPress={() => navigation.navigate('ClubDetail', {
-                clubId: club.uuid,
-                clubName: club.name,
-              })}
-            >
+              style={[
+                styles.clubCard,
+                {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
+              ]}
+              onPress={() =>
+                navigation.navigate('ClubDetail', {
+                  clubId: club.uuid,
+                  clubName: club.name,
+                })
+              }>
               <View style={styles.cardContent}>
                 <View style={styles.imageContainer}>
                   <Image
-                    source={{ uri: club.image_url }}
+                    source={{uri: club.image_url}}
                     style={styles.clubImage}
                     resizeMode="contain"
                   />
                 </View>
                 <View style={styles.clubInfo}>
-                  <Text style={[styles.clubName, { color: textColor }]} numberOfLines={1}>
+                  <Text
+                    style={[styles.clubName, {color: textColor}]}
+                    numberOfLines={1}>
                     {club.name}
                   </Text>
                   <Text
-                    style={[styles.clubDescription, { color: isDarkMode ? '#888' : '#666' }]}
-                    numberOfLines={2}
-                  >
+                    style={[
+                      styles.clubDescription,
+                      {color: isDarkMode ? '#888' : '#666'},
+                    ]}
+                    numberOfLines={2}>
                     {club.short_desc}
                   </Text>
                 </View>
@@ -299,9 +331,9 @@ const styles = StyleSheet.create({
     width: 40,
   },
   sortButtons: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingHorizontal: 15,
-    marginVertical: 10
+    marginVertical: 10,
   },
   sortButton: {
     paddingHorizontal: 15,

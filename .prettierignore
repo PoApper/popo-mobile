@@ -1,0 +1,10 @@
+node_modules/
+.git
+
+ios/Pods/
+ios/build/
+ios/popoMobile.xcworkspace/
+
+android/app/.cxx/
+android/app/build/
+android/build/
