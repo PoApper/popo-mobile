@@ -139,9 +139,11 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   };
 
   // 컴포넌트 마운트 시 예약 정보 가져오기
+
   useEffect(() => {
     fetchReservations();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // 상태에 따른 배지 색상
   const getStatusColor = (status: string) => {

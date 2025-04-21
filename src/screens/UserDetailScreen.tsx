@@ -110,7 +110,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   // 컴포넌트 마운트 시 프로필 정보 가져오기
   useEffect(() => {
     fetchUserProfile();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // 로컬에 저장된 사용자 정보로 UI 초기화
   useEffect(() => {
