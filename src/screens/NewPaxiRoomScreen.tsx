@@ -8,58 +8,49 @@ import {
   useColorScheme,
   StatusBar,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
+import paxi_api from '../utils/paxi_api';
+import CalendarKoreanLocales from '../utils/calendar-locales';
 
-LocaleConfig.locales.kr = {
-  monthNames: [
-    '1월',
-    '2월',
-    '3월',
-    '4월',
-    '5월',
-    '6월',
-    '7월',
-    '8월',
-    '9월',
-    '10월',
-    '11월',
-    '12월',
-  ],
-  monthNamesShort: [
-    '1월',
-    '2월',
-    '3월',
-    '4월',
-    '5월',
-    '6월',
-    '7월',
-    '8월',
-    '9월',
-    '10월',
-    '11월',
-    '12월',
-  ],
-  dayNames: [
-    '일요일',
-    '월요일',
-    '화요일',
-    '수요일',
-    '목요일',
-    '금요일',
-    '토요일',
-  ],
-  dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-  today: '오늘',
-};
+LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';
 
 type NewPaxiRoomScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewPaxiRoom'>;
 };
+
+interface NewRoomData {
+  title: string;
+  description: string;
+  departureTime: string;
+  departureLocation: string;
+  destinationLocation: string;
+  maxParticipant: number;
+}
+
+async function createNewRoom(roomData: NewRoomData) {
+  try {
+    const res = await paxi_api.post('/room', {
+      description: roomData.description,
+      title: roomData.title,
+      departureTime: new Date(
+        roomData.departureTime + 'T00:00:00Z',
+      ).toISOString(),
+      departureLocation: roomData.departureLocation,
+      destinationLocation: roomData.destinationLocation,
+      maxParticipant: roomData.maxParticipant,
+    });
+
+    return res.status;
+  } catch (error: string | any) {
+    console.error('Error:', error);
+  }
+}
 
 const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
   const [roomName, setRoomName] = useState('');
@@ -84,6 +75,45 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
   const onDayPress = useCallback((day: any) => {
     setSelected(day.dateString);
   }, []);
+
+  const checkInputValid = () => {
+    if (!roomName || !departureName || !arrivalName) {
+      Alert.alert('오류', '모든 필수 필드를 입력해주세요.');
+      return;
+    } else if (roomName.length < 2 || roomName.length > 20) {
+      Alert.alert('오류', '방 제목은 2자 이상 20자 이하로 입력해주세요.');
+      return;
+    } else if (departureName.length < 2 || departureName.length > 20) {
+      Alert.alert('오류', '출발지는 2자 이상 20자 이하로 입력해주세요.');
+      return;
+    } else if (arrivalName.length < 2 || arrivalName.length > 20) {
+      Alert.alert('오류', '도착지는 2자 이상 20자 이하로 입력해주세요.');
+      return;
+    } else if (roomDetails.length > 100) {
+      Alert.alert('오류', '상세내용은 100자 이하로 입력해주세요.');
+      return;
+    } else {
+      createNewRoom({
+        title: roomName,
+        description: roomDetails,
+        destinationLocation: arrivalName,
+        maxParticipant: 4,
+        departureTime: selected,
+        departureLocation: departureName,
+      })
+        .then(result => {
+          if (result == 201) {
+            Alert.alert('성공', '방을 성공적으로 생성했습니다.');
+            navigation.goBack();
+          } else {
+            Alert.alert('실패', 'response: ' + result?.toString());
+          }
+        })
+        .catch(error => {
+          Alert.alert('실패', '방을 생성하는데 실패했습니다: ' + error.message);
+        });
+    }
+  };
 
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
@@ -250,17 +280,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
               backgroundColor: 'black',
             },
           ]}
-          onPress={() => {
-            if (roomName && departureName && arrivalName) {
-              navigation.navigate('NewPaxiRoomNext', {
-                roomName,
-                roomDetails,
-                departureName,
-                arrivalName,
-                selectedDate: selected,
-              });
-            }
-          }}
+          onPress={() => checkInputValid()}
           disabled={!roomName || !departureName || !arrivalName}>
           <Text style={styles.nextButtonText}>방 생성하기</Text>
         </TouchableOpacity>

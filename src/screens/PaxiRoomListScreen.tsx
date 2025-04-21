@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,11 +7,13 @@ import {
   TouchableOpacity,
   StatusBar,
   useColorScheme,
+  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainTabParamList} from '../navigation/types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import paxi_api from '../utils/paxi_api';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<MainTabParamList, 'Paxi'>;
@@ -39,8 +41,25 @@ const RoomContainer: React.FC<RoomContainerProps> = ({
   const backgroundColor = isDarkMode ? '#1A1A1A' : '#fff';
   const subTextColor = isDarkMode ? '#888' : '#666';
 
+  const askJoinRoom = () => {
+    Alert.alert('참여하기', '방에 참여하시겠습니까?', [
+      {
+        text: '취소',
+        style: 'cancel',
+      },
+      {
+        text: '확인',
+        onPress: () => {
+          Alert.alert('참여 완료', '방에 성공적으로 참여했습니다.');
+        },
+      },
+    ]);
+  };
+
   return (
-    <TouchableOpacity style={[styles.roomContainer, {backgroundColor}]}>
+    <TouchableOpacity
+      style={[styles.roomContainer, {backgroundColor}]}
+      onPress={() => askJoinRoom()}>
       <View style={styles.cardContent}>
         <View style={styles.mainInfo}>
           <View style={styles.titleContainer}>
@@ -90,6 +109,33 @@ const RefreshButton = ({onPress}: {onPress: () => void}) => {
   );
 };
 
+interface RoomDataType {
+  uuid: string;
+  title: string;
+  ownerUuid: string;
+  departureLocation: string;
+  destinationLocation: string;
+  maxParticipant: number;
+  currentParticipant: number;
+  departureTime: string;
+  status: string;
+  description: string;
+  payerUuid: string;
+  payAmount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface ParsedRoomDataType {
+  uuid: string;
+  title: string;
+  departureTime: string;
+  remain: number;
+  total: number;
+  departure: string;
+  destination: string;
+}
+
 const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const isDarkMode = useColorScheme() === 'dark';
@@ -100,50 +146,44 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
     flex: 1,
   };
 
+  const [roomData, setRoomData] = useState<ParsedRoomDataType[]>([]);
+
+  useEffect(() => {
+    getUserDataAndRequest();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const refreshRoomData = () => getUserDataAndRequest();
   const clicking = () => {};
 
-  const roomData = [
-    {
-      title: '포항역 카풀',
-      departureTime: '3월 14일 오전 7시 출발',
-      remain: 2,
-      total: 4,
-      departure: '포항역',
-      destination: '지곡회관',
-    },
-    {
-      title: '서울역 카풀',
-      departureTime: '3월 15일 오후 5시 출발',
-      remain: 1,
-      total: 3,
-      departure: '서울역',
-      destination: '강남역',
-    },
-    {
-      title: '포항역 카풀',
-      departureTime: '3월 14일 오전 7시 출발',
-      remain: 2,
-      total: 4,
-      departure: '포항역',
-      destination: '지곡회관',
-    },
-    {
-      title: '포항역 카풀',
-      departureTime: '3월 14일 오전 7시 출발',
-      remain: 2,
-      total: 4,
-      departure: '포항역',
-      destination: '지곡회관',
-    },
-    {
-      title: '포항역 카풀',
-      departureTime: '3월 14일 오전 7시 출발',
-      remain: 2,
-      total: 4,
-      departure: '포항역',
-      destination: '지곡회관',
-    },
-  ];
+  async function getUserDataAndRequest() {
+    try {
+      const response = await paxi_api.get('/room');
+      const parsedData = parseRoomData(response.data);
+      setRoomData(parsedData);
+    } catch (error: string | any) {
+      console.error('Error:', error);
+      Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + error.message);
+    }
+  }
+
+  const parseRoomData = (items: RoomDataType[]) =>
+    items.map((item: RoomDataType) => ({
+      uuid: item.uuid,
+      title: item.title,
+      departureTime: new Date(item.departureTime).toLocaleString('ko-KR', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+      }),
+      remain: item.maxParticipant - item.currentParticipant,
+      total: item.maxParticipant,
+      departure: item.departureLocation,
+      destination: item.destinationLocation,
+    }));
 
   return (
     <SafeAreaView style={[backgroundStyle]}>
@@ -162,7 +202,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       </View>
 
       <View style={[styles.conditionNavigator]}>
-        <RefreshButton onPress={() => {}} />
+        <RefreshButton onPress={() => refreshRoomData()} />
 
         <TouchableOpacity
           style={[
