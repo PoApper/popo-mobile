@@ -10,12 +10,11 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { Calendar, LocaleConfig } from 'react-native-calendars';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/types';
-import EncryptedStorage from 'react-native-encrypted-storage';
-import axios from 'axios';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/types';
+import paxi_api from '../utils/paxi_api';
 
 LocaleConfig.locales.kr = {
   monthNames: [
@@ -75,37 +74,28 @@ interface NewRoomData {
 
 async function createNewRoom(roomData: NewRoomData) {
   try {
-    const authToken = await EncryptedStorage.getItem('auth_token');
-    if (!authToken) return;
+    const res = await paxi_api.post('/room', {
+      description: roomData.description,
+      title: roomData.title,
+      departureTime: new Date(
+        roomData.departureTime + 'T00:00:00Z',
+      ).toISOString(),
+      departureLocation: roomData.departureLocation,
+      destinationLocation: roomData.destinationLocation,
+      maxParticipant: roomData.maxParticipant,
+    });
 
-    const response = await axios.post('https://api.paxi-dev.popo.poapper.club/room', 
-      {
-        "description": roomData.description,
-        "title": roomData.title,
-        "departureTime": new Date(roomData.departureTime + 'T00:00:00Z').toISOString(),
-        "departureLocation": roomData.departureLocation,
-        "destinationLocation": roomData.destinationLocation,
-        "maxParticipant": roomData.maxParticipant,
-      },
-      {
-        headers: {
-          'Cookie': `Authentication=${authToken}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    return response.status;
+    return res.status;
   } catch (error: string | any) {
     console.error('Error:', error);
   }
 }
 
-const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
-  const [roomName, setRoomName] = useState("");
-  const [roomDetails, setRoomDetails] = useState("");
-  const [departureName, setDepartureName] = useState("");
-  const [arrivalName, setArrivalName] = useState("");
+const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
+  const [roomName, setRoomName] = useState('');
+  const [roomDetails, setRoomDetails] = useState('');
+  const [departureName, setDepartureName] = useState('');
+  const [arrivalName, setArrivalName] = useState('');
 
   const [selected, setSelected] = useState(
     new Date().toISOString().split('T')[0],
@@ -149,19 +139,20 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
         maxParticipant: 4,
         departureTime: selected,
         departureLocation: departureName,
-      }).then((result) => {
-        if (result == 201) {
-          Alert.alert('성공', '방을 성공적으로 생성했습니다.');
-          navigation.goBack();
-        } else {
-          Alert.alert('실패', 'response: ' + result?.toString());
-        }
       })
-      .catch((error) => {
-        Alert.alert('실패', '방을 생성하는데 실패했습니다: ' + error.message);
-      });
+        .then(result => {
+          if (result == 201) {
+            Alert.alert('성공', '방을 성공적으로 생성했습니다.');
+            navigation.goBack();
+          } else {
+            Alert.alert('실패', 'response: ' + result?.toString());
+          }
+        })
+        .catch(error => {
+          Alert.alert('실패', '방을 생성하는데 실패했습니다: ' + error.message);
+        });
     }
-  }
+  };
 
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
@@ -329,8 +320,7 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
             },
           ]}
           onPress={() => checkInputValid()}
-          disabled={!roomName || !departureName || !arrivalName}
-        >
+          disabled={!roomName || !departureName || !arrivalName}>
           <Text style={styles.nextButtonText}>방 생성하기</Text>
         </TouchableOpacity>
       </ScrollView>
