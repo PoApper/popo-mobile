@@ -1,10 +1,9 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, {useState, useMemo, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
-  TextStyle,
   TouchableOpacity,
   useColorScheme,
   StatusBar,
@@ -18,15 +17,46 @@ import { RootStackParamList } from '../navigation/types';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import axios from 'axios';
 
-LocaleConfig.locales['kr'] = {
+LocaleConfig.locales.kr = {
   monthNames: [
-    '1월', '2월', '3월', '4월', '5월', '6월',
-    '7월', '8월', '9월', '10월', '11월', '12월'
+    '1월',
+    '2월',
+    '3월',
+    '4월',
+    '5월',
+    '6월',
+    '7월',
+    '8월',
+    '9월',
+    '10월',
+    '11월',
+    '12월',
   ],
-  monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-  dayNames: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+  monthNamesShort: [
+    '1월',
+    '2월',
+    '3월',
+    '4월',
+    '5월',
+    '6월',
+    '7월',
+    '8월',
+    '9월',
+    '10월',
+    '11월',
+    '12월',
+  ],
+  dayNames: [
+    '일요일',
+    '월요일',
+    '화요일',
+    '수요일',
+    '목요일',
+    '금요일',
+    '토요일',
+  ],
   dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-  today: '오늘'
+  today: '오늘',
 };
 LocaleConfig.defaultLocale = 'kr';
 
@@ -77,14 +107,19 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
   const [departureName, setDepartureName] = useState("");
   const [arrivalName, setArrivalName] = useState("");
 
-  const [selected, setSelected] = useState(new Date().toISOString().split('T')[0]);
-  const marked = useMemo(() => ({
-    [selected]: {
-      selected: true,
-      selectedColor: '#FB5353',
-      selectedTextColor: 'white'
-    }
-  }), [selected]);
+  const [selected, setSelected] = useState(
+    new Date().toISOString().split('T')[0],
+  );
+  const marked = useMemo(
+    () => ({
+      [selected]: {
+        selected: true,
+        selectedColor: '#FB5353',
+        selectedTextColor: 'white',
+      },
+    }),
+    [selected],
+  );
 
   const onDayPress = useCallback((day: any) => {
     setSelected(day.dateString);
@@ -136,64 +171,64 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
     flex: 1,
   };
 
-  const textStyle: TextStyle = {
-    color: textColor,
-  };
-
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, { borderBottomColor: borderColor }]}>
+      <View style={[styles.header, {borderBottomColor: borderColor}]}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+          onPress={() => navigation.goBack()}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: textColor }]}>방 생성하기</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>
+          방 생성하기
+        </Text>
         <View style={styles.placeholderButton} />
       </View>
 
       <ScrollView>
         <View style={styles.container}>
-          <View style={{ width: '100%', marginBottom: 8 }}>
-            <Text style={[styles.titleText, { color: textColor }]}>방 제목</Text>
+          <View style={{width: '100%', marginBottom: 8}}>
+            <Text style={[styles.titleText, {color: textColor}]}>방 제목</Text>
             <TextInput
-            style={[
-              styles.roomInput,
-              {
-                marginBottom: 10,
-                borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-                backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
-                color: textColor
-              }
-            ]}
-            placeholder="제목을 입력해주세요."
-            placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+              style={[
+                styles.roomInput,
+                {
+                  marginBottom: 10,
+                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                  backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+                  color: textColor,
+                },
+              ]}
+              placeholder="제목을 입력해주세요."
+              placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={roomName}
               onChangeText={setRoomName}
             />
           </View>
 
-          <View style={{ width: '100%', marginBottom: 8 }}>
-            <Text style={[styles.titleText, { color: textColor }]}>위치 지정</Text>
-            <View style={[
-              styles.inputWrapper,
-              {
-                marginBottom: 10,
-                borderColor: isDarkMode ? '#2C2C2C' : '#d0d0d0',
-                backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'
-              }
-            ]}>
+          <View style={{width: '100%', marginBottom: 8}}>
+            <Text style={[styles.titleText, {color: textColor}]}>
+              위치 지정
+            </Text>
+            <View
+              style={[
+                styles.inputWrapper,
+                {
+                  marginBottom: 10,
+                  borderColor: isDarkMode ? '#2C2C2C' : '#d0d0d0',
+                  backgroundColor: isDarkMode ? '#1A1A1A' : '#fff',
+                },
+              ]}>
               <View style={styles.inputWithDot}>
                 <View style={styles.dotBlack} />
                 <TextInput
                   style={{
                     width: '90%',
-                    color: textColor
+                    color: textColor,
                   }}
                   placeholder="어디서 출발하시나요?"
                   placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
@@ -201,13 +236,18 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
                   onChangeText={setDepartureName}
                 />
               </View>
-              <View style={[styles.separator, { backgroundColor: isDarkMode ? '#2C2C2C' : '#d0d0d0' }]} />
+              <View
+                style={[
+                  styles.separator,
+                  {backgroundColor: isDarkMode ? '#2C2C2C' : '#d0d0d0'},
+                ]}
+              />
               <View style={styles.inputWithDot}>
                 <View style={styles.dotRed} />
                 <TextInput
                   style={{
                     width: '90%',
-                    color: textColor
+                    color: textColor,
                   }}
                   placeholder="어디로 떠나시나요?"
                   placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
@@ -218,21 +258,25 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
             </View>
           </View>
 
-          <View style={{ width: '100%', marginBottom: 0, paddingBottom: 0 }}>
-            <Text style={[styles.titleText, { marginBottom: 0, color: textColor }]}>일정 선택</Text>
+          <View style={{width: '100%', marginBottom: 0, paddingBottom: 0}}>
+            <Text
+              style={[styles.titleText, {marginBottom: 0, color: textColor}]}>
+              일정 선택
+            </Text>
           </View>
         </View>
 
-        <View style={{
-          marginHorizontal: 16,
-          marginVertical: 8,
-          borderWidth: 1,
-          borderRadius: 6,
-          borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-          backgroundColor: isDarkMode ? '#1A1A1A' : '#fff',
-          overflow: 'hidden',
-          height: 370
-        }}>
+        <View
+          style={{
+            marginHorizontal: 16,
+            marginVertical: 8,
+            borderWidth: 1,
+            borderRadius: 6,
+            borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+            backgroundColor: isDarkMode ? '#1A1A1A' : '#fff',
+            overflow: 'hidden',
+            height: 370,
+          }}>
           <Calendar
             current={selected}
             onDayPress={onDayPress}
@@ -254,21 +298,21 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
               textDayHeaderFontSize: 14,
             }}
             style={{
-              height: 370
+              height: 370,
             }}
           />
         </View>
 
         <View style={styles.container}>
-          <Text style={[styles.titleText, { color: textColor }]}>상세내용</Text>
+          <Text style={[styles.titleText, {color: textColor}]}>상세내용</Text>
           <TextInput
             style={[
               styles.roomInput,
               {
                 borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
                 backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
-                color: textColor
-              }
+                color: textColor,
+              },
             ]}
             placeholder="세부사항을 입력해주세요."
             placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
@@ -281,8 +325,8 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
           style={[
             styles.nextButton,
             {
-              backgroundColor: 'black'
-            }
+              backgroundColor: 'black',
+            },
           ]}
           onPress={() => checkInputValid()}
           disabled={!roomName || !departureName || !arrivalName}
@@ -292,27 +336,6 @@ const NewPaxiRoomScreen = ({ navigation }: NewPaxiRoomScreenProps) => {
       </ScrollView>
     </SafeAreaView>
   );
-};
-
-const calendarTheme = {
-  'stylesheet.calendar.main': {
-    container: {
-      paddingLeft: 0,
-      paddingRight: 0,
-    },
-    week: {
-      marginTop: 0,
-      marginBottom: 5,
-      flexDirection: 'row',
-    },
-    day: {
-      width: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  },
-  textDayFontSize: 18,
-  textDayHeaderFontSize: 16,
 };
 
 export default NewPaxiRoomScreen;
@@ -348,8 +371,8 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 15,
     letterSpacing: -0.5,
-    fontWeight: "700",
-    color: "#000",
+    fontWeight: '700',
+    color: '#000',
     textAlign: 'left',
     width: '100%',
     marginBottom: 10,
@@ -366,29 +389,29 @@ const styles = StyleSheet.create({
   },
   nextButtonText: {
     fontSize: 13,
-    fontWeight: "500",
-    fontFamily: "Pretendard",
-    color: "#ffffff",
-    textAlign: "center"
+    fontWeight: '500',
+    fontFamily: 'Pretendard',
+    color: '#ffffff',
+    textAlign: 'center',
   },
   roomInput: {
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderWidth: 1,
     borderRadius: 6,
-    borderColor: "#D0D0D0",
-    width: "100%",
+    borderColor: '#D0D0D0',
+    width: '100%',
     backgroundColor: '#FFFFFF',
     height: 42,
     paddingHorizontal: 16,
     fontSize: 13,
-    textAlignVertical: 'center'
+    textAlignVertical: 'center',
   },
   container: {
     alignItems: 'center',
     paddingRight: '5%',
     paddingLeft: '5%',
     paddingTop: '5%',
-    marginBottom: 0
+    marginBottom: 0,
   },
   inputWrapper: {
     width: '100%',

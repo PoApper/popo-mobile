@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,14 +10,17 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../navigation/types';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RouteProp} from '@react-navigation/native';
+import {RootStackParamList} from '../navigation/types';
 import api from '../utils/api';
 
 type AssociationDetailScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'AssociationDetail'>;
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    'AssociationDetail'
+  >;
   route: RouteProp<RootStackParamList, 'AssociationDetail'>;
 };
 
@@ -36,17 +39,23 @@ interface AssociationItem {
   youtube_url: string;
 }
 
-const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({ navigation, route }) => {
+const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [associationData, setAssociationData] = useState<AssociationItem | null>(null);
+  const [associationData, setAssociationData] =
+    useState<AssociationItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { associationId, associationName } = route.params;
+  const {associationId, associationName} = route.params;
 
   useEffect(() => {
     const fetchAssociationDetail = async () => {
       try {
-        const response = await api.get<AssociationItem>(`/introduce/association/${associationId}`);
+        const response = await api.get<AssociationItem>(
+          `/introduce/association/${associationId}`,
+        );
         setAssociationData(response.data);
       } catch (error) {
         console.error('자치단체 상세 정보 로드 오류:', error);
@@ -80,7 +89,9 @@ const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({ navig
     return (
       <SafeAreaView style={backgroundStyle}>
         <View style={styles.loadingContainer}>
-          <Text style={[styles.loadingText, { color: textColor }]}>로딩중...</Text>
+          <Text style={[styles.loadingText, {color: textColor}]}>
+            로딩중...
+          </Text>
         </View>
       </SafeAreaView>
     );
@@ -92,14 +103,15 @@ const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({ navig
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, { borderBottomColor: borderColor }]}>
+      <View style={[styles.header, {borderBottomColor: borderColor}]}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+          onPress={() => navigation.goBack()}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: textColor }]}>{associationName}</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>
+          {associationName}
+        </Text>
         <View style={styles.placeholderButton} />
       </View>
 
@@ -108,75 +120,123 @@ const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({ navig
           <>
             <View style={styles.imageContainer}>
               <Image
-                source={{ uri: associationData.image_url }}
+                source={{uri: associationData.image_url}}
                 style={styles.associationImage}
                 resizeMode="contain"
               />
             </View>
             <View style={styles.contentContainer}>
-              <Text style={[styles.associationName, { color: textColor }]}>{associationData.name}</Text>
+              <Text style={[styles.associationName, {color: textColor}]}>
+                {associationData.name}
+              </Text>
 
-              <View style={[styles.infoSection, { borderColor }]}>
-                <Text style={[styles.content, { color: isDarkMode ? '#888' : '#666' }]}>
+              <View style={[styles.infoSection, {borderColor}]}>
+                <Text
+                  style={[
+                    styles.content,
+                    {color: isDarkMode ? '#888' : '#666'},
+                  ]}>
                   {associationData.content}
                 </Text>
               </View>
 
-              <View style={[styles.infoSection, { borderColor }]}>
+              <View style={[styles.infoSection, {borderColor}]}>
                 <View style={styles.infoRow}>
-                  <Text style={[styles.infoLabel, { color: textColor }]}>위치</Text>
-                  <Text style={[styles.infoValue, { color: isDarkMode ? '#888' : '#666' }]}>
+                  <Text style={[styles.infoLabel, {color: textColor}]}>
+                    위치
+                  </Text>
+                  <Text
+                    style={[
+                      styles.infoValue,
+                      {color: isDarkMode ? '#888' : '#666'},
+                    ]}>
                     {associationData.location}
                   </Text>
                 </View>
                 <View style={styles.infoRow}>
-                  <Text style={[styles.infoLabel, { color: textColor }]}>대표자</Text>
-                  <Text style={[styles.infoValue, { color: isDarkMode ? '#888' : '#666' }]}>
+                  <Text style={[styles.infoLabel, {color: textColor}]}>
+                    대표자
+                  </Text>
+                  <Text
+                    style={[
+                      styles.infoValue,
+                      {color: isDarkMode ? '#888' : '#666'},
+                    ]}>
                     {associationData.representative}
                   </Text>
                 </View>
                 <View style={styles.infoRow}>
-                  <Text style={[styles.infoLabel, { color: textColor }]}>연락처</Text>
-                  <Text style={[styles.infoValue, { color: isDarkMode ? '#888' : '#666' }]}>
+                  <Text style={[styles.infoLabel, {color: textColor}]}>
+                    연락처
+                  </Text>
+                  <Text
+                    style={[
+                      styles.infoValue,
+                      {color: isDarkMode ? '#888' : '#666'},
+                    ]}>
                     {associationData.contact}
                   </Text>
                 </View>
               </View>
 
-              <View style={[styles.infoSection, { borderColor }]}>
+              <View style={[styles.infoSection, {borderColor}]}>
                 <View style={styles.socialLinks}>
-                  {associationData.homepage_url != "null" && associationData.homepage_url != "" && associationData.homepage_url && (
-                    <TouchableOpacity
-                      style={[styles.socialButton, { backgroundColor: '#000000' }]}
-                      onPress={() => handleLinkPress(associationData.homepage_url)}
-                    >
-                      <Text style={styles.socialText}>홈페이지</Text>
-                    </TouchableOpacity>
-                  )}
-                  {associationData.facebook_url != "null" && associationData.facebook_url != "" && associationData.facebook_url && (
-                    <TouchableOpacity
-                      style={[styles.socialButton, { backgroundColor: '#1877F2' }]}
-                      onPress={() => handleLinkPress(associationData.facebook_url)}
-                    >
-                      <Text style={styles.socialText}>Facebook</Text>
-                    </TouchableOpacity>
-                  )}
-                  {associationData.instagram_url != "null" && associationData.instagram_url != "" && associationData.instagram_url && (
-                    <TouchableOpacity
-                      style={[styles.socialButton, { backgroundColor: '#E4405F' }]}
-                      onPress={() => handleLinkPress(associationData.instagram_url)}
-                    >
-                      <Text style={styles.socialText}>Instagram</Text>
-                    </TouchableOpacity>
-                  )}
-                  {associationData.youtube_url != "null" && associationData.youtube_url != "" && associationData.youtube_url && (
-                    <TouchableOpacity
-                      style={[styles.socialButton, { backgroundColor: '#FF0000' }]}
-                      onPress={() => handleLinkPress(associationData.youtube_url)}
-                    >
-                      <Text style={styles.socialText}>YouTube</Text>
-                    </TouchableOpacity>
-                  )}
+                  {associationData.homepage_url != 'null' &&
+                    associationData.homepage_url != '' &&
+                    associationData.homepage_url && (
+                      <TouchableOpacity
+                        style={[
+                          styles.socialButton,
+                          {backgroundColor: '#000000'},
+                        ]}
+                        onPress={() =>
+                          handleLinkPress(associationData.homepage_url)
+                        }>
+                        <Text style={styles.socialText}>홈페이지</Text>
+                      </TouchableOpacity>
+                    )}
+                  {associationData.facebook_url != 'null' &&
+                    associationData.facebook_url != '' &&
+                    associationData.facebook_url && (
+                      <TouchableOpacity
+                        style={[
+                          styles.socialButton,
+                          {backgroundColor: '#1877F2'},
+                        ]}
+                        onPress={() =>
+                          handleLinkPress(associationData.facebook_url)
+                        }>
+                        <Text style={styles.socialText}>Facebook</Text>
+                      </TouchableOpacity>
+                    )}
+                  {associationData.instagram_url != 'null' &&
+                    associationData.instagram_url != '' &&
+                    associationData.instagram_url && (
+                      <TouchableOpacity
+                        style={[
+                          styles.socialButton,
+                          {backgroundColor: '#E4405F'},
+                        ]}
+                        onPress={() =>
+                          handleLinkPress(associationData.instagram_url)
+                        }>
+                        <Text style={styles.socialText}>Instagram</Text>
+                      </TouchableOpacity>
+                    )}
+                  {associationData.youtube_url != 'null' &&
+                    associationData.youtube_url != '' &&
+                    associationData.youtube_url && (
+                      <TouchableOpacity
+                        style={[
+                          styles.socialButton,
+                          {backgroundColor: '#FF0000'},
+                        ]}
+                        onPress={() =>
+                          handleLinkPress(associationData.youtube_url)
+                        }>
+                        <Text style={styles.socialText}>YouTube</Text>
+                      </TouchableOpacity>
+                    )}
                 </View>
               </View>
             </View>

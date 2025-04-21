@@ -1,66 +1,212 @@
-import React, { useState } from "react";
-import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, useColorScheme, StatusBar } from "react-native";
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/types';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  useColorScheme,
+  StatusBar,
+} from 'react-native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/types';
 
 type PlaceReservationScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PlaceReservation'>;
 };
 
-const buildings = ["학생회관", "지곡회관", "커뮤니티센터", "RC", "기타"];
+const buildings = ['학생회관', '지곡회관', '커뮤니티센터', 'RC', '기타'];
 
 type Location = {
-    id: string;
-    name: string;
-    description: string;
-    image: any;
-  };
+  id: string;
+  name: string;
+  description: string;
+  image: any;
+};
 
-const locationsData: { [key: string]: Location[] } = {
+const locationsData: {[key: string]: Location[]} = {
   학생회관: [
-    { id: "1", name: "1층 홀", description: "학생회관 1층", image: require("../../assets/hall1.png") },
-    { id: "2", name: "2층 홀", description: "학생회관 2층", image: require("../../assets/hall1.png") },
-    { id: "3", name: "3층 홀", description: "학생회관 3층", image: require("../../assets/hall1.png") },
-    { id: "4", name: "4층 홀", description: "학생회관 4층", image: require("../../assets/hall1.png") },
-    { id: "5", name: "노래방", description: "학생회관 410호", image: require("../../assets/hall1.png") },
-    { id: "6", name: "대회의실", description: "학생회관 3층", image: require("../../assets/hall1.png") },
-    { id: "7", name: "아틀라스홀", description: "학생회관 1층, 계단 아래", image: require("../../assets/hall1.png") },
-    { id: "8", name: "오아시스 회의실1", description: "학생회관 오아시스", image: require("../../assets/hall1.png") },
-    { id: "9", name: "오아시스 회의실2", description: "학생회관 오아시스", image: require("../../assets/hall1.png") },
-    { id: "10", name: "음악감상실", description: "학생회관 302호", image: require("../../assets/hall1.png") },
-    { id: "11", name: "커리어라운지 상담실 A", description: "학생회관 102호", image: require("../../assets/hall1.png") },
-    { id: "12", name: "커리어라운지 상담실 B", description: "학생회관 102호", image: require("../../assets/hall1.png") },
-    { id: "13", name: "커리어라운지 세미나실", description: "학생회관 102호", image: require("../../assets/hall1.png") },
+    {
+      id: '1',
+      name: '1층 홀',
+      description: '학생회관 1층',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '2',
+      name: '2층 홀',
+      description: '학생회관 2층',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '3',
+      name: '3층 홀',
+      description: '학생회관 3층',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '4',
+      name: '4층 홀',
+      description: '학생회관 4층',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '5',
+      name: '노래방',
+      description: '학생회관 410호',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '6',
+      name: '대회의실',
+      description: '학생회관 3층',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '7',
+      name: '아틀라스홀',
+      description: '학생회관 1층, 계단 아래',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '8',
+      name: '오아시스 회의실1',
+      description: '학생회관 오아시스',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '9',
+      name: '오아시스 회의실2',
+      description: '학생회관 오아시스',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '10',
+      name: '음악감상실',
+      description: '학생회관 302호',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '11',
+      name: '커리어라운지 상담실 A',
+      description: '학생회관 102호',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '12',
+      name: '커리어라운지 상담실 B',
+      description: '학생회관 102호',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '13',
+      name: '커리어라운지 세미나실',
+      description: '학생회관 102호',
+      image: require('../../assets/hall1.png'),
+    },
   ],
   지곡회관: [
-    { id: "1", name: "버거킹 소무대", description: "지곡회관, 버거킹", image: require("../../assets/hall1.png") },
-    { id: "2", name: "지곡회관 회의실3", description: "지곡회관", image: require("../../assets/hall1.png") },
+    {
+      id: '1',
+      name: '버거킹 소무대',
+      description: '지곡회관, 버거킹',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '2',
+      name: '지곡회관 회의실3',
+      description: '지곡회관',
+      image: require('../../assets/hall1.png'),
+    },
   ],
   커뮤니티센터: [
-    { id: "1", name: "그룹스터디룸A", description: "커뮤니티센터 203호", image: require("../../assets/hall1.png") },
-    { id: "2", name: "그룹스터디룸B", description: "커뮤니티센터 205호", image: require("../../assets/hall1.png") },
-    { id: "3", name: "그룹스터디룸C", description: "커뮤니티센터 207호", image: require("../../assets/hall1.png") },
-    { id: "4", name: "그룹스터디룸D", description: "커뮤니티센터 209호", image: require("../../assets/hall1.png") },
-    { id: "3", name: "시네마실A", description: "커뮤니티센터 103호", image: require("../../assets/hall1.png") },
-    { id: "4", name: "시네마실B", description: "커뮤니티센터 105호", image: require("../../assets/hall1.png") },
+    {
+      id: '1',
+      name: '그룹스터디룸A',
+      description: '커뮤니티센터 203호',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '2',
+      name: '그룹스터디룸B',
+      description: '커뮤니티센터 205호',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '3',
+      name: '그룹스터디룸C',
+      description: '커뮤니티센터 207호',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '4',
+      name: '그룹스터디룸D',
+      description: '커뮤니티센터 209호',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '3',
+      name: '시네마실A',
+      description: '커뮤니티센터 103호',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '4',
+      name: '시네마실B',
+      description: '커뮤니티센터 105호',
+      image: require('../../assets/hall1.png'),
+    },
   ],
   RC: [
-    { id: "1", name: "RA 라운지 룸", description: "RC 1층 공용공간", image: require("../../assets/hall1.png") },
-    { id: "2", name: "소셜 키친 룸", description: "RC 1층 공용공간", image: require("../../assets/hall1.png") },
-    { id: "3", name: "시네마 룸", description: "RC 1층 공용공간", image: require("../../assets/hall1.png") },
-    { id: "4", name: "커뮤니티 룸 1", description: "RC 1층 공용공간", image: require("../../assets/hall1.png") },
-    { id: "5", name: "커뮤니티 룸 2", description: "RC 1층 공용공간", image: require("../../assets/hall1.png") },
+    {
+      id: '1',
+      name: 'RA 라운지 룸',
+      description: 'RC 1층 공용공간',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '2',
+      name: '소셜 키친 룸',
+      description: 'RC 1층 공용공간',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '3',
+      name: '시네마 룸',
+      description: 'RC 1층 공용공간',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '4',
+      name: '커뮤니티 룸 1',
+      description: 'RC 1층 공용공간',
+      image: require('../../assets/hall1.png'),
+    },
+    {
+      id: '5',
+      name: '커뮤니티 룸 2',
+      description: 'RC 1층 공용공간',
+      image: require('../../assets/hall1.png'),
+    },
   ],
   기타: [
-    { id: "1", name: "78 계단", description: "78 계단", image: require("../../assets/hall1.png") },
+    {
+      id: '1',
+      name: '78 계단',
+      description: '78 계단',
+      image: require('../../assets/hall1.png'),
+    },
   ],
 };
 
-const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => {
+const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [selectedBuilding, setSelectedBuilding] = useState("학생회관");
-  const [textWidths, setTextWidths] = useState<{ [key: string]: number }>({});
-  const [sortType, setSortType] = useState("가나다순");
+  const [selectedBuilding, setSelectedBuilding] = useState('학생회관');
+  const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
+  const [sortType, setSortType] = useState('가나다순');
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -73,7 +219,7 @@ const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => 
 
   const locations = [...(locationsData[selectedBuilding] || [])];
 
-  if (sortType === "가나다순") {
+  if (sortType === '가나다순') {
     locations.sort((a, b) => a.name.localeCompare(b.name));
   }
 
@@ -83,48 +229,55 @@ const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => 
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, { borderBottomColor: borderColor }]}>
+      <View style={[styles.header, {borderBottomColor: borderColor}]}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+          onPress={() => navigation.goBack()}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: textColor }]}>장소 예약</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>장소 예약</Text>
         <View style={styles.placeholderButton} />
       </View>
 
       {/* 건물 선택 네비게이션 */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.buildingNav}>
-        {buildings.map((building) => (
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.buildingNav}>
+        {buildings.map(building => (
           <TouchableOpacity
             key={building}
             onPress={() => setSelectedBuilding(building)}
-            style={styles.buildingTabWrapper}
-          >
+            style={styles.buildingTabWrapper}>
             <View style={styles.buildingTabInner}>
               <View style={styles.textWithUnderline}>
-              <Text
-                style={[
-                  styles.buildingTab,
-                  { color: isDarkMode ? '#888' : '#999' },
-                  selectedBuilding === building && [
-                    styles.selectedBuildingText,
-                    { color: textColor }
-                  ],
-                ]}
-                onLayout={(e) => {
-                  const width = e.nativeEvent.layout.width;
-                  setTextWidths((prev) => ({ ...prev, [building]: width }));
-                }}
-              >
-                {building}
-              </Text>
+                <Text
+                  style={[
+                    styles.buildingTab,
+                    {color: isDarkMode ? '#888' : '#999'},
+                    selectedBuilding === building && [
+                      styles.selectedBuildingText,
+                      {color: textColor},
+                    ],
+                  ]}
+                  onLayout={e => {
+                    const width = e.nativeEvent.layout.width;
+                    setTextWidths(prev => ({...prev, [building]: width}));
+                  }}>
+                  {building}
+                </Text>
 
-                {selectedBuilding === building && <View style={[
-                  styles.underline,
-                  { width: (textWidths[building] || 0) + 8, backgroundColor: textColor },
-                ]} />}
+                {selectedBuilding === building && (
+                  <View
+                    style={[
+                      styles.underline,
+                      {
+                        width: (textWidths[building] || 0) + 8,
+                        backgroundColor: textColor,
+                      },
+                    ]}
+                  />
+                )}
               </View>
             </View>
           </TouchableOpacity>
@@ -133,21 +286,24 @@ const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => 
 
       {/* 정렬 버튼 */}
       <View style={styles.sortButtons}>
-        {["가나다순", "예약 많은 순"].map((type) => (
+        {['가나다순', '예약 많은 순'].map(type => (
           <TouchableOpacity
             key={type}
             style={[
               styles.sortButton,
-              { borderColor: isDarkMode ? '#555' : '#ccc' },
-              sortType === type && [styles.activeSort, { backgroundColor: textColor }]
+              {borderColor: isDarkMode ? '#555' : '#ccc'},
+              sortType === type && [
+                styles.activeSort,
+                {backgroundColor: textColor},
+              ],
             ]}
-            onPress={() => setSortType(type)}
-          >
-            <Text style={[
-              styles.sortButtonText,
-              { color: textColor },
-              sortType === type && { color: isDarkMode ? '#000' : '#fff' }
-            ]}>
+            onPress={() => setSortType(type)}>
+            <Text
+              style={[
+                styles.sortButtonText,
+                {color: textColor},
+                sortType === type && {color: isDarkMode ? '#000' : '#fff'},
+              ]}>
               {type}
             </Text>
           </TouchableOpacity>
@@ -156,19 +312,41 @@ const PlaceReservationScreen = ({ navigation }: PlaceReservationScreenProps) => 
 
       {/* 장소 리스트 */}
       <FlatList
-        style={{ flex: 1 }}
-        contentContainerStyle={{ paddingBottom: 20, paddingTop: 0, justifyContent: 'flex-start' }}
+        style={{flex: 1}}
+        contentContainerStyle={{
+          paddingBottom: 20,
+          paddingTop: 0,
+          justifyContent: 'flex-start',
+        }}
         data={locations}
-        keyExtractor={(item) => item.id + item.name}
-        renderItem={({ item }) => (
-          <View style={[styles.locationItem, { backgroundColor: isDarkMode ? '#121212' : '#fff' }]}>
+        keyExtractor={item => item.id + item.name}
+        renderItem={({item}) => (
+          <View
+            style={[
+              styles.locationItem,
+              {backgroundColor: isDarkMode ? '#121212' : '#fff'},
+            ]}>
             <Image source={item.image} style={styles.locationImage} />
             <View style={styles.locationInfo}>
-              <Text style={[styles.locationName, { color: textColor }]}>{item.name}</Text>
-              <Text style={[styles.locationDescription, { color: isDarkMode ? '#888' : '#777' }]}>{item.description}</Text>
+              <Text style={[styles.locationName, {color: textColor}]}>
+                {item.name}
+              </Text>
+              <Text
+                style={[
+                  styles.locationDescription,
+                  {color: isDarkMode ? '#888' : '#777'},
+                ]}>
+                {item.description}
+              </Text>
             </View>
-            <TouchableOpacity style={[styles.reserveButton, { backgroundColor: backgroundSecondary }]}>
-              <Text style={[styles.reserveButtonText, { color: textColor }]}>예약</Text>
+            <TouchableOpacity
+              style={[
+                styles.reserveButton,
+                {backgroundColor: backgroundSecondary},
+              ]}>
+              <Text style={[styles.reserveButtonText, {color: textColor}]}>
+                예약
+              </Text>
             </TouchableOpacity>
           </View>
         )}
@@ -199,34 +377,39 @@ const styles = StyleSheet.create({
   placeholderButton: {
     width: 40,
   },
-  safeArea: { flex: 1, backgroundColor: "#fff" },
-  buildingNav: { flexDirection: "row", paddingHorizontal: 15, marginTop: 20},
-  selectedBuilding: { color: "#000", fontWeight: "bold", borderBottomWidth: 2, borderBottomColor: "#000" },
+  safeArea: {flex: 1, backgroundColor: '#fff'},
+  buildingNav: {flexDirection: 'row', paddingHorizontal: 15, marginTop: 20},
+  selectedBuilding: {
+    color: '#000',
+    fontWeight: 'bold',
+    borderBottomWidth: 2,
+    borderBottomColor: '#000',
+  },
 
   buildingTabWrapper: {
-    alignItems: "center",
-    margin: 2
+    alignItems: 'center',
+    margin: 2,
   },
 
   buildingTabInner: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingHorizontal: 2,
   },
 
   textWithUnderline: {
     paddingHorizontal: 6,
-    alignItems: "center",
+    alignItems: 'center',
   },
 
   buildingTab: {
     fontSize: 16,
-    color: "#999",
+    color: '#999',
     lineHeight: 20,
   },
 
   selectedBuildingText: {
-    color: "#000",
-    fontWeight: "bold",
+    color: '#000',
+    fontWeight: 'bold',
     lineHeight: 20,
   },
 
@@ -234,11 +417,16 @@ const styles = StyleSheet.create({
     marginTop: 4,
     height: 2,
     borderRadius: 1,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
 
   /* 정렬 버튼 */
-  sortButtons: { flexDirection: "row", paddingHorizontal: 15, marginTop: -580, marginBottom: 10 },
+  sortButtons: {
+    flexDirection: 'row',
+    paddingHorizontal: 15,
+    marginTop: -580,
+    marginBottom: 10,
+  },
   sortButton: {
     paddingHorizontal: 15,
     paddingVertical: 8,
@@ -246,13 +434,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginRight: 10,
   },
-  activeSort: { borderColor: "#000" },
-  sortButtonText: { fontSize: 14 },
+  activeSort: {borderColor: '#000'},
+  sortButtonText: {fontSize: 14},
 
   /* 장소 리스트 */
   locationItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 15,
     paddingHorizontal: 20,
   },
@@ -267,16 +455,16 @@ const styles = StyleSheet.create({
   locationInfo: {
     flex: 1,
   },
-  locationName: { fontSize: 16, fontWeight: "bold", marginBottom: 5 },
-  locationDescription: { fontSize: 14 },
+  locationName: {fontSize: 16, fontWeight: 'bold', marginBottom: 5},
+  locationDescription: {fontSize: 14},
   reserveButton: {
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 20,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginLeft: 10,
   },
-  reserveButtonText: { fontSize: 14, fontWeight: "600" },
+  reserveButtonText: {fontSize: 14, fontWeight: '600'},
 });
 
 export default PlaceReservationScreen;

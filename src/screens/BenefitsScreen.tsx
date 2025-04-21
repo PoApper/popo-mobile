@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, useColorScheme, StatusBar } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/types';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  useColorScheme,
+  StatusBar,
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/types';
 import api from '../utils/api';
 
 type BenefitsScreenProps = {
@@ -27,17 +35,21 @@ interface BenefitDiscountItem {
   updatedAt: string;
 }
 
-const benefitTypes = ["제휴 업체", "할인 업체"];
-const sortTypes = ["등록순", "가나다순"];
+const benefitTypes = ['제휴 업체', '할인 업체'];
+const sortTypes = ['등록순', '가나다순'];
 
-const BenefitsScreen: React.FC<BenefitsScreenProps> = ({ navigation }) => {
+const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [selectedType, setSelectedType] = useState("제휴 업체");
-  const [sortType, setSortType] = useState("등록순");
-  const [textWidths, setTextWidths] = useState<{ [key: string]: number }>({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [officialBenefits, setOfficialBenefits] = useState<BenefitAffiliateItem[]>([]);
-  const [discountBenefits, setDiscountBenefits] = useState<BenefitDiscountItem[]>([]);
+  const [selectedType, setSelectedType] = useState('제휴 업체');
+  const [sortType, setSortType] = useState('등록순');
+  const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
+  // const [isLoading, setIsLoading] = useState(true);
+  const [officialBenefits, setOfficialBenefits] = useState<
+    BenefitAffiliateItem[]
+  >([]);
+  const [discountBenefits, setDiscountBenefits] = useState<
+    BenefitDiscountItem[]
+  >([]);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
   const toggleExpand = (id: string) => {
@@ -52,21 +64,26 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({ navigation }) => {
     });
   };
 
-  const getSortedBenefits = (benefits: BenefitAffiliateItem[] | BenefitDiscountItem[]) => {
-    if (sortType === "가나다순") {
+  const getSortedBenefits = (
+    benefits: BenefitAffiliateItem[] | BenefitDiscountItem[],
+  ) => {
+    if (sortType === '가나다순') {
       return [...benefits].sort((a, b) => a.title.localeCompare(b.title));
     } else {
-      return [...benefits].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+      return [...benefits].sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+      );
     }
   };
 
   useEffect(() => {
     const fetchBenefits = async () => {
-      setIsLoading(true);
+      // setIsLoading(true);
       try {
         const [affiliateResponse, discountResponse] = await Promise.all([
           api.get<BenefitAffiliateItem[]>('/benefit/affiliate'),
-          api.get<BenefitDiscountItem[]>('/benefit/discount')
+          api.get<BenefitDiscountItem[]>('/benefit/discount'),
         ]);
 
         setOfficialBenefits(affiliateResponse.data);
@@ -74,7 +91,7 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({ navigation }) => {
       } catch (error) {
         console.error('제휴업체 데이터 로드 오류:', error);
       } finally {
-        setIsLoading(false);
+        // setIsLoading(false);
       }
     };
 
@@ -95,47 +112,50 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({ navigation }) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, { borderBottomColor: borderColor }]}>
+      <View style={[styles.header, {borderBottomColor: borderColor}]}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+          onPress={() => navigation.goBack()}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: textColor }]}>제휴업체</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>제휴업체</Text>
         <View style={styles.placeholderButton} />
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.typeNav}>
-        {benefitTypes.map((type) => (
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.typeNav}>
+        {benefitTypes.map(type => (
           <TouchableOpacity
             key={type}
             onPress={() => setSelectedType(type)}
-            style={styles.typeTabWrapper}
-          >
+            style={styles.typeTabWrapper}>
             <View style={styles.typeTabInner}>
               <View style={styles.textWithUnderline}>
                 <Text
                   style={[
                     styles.typeTab,
-                    { color: isDarkMode ? '#888' : '#999' },
+                    {color: isDarkMode ? '#888' : '#999'},
                     selectedType === type && [
                       styles.selectedTypeText,
-                      { color: textColor }
+                      {color: textColor},
                     ],
                   ]}
-                  onLayout={(e) => {
+                  onLayout={e => {
                     const width = e.nativeEvent.layout.width;
-                    setTextWidths((prev) => ({ ...prev, [type]: width }));
-                  }}
-                >
+                    setTextWidths(prev => ({...prev, [type]: width}));
+                  }}>
                   {type}
                 </Text>
                 {selectedType === type && (
                   <View
                     style={[
                       styles.underline,
-                      { width: (textWidths[type] || 0) + 8, backgroundColor: textColor },
+                      {
+                        width: (textWidths[type] || 0) + 8,
+                        backgroundColor: textColor,
+                      },
                     ]}
                   />
                 )}
@@ -146,21 +166,24 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({ navigation }) => {
       </ScrollView>
 
       <View style={styles.sortButtons}>
-        {sortTypes.map((type) => (
+        {sortTypes.map(type => (
           <TouchableOpacity
             key={type}
             style={[
               styles.sortButton,
-              { borderColor: isDarkMode ? '#555' : '#ccc' },
-              sortType === type && [styles.activeSort, { backgroundColor: textColor }]
+              {borderColor: isDarkMode ? '#555' : '#ccc'},
+              sortType === type && [
+                styles.activeSort,
+                {backgroundColor: textColor},
+              ],
             ]}
-            onPress={() => setSortType(type)}
-          >
-            <Text style={[
-              styles.sortButtonText,
-              { color: textColor },
-              sortType === type && { color: isDarkMode ? '#000' : '#fff' }
-            ]}>
+            onPress={() => setSortType(type)}>
+            <Text
+              style={[
+                styles.sortButtonText,
+                {color: textColor},
+                sortType === type && {color: isDarkMode ? '#000' : '#fff'},
+              ]}>
               {type}
             </Text>
           </TouchableOpacity>
@@ -171,79 +194,119 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({ navigation }) => {
         style={styles.container}
         contentContainerStyle={{
           paddingBottom: 20,
-          flexGrow: 1
-        }}
-      >
-        {selectedType === "제휴 업체" ? (
-          getSortedBenefits(officialBenefits).map((item) => {
-            const affiliateItem = item as BenefitAffiliateItem;
-            return (
-              <TouchableOpacity
-                key={affiliateItem.id}
-                style={[styles.itemContainer, { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' }]}
-                onPress={() => toggleExpand(affiliateItem.id)}
-              >
-                <View style={styles.textContainer}>
-                  <Text style={[styles.itemTitle, { color: textColor }]}>{affiliateItem.title}</Text>
-                  <Text
-                    style={[
-                      styles.itemDescription,
-                      { color: isDarkMode ? '#888' : '#666' }
-                    ]}
-                  >
-                    {expandedItems.has(affiliateItem.id) ? affiliateItem.content : affiliateItem.content_short}
-                  </Text>
-                  <Text style={[styles.expandIndicator, { color: isDarkMode ? '#888' : '#666' }]}>
-                    {expandedItems.has(affiliateItem.id) ? '접기 ▲' : '더보기 ▼'}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })
-        ) : (
-          getSortedBenefits(discountBenefits).map((item) => {
-            const discountItem = item as BenefitDiscountItem;
-            return (
-              <TouchableOpacity
-                key={discountItem.id}
-                style={[styles.itemContainer, { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' }]}
-                onPress={() => toggleExpand(discountItem.id)}
-              >
-                <View style={styles.textContainer}>
-                  <Text style={[styles.itemTitle, { color: textColor }]}>{discountItem.title}</Text>
-                  <Text style={[styles.itemDescription, { color: isDarkMode ? '#888' : '#666' }]}>
-                    {discountItem.content}
-                  </Text>
-                  {expandedItems.has(discountItem.id) && (
-                    <View style={styles.detailsContainer}>
-                      <View style={styles.infoContainer}>
-                        <Text style={[styles.infoLabel, { color: isDarkMode ? '#888' : '#666' }]}>
-                          📍 지역:
-                        </Text>
-                        <Text style={[styles.infoText, { color: textColor }]}>{discountItem.region}</Text>
+          flexGrow: 1,
+        }}>
+        {selectedType === '제휴 업체'
+          ? getSortedBenefits(officialBenefits).map(item => {
+              const affiliateItem = item as BenefitAffiliateItem;
+              return (
+                <TouchableOpacity
+                  key={affiliateItem.id}
+                  style={[
+                    styles.itemContainer,
+                    {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
+                  ]}
+                  onPress={() => toggleExpand(affiliateItem.id)}>
+                  <View style={styles.textContainer}>
+                    <Text style={[styles.itemTitle, {color: textColor}]}>
+                      {affiliateItem.title}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.itemDescription,
+                        {color: isDarkMode ? '#888' : '#666'},
+                      ]}>
+                      {expandedItems.has(affiliateItem.id)
+                        ? affiliateItem.content
+                        : affiliateItem.content_short}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.expandIndicator,
+                        {color: isDarkMode ? '#888' : '#666'},
+                      ]}>
+                      {expandedItems.has(affiliateItem.id)
+                        ? '접기 ▲'
+                        : '더보기 ▼'}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })
+          : getSortedBenefits(discountBenefits).map(item => {
+              const discountItem = item as BenefitDiscountItem;
+              return (
+                <TouchableOpacity
+                  key={discountItem.id}
+                  style={[
+                    styles.itemContainer,
+                    {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
+                  ]}
+                  onPress={() => toggleExpand(discountItem.id)}>
+                  <View style={styles.textContainer}>
+                    <Text style={[styles.itemTitle, {color: textColor}]}>
+                      {discountItem.title}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.itemDescription,
+                        {color: isDarkMode ? '#888' : '#666'},
+                      ]}>
+                      {discountItem.content}
+                    </Text>
+                    {expandedItems.has(discountItem.id) && (
+                      <View style={styles.detailsContainer}>
+                        <View style={styles.infoContainer}>
+                          <Text
+                            style={[
+                              styles.infoLabel,
+                              {color: isDarkMode ? '#888' : '#666'},
+                            ]}>
+                            📍 지역:
+                          </Text>
+                          <Text style={[styles.infoText, {color: textColor}]}>
+                            {discountItem.region}
+                          </Text>
+                        </View>
+                        <View style={styles.infoContainer}>
+                          <Text
+                            style={[
+                              styles.infoLabel,
+                              {color: isDarkMode ? '#888' : '#666'},
+                            ]}>
+                            🕒 영업시간:
+                          </Text>
+                          <Text style={[styles.infoText, {color: textColor}]}>
+                            {discountItem.open_hour}
+                          </Text>
+                        </View>
+                        <View style={styles.infoContainer}>
+                          <Text
+                            style={[
+                              styles.infoLabel,
+                              {color: isDarkMode ? '#888' : '#666'},
+                            ]}>
+                            📞 연락처:
+                          </Text>
+                          <Text style={[styles.infoText, {color: textColor}]}>
+                            {discountItem.phone}
+                          </Text>
+                        </View>
                       </View>
-                      <View style={styles.infoContainer}>
-                        <Text style={[styles.infoLabel, { color: isDarkMode ? '#888' : '#666' }]}>
-                          🕒 영업시간:
-                        </Text>
-                        <Text style={[styles.infoText, { color: textColor }]}>{discountItem.open_hour}</Text>
-                      </View>
-                      <View style={styles.infoContainer}>
-                        <Text style={[styles.infoLabel, { color: isDarkMode ? '#888' : '#666' }]}>
-                          📞 연락처:
-                        </Text>
-                        <Text style={[styles.infoText, { color: textColor }]}>{discountItem.phone}</Text>
-                      </View>
-                    </View>
-                  )}
-                  <Text style={[styles.expandIndicator, { color: isDarkMode ? '#888' : '#666' }]}>
-                    {expandedItems.has(discountItem.id) ? '접기 ▲' : '상세정보 보기 ▼'}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })
-        )}
+                    )}
+                    <Text
+                      style={[
+                        styles.expandIndicator,
+                        {color: isDarkMode ? '#888' : '#666'},
+                      ]}>
+                      {expandedItems.has(discountItem.id)
+                        ? '접기 ▲'
+                        : '상세정보 보기 ▼'}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
       </ScrollView>
     </SafeAreaView>
   );
@@ -352,9 +415,9 @@ const styles = StyleSheet.create({
     borderTopColor: '#E5E7EB',
   },
   sortButtons: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingHorizontal: 15,
-    marginVertical: 10
+    marginVertical: 10,
   },
   sortButton: {
     paddingHorizontal: 15,
@@ -364,10 +427,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   activeSort: {
-    borderColor: "#000"
+    borderColor: '#000',
   },
   sortButtonText: {
-    fontSize: 14
+    fontSize: 14,
   },
 });
 

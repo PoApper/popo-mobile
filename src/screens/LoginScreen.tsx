@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,19 +9,19 @@ import {
   Alert,
   StatusBar,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/types';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/types';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import api, { POPO_API_URL } from '../utils/api';
+import api, {POPO_API_URL} from '../utils/api';
 import axios from 'axios';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
 };
 
-const LoginScreen = ({ navigation }: LoginScreenProps) => {
+const LoginScreen = ({navigation}: LoginScreenProps) => {
   // const isDarkMode = useColorScheme() === 'dark';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -45,7 +45,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     try {
       const response = await api.post('/auth/login', {
         email,
-        password
+        password,
       });
 
       // 응답 데이터
@@ -55,21 +55,22 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       const setCookie = response.headers['set-cookie'];
       if (setCookie) {
         // 쿠키 파싱 (예: Authentication=value;)
-        const authCookie = setCookie.find(cookie => cookie.includes('Authentication='));
+        const authCookie = setCookie.find(cookie =>
+          cookie.includes('Authentication='),
+        );
         if (authCookie) {
-          const tokenValue = authCookie.split('Authentication=')[1].split(';')[0];
+          const tokenValue = authCookie
+            .split('Authentication=')[1]
+            .split(';')[0];
 
           // 1. 쿠키를 RN 쿠키 저장소에 저장
-          await CookieManager.set(
-            POPO_API_URL,
-            {
-              name: 'Authentication',
-              value: tokenValue,
-              path: '/',
-              secure: true,
-              httpOnly: true
-            }
-          );
+          await CookieManager.set(POPO_API_URL, {
+            name: 'Authentication',
+            value: tokenValue,
+            path: '/',
+            secure: true,
+            httpOnly: true,
+          });
 
           // 2. 안전한 저장소에 토큰 저장 (앱 재시작 시 사용)
           await EncryptedStorage.setItem('auth_token', tokenValue);
@@ -96,7 +97,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       // 사용자 상세 정보 페이지로 이동
       navigation.navigate('Main', {
         userId: data.user?.id || 'unknown',
-        userData: data.user || {}
+        userData: data.user || {},
       });
     } catch (err: unknown) {
       console.error('로그인 오류:', err);
@@ -104,18 +105,23 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       // axios 오류 처리
       if (axios.isAxiosError(err)) {
         if (err.code === 'ERR_NETWORK') {
-          const errorMsg = '서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.';
+          const errorMsg =
+            '서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.';
           setError(errorMsg);
           Alert.alert('연결 오류', errorMsg);
         } else {
           // 서버 응답 오류
-          const errorMsg = err.response?.data?.message || err.message || '로그인 중 오류가 발생했습니다.';
+          const errorMsg =
+            err.response?.data?.message ||
+            err.message ||
+            '로그인 중 오류가 발생했습니다.';
           setError(errorMsg);
           Alert.alert('로그인 실패', errorMsg);
         }
       } else {
         // 기타 오류
-        const errorMessage = err instanceof Error ? err.message : '로그인 중 오류가 발생했습니다.';
+        const errorMessage =
+          err instanceof Error ? err.message : '로그인 중 오류가 발생했습니다.';
         setError(errorMessage);
         Alert.alert('로그인 실패', errorMessage);
       }
@@ -127,7 +133,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
-        barStyle='light-content'
+        barStyle="light-content"
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <View style={styles.container}>
@@ -137,16 +143,14 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
             style={styles.logoImage}
             resizeMode="contain"
           />
-          <Text style={styles.loginScreenTitle}>
-            로그인/회원가입
-          </Text>
+          <Text style={styles.loginScreenTitle}>로그인/회원가입</Text>
         </View>
 
         <View style={styles.formContainer}>
-        <TextInput
+          <TextInput
             style={[styles.input]}
             placeholder="POPO 가입 이메일(POSTECH)"
-            placeholderTextColor='#9CA3AF'
+            placeholderTextColor="#9CA3AF"
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
@@ -161,7 +165,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           <TextInput
             style={[styles.input, {marginTop: 11, color: '#000000'}]}
             placeholder="비밀번호"
-            placeholderTextColor='#9CA3AF'
+            placeholderTextColor="#9CA3AF"
             secureTextEntry
             value={password}
             onChangeText={setPassword}
@@ -176,45 +180,34 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
             style={[
               styles.loginButton,
               {marginTop: 11},
-              isLoading && styles.loginButtonDisabled
+              isLoading && styles.loginButtonDisabled,
             ]}
             onPress={handleLogin}
-            disabled={isLoading}
-          >
+            disabled={isLoading}>
             <Text style={styles.loginButtonText}>
               {isLoading ? '로그인 중...' : '계속하기'}
             </Text>
           </TouchableOpacity>
 
-          {error && (
-            <Text style={styles.errorText}>{error}</Text>
-          )}
+          {error && <Text style={styles.errorText}>{error}</Text>}
 
           <View style={[styles.splitterContainer]}>
             <View style={styles.lineView} />
             <Text style={styles.splitterText}>또는</Text>
             <View style={styles.lineView} />
-      		</View>
+          </View>
 
           <View style={styles.signupContainer}>
             <TouchableOpacity
               style={[styles.signupButton]}
               onPress={() => navigation.navigate('Signup')}
-              disabled={isLoading}
-            >
-              <Text style={styles.signupButtonText}>
-                회원가입
-              </Text>
+              disabled={isLoading}>
+              <Text style={styles.signupButtonText}>회원가입</Text>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
-            style={styles.needHelp}
-            onPress={() => {}}
-          >
-            <Text style={[styles.needHelpText]}>
-              도움이 필요하세요?
-            </Text>
+          <TouchableOpacity style={styles.needHelp} onPress={() => {}}>
+            <Text style={[styles.needHelpText]}>도움이 필요하세요?</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -239,11 +232,11 @@ const styles = StyleSheet.create({
   loginScreenTitle: {
     fontSize: 22,
     letterSpacing: -0.2,
-    fontWeight: "600",
-    fontFamily: "Pretendard",
-    color: "#000",
-    textAlign: "center",
-    width: 169
+    fontWeight: '600',
+    fontFamily: 'Pretendard',
+    color: '#000',
+    textAlign: 'center',
+    width: 169,
   },
   formContainer: {
     width: '100%',
@@ -254,7 +247,7 @@ const styles = StyleSheet.create({
     height: 42,
     borderWidth: 1,
     borderRadius: 6,
-    borderColor: "#D0D0D0",
+    borderColor: '#D0D0D0',
     paddingHorizontal: 16,
     fontSize: 16,
   },
@@ -271,32 +264,32 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     fontSize: 13,
-    fontWeight: "500",
-    fontFamily: "Pretendard",
-    color: "#ffffff",
-    textAlign: "center"
+    fontWeight: '500',
+    fontFamily: 'Pretendard',
+    color: '#ffffff',
+    textAlign: 'center',
   },
   splitterContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
     marginTop: 18,
   },
   lineView: {
-    borderStyle: "solid",
-    borderColor: "#9b9b9b",
+    borderStyle: 'solid',
+    borderColor: '#9b9b9b',
     borderTopWidth: 1,
     flex: 1,
     height: 2,
-    width: "100%",
+    width: '100%',
   },
   splitterText: {
     fontSize: 10,
-    fontWeight: "600",
-    fontFamily: "Pretendard",
-    color: "#9b9b9b",
-    textAlign: "center",
-    width: 25
+    fontWeight: '600',
+    fontFamily: 'Pretendard',
+    color: '#9b9b9b',
+    textAlign: 'center',
+    width: 25,
   },
   needHelp: {
     alignItems: 'center',
@@ -304,10 +297,10 @@ const styles = StyleSheet.create({
   },
   needHelpText: {
     fontSize: 13,
-    fontWeight: "500",
-    fontFamily: "Pretendard",
-    color: "#3b82f6",
-    textAlign: "center",
+    fontWeight: '500',
+    fontFamily: 'Pretendard',
+    color: '#3b82f6',
+    textAlign: 'center',
     width: 101,
   },
   signupContainer: {
@@ -317,18 +310,18 @@ const styles = StyleSheet.create({
   },
   signupButton: {
     borderRadius: 6,
-    backgroundColor: "#f2f3f5",
+    backgroundColor: '#f2f3f5',
     flex: 1,
-    width: "100%",
+    width: '100%',
     height: 38,
     justifyContent: 'center',
     alignItems: 'center',
   },
   signupButtonText: {
     fontSize: 13,
-    fontWeight: "500",
-    color: "#262626",
-    fontFamily: "Pretendard",
+    fontWeight: '500',
+    color: '#262626',
+    fontFamily: 'Pretendard',
   },
   errorText: {
     color: '#EF4444',

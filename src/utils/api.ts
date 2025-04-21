@@ -1,14 +1,16 @@
 import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { Alert } from 'react-native';
-import { navigationRef } from '../navigation/RootNavigation';
+import {Alert} from 'react-native';
+import {navigationRef} from '../navigation/RootNavigation';
 
 // EventEmitter 타입 선언
 declare global {
-  var eventEmitter: {
-    emit: (event: string, ...args: any[]) => void;
-  } | undefined;
+  var eventEmitter:
+    | {
+        emit: (event: string, ...args: any[]) => void;
+      }
+    | undefined;
 }
 
 // API 기본 URL
@@ -26,7 +28,7 @@ const api = axios.create({
 
 // 요청 인터셉터 설정
 api.interceptors.request.use(
-  async (config) => {
+  async config => {
     try {
       // 쿠키 저장소에서 인증 토큰 가져오기
       const cookies = await CookieManager.get(POPO_API_URL);
@@ -34,22 +36,19 @@ api.interceptors.request.use(
 
       // 쿠키가 없으면 EncryptedStorage에서 가져오기
       if (!authToken) {
-        console.log("저장된 쿠키에 authToken 없음");
+        console.log('저장된 쿠키에 authToken 없음');
         const storedToken = await EncryptedStorage.getItem('auth_token');
 
         // 저장된 토큰이 있으면 쿠키 저장소에도 다시 설정
         if (storedToken) {
           authToken = storedToken;
-          await CookieManager.set(
-            POPO_API_URL,
-            {
-              name: 'Authentication',
-              value: storedToken,
-              path: '/',
-              secure: true,
-              httpOnly: true
-            }
-          );
+          await CookieManager.set(POPO_API_URL, {
+            name: 'Authentication',
+            value: storedToken,
+            path: '/',
+            secure: true,
+            httpOnly: true,
+          });
         }
       }
 
@@ -59,17 +58,17 @@ api.interceptors.request.use(
       return config;
     }
   },
-  (error) => {
+  error => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // 응답 인터셉터 설정
 api.interceptors.response.use(
-  (response) => {
+  response => {
     return response;
   },
-  async (error) => {
+  async error => {
     const url = error.config.url;
     if (error.response && error.response.status === 401) {
       try {
@@ -86,33 +85,25 @@ api.interceptors.response.use(
         await CookieManager.clearAll();
 
         if (error.response.data.detail) {
-          Alert.alert(
-            "로그인 필요",
-            error.response.data.detail + url,
-            [
-              {
-                text: "확인",
-                onPress: () => {
-                  // 로그인 스크린으로 이동
-                  navigationRef.current?.navigate('Login');
-                }
-              }
-            ]
-          );
+          Alert.alert('로그인 필요', error.response.data.detail + url, [
+            {
+              text: '확인',
+              onPress: () => {
+                // 로그인 스크린으로 이동
+                navigationRef.current?.navigate('Login');
+              },
+            },
+          ]);
         } else {
-          Alert.alert(
-            "로그인 필요",
-            "로그인이 필요한 서비스입니다." + url,
-            [
-              {
-                text: "확인",
-                onPress: () => {
-                  // 로그인 스크린으로 이동
-                  navigationRef.current?.navigate('Login');
-                }
-              }
-            ]
-          );
+          Alert.alert('로그인 필요', '로그인이 필요한 서비스입니다.' + url, [
+            {
+              text: '확인',
+              onPress: () => {
+                // 로그인 스크린으로 이동
+                navigationRef.current?.navigate('Login');
+              },
+            },
+          ]);
         }
       } catch (clearError) {
         console.error('인증 정보 초기화 오류:', clearError);
@@ -120,7 +111,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

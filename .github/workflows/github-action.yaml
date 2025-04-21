@@ -1,0 +1,25 @@
+on:
+  push:
+
+name: Lint
+
+jobs:
+  lint:
+    name: Run pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pre-commit
+        run: |
+          pip install pre-commit
+      - name: Install dependencies
+        run: npm ci --force
+      - name: Run pre-commit
+        run: |
+          pre-commit run --all-files
