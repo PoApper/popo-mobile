@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,11 +10,11 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../navigation/types';
-import { ClubType } from '../types/club';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RouteProp} from '@react-navigation/native';
+import {RootStackParamList} from '../navigation/types';
+import {ClubType} from '../types/club';
 import api from '../utils/api';
 
 type ClubDetailScreenProps = {
@@ -39,12 +39,15 @@ interface ClubItem {
   youtube_url: string;
 }
 
-const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({ navigation, route }) => {
+const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [clubData, setClubData] = useState<ClubItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { clubId, clubName } = route.params;
+  const {clubId, clubName} = route.params;
 
   useEffect(() => {
     const fetchClubDetail = async () => {
@@ -83,7 +86,9 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({ navigation, route }
     return (
       <SafeAreaView style={backgroundStyle}>
         <View style={styles.loadingContainer}>
-          <Text style={[styles.loadingText, { color: textColor }]}>로딩중...</Text>
+          <Text style={[styles.loadingText, {color: textColor}]}>
+            로딩중...
+          </Text>
         </View>
       </SafeAreaView>
     );
@@ -97,14 +102,13 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({ navigation, route }
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, { borderBottomColor: borderColor }]}>
+      <View style={[styles.header, {borderBottomColor: borderColor}]}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+          onPress={() => navigation.goBack()}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: textColor }]}>{clubName}</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>{clubName}</Text>
         <View style={styles.placeholderButton} />
       </View>
 
@@ -113,78 +117,122 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({ navigation, route }
           <>
             <View style={styles.imageContainer}>
               <Image
-                source={{ uri: clubData.image_url }}
+                source={{uri: clubData.image_url}}
                 style={styles.clubImage}
                 resizeMode="contain"
               />
             </View>
             <View style={styles.contentContainer}>
-              <Text style={[styles.clubName, { color: textColor }]}>{clubData.name}</Text>
-              <Text style={[styles.description, { color: isDarkMode ? '#888' : '#666' }]}>
+              <Text style={[styles.clubName, {color: textColor}]}>
+                {clubData.name}
+              </Text>
+              <Text
+                style={[
+                  styles.description,
+                  {color: isDarkMode ? '#888' : '#666'},
+                ]}>
                 {clubData.short_desc}
               </Text>
 
-              <View style={[styles.infoSection, { borderColor }]}>
-                <Text style={[styles.content, { color: isDarkMode ? '#888' : '#666' }]}>
+              <View style={[styles.infoSection, {borderColor}]}>
+                <Text
+                  style={[
+                    styles.content,
+                    {color: isDarkMode ? '#888' : '#666'},
+                  ]}>
                   {clubData.content}
                 </Text>
               </View>
 
-              <View style={[styles.infoSection, { borderColor }]}>
+              <View style={[styles.infoSection, {borderColor}]}>
                 <View style={styles.infoRow}>
-                  <Text style={[styles.infoLabel, { color: textColor }]}>위치</Text>
-                  <Text style={[styles.infoValue, { color: isDarkMode ? '#888' : '#666' }]}>
+                  <Text style={[styles.infoLabel, {color: textColor}]}>
+                    위치
+                  </Text>
+                  <Text
+                    style={[
+                      styles.infoValue,
+                      {color: isDarkMode ? '#888' : '#666'},
+                    ]}>
                     {clubData.location}
                   </Text>
                 </View>
                 <View style={styles.infoRow}>
-                  <Text style={[styles.infoLabel, { color: textColor }]}>대표자</Text>
-                  <Text style={[styles.infoValue, { color: isDarkMode ? '#888' : '#666' }]}>
+                  <Text style={[styles.infoLabel, {color: textColor}]}>
+                    대표자
+                  </Text>
+                  <Text
+                    style={[
+                      styles.infoValue,
+                      {color: isDarkMode ? '#888' : '#666'},
+                    ]}>
                     {clubData.representative}
                   </Text>
                 </View>
                 <View style={styles.infoRow}>
-                  <Text style={[styles.infoLabel, { color: textColor }]}>연락처</Text>
-                  <Text style={[styles.infoValue, { color: isDarkMode ? '#888' : '#666' }]}>
+                  <Text style={[styles.infoLabel, {color: textColor}]}>
+                    연락처
+                  </Text>
+                  <Text
+                    style={[
+                      styles.infoValue,
+                      {color: isDarkMode ? '#888' : '#666'},
+                    ]}>
                     {clubData.contact}
                   </Text>
                 </View>
               </View>
 
-              <View style={[styles.infoSection, { borderColor }]}>
+              <View style={[styles.infoSection, {borderColor}]}>
                 <View style={styles.socialLinks}>
-                  {clubData.homepage_url != "null" && clubData.homepage_url != "" && clubData.homepage_url && (
-                    <TouchableOpacity
-                      style={[styles.socialButton, { backgroundColor: '#000000' }]}
-                      onPress={() => handleLinkPress(clubData.homepage_url)}
-                    >
-                      <Text style={styles.socialText}>홈페이지</Text>
-                    </TouchableOpacity>
-                  )}
-                  {clubData.facebook_url != "null" && clubData.facebook_url != "" && clubData.facebook_url && (
-                    <TouchableOpacity
-                      style={[styles.socialButton, { backgroundColor: '#1877F2' }]}
-                      onPress={() => handleLinkPress(clubData.facebook_url)}
-                    >
-                      <Text style={styles.socialText}>Facebook</Text>
-                    </TouchableOpacity>
-                  )}
-                  {clubData.instagram_url != "null" && clubData.instagram_url != "" && clubData.instagram_url && (
-                    <TouchableOpacity
-                      style={[styles.socialButton, { backgroundColor: '#E4405F' }]}
-                      onPress={() => handleLinkPress(clubData.instagram_url)}
-                    >
-                      <Text style={styles.socialText}>Instagram</Text>
-                    </TouchableOpacity>
-                  )}
-                  {clubData.youtube_url != "null" && clubData.youtube_url != "" && clubData.youtube_url && (
-                    <TouchableOpacity
-                      style={[styles.socialButton, { backgroundColor: '#FF0000' }]}
-                      onPress={() => handleLinkPress(clubData.youtube_url)}
-                    >
-                      <Text style={styles.socialText}>YouTube</Text>
-                    </TouchableOpacity>
-                  )}
+                  {clubData.homepage_url != 'null' &&
+                    clubData.homepage_url != '' &&
+                    clubData.homepage_url && (
+                      <TouchableOpacity
+                        style={[
+                          styles.socialButton,
+                          {backgroundColor: '#000000'},
+                        ]}
+                        onPress={() => handleLinkPress(clubData.homepage_url)}>
+                        <Text style={styles.socialText}>홈페이지</Text>
+                      </TouchableOpacity>
+                    )}
+                  {clubData.facebook_url != 'null' &&
+                    clubData.facebook_url != '' &&
+                    clubData.facebook_url && (
+                      <TouchableOpacity
+                        style={[
+                          styles.socialButton,
+                          {backgroundColor: '#1877F2'},
+                        ]}
+                        onPress={() => handleLinkPress(clubData.facebook_url)}>
+                        <Text style={styles.socialText}>Facebook</Text>
+                      </TouchableOpacity>
+                    )}
+                  {clubData.instagram_url != 'null' &&
+                    clubData.instagram_url != '' &&
+                    clubData.instagram_url && (
+                      <TouchableOpacity
+                        style={[
+                          styles.socialButton,
+                          {backgroundColor: '#E4405F'},
+                        ]}
+                        onPress={() => handleLinkPress(clubData.instagram_url)}>
+                        <Text style={styles.socialText}>Instagram</Text>
+                      </TouchableOpacity>
+                    )}
+                  {clubData.youtube_url != 'null' &&
+                    clubData.youtube_url != '' &&
+                    clubData.youtube_url && (
+                      <TouchableOpacity
+                        style={[
+                          styles.socialButton,
+                          {backgroundColor: '#FF0000'},
+                        ]}
+                        onPress={() => handleLinkPress(clubData.youtube_url)}>
+                        <Text style={styles.socialText}>YouTube</Text>
+                      </TouchableOpacity>
+                    )}
                 </View>
               </View>
             </View>

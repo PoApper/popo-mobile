@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,11 +8,10 @@ import {
   StatusBar,
   useColorScheme,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { MainTabParamList } from '../navigation/types';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {MainTabParamList} from '../navigation/types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<MainTabParamList, 'Paxi'>;
@@ -27,44 +26,61 @@ interface RoomContainerProps {
   destination: string;
 }
 
-const RoomContainer: React.FC<RoomContainerProps> = ({ title, departureTime, remain, total, departure, destination }) => {
+const RoomContainer: React.FC<RoomContainerProps> = ({
+  title,
+  departureTime,
+  remain,
+  total,
+  departure,
+  destination,
+}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const backgroundColor = isDarkMode ? '#1A1A1A' : '#fff';
   const subTextColor = isDarkMode ? '#888' : '#666';
 
   return (
-    <TouchableOpacity style={[styles.roomContainer, { backgroundColor }]}>
+    <TouchableOpacity style={[styles.roomContainer, {backgroundColor}]}>
       <View style={styles.cardContent}>
         <View style={styles.mainInfo}>
           <View style={styles.titleContainer}>
-            <Text style={[styles.title, { color: textColor }]}>{title}</Text>
+            <Text style={[styles.title, {color: textColor}]}>{title}</Text>
             <Text style={remain < total ? styles.possible : styles.impossible}>
-              {remain < total ? "참여 가능" : "마감"}
+              {remain < total ? '참여 가능' : '마감'}
             </Text>
           </View>
           <View style={styles.details}>
-            <Text style={[styles.detailsText, { color: textColor }]}>{departure}</Text>
-            <Text style={[styles.arrow, { color: textColor }]}>{"  - - - - >  "}</Text>
-            <Text style={[styles.detailsText, { color: textColor }]}>{destination}</Text>
+            <Text style={[styles.detailsText, {color: textColor}]}>
+              {departure}
+            </Text>
+            <Text style={[styles.arrow, {color: textColor}]}>
+              {'  - - - - >  '}
+            </Text>
+            <Text style={[styles.detailsText, {color: textColor}]}>
+              {destination}
+            </Text>
           </View>
-          <Text style={[styles.departureTime, { color: subTextColor }]}>{departureTime}</Text>
+          <Text style={[styles.departureTime, {color: subTextColor}]}>
+            {departureTime}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
   );
 };
 
-const RefreshButton = ({ onPress }: { onPress: () => void }) => {
+const RefreshButton = ({onPress}: {onPress: () => void}) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <TouchableOpacity
-      style={[styles.refreshButton, {
-        backgroundColor: isDarkMode ? '#2C2C2C' : '#F4F4F6',
-      }]}
+      style={[
+        styles.refreshButton,
+        {
+          backgroundColor: isDarkMode ? '#2C2C2C' : '#F4F4F6',
+        },
+      ]}
       onPress={onPress}
-      activeOpacity={0.7}
-    >
+      activeOpacity={0.7}>
       <Icon
         name="refresh"
         size={24}
@@ -74,8 +90,7 @@ const RefreshButton = ({ onPress }: { onPress: () => void }) => {
   );
 };
 
-
-const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
+const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
@@ -85,7 +100,7 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
     flex: 1,
   };
 
-  const clicking = () => {}
+  const clicking = () => {};
 
   const roomData = [
     {
@@ -136,78 +151,94 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, { borderBottomColor: borderColor }]}>
+      <View style={[styles.header, {borderBottomColor: borderColor}]}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+          onPress={() => navigation.goBack()}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: textColor }]}>Paxi</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>Paxi</Text>
         <View style={styles.placeholderButton} />
       </View>
 
       <View style={[styles.conditionNavigator]}>
-        <RefreshButton
-          onPress={() => {}} />
+        <RefreshButton onPress={() => {}} />
 
         <TouchableOpacity
-          style={[styles.button, {
-            borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
-            backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
-          }]}
-          onPress={clicking}
-        >
-          <Text style={{ color: textColor }}>출발지</Text>
+          style={[
+            styles.button,
+            {
+              borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
+              backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
+            },
+          ]}
+          onPress={clicking}>
+          <Text style={{color: textColor}}>출발지</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, {
-            borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
-            backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
-          }]}
-          onPress={clicking}
-        >
-          <Text style={{ color: textColor }}>도착지</Text>
+          style={[
+            styles.button,
+            {
+              borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
+              backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
+            },
+          ]}
+          onPress={clicking}>
+          <Text style={{color: textColor}}>도착지</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, {
-            borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
-            backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
-          }]}
-          onPress={clicking}
-        >
-          <Text style={{ color: textColor }}>날짜</Text>
+          style={[
+            styles.button,
+            {
+              borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
+              backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
+            },
+          ]}
+          onPress={clicking}>
+          <Text style={{color: textColor}}>날짜</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, {
-            borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
-            backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
-          }]}
-          onPress={clicking}
-        >
-          <Text style={{ color: textColor }}>시간</Text>
+          style={[
+            styles.button,
+            {
+              borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
+              backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
+            },
+          ]}
+          onPress={clicking}>
+          <Text style={{color: textColor}}>시간</Text>
         </TouchableOpacity>
       </View>
 
       <TouchableOpacity
         style={styles.checkboxContainer}
-        onPress={() => setIsChecked(!isChecked)}
-      >
-        <View style={[
-          styles.checkbox,
-          { borderColor: isDarkMode ? '#555' : '#D0D0D0' },
-          isChecked && { backgroundColor: isDarkMode ? '#FFFFFF' : 'black', borderColor: isDarkMode ? '#FFFFFF' : 'black' }
-        ]}>
-          {isChecked && <Text style={[styles.checkmark, { color: isDarkMode ? '#000000' : '#FFFFFF' }]}>✓</Text>}
+        onPress={() => setIsChecked(!isChecked)}>
+        <View
+          style={[
+            styles.checkbox,
+            {borderColor: isDarkMode ? '#555' : '#D0D0D0'},
+            isChecked && {
+              backgroundColor: isDarkMode ? '#FFFFFF' : 'black',
+              borderColor: isDarkMode ? '#FFFFFF' : 'black',
+            },
+          ]}>
+          {isChecked && (
+            <Text
+              style={[
+                styles.checkmark,
+                {color: isDarkMode ? '#000000' : '#FFFFFF'},
+              ]}>
+              ✓
+            </Text>
+          )}
         </View>
-        <Text style={{ fontSize: 15, color: textColor }}>빈 방만 보기</Text>
+        <Text style={{fontSize: 15, color: textColor}}>빈 방만 보기</Text>
       </TouchableOpacity>
 
       <ScrollView
-        contentContainerStyle={{ padding: 4 }}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={{ padding: 16 }}>
+        contentContainerStyle={{padding: 4}}
+        showsVerticalScrollIndicator={false}>
+        <View style={{padding: 16}}>
           {roomData.length > 0 ? (
             roomData.map((room, index) => (
               <RoomContainer
@@ -221,7 +252,7 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
               />
             ))
           ) : (
-            <Text style={{ fontSize: 16, textAlign: 'center', color: textColor }}>
+            <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>
               현재 등록된 카풀이 없습니다.
             </Text>
           )}
@@ -229,16 +260,14 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
       </ScrollView>
 
       <TouchableOpacity
-        style={[styles.floatingButton, {
-          backgroundColor: isDarkMode ? '#FFFFFF' : 'black'
-        }]}
-        onPress={() => navigation.navigate('NewPaxiRoom')}
-      >
-        <Icon
-          name="add"
-          size={30}
-          color={isDarkMode ? '#000000' : 'white'}
-        />
+        style={[
+          styles.floatingButton,
+          {
+            backgroundColor: isDarkMode ? '#FFFFFF' : 'black',
+          },
+        ]}
+        onPress={() => navigation.navigate('NewPaxiRoom')}>
+        <Icon name="add" size={30} color={isDarkMode ? '#000000' : 'white'} />
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -279,7 +308,7 @@ const styles = StyleSheet.create({
   },
   conditionNavigator: {
     paddingLeft: 15,
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 5,
     marginTop: 10,
     marginBottom: 10,
@@ -317,20 +346,20 @@ const styles = StyleSheet.create({
   possible: {
     fontSize: 13,
     letterSpacing: -0.1,
-    fontWeight: "700",
-    color: "#fb5353",
+    fontWeight: '700',
+    color: '#fb5353',
     borderRadius: 3,
-    backgroundColor: "#fff3f3",
+    backgroundColor: '#fff3f3',
     paddingHorizontal: 5,
     paddingVertical: 2,
   },
   impossible: {
     fontSize: 13,
     letterSpacing: -0.1,
-    fontWeight: "700",
-    color: "#909090",
+    fontWeight: '700',
+    color: '#909090',
     borderRadius: 3,
-    backgroundColor: "rgba(217, 217, 217, 0.83)",
+    backgroundColor: 'rgba(217, 217, 217, 0.83)',
     paddingHorizontal: 5,
     paddingVertical: 2,
   },
@@ -340,7 +369,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   details: {
-    flexDirection: "row",
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,

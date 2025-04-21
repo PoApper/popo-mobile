@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,9 +11,9 @@ import {
   StatusBar,
   ScrollView,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/types';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/types';
 
 type SignupScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Signup'>;
@@ -26,14 +26,15 @@ enum UserType {
   others = 'OTHERS',
 }
 
-const SignupScreen = ({ navigation }: SignupScreenProps) => {
+const SignupScreen = ({navigation}: SignupScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [userType, setUserType] = useState<UserType | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  const isLoading = false;
   const [error, setError] = useState<string | null>(null);
 
   const backgroundStyle = {
@@ -83,13 +84,15 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
     // API 연동은 추후에 구현 예정
     Alert.alert(
       '회원가입 성공',
-      `회원가입이 완료되었습니다.\n사용자 타입: ${getUserTypeName(userType)}\n로그인 화면으로 이동합니다.`,
+      `회원가입이 완료되었습니다.\n사용자 타입: ${getUserTypeName(
+        userType,
+      )}\n로그인 화면으로 이동합니다.`,
       [
         {
           text: '확인',
           onPress: () => navigation.navigate('Login'),
         },
-      ]
+      ],
     );
   };
 
@@ -103,9 +106,12 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
         <View style={styles.container}>
           <TouchableOpacity
             style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={[styles.backButtonText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
+            onPress={() => navigation.goBack()}>
+            <Text
+              style={[
+                styles.backButtonText,
+                {color: isDarkMode ? '#FFFFFF' : '#000000'},
+              ]}>
               {'← 뒤로'}
             </Text>
           </TouchableOpacity>
@@ -118,12 +124,20 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
             />
           </View>
 
-          <Text style={[styles.headerText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
+          <Text
+            style={[
+              styles.headerText,
+              {color: isDarkMode ? '#FFFFFF' : '#000000'},
+            ]}>
             회원가입
           </Text>
 
           <View style={styles.formContainer}>
-            <Text style={[styles.label, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
+            <Text
+              style={[
+                styles.label,
+                {color: isDarkMode ? '#FFFFFF' : '#000000'},
+              ]}>
               이름 *
             </Text>
             <TextInput
@@ -133,7 +147,7 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
                   backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
                   color: isDarkMode ? '#FFFFFF' : '#000000',
                   borderColor: isDarkMode ? '#555555' : '#E5E7EB',
-                }
+                },
               ]}
               placeholder="이름을 입력하세요"
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
@@ -141,7 +155,11 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
               onChangeText={setName}
             />
 
-            <Text style={[styles.label, { color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16 }]}>
+            <Text
+              style={[
+                styles.label,
+                {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
+              ]}>
               이메일 *
             </Text>
             <TextInput
@@ -151,7 +169,7 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
                   backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
                   color: isDarkMode ? '#FFFFFF' : '#000000',
                   borderColor: isDarkMode ? '#555555' : '#E5E7EB',
-                }
+                },
               ]}
               placeholder="이메일 주소를 입력하세요"
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
@@ -161,7 +179,11 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
               onChangeText={setEmail}
             />
 
-            <Text style={[styles.label, { color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16 }]}>
+            <Text
+              style={[
+                styles.label,
+                {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
+              ]}>
               비밀번호 *
             </Text>
             <TextInput
@@ -171,7 +193,7 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
                   backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
                   color: isDarkMode ? '#FFFFFF' : '#000000',
                   borderColor: isDarkMode ? '#555555' : '#E5E7EB',
-                }
+                },
               ]}
               placeholder="8자리 이상, 16자리 이하"
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
@@ -180,7 +202,11 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
               onChangeText={setPassword}
             />
 
-            <Text style={[styles.label, { color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16 }]}>
+            <Text
+              style={[
+                styles.label,
+                {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
+              ]}>
               비밀번호 확인 *
             </Text>
             <TextInput
@@ -190,7 +216,7 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
                   backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
                   color: isDarkMode ? '#FFFFFF' : '#000000',
                   borderColor: isDarkMode ? '#555555' : '#E5E7EB',
-                }
+                },
               ]}
               placeholder="비밀번호를 다시 입력하세요"
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
@@ -199,7 +225,11 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
               onChangeText={setConfirmPassword}
             />
 
-            <Text style={[styles.label, { color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16 }]}>
+            <Text
+              style={[
+                styles.label,
+                {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
+              ]}>
               사용자 유형 *
             </Text>
             <View style={styles.userTypeContainer}>
@@ -208,24 +238,28 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
                   styles.userTypeButton,
                   userType === UserType.student ? styles.selectedUserType : {},
                   {
-                    backgroundColor: userType === UserType.student
-                      ? '#4F46E5'
-                      : isDarkMode ? '#333333' : '#FFFFFF',
+                    backgroundColor:
+                      userType === UserType.student
+                        ? '#4F46E5'
+                        : isDarkMode
+                        ? '#333333'
+                        : '#FFFFFF',
                     borderColor: isDarkMode ? '#555555' : '#E5E7EB',
-                  }
+                  },
                 ]}
-                onPress={() => setUserType(UserType.student)}
-              >
+                onPress={() => setUserType(UserType.student)}>
                 <Text
                   style={[
                     styles.userTypeText,
                     {
-                      color: userType === UserType.student
-                        ? '#FFFFFF'
-                        : isDarkMode ? '#FFFFFF' : '#000000',
-                    }
-                  ]}
-                >
+                      color:
+                        userType === UserType.student
+                          ? '#FFFFFF'
+                          : isDarkMode
+                          ? '#FFFFFF'
+                          : '#000000',
+                    },
+                  ]}>
                   학생
                 </Text>
               </TouchableOpacity>
@@ -235,24 +269,28 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
                   styles.userTypeButton,
                   userType === UserType.faculty ? styles.selectedUserType : {},
                   {
-                    backgroundColor: userType === UserType.faculty
-                      ? '#4F46E5'
-                      : isDarkMode ? '#333333' : '#FFFFFF',
+                    backgroundColor:
+                      userType === UserType.faculty
+                        ? '#4F46E5'
+                        : isDarkMode
+                        ? '#333333'
+                        : '#FFFFFF',
                     borderColor: isDarkMode ? '#555555' : '#E5E7EB',
-                  }
+                  },
                 ]}
-                onPress={() => setUserType(UserType.faculty)}
-              >
+                onPress={() => setUserType(UserType.faculty)}>
                 <Text
                   style={[
                     styles.userTypeText,
                     {
-                      color: userType === UserType.faculty
-                        ? '#FFFFFF'
-                        : isDarkMode ? '#FFFFFF' : '#000000',
-                    }
-                  ]}
-                >
+                      color:
+                        userType === UserType.faculty
+                          ? '#FFFFFF'
+                          : isDarkMode
+                          ? '#FFFFFF'
+                          : '#000000',
+                    },
+                  ]}>
                   교직원
                 </Text>
               </TouchableOpacity>
@@ -262,52 +300,61 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
                   styles.userTypeButton,
                   userType === UserType.others ? styles.selectedUserType : {},
                   {
-                    backgroundColor: userType === UserType.others
-                      ? '#4F46E5'
-                      : isDarkMode ? '#333333' : '#FFFFFF',
+                    backgroundColor:
+                      userType === UserType.others
+                        ? '#4F46E5'
+                        : isDarkMode
+                        ? '#333333'
+                        : '#FFFFFF',
                     borderColor: isDarkMode ? '#555555' : '#E5E7EB',
-                  }
+                  },
                 ]}
-                onPress={() => setUserType(UserType.others)}
-              >
+                onPress={() => setUserType(UserType.others)}>
                 <Text
                   style={[
                     styles.userTypeText,
                     {
-                      color: userType === UserType.others
-                        ? '#FFFFFF'
-                        : isDarkMode ? '#FFFFFF' : '#000000',
-                    }
-                  ]}
-                >
+                      color:
+                        userType === UserType.others
+                          ? '#FFFFFF'
+                          : isDarkMode
+                          ? '#FFFFFF'
+                          : '#000000',
+                    },
+                  ]}>
                   기타
                 </Text>
               </TouchableOpacity>
             </View>
 
-            <Text style={[styles.requiredNote, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+            <Text
+              style={[
+                styles.requiredNote,
+                {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+              ]}>
               * 필수 항목
             </Text>
 
             <TouchableOpacity
               style={[
                 styles.signupButton,
-                isLoading && styles.signupButtonDisabled
+                isLoading && styles.signupButtonDisabled,
               ]}
               onPress={handleSignup}
-              disabled={isLoading}
-            >
+              disabled={isLoading}>
               <Text style={styles.signupButtonText}>
                 {isLoading ? '처리중...' : '회원가입'}
               </Text>
             </TouchableOpacity>
 
-            {error && (
-              <Text style={styles.errorText}>{error}</Text>
-            )}
+            {error && <Text style={styles.errorText}>{error}</Text>}
 
             <View style={styles.loginContainer}>
-              <Text style={[styles.loginText, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+              <Text
+                style={[
+                  styles.loginText,
+                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                ]}>
                 이미 계정이 있으신가요?
               </Text>
               <TouchableOpacity onPress={() => navigation.navigate('Login')}>

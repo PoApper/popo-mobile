@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, useColorScheme } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View, ScrollView, useColorScheme} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '../utils/api';
 
@@ -43,12 +43,15 @@ const UpcomingEvents = () => {
   useEffect(() => {
     const fetchReservations = async () => {
       try {
-        const response = await api.get<PaginatedResponse>('https://api.popo-dev.poapper.club/reservation-place/user', {
-          params: {
-            skip: 0,
-            take: 5
-          }
-        });
+        const response = await api.get<PaginatedResponse>(
+          'https://api.popo-dev.poapper.club/reservation-place/user',
+          {
+            params: {
+              skip: 0,
+              take: 5,
+            },
+          },
+        );
         setReservations(response.data.items);
       } catch (error) {
         console.error('예약 정보 조회 오류:', error);
@@ -70,11 +73,18 @@ const UpcomingEvents = () => {
   if (isLoading) {
     return (
       <View style={styles.upcomingSection}>
-        <Text style={[styles.sectionTitle, { color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24 }]}>
+        <Text
+          style={[
+            styles.sectionTitle,
+            {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
+          ]}>
           나의 최근 예약
         </Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scheduleScroll}>
-          <View style={[styles.scheduleCard, { backgroundColor: '#4D61DD' }]}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.scheduleScroll}>
+          <View style={[styles.scheduleCard, {backgroundColor: '#4D61DD'}]}>
             <Text style={styles.scheduleTitle}>예약 정보를 불러오는 중...</Text>
           </View>
         </ScrollView>
@@ -85,11 +95,18 @@ const UpcomingEvents = () => {
   if (reservations.length === 0) {
     return (
       <View style={styles.upcomingSection}>
-        <Text style={[styles.sectionTitle, { color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24 }]}>
+        <Text
+          style={[
+            styles.sectionTitle,
+            {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
+          ]}>
           나의 최근 예약
         </Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scheduleScroll}>
-          <View style={[styles.scheduleCard, { backgroundColor: '#4D61DD' }]}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.scheduleScroll}>
+          <View style={[styles.scheduleCard, {backgroundColor: '#4D61DD'}]}>
             <Text style={styles.scheduleTitle}>최근 예약 내역이 없습니다</Text>
           </View>
         </ScrollView>
@@ -99,26 +116,46 @@ const UpcomingEvents = () => {
 
   return (
     <View style={styles.upcomingSection}>
-      <Text style={[styles.sectionTitle, { color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24 }]}>
+      <Text
+        style={[
+          styles.sectionTitle,
+          {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
+        ]}>
         나의 최근 예약
       </Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scheduleScroll}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.scheduleScroll}>
         {reservations.map((reservation, index) => (
           <View
             key={reservation.uuid}
             style={[
               styles.scheduleCard,
-              { backgroundColor: index % 2 === 0 ? '#4D61DD' : '#10ADB6' }
-            ]}
-          >
+              {backgroundColor: index % 2 === 0 ? '#4D61DD' : '#10ADB6'},
+            ]}>
             <Text style={styles.scheduleTitle}>{reservation.title}</Text>
             <View style={styles.scheduleInfo}>
-              <Icon name="place" size={20} color="#FFFFFF" style={styles.icon} />
-              <Text style={styles.scheduleLocation}>{reservation.place.name || '장소 미정'}</Text>
+              <Icon
+                name="place"
+                size={20}
+                color="#FFFFFF"
+                style={styles.icon}
+              />
+              <Text style={styles.scheduleLocation}>
+                {reservation.place.name || '장소 미정'}
+              </Text>
             </View>
             <View style={styles.scheduleInfo}>
-              <Icon name="event" size={20} color="#FFFFFF" style={styles.icon} />
-              <Text style={styles.scheduleDate}>{formatDate(reservation.date)}</Text>
+              <Icon
+                name="event"
+                size={20}
+                color="#FFFFFF"
+                style={styles.icon}
+              />
+              <Text style={styles.scheduleDate}>
+                {formatDate(reservation.date)}
+              </Text>
             </View>
           </View>
         ))}

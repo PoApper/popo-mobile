@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,10 +11,10 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../navigation/types';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RouteProp} from '@react-navigation/native';
+import {RootStackParamList} from '../navigation/types';
 import api from '../utils/api';
 import axios from 'axios';
 
@@ -54,7 +54,7 @@ interface PaginatedResponse {
   total: number;
 }
 
-const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
+const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -78,13 +78,16 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
     setError(null);
 
     try {
-      const response = await api.get<PaginatedResponse>('/reservation-place/user', {
-        params: {
-          skip: (page - 1) * itemsPerPage,
-          take: itemsPerPage
-        }
-      });
-      const { items, total } = response.data;
+      const response = await api.get<PaginatedResponse>(
+        '/reservation-place/user',
+        {
+          params: {
+            skip: (page - 1) * itemsPerPage,
+            take: itemsPerPage,
+          },
+        },
+      );
+      const {items, total} = response.data;
 
       // 날짜 기준으로 정렬 (최신 날짜가 먼저 오도록)
       const sortedReservations = [...items].sort((a, b) => {
@@ -103,7 +106,7 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
         if (err.response?.status === 401) {
           // 인증 오류 시 로그인 화면으로 이동
           Alert.alert('인증 만료', '다시 로그인해주세요.', [
-            { text: '확인', onPress: () => navigation.navigate('Login') }
+            {text: '확인', onPress: () => navigation.navigate('Login')},
           ]);
         } else {
           setError('예약 정보를 불러오는데 실패했습니다.');
@@ -118,20 +121,27 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
 
   // YYYYMMDD 형식의 날짜를 YYYY-MM-DD로 변환
   const formatDate = (dateStr: string): string => {
-    if (!dateStr || dateStr.length !== 8) return dateStr;
-    return `${dateStr.substring(0, 4)}-${dateStr.substring(4, 6)}-${dateStr.substring(6, 8)}`;
+    if (!dateStr || dateStr.length !== 8) {
+      return dateStr;
+    }
+    return `${dateStr.substring(0, 4)}-${dateStr.substring(
+      4,
+      6,
+    )}-${dateStr.substring(6, 8)}`;
   };
 
   // HHmm 형식의 시간을 HH:mm으로 변환
   const formatTime = (timeStr: string): string => {
-    if (!timeStr || timeStr.length !== 4) return timeStr;
+    if (!timeStr || timeStr.length !== 4) {
+      return timeStr;
+    }
     return `${timeStr.substring(0, 2)}:${timeStr.substring(2, 4)}`;
   };
 
   // 컴포넌트 마운트 시 예약 정보 가져오기
   useEffect(() => {
     fetchReservations();
-  }, []);
+  });
 
   // 상태에 따른 배지 색상
   const getStatusColor = (status: string) => {
@@ -191,72 +201,97 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
           },
         },
       ],
-      { cancelable: false }
+      {cancelable: false},
     );
   };
 
   // 개별 예약 항목 렌더링
-  const renderReservationItem = ({ item }: { item: PlaceReservation }) => (
-    <View style={[styles.reservationCard, { backgroundColor: cardBgColor, borderColor }]}>
+  const renderReservationItem = ({item}: {item: PlaceReservation}) => (
+    <View
+      style={[
+        styles.reservationCard,
+        {backgroundColor: cardBgColor, borderColor},
+      ]}>
       <View style={styles.reservationHeader}>
         <View style={styles.titleContainer}>
-          <Text style={[styles.reservationTitle, { color: textColor }]}>{item.title || '제목 없음'}</Text>
+          <Text style={[styles.reservationTitle, {color: textColor}]}>
+            {item.title || '제목 없음'}
+          </Text>
         </View>
         <View
           style={[
             styles.statusBadge,
-            { backgroundColor: getStatusColor(item.status) },
-          ]}
-        >
+            {backgroundColor: getStatusColor(item.status)},
+          ]}>
           <Text style={styles.statusText}>{getStatusText(item.status)}</Text>
         </View>
       </View>
 
       <View style={styles.reservationDetail}>
-        <Text style={[styles.detailLabel, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+        <Text
+          style={[
+            styles.detailLabel,
+            {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+          ]}>
           날짜 / 시간
         </Text>
-        <Text style={[styles.detailValue, { color: textColor }]}>
+        <Text style={[styles.detailValue, {color: textColor}]}>
           {new Date(formatDate(item.date)).toLocaleDateString('ko-KR', {
             year: 'numeric',
             month: 'long',
-            day: 'numeric'
-          })} | {formatTime(item.start_time)}-{formatTime(item.end_time)}
+            day: 'numeric',
+          })}{' '}
+          | {formatTime(item.start_time)}-{formatTime(item.end_time)}
         </Text>
       </View>
 
       <View style={styles.reservationDetail}>
-        <Text style={[styles.detailLabel, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+        <Text
+          style={[
+            styles.detailLabel,
+            {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+          ]}>
           장소
         </Text>
-        <Text style={[styles.detailValue, { color: textColor }]}>
+        <Text style={[styles.detailValue, {color: textColor}]}>
           {item.place?.name || '장소 이름 없음'}
         </Text>
       </View>
 
       {item.place?.location && (
         <View style={styles.reservationDetail}>
-          <Text style={[styles.detailLabel, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+          <Text
+            style={[
+              styles.detailLabel,
+              {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+            ]}>
             위치
           </Text>
-          <Text style={[styles.detailValue, { color: textColor }]}>{item.place.location}</Text>
+          <Text style={[styles.detailValue, {color: textColor}]}>
+            {item.place.location}
+          </Text>
         </View>
       )}
 
       {item.description && (
         <View style={styles.reservationDetail}>
-          <Text style={[styles.detailLabel, { color: isDarkMode ? '#BBBBBB' : '#6B7280' }]}>
+          <Text
+            style={[
+              styles.detailLabel,
+              {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+            ]}>
             설명
           </Text>
-          <Text style={[styles.detailValue, { color: textColor }]}>{item.description}</Text>
+          <Text style={[styles.detailValue, {color: textColor}]}>
+            {item.description}
+          </Text>
         </View>
       )}
 
       {item.status !== '거절' && (
         <TouchableOpacity
           style={styles.cancelButton}
-          onPress={() => handleCancelReservation(item.uuid)}
-        >
+          onPress={() => handleCancelReservation(item.uuid)}>
           <Text style={styles.cancelButtonText}>예약 취소</Text>
         </TouchableOpacity>
       )}
@@ -272,7 +307,10 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
   const renderPaginationButtons = () => {
     const buttons = [];
     const maxVisibleButtons = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
+    let startPage = Math.max(
+      1,
+      currentPage - Math.floor(maxVisibleButtons / 2),
+    );
     let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
 
     if (endPage - startPage + 1 < maxVisibleButtons) {
@@ -284,11 +322,13 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
       buttons.push(
         <TouchableOpacity
           key="prev"
-          style={[styles.pageButton, { backgroundColor: cardBgColor, borderColor }]}
-          onPress={() => fetchReservations(currentPage - 1)}
-        >
-          <Text style={[styles.pageButtonText, { color: textColor }]}>이전</Text>
-        </TouchableOpacity>
+          style={[
+            styles.pageButton,
+            {backgroundColor: cardBgColor, borderColor},
+          ]}
+          onPress={() => fetchReservations(currentPage - 1)}>
+          <Text style={[styles.pageButtonText, {color: textColor}]}>이전</Text>
+        </TouchableOpacity>,
       );
     }
 
@@ -299,19 +339,19 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
           key={i}
           style={[
             styles.pageButton,
-            { backgroundColor: cardBgColor, borderColor },
-            currentPage === i && styles.activePageButton
+            {backgroundColor: cardBgColor, borderColor},
+            currentPage === i && styles.activePageButton,
           ]}
-          onPress={() => fetchReservations(i)}
-        >
-          <Text style={[
-            styles.pageButtonText,
-            { color: textColor },
-            currentPage === i && styles.activePageButtonText
-          ]}>
+          onPress={() => fetchReservations(i)}>
+          <Text
+            style={[
+              styles.pageButtonText,
+              {color: textColor},
+              currentPage === i && styles.activePageButtonText,
+            ]}>
             {i}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity>,
       );
     }
 
@@ -320,11 +360,13 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
       buttons.push(
         <TouchableOpacity
           key="next"
-          style={[styles.pageButton, { backgroundColor: cardBgColor, borderColor }]}
-          onPress={() => fetchReservations(currentPage + 1)}
-        >
-          <Text style={[styles.pageButtonText, { color: textColor }]}>다음</Text>
-        </TouchableOpacity>
+          style={[
+            styles.pageButton,
+            {backgroundColor: cardBgColor, borderColor},
+          ]}
+          onPress={() => fetchReservations(currentPage + 1)}>
+          <Text style={[styles.pageButtonText, {color: textColor}]}>다음</Text>
+        </TouchableOpacity>,
       );
     }
 
@@ -340,46 +382,51 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
+          onPress={() => navigation.goBack()}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: textColor }]}>내 예약 목록</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>
+          내 예약 목록
+        </Text>
         <TouchableOpacity
           style={styles.refreshButton}
           onPress={handleRefresh}
-          disabled={isLoading}
-        >
-          <Text style={[styles.refreshButtonText, { color: textColor }]}>새로고침</Text>
+          disabled={isLoading}>
+          <Text style={[styles.refreshButtonText, {color: textColor}]}>
+            새로고침
+          </Text>
         </TouchableOpacity>
       </View>
 
       {isLoading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#4F46E5" />
-          <Text style={[styles.loadingText, { color: textColor }]}>
+          <Text style={[styles.loadingText, {color: textColor}]}>
             예약 정보를 불러오는 중...
           </Text>
         </View>
       ) : error ? (
         <View style={styles.errorContainer}>
-          <Text style={[styles.errorText, { color: textColor }]}>{error}</Text>
+          <Text style={[styles.errorText, {color: textColor}]}>{error}</Text>
           <TouchableOpacity
             style={styles.retryButton}
-            onPress={fetchReservations}
-          >
+            onPress={fetchReservations}>
             <Text style={styles.retryButtonText}>다시 시도</Text>
           </TouchableOpacity>
         </View>
       ) : reservations.length > 0 ? (
         <>
-          <View style={[styles.paginationContainer, { backgroundColor: cardBgColor }]}>
+          <View
+            style={[
+              styles.paginationContainer,
+              {backgroundColor: cardBgColor},
+            ]}>
             {renderPaginationButtons()}
           </View>
           <FlatList
             data={reservations}
             renderItem={renderReservationItem}
-            keyExtractor={(item) => item.uuid}
+            keyExtractor={item => item.uuid}
             contentContainerStyle={styles.listContainer}
           />
         </>
@@ -390,13 +437,14 @@ const ReservationScreen = ({ navigation }: ReservationScreenProps) => {
             style={styles.emptyImage}
             resizeMode="contain"
           />
-          <Text style={[styles.emptyText, { color: textColor }]}>
+          <Text style={[styles.emptyText, {color: textColor}]}>
             예약 내역이 없습니다.
           </Text>
           <TouchableOpacity
             style={styles.newReservationButton}
-            onPress={() => Alert.alert('알림', '새 예약 기능은 준비 중입니다.')}
-          >
+            onPress={() =>
+              Alert.alert('알림', '새 예약 기능은 준비 중입니다.')
+            }>
             <Text style={styles.newReservationButtonText}>새 예약 만들기</Text>
           </TouchableOpacity>
         </View>
@@ -443,7 +491,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 1,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 2,

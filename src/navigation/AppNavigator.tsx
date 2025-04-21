@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, {useEffect, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useColorScheme } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {useColorScheme} from 'react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-import { RootStackParamList, AuthStackParamList, MainTabParamList } from './types';
+import {
+  RootStackParamList,
+  AuthStackParamList,
+  MainTabParamList,
+} from './types';
 import LandingScreen from '../screens/LandingScreen';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
@@ -31,7 +35,7 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 
 const AuthNavigator = () => {
   return (
-    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+    <AuthStack.Navigator screenOptions={{headerShown: false}}>
       <AuthStack.Screen name="Login" component={LoginScreen} />
     </AuthStack.Navigator>
   );
@@ -50,14 +54,13 @@ const MainNavigator = () => {
         },
         tabBarActiveTintColor: '#4F46E5',
         tabBarInactiveTintColor: isDarkMode ? '#888888' : '#6B7280',
-      }}
-    >
+      }}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
           tabBarLabel: '홈',
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({color, size}) => (
             <Icon name="home" size={size} color={color} />
           ),
         }}
@@ -67,7 +70,7 @@ const MainNavigator = () => {
         component={PaxiRoomListScreen}
         options={{
           tabBarLabel: 'Paxi',
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({color, size}) => (
             <Icon name="local-taxi" size={size} color={color} />
           ),
         }}
@@ -77,7 +80,7 @@ const MainNavigator = () => {
         component={ReservationScreen}
         options={{
           tabBarLabel: '내 일정',
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({color, size}) => (
             <Icon name="event" size={size} color={color} />
           ),
         }}
@@ -87,7 +90,7 @@ const MainNavigator = () => {
         component={UserDetailScreen}
         options={{
           tabBarLabel: '내 정보',
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({color, size}) => (
             <Icon name="person" size={size} color={color} />
           ),
         }}
@@ -122,25 +125,30 @@ const AppNavigator = () => {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName={isAuthenticated ? "Main" : "Landing"}
+          initialRouteName={isAuthenticated ? 'Main' : 'Landing'}
           screenOptions={{
             headerShown: false,
-          }}
-        >
+          }}>
           <Stack.Screen name="PaxiRoomList" component={PaxiRoomListScreen} />
           <Stack.Screen name="NewPaxiRoom" component={NewPaxiRoomScreen} />
           <Stack.Screen name="Landing" component={LandingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="UserDetail" component={UserDetailScreen} />
           <Stack.Screen name="Reservation" component={ReservationScreen} />
-          <Stack.Screen name="PlaceReservation" component={PlaceReservationScreen} />
+          <Stack.Screen
+            name="PlaceReservation"
+            component={PlaceReservationScreen}
+          />
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="Whitebook" component={WhitebookScreen} />
           <Stack.Screen name="Benefits" component={BenefitsScreen} />
           <Stack.Screen name="Club" component={ClubScreen} />
           <Stack.Screen name="ClubDetail" component={ClubDetailScreen} />
           <Stack.Screen name="Association" component={AssociationScreen} />
-          <Stack.Screen name="AssociationDetail" component={AssociationDetailScreen} />
+          <Stack.Screen
+            name="AssociationDetail"
+            component={AssociationDetailScreen}
+          />
           <Stack.Screen name="CampusShuttle" component={CampusShuttleScreen} />
           <Stack.Screen name="Auth" component={AuthNavigator} />
           <Stack.Screen name="Main" component={MainNavigator} />
