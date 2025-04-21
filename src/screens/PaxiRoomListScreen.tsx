@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
   StatusBar,
   useColorScheme,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainTabParamList } from '../navigation/types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
+import EncryptedStorage from 'react-native-encrypted-storage';
+import axios, { AxiosResponse } from 'axios';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<MainTabParamList, 'Paxi'>;
@@ -33,8 +35,26 @@ const RoomContainer: React.FC<RoomContainerProps> = ({ title, departureTime, rem
   const backgroundColor = isDarkMode ? '#1A1A1A' : '#fff';
   const subTextColor = isDarkMode ? '#888' : '#666';
 
+  const askJoinRoom = () => {
+    Alert.alert('참여하기', '방에 참여하시겠습니까?', [
+      {
+        text: '취소',
+        style: 'cancel',
+      },
+      {
+        text: '확인',
+        onPress: () => {
+          Alert.alert('참여 완료', '방에 성공적으로 참여했습니다.');
+        },
+      },
+    ]);
+  };
+
   return (
-    <TouchableOpacity style={[styles.roomContainer, { backgroundColor }]}>
+    <TouchableOpacity
+      style={[styles.roomContainer, { backgroundColor }]}
+      onPress={() => askJoinRoom()}
+    >
       <View style={styles.cardContent}>
         <View style={styles.mainInfo}>
           <View style={styles.titleContainer}>
@@ -74,6 +94,32 @@ const RefreshButton = ({ onPress }: { onPress: () => void }) => {
   );
 };
 
+interface RoomDataType {
+  uuid: string;
+  title: string;
+  ownerUuid: string;
+  departureLocation: string;
+  destinationLocation: string;
+  maxParticipant: number;
+  currentParticipant: number;
+  departureTime: string;
+  status: string;
+  description: string;
+  payerUuid: string;
+  payAmount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface ParsedRoomDataType {
+  uuid: string,
+  title: string,
+  departureTime: string,
+  remain: number,
+  total: number,
+  departure: string,
+  destination: string
+}
 
 const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -85,50 +131,48 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
     flex: 1,
   };
 
-  const clicking = () => {}
+  const [roomData, setRoomData] = useState<ParsedRoomDataType[]>([]);
 
-  const roomData = [
-    {
-      title: '포항역 카풀',
-      departureTime: '3월 14일 오전 7시 출발',
-      remain: 2,
-      total: 4,
-      departure: '포항역',
-      destination: '지곡회관',
-    },
-    {
-      title: '서울역 카풀',
-      departureTime: '3월 15일 오후 5시 출발',
-      remain: 1,
-      total: 3,
-      departure: '서울역',
-      destination: '강남역',
-    },
-    {
-      title: '포항역 카풀',
-      departureTime: '3월 14일 오전 7시 출발',
-      remain: 2,
-      total: 4,
-      departure: '포항역',
-      destination: '지곡회관',
-    },
-    {
-      title: '포항역 카풀',
-      departureTime: '3월 14일 오전 7시 출발',
-      remain: 2,
-      total: 4,
-      departure: '포항역',
-      destination: '지곡회관',
-    },
-    {
-      title: '포항역 카풀',
-      departureTime: '3월 14일 오전 7시 출발',
-      remain: 2,
-      total: 4,
-      departure: '포항역',
-      destination: '지곡회관',
-    },
-  ];
+  const refreshRoomData = () => getUserDataAndRequest();
+  const clicking = () => {};
+
+  async function getUserDataAndRequest() {
+    try {
+      const authToken = await EncryptedStorage.getItem('auth_token');
+      if (!authToken) return;
+  
+      const response = await axios.get('https://api.paxi-dev.popo.poapper.club/room', {
+        headers: {
+          'Cookie': `Authentication=${authToken}`,
+        },
+      });
+  
+      const parsedData = parseRoomData(response);
+      setRoomData(parsedData);
+
+      Alert.alert('성공', '방을 성공적으로 불러왔습니다.');
+    } catch (error: string | any) {
+      console.error('Error:', error);
+      Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + error.message);
+    }
+  }
+
+  const parseRoomData = (response: AxiosResponse) => response.data.map((item: RoomDataType) => ({
+    uuid: item.uuid,
+    title: item.title,
+    departureTime: new Date(item.departureTime).toLocaleString('ko-KR', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+    }),
+    remain: item.maxParticipant - item.currentParticipant,
+    total: item.maxParticipant,
+    departure: item.departureLocation,
+    destination: item.destinationLocation
+  }));
 
   return (
     <SafeAreaView style={[backgroundStyle]}>
@@ -149,7 +193,7 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
 
       <View style={[styles.conditionNavigator]}>
         <RefreshButton
-          onPress={() => {}} />
+          onPress={() => refreshRoomData()} />
 
         <TouchableOpacity
           style={[styles.button, {
