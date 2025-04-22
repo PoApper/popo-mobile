@@ -28,6 +28,8 @@ import ClubDetailScreen from '../screens/ClubDetailScreen';
 import AssociationScreen from '../screens/AssociationScreen';
 import AssociationDetailScreen from '../screens/AssociationDetailScreen';
 import CampusShuttleScreen from '../screens/CampusShuttle';
+import ChatScreen from '../screens/ChatScreen';
+import SettlementScreen from '../screens/SettlementScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -129,6 +131,8 @@ const AppNavigator = () => {
           screenOptions={{
             headerShown: false,
           }}>
+          <Stack.Screen name="Chat" component={ChatScreen} />
+          <Stack.Screen name="Settlement" component={SettlementScreen} />
           <Stack.Screen name="PaxiRoomList" component={PaxiRoomListScreen} />
           <Stack.Screen name="NewPaxiRoom" component={NewPaxiRoomScreen} />
           <Stack.Screen name="Landing" component={LandingScreen} />
