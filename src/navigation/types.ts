@@ -57,5 +57,5 @@ export type MainTabParamList = {
   MyInfo: {
     navigation: NativeStackNavigationProp<RootStackParamList>;
     route: RouteProp<MainTabParamList, 'MyInfo'>;
-  };
+  }; 
 };
