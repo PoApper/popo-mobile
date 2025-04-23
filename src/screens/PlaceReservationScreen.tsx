@@ -31,11 +31,11 @@ type Location = {
 };
 
 const buildingToRegion: {[key: string]: string} = {
-  '학생회관': 'STUDENT_HALL',
-  '지곡회관': 'JIGOK_CENTER',
-  '커뮤니티센터': 'COMMUNITY_CENTER',
-  'RC': 'RESIDENTIAL_COLLEGE',
-  '기타': 'OTHERS',
+  학생회관: 'STUDENT_HALL',
+  지곡회관: 'JIGOK_CENTER',
+  커뮤니티센터: 'COMMUNITY_CENTER',
+  RC: 'RESIDENTIAL_COLLEGE',
+  기타: 'OTHERS',
 };
 
 const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
@@ -59,7 +59,9 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
     const fetchLocations = async () => {
       try {
         setIsLoading(true);
-        const response = await api.get(`/place/region/${buildingToRegion[selectedBuilding]}`);
+        const response = await api.get(
+          `/place/region/${buildingToRegion[selectedBuilding]}`,
+        );
         const formattedLocations = response.data.map((place: any) => ({
           id: place.uuid,
           name: place.name,
