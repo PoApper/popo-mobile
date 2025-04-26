@@ -13,13 +13,23 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+# Firebase를 위한 modular headers 설정 추가
+use_modular_headers!
+
 target 'popoMobile' do
   config = use_native_modules!
+
+  # New Architecture 비활성화
+  ENV['RCT_NEW_ARCH_ENABLED'] = '0'
+
+  # Firebase 버전 명시
+  # pod 'Firebase', '~> 8.7.0'
+  # pod 'FirebaseMessaging', '~> 8.7.0'
 
   use_react_native!(
     :path => config[:reactNativePath],
     :hermes_enabled => true,
-    :fabric_enabled => false,
+    :fabric_enabled => false,  # Fabric 비활성화
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
