@@ -23,6 +23,9 @@ export const requestUserPermission = async () => {
     }
 
     if (Platform.OS === 'ios') {
+      // iOS에서 디바이스를 원격 메시지용으로 등록
+      await messaging().registerDeviceForRemoteMessages();
+
       const authStatus = await messaging().requestPermission();
       const enabled =
         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
