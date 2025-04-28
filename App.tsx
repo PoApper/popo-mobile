@@ -10,6 +10,7 @@ import {
   getFCMToken,
   onTokenRefresh,
 } from './src/utils/firebase';
+import paxi_api from './src/utils/paxi_api';
 
 const App = () => {
   useEffect(() => {
@@ -18,9 +19,16 @@ const App = () => {
       if (hasPermission) {
         const token = await getFCMToken();
         if (token) {
-          console.log('FCM Token:', token);
-          // TODO: 여기에서 토큰을 서버에 전송
-          // await sendTokenToServer(token);
+          // console.log('FCM Token:', token);
+          paxi_api
+            .post(`/push/key/${token}`)
+            .then(res => {
+              console.log('토큰 전송 성공', res);
+            })
+            .catch(err => {
+              const msg = err.response.data.message;
+              console.log('토큰 전송 실패', msg);
+            });
         }
       }
     };

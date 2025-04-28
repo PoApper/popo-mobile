@@ -16,6 +16,7 @@ import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import api, {POPO_API_URL} from '../utils/api';
 import axios from 'axios';
+import {getFCMToken} from '../utils/firebase';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -90,6 +91,18 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
 
       // 로그인 상태 저장
       await EncryptedStorage.setItem('isAuthenticated', 'true');
+
+      // FCM 토큰 가져오기 및 저장
+      try {
+        const fcmToken = await getFCMToken();
+        if (fcmToken) {
+          console.log('FCM 토큰 발급 성공');
+          // TODO: FCM 토큰을 서버에 전송하는 API 호출
+          // await api.post('/users/fcm-token', { token: fcmToken });
+        }
+      } catch (fcmError) {
+        console.error('FCM 토큰 발급 실패:', fcmError);
+      }
 
       // 로그인 성공
       Alert.alert('로그인 성공', '환영합니다!');

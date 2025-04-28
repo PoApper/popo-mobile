@@ -54,7 +54,7 @@ export const getFCMToken = async () => {
     // 토큰 가져오기 시도
     console.log('Attempting to get FCM token...');
     const fcmToken = await messaging().getToken();
-    console.log('FCM Token successfully retrieved:', fcmToken);
+    // console.log('FCM Token successfully retrieved:', fcmToken);
     return fcmToken;
   } catch (error: any) {
     console.error('Failed to get FCM token. Full error:', error);
@@ -71,7 +71,7 @@ export const getFCMToken = async () => {
 // 토큰 갱신 이벤트 리스너 설정
 export const onTokenRefresh = (callback: (token: string) => void) => {
   return messaging().onTokenRefresh(token => {
-    console.log('New FCM Token:', token);
+    // console.log('New FCM Token:', token);
     callback(token);
   });
 };
