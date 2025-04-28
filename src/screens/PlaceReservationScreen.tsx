@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,9 +10,11 @@ import {
   ScrollView,
   useColorScheme,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
+import api from '../utils/api';
 
 type PlaceReservationScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PlaceReservation'>;
@@ -25,181 +27,15 @@ type Location = {
   name: string;
   description: string;
   image: any;
+  total_reservation_count: number;
 };
 
-const locationsData: {[key: string]: Location[]} = {
-  학생회관: [
-    {
-      id: '1',
-      name: '1층 홀',
-      description: '학생회관 1층',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '2',
-      name: '2층 홀',
-      description: '학생회관 2층',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '3',
-      name: '3층 홀',
-      description: '학생회관 3층',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '4',
-      name: '4층 홀',
-      description: '학생회관 4층',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '5',
-      name: '노래방',
-      description: '학생회관 410호',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '6',
-      name: '대회의실',
-      description: '학생회관 3층',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '7',
-      name: '아틀라스홀',
-      description: '학생회관 1층, 계단 아래',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '8',
-      name: '오아시스 회의실1',
-      description: '학생회관 오아시스',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '9',
-      name: '오아시스 회의실2',
-      description: '학생회관 오아시스',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '10',
-      name: '음악감상실',
-      description: '학생회관 302호',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '11',
-      name: '커리어라운지 상담실 A',
-      description: '학생회관 102호',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '12',
-      name: '커리어라운지 상담실 B',
-      description: '학생회관 102호',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '13',
-      name: '커리어라운지 세미나실',
-      description: '학생회관 102호',
-      image: require('../../assets/hall1.png'),
-    },
-  ],
-  지곡회관: [
-    {
-      id: '1',
-      name: '버거킹 소무대',
-      description: '지곡회관, 버거킹',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '2',
-      name: '지곡회관 회의실3',
-      description: '지곡회관',
-      image: require('../../assets/hall1.png'),
-    },
-  ],
-  커뮤니티센터: [
-    {
-      id: '1',
-      name: '그룹스터디룸A',
-      description: '커뮤니티센터 203호',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '2',
-      name: '그룹스터디룸B',
-      description: '커뮤니티센터 205호',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '3',
-      name: '그룹스터디룸C',
-      description: '커뮤니티센터 207호',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '4',
-      name: '그룹스터디룸D',
-      description: '커뮤니티센터 209호',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '3',
-      name: '시네마실A',
-      description: '커뮤니티센터 103호',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '4',
-      name: '시네마실B',
-      description: '커뮤니티센터 105호',
-      image: require('../../assets/hall1.png'),
-    },
-  ],
-  RC: [
-    {
-      id: '1',
-      name: 'RA 라운지 룸',
-      description: 'RC 1층 공용공간',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '2',
-      name: '소셜 키친 룸',
-      description: 'RC 1층 공용공간',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '3',
-      name: '시네마 룸',
-      description: 'RC 1층 공용공간',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '4',
-      name: '커뮤니티 룸 1',
-      description: 'RC 1층 공용공간',
-      image: require('../../assets/hall1.png'),
-    },
-    {
-      id: '5',
-      name: '커뮤니티 룸 2',
-      description: 'RC 1층 공용공간',
-      image: require('../../assets/hall1.png'),
-    },
-  ],
-  기타: [
-    {
-      id: '1',
-      name: '78 계단',
-      description: '78 계단',
-      image: require('../../assets/hall1.png'),
-    },
-  ],
+const buildingToRegion: {[key: string]: string} = {
+  학생회관: 'STUDENT_HALL',
+  지곡회관: 'JIGOK_CENTER',
+  커뮤니티센터: 'COMMUNITY_CENTER',
+  RC: 'RESIDENTIAL_COLLEGE',
+  기타: 'OTHERS',
 };
 
 const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
@@ -207,6 +43,8 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
   const [selectedBuilding, setSelectedBuilding] = useState('학생회관');
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
   const [sortType, setSortType] = useState('가나다순');
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -217,11 +55,38 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
   const backgroundSecondary = isDarkMode ? '#2C2C2C' : '#F3F3F3';
 
-  const locations = [...(locationsData[selectedBuilding] || [])];
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        setIsLoading(true);
+        const response = await api.get(
+          `/place/region/${buildingToRegion[selectedBuilding]}`,
+        );
+        const formattedLocations = response.data.map((place: any) => ({
+          id: place.uuid,
+          name: place.name,
+          description: place.location,
+          image: {uri: place.image_url},
+          total_reservation_count: place.total_reservation_count,
+        }));
+        setLocations(formattedLocations);
+      } catch (error) {
+        console.error('장소 정보를 불러오는데 실패했습니다:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  if (sortType === '가나다순') {
-    locations.sort((a, b) => a.name.localeCompare(b.name));
-  }
+    fetchLocations();
+  }, [selectedBuilding]);
+
+  const sortedLocations = [...locations].sort((a, b) => {
+    if (sortType === '가나다순') {
+      return a.name.localeCompare(b.name);
+    } else {
+      return b.total_reservation_count - a.total_reservation_count;
+    }
+  });
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -311,46 +176,52 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
       </View>
 
       {/* 장소 리스트 */}
-      <FlatList
-        style={{flex: 1}}
-        contentContainerStyle={{
-          paddingBottom: 20,
-          paddingTop: 0,
-          justifyContent: 'flex-start',
-        }}
-        data={locations}
-        keyExtractor={item => item.id + item.name}
-        renderItem={({item}) => (
-          <View
-            style={[
-              styles.locationItem,
-              {backgroundColor: isDarkMode ? '#121212' : '#fff'},
-            ]}>
-            <Image source={item.image} style={styles.locationImage} />
-            <View style={styles.locationInfo}>
-              <Text style={[styles.locationName, {color: textColor}]}>
-                {item.name}
-              </Text>
-              <Text
-                style={[
-                  styles.locationDescription,
-                  {color: isDarkMode ? '#888' : '#777'},
-                ]}>
-                {item.description}
-              </Text>
-            </View>
-            <TouchableOpacity
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={textColor} />
+        </View>
+      ) : (
+        <FlatList
+          style={{flex: 1}}
+          contentContainerStyle={{
+            paddingBottom: 20,
+            paddingTop: 0,
+            justifyContent: 'flex-start',
+          }}
+          data={sortedLocations}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => (
+            <View
               style={[
-                styles.reserveButton,
-                {backgroundColor: backgroundSecondary},
+                styles.locationItem,
+                {backgroundColor: isDarkMode ? '#121212' : '#fff'},
               ]}>
-              <Text style={[styles.reserveButtonText, {color: textColor}]}>
-                예약
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      />
+              <Image source={item.image} style={styles.locationImage} />
+              <View style={styles.locationInfo}>
+                <Text style={[styles.locationName, {color: textColor}]}>
+                  {item.name}
+                </Text>
+                <Text
+                  style={[
+                    styles.locationDescription,
+                    {color: isDarkMode ? '#888' : '#777'},
+                  ]}>
+                  {item.description}
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={[
+                  styles.reserveButton,
+                  {backgroundColor: backgroundSecondary},
+                ]}>
+                <Text style={[styles.reserveButtonText, {color: textColor}]}>
+                  예약
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -385,42 +256,34 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: '#000',
   },
-
   buildingTabWrapper: {
     alignItems: 'center',
     margin: 2,
   },
-
   buildingTabInner: {
     alignItems: 'center',
     paddingHorizontal: 2,
   },
-
   textWithUnderline: {
     paddingHorizontal: 6,
     alignItems: 'center',
   },
-
   buildingTab: {
     fontSize: 16,
     color: '#999',
     lineHeight: 20,
   },
-
   selectedBuildingText: {
     color: '#000',
     fontWeight: 'bold',
     lineHeight: 20,
   },
-
   underline: {
     marginTop: 4,
     height: 2,
     borderRadius: 1,
     alignSelf: 'center',
   },
-
-  /* 정렬 버튼 */
   sortButtons: {
     flexDirection: 'row',
     paddingHorizontal: 15,
@@ -436,22 +299,18 @@ const styles = StyleSheet.create({
   },
   activeSort: {borderColor: '#000'},
   sortButtonText: {fontSize: 14},
-
-  /* 장소 리스트 */
   locationItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
     paddingHorizontal: 20,
   },
-
   locationImage: {
     width: 60,
     height: 60,
     borderRadius: 30,
     marginRight: 20,
   },
-
   locationInfo: {
     flex: 1,
   },
@@ -465,6 +324,11 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   reserveButtonText: {fontSize: 14, fontWeight: '600'},
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default PlaceReservationScreen;
