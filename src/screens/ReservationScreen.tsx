@@ -349,9 +349,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
           onPress={() => navigation.goBack()}>
           <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>
-          내 예약 목록
-        </Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>내 일정</Text>
         <TouchableOpacity
           style={styles.refreshButton}
           onPress={() => fetchReservations(1)}
