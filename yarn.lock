@@ -2039,17 +2039,17 @@
   dependencies:
     invariant "^2.2.4"
 
-"@react-native-firebase/app@^21.14.0", "@react-native-firebase/app@21.14.0":
-  version "21.14.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-21.14.0.tgz"
-  integrity sha512-vBNfn7PoQrZfANLJnJiWZSHVu7WG6hjM5w3MDfmG8DLdr8VsAVBUgsn8lGpqobSuno1vTgwDIhR8PYZjMGsuvg==
+"@react-native-firebase/app@^22.0.0", "@react-native-firebase/app@22.0.0":
+  version "22.0.0"
+  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-22.0.0.tgz"
+  integrity sha512-fbagoIrTJy8edCTiEI7OeAUqO5XoifMirEKoXJDHlsFrPJBfxqMGDhSJutUoWLNHt8KxDtLG9JWnKuW23ISq2Q==
   dependencies:
     firebase "11.3.1"
 
-"@react-native-firebase/messaging@^21.14.0":
-  version "21.14.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-21.14.0.tgz"
-  integrity sha512-EwJVFr2xtQFf6wQ3anXvnxCyFNRc6Hw7B6Ov4GYwgBEXNzw0MIPN2qDDA3lIN2a6nf6zESPuflYyG6Tel1ovSQ==
+"@react-native-firebase/messaging@^22.0.0":
+  version "22.0.0"
+  resolved "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-22.0.0.tgz"
+  integrity sha512-l9wVECx1FdK5W5FK2PjnEnPFVg0bDvMuA5CUOzLhItnRAXKsvR8ovo/YCZxWqF16PxSlxxcBgDISHqlppH2Svw==
 
 "@react-native/assets-registry@0.78.0":
   version "0.78.0"
@@ -2849,10 +2849,10 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-axios@^1.8.1:
-  version "1.8.4"
-  resolved "https://registry.npmjs.org/axios/-/axios-1.8.4.tgz"
-  integrity sha512-eBSYY4Y68NNlHbHBMdeDmKNtDgXWhQsJcGqzO3iLUM0GraQFSS9cVgPX5I9b3lbdFKyYoAEGAZF1DwhTaljNAw==
+axios@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.npmjs.org/axios/-/axios-1.9.0.tgz"
+  integrity sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
