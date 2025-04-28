@@ -94,8 +94,6 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
     );
   }
 
-  console.log(clubData);
-
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
