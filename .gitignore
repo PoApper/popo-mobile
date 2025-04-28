@@ -90,3 +90,4 @@ ios/*/build/
 
 # Firebase
 google-services.json
+GoogleService-info.plist
