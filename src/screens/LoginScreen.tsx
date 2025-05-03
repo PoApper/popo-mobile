@@ -301,7 +301,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard',
     color: '#3b82f6',
     textAlign: 'center',
-    width: 101,
   },
   signupContainer: {
     flexDirection: 'row',

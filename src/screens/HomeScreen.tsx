@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderRadius: 12,
     padding: 12,
+    paddingTop: 24,
   },
   serviceItem: {
     width: '23%',
