@@ -24,21 +24,22 @@ type SettlementScreenProps = {
 type SettlementScreenRouteProp = RouteProp<RootStackParamList, 'Settlement'>;
 
 interface SettlementData {
-  bankName: string;
-  accountNumber: string;
-  accountName: string;
-  totalCost: string;
+  payerBankName: string;
+  payerAccountNumber: string;
+  payerAccountHolderName: string;
+  payAmount: string;
+  updateAccount: boolean;
   roomUuid: string;
-  payerUuid: string;
 }
 
 async function requestSettlement(settlementData: SettlementData) {
   try {
     const res = await paxi_api.post(`/room/${settlementData.roomUuid}/settlement`, {
-      payerUuid: settlementData.payerUuid,
-      payAmount: settlementData.totalCost,
-      payerAccountNumber: settlementData.accountNumber,
-      updateAccountNumber: true,
+      payerAccountNumber: settlementData.payerAccountNumber,
+      payerAccountHolderName: settlementData.payerAccountHolderName,
+      payerBankName: settlementData.payerBankName,
+      payAmount: settlementData.payAmount,
+      updateAccount: settlementData.updateAccount,
     });
 
     return res.status;
@@ -49,7 +50,7 @@ async function requestSettlement(settlementData: SettlementData) {
 
 const SettlementScreen = ({navigation}: SettlementScreenProps) => {
   const route = useRoute<SettlementScreenRouteProp>();
-  const { roomUuid, payerUuid } = route.params;
+  const { roomUuid } = route.params;
 
   const [bankName, setbankName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
@@ -62,16 +63,18 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
       return;
     } else {
       requestSettlement({
-        bankName: bankName,
-        accountNumber: accountNumber,
-        accountName: accountName,
-        totalCost: totalCost,
+        payerBankName: bankName,
+        payerAccountNumber: accountNumber,
+        payerAccountHolderName: accountName,
+        payAmount: totalCost,
         roomUuid: roomUuid,
-        payerUuid: payerUuid,
+        updateAccount: true,
       })
         .then(result => {
           if (result != 201) {
             Alert.alert('실패', 'response: ' + result?.toString());
+          } else {
+            Alert.alert('성공', 'response: ' + result?.toString());
           }
         })
         .catch(error => {

@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useCallback} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -16,6 +16,10 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
 import paxi_api from '../utils/paxi_api';
 import CalendarKoreanLocales from '../utils/calendar-locales';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import EditableTextInput from '../components/AlertableTextInput';
+import DropdownFilter from '../components/DropdownFilter';
+import DropdownMenu from '../components/DropdownMenu';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';
@@ -35,17 +39,7 @@ interface NewRoomData {
 
 async function createNewRoom(roomData: NewRoomData) {
   try {
-    const res = await paxi_api.post('/room', {
-      description: roomData.description,
-      title: roomData.title,
-      departureTime: new Date(
-        roomData.departureTime + 'T00:00:00Z',
-      ).toISOString(),
-      departureLocation: roomData.departureLocation,
-      destinationLocation: roomData.destinationLocation,
-      maxParticipant: roomData.maxParticipant,
-    });
-
+    const res = await paxi_api.post('/room', roomData);
     return res.status;
   } catch (error: string | any) {
     console.error('Error:', error);
@@ -57,24 +51,36 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
   const [roomDetails, setRoomDetails] = useState('');
   const [departureName, setDepartureName] = useState('');
   const [arrivalName, setArrivalName] = useState('');
+  const [maxParticipants, setMaxParticipants] = useState(4);
+  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
-  const [selected, setSelected] = useState(
-    new Date().toISOString().split('T')[0],
-  );
-  const marked = useMemo(
-    () => ({
-      [selected]: {
-        selected: true,
-        selectedColor: '#FB5353',
-        selectedTextColor: 'white',
-      },
-    }),
-    [selected],
-  );
-
-  const onDayPress = useCallback((day: any) => {
-    setSelected(day.dateString);
-  }, []);
+  const onDatePicked = (event: any, selectedDate?: Date) => {
+    selectedDate = selectedDate || new Date();
+    setSelectedDateTime(prev => new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate(),
+      prev.getHours(),
+      prev.getMinutes(),
+      prev.getSeconds()
+    ));
+    setShowDatePicker(false);
+  };
+  
+  const onTimePicked = (event: any, selectedTime?: Date) => {
+    selectedTime = selectedTime || new Date();
+    setSelectedDateTime(prev => new Date(
+      prev.getFullYear(),
+      prev.getMonth(),
+      prev.getDate(),
+      selectedTime.getHours(),
+      selectedTime.getMinutes(),
+      selectedTime.getSeconds()
+    ));
+    setShowTimePicker(false);
+  };
 
   const checkInputValid = () => {
     if (!roomName || !departureName || !arrivalName) {
@@ -98,7 +104,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
         description: roomDetails,
         destinationLocation: arrivalName,
         maxParticipant: 4,
-        departureTime: selected,
+        departureTime: selectedDateTime.toISOString(),
         departureLocation: departureName,
       })
         .then(result => {
@@ -122,6 +128,27 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
     flex: 1,
   };
+
+  const dropdownStyle = [
+    {
+      borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
+      backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
+    },
+  ]
+
+  const locations = [
+    { name: '지곡회관' },
+    { name: '학생회관' },
+    { name: '체인지업그라운드' },
+    { name: '포항역' },
+    { name: '터미널' },
+    { name: '테스트1' },
+    { name: '테스트2' },
+    { name: '테스트3' },
+    { name: '테스트4' },
+    { name: '테스트5' },
+    { name: '테스트6' },
+  ]
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -176,17 +203,27 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                 },
               ]}>
               <View style={styles.inputWithDot}>
-                <View style={styles.dotBlack} />
-                <TextInput
-                  style={{
-                    width: '90%',
-                    color: textColor,
-                  }}
+                <View style={styles.dotWhite} />
+
+                <DropdownMenu
+                  style={[{width: 300}, dropdownStyle]}
+                  textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
+                  textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
+                  defaultText='어디서 출발하시나요?'
+                  categories={locations}
+                  onSelect={(selected) => setDepartureName(selected ?? "출발지")}
+                />
+
+                {/*
+                <EditableTextInput
                   placeholder="어디서 출발하시나요?"
                   placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+                  style={{width: '90%'}}
+                  inputStyle={{color: textColor}}
                   value={departureName}
                   onChangeText={setDepartureName}
                 />
+                */}
               </View>
               <View
                 style={[
@@ -196,6 +233,16 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
               />
               <View style={styles.inputWithDot}>
                 <View style={styles.dotRed} />
+
+                <DropdownMenu
+                  style={[{width: 300}, dropdownStyle]}
+                  textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
+                  textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
+                  defaultText='어디로 떠나시나요?'
+                  categories={locations}
+                  onSelect={(selected) => setArrivalName(selected ?? "도착지")}
+                />
+                {/*
                 <TextInput
                   style={{
                     width: '90%',
@@ -206,56 +253,72 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                   value={arrivalName}
                   onChangeText={setArrivalName}
                 />
+                */}
               </View>
             </View>
           </View>
 
-          <View style={{width: '100%', marginBottom: 0, paddingBottom: 0}}>
-            <Text
-              style={[styles.titleText, {marginBottom: 0, color: textColor}]}>
-              일정 선택
-            </Text>
-          </View>
-        </View>
-
-        <View
-          style={{
-            marginHorizontal: 16,
-            marginVertical: 8,
-            borderWidth: 1,
-            borderRadius: 6,
-            borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-            backgroundColor: isDarkMode ? '#1A1A1A' : '#fff',
-            overflow: 'hidden',
-            height: 370,
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+            marginBottom: 12,
           }}>
-          <Calendar
-            current={selected}
-            onDayPress={onDayPress}
-            markedDates={marked}
-            hideExtraDays={true}
-            firstDay={0}
-            monthFormat={'yyyy년 MM월'}
-            theme={{
-              calendarBackground: isDarkMode ? '#1A1A1A' : '#fff',
-              textSectionTitleColor: isDarkMode ? '#FFFFFF' : '#000000',
-              selectedDayBackgroundColor: '#FB5353',
-              selectedDayTextColor: '#FFFFFF',
-              todayTextColor: '#FB5353',
-              dayTextColor: isDarkMode ? '#FFFFFF' : '#000000',
-              textDisabledColor: isDarkMode ? '#555' : '#d0d0d0',
-              monthTextColor: isDarkMode ? '#FFFFFF' : '#000000',
-              textMonthFontSize: 16,
-              textDayFontSize: 16,
-              textDayHeaderFontSize: 14,
-            }}
-            style={{
-              height: 370,
-            }}
-          />
-        </View>
+            <View style={{width: '48%'}}>
+              <Text style={[styles.titleText, {color: textColor}]}>날짜</Text>
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                  borderRadius: 6,
+                  paddingVertical: 10,
+                  paddingHorizontal: 16,
+                }}
+                onPress={() => setShowDatePicker(true)}
+              >
+                <Text style={{color: textColor}}>{selectedDateTime.toLocaleDateString()}</Text>
+              </TouchableOpacity>
+              {showDatePicker && (
+                <DateTimePicker
+                  value={selectedDateTime}
+                  mode="date"
+                  display="default"
+                  onChange={onDatePicked}
+                />
+              )}
+            </View>
+            <View style={{width: '48%'}}>
+              <Text style={[styles.titleText, {color: textColor}]}>출발시각</Text>
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                  borderRadius: 6,
+                  paddingVertical: 10,
+                  paddingHorizontal: 16,
+                }}
+                onPress={() => setShowTimePicker(true)}
+              >
+                <Text style={{color: textColor}}>
+                  {selectedDateTime.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </Text>
+              </TouchableOpacity>
 
-        <View style={styles.container}>
+              {showTimePicker && (
+                <DateTimePicker
+                  value={selectedDateTime}
+                  mode="time"
+                  display="default"
+                  onChange={onTimePicked}
+                />
+              )}
+            </View>
+          </View>
+
           <Text style={[styles.titleText, {color: textColor}]}>상세내용</Text>
           <TextInput
             style={[
@@ -264,26 +327,74 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                 borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
                 backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                 color: textColor,
+                height: 200,
+                textAlignVertical: 'top',
+                marginBottom: 12
               },
             ]}
+            multiline={true}
             placeholder="세부사항을 입력해주세요."
             placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
             value={roomDetails}
             onChangeText={setRoomDetails}
           />
-        </View>
 
-        <TouchableOpacity
-          style={[
-            styles.nextButton,
-            {
-              backgroundColor: 'black',
-            },
-          ]}
-          onPress={() => checkInputValid()}
-          disabled={!roomName || !departureName || !arrivalName}>
-          <Text style={styles.nextButtonText}>방 생성하기</Text>
-        </TouchableOpacity>
+          <Text style={[styles.titleText, {color: textColor}]}>최대인원</Text>
+          <View style={{
+            alignItems: 'flex-start',
+            width: '100%'
+          }}>
+            <View style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              borderWidth: 1,
+              borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+              borderRadius: 50,
+              marginBottom: 10,
+            }}>
+              <TouchableOpacity
+                style={{
+                  paddingHorizontal: 20,
+                  paddingVertical: 10,
+                }}
+                onPress={() => setMaxParticipants(Math.max(1, maxParticipants - 1))}
+              >
+                <Text style={{
+                  color: 'white',
+                  fontSize: 20,
+                }}>-</Text>
+              </TouchableOpacity>
+              <Text style={{
+                  color: 'white',
+                  fontSize: 20,
+              }}>{maxParticipants}</Text>
+              <TouchableOpacity
+                style={{
+                  paddingHorizontal: 20,
+                  paddingVertical: 10,
+                }}
+                onPress={() => setMaxParticipants(Math.min(4, maxParticipants + 1))}
+              >
+                <Text style={{
+                  color: 'white',
+                  fontSize: 20,
+                }}>+</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          
+          <TouchableOpacity
+            style={[
+              styles.nextButton,
+              {
+                backgroundColor: 'black',
+              },
+            ]}
+            onPress={() => checkInputValid()}
+            disabled={!roomName || !departureName || !arrivalName}>
+            <Text style={styles.nextButtonText}>방 생성하기</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -331,8 +442,7 @@ const styles = StyleSheet.create({
   nextButton: {
     borderRadius: 6,
     backgroundColor: '#FB5353',
-    width: '90%',
-    marginLeft: '5%',
+    width: '100%',
     marginTop: 20,
     height: 40,
     justifyContent: 'center',
@@ -384,18 +494,20 @@ const styles = StyleSheet.create({
     width: '95%',
     backgroundColor: '#d0d0d0',
   },
-  dotBlack: {
-    width: 8,
-    height: 8,
+  dotWhite: {
+    width: 5,
+    height: 5,
     borderRadius: 4,
-    backgroundColor: 'black',
+    backgroundColor: 'white',
+    marginLeft: 5,
     marginRight: 10,
   },
   dotRed: {
-    width: 8,
-    height: 8,
+    width: 5,
+    height: 5,
     borderRadius: 4,
     backgroundColor: 'red',
+    marginLeft: 5,
     marginRight: 10,
   },
 });

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,12 +14,14 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {MainTabParamList} from '../navigation/types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import paxi_api from '../utils/paxi_api';
+import DropdownFilter from '../components/DropdownFilter';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<MainTabParamList, 'Paxi'>;
 };
 
 interface RoomContainerProps {
+  uuid: string;
   title: string;
   departureTime: string;
   remain: number;
@@ -29,6 +31,7 @@ interface RoomContainerProps {
 }
 
 const RoomContainer: React.FC<RoomContainerProps> = ({
+  uuid,
   title,
   departureTime,
   remain,
@@ -50,7 +53,19 @@ const RoomContainer: React.FC<RoomContainerProps> = ({
       {
         text: '확인',
         onPress: () => {
-          Alert.alert('참여 완료', '방에 성공적으로 참여했습니다.');
+          console.log('방 참여 요청:', uuid);
+          paxi_api.post(`/room/join/${uuid}`).then((response) => {
+            console.log('response.data:', response.data);
+            console.log('response.status', response.status)
+            if (response.status === 201) {
+              Alert.alert('성공', '방에 참여했습니다.');
+            } else {
+              Alert.alert('실패', '방 참여에 실패했습니다.');
+            }
+          }).catch((error) => {
+            console.error('Error:', error);
+            Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
+          });
         },
       },
     ]);
@@ -63,10 +78,10 @@ const RoomContainer: React.FC<RoomContainerProps> = ({
       <View style={styles.cardContent}>
         <View style={styles.mainInfo}>
           <View style={styles.titleContainer}>
-            <Text style={[styles.title, {color: textColor}]}>{title}</Text>
             <Text style={remain < total ? styles.possible : styles.impossible}>
               {remain < total ? '참여 가능' : '마감'}
             </Text>
+            <Text style={[styles.title, {color: textColor}]}>{title}</Text>
           </View>
           <View style={styles.details}>
             <Text style={[styles.detailsText, {color: textColor}]}>
@@ -136,8 +151,17 @@ interface ParsedRoomDataType {
   destination: string;
 }
 
+enum FilterType {
+  Departure,
+  Destination,
+  Date,
+  Time,
+}
+
 const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);  
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
@@ -150,7 +174,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
   useEffect(() => {
     getUserDataAndRequest();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const refreshRoomData = () => getUserDataAndRequest();
@@ -165,6 +188,10 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       console.error('Error:', error);
       Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + error.message);
     }
+  }
+
+  const filterDeparture = (selected: string | null) => {
+    console.log('selected', selected)
   }
 
   const parseRoomData = (items: RoomDataType[]) =>
@@ -185,6 +212,14 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       destination: item.destinationLocation,
     }));
 
+  const dropdownStyle = [
+    styles.button,
+    {
+      borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
+      backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
+    },
+  ]
+
   return (
     <SafeAreaView style={[backgroundStyle]}>
       <StatusBar
@@ -200,7 +235,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <Text style={[styles.headerTitle, {color: textColor}]}>Paxi</Text>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.navigate('Chat')}>
+          onPress={() => navigation.navigate('ChatList')}>
           <Text style={[styles.backButtonText, {color: textColor}]}>채팅창(임시)</Text>
         </TouchableOpacity>
         <View style={styles.placeholderButton} />
@@ -209,50 +244,47 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       <View style={[styles.conditionNavigator]}>
         <RefreshButton onPress={() => refreshRoomData()} />
 
-        <TouchableOpacity
-          style={[
-            styles.button,
-            {
-              borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
-              backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
-            },
+        <DropdownFilter
+          style={dropdownStyle}
+          textStyle={{color: 'white'}}
+          textSelectedStyle={{color: 'white'}}
+          defaultText='출발지'
+          categories={[
+            { id: 'fruit', name: '과일' },
+            { id: 'fruit2', name: '과일' },
           ]}
-          onPress={clicking}>
-          <Text style={{color: textColor}}>출발지</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.button,
-            {
-              borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
-              backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
-            },
+          onSelect={(selected) => filterDeparture(selected)}
+        />
+
+        <DropdownFilter
+          style={dropdownStyle}
+          textStyle={{color: 'white'}}
+          defaultText='도착지'
+          categories={[
+            { id: 'fruit', name: '과일' },
           ]}
-          onPress={clicking}>
-          <Text style={{color: textColor}}>도착지</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.button,
-            {
-              borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
-              backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
-            },
+          onSelect={(selected) => console.log('선택된 카테고리:', selected)}
+        />
+
+        <DropdownFilter
+          style={dropdownStyle}
+          textStyle={{color: 'white'}}
+          defaultText='날짜'
+          categories={[
+            { id: 'fruit', name: '과일' },
           ]}
-          onPress={clicking}>
-          <Text style={{color: textColor}}>날짜</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.button,
-            {
-              borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
-              backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
-            },
+          onSelect={(selected) => console.log('선택된 카테고리:', selected)}
+        />
+
+        <DropdownFilter
+          style={dropdownStyle}
+          textStyle={{color: 'white'}}
+          defaultText='시간'
+          categories={[
+            { id: 'fruit', name: '과일' },
           ]}
-          onPress={clicking}>
-          <Text style={{color: textColor}}>시간</Text>
-        </TouchableOpacity>
+          onSelect={(selected) => console.log('선택된 카테고리:', selected)}
+        />
       </View>
 
       <TouchableOpacity
@@ -287,6 +319,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
           {roomData.length > 0 ? (
             roomData.map((room, index) => (
               <RoomContainer
+                uuid={room.uuid}
                 key={index}
                 title={room.title}
                 departureTime={room.departureTime}
@@ -350,6 +383,32 @@ const styles = StyleSheet.create({
   },
   placeholderButton: {
     width: 40,
+  },
+  filterButton: {
+    padding: 10,
+    backgroundColor: '#eee',
+    borderRadius: 5,
+    width: 150,
+  },
+  filterModal: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#333',
+    borderRadius: 10,
+  },
+  filterOverlay: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   conditionNavigator: {
     paddingLeft: 15,

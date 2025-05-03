@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,63 +8,60 @@ import {
   Modal,
   TextInput,
   StyleSheet,
-  SectionList,
   FlatList,
   ListRenderItemInfo,
   Alert,
-  ToastAndroid,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
-import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import { io, Socket } from 'socket.io-client';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import axios from 'axios';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import paxi_api from '../utils/paxi_api';
+import EdibleText from '../components/EdibleText';
 
-interface ChatMessage {
-  id: string;
-  user: string;
-  text: string;
+interface MessageData {
+  uuid: string;
+  senderUuid: string;
+  senderName: string;
+  message: string;
+  messageType: string;
+  createdAt: any;
+  updatedAt: any;
   avatar: any;
   isMe: boolean;
 }
 
-interface ChatSection {
-  title: string;
-  data: ChatMessage[];
+interface UserData {
+  userUuid: string;
+  nickname: string;
+  isPaid: boolean;
+  isOwner: boolean;
+  status: string;
+}
+
+interface RoomData {
+  uuid: string,
+  title: string,
+  ownerUuid: string,
+  departureLocation: string,
+  destinationLocation: string,
+  maxParticipant: number,
+  currentParticipant: number,
+  departureTime: string,
+  status: string,
+  description: string,
+  payerUuid: string,
+  payAmount: number,
+  roomUser: UserData[],
 }
 
 type ChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Chat'>;
 };
 
-const members = [
-  { id: '1', name: '건방진 포닉스', paid: true, crown: true },
-  { id: '2', name: '소심한 포닉스', paid: true, crown: false },
-  { id: '3', name: '간절한 포닉스', paid: false, crown: false },
-  { id: '4', name: '시니컬한 포닉스', paid: false, crown: false },
-];
-
-const messagesData: ChatSection[] = [
-  {
-    title: "2025-04-12",
-    data: [
-      {
-        id: '1',
-        user: '건방진 포닉스',
-        text: '돈 빨리 보내세요',
-        avatar: require('../../assets/popo.png'),
-        isMe: false,
-      },
-      {
-        id: '2',
-        user: 'Me',
-        text: 'ㄷㄷㄷ',
-        avatar: require('../../assets/popo.png'),
-        isMe: true,
-      },
-    ],
-  },
-];
+type ChatScreenRouteProp = RouteProp<RootStackParamList, 'Chat'>;
 
 const renderSettlementItem = () => {
   return (
@@ -72,10 +69,73 @@ const renderSettlementItem = () => {
   );
 }
 
-const renderItem = ({ item }: ListRenderItemInfo<ChatMessage>) => {
-  const alignment = item.isMe ? 'flex-end' : 'flex-start';
+const renderMemberItem = ({ item }: ListRenderItemInfo<UserData>) => {
+  const banUser = () => {
+    Alert.alert('추방', `유저 ${item.nickname}를 추방하시겠습니까?`, [
+      {
+        text: '아니오',
+        style: 'cancel',
+      },
+      {
+        text: '추방',
+        onPress: () => {
+          Alert.alert('처리 완료', '요청이 처리되었습니다.');
+        },
+      },
+    ]);
+  }
+
+  const reportUser = () => {
+    Alert.alert('신고', `유저 ${item.nickname}를 신고하시겠습니까?`, [
+      {
+        text: '아니오',
+        style: 'cancel',
+      },
+      {
+        text: '신고',
+        onPress: () => {
+          Alert.alert('처리 완료', '요청이 처리되었습니다.');
+        },
+      },
+    ]);
+  }
+
   return (
-    <View style={{ alignSelf: alignment }}>
+      <View style={styles.userRow}>
+        <View style={styles.rowCenter}>
+          {/* 프로필 사진 대체 원 */}
+          <View style={styles.avatarCircle} />
+          <View>
+            <View style={styles.nameRow}>
+              {item.isOwner}
+              <Text style={styles.nameText}>{item.nickname}</Text>
+            </View>
+            {item.isPaid && <Text style={styles.subText}>송금 완료</Text>}
+          </View>
+        </View>
+        <View style={styles.rowCenter}>
+          <TouchableOpacity
+            style={styles.grayButton}
+            onPress={banUser}
+          >
+            <Text>추방</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.grayButton}
+            onPress={reportUser}
+          >
+            <Text>신고</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+  );
+};
+
+const renderItem = ({ item }: ListRenderItemInfo<MessageData>) => {
+  const alignment = item.isMe ? 'flex-end' : 'flex-start';
+  const createdTime = item.createdAt.slice(11,16)
+  return (
+    <View style={{ alignSelf: alignment}}>
       {!item.isMe &&
         <View style={[styles.messageContainer]}>
           <Image source={item.avatar} style={styles.avatar} />
@@ -85,7 +145,7 @@ const renderItem = ({ item }: ListRenderItemInfo<ChatMessage>) => {
               letterSpacing: -0.4,
               color: "#000",
               marginBottom: 4,
-            }}>건방진 포닉스</Text>
+            }}>{item.senderName}</Text>
             
             <View style={{
               flexDirection: 'row',
@@ -94,27 +154,19 @@ const renderItem = ({ item }: ListRenderItemInfo<ChatMessage>) => {
             }}>
               <View style={styles.messageBubble}>
                 <Text style={{
-                  fontSize: 15,
+                  fontSize: 14,
                   letterSpacing: -0.4,
                   color: "#000",
                   marginBottom: 4,
-                }}>{item.text}</Text>
+                }}>{item.message}</Text>
               </View>
-
-              <View>
-                <Text style={{
-                  color: '#4f4f4f',
-                  fontSize: 12,
-                  letterSpacing: -0.3,
-                  fontWeight: "bold",
-                }}>2</Text>
-                <Text style={{
-                  color: '#9b9b9b',
-                  fontSize: 12,
-                  letterSpacing: -0.3,
-                  fontWeight: "bold",
-                }}>오후 10:58</Text>
-              </View>
+              
+              <Text style={{
+                color: '#9b9b9b',
+                fontSize: 12,
+                letterSpacing: -0.3,
+                fontWeight: "bold",
+              }}>{createdTime}</Text>
             </View>
           </View>
         </View>
@@ -125,28 +177,20 @@ const renderItem = ({ item }: ListRenderItemInfo<ChatMessage>) => {
           alignItems: 'flex-end',
           gap: 5,
         }]}>
-          <View>
-            <Text style={{
-              color: '#4f4f4f',
-              fontSize: 12,
-              letterSpacing: -0.3,
-              fontWeight: "bold",
-            }}>2</Text>
-            <Text style={{
-              color: '#9b9b9b',
-              fontSize: 12,
-              letterSpacing: -0.3,
-              fontWeight: "bold",
-            }}>오후 10:58</Text>
-          </View>
+          <Text style={{
+            color: '#9b9b9b',
+            fontSize: 12,
+            letterSpacing: -0.3,
+            fontWeight: "bold",
+          }}>{createdTime}</Text>
 
           <View style={styles.messageBubble}>
             <Text style={{
-              fontSize: 15,
+              fontSize: 14,
               letterSpacing: -0.4,
               color: "#000",
               marginBottom: 4,
-            }}>{item.text}</Text>
+            }}>{item.message}</Text>
           </View>
         </View>
       }
@@ -154,115 +198,262 @@ const renderItem = ({ item }: ListRenderItemInfo<ChatMessage>) => {
   );
 };
 
-async function connectWebSocket(): Promise<WebSocket> {
+async function connectSocket(addChatData: (arg0: MessageData) => void): Promise<Socket> {
   const token = (await EncryptedStorage.getItem('auth_token')) ?? '';
+  const socket = io(`https://api.paxi-dev.popo.poapper.club?Authentication=${token}`, {
+      transports: ['websocket'],
+      forceNew: true,
+      reconnection: true,
+    });
 
-  const response = await axios.get('https://api.paxi-dev.popo.poapper.club/auth/me', {
-    headers: {
-      Authorization: `${token}`,
-    },
-    withCredentials: true, // 이거 중요
-  });
+  console.log('웹소켓 연결 중...');
 
-  Alert.alert('웹소켓 연결', `${response.status}`);
-
-  const socket = new WebSocket('ws://api.paxi-dev.popo.poapper.club:4001', '', {
-    headers: {
-      Authentication: token,
-    },
-  });
-
-  socket.addEventListener('open', () => {
+  socket.on('connect', () => {
     console.log('웹소켓 연결 완료');
   });
 
-  socket.addEventListener('message', (event) => {
-    const data = JSON.parse(event.data);
-    if (data.event === 'newMessage') {
-      console.log('새 메시지:', data.payload);
-    }
+  socket.on('newMessage', (data) => {
+    console.log('메시지 수신:', data);
+    addChatData(data);
   });
 
-  socket.addEventListener('error', (error) => {
-    console.error('웹소켓 에러 발생:', error);
+  socket.on('connect_error', (error) => {
+    console.error('연결 에러 발생:', error);
+  });
+  
+  socket.on('error', (error) => {
+    console.error('에러 발생:', error);
   });
 
-  socket.addEventListener('close', () => {
+  socket.on('disconnect', () => {
     console.log('웹소켓 연결 종료');
   });
 
   return socket;
-}  
+};
 
-function joinRoom(socket: WebSocket, roomUuid: string) {
-  const payload = {
-    event: 'joinRoom',
-    payload: {
-      roomUuid: roomUuid,
-    },
-  };
-
-  socket.send(JSON.stringify(payload));
+function joinRoom(socket: Socket | undefined, roomUuid: string) {
+  if (!socket) {
+    console.error('소켓이 아직 연결되지 않았습니다.');
+    return;
+  }
+  
+  socket.emit('joinRoom', {
+    roomUuid: roomUuid,
+  });
 }
 
-function leaveRoom(socket: WebSocket, roomUuid: string) {
-  const payload = {
-    event: 'leaveRoom',
-    payload: roomUuid,
-  };
-
-  socket.send(JSON.stringify(payload));
-}
-
-function sendMessage(socket: WebSocket | undefined, roomUuid: string, message: string) {
-  if (!socket || socket.readyState !== WebSocket.OPEN) {
+function leaveRoom(socket: Socket | undefined, roomUuid: string) {
+  if (!socket) {
     console.error('소켓이 아직 연결되지 않았습니다.');
     return;
   }
 
-  const payload = {
-    event: 'sendMessage',
-    payload: {
-      roomUuid,
-      message,
-    },
+  socket.emit('leaveRoom', {
+    roomUuid: roomUuid,
+  });
+}
+
+const SettlementRequest = () => {
+  const settlementSend = () => {
+    Alert.alert('송금 확인', '송금을 완료하셨습니까?', [
+      {
+        text: '아니오',
+        style: 'cancel',
+      },
+      {
+        text: '네',
+        onPress: () => {
+          Alert.alert('전송 완료', '송금 완료 알림을 전송했습니다.');
+        },
+      },
+    ]);
   };
-  
-  socket.send(JSON.stringify(payload));
+
+  return (
+    <View style={styles.settlementRequest}>
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+      }}>
+        <Text style={{
+          fontSize: 22,
+          letterSpacing: -0.7,
+          fontWeight: "600",
+          color: "black",            
+        }}>정산 요청 안내</Text>
+        <Text style={{
+          fontSize: 22,
+          letterSpacing: -0.7,
+          fontWeight: "600",
+          color: "black",            
+        }}>1350원</Text>
+      </View>
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+      }}>
+        <View style={{marginTop: 10}}>
+          <Text style={{
+            fontSize: 13,
+            letterSpacing: -0.4,
+            color: "#4f4f4f",
+          }}>김포닉</Text>
+          <Text style={{
+            fontSize: 13,
+            letterSpacing: -0.4,
+            color: "#4f4f4f",
+          }}>농심 000000000000</Text>
+        </View>
+        <Text style={{
+          fontSize: 16,
+          letterSpacing: -0.4,
+          fontWeight: "bold",
+          color: "#e45b63",
+        }}>2/4</Text>
+      </View>
+      <Text style={{
+        fontSize: 12,
+        letterSpacing: -0.4,
+        fontWeight: "600",
+        marginTop: 10,
+        color: "#9b9b9b",
+      }}>꼭! 송금 후 완료 버튼을 눌러 주세요!</Text>
+     
+      <TouchableOpacity
+        style={{
+          backgroundColor: '#000',
+          width: 250,
+          alignItems: 'center',
+          paddingVertical: 8,
+          borderRadius: 6,
+          marginTop: 5,
+          justifyContent: 'center',
+        }}
+        onPress={() => settlementSend()}
+      >
+        <Text style={{
+          fontSize: 14,
+          letterSpacing: -0.4,
+          color: "#f6f7f9",
+          alignItems: "center",
+        }}>송금 완료 알림을 보냅니다</Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 const ChatScreen = ({navigation}: ChatScreenProps) => {
+  const route = useRoute<ChatScreenRouteProp>();
+  const { roomUuid } = route.params;
+  const [users, setUsers] = useState<UserData[]>();
   const [message, setMessage] = useState<string>('');
-  const [inputHeight, setInputHeight] = useState<Int32>(40);
+  const [inputHeight, setInputHeight] = useState<number>(40);
   const [modalVisible, setModalVisible] = useState(false);
-  const [socket, setSocket] = useState<WebSocket>();
+  const [socket, setSocket] = useState<Socket>();
+  const [roomData, setRoomData] = useState<RoomData>();
+  const [chatData, setChatData] = useState<MessageData[]>([]);
+  const [myUuid, setMyUuid] = useState<string>('');
 
-  /* 웹 소켓을 설정하는 부분은 주석 처리했습니다.
+  const flatListRef = useRef<FlatList>(null);
+  const [isLoadingOld, setIsLoadingOld] = useState(false);
+  const [isAtBottom, setIsAtBottom] = useState(false);
+
+  function sendMessage(msg: string) {
+    if (!socket) {
+      console.error('소켓이 아직 연결되지 않았습니다.');
+      return;
+    }
+    
+    socket.emit('sendMessage', {
+      roomUuid: roomUuid,
+      message: msg,
+    });
+  }
+
+  const fetchPrevChatData = async () => {
+    if (isLoadingOld) return;
+    setIsLoadingOld(true);
+    try {
+      const response = await paxi_api.get(`/chat/${roomUuid}?before=${chatData[chatData.length - 1].uuid}`);
+      const newChatData: MessageData[] = response.data.map((item: MessageData) => ({
+        ...item,
+        avatar: require('../../assets/popo.png'), // 임시 이미지
+        senderName: users?.find(user => user.userUuid === item.senderUuid)?.nickname ?? '알 수 없음',
+        isMe: item.senderUuid === myUuid,
+      }));
+      setChatData(prev => [...prev, ...newChatData]);
+    } catch (error) {
+      console.error('Error fetching previous chat data:', error);
+    } finally {
+      setIsLoadingOld(false);
+    }
+  }
+
   useEffect(() => {
-    async function initSocket() {
-      const ws = await connectWebSocket();
+    async function initSocket(myUuid: string) {
+      const addChatData = (data: MessageData) => {
+        const newChatData = {
+          ...data,
+          avatar: require('../../assets/popo.png'), // 임시 이미지
+          senderName: users?.find(user => user.userUuid === data.senderUuid)?.nickname ?? '알 수 없음',
+          isMe: data.senderUuid === myUuid,
+        };
+        setChatData(prev => [newChatData, ...prev]);
+        if (isAtBottom) flatListRef.current?.scrollToIndex({ index: 0, animated: false });
+      }
+
+      const ws = await connectSocket(addChatData);
       setSocket(ws);
     }
 
-    initSocket();
+    const fetchChatRoomData = async () => {
+      try {
+        const roomResponse = await paxi_api.post(`/room/join/${roomUuid}`);
+        const myResponse = await paxi_api.get(`/auth/me`);
+        roomResponse.data.departureTime = roomResponse.data.departureTime.slice(0,10) + " " + roomResponse.data.departureTime.slice(11,16)
+        
+        setRoomData(roomResponse.data);
+        initSocket(myResponse.data.uuid);
+        setMyUuid(myResponse.data.uuid);
+
+        const chatResponse = await paxi_api.get(`/chat/${roomUuid}`);
+        const chatData: MessageData[] = chatResponse.data.map((item: MessageData) => ({
+          ...item,
+          avatar: require('../../assets/popo.png'), // 임시 이미지
+          senderName: roomResponse.data.room_users[item.senderUuid],
+          isMe: item.senderUuid === myResponse.data.uuid,
+        }));
+    
+        setUsers(roomResponse.data.room_users);
+        setChatData(chatData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        Alert.alert('Error', 'Failed to fetch data. Please try again later.');
+      }
+    };
+
+    fetchChatRoomData();
 
     // 컴포넌트 언마운트될 때 소켓 닫기
     return () => {
       socket?.close();
     };
   }, []);
-  */
   
   const msgSend = () => {
     if (!message.trim()) return;
-    sendMessage(socket, 'roomUuid', message);
+    sendMessage(message);
     setMessage('');
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-      <TouchableOpacity
+        <TouchableOpacity
           style={{ marginLeft: 10 }}
           onPress={() => navigation.goBack()}
         >
@@ -276,7 +467,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
           position: 'absolute',
           width: '100%',
           textAlign: 'center',
-        }}>방 제목</Text>
+        }}>{roomData?.title}</Text>
 
         <TouchableOpacity
           style={{ marginRight: 10 }}
@@ -286,8 +477,11 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
         </TouchableOpacity>
       </View>
 
+      {roomData?.payerUuid === 'va' && (
+        <SettlementRequest />
+      )}
+
       <Modal
-        animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
@@ -307,14 +501,14 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
               <View style={styles.routeInfo}>
                 <View style={styles.locationBlock}>
                   <Text style={styles.label}>출발지</Text>
-                  <Text style={styles.location}>포항역</Text>
-                  <Text style={styles.subText}>3월 14일 오전 7시 출발</Text>
+                  <Text style={styles.location}>{roomData?.departureLocation}</Text>
+                  <Text style={styles.subText}>{roomData?.departureTime}</Text>
                 </View>
                 <Text style={styles.arrow}>〉</Text>
                 <View style={styles.locationBlock}>
                   <Text style={styles.label}>도착지</Text>
-                  <Text style={styles.location}>지곡회관</Text>
-                  <Text style={styles.subText}>3월 17일 오후 6시 도착</Text>
+                  <Text style={styles.location}>{roomData?.destinationLocation}</Text>
+                  <Text style={styles.subText}></Text>
                 </View>
               </View>
               <View style={{
@@ -323,16 +517,19 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
                 borderStyle: 'dotted',
                 marginTop: 12
               }}/>
-              <Text style={styles.extraInfo}>짐이 많아 트렁크 사용에 제한이 있을 수 있습니다ㅜㅜ</Text>
+              <Text style={styles.extraInfo}>{roomData?.description}</Text>
             </View>
 
             <View style={styles.rowBetween}>
               <View style={styles.rowCenter}>
-                <Text style={styles.countText}>👤 4</Text>
+                <Text style={styles.countText}>👤 {roomData?.currentParticipant}</Text>
               </View>
               <TouchableOpacity
                 style={styles.primaryButton}
-                onPress={() => navigation.navigate('Settlement', { roomUuid: 'va', payerUuid: 'va' })}
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate('Settlement', { roomUuid: roomUuid })
+                }}
               >
                 <Text style={styles.buttonText}>정산 요청하기</Text>
               </TouchableOpacity>
@@ -340,41 +537,27 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
 
             <FlatList
               style={{ width: '100%', paddingHorizontal: 0 }}
-              data={members}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <View style={styles.userRow}>
-                  <View style={styles.rowCenter}>
-                    {/* 프로필 사진 대체 원 */}
-                    <View style={styles.avatarCircle} />
-                    <View>
-                      <View style={styles.nameRow}>
-                        {item.crown}
-                        <Text style={styles.nameText}>{item.name}</Text>
-                      </View>
-                      {item.paid && <Text style={styles.subText}>송금 완료</Text>}
-                    </View>
-                  </View>
-                  <View style={styles.rowCenter}>
-                    <TouchableOpacity style={styles.grayButton}>
-                      <Text>추방</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.grayButton}>
-                      <Text>신고</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )}
+              data={users}
+              keyExtractor={(item) => item.userUuid}
+              renderItem={renderMemberItem}
             />
           </Pressable>
         </Pressable>
       </Modal>
 
-      <SectionList
+      <FlatList
+        ref={flatListRef}
         style={styles.chatList}
-        sections={messagesData}
-        keyExtractor={(item) => item.id}
+        data={chatData}
+        keyExtractor={(item) => item.uuid}
         renderItem={renderItem}
+        inverted={true}
+        onScroll ={(event) => {
+          setIsAtBottom(event.nativeEvent.contentOffset.y > 300);
+        }}
+        onEndReached={() => {
+          fetchPrevChatData();
+        }}
       />
 
       <View style={styles.inputContainer}>
@@ -387,10 +570,22 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
             setInputHeight(Math.max(40, Math.min(120, e.nativeEvent.contentSize.height)))
           }
         />
-        <TouchableOpacity style={styles.sendButton} onPress={msgSend}>
-          <Text style={styles.sendButtonText}>📤</Text>
+        <TouchableOpacity
+          style={styles.sendButton}
+          onPress={msgSend}
+        >
+          <Icon name="send" size={20} color="white" />
         </TouchableOpacity>
       </View>
+
+        {isAtBottom && (
+          <TouchableOpacity
+            style={styles.goDownButton}
+            onPress={() => flatListRef.current?.scrollToIndex({ index: 0, animated: false })}
+          >
+            <Icon name="arrow-drop-down" size={40} color="white" />
+          </TouchableOpacity>
+        )}
     </View>
   );
 };
@@ -427,10 +622,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#007AFF',
   },
+  settlementRequest: {
+    backgroundColor: '#f2f3f5',
+    padding: 25,
+    margin: 15,
+    paddingBottom: 15,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
   chatList: {
     flex: 1,
     paddingHorizontal: 10,
-    paddingVertical: 5,
   },
   messageContainer: {
     flexDirection: 'row',
@@ -442,7 +644,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 7,
     paddingHorizontal: 12,
-    maxWidth: '70%',
+    maxWidth: 250,
   },
   avatar: {
     width: 40,
@@ -473,6 +675,16 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 20,
     paddingHorizontal: 15,
+  },
+  goDownButton: {
+    position: 'absolute',
+    bottom: 70,
+    right: 20,
+    backgroundColor: 'black',
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
   },
   sendButton: {
     marginLeft: 5,
@@ -546,7 +758,7 @@ const styles = StyleSheet.create({
   countText: {
     fontSize: 18,
     letterSpacing: -0.6,
-    fontFamily: "Pretendard",
+    
     color: "black",
     textAlign: "left",
     fontWeight: 'bold',
