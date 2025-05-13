@@ -54,7 +54,6 @@ export const getFCMToken = async () => {
     // 토큰 가져오기 시도
     console.log('Attempting to get FCM token...');
     const fcmToken = await messaging().getToken();
-    // console.log('FCM Token successfully retrieved:', fcmToken);
     return fcmToken;
   } catch (error: any) {
     console.error('Failed to get FCM token. Full error:', error);

@@ -9,6 +9,9 @@ import {
   useColorScheme,
   StatusBar,
   Alert,
+  Platform,
+  Clipboard,
+  ToastAndroid,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -17,6 +20,8 @@ import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import api from '../utils/api';
+import {getAuthToken} from '../utils/auth-token';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type UserDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserDetail'>;
@@ -27,6 +32,23 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(false);
   const [userDataState, setUserData] = useState<any>(null);
+  const [isDevOrTestEnv, setIsDevOrTestEnv] = useState(false);
+  const [authTokenData, setAuthTokenData] = useState<any>(null);
+
+  // authToken 정보 가져오기
+  useEffect(() => {
+    const fetchAuthToken = async () => {
+      try {
+        const token = await getAuthToken();
+        console.log('정상적으로 가져온 authTokenData', token);
+        setAuthTokenData(token);
+      } catch (error) {
+        console.error('Auth Token 가져오기 오류:', error);
+      }
+    };
+
+    fetchAuthToken();
+  }, []);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -126,6 +148,50 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
 
     loadStoredUserInfo();
   }, []);
+
+  // 개발 환경 또는 TestFlight 환경 확인
+  useEffect(() => {
+    // __DEV__는 React Native에서 개발 환경을 나타내는 전역 변수
+    if (__DEV__) {
+      setIsDevOrTestEnv(true);
+      return;
+    }
+
+    // TestFlight 환경 확인 (iOS)
+    // iOS에서 TestFlight는 번들 ID에 특정 접미사가 있거나 특수 entitlement가 있음
+    if (Platform.OS === 'ios') {
+      // TestFlight 감지를 위한 간단한 방법 (실제로는 더 정확한 방법 사용이 필요할 수 있음)
+      try {
+        // iOS에서 TestFlight 환경을 감지하는 방법
+        // 실제 앱에서는 RNDeviceInfo 같은 라이브러리를 활용하는 것이 좋음
+        const isTestFlight = false; // 여기에 실제 TestFlight 감지 로직 필요
+        setIsDevOrTestEnv(isTestFlight);
+      } catch (error) {
+        console.error('TestFlight 환경 감지 오류:', error);
+      }
+    }
+
+    // Android 베타 환경 감지 (필요한 경우)
+    if (Platform.OS === 'android') {
+      // Beta/Internal 테스트 환경 감지 로직
+      try {
+        const isBetaEnv = false; // 여기에 실제 베타 환경 감지 로직 필요
+        setIsDevOrTestEnv(isBetaEnv);
+      } catch (error) {
+        console.error('Android 베타 환경 감지 오류:', error);
+      }
+    }
+  }, []);
+
+  // 텍스트 복사 기능
+  const copyToClipboard = (text: string) => {
+    Clipboard.setString(text);
+    if (Platform.OS === 'android') {
+      ToastAndroid.show('복사되었습니다', ToastAndroid.SHORT);
+    } else {
+      Alert.alert('복사 완료', '클립보드에 복사되었습니다.');
+    }
+  };
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -261,6 +327,160 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   : '정보 없음'}
               </Text>
             </View>
+
+            {/* 개발/테스트 환경에서만 표시되는 정보들 */}
+            {isDevOrTestEnv && (
+              <>
+                {/* UUID 정보 */}
+                <View
+                  style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+                  <View style={styles.sectionTitleRow}>
+                    <View style={styles.titleContainer}>
+                      <Text
+                        style={[
+                          styles.detailLabel,
+                          {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                        ]}>
+                        UUID
+                      </Text>
+                    </View>
+                    <View style={styles.iconContainer}>
+                      {userDataState?.uuid && (
+                        <TouchableOpacity
+                          style={styles.copyIconButton}
+                          onPress={() => copyToClipboard(userDataState.uuid)}>
+                          <Icon
+                            name="content-copy"
+                            size={16}
+                            color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </View>
+                  <View style={styles.tokenContainer}>
+                    <Text
+                      style={[styles.tokenValue, {color: textColor}]}
+                      selectable={true}>
+                      {userDataState?.uuid || '정보 없음'}
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Auth Token (Cookie) 정보 */}
+                <View
+                  style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+                  <View style={styles.sectionTitleRow}>
+                    <View style={styles.titleContainer}>
+                      <Text
+                        style={[
+                          styles.detailLabel,
+                          {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                        ]}>
+                        Auth Token (Cookie)
+                      </Text>
+                    </View>
+                    <View style={styles.iconContainer}>
+                      {authTokenData?.cookie && (
+                        <TouchableOpacity
+                          style={styles.copyIconButton}
+                          onPress={() => copyToClipboard(authTokenData.cookie)}>
+                          <Icon
+                            name="content-copy"
+                            size={16}
+                            color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </View>
+                  <View style={styles.tokenContainer}>
+                    <Text
+                      style={[styles.tokenValue, {color: textColor}]}
+                      selectable={true}>
+                      {authTokenData?.cookie || '정보 없음'}
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Auth Token (Encrypted Storage) 정보 */}
+                <View
+                  style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+                  <View style={styles.sectionTitleRow}>
+                    <View style={styles.titleContainer}>
+                      <Text
+                        style={[
+                          styles.detailLabel,
+                          {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                        ]}>
+                        Auth Token (Encrypted Storage)
+                      </Text>
+                    </View>
+                    <View style={styles.iconContainer}>
+                      {authTokenData?.encrypted_storage && (
+                        <TouchableOpacity
+                          style={styles.copyIconButton}
+                          onPress={() =>
+                            copyToClipboard(authTokenData.encrypted_storage)
+                          }>
+                          <Icon
+                            name="content-copy"
+                            size={16}
+                            color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </View>
+                  <View style={styles.tokenContainer}>
+                    <Text
+                      style={[styles.tokenValue, {color: textColor}]}
+                      selectable={true}>
+                      {authTokenData?.encrypted_storage || '정보 없음'}
+                    </Text>
+                  </View>
+                </View>
+
+                {/* FCM Token 정보 */}
+                <View
+                  style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+                  <View style={styles.sectionTitleRow}>
+                    <View style={styles.titleContainer}>
+                      <Text
+                        style={[
+                          styles.detailLabel,
+                          {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                        ]}>
+                        FCM Token
+                      </Text>
+                    </View>
+                    <View style={styles.iconContainer}>
+                      {authTokenData?.fcm_token && (
+                        <TouchableOpacity
+                          style={styles.copyIconButton}
+                          onPress={() =>
+                            copyToClipboard(authTokenData.fcm_token)
+                          }>
+                          <Icon
+                            name="content-copy"
+                            size={16}
+                            color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </View>
+
+                  <View style={styles.tokenContainer}>
+                    <Text
+                      style={[styles.tokenValue, {color: textColor}]}
+                      selectable={true}>
+                      {authTokenData?.fcm_token || '정보 없음'}
+                    </Text>
+                  </View>
+                </View>
+              </>
+            )}
           </View>
         </View>
 
@@ -366,8 +586,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   detailItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
     paddingVertical: 12,
     borderBottomWidth: 1,
   },
@@ -376,6 +595,43 @@ const styles = StyleSheet.create({
   },
   detailValue: {
     fontSize: 16,
+    fontWeight: '500',
+    flex: 1,
+    textAlign: 'right',
+    marginTop: 4,
+  },
+  uuidText: {
+    maxWidth: '70%',
+  },
+  tokenContainer: {
+    width: '100%',
+  },
+  tokenValue: {
+    fontSize: 16,
+    fontWeight: '500',
+    width: '100%',
+    paddingVertical: 2,
+  },
+  tokenWithCopyContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  tokenWithCopy: {
+    flex: 1,
+    paddingRight: 8,
+  },
+  copyButton: {
+    backgroundColor: '#4F46E5',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 4,
+    marginLeft: 8,
+  },
+  copyButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
     fontWeight: '500',
   },
   reservationButton: {
@@ -400,6 +656,34 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    justifyContent: 'space-between',
+  },
+  titleContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  iconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  copyIconButton: {
+    padding: 4,
+    marginLeft: 8,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 24,
+    width: 24,
+  },
+  copyIconText: {
+    fontSize: 16,
+    lineHeight: 16,
+    textAlignVertical: 'center',
   },
 });
 
