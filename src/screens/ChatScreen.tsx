@@ -320,11 +320,11 @@ const SettlementRequest = () => {
 const ChatScreen = ({navigation}: ChatScreenProps) => {
   const route = useRoute<ChatScreenRouteProp>();
   const { roomUuid } = route.params;
-  const [users, setUsers] = useState<UserData[]>();
+  const [users, setUsers] = useState<UserData[]>([]);
   const [message, setMessage] = useState<string>('');
   const [inputHeight, setInputHeight] = useState<number>(40);
   const [modalVisible, setModalVisible] = useState(false);
-  const [socket, setSocket] = useState<Socket>();
+  const socketRef = useRef<Socket | null>(null);
   const [roomData, setRoomData] = useState<RoomData>();
   const [chatData, setChatData] = useState<MessageData[]>([]);
   const [myUuid, setMyUuid] = useState<string>('');
@@ -333,15 +333,14 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
   const [isLoadingOld, setIsLoadingOld] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(false);
 
-  function sendMessage(msg: string) {
-    if (!socket) {
+  async function sendMessage(msg: string) {
+    if (!socketRef.current) {
       console.error('소켓이 아직 연결되지 않았습니다.');
       return;
     }
     
-    socket.emit('sendMessage', {
-      roomUuid: roomUuid,
-      message: msg,
+    await paxi_api.post(`/chat/${roomUuid}`, {
+      message: msg
     });
   }
 
@@ -364,61 +363,65 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
     }
   }
 
-  useEffect(() => {
-    async function initSocket(myUuid: string) {
-      const addChatData = (data: MessageData) => {
-        const newChatData = {
-          ...data,
-          avatar: require('../../assets/popo.png'), // 임시 이미지
-          senderName: users?.find(user => user.userUuid === data.senderUuid)?.nickname ?? '알 수 없음',
-          isMe: data.senderUuid === myUuid,
-        };
-        setChatData(prev => [newChatData, ...prev]);
-        if (isAtBottom) flatListRef.current?.scrollToIndex({ index: 0, animated: false });
-      }
-
-      const ws = await connectSocket(addChatData);
-      setSocket(ws);
+  async function initSocket(myUuid: string) {
+    const addChatData = (data: MessageData) => {
+      const newChatData = {
+        ...data,
+        avatar: require('../../assets/popo.png'), // 임시 이미지
+        senderName: users?.find(user => user.userUuid === data.senderUuid)?.nickname ?? '알 수 없음',
+        isMe: data.senderUuid === myUuid,
+      };
+      setChatData(prev => [newChatData, ...prev]);
+      if (isAtBottom) flatListRef.current?.scrollToIndex({ index: 0, animated: false });
     }
 
-    const fetchChatRoomData = async () => {
-      try {
-        const roomResponse = await paxi_api.post(`/room/join2/${roomUuid}`);
-        const myResponse = await paxi_api.get(`/auth/me`);
-        roomResponse.data.departureTime = roomResponse.data.departureTime.slice(0,10) + " " + roomResponse.data.departureTime.slice(11,16);
-        
-        setRoomData(roomResponse.data);
-        initSocket(myResponse.data.uuid);
-        setMyUuid(myResponse.data.uuid);
+    const ws = await connectSocket(addChatData);
+    socketRef.current = ws;
+  }
 
-        const chatResponse = await paxi_api.get(`/chat/${roomUuid}`);
-        const chatData: MessageData[] = chatResponse.data.map((item: MessageData) => ({
-          ...item,
-          avatar: require('../../assets/popo.png'), // 임시 이미지
-          senderName: roomResponse.data.room_users[item.senderUuid],
-          isMe: item.senderUuid === myResponse.data.uuid,
-        }));
+  const fetchChatRoomData = async () => {
+    try {
+      const roomResponse = await paxi_api.post(`/room/join2/${roomUuid}`);
+      const myResponse = await paxi_api.get(`/auth/me`);
+      roomResponse.data.departureTime = roomResponse.data.departureTime.slice(0,10) + " " + roomResponse.data.departureTime.slice(11,16);
+      
+      setRoomData(roomResponse.data);
+      initSocket(myResponse.data.uuid);
+      setMyUuid(myResponse.data.uuid);
+
+      const chatResponse = await paxi_api.get(`/chat/${roomUuid}`);
+      const chatData: MessageData[] = chatResponse.data.map((item: MessageData) => ({
+        ...item,
+        avatar: require('../../assets/popo.png'), // 임시 이미지
+        senderName: roomResponse.data.room_users[item.senderUuid],
+        isMe: item.senderUuid === myResponse.data.uuid,
+      }));
     
-        setUsers(roomResponse.data.room_users);
-        setChatData(chatData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        Alert.alert('Error', 'Failed to fetch data. Please try again later.');
-      }
-    };
+      setUsers(roomResponse.data.room_users);
+      setChatData(chatData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      Alert.alert('Error', 'Failed to fetch data. Please try again later.');
+    }
+  };
 
-    fetchChatRoomData();
+  useEffect(() => {
+    const run = async () => {
+      await fetchChatRoomData();
+    };
+    run();
 
     // 컴포넌트 언마운트될 때 소켓 닫기
     return () => {
-      socket?.close();
+      socketRef.current?.close();
     };
-  }, []);
+  }, [socketRef]);
   
   const msgSend = () => {
     if (!message.trim()) return;
-    sendMessage(message);
+    const msg = message;
     setMessage('');
+    sendMessage(msg);
   };
 
   return (

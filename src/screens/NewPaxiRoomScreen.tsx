@@ -10,19 +10,12 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
 import paxi_api from '../utils/paxi_api';
-import CalendarKoreanLocales from '../utils/calendar-locales';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import EditableTextInput from '../components/AlertableTextInput';
-import DropdownFilter from '../components/DropdownFilter';
 import DropdownMenu from '../components/DropdownMenu';
-
-LocaleConfig.locales.kr = CalendarKoreanLocales;
-LocaleConfig.defaultLocale = 'kr';
 
 type NewPaxiRoomScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewPaxiRoom'>;

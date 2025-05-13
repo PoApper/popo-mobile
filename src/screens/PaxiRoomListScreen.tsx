@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -164,13 +164,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
   const [roomData, setRoomData] = useState<ParsedRoomDataType[]>([]);
 
-  useEffect(() => {
-    getUserDataAndRequest();
-  }, []);
-
-  const refreshRoomData = () => getUserDataAndRequest();
-
-  async function getUserDataAndRequest() {
+  const getUserDataAndRequest = useCallback(async () => {
     try {
       const response = await paxi_api.get('/room');
       const parsedData = parseRoomData(response.data);
@@ -179,7 +173,13 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       console.error('Error:', error);
       Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + error.message);
     }
-  }
+  }, []); // 여기에 들어가는 의존성도 필요하면 추가
+
+  useEffect(() => {
+    getUserDataAndRequest();
+  }, [getUserDataAndRequest]);
+
+  const refreshRoomData = () => getUserDataAndRequest();
 
   const filterDeparture = (selected: string | null) => {
     console.log('selected', selected)
