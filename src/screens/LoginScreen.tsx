@@ -8,6 +8,7 @@ import {
   Image,
   Alert,
   StatusBar,
+  useColorScheme,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -23,16 +24,24 @@ type LoginScreenProps = {
 };
 
 const LoginScreen = ({navigation}: LoginScreenProps) => {
-  // const isDarkMode = useColorScheme() === 'dark';
+  const isDarkMode = useColorScheme() === 'dark';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const backgroundStyle = {
-    backgroundColor: '#ffffff',
+    backgroundColor: isDarkMode ? '#121212' : '#ffffff',
     flex: 1,
   };
+
+  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const inputBackgroundColor = isDarkMode ? '#1E1E1E' : '#FFFFFF';
+  const inputBorderColor = isDarkMode ? '#333333' : '#D0D0D0';
+  const placeholderColor = isDarkMode ? '#757575' : '#9CA3AF';
+  const secondaryButtonBg = isDarkMode ? '#2A2A2A' : '#f2f3f5';
+  const secondaryTextColor = isDarkMode ? '#E0E0E0' : '#262626';
+  const helpTextColor = isDarkMode ? '#60A5FA' : '#3b82f6';
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -146,24 +155,37 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
-        barStyle="light-content"
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {backgroundColor: backgroundStyle.backgroundColor},
+        ]}>
         <View style={styles.logoContainer}>
           <Image
             source={require('../../assets/popo.png')}
             style={styles.logoImage}
             resizeMode="contain"
           />
-          <Text style={styles.loginScreenTitle}>로그인/회원가입</Text>
+          <Text style={[styles.loginScreenTitle, {color: textColor}]}>
+            로그인/회원가입
+          </Text>
         </View>
 
         <View style={styles.formContainer}>
           <TextInput
-            style={[styles.input]}
+            style={[
+              styles.input,
+              {
+                backgroundColor: inputBackgroundColor,
+                borderColor: inputBorderColor,
+                color: textColor,
+              },
+            ]}
             placeholder="POPO 가입 이메일(POSTECH)"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={placeholderColor}
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
@@ -176,9 +198,17 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
           />
 
           <TextInput
-            style={[styles.input, {marginTop: 11, color: '#000000'}]}
+            style={[
+              styles.input,
+              {
+                marginTop: 11,
+                backgroundColor: inputBackgroundColor,
+                borderColor: inputBorderColor,
+                color: textColor,
+              },
+            ]}
             placeholder="비밀번호"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={placeholderColor}
             secureTextEntry
             value={password}
             onChangeText={setPassword}
@@ -205,22 +235,46 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
           {error && <Text style={styles.errorText}>{error}</Text>}
 
           <View style={[styles.splitterContainer]}>
-            <View style={styles.lineView} />
-            <Text style={styles.splitterText}>또는</Text>
-            <View style={styles.lineView} />
+            <View
+              style={[
+                styles.lineView,
+                {borderColor: isDarkMode ? '#555555' : '#9b9b9b'},
+              ]}
+            />
+            <Text
+              style={[
+                styles.splitterText,
+                {color: isDarkMode ? '#AAAAAA' : '#9b9b9b'},
+              ]}>
+              또는
+            </Text>
+            <View
+              style={[
+                styles.lineView,
+                {borderColor: isDarkMode ? '#555555' : '#9b9b9b'},
+              ]}
+            />
           </View>
 
           <View style={styles.signupContainer}>
             <TouchableOpacity
-              style={[styles.signupButton]}
+              style={[
+                styles.signupButton,
+                {backgroundColor: secondaryButtonBg},
+              ]}
               onPress={() => navigation.navigate('Signup')}
               disabled={isLoading}>
-              <Text style={styles.signupButtonText}>회원가입</Text>
+              <Text
+                style={[styles.signupButtonText, {color: secondaryTextColor}]}>
+                회원가입
+              </Text>
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity style={styles.needHelp} onPress={() => {}}>
-            <Text style={[styles.needHelpText]}>도움이 필요하세요?</Text>
+            <Text style={[styles.needHelpText, {color: helpTextColor}]}>
+              도움이 필요하세요?
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -233,7 +287,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     justifyContent: 'center',
-    backgroundColor: '#ffffff',
   },
   logoContainer: {
     alignItems: 'center',
