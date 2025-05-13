@@ -76,7 +76,7 @@ const renderMemberItem = ({ item }: ListRenderItemInfo<UserData>) => {
         },
       },
     ]);
-  }
+  };
 
   const reportUser = () => {
     Alert.alert('신고', `유저 ${item.nickname}를 신고하시겠습니까?`, [
@@ -91,7 +91,7 @@ const renderMemberItem = ({ item }: ListRenderItemInfo<UserData>) => {
         },
       },
     ]);
-  }
+  };
 
   return (
       <View style={styles.userRow}>
@@ -213,7 +213,7 @@ async function connectSocket(addChatData: (arg0: MessageData) => void): Promise<
   socket.on('connect_error', (error) => {
     console.error('연결 에러 발생:', error);
   });
-  
+
   socket.on('error', (error) => {
     console.error('에러 발생:', error);
   });
@@ -315,7 +315,7 @@ const SettlementRequest = () => {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const ChatScreen = ({navigation}: ChatScreenProps) => {
   const route = useRoute<ChatScreenRouteProp>();
@@ -338,14 +338,16 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
       console.error('소켓이 아직 연결되지 않았습니다.');
       return;
     }
-    
+
     await paxi_api.post(`/chat/${roomUuid}`, {
-      message: msg
+      message: msg,
     });
   }
 
   const fetchPrevChatData = async () => {
-    if (isLoadingOld) return;
+    if (isLoadingOld) {
+      return;
+    }
     setIsLoadingOld(true);
     try {
       const response = await paxi_api.get(`/chat/${roomUuid}?before=${chatData[chatData.length - 1].uuid}`);
@@ -361,49 +363,51 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
     } finally {
       setIsLoadingOld(false);
     }
-  }
+  };
 
-  const initSocket = useCallback(async (myUuid: string) => {
+  const initSocket = useCallback(async (tempMyUuid: string) => {
     const addChatData = (data: MessageData) => {
       const newChatData = {
         ...data,
         avatar: require('../../assets/popo.png'), // 임시 이미지
         senderName: users?.find(user => user.userUuid === data.senderUuid)?.nickname ?? '알 수 없음',
-        isMe: data.senderUuid === myUuid,
+        isMe: data.senderUuid === tempMyUuid,
       };
       setChatData(prev => [newChatData, ...prev]);
-      if (isAtBottom) flatListRef.current?.scrollToIndex({ index: 0, animated: false });
-    }
+      if (isAtBottom) {
+        flatListRef.current?.scrollToIndex({ index: 0, animated: false });
+      }
+    };
 
     const ws = await connectSocket(addChatData);
     socketRef.current = ws;
-  }, [users, setChatData, isAtBottom, connectSocket]);
+  }, [users, setChatData, isAtBottom]);
 
   const fetchChatRoomData = useCallback(async () => {
     try {
       const roomResponse = await paxi_api.post(`/room/join2/${roomUuid}`);
-      const myResponse = await paxi_api.get(`/auth/me`);
-      roomResponse.data.departureTime = roomResponse.data.departureTime.slice(0,10) + " " + roomResponse.data.departureTime.slice(11,16);
-      
+      const myResponse = await paxi_api.get('/auth/me');
+      roomResponse.data.departureTime = roomResponse.data.departureTime.slice(0,10) + ' ' + roomResponse.data.departureTime.slice(11,16);
+
       setRoomData(roomResponse.data);
       initSocket(myResponse.data.uuid);
       setMyUuid(myResponse.data.uuid);
 
       const chatResponse = await paxi_api.get(`/chat/${roomUuid}`);
-      const chatData: MessageData[] = chatResponse.data.map((item: MessageData) => ({
+      const getChatData: MessageData[] = chatResponse.data.map((item: MessageData) => ({
         ...item,
         avatar: require('../../assets/popo.png'), // 임시 이미지
         senderName: roomResponse.data.room_users[item.senderUuid],
         isMe: item.senderUuid === myResponse.data.uuid,
       }));
-    
+
       setUsers(roomResponse.data.room_users);
-      setChatData(chatData);
+      setChatData(getChatData);
     } catch (error) {
       console.error('Error fetching data:', error);
       Alert.alert('Error', 'Failed to fetch data. Please try again later.');
     }
-  }, [roomUuid]);
+  }, [roomUuid, initSocket]);
 
   useEffect(() => {
     const run = async () => {
@@ -416,9 +420,12 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
       socketRef.current?.close();
     };
   }, [fetchChatRoomData, initSocket, socketRef]);
-  
+
   const msgSend = () => {
-    if (!message.trim()) return;
+    if (!message.trim()) {
+      return;
+    }
+
     const msg = message;
     setMessage('');
     sendMessage(msg);
@@ -732,9 +739,8 @@ const styles = StyleSheet.create({
   countText: {
     fontSize: 18,
     letterSpacing: -0.6,
-    
-    color: "black",
-    textAlign: "left",
+    color: 'black',
+    textAlign: 'left',
     fontWeight: 'bold',
     marginLeft: 6,
   },

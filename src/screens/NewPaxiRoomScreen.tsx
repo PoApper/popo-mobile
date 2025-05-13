@@ -61,7 +61,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
     ));
     setShowDatePicker(false);
   };
-  
+
   const onTimePicked = (event: any, selectedTime?: Date) => {
     selectedTime = selectedTime || new Date();
     setSelectedDateTime(prev => new Date(
@@ -101,7 +101,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
         departureLocation: departureName,
       })
         .then(result => {
-          if (result == 201) {
+          if (result === 201) {
             Alert.alert('성공', '방을 성공적으로 생성했습니다.');
             navigation.goBack();
           } else {
@@ -127,7 +127,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
       borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
       backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
     },
-  ]
+  ];
 
   const locations = [
     { name: '지곡회관' },
@@ -141,7 +141,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
     { name: '테스트4' },
     { name: '테스트5' },
     { name: '테스트6' },
-  ]
+  ];
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -202,21 +202,10 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                   style={[{width: 300}, dropdownStyle]}
                   textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
                   textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
-                  defaultText='어디서 출발하시나요?'
+                  defaultText={'어디서 출발하시나요?'}
                   categories={locations}
-                  onSelect={(selected) => setDepartureName(selected ?? "출발지")}
+                  onSelect={(selected) => setDepartureName(selected ?? '출발지')}
                 />
-
-                {/*
-                <EditableTextInput
-                  placeholder="어디서 출발하시나요?"
-                  placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
-                  style={{width: '90%'}}
-                  inputStyle={{color: textColor}}
-                  value={departureName}
-                  onChangeText={setDepartureName}
-                />
-                */}
               </View>
               <View
                 style={[
@@ -231,22 +220,10 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                   style={[{width: 300}, dropdownStyle]}
                   textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
                   textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
-                  defaultText='어디로 떠나시나요?'
+                  defaultText={'어디로 떠나시나요?'}
                   categories={locations}
-                  onSelect={(selected) => setArrivalName(selected ?? "도착지")}
+                  onSelect={(selected) => setArrivalName(selected ?? '도착지')}
                 />
-                {/*
-                <TextInput
-                  style={{
-                    width: '90%',
-                    color: textColor,
-                  }}
-                  placeholder="어디로 떠나시나요?"
-                  placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
-                  value={arrivalName}
-                  onChangeText={setArrivalName}
-                />
-                */}
               </View>
             </View>
           </View>
@@ -375,7 +352,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
               </TouchableOpacity>
             </View>
           </View>
-          
+
           <TouchableOpacity
             style={[
               styles.nextButton,

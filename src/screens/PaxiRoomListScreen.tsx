@@ -56,7 +56,7 @@ const RoomContainer: React.FC<RoomContainerProps> = ({
           console.log('방 참여 요청:', uuid);
           paxi_api.post(`/room/join/${uuid}`).then((response) => {
             console.log('response.data:', response.data);
-            console.log('response.status', response.status)
+            console.log('response.status', response.status);
             if (response.status === 201) {
               Alert.alert('성공', '방에 참여했습니다.');
             } else {
@@ -239,7 +239,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
           style={dropdownStyle}
           textStyle={{color: 'white'}}
           textSelectedStyle={{color: 'white'}}
-          defaultText='출발지'
+          defaultText={'출발지'}
           categories={[
             { id: 'fruit', name: '과일' },
             { id: 'fruit2', name: '과일' },
@@ -250,7 +250,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <DropdownFilter
           style={dropdownStyle}
           textStyle={{color: 'white'}}
-          defaultText='도착지'
+          defaultText={'도착지'}
           categories={[
             { id: 'fruit', name: '과일' },
           ]}
@@ -260,7 +260,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <DropdownFilter
           style={dropdownStyle}
           textStyle={{color: 'white'}}
-          defaultText='날짜'
+          defaultText={'날짜'}
           categories={[
             { id: 'fruit', name: '과일' },
           ]}
@@ -270,7 +270,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <DropdownFilter
           style={dropdownStyle}
           textStyle={{color: 'white'}}
-          defaultText='시간'
+          defaultText={'시간'}
           categories={[
             { id: 'fruit', name: '과일' },
           ]}

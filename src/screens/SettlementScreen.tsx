@@ -72,7 +72,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         updateAccount: true,
       })
         .then(result => {
-          if (result != 201) {
+          if (result !== 201) {
             Alert.alert('실패', 'response: ' + result?.toString());
           } else {
             Alert.alert('성공', 'response: ' + result?.toString());
@@ -245,12 +245,12 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 11,
-    fontWeight: "600",
-    fontFamily: "Pretendard",
-    color: "#e45b63",
-    textAlign: "left",
-    display: "flex",
-    alignItems: "center",
+    fontWeight: '600',
+    fontFamily: 'Pretendard',
+    color: '#e45b63',
+    textAlign: 'left',
+    display: 'flex',
+    alignItems: 'center',
   },
   nextButton: {
     borderRadius: 6,
