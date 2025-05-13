@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -379,7 +379,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
     socketRef.current = ws;
   }
 
-  const fetchChatRoomData = async () => {
+  const fetchChatRoomData = useCallback(async () => {
     try {
       const roomResponse = await paxi_api.post(`/room/join2/${roomUuid}`);
       const myResponse = await paxi_api.get(`/auth/me`);
@@ -403,7 +403,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
       console.error('Error fetching data:', error);
       Alert.alert('Error', 'Failed to fetch data. Please try again later.');
     }
-  };
+  }, [roomUuid]);
 
   useEffect(() => {
     const run = async () => {
@@ -415,7 +415,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
     return () => {
       socketRef.current?.close();
     };
-  }, [socketRef]);
+  }, [fetchChatRoomData, socketRef]);
   
   const msgSend = () => {
     if (!message.trim()) return;
