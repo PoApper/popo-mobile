@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useCallback} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -34,7 +34,7 @@ interface SettlementData {
 
 async function requestSettlement(settlementData: SettlementData) {
   try {
-    const res = await paxi_api.post(`/room/${settlementData.roomUuid}/settlement`, {
+    const res = await paxi_api.post(`/room/${settlementData.roomUuid}/settlement2`, {
       payerAccountNumber: settlementData.payerAccountNumber,
       payerAccountHolderName: settlementData.payerAccountHolderName,
       payerBankName: settlementData.payerBankName,
@@ -62,6 +62,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
       Alert.alert('오류', '모든 필수 필드를 입력해주세요.');
       return;
     } else {
+      console.log(roomUuid);
       requestSettlement({
         payerBankName: bankName,
         payerAccountNumber: accountNumber,

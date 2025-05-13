@@ -19,7 +19,6 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import paxi_api from '../utils/paxi_api';
-import EdibleText from '../components/EdibleText';
 
 interface MessageData {
   uuid: string;
@@ -62,12 +61,6 @@ type ChatScreenProps = {
 };
 
 type ChatScreenRouteProp = RouteProp<RootStackParamList, 'Chat'>;
-
-const renderSettlementItem = () => {
-  return (
-    <View />
-  );
-}
 
 const renderMemberItem = ({ item }: ListRenderItemInfo<UserData>) => {
   const banUser = () => {
@@ -232,28 +225,6 @@ async function connectSocket(addChatData: (arg0: MessageData) => void): Promise<
   return socket;
 };
 
-function joinRoom(socket: Socket | undefined, roomUuid: string) {
-  if (!socket) {
-    console.error('소켓이 아직 연결되지 않았습니다.');
-    return;
-  }
-  
-  socket.emit('joinRoom', {
-    roomUuid: roomUuid,
-  });
-}
-
-function leaveRoom(socket: Socket | undefined, roomUuid: string) {
-  if (!socket) {
-    console.error('소켓이 아직 연결되지 않았습니다.');
-    return;
-  }
-
-  socket.emit('leaveRoom', {
-    roomUuid: roomUuid,
-  });
-}
-
 const SettlementRequest = () => {
   const settlementSend = () => {
     Alert.alert('송금 확인', '송금을 완료하셨습니까?', [
@@ -412,9 +383,9 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
 
     const fetchChatRoomData = async () => {
       try {
-        const roomResponse = await paxi_api.post(`/room/join/${roomUuid}`);
+        const roomResponse = await paxi_api.post(`/room/join2/${roomUuid}`);
         const myResponse = await paxi_api.get(`/auth/me`);
-        roomResponse.data.departureTime = roomResponse.data.departureTime.slice(0,10) + " " + roomResponse.data.departureTime.slice(11,16)
+        roomResponse.data.departureTime = roomResponse.data.departureTime.slice(0,10) + " " + roomResponse.data.departureTime.slice(11,16);
         
         setRoomData(roomResponse.data);
         initSocket(myResponse.data.uuid);

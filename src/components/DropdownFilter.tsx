@@ -13,7 +13,6 @@ import {
   StyleProp,
   ViewStyle,
   TextStyle,
-  TextInput
 } from 'react-native';
 
 interface Category {

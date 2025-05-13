@@ -151,16 +151,8 @@ interface ParsedRoomDataType {
   destination: string;
 }
 
-enum FilterType {
-  Departure,
-  Destination,
-  Date,
-  Time,
-}
-
 const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const [isChecked, setIsChecked] = useState(false);  
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
@@ -177,7 +169,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   }, []);
 
   const refreshRoomData = () => getUserDataAndRequest();
-  const clicking = () => {};
 
   async function getUserDataAndRequest() {
     try {
