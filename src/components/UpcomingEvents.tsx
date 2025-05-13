@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     marginRight: 12,
-    width: 280,
+    width: 250,
     height: 140,
     justifyContent: 'space-between',
   },

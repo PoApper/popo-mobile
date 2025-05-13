@@ -54,6 +54,7 @@ const MainNavigator = () => {
         tabBarStyle: {
           backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
           borderTopColor: isDarkMode ? '#333333' : '#E5E7EB',
+          paddingTop: 5,
         },
         tabBarActiveTintColor: '#4F46E5',
         tabBarInactiveTintColor: isDarkMode ? '#888888' : '#6B7280',

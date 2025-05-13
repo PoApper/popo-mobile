@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 2,
+    elevation: 6,
     padding: 12,
   },
   cardContent: {

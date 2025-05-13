@@ -241,7 +241,6 @@ const styles = StyleSheet.create({
   associationCard: {
     marginBottom: 12,
     borderRadius: 12,
-    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -249,7 +248,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 2,
+    elevation: 6,
     padding: 12,
   },
   cardContent: {

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -59,8 +59,11 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reservations, setReservations] = useState<PlaceReservation[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const listRef = useRef<FlatList>(null);
   const itemsPerPage = 10;
 
   const backgroundStyle = {
@@ -72,39 +75,48 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const cardBgColor = isDarkMode ? '#1E1E1E' : '#FFFFFF';
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';
 
-  // 서버에서 예약 정보 가져오기
-  const fetchReservations = async (page: number = 1) => {
-    setIsLoading(true);
-    setError(null);
+  const fetchReservations = async (
+    pageNum: number = 1,
+    append: boolean = false,
+  ) => {
+    if (!hasMore && pageNum > 1) {
+      return;
+    }
 
     try {
+      setIsLoadingMore(pageNum > 1);
+      if (pageNum === 1) {
+        setIsLoading(true);
+      }
+
       const response = await api.get<PaginatedResponse>(
         '/reservation-place/user',
         {
           params: {
-            skip: (page - 1) * itemsPerPage,
+            skip: (pageNum - 1) * itemsPerPage,
             take: itemsPerPage,
           },
         },
       );
-      const {items, total} = response.data;
 
-      // 날짜 기준으로 정렬 (최신 날짜가 먼저 오도록)
+      const {items} = response.data;
       const sortedReservations = [...items].sort((a, b) => {
         const dateA = new Date(formatDate(a.date));
         const dateB = new Date(formatDate(b.date));
         return dateB.getTime() - dateA.getTime();
       });
 
-      setReservations(sortedReservations);
-      setCurrentPage(page);
-      setTotalPages(Math.ceil(total / itemsPerPage));
+      setHasMore(items.length === itemsPerPage);
+      if (append) {
+        setReservations(prev => [...prev, ...sortedReservations]);
+      } else {
+        setReservations(sortedReservations);
+      }
+      setPage(pageNum);
     } catch (err) {
       console.error('예약 정보 조회 오류:', err);
-
       if (axios.isAxiosError(err)) {
         if (err.response?.status === 401) {
-          // 인증 오류 시 로그인 화면으로 이동
           Alert.alert('인증 만료', '다시 로그인해주세요.', [
             {text: '확인', onPress: () => navigation.navigate('Login')},
           ]);
@@ -116,8 +128,40 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
       }
     } finally {
       setIsLoading(false);
+      setIsLoadingMore(false);
     }
   };
+
+  const handleLoadMore = () => {
+    if (!isLoadingMore && hasMore) {
+      fetchReservations(page + 1, true);
+    }
+  };
+
+  const renderFooter = () => {
+    if (!isLoadingMore) {
+      return null;
+    }
+    return (
+      <View style={styles.loadingFooter}>
+        <ActivityIndicator size="small" color="#4F46E5" />
+      </View>
+    );
+  };
+
+  const handleScroll = (event: any) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    setShowScrollTop(offsetY > 200); // 200px 이상 스크롤되면 버튼 표시
+  };
+
+  const scrollToTop = () => {
+    listRef.current?.scrollToOffset({offset: 0, animated: true});
+  };
+
+  useEffect(() => {
+    fetchReservations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // YYYYMMDD 형식의 날짜를 YYYY-MM-DD로 변환
   const formatDate = (dateStr: string): string => {
@@ -137,13 +181,6 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
     }
     return `${timeStr.substring(0, 2)}:${timeStr.substring(2, 4)}`;
   };
-
-  // 컴포넌트 마운트 시 예약 정보 가져오기
-
-  useEffect(() => {
-    fetchReservations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // 상태에 따른 배지 색상
   const getStatusColor = (status: string) => {
@@ -300,81 +337,6 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
     </View>
   );
 
-  // 새로고침 처리
-  const handleRefresh = () => {
-    fetchReservations(1);
-  };
-
-  // 페이지네이션 버튼 렌더링
-  const renderPaginationButtons = () => {
-    const buttons = [];
-    const maxVisibleButtons = 5;
-    let startPage = Math.max(
-      1,
-      currentPage - Math.floor(maxVisibleButtons / 2),
-    );
-    let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
-
-    if (endPage - startPage + 1 < maxVisibleButtons) {
-      startPage = Math.max(1, endPage - maxVisibleButtons + 1);
-    }
-
-    // 이전 페이지 버튼
-    if (currentPage > 1) {
-      buttons.push(
-        <TouchableOpacity
-          key="prev"
-          style={[
-            styles.pageButton,
-            {backgroundColor: cardBgColor, borderColor},
-          ]}
-          onPress={() => fetchReservations(currentPage - 1)}>
-          <Text style={[styles.pageButtonText, {color: textColor}]}>이전</Text>
-        </TouchableOpacity>,
-      );
-    }
-
-    // 페이지 번호 버튼들
-    for (let i = startPage; i <= endPage; i++) {
-      buttons.push(
-        <TouchableOpacity
-          key={i}
-          style={[
-            styles.pageButton,
-            {backgroundColor: cardBgColor, borderColor},
-            currentPage === i && styles.activePageButton,
-          ]}
-          onPress={() => fetchReservations(i)}>
-          <Text
-            style={[
-              styles.pageButtonText,
-              {color: textColor},
-              currentPage === i && styles.activePageButtonText,
-            ]}>
-            {i}
-          </Text>
-        </TouchableOpacity>,
-      );
-    }
-
-    // 다음 페이지 버튼
-    if (currentPage < totalPages) {
-      buttons.push(
-        <TouchableOpacity
-          key="next"
-          style={[
-            styles.pageButton,
-            {backgroundColor: cardBgColor, borderColor},
-          ]}
-          onPress={() => fetchReservations(currentPage + 1)}>
-          <Text style={[styles.pageButtonText, {color: textColor}]}>다음</Text>
-        </TouchableOpacity>,
-      );
-    }
-
-    return buttons;
-  };
-
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -387,12 +349,10 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
           onPress={() => navigation.goBack()}>
           <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>
-          내 예약 목록
-        </Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>내 일정</Text>
         <TouchableOpacity
           style={styles.refreshButton}
-          onPress={handleRefresh}
+          onPress={() => fetchReservations(1)}
           disabled={isLoading}>
           <Text style={[styles.refreshButtonText, {color: textColor}]}>
             새로고침
@@ -412,25 +372,37 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
           <Text style={[styles.errorText, {color: textColor}]}>{error}</Text>
           <TouchableOpacity
             style={styles.retryButton}
-            onPress={fetchReservations}>
+            onPress={() => fetchReservations(1)}>
             <Text style={styles.retryButtonText}>다시 시도</Text>
           </TouchableOpacity>
         </View>
       ) : reservations.length > 0 ? (
         <>
-          <View
-            style={[
-              styles.paginationContainer,
-              {backgroundColor: cardBgColor},
-            ]}>
-            {renderPaginationButtons()}
-          </View>
           <FlatList
+            ref={listRef}
             data={reservations}
             renderItem={renderReservationItem}
             keyExtractor={item => item.uuid}
             contentContainerStyle={styles.listContainer}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={renderFooter}
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
           />
+          {showScrollTop && (
+            <TouchableOpacity
+              style={[
+                styles.scrollTopButton,
+                {
+                  backgroundColor: isDarkMode ? '#333' : '#fff',
+                  shadowColor: isDarkMode ? '#000' : 'rgba(0, 0, 0, 0.3)',
+                },
+              ]}
+              onPress={scrollToTop}>
+              <Text style={[styles.scrollTopText, {color: textColor}]}>↑</Text>
+            </TouchableOpacity>
+          )}
         </>
       ) : (
         <View style={styles.emptyContainer}>
@@ -496,7 +468,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.05,
     shadowRadius: 8,
-    elevation: 2,
+    elevation: 6,
   },
   reservationHeader: {
     flexDirection: 'row',
@@ -619,31 +591,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  paginationContainer: {
-    flexDirection: 'row',
+  loadingFooter: {
+    paddingVertical: 20,
+    alignItems: 'center',
+  },
+  scrollTopButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    zIndex: 1000,
   },
-  pageButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginHorizontal: 4,
-    borderRadius: 8,
-    borderWidth: 1,
-  },
-  activePageButton: {
-    backgroundColor: '#4F46E5',
-    borderColor: '#4F46E5',
-  },
-  pageButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  activePageButtonText: {
-    color: '#FFFFFF',
+  scrollTopText: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 

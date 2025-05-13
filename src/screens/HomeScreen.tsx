@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderRadius: 12,
     padding: 12,
+    paddingTop: 24,
   },
   serviceItem: {
     width: '23%',
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 2,
+    elevation: 6,
   },
   serviceTitle: {
     fontSize: 12,
