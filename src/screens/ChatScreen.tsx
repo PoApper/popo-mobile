@@ -363,7 +363,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
     }
   }
 
-  async function initSocket(myUuid: string) {
+  const initSocket = useCallback(async (myUuid: string) => {
     const addChatData = (data: MessageData) => {
       const newChatData = {
         ...data,
@@ -377,7 +377,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
 
     const ws = await connectSocket(addChatData);
     socketRef.current = ws;
-  }
+  }, [users, setChatData, isAtBottom, connectSocket]);
 
   const fetchChatRoomData = useCallback(async () => {
     try {
@@ -415,7 +415,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
     return () => {
       socketRef.current?.close();
     };
-  }, [fetchChatRoomData, socketRef]);
+  }, [fetchChatRoomData, initSocket, socketRef]);
   
   const msgSend = () => {
     if (!message.trim()) return;
