@@ -21,6 +21,8 @@ import ReservationScreen from '../screens/ReservationScreen';
 import NewPaxiRoomScreen from '../screens/NewPaxiRoomScreen';
 import PaxiRoomListScreen from '../screens/PaxiRoomListScreen';
 import PlaceReservationScreen from '../screens/PlaceReservationScreen';
+import PlaceDetailReservationScreen from '../screens/PlaceDetailReservationScreen';
+import PlaceReservationApplyScreen from '../screens/PlaceReservationApplyScreen';
 import WhitebookScreen from '../screens/WhitebookScreen';
 import BenefitsScreen from '../screens/BenefitsScreen';
 import ClubScreen from '../screens/ClubScreen';
@@ -152,6 +154,14 @@ const AppNavigator = () => {
           <Stack.Screen name="CampusShuttle" component={CampusShuttleScreen} />
           <Stack.Screen name="Auth" component={AuthNavigator} />
           <Stack.Screen name="Main" component={MainNavigator} />
+          <Stack.Screen
+            name="PlaceDetailReservation"
+            component={PlaceDetailReservationScreen}
+          />
+          <Stack.Screen
+            name="PlaceReservationApply"
+            component={PlaceReservationApplyScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

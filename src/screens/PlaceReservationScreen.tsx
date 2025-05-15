@@ -213,7 +213,13 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
                 style={[
                   styles.reserveButton,
                   {backgroundColor: backgroundSecondary},
-                ]}>
+                ]}
+                onPress={() =>
+                  navigation.navigate('PlaceDetailReservation', {
+                    placeId: item.id,
+                    placeName: item.name,
+                  })
+                }>
                 <Text style={[styles.reserveButtonText, {color: textColor}]}>
                   예약
                 </Text>
