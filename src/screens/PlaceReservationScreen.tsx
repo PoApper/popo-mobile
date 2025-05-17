@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
-  Image,
   FlatList,
   TouchableOpacity,
   StyleSheet,
@@ -15,6 +14,7 @@ import {
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
 import api from '../utils/api';
+import LazyImage from '../components/LazyImage';
 
 type PlaceReservationScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PlaceReservation'>;
@@ -196,7 +196,7 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
                 styles.locationItem,
                 {backgroundColor: isDarkMode ? '#121212' : '#fff'},
               ]}>
-              <Image source={item.image} style={styles.locationImage} />
+              <LazyImage uri={item.image.uri} style={styles.locationImage} />
               <View style={styles.locationInfo}>
                 <Text style={[styles.locationName, {color: textColor}]}>
                   {item.name}

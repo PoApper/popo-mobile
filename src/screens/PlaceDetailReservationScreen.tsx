@@ -2,7 +2,6 @@ import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
@@ -18,6 +17,7 @@ import {RootStackParamList} from '../navigation/types';
 import {RouteProp} from '@react-navigation/native';
 import api from '../utils/api';
 import CalendarKoreanLocales from '../utils/calendar-locales';
+import LazyImage from '../components/LazyImage';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';
@@ -205,11 +205,7 @@ const PlaceDetailReservationScreen = ({
                 {placeDetail.description}
               </Text>
             </View>
-            <Image
-              source={{uri: placeDetail.image_url}}
-              style={styles.placeImage}
-              resizeMode="cover"
-            />
+            <LazyImage uri={placeDetail.image_url} style={styles.placeImage} />
             <TouchableOpacity
               style={[
                 styles.reserveButton,
