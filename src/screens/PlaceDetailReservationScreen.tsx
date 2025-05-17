@@ -211,7 +211,10 @@ const PlaceDetailReservationScreen = ({
               resizeMode="cover"
             />
             <TouchableOpacity
-              style={styles.reserveButton}
+              style={[
+                styles.reserveButton,
+                {backgroundColor: isDarkMode ? '#FB5353' : '#000000'},
+              ]}
               onPress={() => {
                 navigation.navigate('PlaceReservationApply', {
                   buildingName: placeDetail?.location || '',
@@ -240,6 +243,7 @@ const PlaceDetailReservationScreen = ({
                         fontSize: 18,
                         fontWeight: 'bold',
                         margin: 10,
+                        color: textColor,
                       }}>{`${year}년 ${month}월`}</Text>
                   );
                 }}
@@ -347,7 +351,6 @@ const styles = StyleSheet.create({
   },
   reserveButton: {
     width: '100%',
-    backgroundColor: '#000000',
     padding: 16,
     borderRadius: 50,
     alignItems: 'center',
