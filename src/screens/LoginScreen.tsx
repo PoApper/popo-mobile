@@ -8,6 +8,7 @@ import {
   Image,
   Alert,
   StatusBar,
+  useColorScheme,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -16,22 +17,31 @@ import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import api, {POPO_API_URL} from '../utils/api';
 import axios from 'axios';
+import {getFCMToken} from '../utils/firebase';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
 };
 
 const LoginScreen = ({navigation}: LoginScreenProps) => {
-  // const isDarkMode = useColorScheme() === 'dark';
+  const isDarkMode = useColorScheme() === 'dark';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const backgroundStyle = {
-    backgroundColor: '#ffffff',
+    backgroundColor: isDarkMode ? '#121212' : '#ffffff',
     flex: 1,
   };
+
+  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const inputBackgroundColor = isDarkMode ? '#1E1E1E' : '#FFFFFF';
+  const inputBorderColor = isDarkMode ? '#333333' : '#D0D0D0';
+  const placeholderColor = isDarkMode ? '#757575' : '#9CA3AF';
+  const secondaryButtonBg = isDarkMode ? '#2A2A2A' : '#f2f3f5';
+  const secondaryTextColor = isDarkMode ? '#E0E0E0' : '#262626';
+  const helpTextColor = isDarkMode ? '#60A5FA' : '#3b82f6';
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -91,6 +101,18 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       // 로그인 상태 저장
       await EncryptedStorage.setItem('isAuthenticated', 'true');
 
+      // FCM 토큰 가져오기 및 저장
+      try {
+        const fcmToken = await getFCMToken();
+        if (fcmToken) {
+          console.log('FCM 토큰 발급 성공');
+          // TODO: FCM 토큰을 서버에 전송하는 API 호출
+          // await api.post('/users/fcm-token', { token: fcmToken });
+        }
+      } catch (fcmError) {
+        console.error('FCM 토큰 발급 실패:', fcmError);
+      }
+
       // 로그인 성공
       Alert.alert('로그인 성공', '환영합니다!');
 
@@ -133,39 +155,60 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
-        barStyle="light-content"
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {backgroundColor: backgroundStyle.backgroundColor},
+        ]}>
         <View style={styles.logoContainer}>
           <Image
             source={require('../../assets/popo.png')}
             style={styles.logoImage}
             resizeMode="contain"
           />
-          <Text style={styles.loginScreenTitle}>로그인/회원가입</Text>
+          <Text style={[styles.loginScreenTitle, {color: textColor}]}>
+            로그인/회원가입
+          </Text>
         </View>
 
         <View style={styles.formContainer}>
           <TextInput
-            style={[styles.input]}
+            style={[
+              styles.input,
+              {
+                backgroundColor: inputBackgroundColor,
+                borderColor: inputBorderColor,
+                color: textColor,
+              },
+            ]}
             placeholder="POPO 가입 이메일(POSTECH)"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={placeholderColor}
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
             onChangeText={setEmail}
-            autoComplete="email"
-            textContentType="emailAddress"
+            autoComplete="username" // ios
+            textContentType="username" // ios
             autoCorrect={false}
-            importantForAutofill="yes"
-            accessibilityLabel="popo.poapper.club email"
+            importantForAutofill="yes" // android
+            accessibilityLabel="popo.poapper.club username"
           />
 
           <TextInput
-            style={[styles.input, {marginTop: 11, color: '#000000'}]}
+            style={[
+              styles.input,
+              {
+                marginTop: 11,
+                backgroundColor: inputBackgroundColor,
+                borderColor: inputBorderColor,
+                color: textColor,
+              },
+            ]}
             placeholder="비밀번호"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={placeholderColor}
             secureTextEntry
             value={password}
             onChangeText={setPassword}
@@ -192,22 +235,46 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
           {error && <Text style={styles.errorText}>{error}</Text>}
 
           <View style={[styles.splitterContainer]}>
-            <View style={styles.lineView} />
-            <Text style={styles.splitterText}>또는</Text>
-            <View style={styles.lineView} />
+            <View
+              style={[
+                styles.lineView,
+                {borderColor: isDarkMode ? '#555555' : '#9b9b9b'},
+              ]}
+            />
+            <Text
+              style={[
+                styles.splitterText,
+                {color: isDarkMode ? '#AAAAAA' : '#9b9b9b'},
+              ]}>
+              또는
+            </Text>
+            <View
+              style={[
+                styles.lineView,
+                {borderColor: isDarkMode ? '#555555' : '#9b9b9b'},
+              ]}
+            />
           </View>
 
           <View style={styles.signupContainer}>
             <TouchableOpacity
-              style={[styles.signupButton]}
+              style={[
+                styles.signupButton,
+                {backgroundColor: secondaryButtonBg},
+              ]}
               onPress={() => navigation.navigate('Signup')}
               disabled={isLoading}>
-              <Text style={styles.signupButtonText}>회원가입</Text>
+              <Text
+                style={[styles.signupButtonText, {color: secondaryTextColor}]}>
+                회원가입
+              </Text>
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity style={styles.needHelp} onPress={() => {}}>
-            <Text style={[styles.needHelpText]}>도움이 필요하세요?</Text>
+            <Text style={[styles.needHelpText, {color: helpTextColor}]}>
+              도움이 필요하세요?
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -220,7 +287,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     justifyContent: 'center',
-    backgroundColor: '#ffffff',
   },
   logoContainer: {
     alignItems: 'center',
@@ -301,7 +367,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Pretendard',
     color: '#3b82f6',
     textAlign: 'center',
-    width: 101,
   },
   signupContainer: {
     flexDirection: 'row',

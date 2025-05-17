@@ -1,3 +1,6 @@
+# Disable this workflow (25/04/28)
+# Due to heavy bundle size, and security issue, we need to disable this workflow
+
 name: Android APK Build
 on:
   push:
@@ -6,6 +9,7 @@ on:
 
 jobs:
   build_apk:
+    if: false # This disables the entire workflow
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
