@@ -190,11 +190,11 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             autoCapitalize="none"
             value={email}
             onChangeText={setEmail}
-            autoComplete="email"
-            textContentType="emailAddress"
+            autoComplete="username" // ios
+            textContentType="username" // ios
             autoCorrect={false}
-            importantForAutofill="yes"
-            accessibilityLabel="popo.poapper.club email"
+            importantForAutofill="yes" // android
+            accessibilityLabel="popo.poapper.club username"
           />
 
           <TextInput

@@ -60,6 +60,8 @@ target 'popoMobile' do
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
         # 중복 헤더 문제 해결을 위한 설정
         config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+        # dSYM 파일 생성을 위한 설정 추가
+        config.build_settings['DEBUG_INFORMATION_FORMAT'] = 'dwarf-with-dsym'
       end
 
       # Privacy 번들 관련 처리

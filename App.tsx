@@ -21,7 +21,9 @@ const App = () => {
         if (token) {
           // console.log('FCM Token:', token);
           paxi_api
-            .post(`/push/key/${token}`)
+            .post('/push/key/', {
+              key: token,
+            })
             .then(res => {
               console.log('토큰 전송 성공', res);
             })
