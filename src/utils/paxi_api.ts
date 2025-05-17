@@ -84,6 +84,12 @@ paxi_api.interceptors.response.use(
         }
         await CookieManager.clearAll();
 
+        const debug = false;
+        if (!debug) {
+          navigationRef.current?.navigate('Login');
+          return;
+        }
+
         if (error.response.data.detail) {
           Alert.alert('로그인 필요', error.response.data.detail + url, [
             {
