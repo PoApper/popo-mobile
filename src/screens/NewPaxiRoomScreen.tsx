@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -51,27 +51,33 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
 
   const onDatePicked = (event: any, selectedDate?: Date) => {
     selectedDate = selectedDate || new Date();
-    setSelectedDateTime(prev => new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate(),
-      prev.getHours(),
-      prev.getMinutes(),
-      prev.getSeconds()
-    ));
+    setSelectedDateTime(
+      prev =>
+        new Date(
+          selectedDate.getFullYear(),
+          selectedDate.getMonth(),
+          selectedDate.getDate(),
+          prev.getHours(),
+          prev.getMinutes(),
+          prev.getSeconds(),
+        ),
+    );
     setShowDatePicker(false);
   };
 
   const onTimePicked = (event: any, selectedTime?: Date) => {
     selectedTime = selectedTime || new Date();
-    setSelectedDateTime(prev => new Date(
-      prev.getFullYear(),
-      prev.getMonth(),
-      prev.getDate(),
-      selectedTime.getHours(),
-      selectedTime.getMinutes(),
-      selectedTime.getSeconds()
-    ));
+    setSelectedDateTime(
+      prev =>
+        new Date(
+          prev.getFullYear(),
+          prev.getMonth(),
+          prev.getDate(),
+          selectedTime.getHours(),
+          selectedTime.getMinutes(),
+          selectedTime.getSeconds(),
+        ),
+    );
     setShowTimePicker(false);
   };
 
@@ -130,17 +136,17 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
   ];
 
   const locations = [
-    { name: '지곡회관' },
-    { name: '학생회관' },
-    { name: '체인지업그라운드' },
-    { name: '포항역' },
-    { name: '터미널' },
-    { name: '테스트1' },
-    { name: '테스트2' },
-    { name: '테스트3' },
-    { name: '테스트4' },
-    { name: '테스트5' },
-    { name: '테스트6' },
+    {name: '지곡회관'},
+    {name: '학생회관'},
+    {name: '체인지업그라운드'},
+    {name: '포항역'},
+    {name: '터미널'},
+    {name: '테스트1'},
+    {name: '테스트2'},
+    {name: '테스트3'},
+    {name: '테스트4'},
+    {name: '테스트5'},
+    {name: '테스트6'},
   ];
 
   return (
@@ -204,7 +210,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                   textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
                   defaultText={'어디서 출발하시나요?'}
                   categories={locations}
-                  onSelect={(selected) => setDepartureName(selected ?? '출발지')}
+                  onSelect={selected => setDepartureName(selected ?? '출발지')}
                 />
               </View>
               <View
@@ -222,19 +228,20 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                   textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
                   defaultText={'어디로 떠나시나요?'}
                   categories={locations}
-                  onSelect={(selected) => setArrivalName(selected ?? '도착지')}
+                  onSelect={selected => setArrivalName(selected ?? '도착지')}
                 />
               </View>
             </View>
           </View>
 
-          <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: '100%',
-            marginBottom: 12,
-          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '100%',
+              marginBottom: 12,
+            }}>
             <View style={{width: '48%'}}>
               <Text style={[styles.titleText, {color: textColor}]}>날짜</Text>
               <TouchableOpacity
@@ -245,9 +252,10 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                 }}
-                onPress={() => setShowDatePicker(true)}
-              >
-                <Text style={{color: textColor}}>{selectedDateTime.toLocaleDateString()}</Text>
+                onPress={() => setShowDatePicker(true)}>
+                <Text style={{color: textColor}}>
+                  {selectedDateTime.toLocaleDateString()}
+                </Text>
               </TouchableOpacity>
               {showDatePicker && (
                 <DateTimePicker
@@ -259,7 +267,9 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
               )}
             </View>
             <View style={{width: '48%'}}>
-              <Text style={[styles.titleText, {color: textColor}]}>출발시각</Text>
+              <Text style={[styles.titleText, {color: textColor}]}>
+                출발시각
+              </Text>
               <TouchableOpacity
                 style={{
                   borderWidth: 1,
@@ -268,8 +278,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                 }}
-                onPress={() => setShowTimePicker(true)}
-              >
+                onPress={() => setShowTimePicker(true)}>
                 <Text style={{color: textColor}}>
                   {selectedDateTime.toLocaleTimeString([], {
                     hour: '2-digit',
@@ -310,45 +319,58 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
           />
 
           <Text style={[styles.titleText, {color: textColor}]}>최대인원</Text>
-          <View style={{
-            alignItems: 'flex-start',
-            width: '100%',
-          }}>
-            <View style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              borderWidth: 1,
-              borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-              borderRadius: 50,
-              marginBottom: 10,
+          <View
+            style={{
+              alignItems: 'flex-start',
+              width: '100%',
             }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                borderWidth: 1,
+                borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                borderRadius: 50,
+                marginBottom: 10,
+              }}>
               <TouchableOpacity
                 style={{
                   paddingHorizontal: 20,
                   paddingVertical: 10,
                 }}
-                onPress={() => setMaxParticipants(Math.max(1, maxParticipants - 1))}
-              >
-                <Text style={{
-                  color: 'white',
-                  fontSize: 20,
-                }}>-</Text>
+                onPress={() =>
+                  setMaxParticipants(Math.max(1, maxParticipants - 1))
+                }>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: 20,
+                  }}>
+                  -
+                </Text>
               </TouchableOpacity>
-              <Text style={{
+              <Text
+                style={{
                   color: 'white',
                   fontSize: 20,
-              }}>{maxParticipants}</Text>
+                }}>
+                {maxParticipants}
+              </Text>
               <TouchableOpacity
                 style={{
                   paddingHorizontal: 20,
                   paddingVertical: 10,
                 }}
-                onPress={() => setMaxParticipants(Math.min(4, maxParticipants + 1))}
-              >
-                <Text style={{
-                  color: 'white',
-                  fontSize: 20,
-                }}>+</Text>
+                onPress={() =>
+                  setMaxParticipants(Math.min(4, maxParticipants + 1))
+                }>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: 20,
+                  }}>
+                  +
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

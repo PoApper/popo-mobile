@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -33,20 +33,25 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
   const [nickname, setNickname] = useState('');
 
   const checkInputValid = () => {
-    if (!nickname) { // TODO: 더 확실한 기준 넣기
+    if (!nickname) {
+      // TODO: 더 확실한 기준 넣기
       Alert.alert('오류', '모든 필수 필드를 입력해주세요.');
     } else {
-      createNewNickname(nickname).then(result => {
-        if (result === 201) {
-          Alert.alert('성공', '닉네임을 성공적으로 생성했습니다.');
-          navigation.goBack();
-        } else {
-          Alert.alert('실패', 'response: ' + result?.toString());
-        }
-      })
-      .catch(error => {
-        Alert.alert('실패', '닉네임을 생성하는데 실패했습니다: ' + error.message);
-      });
+      createNewNickname(nickname)
+        .then(result => {
+          if (result === 201) {
+            Alert.alert('성공', '닉네임을 성공적으로 생성했습니다.');
+            navigation.goBack();
+          } else {
+            Alert.alert('실패', 'response: ' + result?.toString());
+          }
+        })
+        .catch(error => {
+          Alert.alert(
+            '실패',
+            '닉네임을 생성하는데 실패했습니다: ' + error.message,
+          );
+        });
     }
   };
 

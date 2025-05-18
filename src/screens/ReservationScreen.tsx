@@ -353,12 +353,16 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.navigate('ChatList')}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>채팅방목록(임시)</Text>
+          <Text style={[styles.backButtonText, {color: textColor}]}>
+            채팅방목록(임시)
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.navigate('PaxiStart')}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>새닉네임(임시)</Text>
+          <Text style={[styles.backButtonText, {color: textColor}]}>
+            새닉네임(임시)
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.refreshButton}

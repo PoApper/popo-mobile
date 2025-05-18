@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -54,18 +54,21 @@ const RoomContainer: React.FC<RoomContainerProps> = ({
         text: '확인',
         onPress: () => {
           console.log('방 참여 요청:', uuid);
-          paxi_api.post(`/room/join/${uuid}`).then((response) => {
-            console.log('response.data:', response.data);
-            console.log('response.status', response.status);
-            if (response.status === 201) {
-              Alert.alert('성공', '방에 참여했습니다.');
-            } else {
-              Alert.alert('실패', '방 참여에 실패했습니다.');
-            }
-          }).catch((error) => {
-            console.error('Error:', error);
-            Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
-          });
+          paxi_api
+            .post(`/room/join/${uuid}`)
+            .then(response => {
+              console.log('response.data:', response.data);
+              console.log('response.status', response.status);
+              if (response.status === 201) {
+                Alert.alert('성공', '방에 참여했습니다.');
+              } else {
+                Alert.alert('실패', '방 참여에 실패했습니다.');
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
+            });
         },
       },
     ]);
@@ -236,40 +239,34 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
           textSelectedStyle={{color: 'white'}}
           defaultText={'출발지'}
           categories={[
-            { id: 'fruit', name: '과일' },
-            { id: 'fruit2', name: '과일' },
+            {id: 'fruit', name: '과일'},
+            {id: 'fruit2', name: '과일'},
           ]}
-          onSelect={(selected) => filterDeparture(selected)}
+          onSelect={selected => filterDeparture(selected)}
         />
 
         <DropdownFilter
           style={dropdownStyle}
           textStyle={{color: 'white'}}
           defaultText={'도착지'}
-          categories={[
-            { id: 'fruit', name: '과일' },
-          ]}
-          onSelect={(selected) => console.log('선택된 카테고리:', selected)}
+          categories={[{id: 'fruit', name: '과일'}]}
+          onSelect={selected => console.log('선택된 카테고리:', selected)}
         />
 
         <DropdownFilter
           style={dropdownStyle}
           textStyle={{color: 'white'}}
           defaultText={'날짜'}
-          categories={[
-            { id: 'fruit', name: '과일' },
-          ]}
-          onSelect={(selected) => console.log('선택된 카테고리:', selected)}
+          categories={[{id: 'fruit', name: '과일'}]}
+          onSelect={selected => console.log('선택된 카테고리:', selected)}
         />
 
         <DropdownFilter
           style={dropdownStyle}
           textStyle={{color: 'white'}}
           defaultText={'시간'}
-          categories={[
-            { id: 'fruit', name: '과일' },
-          ]}
-          onSelect={(selected) => console.log('선택된 카테고리:', selected)}
+          categories={[{id: 'fruit', name: '과일'}]}
+          onSelect={selected => console.log('선택된 카테고리:', selected)}
         />
       </View>
 

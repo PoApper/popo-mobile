@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,7 +15,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
 import paxi_api from '../utils/paxi_api';
 
-import { RouteProp, useRoute } from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 
 type SettlementScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Settlement'>;
@@ -35,13 +35,16 @@ interface SettlementData {
 async function requestSettlement(settlementData: SettlementData) {
   try {
     console.log(settlementData.roomUuid);
-    const res = await paxi_api.post(`/room/${settlementData.roomUuid}/settlement2`, {
-      payAmount: settlementData.payAmount,
-      payerAccountNumber: settlementData.payerAccountNumber,
-      payerAccountHolderName: settlementData.payerAccountHolderName,
-      payerBankName: settlementData.payerBankName,
-      updateAccount: settlementData.updateAccount,
-    });
+    const res = await paxi_api.post(
+      `/room/${settlementData.roomUuid}/settlement2`,
+      {
+        payAmount: settlementData.payAmount,
+        payerAccountNumber: settlementData.payerAccountNumber,
+        payerAccountHolderName: settlementData.payerAccountHolderName,
+        payerBankName: settlementData.payerBankName,
+        updateAccount: settlementData.updateAccount,
+      },
+    );
 
     return res.status;
   } catch (error: string | any) {
@@ -51,7 +54,7 @@ async function requestSettlement(settlementData: SettlementData) {
 
 const SettlementScreen = ({navigation}: SettlementScreenProps) => {
   const route = useRoute<SettlementScreenRouteProp>();
-  const { roomUuid } = route.params;
+  const {roomUuid} = route.params;
 
   const [bankName, setbankName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
@@ -70,7 +73,8 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         payAmount: Number(totalCost),
         roomUuid: roomUuid,
         updateAccount: false,
-      }).then(result => {
+      })
+        .then(result => {
           if (result !== 201) {
             Alert.alert('실패', 'response: ' + result?.toString());
           } else {
@@ -110,7 +114,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
 
       <ScrollView>
         <View style={styles.container}>
-        <View style={{width: '100%', marginBottom: 8}}>
+          <View style={{width: '100%', marginBottom: 8}}>
             <Text style={[styles.titleText, {color: textColor}]}>은행명</Text>
             <TextInput
               style={[
@@ -168,7 +172,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
           </View>
 
           <View style={{width: '100%', marginBottom: 8}}>
-          <Text style={[styles.titleText, {color: textColor}]}>결제금액</Text>
+            <Text style={[styles.titleText, {color: textColor}]}>결제금액</Text>
             <TextInput
               style={[
                 styles.roomInput,
@@ -184,7 +188,10 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
               value={totalCost}
               onChangeText={setTotalCost}
             />
-            <Text style={[styles.infoText]}>총 금액을 입력해주세요! 자동으로 N분의 1 처리한 금액을 요청해드릴게요.</Text>
+            <Text style={[styles.infoText]}>
+              총 금액을 입력해주세요! 자동으로 N분의 1 처리한 금액을
+              요청해드릴게요.
+            </Text>
           </View>
         </View>
 

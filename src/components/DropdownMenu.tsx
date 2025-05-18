@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -41,7 +41,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
-  const [dropdownPosition, setDropdownPosition] = useState<LayoutRectangle | null>(null);
+  const [dropdownPosition, setDropdownPosition] =
+    useState<LayoutRectangle | null>(null);
 
   // useRef를 사용해 TouchableOpacity의 ref를 설정, 타입을 View로 설정
   const buttonRef = useRef<View | null>(null);
@@ -49,13 +50,10 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const openDropdown = () => {
     const handle = findNodeHandle(buttonRef.current);
     if (handle) {
-      UIManager.measure(
-        handle,
-        (x, y, width, height, pageX, pageY) => {
-          setDropdownPosition({ x: pageX, y: pageY + height + 5, width, height });
-          setVisible(true);
-        }
-      );
+      UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
+        setDropdownPosition({x: pageX, y: pageY + height + 5, width, height});
+        setVisible(true);
+      });
     }
   };
 
@@ -68,15 +66,15 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   return (
     <View>
       {/* buttonRef를 통해 TouchableOpacity 참조 */}
-      <TouchableOpacity ref={buttonRef} onPress={openDropdown} style={[styles.button, style]}>
+      <TouchableOpacity
+        ref={buttonRef}
+        onPress={openDropdown}
+        style={[styles.button, style]}>
         <TextInput
-          style={[styles.buttonText,
-            selected ? textSelectedStyle : textStyle,
-          ]}
-          editable={false}
-        >
+          style={[styles.buttonText, selected ? textSelectedStyle : textStyle]}
+          editable={false}>
           {selected
-            ? categories.find((cat) => cat.name === selected)?.name
+            ? categories.find(cat => cat.name === selected)?.name
             : defaultText}
         </TextInput>
       </TouchableOpacity>
@@ -94,16 +92,14 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                     left: dropdownPosition.x,
                     width: dropdownPosition.width,
                   },
-                ]}
-              >
+                ]}>
                 <FlatList
                   data={[...categories]}
-                  keyExtractor={(item) => item.name || 'none'}
-                  renderItem={({ item }) => (
+                  keyExtractor={item => item.name || 'none'}
+                  renderItem={({item}) => (
                     <TouchableOpacity
                       style={[styles.item, dropdownStyle]}
-                      onPress={() => handleSelect(item.name || null)}
-                    >
+                      onPress={() => handleSelect(item.name || null)}>
                       <Text>{item.name}</Text>
                     </TouchableOpacity>
                   )}

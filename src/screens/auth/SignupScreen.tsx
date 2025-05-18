@@ -275,8 +275,8 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                       userType === UserType.student
                         ? '#4F46E5'
                         : isDarkMode
-                        ? '#333333'
-                        : '#FFFFFF',
+                          ? '#333333'
+                          : '#FFFFFF',
                     borderColor: isDarkMode ? '#555555' : '#E5E7EB',
                   },
                 ]}
@@ -289,8 +289,8 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                         userType === UserType.student
                           ? '#FFFFFF'
                           : isDarkMode
-                          ? '#FFFFFF'
-                          : '#000000',
+                            ? '#FFFFFF'
+                            : '#000000',
                     },
                   ]}>
                   학생
@@ -306,8 +306,8 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                       userType === UserType.faculty
                         ? '#4F46E5'
                         : isDarkMode
-                        ? '#333333'
-                        : '#FFFFFF',
+                          ? '#333333'
+                          : '#FFFFFF',
                     borderColor: isDarkMode ? '#555555' : '#E5E7EB',
                   },
                 ]}
@@ -320,8 +320,8 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                         userType === UserType.faculty
                           ? '#FFFFFF'
                           : isDarkMode
-                          ? '#FFFFFF'
-                          : '#000000',
+                            ? '#FFFFFF'
+                            : '#000000',
                     },
                   ]}>
                   교직원
@@ -337,8 +337,8 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                       userType === UserType.others
                         ? '#4F46E5'
                         : isDarkMode
-                        ? '#333333'
-                        : '#FFFFFF',
+                          ? '#333333'
+                          : '#FFFFFF',
                     borderColor: isDarkMode ? '#555555' : '#E5E7EB',
                   },
                 ]}
@@ -351,8 +351,8 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                         userType === UserType.others
                           ? '#FFFFFF'
                           : isDarkMode
-                          ? '#FFFFFF'
-                          : '#000000',
+                            ? '#FFFFFF'
+                            : '#000000',
                     },
                   ]}>
                   기타

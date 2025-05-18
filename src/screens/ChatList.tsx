@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   Alert,
   SafeAreaView,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
 import paxi_api from '../utils/paxi_api';
@@ -34,30 +34,36 @@ const ChatListScreen = ({navigation}: ChatListScreenProps) => {
 
   useFocusEffect(
     useCallback(() => {
-      paxi_api.get('/room/my').then((response) => {
-        const data = response.data;
+      paxi_api
+        .get('/room/my')
+        .then(response => {
+          const data = response.data;
 
-        const filteredData: RoomData[] = data.map((room: any) => ({
-          uuid: room.uuid,
-          title: room.title,
-          departureTime: room.departureTime,
-          departureLocation: room.departureLocation,
-          destinationLocation: room.destinationLocation,
-          status: room.status,
-        }));
+          const filteredData: RoomData[] = data.map((room: any) => ({
+            uuid: room.uuid,
+            title: room.title,
+            departureTime: room.departureTime,
+            departureLocation: room.departureLocation,
+            destinationLocation: room.destinationLocation,
+            status: room.status,
+          }));
 
-        setRoomDatas(filteredData);
-      }).catch((error) => {
-        console.error('Error fetching chat rooms:', error);
-        Alert.alert('Error', 'Failed to fetch chat rooms. Please try again later.');
-      });
+          setRoomDatas(filteredData);
+        })
+        .catch(error => {
+          console.error('Error fetching chat rooms:', error);
+          Alert.alert(
+            'Error',
+            'Failed to fetch chat rooms. Please try again later.',
+          );
+        });
       return () => {
         // console.log('ChatList 화면 이탈');
       };
-    }, [])
+    }, []),
   );
 
-  const renderItem = ({ item }: ListRenderItemInfo<RoomData>) => {
+  const renderItem = ({item}: ListRenderItemInfo<RoomData>) => {
     if (item.status === 'DELETED') {
       return null;
     } else {
@@ -65,10 +71,12 @@ const ChatListScreen = ({navigation}: ChatListScreenProps) => {
         <View style={[styles.roomContainer]}>
           <TouchableOpacity
             style={styles.roomItem}
-            onPress={() => navigation.navigate('Chat', { roomUuid: item.uuid })}
-          >
+            onPress={() => navigation.navigate('Chat', {roomUuid: item.uuid})}>
             <View style={{width: '85%', marginRight: 10}}>
-              <Text style={styles.roomName}>{item.title} | {item.departureLocation} → {item.destinationLocation}</Text>
+              <Text style={styles.roomName}>
+                {item.title} | {item.departureLocation} →{' '}
+                {item.destinationLocation}
+              </Text>
               <Text style={styles.departureTimeText}>{item.departureTime}</Text>
             </View>
             <View style={styles.chatBox} />
@@ -83,9 +91,8 @@ const ChatListScreen = ({navigation}: ChatListScreenProps) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
-            style={{ marginLeft: 10 }}
-            onPress={() => navigation.goBack()}
-          >
+          style={{marginLeft: 10}}
+          onPress={() => navigation.goBack()}>
           <Text style={styles.headerButton}>나가기</Text>
         </TouchableOpacity>
 
@@ -97,8 +104,7 @@ const ChatListScreen = ({navigation}: ChatListScreenProps) => {
           <TouchableOpacity
             key={option}
             onPress={() => setSelectedOption(option)}
-            style={styles.optionTabWrapper}
-          >
+            style={styles.optionTabWrapper}>
             <View style={styles.optionTabInner}>
               <View style={styles.textWithUnderline}>
                 <Text
@@ -116,7 +122,12 @@ const ChatListScreen = ({navigation}: ChatListScreenProps) => {
                   {option}
                 </Text>
                 {selectedOption === option && (
-                  <View style={[styles.underline, {width: (textWidths[option] || 0) + 8}]} />
+                  <View
+                    style={[
+                      styles.underline,
+                      {width: (textWidths[option] || 0) + 8},
+                    ]}
+                  />
                 )}
               </View>
             </View>
@@ -127,7 +138,7 @@ const ChatListScreen = ({navigation}: ChatListScreenProps) => {
       <FlatList
         style={styles.chatList}
         data={roomDatas}
-        keyExtractor={(item) => item.uuid}
+        keyExtractor={item => item.uuid}
         renderItem={renderItem}
       />
     </SafeAreaView>
@@ -171,7 +182,6 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
     fontWeight: 'bold',
     fontFamily: 'Pretendard',
-
   },
   roomItem: {
     flex: 1,

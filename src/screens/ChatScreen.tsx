@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -13,10 +13,10 @@ import {
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
-import { io, Socket } from 'socket.io-client';
+import {io, Socket} from 'socket.io-client';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import paxi_api from '../utils/paxi_api';
 
 interface MessageData {
@@ -40,19 +40,19 @@ interface UserData {
 }
 
 interface RoomData {
-  uuid: string,
-  title: string,
-  ownerUuid: string,
-  departureLocation: string,
-  destinationLocation: string,
-  maxParticipant: number,
-  currentParticipant: number,
-  departureTime: string,
-  status: string,
-  description: string,
-  payerUuid: string,
-  payAmount: number,
-  roomUser: UserData[],
+  uuid: string;
+  title: string;
+  ownerUuid: string;
+  departureLocation: string;
+  destinationLocation: string;
+  maxParticipant: number;
+  currentParticipant: number;
+  departureTime: string;
+  status: string;
+  description: string;
+  payerUuid: string;
+  payAmount: number;
+  roomUser: UserData[];
 }
 
 interface SettlementData {
@@ -71,7 +71,7 @@ type ChatScreenProps = {
 
 type ChatScreenRouteProp = RouteProp<RootStackParamList, 'Chat'>;
 
-const renderMemberItem = ({ item }: ListRenderItemInfo<UserData>) => {
+const renderMemberItem = ({item}: ListRenderItemInfo<UserData>) => {
   const banUser = () => {
     Alert.alert('추방', `유저 ${item.nickname}를 추방하시겠습니까?`, [
       {
@@ -106,36 +106,46 @@ const renderMemberItem = ({ item }: ListRenderItemInfo<UserData>) => {
     <View style={styles.userRow}>
       <View style={styles.rowCenter}>
         {/* 프로필 사진 대체 원 */}
-        <View style={styles.avatarCircle} >
+        <View style={styles.avatarCircle}>
           <View style={{width: 36, height: 36, position: 'relative'}}>
-              {item.isPaid &&
-              <Icon name="check-circle-outline" style={{ position: 'absolute', bottom: 0, right: 0 }} size={20} color="green" />
-              }
-              {item.isOwner &&
-              <Icon name="verified" style={{ position: 'absolute', top: 0, left: 0 }} size={20} color="gold" />
-              }
+            {item.isPaid && (
+              <Icon
+                name="check-circle-outline"
+                style={{position: 'absolute', bottom: 0, right: 0}}
+                size={20}
+                color="green"
+              />
+            )}
+            {item.isOwner && (
+              <Icon
+                name="verified"
+                style={{position: 'absolute', top: 0, left: 0}}
+                size={20}
+                color="gold"
+              />
+            )}
           </View>
         </View>
         <View>
           <View style={styles.nameRow}>
             <Text style={styles.nameText}>{item.nickname}</Text>
           </View>
-          {item.isOwner && !item.isPaid && <Text style={styles.subText}>방장</Text>}
-          {item.isPaid && !item.isOwner && <Text style={styles.subText}>송금 완료</Text>}
-          {item.isPaid && item.isOwner && <Text style={styles.subText}>방장 & 송금 완료</Text>}
+          {item.isOwner && !item.isPaid && (
+            <Text style={styles.subText}>방장</Text>
+          )}
+          {item.isPaid && !item.isOwner && (
+            <Text style={styles.subText}>송금 완료</Text>
+          )}
+          {item.isPaid && item.isOwner && (
+            <Text style={styles.subText}>방장 & 송금 완료</Text>
+          )}
         </View>
       </View>
       <View style={styles.rowCenter}>
-        <TouchableOpacity
-          style={styles.grayButton}
-          onPress={banUser}
-        >
+        <TouchableOpacity style={styles.grayButton} onPress={banUser}>
           <Text>추방</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.grayButton}
-          onPress={reportUser}
-        >
+        <TouchableOpacity style={styles.grayButton} onPress={reportUser}>
           <Text>신고</Text>
         </TouchableOpacity>
       </View>
@@ -143,84 +153,106 @@ const renderMemberItem = ({ item }: ListRenderItemInfo<UserData>) => {
   );
 };
 
-const renderItem = ({ item }: ListRenderItemInfo<MessageData>) => {
+const renderItem = ({item}: ListRenderItemInfo<MessageData>) => {
   const alignment = item.isMe ? 'flex-end' : 'flex-start';
-  const createdTime = item.createdAt.slice(11,16);
+  const createdTime = item.createdAt.slice(11, 16);
   const isSystemMsg = item.senderUuid == null;
   return (
-    <View style={{ alignSelf: alignment }}>
-      {!item.isMe && !isSystemMsg &&
+    <View style={{alignSelf: alignment}}>
+      {!item.isMe && !isSystemMsg && (
         <View style={[styles.messageContainer]}>
           <Icon name="face" size={35} color="black" />
           {/* <Image source={item.avatar} style={styles.avatar} /> */}
           <View>
-            <Text style={{
-              fontSize: 13,
-              letterSpacing: -0.4,
-              color: '#000',
-              marginBottom: 4,
-            }}>{item.senderName}</Text>
-            <View style={{
-              flexDirection: 'row',
-              alignItems: 'flex-end',
-              gap: 5,
-            }}>
+            <Text
+              style={{
+                fontSize: 13,
+                letterSpacing: -0.4,
+                color: '#000',
+                marginBottom: 4,
+              }}>
+              {item.senderName}
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'flex-end',
+                gap: 5,
+              }}>
               <View style={styles.messageBubble}>
-                <Text style={{
-                  fontSize: 14,
-                  letterSpacing: -0.4,
-                  color: '#000',
-                  marginBottom: 4,
-                }}>{item.message}</Text>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    letterSpacing: -0.4,
+                    color: '#000',
+                    marginBottom: 4,
+                  }}>
+                  {item.message}
+                </Text>
               </View>
-              <Text style={{
-                color: '#9b9b9b',
-                fontSize: 12,
-                letterSpacing: -0.3,
-                fontWeight: 'bold',
-              }}>{createdTime}</Text>
+              <Text
+                style={{
+                  color: '#9b9b9b',
+                  fontSize: 12,
+                  letterSpacing: -0.3,
+                  fontWeight: 'bold',
+                }}>
+                {createdTime}
+              </Text>
             </View>
           </View>
         </View>
-      }
-      {item.isMe &&
-        <View style={[styles.messageContainer, {
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-          gap: 5,
-        }]}>
-          <Text style={{
-            color: '#9b9b9b',
-            fontSize: 12,
-            letterSpacing: -0.3,
-            fontWeight: 'bold',
-          }}>{createdTime}</Text>
-          <View style={styles.messageBubble}>
-            <Text style={{
-              fontSize: 14,
-              letterSpacing: -0.4,
-              color: '#000',
-              marginBottom: 4,
-            }}>{item.message}</Text>
-          </View>
-        </View>
-      }
-      {isSystemMsg &&
-        <View style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          width: '100%',
-        }}>
-          <View style={styles.systemMessageBubble}>
-            <Text style={{
+      )}
+      {item.isMe && (
+        <View
+          style={[
+            styles.messageContainer,
+            {
+              flexDirection: 'row',
+              alignItems: 'flex-end',
+              gap: 5,
+            },
+          ]}>
+          <Text
+            style={{
+              color: '#9b9b9b',
               fontSize: 12,
-              color: '#000',
+              letterSpacing: -0.3,
+              fontWeight: 'bold',
             }}>
+            {createdTime}
+          </Text>
+          <View style={styles.messageBubble}>
+            <Text
+              style={{
+                fontSize: 14,
+                letterSpacing: -0.4,
+                color: '#000',
+                marginBottom: 4,
+              }}>
               {item.message}
             </Text>
           </View>
         </View>
-      }
+      )}
+      {isSystemMsg && (
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '100%',
+          }}>
+          <View style={styles.systemMessageBubble}>
+            <Text
+              style={{
+                fontSize: 12,
+                color: '#000',
+              }}>
+              {item.message}
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -250,7 +282,11 @@ async function completeSettlement(settlementData: SettlementData) {
   }
 }
 
-const SettlementRequest = ({ settlementData }: { settlementData: SettlementData }) => {
+const SettlementRequest = ({
+  settlementData,
+}: {
+  settlementData: SettlementData;
+}) => {
   const settlementSend = () => {
     Alert.alert('송금 확인', '송금을 완료하셨습니까?', [
       {
@@ -260,15 +296,20 @@ const SettlementRequest = ({ settlementData }: { settlementData: SettlementData 
       {
         text: '네',
         onPress: () => {
-          completeSettlement(settlementData).then(result => {
-            if (result !== 200) {
-              Alert.alert('실패', 'response: ' + result?.toString());
-            } else {
-              Alert.alert('전송 완료', '송금 완료 알림을 전송했습니다.');
-            }
-          }).catch(error => {
-            Alert.alert('실패', '송금 완료 알림 전송에 실패했습니다: ' + error.message);
-          });
+          completeSettlement(settlementData)
+            .then(result => {
+              if (result !== 200) {
+                Alert.alert('실패', 'response: ' + result?.toString());
+              } else {
+                Alert.alert('전송 완료', '송금 완료 알림을 전송했습니다.');
+              }
+            })
+            .catch(error => {
+              Alert.alert(
+                '실패',
+                '송금 완료 알림 전송에 실패했습니다: ' + error.message,
+              );
+            });
         },
       },
     ]);
@@ -276,56 +317,76 @@ const SettlementRequest = ({ settlementData }: { settlementData: SettlementData 
 
   return (
     <View style={styles.settlementRequest}>
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-      }}>
-        <Text style={{
-          fontSize: 22,
-          letterSpacing: -0.7,
-          fontWeight: '600',
-          color: 'black',
-        }}>정산 요청 안내</Text>
-        <Text style={{
-          fontSize: 22,
-          letterSpacing: -0.7,
-          fontWeight: '600',
-          color: 'black',
-        }}>{settlementData.payAmount}원</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '100%',
+        }}>
+        <Text
+          style={{
+            fontSize: 22,
+            letterSpacing: -0.7,
+            fontWeight: '600',
+            color: 'black',
+          }}>
+          정산 요청 안내
+        </Text>
+        <Text
+          style={{
+            fontSize: 22,
+            letterSpacing: -0.7,
+            fontWeight: '600',
+            color: 'black',
+          }}>
+          {settlementData.payAmount}원
+        </Text>
       </View>
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
-      }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '100%',
+        }}>
         <View style={{marginTop: 10}}>
-          <Text style={{
-            fontSize: 13,
-            letterSpacing: -0.4,
-            color: '#4f4f4f',
-          }}>{settlementData.payerAccountHolderName}</Text>
-          <Text style={{
-            fontSize: 13,
-            letterSpacing: -0.4,
-            color: '#4f4f4f',
-          }}>{settlementData.payerBankName} {settlementData.payerAccountNumber}</Text>
+          <Text
+            style={{
+              fontSize: 13,
+              letterSpacing: -0.4,
+              color: '#4f4f4f',
+            }}>
+            {settlementData.payerAccountHolderName}
+          </Text>
+          <Text
+            style={{
+              fontSize: 13,
+              letterSpacing: -0.4,
+              color: '#4f4f4f',
+            }}>
+            {settlementData.payerBankName} {settlementData.payerAccountNumber}
+          </Text>
         </View>
-        <Text style={{
-          fontSize: 16,
-          letterSpacing: -0.4,
-          fontWeight: 'bold',
-          color: '#e45b63',
-        }}>???/{settlementData.currentParticipant}</Text>
+        <Text
+          style={{
+            fontSize: 16,
+            letterSpacing: -0.4,
+            fontWeight: 'bold',
+            color: '#e45b63',
+          }}>
+          ???/{settlementData.currentParticipant}
+        </Text>
       </View>
-      <Text style={{
-        fontSize: 12,
-        letterSpacing: -0.4,
-        fontWeight: '600',
-        marginTop: 10,
-        color: '#9b9b9b',
-      }}>꼭! 송금 후 완료 버튼을 눌러 주세요!</Text>
+      <Text
+        style={{
+          fontSize: 12,
+          letterSpacing: -0.4,
+          fontWeight: '600',
+          marginTop: 10,
+          color: '#9b9b9b',
+        }}>
+        꼭! 송금 후 완료 버튼을 눌러 주세요!
+      </Text>
 
       <TouchableOpacity
         style={{
@@ -337,14 +398,16 @@ const SettlementRequest = ({ settlementData }: { settlementData: SettlementData 
           marginTop: 5,
           justifyContent: 'center',
         }}
-        onPress={() => settlementSend()}
-      >
-        <Text style={{
-          fontSize: 14,
-          letterSpacing: -0.4,
-          color: '#f6f7f9',
-          alignItems: 'center',
-        }}>송금 완료 알림을 보냅니다</Text>
+        onPress={() => settlementSend()}>
+        <Text
+          style={{
+            fontSize: 14,
+            letterSpacing: -0.4,
+            color: '#f6f7f9',
+            alignItems: 'center',
+          }}>
+          송금 완료 알림을 보냅니다
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -352,7 +415,7 @@ const SettlementRequest = ({ settlementData }: { settlementData: SettlementData 
 
 const ChatScreen = ({navigation}: ChatScreenProps) => {
   const route = useRoute<ChatScreenRouteProp>();
-  const { roomUuid } = route.params;
+  const {roomUuid} = route.params;
   const [users, setUsers] = useState<UserData[]>([]);
   const [message, setMessage] = useState<string>('');
   const [inputHeight, setInputHeight] = useState<number>(40);
@@ -396,13 +459,19 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
     }
     setIsLoadingOld(true);
     try {
-      const response = await paxi_api.get(`/chat/${roomUuid}?before=${chatData[chatData.length - 1].uuid}`);
-      const newChatData: MessageData[] = response.data.map((item: MessageData) => ({
-        ...item,
-        avatar: require('../../assets/popo.png'), // 임시 이미지
-        senderName: users?.find(user => user.userUuid === item.senderUuid)?.nickname ?? '알 수 없음',
-        isMe: item.senderUuid === myUuid,
-      }));
+      const response = await paxi_api.get(
+        `/chat/${roomUuid}?before=${chatData[chatData.length - 1].uuid}`,
+      );
+      const newChatData: MessageData[] = response.data.map(
+        (item: MessageData) => ({
+          ...item,
+          avatar: require('../../assets/popo.png'), // 임시 이미지
+          senderName:
+            users?.find(user => user.userUuid === item.senderUuid)?.nickname ??
+            '알 수 없음',
+          isMe: item.senderUuid === myUuid,
+        }),
+      );
       setChatData(prev => [...prev, ...newChatData]);
     } catch (error) {
       console.error('Error fetching previous chat data:', error);
@@ -415,12 +484,14 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
     const newChatData = {
       ...data,
       avatar: require('../../assets/popo.png'), // 임시 이미지
-      senderName: users?.find(user => user.userUuid === data.senderUuid)?.nickname ?? '알 수 없음',
+      senderName:
+        users?.find(user => user.userUuid === data.senderUuid)?.nickname ??
+        '알 수 없음',
       isMe: data.senderUuid === myUuid,
     };
     setChatData(prev => [newChatData, ...prev]);
     if (isAtBottom) {
-      flatListRef.current?.scrollToIndex({ index: 0, animated: false });
+      flatListRef.current?.scrollToIndex({index: 0, animated: false});
     }
   };
 
@@ -430,20 +501,23 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
   };
 
   const deleteChatData = (uuid: string) => {
-    const removedChatData = chatData.filter(item =>item.uuid !== uuid);
+    const removedChatData = chatData.filter(item => item.uuid !== uuid);
     setChatData(removedChatData);
     if (isAtBottom) {
-      flatListRef.current?.scrollToIndex({ index: 0, animated: false });
+      flatListRef.current?.scrollToIndex({index: 0, animated: false});
     }
   };
 
   const connectSocket = async (tempMyUuid: string) => {
     const token = (await EncryptedStorage.getItem('auth_token')) ?? '';
-    const socket = io(`https://api.paxi-dev.popo.poapper.club?Authentication=${token}`, {
-      transports: ['websocket'],
-      forceNew: true,
-      reconnection: true,
-    });
+    const socket = io(
+      `https://api.paxi-dev.popo.poapper.club?Authentication=${token}`,
+      {
+        transports: ['websocket'],
+        forceNew: true,
+        reconnection: true,
+      },
+    );
 
     console.log('웹소켓 연결 중...');
 
@@ -452,26 +526,26 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
     });
 
     socket.off('newMessage');
-    socket.on('newMessage', (data) => {
+    socket.on('newMessage', data => {
       console.log('메시지 수신:', data);
       addChatData(data, tempMyUuid);
     });
 
-    socket.on('updatedMessage', (data) => {
+    socket.on('updatedMessage', data => {
       console.log('갱신될 메시지:', data);
       updateChatData(data);
     });
 
-    socket.on('deletedMessage', (data) => {
+    socket.on('deletedMessage', data => {
       console.log('삭제될 메시지:', data);
       deleteChatData(data);
     });
 
-    socket.on('connect_error', (error) => {
+    socket.on('connect_error', error => {
       console.error('연결 에러 발생:', error);
     });
 
-    socket.on('error', (error) => {
+    socket.on('error', error => {
       console.error('에러 발생:', error);
     });
 
@@ -507,50 +581,53 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
     }
   };
 
-  const renderDeligateItem = ({ item }: ListRenderItemInfo<UserData>) => {
+  const renderDeligateItem = ({item}: ListRenderItemInfo<UserData>) => {
     const deligateCheck = () => {
-      Alert.alert('권한 위임', `유저 ${item.nickname}에게 방장 권한을 위임하시겠습니까?`, [
-        {
-          text: '아니오',
-          style: 'cancel',
-        },
-        {
-          text: '위임하고 나가기',
-          onPress: () => {
-            leaveRoomWithDeligate(item.userUuid).then( response => {
-              console.log('success in deligate', response);
-              Alert.alert('처리 완료', '요청이 처리되었습니다.');
-            }).catch(error => {
-              console.error('error while deligate', error);
-            });
+      Alert.alert(
+        '권한 위임',
+        `유저 ${item.nickname}에게 방장 권한을 위임하시겠습니까?`,
+        [
+          {
+            text: '아니오',
+            style: 'cancel',
           },
-        },
-      ]);
+          {
+            text: '위임하고 나가기',
+            onPress: () => {
+              leaveRoomWithDeligate(item.userUuid)
+                .then(response => {
+                  console.log('success in deligate', response);
+                  Alert.alert('처리 완료', '요청이 처리되었습니다.');
+                })
+                .catch(error => {
+                  console.error('error while deligate', error);
+                });
+            },
+          },
+        ],
+      );
     };
 
     console.log(item.isOwner);
 
     return (
-        <View style={styles.userRow}>
-          <View style={styles.rowCenter}>
-            {/* 프로필 사진 대체 원 */}
-            <View style={styles.avatarCircle} />
-            <View>
-              <View style={styles.nameRow}>
-                {item.isOwner}
-                <Text style={styles.nameText}>{item.nickname}</Text>
-              </View>
+      <View style={styles.userRow}>
+        <View style={styles.rowCenter}>
+          {/* 프로필 사진 대체 원 */}
+          <View style={styles.avatarCircle} />
+          <View>
+            <View style={styles.nameRow}>
+              {item.isOwner}
+              <Text style={styles.nameText}>{item.nickname}</Text>
             </View>
           </View>
-          <View style={styles.rowCenter}>
-            <TouchableOpacity
-              style={styles.grayButton}
-              onPress={deligateCheck}
-            >
-              <Text>권한 위임</Text>
-            </TouchableOpacity>
-          </View>
         </View>
+        <View style={styles.rowCenter}>
+          <TouchableOpacity style={styles.grayButton} onPress={deligateCheck}>
+            <Text>권한 위임</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   };
 
@@ -559,7 +636,9 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
       setIsLeaveRoom(false);
       setModalVisible(false);
       navigation.goBack();
-      const leaveWithDeleteResponse = await paxi_api.delete(`/room/${roomUuid}`);
+      const leaveWithDeleteResponse = await paxi_api.delete(
+        `/room/${roomUuid}`,
+      );
       console.log(leaveWithDeleteResponse.data);
     } catch (error) {
       console.error('Error while deleting room:', error);
@@ -588,21 +667,29 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
     try {
       const roomResponse = await paxi_api.post(`/room/join2/${roomUuid}`);
       const myResponse = await paxi_api.get('/auth/me');
-      roomResponse.data.departureTime = roomResponse.data.departureTime.slice(0,10) + ' ' + roomResponse.data.departureTime.slice(11,16);
+      roomResponse.data.departureTime =
+        roomResponse.data.departureTime.slice(0, 10) +
+        ' ' +
+        roomResponse.data.departureTime.slice(11, 16);
       console.log(roomResponse.data);
 
       const payerUuid = roomResponse.data.payerUuid;
       if (payerUuid) {
         console.log(roomUuid);
-        const settlementResponse = await paxi_api.get(`/room/${roomUuid}/settlement`);
+        const settlementResponse = await paxi_api.get(
+          `/room/${roomUuid}/settlement`,
+        );
         console.log('Settlement Data:', settlementResponse.data);
 
         setSettlementData({
           payAmount: Number(settlementResponse.data.payAmountPerPerson),
           payerBankName: settlementResponse.data.payerBankName,
           payerAccountNumber: settlementResponse.data.payerAccountNumber,
-          payerAccountHolderName: settlementResponse.data.payerAccountHolderName,
-          currentParticipant: Number(settlementResponse.data.currentParticipant),
+          payerAccountHolderName:
+            settlementResponse.data.payerAccountHolderName,
+          currentParticipant: Number(
+            settlementResponse.data.currentParticipant,
+          ),
           updateAccount: false, // TODO: 이 변수의 활용처를 정확하게 알아서 나중에 업데이트하기
           roomUuid: roomUuid,
         });
@@ -613,12 +700,15 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
       setMyUuid(myResponse.data.uuid);
 
       const chatResponse = await paxi_api.get(`/chat/${roomUuid}`);
-      const getChatData: MessageData[] = chatResponse.data.map((item: MessageData) => ({
-        ...item,
-        avatar: require('../../assets/popo.png'), // 임시 이미지
-        senderName: roomResponse.data.room_users[item.senderUuid] ?? '알 수 없음',
-        isMe: item.senderUuid === myResponse.data.uuid,
-      }));
+      const getChatData: MessageData[] = chatResponse.data.map(
+        (item: MessageData) => ({
+          ...item,
+          avatar: require('../../assets/popo.png'), // 임시 이미지
+          senderName:
+            roomResponse.data.room_users[item.senderUuid] ?? '알 수 없음',
+          isMe: item.senderUuid === myResponse.data.uuid,
+        }),
+      );
 
       const userData = roomResponse.data.room_users.map((item: any) => ({
         ...item,
@@ -659,48 +749,52 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={{
-          fontSize: 25,
-          letterSpacing: -1,
-          color: '#000',
-          position: 'absolute',
-          width: '100%',
-          textAlign: 'center',
-        }}>{roomData?.title}</Text>
+        <Text
+          style={{
+            fontSize: 25,
+            letterSpacing: -1,
+            color: '#000',
+            position: 'absolute',
+            width: '100%',
+            textAlign: 'center',
+          }}>
+          {roomData?.title}
+        </Text>
 
         <TouchableOpacity
-          style={{ marginLeft: 10 }}
-          onPress={() => navigation.goBack()}
-        >
+          style={{marginLeft: 10}}
+          onPress={() => navigation.goBack()}>
           <Icon name="arrow-back-ios-new" size={25} color={'black'} />
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{ marginRight: 10 }}
-          onPress={() => setModalVisible(true)}
-        >
+          style={{marginRight: 10}}
+          onPress={() => setModalVisible(true)}>
           <Icon name="menu" size={30} color={'black'} />
         </TouchableOpacity>
       </View>
 
-      { isSettlementModal &&
-        <SettlementRequest
-          settlementData={settlementData}
-        />
-      }
+      {isSettlementModal && (
+        <SettlementRequest settlementData={settlementData} />
+      )}
 
       <Modal
         transparent={true}
         visible={isLeaveRoom}
-        onRequestClose={() => setIsLeaveRoom(false)}
-      >
-        <Pressable style={styles.overlay2} onPress={() => setIsLeaveRoom(false)}>
-          <Pressable style={styles.modalContainer2} onPress={() => { /* 내부 터치 무시 */ }}>
+        onRequestClose={() => setIsLeaveRoom(false)}>
+        <Pressable
+          style={styles.overlay2}
+          onPress={() => setIsLeaveRoom(false)}>
+          <Pressable
+            style={styles.modalContainer2}
+            onPress={() => {
+              /* 내부 터치 무시 */
+            }}>
             <Text>방을 나가시려면 방장 권한을 위임해야 합니다.</Text>
             <FlatList
-              style={{ width: '100%', paddingHorizontal: 0 }}
+              style={{width: '100%', paddingHorizontal: 0}}
               data={users.filter(item => !item.isOwner)}
-              keyExtractor={(item) => item.userUuid}
+              keyExtractor={item => item.userUuid}
               renderItem={renderDeligateItem}
             />
           </Pressable>
@@ -710,74 +804,89 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
       <Modal
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <Pressable style={styles.overlay} onPress={() => setModalVisible(false)}>
-          <Pressable style={styles.modalContainer} onPress={() => { /* 내부 터치 무시 */ }}>
+        onRequestClose={() => setModalVisible(false)}>
+        <Pressable
+          style={styles.overlay}
+          onPress={() => setModalVisible(false)}>
+          <Pressable
+            style={styles.modalContainer}
+            onPress={() => {
+              /* 내부 터치 무시 */
+            }}>
             <View style={styles.infoBox}>
               <TouchableOpacity onPress={() => {}}>
-                <Text style={{
-                  color: '#999',
-                  fontSize: 13,
-                  marginLeft: 4,
-                  marginBottom: 8,
-                }}>✎ 수정하기</Text>
+                <Text
+                  style={{
+                    color: '#999',
+                    fontSize: 13,
+                    marginLeft: 4,
+                    marginBottom: 8,
+                  }}>
+                  ✎ 수정하기
+                </Text>
               </TouchableOpacity>
 
               <View style={styles.routeInfo}>
                 <View style={styles.locationBlock}>
                   <Text style={styles.label}>출발지</Text>
-                  <Text style={styles.location}>{roomData?.departureLocation}</Text>
+                  <Text style={styles.location}>
+                    {roomData?.departureLocation}
+                  </Text>
                   <Text style={styles.subText}>{roomData?.departureTime}</Text>
                 </View>
                 <Text style={styles.arrow}>〉</Text>
                 <View style={styles.locationBlock}>
                   <Text style={styles.label}>도착지</Text>
-                  <Text style={styles.location}>{roomData?.destinationLocation}</Text>
+                  <Text style={styles.location}>
+                    {roomData?.destinationLocation}
+                  </Text>
                   <Text style={styles.subText} />
                 </View>
               </View>
-              <View style={{
-                borderBottomWidth: 1,
-                borderColor: '#ddd',
-                borderStyle: 'dotted',
-                marginTop: 12,
-              }}/>
+              <View
+                style={{
+                  borderBottomWidth: 1,
+                  borderColor: '#ddd',
+                  borderStyle: 'dotted',
+                  marginTop: 12,
+                }}
+              />
               <Text style={styles.extraInfo}>{roomData?.description}</Text>
             </View>
 
             <View style={styles.rowBetween}>
               <View style={styles.rowCenter}>
                 <Icon name="person" size={30} color="black" />
-                <Text style={styles.countText}>{roomData?.currentParticipant}</Text>
+                <Text style={styles.countText}>
+                  {roomData?.currentParticipant}
+                </Text>
               </View>
               <TouchableOpacity
                 style={styles.primaryButton}
                 onPress={() => {
                   setModalVisible(false);
-                  navigation.navigate('Settlement', { roomUuid: roomUuid });
-                }}
-              >
+                  navigation.navigate('Settlement', {roomUuid: roomUuid});
+                }}>
                 <Text style={styles.buttonText}>정산 요청하기</Text>
               </TouchableOpacity>
             </View>
 
             <FlatList
-              style={{ width: '100%', paddingHorizontal: 0 }}
+              style={{width: '100%', paddingHorizontal: 0}}
               data={users}
-              keyExtractor={(item) => item.userUuid}
+              keyExtractor={item => item.userUuid}
               renderItem={renderMemberItem}
             />
 
-            <View style={{
-              width: '100%',
-              height: 50,
-              justifyContent: 'center',
-            }}>
+            <View
+              style={{
+                width: '100%',
+                height: 50,
+                justifyContent: 'center',
+              }}>
               <TouchableOpacity
                 style={styles.leaveRoomButton}
-                onPress={leaveRoom}
-              >
+                onPress={leaveRoom}>
                 <Icon name="logout" size={30} color="black" />
               </TouchableOpacity>
             </View>
@@ -789,10 +898,10 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
         ref={flatListRef}
         style={styles.chatList}
         data={chatData}
-        keyExtractor={(item) => item.uuid}
+        keyExtractor={item => item.uuid}
         renderItem={renderItem}
         inverted={true}
-        onScroll ={(event) => {
+        onScroll={event => {
           setIsAtBottom(event.nativeEvent.contentOffset.y > 300);
         }}
         onEndReached={() => {
@@ -806,26 +915,26 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
           value={message}
           onChangeText={setMessage}
           multiline={true}
-          onContentSizeChange={(e) =>
-            setInputHeight(Math.max(40, Math.min(120, e.nativeEvent.contentSize.height)))
+          onContentSizeChange={e =>
+            setInputHeight(
+              Math.max(40, Math.min(120, e.nativeEvent.contentSize.height)),
+            )
           }
         />
-        <TouchableOpacity
-          style={styles.sendButton}
-          onPress={msgSend}
-        >
+        <TouchableOpacity style={styles.sendButton} onPress={msgSend}>
           <Icon name="send" size={20} color="white" />
         </TouchableOpacity>
       </View>
 
-        {isAtBottom && (
-          <TouchableOpacity
-            style={styles.goDownButton}
-            onPress={() => flatListRef.current?.scrollToIndex({ index: 0, animated: false })}
-          >
-            <Icon name="arrow-drop-down" size={40} color="white" />
-          </TouchableOpacity>
-        )}
+      {isAtBottom && (
+        <TouchableOpacity
+          style={styles.goDownButton}
+          onPress={() =>
+            flatListRef.current?.scrollToIndex({index: 0, animated: false})
+          }>
+          <Icon name="arrow-drop-down" size={40} color="white" />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

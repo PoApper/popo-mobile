@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -43,7 +43,8 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
-  const [dropdownPosition, setDropdownPosition] = useState<LayoutRectangle | null>(null);
+  const [dropdownPosition, setDropdownPosition] =
+    useState<LayoutRectangle | null>(null);
 
   // useRef를 사용해 TouchableOpacity의 ref를 설정, 타입을 View로 설정
   const buttonRef = useRef<View | null>(null);
@@ -51,13 +52,10 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
   const openDropdown = () => {
     const handle = findNodeHandle(buttonRef.current);
     if (handle) {
-      UIManager.measure(
-        handle,
-        (x, y, width, height, pageX, pageY) => {
-          setDropdownPosition({ x: pageX, y: pageY + height + 5, width, height });
-          setVisible(true);
-        }
-      );
+      UIManager.measure(handle, (x, y, width, height, pageX, pageY) => {
+        setDropdownPosition({x: pageX, y: pageY + height + 5, width, height});
+        setVisible(true);
+      });
     }
   };
 
@@ -70,10 +68,14 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
   return (
     <View>
       {/* buttonRef를 통해 TouchableOpacity 참조 */}
-      <TouchableOpacity ref={buttonRef} onPress={openDropdown} style={[styles.button, style]}>
-        <Text style={[styles.buttonText,selected ? textSelectedStyle : textStyle]}>
+      <TouchableOpacity
+        ref={buttonRef}
+        onPress={openDropdown}
+        style={[styles.button, style]}>
+        <Text
+          style={[styles.buttonText, selected ? textSelectedStyle : textStyle]}>
           {selected
-            ? categories.find((cat) => cat.id === selected)?.name
+            ? categories.find(cat => cat.id === selected)?.name
             : defaultText}
         </Text>
       </TouchableOpacity>
@@ -91,19 +93,19 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
                     left: dropdownPosition.x,
                     width: dropdownPosition.width * 1.5,
                   },
-                ]}
-              >
+                ]}>
                 <FlatList
                   data={[
-                    ...(showDefaultTextInDropDown ? [{ id: '', name: '전체보기' }] : []),
+                    ...(showDefaultTextInDropDown
+                      ? [{id: '', name: '전체보기'}]
+                      : []),
                     ...categories,
                   ]}
-                  keyExtractor={(item) => item.id || 'all'}
-                  renderItem={({ item }) => (
+                  keyExtractor={item => item.id || 'all'}
+                  renderItem={({item}) => (
                     <TouchableOpacity
                       style={[styles.item, dropdownStyle]}
-                      onPress={() => handleSelect(item.id || null)}
-                    >
+                      onPress={() => handleSelect(item.id || null)}>
                       <Text>{item.name}</Text>
                     </TouchableOpacity>
                   )}
