@@ -13,11 +13,11 @@ import {
 } from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+import {RootStackParamList} from '../../navigation/types';
 import {RouteProp} from '@react-navigation/native';
-import api from '../utils/api';
-import CalendarKoreanLocales from '../utils/calendar-locales';
-import LazyImage from '../components/LazyImage';
+import api from '../../utils/api';
+import CalendarKoreanLocales from '../../utils/calendar-locales';
+import LazyImage from '../../components/LazyImage';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';

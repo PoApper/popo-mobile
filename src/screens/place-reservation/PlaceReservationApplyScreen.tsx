@@ -13,12 +13,12 @@ import {
   Alert,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+import {RootStackParamList} from '../../navigation/types';
 import {RouteProp} from '@react-navigation/native';
-import api from '../utils/api';
+import api from '../../utils/api';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {LocaleConfig} from 'react-native-calendars';
-import CalendarKoreanLocales from '../utils/calendar-locales';
+import CalendarKoreanLocales from '../../utils/calendar-locales';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';

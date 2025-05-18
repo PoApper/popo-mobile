@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+import {RootStackParamList} from '../../navigation/types';
 
 type SignupScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Signup'>;
@@ -118,7 +118,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
 
           <View style={styles.logoContainer}>
             <Image
-              source={require('../../assets/popo.png')}
+              source={require('../../../assets/popo.png')}
               style={styles.logoImage}
               resizeMode="contain"
             />

@@ -12,9 +12,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
-import api from '../utils/api';
-import LazyImage from '../components/LazyImage';
+import {RootStackParamList} from '../../navigation/types';
+import api from '../../utils/api';
+import LazyImage from '../../components/LazyImage';
 
 type PlaceReservationScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PlaceReservation'>;

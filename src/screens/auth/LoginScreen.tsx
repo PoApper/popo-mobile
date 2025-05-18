@@ -12,12 +12,12 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+import {RootStackParamList} from '../../navigation/types';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import api, {POPO_API_URL} from '../utils/api';
+import api, {POPO_API_URL} from '../../utils/api';
 import axios from 'axios';
-import {getFCMToken} from '../utils/firebase';
+import {getFCMToken} from '../../utils/firebase';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -165,7 +165,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         ]}>
         <View style={styles.logoContainer}>
           <Image
-            source={require('../../assets/popo.png')}
+            source={require('../../../assets/popo.png')}
             style={styles.logoImage}
             resizeMode="contain"
           />
