@@ -76,8 +76,8 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
     }
 
     // 비밀번호 길이 검사
-    if (password.length < 6) {
-      setError('비밀번호는 최소 6자 이상이어야 합니다.');
+    if (password.length < 8) {
+      setError('비밀번호는 최소 8자 이상이어야 합니다.');
       return;
     }
 
@@ -112,7 +112,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.backButtonText,
                 {color: isDarkMode ? '#FFFFFF' : '#000000'},
               ]}>
-              {'← 뒤로'}
+              {'로그인 페이지로'}
             </Text>
           </TouchableOpacity>
 
@@ -138,7 +138,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.label,
                 {color: isDarkMode ? '#FFFFFF' : '#000000'},
               ]}>
-              이름 *
+              이름*
             </Text>
             <TextInput
               style={[
@@ -149,7 +149,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                   borderColor: isDarkMode ? '#555555' : '#E5E7EB',
                 },
               ]}
-              placeholder="이름을 입력하세요"
+              placeholder="예약에 사용할 실명을 입력해주세요"
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
               value={name}
               onChangeText={setName}
@@ -160,7 +160,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.label,
                 {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
               ]}>
-              이메일 *
+              이메일*
             </Text>
             <TextInput
               style={[
@@ -171,20 +171,27 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                   borderColor: isDarkMode ? '#555555' : '#E5E7EB',
                 },
               ]}
-              placeholder="이메일 주소를 입력하세요"
+              placeholder="POSTECH 메일만 가입 가능 합니다"
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
               keyboardType="email-address"
               autoCapitalize="none"
               value={email}
               onChangeText={setEmail}
             />
+            <Text
+              style={[
+                styles.emailHintText,
+                {color: isDarkMode ? '#AAAAAA' : '#9CA3AF'},
+              ]}>
+              입력한 이메일로 인증메일이 발송 됩니다.
+            </Text>
 
             <Text
               style={[
                 styles.label,
                 {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
               ]}>
-              비밀번호 *
+              비밀번호*
             </Text>
             <TextInput
               style={[
@@ -207,7 +214,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.label,
                 {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
               ]}>
-              비밀번호 확인 *
+              비밀번호 확인*
             </Text>
             <TextInput
               style={[
@@ -230,7 +237,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.label,
                 {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
               ]}>
-              사용자 유형 *
+              사용자 유형*
             </Text>
             <View style={styles.userTypeContainer}>
               <TouchableOpacity
@@ -472,6 +479,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#4F46E5',
     fontWeight: '600',
+  },
+  emailHintText: {
+    fontSize: 12,
+    marginTop: 4,
+    marginLeft: 4,
+    fontFamily: 'Pretendard',
   },
 });
 
