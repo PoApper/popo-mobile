@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
     maxHeight: '80%',
     borderRadius: 12,
     padding: 20,
-    paddingBottom: 0,
+    paddingBottom: 20,
     justifyContent: 'space-between',
   },
   scrollView: {
