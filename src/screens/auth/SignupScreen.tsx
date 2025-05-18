@@ -81,9 +81,10 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
     }
 
     // 이메일 형식 검사
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError('유효한 이메일 주소를 입력해주세요.');
+    if (email.includes('@')) {
+      setError(
+        '유효한 POVIS ID를 입력해주세요. @postech.ac.kr는 포함할 필요 없습니다.',
+      );
       return;
     }
 
@@ -95,7 +96,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
 
     api
       .post('/auth/signin', {
-        email,
+        email: email + '@postech.ac.kr',
         password,
         name,
         userType,
@@ -113,11 +114,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
         );
       })
       .catch(err => {
-        Alert.alert('회원가입 실패', err.response.data.message, [
-          {
-            text: '확인',
-          },
-        ]);
+        Alert.alert('회원가입 실패', err.response.data.message);
       });
   };
 
@@ -185,7 +182,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.label,
                 {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
               ]}>
-              이메일*
+              POVIS ID*
             </Text>
             <TextInput
               style={[
@@ -196,7 +193,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                   borderColor: isDarkMode ? '#555555' : '#E5E7EB',
                 },
               ]}
-              placeholder="POSTECH 메일만 가입 가능 합니다"
+              placeholder="POVIS ID를 입력해주세요"
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
               keyboardType="email-address"
               autoCapitalize="none"
@@ -208,7 +205,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.emailHintText,
                 {color: isDarkMode ? '#AAAAAA' : '#9CA3AF'},
               ]}>
-              입력한 이메일로 인증메일이 발송 됩니다.
+              POVIS 이메일로 인증메일이 발송 됩니다.
             </Text>
 
             <Text
