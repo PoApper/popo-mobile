@@ -407,7 +407,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
       ) : (
         <View style={styles.emptyContainer}>
           <Image
-            source={require('../../assets/popo.png')}
+            source={require('../../assets/icon/POPO_typography_bg_removed_cropped.png')}
             style={styles.emptyImage}
             resizeMode="contain"
           />
