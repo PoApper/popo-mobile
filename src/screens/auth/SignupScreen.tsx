@@ -115,8 +115,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
       .catch(err => {
         Alert.alert('회원가입 실패', err.response.data.message, [
           {
-            text: '처음으로',
-            onPress: () => navigation.navigate('Login'),
+            text: '확인',
           },
         ]);
       });
