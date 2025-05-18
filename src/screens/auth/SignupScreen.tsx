@@ -15,6 +15,8 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
 import api from '../../utils/api';
+import PrivacyPolicy from '../../components/PrivacyPolicy';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type SignupScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Signup'>;
@@ -54,13 +56,17 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
   const [name, setName] = useState('');
   const [userType, setUserType] = useState<UserType | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isPrivacyPolicyVisible, setIsPrivacyPolicyVisible] = useState(false);
+  const [isPrivacyPolicyAgreed, setIsPrivacyPolicyAgreed] = useState(false);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
     flex: 1,
   };
 
-  const okSignup = isOkSignup(email, password, confirmPassword, name, userType);
+  const okSignup =
+    isOkSignup(email, password, confirmPassword, name, userType) &&
+    isPrivacyPolicyAgreed;
 
   const handleSignup = () => {
     // 기본적인 유효성 검사
@@ -363,6 +369,23 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
             </Text>
 
             <TouchableOpacity
+              style={styles.privacyPolicyContainer}
+              onPress={() => setIsPrivacyPolicyVisible(true)}>
+              <View style={styles.privacyPolicyCheckbox}>
+                {isPrivacyPolicyAgreed && (
+                  <Icon name="check" size={16} color="#4F46E5" />
+                )}
+              </View>
+              <Text
+                style={[
+                  styles.privacyPolicyText,
+                  {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                ]}>
+                개인정보 처리 방침에 동의합니다
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
               style={[
                 styles.signupButton,
                 !okSignup && styles.signupButtonDisabled,
@@ -389,6 +412,15 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
           </View>
         </View>
       </ScrollView>
+
+      <PrivacyPolicy
+        visible={isPrivacyPolicyVisible}
+        onClose={() => setIsPrivacyPolicyVisible(false)}
+        onAgree={() => {
+          setIsPrivacyPolicyAgreed(true);
+          setIsPrivacyPolicyVisible(false);
+        }}
+      />
     </SafeAreaView>
   );
 };
@@ -503,6 +535,25 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginLeft: 4,
     fontFamily: 'Pretendard',
+  },
+  privacyPolicyContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  privacyPolicyCheckbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: '#4F46E5',
+    borderRadius: 4,
+    marginRight: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  privacyPolicyText: {
+    fontSize: 14,
   },
 });
 
