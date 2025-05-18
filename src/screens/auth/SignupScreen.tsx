@@ -14,6 +14,7 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
+import api from '../../utils/api';
 
 type SignupScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Signup'>;
@@ -26,6 +27,25 @@ enum UserType {
   others = 'OTHERS',
 }
 
+const isOkSignup = (
+  email: string | null,
+  password: string | null,
+  confirmPassword: string | null,
+  name: string | null,
+  userType: UserType | null,
+) => {
+  return (
+    email &&
+    password &&
+    confirmPassword &&
+    name &&
+    userType &&
+    password.length >= 8 &&
+    password === confirmPassword &&
+    email.includes('@postech.ac.kr')
+  );
+};
+
 const SignupScreen = ({navigation}: SignupScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [email, setEmail] = useState('');
@@ -33,8 +53,6 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [userType, setUserType] = useState<UserType | null>(null);
-  // const [isLoading, setIsLoading] = useState(false);
-  const isLoading = false;
   const [error, setError] = useState<string | null>(null);
 
   const backgroundStyle = {
@@ -42,19 +60,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
     flex: 1,
   };
 
-  // 사용자 타입에 대한 한글 이름
-  const getUserTypeName = (type: UserType | null): string => {
-    switch (type) {
-      case UserType.student:
-        return '학생';
-      case UserType.faculty:
-        return '교직원';
-      case UserType.others:
-        return '기타';
-      default:
-        return '';
-    }
-  };
+  const okSignup = isOkSignup(email, password, confirmPassword, name, userType);
 
   const handleSignup = () => {
     // 기본적인 유효성 검사
@@ -81,19 +87,33 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
       return;
     }
 
-    // API 연동은 추후에 구현 예정
-    Alert.alert(
-      '회원가입 성공',
-      `회원가입이 완료되었습니다.\n사용자 타입: ${getUserTypeName(
+    api
+      .post('/auth/signin', {
+        email,
+        password,
+        name,
         userType,
-      )}\n로그인 화면으로 이동합니다.`,
-      [
-        {
-          text: '확인',
-          onPress: () => navigation.navigate('Login'),
-        },
-      ],
-    );
+      })
+      .then(() => {
+        Alert.alert(
+          '회원가입 성공',
+          '회원가입에 성공했습니다! 😁\n계정 활성화 메일을 확인해주세요! 📧\n(1분 정도 지연 될 수 있습니다.)',
+          [
+            {
+              text: '확인',
+              onPress: () => navigation.navigate('Login'),
+            },
+          ],
+        );
+      })
+      .catch(err => {
+        Alert.alert('회원가입 실패', err.response.data.message, [
+          {
+            text: '처음으로',
+            onPress: () => navigation.navigate('Login'),
+          },
+        ]);
+      });
   };
 
   return (
@@ -345,13 +365,11 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
             <TouchableOpacity
               style={[
                 styles.signupButton,
-                isLoading && styles.signupButtonDisabled,
+                !okSignup && styles.signupButtonDisabled,
               ]}
               onPress={handleSignup}
-              disabled={isLoading}>
-              <Text style={styles.signupButtonText}>
-                {isLoading ? '처리중...' : '회원가입'}
-              </Text>
+              disabled={!okSignup}>
+              <Text style={styles.signupButtonText}>회원가입</Text>
             </TouchableOpacity>
 
             {error && <Text style={styles.errorText}>{error}</Text>}
