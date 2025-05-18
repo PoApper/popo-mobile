@@ -223,12 +223,23 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             style={[
               styles.loginButton,
               {marginTop: 11},
+              isDarkMode
+                ? {
+                    backgroundColor: isLoading ? '#444' : '#fff',
+                    borderWidth: 1,
+                    borderColor: '#888',
+                  }
+                : {},
               isLoading && styles.loginButtonDisabled,
             ]}
             onPress={handleLogin}
             disabled={isLoading}>
-            <Text style={styles.loginButtonText}>
-              {isLoading ? '로그인 중...' : '계속하기'}
+            <Text
+              style={[
+                styles.loginButtonText,
+                isDarkMode ? {color: isLoading ? '#bbb' : '#000'} : {},
+              ]}>
+              {isLoading ? '로그인 중...' : '로그인'}
             </Text>
           </TouchableOpacity>
 
