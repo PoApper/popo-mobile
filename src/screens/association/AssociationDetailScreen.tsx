@@ -13,24 +13,24 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '../navigation/types';
-import {ClubType} from '../types/club';
-import api from '../utils/api';
+import {RootStackParamList} from '../../navigation/types';
+import api from '../../utils/api';
 
-type ClubDetailScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'ClubDetail'>;
-  route: RouteProp<RootStackParamList, 'ClubDetail'>;
+type AssociationDetailScreenProps = {
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    'AssociationDetail'
+  >;
+  route: RouteProp<RootStackParamList, 'AssociationDetail'>;
 };
 
-interface ClubItem {
+interface AssociationItem {
   uuid: string;
   name: string;
-  short_desc: string;
   content: string;
   location: string;
   representative: string;
   contact: string;
-  clubType: ClubType;
   image_url: string;
   views: number;
   homepage_url: string;
@@ -39,30 +39,33 @@ interface ClubItem {
   youtube_url: string;
 }
 
-const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
+const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({
   navigation,
   route,
 }) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [clubData, setClubData] = useState<ClubItem | null>(null);
+  const [associationData, setAssociationData] =
+    useState<AssociationItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const {clubId, clubName} = route.params;
+  const {associationId, associationName} = route.params;
 
   useEffect(() => {
-    const fetchClubDetail = async () => {
+    const fetchAssociationDetail = async () => {
       try {
-        const response = await api.get<ClubItem>(`/introduce/club/${clubId}`);
-        setClubData(response.data);
+        const response = await api.get<AssociationItem>(
+          `/introduce/association/${associationId}`,
+        );
+        setAssociationData(response.data);
       } catch (error) {
-        console.error('동아리 상세 정보 로드 오류:', error);
+        console.error('자치단체 상세 정보 로드 오류:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchClubDetail();
-  }, [clubId]);
+    fetchAssociationDetail();
+  }, [associationId]);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -106,30 +109,25 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
           onPress={() => navigation.goBack()}>
           <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>{clubName}</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>
+          {associationName}
+        </Text>
         <View style={styles.placeholderButton} />
       </View>
 
       <ScrollView style={styles.container}>
-        {clubData && (
+        {associationData && (
           <>
             <View style={styles.imageContainer}>
               <Image
-                source={{uri: clubData.image_url}}
-                style={styles.clubImage}
+                source={{uri: associationData.image_url}}
+                style={styles.associationImage}
                 resizeMode="contain"
               />
             </View>
             <View style={styles.contentContainer}>
-              <Text style={[styles.clubName, {color: textColor}]}>
-                {clubData.name}
-              </Text>
-              <Text
-                style={[
-                  styles.description,
-                  {color: isDarkMode ? '#888' : '#666'},
-                ]}>
-                {clubData.short_desc}
+              <Text style={[styles.associationName, {color: textColor}]}>
+                {associationData.name}
               </Text>
 
               <View style={[styles.infoSection, {borderColor}]}>
@@ -138,7 +136,7 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
                     styles.content,
                     {color: isDarkMode ? '#888' : '#666'},
                   ]}>
-                  {clubData.content}
+                  {associationData.content}
                 </Text>
               </View>
 
@@ -152,7 +150,7 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
                       styles.infoValue,
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}>
-                    {clubData.location}
+                    {associationData.location}
                   </Text>
                 </View>
                 <View style={styles.infoRow}>
@@ -164,7 +162,7 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
                       styles.infoValue,
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}>
-                    {clubData.representative}
+                    {associationData.representative}
                   </Text>
                 </View>
                 <View style={styles.infoRow}>
@@ -176,58 +174,66 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
                       styles.infoValue,
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}>
-                    {clubData.contact}
+                    {associationData.contact}
                   </Text>
                 </View>
               </View>
 
               <View style={[styles.infoSection, {borderColor}]}>
                 <View style={styles.socialLinks}>
-                  {clubData.homepage_url != 'null' &&
-                    clubData.homepage_url != '' &&
-                    clubData.homepage_url && (
+                  {associationData.homepage_url != 'null' &&
+                    associationData.homepage_url != '' &&
+                    associationData.homepage_url && (
                       <TouchableOpacity
                         style={[
                           styles.socialButton,
                           {backgroundColor: '#000000'},
                         ]}
-                        onPress={() => handleLinkPress(clubData.homepage_url)}>
+                        onPress={() =>
+                          handleLinkPress(associationData.homepage_url)
+                        }>
                         <Text style={styles.socialText}>홈페이지</Text>
                       </TouchableOpacity>
                     )}
-                  {clubData.facebook_url != 'null' &&
-                    clubData.facebook_url != '' &&
-                    clubData.facebook_url && (
+                  {associationData.facebook_url != 'null' &&
+                    associationData.facebook_url != '' &&
+                    associationData.facebook_url && (
                       <TouchableOpacity
                         style={[
                           styles.socialButton,
                           {backgroundColor: '#1877F2'},
                         ]}
-                        onPress={() => handleLinkPress(clubData.facebook_url)}>
+                        onPress={() =>
+                          handleLinkPress(associationData.facebook_url)
+                        }>
                         <Text style={styles.socialText}>Facebook</Text>
                       </TouchableOpacity>
                     )}
-                  {clubData.instagram_url != 'null' &&
-                    clubData.instagram_url != '' &&
-                    clubData.instagram_url && (
+                  {associationData.instagram_url != 'null' &&
+                    associationData.instagram_url != '' &&
+                    associationData.instagram_url && (
                       <TouchableOpacity
                         style={[
                           styles.socialButton,
                           {backgroundColor: '#E4405F'},
                         ]}
-                        onPress={() => handleLinkPress(clubData.instagram_url)}>
+                        onPress={() =>
+                          handleLinkPress(associationData.instagram_url)
+                        }>
                         <Text style={styles.socialText}>Instagram</Text>
                       </TouchableOpacity>
                     )}
-                  {clubData.youtube_url != 'null' &&
-                    clubData.youtube_url != '' &&
-                    clubData.youtube_url && (
+                  {associationData.youtube_url != 'null' &&
+                    associationData.youtube_url != '' &&
+                    associationData.youtube_url && (
                       <TouchableOpacity
                         style={[
                           styles.socialButton,
                           {backgroundColor: '#FF0000'},
                         ]}
-                        onPress={() => handleLinkPress(clubData.youtube_url)}>
+                        onPress={() =>
+                          handleLinkPress(associationData.youtube_url)
+                        }>
                         <Text style={styles.socialText}>YouTube</Text>
                       </TouchableOpacity>
                     )}
@@ -285,7 +291,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 24,
   },
-  clubImage: {
+  associationImage: {
     padding: 10,
     width: '100%',
     height: '100%',
@@ -293,24 +299,14 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: 24,
   },
-  clubName: {
+  associationName: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 12,
   },
-  description: {
-    fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 32,
-  },
   infoSection: {
     borderTopWidth: 1,
     paddingVertical: 24,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 12,
   },
   content: {
     fontSize: 16,
@@ -350,10 +346,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
-  socialIcon: {
-    width: 100,
-    height: 28,
-  },
 });
 
-export default ClubDetailScreen;
+export default AssociationDetailScreen;

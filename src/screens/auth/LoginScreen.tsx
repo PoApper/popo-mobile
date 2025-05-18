@@ -12,12 +12,12 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+import {RootStackParamList} from '../../navigation/types';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import api, {POPO_API_URL} from '../utils/api';
+import api, {POPO_API_URL} from '../../utils/api';
 import axios from 'axios';
-import {getFCMToken} from '../utils/firebase';
+import {getFCMToken} from '../../utils/firebase';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -165,7 +165,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         ]}>
         <View style={styles.logoContainer}>
           <Image
-            source={require('../../assets/popo.png')}
+            source={require('../../../assets/popo.png')}
             style={styles.logoImage}
             resizeMode="contain"
           />
@@ -223,12 +223,23 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             style={[
               styles.loginButton,
               {marginTop: 11},
+              isDarkMode
+                ? {
+                    backgroundColor: isLoading ? '#444' : '#fff',
+                    borderWidth: 1,
+                    borderColor: '#888',
+                  }
+                : {},
               isLoading && styles.loginButtonDisabled,
             ]}
             onPress={handleLogin}
             disabled={isLoading}>
-            <Text style={styles.loginButtonText}>
-              {isLoading ? '로그인 중...' : '계속하기'}
+            <Text
+              style={[
+                styles.loginButtonText,
+                isDarkMode ? {color: isLoading ? '#bbb' : '#000'} : {},
+              ]}>
+              {isLoading ? '로그인 중...' : '로그인'}
             </Text>
           </TouchableOpacity>
 

@@ -15,14 +15,14 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+import {RootStackParamList} from '../../navigation/types';
 import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import api from '../utils/api';
-import {getAuthToken} from '../utils/auth-token';
+import api from '../../utils/api';
+import {getAuthToken} from '../../utils/auth-token';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Environment from '../utils/environment';
+import Environment from '../../utils/environment';
 
 type UserDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserDetail'>;

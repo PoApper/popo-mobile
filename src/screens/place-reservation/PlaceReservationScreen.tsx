@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
-  Image,
   FlatList,
   TouchableOpacity,
   StyleSheet,
@@ -13,8 +12,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
-import api from '../utils/api';
+import {RootStackParamList} from '../../navigation/types';
+import api from '../../utils/api';
+import LazyImage from '../../components/LazyImage';
 
 type PlaceReservationScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PlaceReservation'>;
@@ -196,7 +196,7 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
                 styles.locationItem,
                 {backgroundColor: isDarkMode ? '#121212' : '#fff'},
               ]}>
-              <Image source={item.image} style={styles.locationImage} />
+              <LazyImage uri={item.image.uri} style={styles.locationImage} />
               <View style={styles.locationInfo}>
                 <Text style={[styles.locationName, {color: textColor}]}>
                   {item.name}
@@ -213,7 +213,13 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
                 style={[
                   styles.reserveButton,
                   {backgroundColor: backgroundSecondary},
-                ]}>
+                ]}
+                onPress={() =>
+                  navigation.navigate('PlaceDetailReservation', {
+                    placeId: item.id,
+                    placeName: item.name,
+                  })
+                }>
                 <Text style={[styles.reserveButtonText, {color: textColor}]}>
                   예약
                 </Text>
