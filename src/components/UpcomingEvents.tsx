@@ -29,7 +29,7 @@ interface PlaceReservation {
 }
 
 type PaginatedResponse = {
-  items: Reservation[];
+  items: PlaceReservation[];
   total: number;
   page: number;
   take: number;
@@ -132,7 +132,7 @@ const UpcomingEvents = () => {
             key={reservation.uuid}
             style={[
               styles.scheduleCard,
-              {backgroundColor: index % 2 === 0 ? '#4D61DD' : '#10ADB6'},
+              {backgroundColor: index % 2 === 0 ? '#FF616B' : '#FF7BA5'},
             ]}>
             <Text style={styles.scheduleTitle}>{reservation.title}</Text>
             <View style={styles.scheduleInfo}>
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     marginRight: 12,
-    width: 280,
+    width: 250,
     height: 140,
     justifyContent: 'space-between',
   },

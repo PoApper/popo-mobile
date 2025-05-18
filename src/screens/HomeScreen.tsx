@@ -99,8 +99,22 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       title: '기록물',
       active: true,
       onPress: () =>
-        handleMoveSite(
-          'https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD',
+        Alert.alert(
+          '외부 링크 이동',
+          '총학생회 구글 드라이브로 이동합니다. 계속하시겠습니까?',
+          [
+            {
+              text: '취소',
+              style: 'cancel',
+            },
+            {
+              text: '확인',
+              onPress: () =>
+                handleMoveSite(
+                  'https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD',
+                ),
+            },
+          ],
         ),
     },
     {
@@ -122,7 +136,23 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       icon: 'dining',
       title: '배달업체',
       active: true,
-      onPress: () => handleMoveSite('https://www.postechdorm.com/delivery'),
+      onPress: () => {
+        Alert.alert(
+          '외부 링크 이동',
+          '생활관자치회 배달업체 페이지로 이동합니다. 계속하시겠습니까?',
+          [
+            {
+              text: '취소',
+              style: 'cancel',
+            },
+            {
+              text: '확인',
+              onPress: () =>
+                handleMoveSite('https://www.postechdorm.com/delivery'),
+            },
+          ],
+        );
+      },
     },
   ];
 
@@ -219,6 +249,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderRadius: 12,
     padding: 12,
+    paddingTop: 24,
   },
   serviceItem: {
     width: '23%',
@@ -232,7 +263,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 2,
+    elevation: 6,
   },
   serviceTitle: {
     fontSize: 12,

@@ -29,8 +29,22 @@ export type RootStackParamList = {
   };
   Login: undefined;
   UserDetail: undefined;
+  Developer: undefined;
   Reservation: undefined;
   PlaceReservation: undefined;
+  PlaceDetail: {
+    placeId: string;
+    placeName: string;
+  };
+  PlaceDetailReservation: {
+    placeId: string;
+    placeName: string;
+  };
+  PlaceReservationApply: {
+    buildingName: string;
+    placeName: string;
+    placeId: string;
+  };
   Whitebook: undefined;
   Benefits: undefined;
   Club: undefined;
@@ -54,10 +68,7 @@ export type AuthStackParamList = {
 export type MainTabParamList = {
   Home: undefined;
   Paxi: undefined;
-  MyReservation: {
-    navigation: NativeStackNavigationProp<RootStackParamList>;
-    route: RouteProp<MainTabParamList, 'MyReservation'>;
-  };
+  MyReservation: undefined;
   MyInfo: {
     navigation: NativeStackNavigationProp<RootStackParamList>;
     route: RouteProp<MainTabParamList, 'MyInfo'>;

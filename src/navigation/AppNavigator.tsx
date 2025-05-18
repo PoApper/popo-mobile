@@ -13,20 +13,23 @@ import {
   MainTabParamList,
 } from './types';
 import LandingScreen from '../screens/LandingScreen';
-import LoginScreen from '../screens/LoginScreen';
+import LoginScreen from '../screens/auth/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
-import SignupScreen from '../screens/SignupScreen';
-import UserDetailScreen from '../screens/UserDetailScreen';
+import SignupScreen from '../screens/auth/SignupScreen';
+import UserDetailScreen from '../screens/auth/UserDetailScreen';
+import DeveloperPage from '../screens/auth/DeveloperPage';
 import ReservationScreen from '../screens/ReservationScreen';
 import NewPaxiRoomScreen from '../screens/NewPaxiRoomScreen';
 import PaxiRoomListScreen from '../screens/PaxiRoomListScreen';
-import PlaceReservationScreen from '../screens/PlaceReservationScreen';
+import PlaceReservationScreen from '../screens/place-reservation/PlaceReservationScreen';
+import PlaceDetailReservationScreen from '../screens/place-reservation/PlaceDetailReservationScreen';
+import PlaceReservationApplyScreen from '../screens/place-reservation/PlaceReservationApplyScreen';
 import WhitebookScreen from '../screens/WhitebookScreen';
 import BenefitsScreen from '../screens/BenefitsScreen';
-import ClubScreen from '../screens/ClubScreen';
-import ClubDetailScreen from '../screens/ClubDetailScreen';
-import AssociationScreen from '../screens/AssociationScreen';
-import AssociationDetailScreen from '../screens/AssociationDetailScreen';
+import ClubScreen from '../screens/club/ClubScreen';
+import ClubDetailScreen from '../screens/club/ClubDetailScreen';
+import AssociationScreen from '../screens/association/AssociationScreen';
+import AssociationDetailScreen from '../screens/association/AssociationDetailScreen';
 import CampusShuttleScreen from '../screens/CampusShuttle';
 import ChatScreen from '../screens/ChatScreen';
 import SettlementScreen from '../screens/SettlementScreen';
@@ -55,6 +58,7 @@ const MainNavigator = () => {
         tabBarStyle: {
           backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
           borderTopColor: isDarkMode ? '#333333' : '#E5E7EB',
+          paddingTop: 5,
         },
         tabBarActiveTintColor: '#4F46E5',
         tabBarInactiveTintColor: isDarkMode ? '#888888' : '#6B7280',
@@ -142,6 +146,7 @@ const AppNavigator = () => {
           <Stack.Screen name="Landing" component={LandingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="UserDetail" component={UserDetailScreen} />
+          <Stack.Screen name="Developer" component={DeveloperPage} />
           <Stack.Screen name="Reservation" component={ReservationScreen} />
           <Stack.Screen
             name="PlaceReservation"
@@ -160,6 +165,14 @@ const AppNavigator = () => {
           <Stack.Screen name="CampusShuttle" component={CampusShuttleScreen} />
           <Stack.Screen name="Auth" component={AuthNavigator} />
           <Stack.Screen name="Main" component={MainNavigator} />
+          <Stack.Screen
+            name="PlaceDetailReservation"
+            component={PlaceDetailReservationScreen}
+          />
+          <Stack.Screen
+            name="PlaceReservationApply"
+            component={PlaceReservationApplyScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
