@@ -54,7 +54,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
 
     try {
       const response = await api.post('/auth/login', {
-        email,
+        email: email.includes('@') ? email : `${email}@postech.ac.kr`,
         password,
       });
 
@@ -165,7 +165,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         ]}>
         <View style={styles.logoContainer}>
           <Image
-            source={require('../../../assets/popo.png')}
+            source={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
             style={styles.logoImage}
             resizeMode="contain"
           />
@@ -184,7 +184,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                 color: textColor,
               },
             ]}
-            placeholder="POPO 가입 이메일(POSTECH)"
+            placeholder="POSTECH ID 또는 이메일"
             placeholderTextColor={placeholderColor}
             keyboardType="email-address"
             autoCapitalize="none"
@@ -196,6 +196,9 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             importantForAutofill="yes" // android
             accessibilityLabel="popo.poapper.club username"
           />
+          <Text style={[styles.emailHintText, {color: placeholderColor}]}>
+            POSTECH ID를 입력하면, 자동으로 @postech.ac.kr이 붙습니다
+          </Text>
 
           <TextInput
             style={[
@@ -403,6 +406,12 @@ const styles = StyleSheet.create({
     color: '#EF4444',
     marginTop: 12,
     textAlign: 'center',
+  },
+  emailHintText: {
+    fontSize: 12,
+    marginTop: 4,
+    marginLeft: 4,
+    fontFamily: 'Pretendard',
   },
 });
 

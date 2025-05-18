@@ -17,6 +17,7 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SignupScreen from '../screens/auth/SignupScreen';
 import UserDetailScreen from '../screens/auth/UserDetailScreen';
+import DeveloperPage from '../screens/auth/DeveloperPage';
 import ReservationScreen from '../screens/ReservationScreen';
 import NewPaxiRoomScreen from '../screens/NewPaxiRoomScreen';
 import PaxiRoomListScreen from '../screens/PaxiRoomListScreen';
@@ -137,6 +138,7 @@ const AppNavigator = () => {
           <Stack.Screen name="Landing" component={LandingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="UserDetail" component={UserDetailScreen} />
+          <Stack.Screen name="Developer" component={DeveloperPage} />
           <Stack.Screen name="Reservation" component={ReservationScreen} />
           <Stack.Screen
             name="PlaceReservation"
