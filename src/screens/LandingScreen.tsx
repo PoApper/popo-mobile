@@ -30,7 +30,7 @@ const LandingScreen = ({navigation}: LandingScreenProps) => {
       />
       <View style={styles.container}>
         <Image
-          source={require('../../assets/popo.png')}
+          source={require('../../assets/icon/POPO_typography_bg_removed_cropped.png')}
           style={styles.logoImage}
           resizeMode="contain"
         />

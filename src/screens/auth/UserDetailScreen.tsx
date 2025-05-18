@@ -12,11 +12,12 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+import {RootStackParamList} from '../../navigation/types';
 import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import api from '../utils/api';
+import api from '../../utils/api';
+import Environment from '../../utils/environment';
 
 type UserDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserDetail'>;
@@ -128,7 +129,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   }, []);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={backgroundStyle} edges={['top', 'left', 'right']}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
@@ -145,7 +146,9 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
         <View style={styles.placeholderButton} />
       </View>
 
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{flexGrow: 1}}>
         <View
           style={[
             styles.profileCard,
@@ -240,7 +243,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
               </Text>
             </View>
 
-            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+            <View
+              style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
               <Text
                 style={[
                   styles.detailLabel,
@@ -266,19 +270,40 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
 
         {/* 내 예약 확인하기 버튼 */}
         <TouchableOpacity
-          style={[styles.reservationButton, {backgroundColor: '#4F46E5'}]}
+          style={[styles.buttonContainer, {backgroundColor: '#FF616B'}]}
           onPress={() => navigation.navigate('Reservation')}>
           <Text style={styles.reservationButtonText}>내 예약 확인하기</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.logoutButton}
+          style={[
+            styles.buttonContainer,
+            {backgroundColor: isDarkMode ? '#444444' : '#DBDBDB'},
+          ]}
           onPress={handleLogout}
           disabled={isLoading}>
-          <Text style={styles.logoutButtonText}>
+          <Text
+            style={[
+              styles.logoutButtonText,
+              {color: isDarkMode ? '#FFFFFF' : '#333333'},
+            ]}>
             {isLoading ? '처리 중...' : '로그아웃'}
           </Text>
         </TouchableOpacity>
+
+        {/* 개발자 페이지 버튼 */}
+        {!Environment.isProduction && (
+          <View style={{marginBottom: 48, marginTop: 16}}>
+            <TouchableOpacity
+              style={[styles.buttonContainer, {backgroundColor: '#4F46E5'}]}
+              onPress={() => navigation.navigate('Developer')}>
+              <Text style={styles.developerButtonText}>개발자 페이지</Text>
+            </TouchableOpacity>
+            <Text style={{fontSize: 12, color: '#6B7280'}}>
+              개발자 페이지는 에뮬레이터와 Test Flight에서만 접근 가능합니다.
+            </Text>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -366,8 +391,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   detailItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
     paddingVertical: 12,
     borderBottomWidth: 1,
   },
@@ -377,26 +401,89 @@ const styles = StyleSheet.create({
   detailValue: {
     fontSize: 16,
     fontWeight: '500',
+    flex: 1,
+    textAlign: 'right',
+    marginTop: 4,
   },
-  reservationButton: {
-    borderRadius: 8,
-    padding: 16,
+  uuidText: {
+    maxWidth: '70%',
+  },
+  tokenContainer: {
+    width: '100%',
+  },
+  tokenValue: {
+    fontSize: 16,
+    fontWeight: '500',
+    width: '100%',
+    paddingVertical: 2,
+  },
+  tokenWithCopyContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 6,
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  tokenWithCopy: {
+    flex: 1,
+    paddingRight: 8,
+  },
+  copyButton: {
+    backgroundColor: '#4F46E5',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 4,
+    marginLeft: 8,
+  },
+  copyButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '500',
   },
   reservationButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
   },
-  logoutButton: {
-    backgroundColor: '#EF4444',
+  buttonContainer: {
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
     marginVertical: 10,
   },
   logoutButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    justifyContent: 'space-between',
+  },
+  titleContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  iconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  copyIconButton: {
+    padding: 4,
+    marginLeft: 8,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 24,
+    width: 24,
+  },
+  copyIconText: {
+    fontSize: 16,
+    lineHeight: 16,
+    textAlignVertical: 'center',
+  },
+  developerButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
