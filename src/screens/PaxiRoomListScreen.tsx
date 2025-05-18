@@ -224,11 +224,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
           <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
         <Text style={[styles.headerTitle, {color: textColor}]}>Paxi</Text>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.navigate('ChatList')}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>채팅창(임시)</Text>
-        </TouchableOpacity>
         <View style={styles.placeholderButton} />
       </View>
 

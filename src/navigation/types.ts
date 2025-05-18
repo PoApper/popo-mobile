@@ -10,6 +10,7 @@ export type RootStackParamList = {
   Home: undefined;
   Signup: undefined;
   Landing: undefined;
+  PaxiStart: undefined;
   ChatList: undefined;
   Chat: {
     roomUuid: string;

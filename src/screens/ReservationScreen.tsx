@@ -391,6 +391,16 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
           내 예약 목록
         </Text>
         <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.navigate('ChatList')}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>채팅방목록(임시)</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.navigate('PaxiStart')}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>새닉네임(임시)</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           style={styles.refreshButton}
           onPress={handleRefresh}
           disabled={isLoading}>
@@ -412,7 +422,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
           <Text style={[styles.errorText, {color: textColor}]}>{error}</Text>
           <TouchableOpacity
             style={styles.retryButton}
-            onPress={fetchReservations}>
+            onPress={() => fetchReservations()}>
             <Text style={styles.retryButtonText}>다시 시도</Text>
           </TouchableOpacity>
         </View>

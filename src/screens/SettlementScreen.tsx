@@ -24,21 +24,22 @@ type SettlementScreenProps = {
 type SettlementScreenRouteProp = RouteProp<RootStackParamList, 'Settlement'>;
 
 interface SettlementData {
+  payAmount: number;
   payerBankName: string;
   payerAccountNumber: string;
   payerAccountHolderName: string;
-  payAmount: string;
   updateAccount: boolean;
   roomUuid: string;
 }
 
 async function requestSettlement(settlementData: SettlementData) {
   try {
+    console.log(settlementData.roomUuid);
     const res = await paxi_api.post(`/room/${settlementData.roomUuid}/settlement2`, {
+      payAmount: settlementData.payAmount,
       payerAccountNumber: settlementData.payerAccountNumber,
       payerAccountHolderName: settlementData.payerAccountHolderName,
       payerBankName: settlementData.payerBankName,
-      payAmount: settlementData.payAmount,
       updateAccount: settlementData.updateAccount,
     });
 
@@ -62,20 +63,19 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
       Alert.alert('오류', '모든 필수 필드를 입력해주세요.');
       return;
     } else {
-      console.log(roomUuid);
       requestSettlement({
         payerBankName: bankName,
         payerAccountNumber: accountNumber,
         payerAccountHolderName: accountName,
-        payAmount: totalCost,
+        payAmount: Number(totalCost),
         roomUuid: roomUuid,
-        updateAccount: true,
-      })
-        .then(result => {
+        updateAccount: false,
+      }).then(result => {
           if (result !== 201) {
             Alert.alert('실패', 'response: ' + result?.toString());
           } else {
-            Alert.alert('성공', 'response: ' + result?.toString());
+            Alert.alert('성공', '정산 요청을 보냈습니다.');
+            navigation.goBack();
           }
         })
         .catch(error => {
