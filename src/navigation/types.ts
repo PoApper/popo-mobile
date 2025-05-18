@@ -21,6 +21,7 @@ export type RootStackParamList = {
   };
   Login: undefined;
   UserDetail: undefined;
+  Developer: undefined;
   Reservation: undefined;
   PlaceReservation: undefined;
   PlaceDetail: {

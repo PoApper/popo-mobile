@@ -9,9 +9,6 @@ import {
   useColorScheme,
   StatusBar,
   Alert,
-  Platform,
-  Clipboard,
-  ToastAndroid,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -20,8 +17,6 @@ import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import api from '../../utils/api';
-import {getAuthToken} from '../../utils/auth-token';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Environment from '../../utils/environment';
 
 type UserDetailScreenProps = {
@@ -33,22 +28,6 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(false);
   const [userDataState, setUserData] = useState<any>(null);
-  const [authTokenData, setAuthTokenData] = useState<any>(null);
-
-  // authToken 정보 가져오기
-  useEffect(() => {
-    const fetchAuthToken = async () => {
-      try {
-        const token = await getAuthToken();
-        console.log('정상적으로 가져온 authTokenData', token);
-        setAuthTokenData(token);
-      } catch (error) {
-        console.error('Auth Token 가져오기 오류:', error);
-      }
-    };
-
-    fetchAuthToken();
-  }, []);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -149,18 +128,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
     loadStoredUserInfo();
   }, []);
 
-  // 텍스트 복사 기능
-  const copyToClipboard = (text: string) => {
-    Clipboard.setString(text);
-    if (Platform.OS === 'android') {
-      ToastAndroid.show('복사되었습니다', ToastAndroid.SHORT);
-    } else {
-      Alert.alert('복사 완료', '클립보드에 복사되었습니다.');
-    }
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={backgroundStyle} edges={['top', 'left', 'right']}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
@@ -177,7 +146,9 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
         <View style={styles.placeholderButton} />
       </View>
 
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{flexGrow: 1}}>
         <View
           style={[
             styles.profileCard,
@@ -272,7 +243,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
               </Text>
             </View>
 
-            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+            <View
+              style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
               <Text
                 style={[
                   styles.detailLabel,
@@ -293,172 +265,19 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   : '정보 없음'}
               </Text>
             </View>
-
-            {/* 개발/테스트 환경에서만 표시되는 정보들 */}
-            {!Environment.isProduction && (
-              <>
-                {/* UUID 정보 */}
-                <View
-                  style={[styles.detailItem, {borderBottomColor: borderColor}]}>
-                  <View style={styles.sectionTitleRow}>
-                    <View style={styles.titleContainer}>
-                      <Text
-                        style={[
-                          styles.detailLabel,
-                          {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-                        ]}>
-                        UUID
-                      </Text>
-                    </View>
-                    <View style={styles.iconContainer}>
-                      {userDataState?.uuid && (
-                        <TouchableOpacity
-                          style={styles.copyIconButton}
-                          onPress={() => copyToClipboard(userDataState.uuid)}>
-                          <Icon
-                            name="content-copy"
-                            size={16}
-                            color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
-                          />
-                        </TouchableOpacity>
-                      )}
-                    </View>
-                  </View>
-                  <View style={styles.tokenContainer}>
-                    <Text
-                      style={[styles.tokenValue, {color: textColor}]}
-                      selectable={true}>
-                      {userDataState?.uuid || '정보 없음'}
-                    </Text>
-                  </View>
-                </View>
-
-                {/* Auth Token (Cookie) 정보 */}
-                <View
-                  style={[styles.detailItem, {borderBottomColor: borderColor}]}>
-                  <View style={styles.sectionTitleRow}>
-                    <View style={styles.titleContainer}>
-                      <Text
-                        style={[
-                          styles.detailLabel,
-                          {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-                        ]}>
-                        Auth Token (Cookie)
-                      </Text>
-                    </View>
-                    <View style={styles.iconContainer}>
-                      {authTokenData?.cookie && (
-                        <TouchableOpacity
-                          style={styles.copyIconButton}
-                          onPress={() => copyToClipboard(authTokenData.cookie)}>
-                          <Icon
-                            name="content-copy"
-                            size={16}
-                            color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
-                          />
-                        </TouchableOpacity>
-                      )}
-                    </View>
-                  </View>
-                  <View style={styles.tokenContainer}>
-                    <Text
-                      style={[styles.tokenValue, {color: textColor}]}
-                      selectable={true}>
-                      {authTokenData?.cookie || '정보 없음'}
-                    </Text>
-                  </View>
-                </View>
-
-                {/* Auth Token (Encrypted Storage) 정보 */}
-                <View
-                  style={[styles.detailItem, {borderBottomColor: borderColor}]}>
-                  <View style={styles.sectionTitleRow}>
-                    <View style={styles.titleContainer}>
-                      <Text
-                        style={[
-                          styles.detailLabel,
-                          {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-                        ]}>
-                        Auth Token (Encrypted Storage)
-                      </Text>
-                    </View>
-                    <View style={styles.iconContainer}>
-                      {authTokenData?.encrypted_storage && (
-                        <TouchableOpacity
-                          style={styles.copyIconButton}
-                          onPress={() =>
-                            copyToClipboard(authTokenData.encrypted_storage)
-                          }>
-                          <Icon
-                            name="content-copy"
-                            size={16}
-                            color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
-                          />
-                        </TouchableOpacity>
-                      )}
-                    </View>
-                  </View>
-                  <View style={styles.tokenContainer}>
-                    <Text
-                      style={[styles.tokenValue, {color: textColor}]}
-                      selectable={true}>
-                      {authTokenData?.encrypted_storage || '정보 없음'}
-                    </Text>
-                  </View>
-                </View>
-
-                {/* FCM Token 정보 */}
-                <View
-                  style={[styles.detailItem, {borderBottomColor: borderColor}]}>
-                  <View style={styles.sectionTitleRow}>
-                    <View style={styles.titleContainer}>
-                      <Text
-                        style={[
-                          styles.detailLabel,
-                          {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-                        ]}>
-                        FCM Token
-                      </Text>
-                    </View>
-                    <View style={styles.iconContainer}>
-                      {authTokenData?.fcm_token && (
-                        <TouchableOpacity
-                          style={styles.copyIconButton}
-                          onPress={() =>
-                            copyToClipboard(authTokenData.fcm_token)
-                          }>
-                          <Icon
-                            name="content-copy"
-                            size={16}
-                            color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
-                          />
-                        </TouchableOpacity>
-                      )}
-                    </View>
-                  </View>
-                  <View style={styles.tokenContainer}>
-                    <Text
-                      style={[styles.tokenValue, {color: textColor}]}
-                      selectable={true}>
-                      {authTokenData?.fcm_token || '정보 없음'}
-                    </Text>
-                  </View>
-                </View>
-              </>
-            )}
           </View>
         </View>
 
         {/* 내 예약 확인하기 버튼 */}
         <TouchableOpacity
-          style={[styles.reservationButton, {backgroundColor: '#FF616B'}]}
+          style={[styles.buttonContainer, {backgroundColor: '#FF616B'}]}
           onPress={() => navigation.navigate('Reservation')}>
           <Text style={styles.reservationButtonText}>내 예약 확인하기</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[
-            styles.logoutButton,
+            styles.buttonContainer,
             {backgroundColor: isDarkMode ? '#444444' : '#DBDBDB'},
           ]}
           onPress={handleLogout}
@@ -471,6 +290,20 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
             {isLoading ? '처리 중...' : '로그아웃'}
           </Text>
         </TouchableOpacity>
+
+        {/* 개발자 페이지 버튼 */}
+        {!Environment.isProduction && (
+          <View style={{marginBottom: 48, marginTop: 16}}>
+            <TouchableOpacity
+              style={[styles.buttonContainer, {backgroundColor: '#4F46E5'}]}
+              onPress={() => navigation.navigate('Developer')}>
+              <Text style={styles.developerButtonText}>개발자 페이지</Text>
+            </TouchableOpacity>
+            <Text style={{fontSize: 12, color: '#6B7280'}}>
+              개발자 페이지는 에뮬레이터와 Test Flight에서만 접근 가능합니다.
+            </Text>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -606,18 +439,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
-  reservationButton: {
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    marginVertical: 6,
-  },
   reservationButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
   },
-  logoutButton: {
+  buttonContainer: {
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
@@ -655,6 +482,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16,
     textAlignVertical: 'center',
+  },
+  developerButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
