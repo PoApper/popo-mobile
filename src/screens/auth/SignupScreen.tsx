@@ -415,7 +415,10 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
 
       <PrivacyPolicy
         visible={isPrivacyPolicyVisible}
-        onClose={() => setIsPrivacyPolicyVisible(false)}
+        onClose={() => {
+          setIsPrivacyPolicyAgreed(false);
+          setIsPrivacyPolicyVisible(false);
+        }}
         onAgree={() => {
           setIsPrivacyPolicyAgreed(true);
           setIsPrivacyPolicyVisible(false);
