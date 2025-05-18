@@ -152,7 +152,7 @@ interface ParsedRoomDataType {
 }
 
 const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
-  const [isChecked, setIsChecked] = useState(false);  
+  const [isChecked, setIsChecked] = useState(false);
 
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
@@ -182,8 +182,8 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const refreshRoomData = () => getUserDataAndRequest();
 
   const filterDeparture = (selected: string | null) => {
-    console.log('selected', selected)
-  }
+    console.log('selected', selected);
+  };
 
   const parseRoomData = (items: RoomDataType[]) =>
     items.map((item: RoomDataType) => ({
@@ -209,7 +209,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
       backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
     },
-  ]
+  ];
 
   return (
     <SafeAreaView style={[backgroundStyle]}>

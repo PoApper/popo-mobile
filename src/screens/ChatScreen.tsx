@@ -157,7 +157,7 @@ const renderItem = ({ item }: ListRenderItemInfo<MessageData>) => {
             <Text style={{
               fontSize: 13,
               letterSpacing: -0.4,
-              color: "#000",
+              color: '#000',
               marginBottom: 4,
             }}>{item.senderName}</Text>
             <View style={{
@@ -169,7 +169,7 @@ const renderItem = ({ item }: ListRenderItemInfo<MessageData>) => {
                 <Text style={{
                   fontSize: 14,
                   letterSpacing: -0.4,
-                  color: "#000",
+                  color: '#000',
                   marginBottom: 4,
                 }}>{item.message}</Text>
               </View>
@@ -177,7 +177,7 @@ const renderItem = ({ item }: ListRenderItemInfo<MessageData>) => {
                 color: '#9b9b9b',
                 fontSize: 12,
                 letterSpacing: -0.3,
-                fontWeight: "bold",
+                fontWeight: 'bold',
               }}>{createdTime}</Text>
             </View>
           </View>
@@ -193,13 +193,13 @@ const renderItem = ({ item }: ListRenderItemInfo<MessageData>) => {
             color: '#9b9b9b',
             fontSize: 12,
             letterSpacing: -0.3,
-            fontWeight: "bold",
+            fontWeight: 'bold',
           }}>{createdTime}</Text>
           <View style={styles.messageBubble}>
             <Text style={{
               fontSize: 14,
               letterSpacing: -0.4,
-              color: "#000",
+              color: '#000',
               marginBottom: 4,
             }}>{item.message}</Text>
           </View>
@@ -214,7 +214,7 @@ const renderItem = ({ item }: ListRenderItemInfo<MessageData>) => {
           <View style={styles.systemMessageBubble}>
             <Text style={{
               fontSize: 12,
-              color: "#000",
+              color: '#000',
             }}>
               {item.message}
             </Text>
@@ -284,14 +284,14 @@ const SettlementRequest = ({ settlementData }: { settlementData: SettlementData 
         <Text style={{
           fontSize: 22,
           letterSpacing: -0.7,
-          fontWeight: "600",
-          color: "black",            
+          fontWeight: '600',
+          color: 'black',
         }}>정산 요청 안내</Text>
         <Text style={{
           fontSize: 22,
           letterSpacing: -0.7,
-          fontWeight: "600",
-          color: "black",            
+          fontWeight: '600',
+          color: 'black',
         }}>{settlementData.payAmount}원</Text>
       </View>
       <View style={{
@@ -304,29 +304,29 @@ const SettlementRequest = ({ settlementData }: { settlementData: SettlementData 
           <Text style={{
             fontSize: 13,
             letterSpacing: -0.4,
-            color: "#4f4f4f",
+            color: '#4f4f4f',
           }}>{settlementData.payerAccountHolderName}</Text>
           <Text style={{
             fontSize: 13,
             letterSpacing: -0.4,
-            color: "#4f4f4f",
+            color: '#4f4f4f',
           }}>{settlementData.payerBankName} {settlementData.payerAccountNumber}</Text>
         </View>
         <Text style={{
           fontSize: 16,
           letterSpacing: -0.4,
-          fontWeight: "bold",
-          color: "#e45b63",
+          fontWeight: 'bold',
+          color: '#e45b63',
         }}>???/{settlementData.currentParticipant}</Text>
       </View>
       <Text style={{
         fontSize: 12,
         letterSpacing: -0.4,
-        fontWeight: "600",
+        fontWeight: '600',
         marginTop: 10,
-        color: "#9b9b9b",
+        color: '#9b9b9b',
       }}>꼭! 송금 후 완료 버튼을 눌러 주세요!</Text>
-     
+
       <TouchableOpacity
         style={{
           backgroundColor: '#000',
@@ -342,8 +342,8 @@ const SettlementRequest = ({ settlementData }: { settlementData: SettlementData 
         <Text style={{
           fontSize: 14,
           letterSpacing: -0.4,
-          color: "#f6f7f9",
-          alignItems: "center",
+          color: '#f6f7f9',
+          alignItems: 'center',
         }}>송금 완료 알림을 보냅니다</Text>
       </TouchableOpacity>
     </View>
@@ -595,7 +595,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
       if (payerUuid) {
         console.log(roomUuid);
         const settlementResponse = await paxi_api.get(`/room/${roomUuid}/settlement`);
-        console.log("Settlement Data:", settlementResponse.data);
+        console.log('Settlement Data:', settlementResponse.data);
 
         setSettlementData({
           payAmount: Number(settlementResponse.data.payAmountPerPerson),
@@ -662,7 +662,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
         <Text style={{
           fontSize: 25,
           letterSpacing: -1,
-          color: "#000",
+          color: '#000',
           position: 'absolute',
           width: '100%',
           textAlign: 'center',
@@ -734,14 +734,14 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
                 <View style={styles.locationBlock}>
                   <Text style={styles.label}>도착지</Text>
                   <Text style={styles.location}>{roomData?.destinationLocation}</Text>
-                  <Text style={styles.subText}></Text>
+                  <Text style={styles.subText} />
                 </View>
               </View>
               <View style={{
                 borderBottomWidth: 1,
                 borderColor: '#ddd',
                 borderStyle: 'dotted',
-                marginTop: 12
+                marginTop: 12,
               }}/>
               <Text style={styles.extraInfo}>{roomData?.description}</Text>
             </View>
@@ -802,7 +802,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
 
       <View style={styles.inputContainer}>
         <TextInput
-          style={[styles.input, {height: inputHeight,}]}
+          style={[styles.input, {height: inputHeight}]}
           value={message}
           onChangeText={setMessage}
           multiline={true}

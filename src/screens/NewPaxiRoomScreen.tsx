@@ -299,7 +299,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                 color: textColor,
                 height: 200,
                 textAlignVertical: 'top',
-                marginBottom: 12
+                marginBottom: 12,
               },
             ]}
             multiline={true}
@@ -312,7 +312,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
           <Text style={[styles.titleText, {color: textColor}]}>최대인원</Text>
           <View style={{
             alignItems: 'flex-start',
-            width: '100%'
+            width: '100%',
           }}>
             <View style={{
               flexDirection: 'row',

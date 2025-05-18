@@ -13,7 +13,7 @@ import {
   StyleProp,
   ViewStyle,
   TextStyle,
-  TextInput
+  TextInput,
 } from 'react-native';
 
 interface Category {
@@ -71,7 +71,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       <TouchableOpacity ref={buttonRef} onPress={openDropdown} style={[styles.button, style]}>
         <TextInput
           style={[styles.buttonText,
-            selected ? textSelectedStyle : textStyle
+            selected ? textSelectedStyle : textStyle,
           ]}
           editable={false}
         >

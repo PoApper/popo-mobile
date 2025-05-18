@@ -96,7 +96,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
                 <FlatList
                   data={[
                     ...(showDefaultTextInDropDown ? [{ id: '', name: '전체보기' }] : []),
-                    ...categories
+                    ...categories,
                   ]}
                   keyExtractor={(item) => item.id || 'all'}
                   renderItem={({ item }) => (
