@@ -207,10 +207,7 @@ const PlaceDetailReservationScreen = ({
             </View>
             <LazyImage uri={placeDetail.image_url} style={styles.placeImage} />
             <TouchableOpacity
-              style={[
-                styles.reserveButton,
-                {backgroundColor: isDarkMode ? '#FB5353' : '#000000'},
-              ]}
+              style={[styles.reserveButton]}
               onPress={() => {
                 navigation.navigate('PlaceReservationApply', {
                   buildingName: placeDetail?.location || '',
@@ -348,9 +345,10 @@ const styles = StyleSheet.create({
   reserveButton: {
     width: '100%',
     padding: 16,
-    borderRadius: 50,
+    borderRadius: 8,
     alignItems: 'center',
     marginBottom: 24,
+    backgroundColor: '#FB5353',
   },
   reserveButtonText: {
     color: '#FFFFFF',

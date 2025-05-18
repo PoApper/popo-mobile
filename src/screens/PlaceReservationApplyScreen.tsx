@@ -333,62 +333,78 @@ const PlaceReservationApplyScreen = ({
             placeholderTextColor={subTextColor}
             multiline
           />
-          <Text style={[styles.label, {color: textColor}]}>예약 정보</Text>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               gap: 8,
             }}>
-            {/* 날짜 선택 */}
-            <TouchableOpacity
-              onPress={openDatePicker}
-              style={[
-                styles.input,
-                {
-                  flex: 1.5,
-                  backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                  borderColor: showDatePicker ? '#FB5353' : borderColor,
-                },
-              ]}>
-              <Text style={{color: textColor}}>{formatDate(date)}</Text>
-            </TouchableOpacity>
+            {/* 날짜 */}
+            <View style={{flex: 1.5}}>
+              <Text
+                style={[styles.label, {color: textColor, marginBottom: 13}]}>
+                날짜
+              </Text>
+              <TouchableOpacity
+                onPress={openDatePicker}
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                    borderColor: showDatePicker ? '#FB5353' : borderColor,
+                  },
+                ]}>
+                <Text style={{color: textColor, textAlign: 'center'}}>
+                  {formatDate(date)}
+                </Text>
+              </TouchableOpacity>
+            </View>
             {/* 시작 시간 */}
-            <TouchableOpacity
-              onPress={openStartPicker}
-              style={[
-                styles.input,
-                {
-                  flex: 1,
-                  backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                  borderColor: showStartPicker ? '#FB5353' : borderColor,
-                },
-              ]}>
-              <Text style={{color: textColor, textAlign: 'center'}}>
-                {startTime.toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+            <View style={{flex: 1}}>
+              <Text
+                style={[styles.label, {color: textColor, marginBottom: 10}]}>
+                시작 시각
               </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={openStartPicker}
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                    borderColor: showStartPicker ? '#FB5353' : borderColor,
+                  },
+                ]}>
+                <Text style={{color: textColor, textAlign: 'center'}}>
+                  {startTime.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </Text>
+              </TouchableOpacity>
+            </View>
             {/* 종료 시간 */}
-            <TouchableOpacity
-              onPress={openEndPicker}
-              style={[
-                styles.input,
-                {
-                  flex: 1,
-                  backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                  borderColor: showEndPicker ? '#FB5353' : borderColor,
-                },
-              ]}>
-              <Text style={{color: textColor, textAlign: 'center'}}>
-                {endTime.toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+            <View style={{flex: 1}}>
+              <Text
+                style={[styles.label, {color: textColor, marginBottom: 10}]}>
+                종료 시각
               </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={openEndPicker}
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                    borderColor: showEndPicker ? '#FB5353' : borderColor,
+                  },
+                ]}>
+                <Text style={{color: textColor, textAlign: 'center'}}>
+                  {endTime.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
           {showDatePicker && (
             <DateTimePicker
@@ -396,6 +412,9 @@ const PlaceReservationApplyScreen = ({
               mode="date"
               display={Platform.OS === 'ios' ? 'spinner' : 'default'}
               minimumDate={new Date()}
+              maximumDate={
+                new Date(new Date().setDate(new Date().getDate() + 30))
+              }
               locale="ko-KR"
               onChange={onDateChange}
               onTouchCancel={() => setShowDatePicker(false)}
