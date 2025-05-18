@@ -122,8 +122,6 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         userData: data.user || {},
       });
     } catch (err: unknown) {
-      console.error('로그인 오류:', err);
-
       // axios 오류 처리
       if (axios.isAxiosError(err)) {
         if (err.code === 'ERR_NETWORK') {
