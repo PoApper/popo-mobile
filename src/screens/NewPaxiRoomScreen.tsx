@@ -21,22 +21,13 @@ type NewPaxiRoomScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewPaxiRoom'>;
 };
 
-interface NewRoomData {
+interface NewRoomBody {
   title: string;
   description: string;
   departureTime: string;
   departureLocation: string;
   destinationLocation: string;
   maxParticipant: number;
-}
-
-async function createNewRoom(roomData: NewRoomData) {
-  try {
-    const res = await paxi_api.post('/room', roomData);
-    return res.status;
-  } catch (error: string | any) {
-    console.error('Error:', error);
-  }
 }
 
 const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
@@ -48,6 +39,30 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
   const [selectedDateTime, setSelectedDateTime] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
+
+  async function createNewRoom() {
+    const body: NewRoomBody = {
+      title: roomName,
+      description: roomDetails,
+      destinationLocation: arrivalName,
+      maxParticipant: 4,
+      departureTime: selectedDateTime.toISOString(),
+      departureLocation: departureName,
+    };
+    paxi_api
+      .post('room', body)
+      .then(res => {
+        if (res.status === 201) {
+          Alert.alert('성공', '방을 성공적으로 생성했습니다.');
+          navigation.goBack();
+        }
+      })
+      .catch(error => {
+        // const status = error.response.status;
+        const message = error.response.data.message;
+        Alert.alert('실패', `방을 생성하는데 실패했습니다:\n${message}`);
+      });
+  }
 
   const onDatePicked = (event: any, selectedDate?: Date) => {
     selectedDate = selectedDate || new Date();
@@ -98,25 +113,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
       Alert.alert('오류', '상세내용은 100자 이하로 입력해주세요.');
       return;
     } else {
-      createNewRoom({
-        title: roomName,
-        description: roomDetails,
-        destinationLocation: arrivalName,
-        maxParticipant: 4,
-        departureTime: selectedDateTime.toISOString(),
-        departureLocation: departureName,
-      })
-        .then(result => {
-          if (result === 201) {
-            Alert.alert('성공', '방을 성공적으로 생성했습니다.');
-            navigation.goBack();
-          } else {
-            Alert.alert('실패', 'response: ' + result?.toString());
-          }
-        })
-        .catch(error => {
-          Alert.alert('실패', '방을 생성하는데 실패했습니다: ' + error.message);
-        });
+      createNewRoom();
     }
   };
 
@@ -130,8 +127,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
 
   const dropdownStyle = [
     {
-      borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
-      backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
+      backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
     },
   ];
 
@@ -141,12 +137,14 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
     {name: '체인지업그라운드'},
     {name: '포항역'},
     {name: '터미널'},
-    {name: '테스트1'},
-    {name: '테스트2'},
-    {name: '테스트3'},
-    {name: '테스트4'},
-    {name: '테스트5'},
-    {name: '테스트6'},
+  ];
+
+  const TextInputStyle = [
+    {
+      color: isDarkMode ? '#888888' : '#AAA',
+      backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
+      borderColor: borderColor,
+    },
   ];
 
   return (
@@ -167,20 +165,12 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
         <View style={styles.placeholderButton} />
       </View>
 
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={{width: '100%', marginBottom: 8}}>
-            <Text style={[styles.titleText, {color: textColor}]}>방 제목</Text>
+      <ScrollView contentContainerStyle={{padding: 20}}>
+        <View style={styles.formSection}>
+          <View>
+            <Text style={[styles.label, {color: textColor}]}>방 제목</Text>
             <TextInput
-              style={[
-                styles.roomInput,
-                {
-                  marginBottom: 10,
-                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-                  backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
-                  color: textColor,
-                },
-              ]}
+              style={[styles.roomInput, TextInputStyle]}
               placeholder="제목을 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={roomName}
@@ -188,21 +178,11 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
             />
           </View>
 
-          <View style={{width: '100%', marginBottom: 8}}>
-            <Text style={[styles.titleText, {color: textColor}]}>
-              위치 지정
-            </Text>
-            <View
-              style={[
-                styles.inputWrapper,
-                {
-                  marginBottom: 10,
-                  borderColor: isDarkMode ? '#2C2C2C' : '#d0d0d0',
-                  backgroundColor: isDarkMode ? '#1A1A1A' : '#fff',
-                },
-              ]}>
+          <View style={{marginBottom: 8}}>
+            <Text style={[styles.label, {color: textColor}]}>위치</Text>
+            <View style={[styles.inputWrapper, TextInputStyle]}>
               <View style={styles.inputWithDot}>
-                <View style={styles.dotWhite} />
+                <View style={styles.dotBlack} />
 
                 <DropdownMenu
                   style={[{width: 300}, dropdownStyle]}
@@ -303,12 +283,12 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
             style={[
               styles.roomInput,
               {
-                borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-                backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
-                color: textColor,
-                height: 200,
-                textAlignVertical: 'top',
-                marginBottom: 12,
+                color: isDarkMode ? '#888888' : '#AAA',
+                backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
+                borderColor: borderColor,
+              },
+              {
+                height: 100,
               },
             ]}
             multiline={true}
@@ -318,11 +298,10 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
             onChangeText={setRoomDetails}
           />
 
-          <Text style={[styles.titleText, {color: textColor}]}>최대인원</Text>
+          <Text style={[styles.label, {color: textColor}]}>최대 인원</Text>
           <View
             style={{
               alignItems: 'flex-start',
-              width: '100%',
             }}>
             <View
               style={{
@@ -332,6 +311,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                 borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
                 borderRadius: 50,
                 marginBottom: 10,
+                backgroundColor: isDarkMode ? '#232323' : '#F3F3F3',
               }}>
               <TouchableOpacity
                 style={{
@@ -343,7 +323,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                 }>
                 <Text
                   style={{
-                    color: 'white',
+                    color: isDarkMode ? '#fff' : '#222',
                     fontSize: 20,
                   }}>
                   -
@@ -351,8 +331,11 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
               </TouchableOpacity>
               <Text
                 style={{
-                  color: 'white',
+                  color: isDarkMode ? '#fff' : '#222',
                   fontSize: 20,
+                  fontWeight: 'bold',
+                  minWidth: 32,
+                  textAlign: 'center',
                 }}>
                 {maxParticipants}
               </Text>
@@ -366,7 +349,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
                 }>
                 <Text
                   style={{
-                    color: 'white',
+                    color: isDarkMode ? '#fff' : '#222',
                     fontSize: 20,
                   }}>
                   +
@@ -379,7 +362,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
             style={[
               styles.nextButton,
               {
-                backgroundColor: 'black',
+                backgroundColor: isDarkMode ? '#FB5353' : '#fff',
               },
             ]}
             onPress={() => checkInputValid()}
@@ -428,7 +411,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#000',
     textAlign: 'left',
-    width: '100%',
     marginBottom: 10,
   },
   nextButton: {
@@ -447,17 +429,22 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     textAlign: 'center',
   },
+  label: {
+    fontSize: 15,
+    fontWeight: '500',
+    marginBottom: 4,
+    marginTop: 8,
+  },
+  formSection: {
+    marginTop: 0,
+    gap: 8,
+  },
   roomInput: {
-    borderStyle: 'solid',
     borderWidth: 1,
-    borderRadius: 6,
-    borderColor: '#D0D0D0',
-    width: '100%',
-    backgroundColor: '#FFFFFF',
-    height: 42,
-    paddingHorizontal: 16,
-    fontSize: 13,
-    textAlignVertical: 'center',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 16,
   },
   container: {
     alignItems: 'center',
@@ -467,7 +454,6 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   inputWrapper: {
-    width: '100%',
     backgroundColor: '#fff',
     borderRadius: 7,
     borderWidth: 1,
@@ -486,11 +472,11 @@ const styles = StyleSheet.create({
     width: '95%',
     backgroundColor: '#d0d0d0',
   },
-  dotWhite: {
+  dotBlack: {
     width: 5,
     height: 5,
     borderRadius: 4,
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     marginLeft: 5,
     marginRight: 10,
   },
