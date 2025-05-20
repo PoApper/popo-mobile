@@ -80,14 +80,7 @@ const UpcomingEvents = () => {
           ]}>
           나의 최근 예약
         </Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.scheduleScroll}>
-          <View style={[styles.scheduleCard, {backgroundColor: '#4D61DD'}]}>
-            <Text style={styles.scheduleTitle}>예약 정보를 불러오는 중...</Text>
-          </View>
-        </ScrollView>
+        <View style={[styles.scheduleCard]} />
       </View>
     );
   }
