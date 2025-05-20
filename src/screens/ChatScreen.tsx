@@ -465,7 +465,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
       const newChatData: MessageData[] = response.data.map(
         (item: MessageData) => ({
           ...item,
-          avatar: require('../../assets/popo.png'), // 임시 이미지
+          avatar: require('../../assets/icon/POPO_typography_bg_removed_cropped.png'), // 임시 이미지
           senderName:
             users?.find(user => user.userUuid === item.senderUuid)?.nickname ??
             '알 수 없음',
@@ -483,7 +483,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
   const addChatData = (data: MessageData, myUuid: string) => {
     const newChatData = {
       ...data,
-      avatar: require('../../assets/popo.png'), // 임시 이미지
+      avatar: require('../../assets/icon/POPO_typography_bg_removed_cropped.png'), // 임시 이미지
       senderName:
         users?.find(user => user.userUuid === data.senderUuid)?.nickname ??
         '알 수 없음',
@@ -703,7 +703,7 @@ const ChatScreen = ({navigation}: ChatScreenProps) => {
       const getChatData: MessageData[] = chatResponse.data.map(
         (item: MessageData) => ({
           ...item,
-          avatar: require('../../assets/popo.png'), // 임시 이미지
+          avatar: require('../../assets/icon/POPO_typography_bg_removed_cropped.png'), // 임시 이미지
           senderName:
             roomResponse.data.room_users[item.senderUuid] ?? '알 수 없음',
           isMe: item.senderUuid === myResponse.data.uuid,
