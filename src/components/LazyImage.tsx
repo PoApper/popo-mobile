@@ -1,33 +1,26 @@
-import React, {useState} from 'react';
-import {View, ActivityIndicator, StyleSheet} from 'react-native';
-import FastImage from 'react-native-fast-image';
+import React from 'react';
+import {Image, ImageProps, StyleSheet} from 'react-native';
 
-interface LazyImageProps {
+interface LazyImageProps extends Omit<ImageProps, 'source'> {
   uri: string;
-  style?: any;
 }
 
-const LazyImage = ({uri, style}: LazyImageProps) => {
-  const [loading, setLoading] = useState(true);
+const LazyImage: React.FC<LazyImageProps> = ({uri, style, ...props}) => {
   return (
-    <View style={style}>
-      {loading && (
-        <View
-          style={[
-            StyleSheet.absoluteFill,
-            {justifyContent: 'center', alignItems: 'center', zIndex: 1},
-          ]}>
-          <ActivityIndicator size="small" color="#FB5353" />
-        </View>
-      )}
-      <FastImage
-        style={[StyleSheet.absoluteFill, style]}
-        source={{uri}}
-        resizeMode={FastImage.resizeMode.cover}
-        onLoadEnd={() => setLoading(false)}
-      />
-    </View>
+    <Image
+      source={{uri}}
+      style={[styles.image, style]}
+      resizeMode="cover"
+      {...props}
+    />
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+});
 
 export default LazyImage;
