@@ -15,19 +15,18 @@ import {RootStackParamList} from '../navigation/types';
 import api from '../utils/api';
 import axios from 'axios';
 
-interface Place {
+interface Equipment {
   uuid: string;
   name: string;
   description: string;
-  location: string;
+  equip_owner: string;
   region: string;
   staff_email: string;
   image_url: string;
 }
 
-interface PlaceReservation {
+interface EquipmentReservation {
   uuid: string;
-  place_id: string;
   booker_id: string;
   phone: string;
   title: string;
@@ -37,11 +36,11 @@ interface PlaceReservation {
   end_time: string;
   status: '심사중' | '통과' | '거절';
   created_at: Date;
-  place: Place;
+  equipments: Equipment[];
 }
 
 interface PaginatedResponse {
-  items: PlaceReservation[];
+  items: EquipmentReservation[];
   total: number;
 }
 
@@ -53,7 +52,7 @@ const ReservationList: React.FC<ReservationListProps> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [reservations, setReservations] = useState<PlaceReservation[]>([]);
+  const [reservations, setReservations] = useState<EquipmentReservation[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -80,7 +79,7 @@ const ReservationList: React.FC<ReservationListProps> = ({navigation}) => {
       }
 
       const response = await api.get<PaginatedResponse>(
-        '/reservation-place/user',
+        '/reservation-equip/user',
         {
           params: {
             skip: (pageNum - 1) * itemsPerPage,
@@ -259,11 +258,15 @@ const ReservationList: React.FC<ReservationListProps> = ({navigation}) => {
             styles.detailLabel,
             {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
           ]}>
-          장소
+          장비
         </Text>
-        <Text style={[styles.detailValue, {color: textColor}]}>
-          {item.place?.name || '장소 이름 없음'}
-        </Text>
+        {item.equipments.map((equipment: Equipment) => (
+          <View style={styles.equipmentItem}>
+            <Text style={[styles.detailValue, {color: textColor}]}>
+              - {equipment.name}
+            </Text>
+          </View>
+        ))}
       </View>
 
       {item.place?.location && (
@@ -541,6 +544,11 @@ const styles = StyleSheet.create({
   scrollTopText: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  equipmentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
   },
 });
 

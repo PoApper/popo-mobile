@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,14 +12,18 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/types';
 import ReservationList from '../components/ReservationList';
+import EquipReservationList from '../components/EquipReservationList';
 
 type ReservationScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
   route: RouteProp<RootStackParamList, 'Reservation'>;
 };
 
+type TabType = 'place' | 'equipment';
+
 const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+  const [activeTab, setActiveTab] = useState<TabType>('place');
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -27,6 +31,13 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   };
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const tabBgColor = isDarkMode ? '#1E1E1E' : '#FFFFFF';
+  const activeTabBgColor = isDarkMode ? '#2D2D2D' : '#F3F4F6';
+
+  const tabs = [
+    {id: 'place' as TabType, label: '장소 예약'},
+    {id: 'equipment' as TabType, label: '장비 예약'},
+  ];
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -43,7 +54,38 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
         <Text style={[styles.headerTitle, {color: textColor}]}>내 일정</Text>
         <View style={styles.placeholderButton} />
       </View>
-      <ReservationList navigation={navigation} />
+
+      <View style={[styles.tabContainer, {backgroundColor: tabBgColor}]}>
+        {tabs.map(tab => (
+          <TouchableOpacity
+            key={tab.id}
+            onPress={() => setActiveTab(tab.id)}
+            style={styles.typeTabWrapper}>
+            <View
+              style={[
+                styles.typeTabInner,
+                activeTab === tab.id && {
+                  backgroundColor: activeTabBgColor,
+                },
+              ]}>
+              <Text
+                style={[
+                  styles.tabText,
+                  {color: textColor},
+                  activeTab === tab.id && styles.activeTabText,
+                ]}>
+                {tab.label}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {activeTab === 'place' ? (
+        <ReservationList navigation={navigation} />
+      ) : (
+        <EquipReservationList navigation={navigation} />
+      )}
     </SafeAreaView>
   );
 };
@@ -70,6 +112,29 @@ const styles = StyleSheet.create({
   },
   placeholderButton: {
     width: 40,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    gap: 8,
+  },
+  typeTabWrapper: {
+    flex: 1,
+  },
+  typeTabInner: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  tabText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  activeTabText: {
+    color: '#4F46E5',
+    fontWeight: '600',
   },
 });
 
