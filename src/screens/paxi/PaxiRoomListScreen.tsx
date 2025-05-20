@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {MainTabParamList} from '../navigation/types';
+import {MainTabParamList} from '../../navigation/types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import paxi_api from '../utils/paxi_api';
-import DropdownFilter from '../components/DropdownFilter';
+import paxi_api from '../../utils/paxi_api';
+import DropdownFilter from '../../components/DropdownFilter';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<MainTabParamList, 'Paxi'>;
@@ -327,7 +327,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
             backgroundColor: isDarkMode ? '#FFFFFF' : 'black',
           },
         ]}
-        onPress={() => navigation.navigate('NewPaxiRoom')}>
+        onPress={() => navigation.navigate('CreatePaxiRoomScreen')}>
         <Icon name="add" size={30} color={isDarkMode ? '#000000' : 'white'} />
       </TouchableOpacity>
     </SafeAreaView>

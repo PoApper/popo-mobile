@@ -19,8 +19,8 @@ import SignupScreen from '../screens/auth/SignupScreen';
 import UserDetailScreen from '../screens/auth/UserDetailScreen';
 import DeveloperPage from '../screens/auth/DeveloperPage';
 import ReservationScreen from '../screens/ReservationScreen';
-import NewPaxiRoomScreen from '../screens/NewPaxiRoomScreen';
-import PaxiRoomListScreen from '../screens/PaxiRoomListScreen';
+import CreatePaxiRoomScreen from '../screens/paxi/CreatePaxiRoomScreen';
+import PaxiRoomListScreen from '../screens/paxi/PaxiRoomListScreen';
 import PlaceReservationScreen from '../screens/place-reservation/PlaceReservationScreen';
 import PlaceDetailReservationScreen from '../screens/place-reservation/PlaceDetailReservationScreen';
 import PlaceReservationApplyScreen from '../screens/place-reservation/PlaceReservationApplyScreen';
@@ -33,7 +33,7 @@ import AssociationDetailScreen from '../screens/association/AssociationDetailScr
 import CampusShuttleScreen from '../screens/CampusShuttle';
 import ChatScreen from '../screens/ChatScreen';
 import SettlementScreen from '../screens/SettlementScreen';
-import PaxiStartScreen from '../screens/PaxiStart';
+import PaxiStartScreen from '../screens/paxi/PaxiStart';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -140,7 +140,10 @@ const AppNavigator = () => {
           <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="Settlement" component={SettlementScreen} />
           <Stack.Screen name="PaxiRoomList" component={PaxiRoomListScreen} />
-          <Stack.Screen name="NewPaxiRoom" component={NewPaxiRoomScreen} />
+          <Stack.Screen
+            name="CreatePaxiRoomScreen"
+            component={CreatePaxiRoomScreen}
+          />
           <Stack.Screen name="Landing" component={LandingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="UserDetail" component={UserDetailScreen} />

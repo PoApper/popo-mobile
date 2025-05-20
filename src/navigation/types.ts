@@ -10,22 +10,15 @@ export type RootStackParamList = {
   Home: undefined;
   Signup: undefined;
   Landing: undefined;
-  PaxiStart: undefined;
   Chat: {
     roomUuid: string;
   };
   Settlement: {
     roomUuid: string;
   };
+  PaxiStart: undefined;
   PaxiRoomList: undefined;
-  NewPaxiRoom: undefined;
-  NewPaxiRoomNext: {
-    roomName: string;
-    roomDetails: string;
-    departureName: string;
-    arrivalName: string;
-    selectedDate: string;
-  };
+  CreatePaxiRoomScreen: undefined;
   Login: undefined;
   UserDetail: undefined;
   Developer: undefined;

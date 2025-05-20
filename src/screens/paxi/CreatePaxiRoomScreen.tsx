@@ -11,14 +11,17 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
-import paxi_api from '../utils/paxi_api';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import DropdownMenu from '../components/DropdownMenu';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../navigation/types';
+import paxi_api from '../../utils/paxi_api';
+import DropdownMenu from '../../components/DropdownMenu';
 
-type NewPaxiRoomScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'NewPaxiRoom'>;
+type CreatePaxiRoomScreenProps = {
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    'CreatePaxiRoomScreen'
+  >;
 };
 
 interface NewRoomBody {
@@ -30,7 +33,7 @@ interface NewRoomBody {
   maxParticipant: number;
 }
 
-const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
+const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const [roomName, setRoomName] = useState('');
   const [roomDetails, setRoomDetails] = useState('');
   const [departureName, setDepartureName] = useState('');
@@ -375,7 +378,7 @@ const NewPaxiRoomScreen = ({navigation}: NewPaxiRoomScreenProps) => {
   );
 };
 
-export default NewPaxiRoomScreen;
+export default CreatePaxiRoomScreen;
 
 const styles = StyleSheet.create({
   header: {
