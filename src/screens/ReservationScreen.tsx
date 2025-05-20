@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   useColorScheme,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -24,6 +25,7 @@ type TabType = 'place' | 'equipment';
 const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [activeTab, setActiveTab] = useState<TabType>('place');
+  const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -31,8 +33,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   };
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
-  const tabBgColor = isDarkMode ? '#1E1E1E' : '#FFFFFF';
-  const activeTabBgColor = isDarkMode ? '#2D2D2D' : '#F3F4F6';
+  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
 
   const tabs = [
     {id: 'place' as TabType, label: '장소 예약'},
@@ -45,7 +46,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={styles.header}>
+      <View style={[styles.header, {borderBottomColor: borderColor}]}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
@@ -55,31 +56,48 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
         <View style={styles.placeholderButton} />
       </View>
 
-      <View style={[styles.tabContainer, {backgroundColor: tabBgColor}]}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.typeNav}>
         {tabs.map(tab => (
           <TouchableOpacity
             key={tab.id}
             onPress={() => setActiveTab(tab.id)}
             style={styles.typeTabWrapper}>
-            <View
-              style={[
-                styles.typeTabInner,
-                activeTab === tab.id && {
-                  backgroundColor: activeTabBgColor,
-                },
-              ]}>
-              <Text
-                style={[
-                  styles.tabText,
-                  {color: textColor},
-                  activeTab === tab.id && styles.activeTabText,
-                ]}>
-                {tab.label}
-              </Text>
+            <View style={styles.typeTabInner}>
+              <View style={styles.textWithUnderline}>
+                <Text
+                  style={[
+                    styles.typeTab,
+                    {color: isDarkMode ? '#888' : '#999'},
+                    activeTab === tab.id && [
+                      styles.selectedTypeText,
+                      {color: textColor},
+                    ],
+                  ]}
+                  onLayout={e => {
+                    const width = e.nativeEvent.layout.width;
+                    setTextWidths(prev => ({...prev, [tab.id]: width}));
+                  }}>
+                  {tab.label}
+                </Text>
+                {activeTab === tab.id && (
+                  <View
+                    style={[
+                      styles.underline,
+                      {
+                        width: (textWidths[tab.id] || 0) + 8,
+                        backgroundColor: textColor,
+                      },
+                    ]}
+                  />
+                )}
+              </View>
             </View>
           </TouchableOpacity>
         ))}
-      </View>
+      </ScrollView>
 
       {activeTab === 'place' ? (
         <ReservationList navigation={navigation} />
@@ -98,7 +116,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
   },
   headerTitle: {
     fontSize: 18,
@@ -113,28 +130,31 @@ const styles = StyleSheet.create({
   placeholderButton: {
     width: 40,
   },
-  tabContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    gap: 8,
+  typeNav: {
+    paddingLeft: 16,
   },
   typeTabWrapper: {
-    flex: 1,
+    paddingVertical: 12,
+    marginRight: 24,
   },
   typeTabInner: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
     alignItems: 'center',
   },
-  tabText: {
-    fontSize: 14,
-    fontWeight: '500',
+  textWithUnderline: {
+    alignItems: 'center',
   },
-  activeTabText: {
-    color: '#4F46E5',
-    fontWeight: '600',
+  typeTab: {
+    fontSize: 16,
+    color: '#999',
+  },
+  selectedTypeText: {
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  underline: {
+    marginTop: 4,
+    height: 2,
+    borderRadius: 1,
   },
 });
 

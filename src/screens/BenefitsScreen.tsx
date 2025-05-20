@@ -118,7 +118,9 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
           onPress={() => navigation.goBack()}>
           <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>제휴업체</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>
+          총학 제휴업체
+        </Text>
         <View style={styles.placeholderButton} />
       </View>
 

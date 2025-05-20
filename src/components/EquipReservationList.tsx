@@ -258,10 +258,10 @@ const ReservationList: React.FC<ReservationListProps> = ({navigation}) => {
             styles.detailLabel,
             {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
           ]}>
-          장비
+          장비 목록 ({item.equipments.length})
         </Text>
         {item.equipments.map((equipment: Equipment) => (
-          <View style={styles.equipmentItem}>
+          <View style={styles.equipmentItem} key={item.uuid + equipment.uuid}>
             <Text style={[styles.detailValue, {color: textColor}]}>
               - {equipment.name}
             </Text>
