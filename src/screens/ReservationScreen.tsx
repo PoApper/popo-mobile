@@ -14,13 +14,14 @@ import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/types';
 import ReservationList from '../components/ReservationList';
 import EquipReservationList from '../components/EquipReservationList';
+import TaxiChatList from '../components/TaxiChatList';
 
 type ReservationScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
   route: RouteProp<RootStackParamList, 'Reservation'>;
 };
 
-type TabType = 'place' | 'equipment';
+type TabType = 'place' | 'equipment' | 'taxi';
 
 const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -38,6 +39,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const tabs = [
     {id: 'place' as TabType, label: '장소 예약'},
     {id: 'equipment' as TabType, label: '장비 예약'},
+    {id: 'taxi' as TabType, label: '택시 카풀'},
   ];
 
   return (
@@ -53,79 +55,63 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
           <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
         </TouchableOpacity>
         <Text style={[styles.headerTitle, {color: textColor}]}>내 일정</Text>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.navigate('ChatList')}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>
-            채팅방목록(임시)
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.navigate('PaxiStart')}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>
-            새닉네임(임시)
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.refreshButton}
-          onPress={() => fetchReservations(1)}
-          disabled={isLoading}>
-          <Text style={[styles.refreshButtonText, {color: textColor}]}>
-            새로고침
-          </Text>
-        </TouchableOpacity>
         <View style={styles.placeholderButton} />
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.typeNav}>
-        {tabs.map(tab => (
-          <TouchableOpacity
-            key={tab.id}
-            onPress={() => setActiveTab(tab.id)}
-            style={styles.typeTabWrapper}>
-            <View style={styles.typeTabInner}>
-              <View style={styles.textWithUnderline}>
-                <Text
-                  style={[
-                    styles.typeTab,
-                    {color: isDarkMode ? '#888' : '#999'},
-                    activeTab === tab.id && [
-                      styles.selectedTypeText,
-                      {color: textColor},
-                    ],
-                  ]}
-                  onLayout={e => {
-                    const width = e.nativeEvent.layout.width;
-                    setTextWidths(prev => ({...prev, [tab.id]: width}));
-                  }}>
-                  {tab.label}
-                </Text>
-                {activeTab === tab.id && (
-                  <View
+      <View style={{flex: 0}}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.typeNav}>
+          {tabs.map(tab => (
+            <TouchableOpacity
+              key={tab.id}
+              onPress={() => setActiveTab(tab.id)}
+              style={styles.typeTabWrapper}>
+              <View style={styles.typeTabInner}>
+                <View style={styles.textWithUnderline}>
+                  <Text
                     style={[
-                      styles.underline,
-                      {
-                        width: (textWidths[tab.id] || 0) + 8,
-                        backgroundColor: textColor,
-                      },
+                      styles.typeTab,
+                      {color: isDarkMode ? '#888' : '#999'},
+                      activeTab === tab.id && [
+                        styles.selectedTypeText,
+                        {color: textColor},
+                      ],
                     ]}
-                  />
-                )}
+                    onLayout={e => {
+                      const width = e.nativeEvent.layout.width;
+                      setTextWidths(prev => ({...prev, [tab.id]: width}));
+                    }}>
+                    {tab.label}
+                  </Text>
+                  {activeTab === tab.id && (
+                    <View
+                      style={[
+                        styles.underline,
+                        {
+                          width: (textWidths[tab.id] || 0) + 8,
+                          backgroundColor: textColor,
+                        },
+                      ]}
+                    />
+                  )}
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
-      {activeTab === 'place' ? (
-        <ReservationList navigation={navigation} />
-      ) : (
-        <EquipReservationList navigation={navigation} />
-      )}
+      <View style={{flex: 1}}>
+        {activeTab === 'place' ? (
+          <ReservationList navigation={navigation} />
+        ) : activeTab === 'equipment' ? (
+          <EquipReservationList navigation={navigation} />
+        ) : (
+          <TaxiChatList navigation={navigation} />
+        )}
+      </View>
     </SafeAreaView>
   );
 };
