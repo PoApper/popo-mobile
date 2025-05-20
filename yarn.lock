@@ -1971,7 +1971,7 @@
   dependencies:
     "@react-native-community/cli-platform-apple" "15.0.1"
 
-"@react-native-community/cli-server-api@*", "@react-native-community/cli-server-api@15.0.1":
+"@react-native-community/cli-server-api@15.0.1":
   version "15.0.1"
   resolved "https://registry.npmjs.org/@react-native-community/cli-server-api/-/cli-server-api-15.0.1.tgz"
   integrity sha512-f3rb3t1ELLaMSX5/LWO/IykglBIgiP3+pPnyl8GphHnBpf3bdIcp7fHlHLemvHE06YxT2nANRxRPjy1gNskenA==
@@ -4346,6 +4346,11 @@ fs.realpath@^1.0.0:
   resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
 
+fsevents@^2.3.2:
+  version "2.3.3"
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
+  integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
+
 function-bind@^1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz"
@@ -6541,6 +6546,7 @@ react-native-encrypted-storage@^4.0.3:
   version "4.0.3"
   resolved "https://registry.npmjs.org/react-native-encrypted-storage/-/react-native-encrypted-storage-4.0.3.tgz"
   integrity sha512-0pJA4Aj2S1PIJEbU7pN/Qvf7JIJx3hFywx+i+bLHtgK0/6Zryf1V2xVsWcrD50dfiu3jY1eN2gesQ5osGxE7jA==
+
 react-native-gesture-handler@^2.24.0, "react-native-gesture-handler@>= 2.0.0":
   version "2.24.0"
   resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.24.0.tgz"
@@ -6599,7 +6605,7 @@ react-native-vector-icons@^10.2.0:
     prop-types "^15.7.2"
     yargs "^16.1.1"
 
-react-native@*, react-native@^0.78.0, "react-native@>= 0.30.0", "react-native@>= 0.60.2", "react-native@>= 0.62", react-native@>=0.60.0, react-native@>=0.73.0:
+react-native@*, react-native@^0.78.0, "react-native@>= 0.30.0", "react-native@>= 0.60.2", "react-native@>= 0.62", react-native@>=0.73.0:
   version "0.78.2"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.78.2.tgz"
   integrity sha512-UilZ8sP9amHCz7TTMWMJ71JeYcMzEdgCJaqTfoB1hC/nYMXq6xqSFxKWCDhf7sR7nz3FKxS4t338t42AMDDkww==
@@ -6654,7 +6660,7 @@ react-test-renderer@19.0.0:
     react-is "^19.0.0"
     scheduler "^0.25.0"
 
-react@*, "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^17 || ^18", react@^19.0.0, "react@>= 15.2.1", "react@>= 18.2.0", react@>=16.8, react@>=17.0.0, react@>=18.2.0, react@19.0.0:
+react@*, "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", react@^19.0.0, "react@>= 15.2.1", "react@>= 18.2.0", react@>=16.8, react@>=17.0.0, react@>=18.2.0, react@19.0.0:
   version "19.0.0"
   resolved "https://registry.npmjs.org/react/-/react-19.0.0.tgz"
   integrity sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==
