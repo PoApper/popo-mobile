@@ -92,7 +92,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
   };
 
   const renderReservationItem = ({item}: {item: RoomData}) => (
-    <View
+    <TouchableOpacity
       style={{
         paddingVertical: 12,
         paddingHorizontal: 4,
@@ -100,7 +100,8 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
         alignItems: 'center',
         borderBottomWidth: 1,
         borderBottomColor: borderColor,
-      }}>
+      }}
+      onPress={() => navigation.navigate('Chat', {roomUuid: item.uuid})}>
       <View style={{flex: 1}}>
         <Text
           style={[styles.reservationTitle, {color: textColor}]}
@@ -122,6 +123,19 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
           {formatDateTime(item.departureTime)}
         </Text>
       </View>
+
+      <View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Chat', {roomUuid: item.uuid})}
+          style={{backgroundColor: 'red'}}>
+          <Text>Prev Chat Screen</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{backgroundColor: 'blue'}}
+          onPress={() => navigation.navigate('NewChat', {roomUuid: item.uuid})}>
+          <Text>New Chat Screen</Text>
+        </TouchableOpacity>
+      </View>
       <View
         style={{
           width: 48,
@@ -131,7 +145,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
           marginLeft: 12,
         }}
       />
-    </View>
+    </TouchableOpacity>
   );
 
   const renderFooter = () => {

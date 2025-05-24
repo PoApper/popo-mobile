@@ -13,6 +13,9 @@ export type RootStackParamList = {
   Chat: {
     roomUuid: string;
   };
+  NewChat: {
+    roomUuid: string;
+  };
   Settlement: {
     roomUuid: string;
   };

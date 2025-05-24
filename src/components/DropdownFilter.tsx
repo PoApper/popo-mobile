@@ -12,7 +12,7 @@ import {
   LayoutRectangle,
   StyleProp,
   ViewStyle,
-  TextStyle,
+  useColorScheme,
 } from 'react-native';
 
 interface Category {
@@ -23,8 +23,6 @@ interface Category {
 interface DropdownFilterProps {
   style?: StyleProp<ViewStyle>;
   dropdownStyle?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<TextStyle>;
-  textSelectedStyle?: StyleProp<TextStyle>;
   defaultText?: string;
   showDefaultTextInDropDown?: boolean;
   categories: Category[];
@@ -45,6 +43,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
   const [selected, setSelected] = useState<string | null>(null);
   const [dropdownPosition, setDropdownPosition] =
     useState<LayoutRectangle | null>(null);
+  const isDarkMode = useColorScheme() === 'dark';
 
   // useRef를 사용해 TouchableOpacity의 ref를 설정, 타입을 View로 설정
   const buttonRef = useRef<View | null>(null);
@@ -71,9 +70,22 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
       <TouchableOpacity
         ref={buttonRef}
         onPress={openDropdown}
-        style={[styles.button, style]}>
+        style={[
+          styles.button,
+          {
+            backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+            borderColor: isDarkMode ? '#2C2C2C' : '#E5E7EB',
+          },
+          style,
+        ]}>
         <Text
-          style={[styles.buttonText, selected ? textSelectedStyle : textStyle]}>
+          style={[
+            styles.buttonText,
+            {
+              color: isDarkMode ? '#FFFFFF' : '#000000',
+            },
+            selected ? textSelectedStyle : textStyle,
+          ]}>
           {selected
             ? categories.find(cat => cat.id === selected)?.name
             : defaultText}
@@ -88,6 +100,8 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
                 style={[
                   styles.dropdownContainer,
                   {
+                    backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+                    borderColor: isDarkMode ? '#2C2C2C' : '#E5E7EB',
                     position: 'absolute',
                     top: dropdownPosition.y,
                     left: dropdownPosition.x,
@@ -104,9 +118,20 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
                   keyExtractor={item => item.id || 'all'}
                   renderItem={({item}) => (
                     <TouchableOpacity
-                      style={[styles.item, dropdownStyle]}
+                      style={[
+                        styles.item,
+                        {
+                          borderBottomColor: isDarkMode ? '#2C2C2C' : '#E5E7EB',
+                        },
+                        dropdownStyle,
+                      ]}
                       onPress={() => handleSelect(item.id || null)}>
-                      <Text>{item.name}</Text>
+                      <Text
+                        style={{
+                          color: isDarkMode ? '#FFFFFF' : '#000000',
+                        }}>
+                        {item.name}
+                      </Text>
                     </TouchableOpacity>
                   )}
                 />
@@ -122,23 +147,35 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
 const styles = StyleSheet.create({
   button: {
     borderRadius: 5,
-    backgroundColor: '#eee',
-    width: 75,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    minWidth: 75,
   },
   buttonText: {
     fontSize: 14,
-    textAlignVertical: 'center',
+    textAlign: 'center',
   },
   overlay: {
     flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   dropdownContainer: {
-    backgroundColor: '#fff',
     borderRadius: 5,
+    borderWidth: 1,
     maxHeight: 300,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   item: {
     padding: 12,
+    borderBottomWidth: 1,
   },
 });
 

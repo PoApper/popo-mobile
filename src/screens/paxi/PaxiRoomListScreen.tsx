@@ -11,148 +11,18 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {MainTabParamList} from '../../navigation/types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
+import {MainTabParamList} from '../../navigation/types';
 import paxi_api from '../../utils/paxi_api';
 import DropdownFilter from '../../components/DropdownFilter';
+import {RoomDataType, ParsedRoomDataType} from '../../types/paxi';
+import {RefreshButton} from '../../components/room/RefreshButton';
+import {RoomListCard} from '../../components/room/RoomListCard';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<MainTabParamList, 'Paxi'>;
 };
-
-interface RoomContainerProps {
-  uuid: string;
-  title: string;
-  departureTime: string;
-  remain: number;
-  total: number;
-  departure: string;
-  destination: string;
-}
-
-const RoomContainer: React.FC<RoomContainerProps> = ({
-  uuid,
-  title,
-  departureTime,
-  remain,
-  total,
-  departure,
-  destination,
-}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
-  const backgroundColor = isDarkMode ? '#1A1A1A' : '#fff';
-  const subTextColor = isDarkMode ? '#888' : '#666';
-
-  const askJoinRoom = () => {
-    Alert.alert('참여하기', '방에 참여하시겠습니까?', [
-      {
-        text: '취소',
-        style: 'cancel',
-      },
-      {
-        text: '확인',
-        onPress: () => {
-          console.log('방 참여 요청:', uuid);
-          paxi_api
-            .post(`/room/join/${uuid}`)
-            .then(response => {
-              console.log('response.data:', response.data);
-              console.log('response.status', response.status);
-              if (response.status === 201) {
-                Alert.alert('성공', '방에 참여했습니다.');
-              } else {
-                Alert.alert('실패', '방 참여에 실패했습니다.');
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error);
-              Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
-            });
-        },
-      },
-    ]);
-  };
-
-  return (
-    <TouchableOpacity
-      style={[styles.roomContainer, {backgroundColor}]}
-      onPress={() => askJoinRoom()}>
-      <View style={styles.cardContent}>
-        <View style={styles.mainInfo}>
-          <View style={styles.titleContainer}>
-            <Text style={remain < total ? styles.possible : styles.impossible}>
-              {remain < total ? '참여 가능' : '마감'}
-            </Text>
-            <Text style={[styles.title, {color: textColor}]}>{title}</Text>
-          </View>
-          <View style={styles.details}>
-            <Text style={[styles.detailsText, {color: textColor}]}>
-              {departure}
-            </Text>
-            <Text style={[styles.arrow, {color: textColor}]}>
-              {'  - - - - >  '}
-            </Text>
-            <Text style={[styles.detailsText, {color: textColor}]}>
-              {destination}
-            </Text>
-          </View>
-          <Text style={[styles.departureTime, {color: subTextColor}]}>
-            {departureTime}
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-const RefreshButton = ({onPress}: {onPress: () => void}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <TouchableOpacity
-      style={[
-        styles.refreshButton,
-        {
-          backgroundColor: isDarkMode ? '#2C2C2C' : '#F4F4F6',
-        },
-      ]}
-      onPress={onPress}
-      activeOpacity={0.7}>
-      <Icon
-        name="refresh"
-        size={24}
-        color={isDarkMode ? '#FFFFFF' : '#000000'}
-      />
-    </TouchableOpacity>
-  );
-};
-
-interface RoomDataType {
-  uuid: string;
-  title: string;
-  ownerUuid: string;
-  departureLocation: string;
-  destinationLocation: string;
-  maxParticipant: number;
-  currentParticipant: number;
-  departureTime: string;
-  status: string;
-  description: string;
-  payerUuid: string;
-  payAmount: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface ParsedRoomDataType {
-  uuid: string;
-  title: string;
-  departureTime: string;
-  remain: number;
-  total: number;
-  departure: string;
-  destination: string;
-}
 
 const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -235,8 +105,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
         <DropdownFilter
           style={dropdownStyle}
-          textStyle={{color: 'white'}}
-          textSelectedStyle={{color: 'white'}}
           defaultText={'출발지'}
           categories={[
             {id: 'fruit', name: '과일'},
@@ -247,7 +115,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
         <DropdownFilter
           style={dropdownStyle}
-          textStyle={{color: 'white'}}
           defaultText={'도착지'}
           categories={[{id: 'fruit', name: '과일'}]}
           onSelect={selected => console.log('선택된 카테고리:', selected)}
@@ -255,7 +122,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
         <DropdownFilter
           style={dropdownStyle}
-          textStyle={{color: 'white'}}
           defaultText={'날짜'}
           categories={[{id: 'fruit', name: '과일'}]}
           onSelect={selected => console.log('선택된 카테고리:', selected)}
@@ -263,7 +129,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
         <DropdownFilter
           style={dropdownStyle}
-          textStyle={{color: 'white'}}
           defaultText={'시간'}
           categories={[{id: 'fruit', name: '과일'}]}
           onSelect={selected => console.log('선택된 카테고리:', selected)}
@@ -301,7 +166,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <View style={{padding: 16}}>
           {roomData.length > 0 ? (
             roomData.map((room, index) => (
-              <RoomContainer
+              <RoomListCard
                 uuid={room.uuid}
                 key={index}
                 title={room.title}
@@ -367,58 +232,12 @@ const styles = StyleSheet.create({
   placeholderButton: {
     width: 40,
   },
-  filterButton: {
-    padding: 10,
-    backgroundColor: '#eee',
-    borderRadius: 5,
-    width: 150,
-  },
-  filterModal: {
-    position: 'absolute',
-    backgroundColor: 'white',
-    padding: 20,
-    borderWidth: 1,
-    borderColor: '#333',
-    borderRadius: 10,
-  },
-  filterOverlay: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-  },
   conditionNavigator: {
     paddingLeft: 15,
     flexDirection: 'row',
     gap: 5,
     marginTop: 10,
     marginBottom: 10,
-  },
-  roomContainer: {
-    marginBottom: 12,
-    borderRadius: 12,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 6,
-    padding: 12,
-  },
-  cardContent: {
-    flexDirection: 'column',
-  },
-  mainInfo: {
-    flex: 1,
   },
   titleContainer: {
     flexDirection: 'row',
@@ -430,44 +249,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  possible: {
-    fontSize: 13,
-    letterSpacing: -0.1,
-    fontWeight: '700',
-    color: '#fb5353',
-    borderRadius: 3,
-    backgroundColor: '#fff3f3',
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-  },
-  impossible: {
-    fontSize: 13,
-    letterSpacing: -0.1,
-    fontWeight: '700',
-    color: '#909090',
-    borderRadius: 3,
-    backgroundColor: 'rgba(217, 217, 217, 0.83)',
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-  },
-  departureTime: {
-    fontSize: 14,
-    marginTop: 4,
-    textAlign: 'center',
-  },
-  details: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    marginBottom: 12,
-  },
-  detailsText: {
-    fontSize: 18,
-  },
-  arrow: {
-    fontSize: 20,
-  },
   button: {
     borderRadius: 20,
     borderWidth: 1,
@@ -475,13 +256,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 15,
-  },
-  refreshButton: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   checkboxContainer: {
     flexDirection: 'row',

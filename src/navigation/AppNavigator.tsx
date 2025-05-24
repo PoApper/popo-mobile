@@ -34,6 +34,7 @@ import CampusShuttleScreen from '../screens/CampusShuttle';
 import ChatScreen from '../screens/ChatScreen';
 import SettlementScreen from '../screens/SettlementScreen';
 import PaxiStartScreen from '../screens/paxi/PaxiStart';
+import NewChatScreen from '../screens/NewChatScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -138,6 +139,7 @@ const AppNavigator = () => {
           }}>
           <Stack.Screen name="PaxiStart" component={PaxiStartScreen} />
           <Stack.Screen name="Chat" component={ChatScreen} />
+          <Stack.Screen name="NewChat" component={NewChatScreen} />
           <Stack.Screen name="Settlement" component={SettlementScreen} />
           <Stack.Screen name="PaxiRoomList" component={PaxiRoomListScreen} />
           <Stack.Screen
