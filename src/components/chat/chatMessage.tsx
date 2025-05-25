@@ -6,59 +6,124 @@ interface ChatMessageProps {
   message: MessageData;
 }
 
-const ChatMessage = ({message}: ChatMessageProps) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const alignment = message.isMe ? 'flex-end' : 'flex-start';
+const MyMessage = ({message}: {message: MessageData}) => {
   const createdTime = message.createdAt.slice(11, 16);
-  // const isSystemMsg = item.senderUuid == null;
 
   return (
-    <View style={{alignSelf: alignment}}>
-      <View style={messageStyle.messageContainer}>
-        <View
+    <View
+      style={[
+        styles.messageContainer,
+        {
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          gap: 5,
+        },
+      ]}>
+      <Text
+        style={{
+          color: '#9b9b9b',
+          fontSize: 12,
+          letterSpacing: -0.3,
+          fontWeight: 'bold',
+        }}>
+        {createdTime}
+      </Text>
+      <View style={styles.messageBubble}>
+        <Text
           style={{
-            width: 35,
-            height: 35,
-            borderRadius: 17.5,
-            backgroundColor: '#ddd',
-            marginRight: 8,
-          }}
-        />
-        <View>
-          <Text
+            fontSize: 14,
+            letterSpacing: -0.4,
+            color: '#000',
+            marginBottom: 4,
+          }}>
+          {message.message}
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+const SystemMessage = ({message}: {message: MessageData}) => {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+      }}>
+      <View style={styles.systemMessageBubble}>
+        <Text
+          style={{
+            fontSize: 12,
+            color: '#000',
+          }}>
+          {message.message}
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+const NormalMessage = ({message}: {message: MessageData}) => {
+  const isDarkMode = useColorScheme() === 'dark';
+  const createdTime = message.createdAt.slice(11, 16);
+
+  console.log(message);
+
+  return (
+    <View style={styles.messageContainer}>
+      <View
+        style={{
+          width: 35,
+          height: 35,
+          borderRadius: 17.5,
+          backgroundColor: '#ddd',
+          marginRight: 8,
+        }}
+      />
+      <View>
+        <Text style={[styles.messageSender, {color: textColor(isDarkMode)}]}>
+          {message.senderName ?? 'senderName'}
+        </Text>
+        <View style={styles.messageArea}>
+          <View
             style={[
-              messageStyle.messageSender,
-              {color: textColor(isDarkMode)},
+              styles.messageBubble,
+              {backgroundColor: isDarkMode ? '#23262B' : '#f2f3f5'},
             ]}>
-            {message.senderName ?? 'senderName'}
-          </Text>
-          <View style={messageStyle.messageArea}>
-            <View style={messageStyle.messageBubble}>
-              <Text
-                style={[
-                  messageStyle.messageText,
-                  {color: textColor(isDarkMode)},
-                ]}>
-                {message.message}
-              </Text>
-            </View>
-            <Text
-              style={[
-                messageStyle.createdTime,
-                {color: textColor(isDarkMode)},
-              ]}>
-              {createdTime}
+            <Text style={[styles.messageText, {color: textColor(isDarkMode)}]}>
+              {message.message}
             </Text>
           </View>
+          <Text style={[styles.createdTime, {color: textColor(isDarkMode)}]}>
+            {createdTime}
+          </Text>
         </View>
       </View>
     </View>
   );
 };
 
+const ChatMessage = ({message}: ChatMessageProps) => {
+  const alignment = message.isMe ? 'flex-end' : 'flex-start';
+  const isSystemMsg = message.senderUuid == null;
+
+  return (
+    <View style={{alignSelf: alignment}}>
+      {message.isMe ? (
+        <MyMessage message={message} />
+      ) : isSystemMsg ? (
+        <SystemMessage message={message} />
+      ) : (
+        <NormalMessage message={message} />
+      )}
+    </View>
+  );
+};
+
 export default ChatMessage;
 
-const messageStyle = StyleSheet.create({
+const styles = StyleSheet.create({
   messageContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -90,5 +155,11 @@ const messageStyle = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     gap: 5,
+  },
+
+  systemMessageBubble: {
+    paddingVertical: 7,
+    width: '100%',
+    alignItems: 'center',
   },
 });
