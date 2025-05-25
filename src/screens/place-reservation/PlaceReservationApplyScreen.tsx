@@ -11,6 +11,7 @@ import {
   TextInput,
   Platform,
   Alert,
+  Dimensions,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
@@ -19,6 +20,7 @@ import api from '../../utils/api';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {LocaleConfig} from 'react-native-calendars';
 import CalendarKoreanLocales from '../../utils/calendar-locales';
+import {Calendar} from 'react-native-calendars';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';
@@ -50,7 +52,6 @@ const PlaceReservationApplyScreen = ({
   const [desc, setDesc] = useState('');
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [tempDate, setTempDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [tempStartTime, setTempStartTime] = useState(new Date());
@@ -200,21 +201,6 @@ const PlaceReservationApplyScreen = ({
     );
   };
 
-  const onDateChange = (event: any, selectedDate?: Date) => {
-    if (Platform.OS === 'android') {
-      if (event.type === 'set' && selectedDate) {
-        setShowDatePicker(false);
-        setDate(selectedDate);
-      } else if (event.type === 'dismissed') {
-        setShowDatePicker(false);
-      }
-    } else {
-      if (selectedDate) {
-        setTempDate(selectedDate);
-      }
-    }
-  };
-
   // Picker 상태 관리 함수 추가
   const openDatePicker = () => {
     setShowDatePicker(true);
@@ -257,185 +243,224 @@ const PlaceReservationApplyScreen = ({
         <View style={styles.placeholderButton} />
       </View>
 
-      <ScrollView ref={scrollViewRef} contentContainerStyle={{padding: 20}}>
-        <View style={styles.infoSection}>
-          <Text style={[styles.placeName, {color: textColor}]}>
-            {placeName}
-          </Text>
-          <Text style={[styles.placeLocation, {color: subTextColor}]}>
-            {buildingName}
-          </Text>
-        </View>
-        {/* 예약 폼 */}
-        <View style={styles.formSection}>
-          <Text style={[styles.label, {color: textColor}]}>사용자</Text>
-          <TextInput
-            style={[
-              styles.input,
-              styles.disabledInput,
-              {
-                color: isDarkMode ? '#888888' : '#AAA',
-                backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
-                borderColor: borderColor,
-              },
-            ]}
-            value={userName}
-            editable={false}
-            placeholder="이름"
-            placeholderTextColor={subTextColor}
-          />
-          <Text style={[styles.label, {color: textColor}]}>전화번호</Text>
-          <TextInput
-            style={[
-              styles.input,
-              {
-                color: textColor,
-                backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                borderColor: borderColor,
-              },
-            ]}
-            value={phone}
-            onChangeText={setPhone}
-            placeholder="010-xxxx-xxxx"
-            placeholderTextColor={subTextColor}
-            keyboardType="phone-pad"
-            maxLength={13}
-          />
-          <Text style={[styles.label, {color: textColor}]}>예약 제목</Text>
-          <TextInput
-            style={[
-              styles.input,
-              {
-                color: textColor,
-                backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                borderColor: borderColor,
-              },
-            ]}
-            value={title}
-            onChangeText={setTitle}
-            placeholder="예약 제목을 입력하세요"
-            placeholderTextColor={subTextColor}
-          />
-          <Text style={[styles.label, {color: textColor}]}>설명</Text>
-          <TextInput
-            style={[
-              styles.input,
-              {
-                height: 80,
-                color: textColor,
-                backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                borderColor: borderColor,
-              },
-            ]}
-            value={desc}
-            onChangeText={setDesc}
-            placeholder="예약에 대한 설명과 사용 인원을 꼭 작성해 주세요"
-            placeholderTextColor={subTextColor}
-            multiline
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              gap: 8,
-            }}>
-            {/* 날짜 */}
-            <View style={{flex: 1.5}}>
-              <Text
-                style={[styles.label, {color: textColor, marginBottom: 13}]}>
-                날짜
-              </Text>
-              <TouchableOpacity
-                onPress={openDatePicker}
-                style={[
-                  styles.input,
-                  {
-                    backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                    borderColor: showDatePicker ? '#FB5353' : borderColor,
-                  },
-                ]}>
-                <Text style={{color: textColor, textAlign: 'center'}}>
-                  {formatDate(date)}
+      <ScrollView ref={scrollViewRef} contentContainerStyle={{padding: 0}}>
+        <View style={{padding: 20}}>
+          <View style={styles.infoSection}>
+            <Text style={[styles.placeName, {color: textColor}]}>
+              {placeName}
+            </Text>
+            <Text style={[styles.placeLocation, {color: subTextColor}]}>
+              {buildingName}
+            </Text>
+          </View>
+          {/* 예약 폼 */}
+          <View style={styles.formSection}>
+            <Text style={[styles.label, {color: textColor}]}>사용자</Text>
+            <TextInput
+              style={[
+                styles.input,
+                styles.disabledInput,
+                {
+                  color: isDarkMode ? '#888888' : '#AAA',
+                  backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
+                  borderColor: borderColor,
+                },
+              ]}
+              value={userName}
+              editable={false}
+              placeholder="이름"
+              placeholderTextColor={subTextColor}
+            />
+            <Text style={[styles.label, {color: textColor}]}>전화번호</Text>
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  color: textColor,
+                  backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                  borderColor: borderColor,
+                },
+              ]}
+              value={phone}
+              onChangeText={setPhone}
+              placeholder="010-xxxx-xxxx"
+              placeholderTextColor={subTextColor}
+              keyboardType="phone-pad"
+              maxLength={13}
+            />
+            <Text style={[styles.label, {color: textColor}]}>예약 제목</Text>
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  color: textColor,
+                  backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                  borderColor: borderColor,
+                },
+              ]}
+              value={title}
+              onChangeText={setTitle}
+              placeholder="예약 제목을 입력하세요"
+              placeholderTextColor={subTextColor}
+            />
+            <Text style={[styles.label, {color: textColor}]}>설명</Text>
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  height: 80,
+                  color: textColor,
+                  backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                  borderColor: borderColor,
+                },
+              ]}
+              value={desc}
+              onChangeText={setDesc}
+              placeholder="예약에 대한 설명과 사용 인원을 꼭 작성해 주세요"
+              placeholderTextColor={subTextColor}
+              multiline
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                gap: 8,
+              }}>
+              {/* 날짜 */}
+              <View style={{flex: 1.5}}>
+                <Text
+                  style={[styles.label, {color: textColor, marginBottom: 13}]}>
+                  날짜
                 </Text>
-              </TouchableOpacity>
-            </View>
-            {/* 시작 시간 */}
-            <View style={{flex: 1}}>
-              <Text
-                style={[styles.label, {color: textColor, marginBottom: 10}]}>
-                시작 시각
-              </Text>
-              <TouchableOpacity
-                onPress={openStartPicker}
-                style={[
-                  styles.input,
-                  {
-                    backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                    borderColor: showStartPicker ? '#FB5353' : borderColor,
-                  },
-                ]}>
-                <Text style={{color: textColor, textAlign: 'center'}}>
-                  {startTime.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
+                <TouchableOpacity
+                  onPress={openDatePicker}
+                  style={[
+                    styles.input,
+                    {
+                      backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                      borderColor: showDatePicker ? '#FB5353' : borderColor,
+                    },
+                  ]}>
+                  <Text style={{color: textColor, textAlign: 'center'}}>
+                    {formatDate(date)}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {/* 시작 시간 */}
+              <View style={{flex: 1}}>
+                <Text
+                  style={[styles.label, {color: textColor, marginBottom: 10}]}>
+                  시작 시각
                 </Text>
-              </TouchableOpacity>
-            </View>
-            {/* 종료 시간 */}
-            <View style={{flex: 1}}>
-              <Text
-                style={[styles.label, {color: textColor, marginBottom: 10}]}>
-                종료 시각
-              </Text>
-              <TouchableOpacity
-                onPress={openEndPicker}
-                style={[
-                  styles.input,
-                  {
-                    backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                    borderColor: showEndPicker ? '#FB5353' : borderColor,
-                  },
-                ]}>
-                <Text style={{color: textColor, textAlign: 'center'}}>
-                  {endTime.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
+                <TouchableOpacity
+                  onPress={openStartPicker}
+                  style={[
+                    styles.input,
+                    {
+                      backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                      borderColor: showStartPicker ? '#FB5353' : borderColor,
+                    },
+                  ]}>
+                  <Text style={{color: textColor, textAlign: 'center'}}>
+                    {startTime.toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {/* 종료 시간 */}
+              <View style={{flex: 1}}>
+                <Text
+                  style={[styles.label, {color: textColor, marginBottom: 10}]}>
+                  종료 시각
                 </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={openEndPicker}
+                  style={[
+                    styles.input,
+                    {
+                      backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                      borderColor: showEndPicker ? '#FB5353' : borderColor,
+                    },
+                  ]}>
+                  <Text style={{color: textColor, textAlign: 'center'}}>
+                    {endTime.toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
+          {/* 달력은 날짜/시간 입력란 아래, padding 없는 별도 View에서 렌더링 */}
           {showDatePicker && (
-            <DateTimePicker
-              value={tempDate}
-              mode="date"
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              minimumDate={new Date()}
-              maximumDate={
-                new Date(new Date().setDate(new Date().getDate() + 30))
-              }
-              locale="ko-KR"
-              onChange={onDateChange}
-              onTouchCancel={() => setShowDatePicker(false)}
-            />
-          )}
-          {showDatePicker && Platform.OS === 'ios' && (
-            <TouchableOpacity
+            <View
               style={{
+                width: Dimensions.get('window').width,
+                alignSelf: 'center',
                 marginTop: 8,
-                alignSelf: 'flex-end',
-                backgroundColor: '#FB5353',
-                borderRadius: 8,
-                paddingVertical: 8,
-                paddingHorizontal: 20,
-              }}
-              onPress={() => {
-                setShowDatePicker(false);
-                setDate(tempDate);
+                paddingHorizontal: 0,
+                marginHorizontal: 0,
               }}>
-              <Text style={{color: '#fff', fontWeight: 'bold'}}>확인</Text>
-            </TouchableOpacity>
+              <Calendar
+                style={{
+                  width: Dimensions.get('window').width,
+                  alignSelf: 'center',
+                  paddingHorizontal: 0,
+                  marginHorizontal: 0,
+                }}
+                current={date.toISOString().slice(0, 10)}
+                onDayPress={day => {
+                  setDate(new Date(day.dateString));
+                  setShowDatePicker(false);
+                }}
+                markedDates={{
+                  [date.toISOString().slice(0, 10)]: {
+                    selected: true,
+                    selectedColor: '#FB5353',
+                    selectedTextColor: 'white',
+                  },
+                }}
+                renderHeader={dateObj => {
+                  const year = dateObj.getFullYear();
+                  const month = (dateObj.getMonth() + 1)
+                    .toString()
+                    .padStart(2, '0');
+                  return (
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        margin: 10,
+                        color: textColor,
+                      }}>{`${year}년 ${month}월`}</Text>
+                  );
+                }}
+                theme={{
+                  backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+                  calendarBackground: isDarkMode ? '#121212' : '#ffffff',
+                  textSectionTitleColor: textColor,
+                  selectedDayBackgroundColor: '#FB5353',
+                  selectedDayTextColor: '#ffffff',
+                  todayTextColor: '#FB5353',
+                  dayTextColor: textColor,
+                  textDisabledColor: isDarkMode ? '#444444' : '#d9e1e8',
+                  monthTextColor: textColor,
+                  textMonthFontWeight: 'bold',
+                  textDayFontSize: 16,
+                  textMonthFontSize: 16,
+                  textDayHeaderFontSize: 14,
+                }}
+                minDate={new Date().toISOString().slice(0, 10)}
+                maxDate={(() => {
+                  const d = new Date();
+                  d.setDate(d.getDate() + 30);
+                  return d.toISOString().slice(0, 10);
+                })()}
+              />
+            </View>
           )}
           {showStartPicker && (
             <DateTimePicker
@@ -472,33 +497,6 @@ const PlaceReservationApplyScreen = ({
               onTouchCancel={() => setShowStartPicker(false)}
             />
           )}
-          {showStartPicker && Platform.OS === 'ios' && (
-            <TouchableOpacity
-              style={{
-                marginTop: 8,
-                alignSelf: 'flex-end',
-                backgroundColor: '#FB5353',
-                borderRadius: 8,
-                paddingVertical: 8,
-                paddingHorizontal: 20,
-              }}
-              onPress={() => {
-                setShowStartPicker(false);
-                if (isTimeAfterNow(date, tempStartTime)) {
-                  setStartTime(tempStartTime);
-                  const newEndTime = new Date(tempStartTime);
-                  newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                  setEndTime(newEndTime);
-                } else {
-                  Alert.alert(
-                    '알림',
-                    '현재 시간보다 이후의 시간을 선택해주세요.',
-                  );
-                }
-              }}>
-              <Text style={{color: '#fff', fontWeight: 'bold'}}>확인</Text>
-            </TouchableOpacity>
-          )}
           {showEndPicker && (
             <DateTimePicker
               value={tempEndTime}
@@ -523,29 +521,6 @@ const PlaceReservationApplyScreen = ({
               }}
               onTouchCancel={() => setShowEndPicker(false)}
             />
-          )}
-          {showEndPicker && Platform.OS === 'ios' && (
-            <TouchableOpacity
-              style={{
-                marginTop: 8,
-                alignSelf: 'flex-end',
-                backgroundColor: '#FB5353',
-                borderRadius: 8,
-                paddingVertical: 8,
-                paddingHorizontal: 20,
-              }}
-              onPress={() => {
-                setShowEndPicker(false);
-                if (tempEndTime > startTime) {
-                  setEndTime(tempEndTime);
-                } else {
-                  const newEndTime = new Date(startTime);
-                  newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                  setEndTime(newEndTime);
-                }
-              }}>
-              <Text style={{color: '#fff', fontWeight: 'bold'}}>확인</Text>
-            </TouchableOpacity>
           )}
         </View>
       </ScrollView>

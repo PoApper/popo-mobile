@@ -2010,7 +2010,7 @@
   dependencies:
     joi "^17.2.1"
 
-"@react-native-community/cli@15.0.1":
+"@react-native-community/cli@latest":
   version "15.0.1"
   resolved "https://registry.npmjs.org/@react-native-community/cli/-/cli-15.0.1.tgz"
   integrity sha512-xIGPytx2bj5HxFk0c7S25AVuJowHmEFg5LFC9XosKc0TSOjP1r6zGC6OqC/arQV/pNuqmZN2IFnpgJn0Bn+hhQ==
