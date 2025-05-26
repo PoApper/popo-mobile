@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,59 +8,82 @@ import {
   useColorScheme,
   StatusBar,
   Alert,
+  Animated,
+  Easing,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
+import CommonHeader from '@components/CommonHeader';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type PaxiStartScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PaxiStart'>;
 };
 
-async function createNewNickname(nickname: string) {
-  try {
-    const res = await paxi_api.post('/user/nickname', {
-      nickname: nickname,
-    });
-    return res.status;
-  } catch (error: string | any) {
-    console.error('Error:', error);
-  }
-}
-
 const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
+  const isDarkMode = useColorScheme() === 'dark';
   const [nickname, setNickname] = useState('');
+  const spinValue = useRef(new Animated.Value(0)).current;
 
-  const checkInputValid = () => {
-    if (!nickname) {
-      // TODO: 더 확실한 기준 넣기
-      Alert.alert('오류', '모든 필수 필드를 입력해주세요.');
-    } else {
-      createNewNickname(nickname)
-        .then(result => {
-          if (result === 201) {
-            Alert.alert('성공', '닉네임을 성공적으로 생성했습니다.');
-            navigation.goBack();
-          } else {
-            Alert.alert('실패', 'response: ' + result?.toString());
-          }
-        })
-        .catch(error => {
-          Alert.alert(
-            '실패',
-            '닉네임을 생성하는데 실패했습니다: ' + error.message,
-          );
-        });
-    }
+  const setNickName = async () => {
+    paxi_api
+      .post('/user/nickname', {
+        nickname: nickname,
+      })
+      .then(res => {
+        if (res.status === 201) {
+          Alert.alert('성공', '닉네임을 성공적으로 생성했습니다.');
+        }
+      });
   };
 
-  const isDarkMode = useColorScheme() === 'dark';
+  const getUserInfo = async () => {
+    paxi_api
+      .get('/user/onboarding-status')
+      .then(res => {
+        if (res.data.onboardingStatus === true) {
+          Alert.alert('안내', '이미 세팅된 닉네임이 있습니다.');
+          navigation.navigate('PaxiRoomList');
+        }
+        setNickname(res.data.nickname); // initial nickname
+      })
+      .catch(err => {
+        console.error('Error:', err);
+        Alert.alert('실패', 'Paxi 유저 확인에 실패했습니다: ' + err.message);
+      });
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
-  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
     flex: 1,
+  };
+
+  const spin = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
+  const animateDice = () => {
+    Animated.sequence([
+      Animated.timing(spinValue, {
+        toValue: 1,
+        duration: 300,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }),
+      Animated.timing(spinValue, {
+        toValue: 0,
+        duration: 0,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
   return (
@@ -69,40 +92,57 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>
-          새 닉네임 생성하기
-        </Text>
-        <View style={styles.placeholderButton} />
-      </View>
+      <CommonHeader navigation={navigation} title="Paxi 닉네임 설정하기" />
 
       <View style={styles.container}>
         <View style={{width: '100%', marginBottom: 8}}>
           <Text style={[styles.titleText, {color: textColor}]}>닉네임</Text>
-          <TextInput
-            style={[
-              styles.roomInput,
-              {
-                borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-                backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
-                color: textColor,
-              },
-            ]}
-            placeholder="닉네임을 입력해주세요."
-            placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
-            value={nickname}
-            onChangeText={setNickname}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[
+                styles.roomInput,
+                {
+                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                  backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+                  color: textColor,
+                },
+              ]}
+              placeholder="닉네임을 입력해주세요."
+              placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+              value={nickname}
+              onChangeText={setNickname}
+            />
+            <TouchableOpacity
+              style={[
+                styles.diceButton,
+                {
+                  backgroundColor: isDarkMode ? '#2C2C2C' : '#F4F4F6',
+                },
+              ]}
+              onPress={() => {
+                animateDice();
+                getUserInfo();
+              }}>
+              <Animated.View style={{transform: [{rotate: spin}]}}>
+                <Icon
+                  name="casino"
+                  size={24}
+                  color={isDarkMode ? '#FFFFFF' : '#000000'}
+                />
+              </Animated.View>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <TouchableOpacity
           style={[styles.nextButton, {backgroundColor: 'black'}]}
-          onPress={() => checkInputValid()}
+          onPress={() => {
+            if (!nickname) {
+              Alert.alert('오류', '닉네임을 입력해주세요.');
+            } else {
+              setNickName();
+            }
+          }}
           disabled={!nickname}>
           <Text style={styles.nextButtonText}>Paxi 시작하기</Text>
         </TouchableOpacity>
@@ -166,17 +206,25 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     textAlign: 'center',
   },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   roomInput: {
-    borderStyle: 'solid',
+    flex: 1,
+    height: 48,
     borderWidth: 1,
-    borderRadius: 6,
-    borderColor: '#D0D0D0',
-    width: '100%',
-    backgroundColor: '#FFFFFF',
-    height: 42,
+    borderRadius: 8,
     paddingHorizontal: 16,
-    fontSize: 13,
-    textAlignVertical: 'center',
+    fontSize: 16,
+  },
+  diceButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   container: {
     alignItems: 'center',

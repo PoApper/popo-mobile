@@ -14,7 +14,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 
-import {MainTabParamList} from '@navigation/types';
+import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import DropdownFilter from '@components/DropdownFilter';
 import {RoomDataType} from '@interfaces/paxi';
@@ -23,7 +23,7 @@ import {RoomListCard} from '@components/room/RoomListCard';
 import CommonHeader from '@components/CommonHeader';
 
 type PaxiRoomListScreenProps = {
-  navigation: NativeStackNavigationProp<MainTabParamList, 'Paxi'>;
+  navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
 const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
@@ -51,9 +51,33 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       });
   };
 
+  const checkPaxiUser = async () => {
+    paxi_api
+      .get('/user/onboarding-status')
+      .then(res => {
+        if (res.data.onboardingStatus === false) {
+          Alert.alert(
+            '안내',
+            '택시 서비스가 처음이군요! 닉네임을 설정해주세요.',
+          );
+          navigation.navigate('PaxiStart');
+        }
+      })
+      .catch(err => {
+        console.error('Error:', err);
+        Alert.alert('실패', 'Paxi 유저 확인에 실패했습니다: ' + err.message);
+      });
+  };
+
   useEffect(() => {
-    getRoomList();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      checkPaxiUser().then(() => {
+        getRoomList();
+      });
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const filterDeparture = (selected: string | null) => {
     console.log('selected', selected);
