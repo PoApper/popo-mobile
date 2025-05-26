@@ -10,8 +10,10 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
-import api from '../utils/api';
+
+import {RootStackParamList} from '@navigation/types';
+import api from '@utils/api';
+import CommonHeader from '@components/CommonHeader';
 
 type BenefitsScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Benefits'>;
@@ -104,7 +106,6 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
   };
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
-  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -112,17 +113,7 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>
-          총학 제휴업체
-        </Text>
-        <View style={styles.placeholderButton} />
-      </View>
+      <CommonHeader navigation={navigation} title="총학 제휴업체" />
 
       <ScrollView
         horizontal
@@ -318,27 +309,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingTop: 16,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  backButton: {
-    padding: 8,
-  },
-  backButtonText: {
-    fontSize: 16,
-  },
-  placeholderButton: {
-    width: 40,
   },
   typeNav: {
     paddingLeft: 16,

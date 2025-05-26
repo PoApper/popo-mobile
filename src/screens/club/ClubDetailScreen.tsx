@@ -13,9 +13,11 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '../../navigation/types';
-import {ClubType} from '../../types/club';
-import api from '../../utils/api';
+
+import {RootStackParamList} from '@navigation/types';
+import {ClubType} from '@interfaces/club';
+import api from '@utils/api';
+import CommonHeader from '@components/CommonHeader';
 
 type ClubDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'ClubDetail'>;
@@ -100,15 +102,7 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>{clubName}</Text>
-        <View style={styles.placeholderButton} />
-      </View>
+      <CommonHeader navigation={navigation} title={clubName} />
 
       <ScrollView style={styles.container}>
         {clubData && (
@@ -252,29 +246,6 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    flex: 1,
-    textAlign: 'center',
-  },
-  backButton: {
-    padding: 8,
-  },
-  backButtonText: {
-    fontSize: 16,
-  },
-  placeholderButton: {
-    width: 40,
   },
   imageContainer: {
     width: '100%',
