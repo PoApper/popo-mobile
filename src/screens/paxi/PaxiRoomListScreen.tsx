@@ -13,12 +13,12 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import {MainTabParamList} from '../../navigation/types';
-import paxi_api from '../../utils/paxi_api';
-import DropdownFilter from '../../components/DropdownFilter';
-import {RoomDataType, ParsedRoomDataType} from '../../types/paxi';
-import {RefreshButton} from '../../components/room/RefreshButton';
-import {RoomListCard} from '../../components/room/RoomListCard';
+import {MainTabParamList} from '@navigation/types';
+import paxi_api from '@utils/paxi_api';
+import DropdownFilter from '@components/DropdownFilter';
+import {RoomDataType, ParsedRoomDataType} from '@interfaces/paxi';
+import {RefreshButton} from '@components/room/RefreshButton';
+import {RoomListCard} from '@components/room/RoomListCard';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<MainTabParamList, 'Paxi'>;

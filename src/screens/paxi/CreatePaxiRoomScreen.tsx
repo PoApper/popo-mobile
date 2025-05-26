@@ -13,9 +13,9 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../navigation/types';
-import paxi_api from '../../utils/paxi_api';
-import DropdownMenu from '../../components/DropdownMenu';
+import {RootStackParamList} from '@navigation/types';
+import paxi_api from '@utils/paxi_api';
+import DropdownMenu from '@components/DropdownMenu';
 
 type CreatePaxiRoomScreenProps = {
   navigation: NativeStackNavigationProp<
