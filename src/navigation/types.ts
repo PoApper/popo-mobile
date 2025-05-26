@@ -1,31 +1,38 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 
-export type RootStackParamList = {
-  Auth: undefined;
-  Main: {
-    userId: string;
-    userData: any;
-  };
-  Home: undefined;
-  Signup: undefined;
+export type RootStackParamList = AuthStackParamList &
+  MainTabParamList &
+  PaxiStackParamList &
+  PlaceReservationStackParamList &
+  ClubStackParamList &
+  AssociationStackParamList &
+  OtherStackParamList;
+
+export type AuthStackParamList = {
   Landing: undefined;
-  Chat: {
-    roomUuid: string;
+  Login: undefined;
+  Signup: undefined;
+};
+
+export type MainTabParamList = {
+  Home: undefined;
+  Paxi: undefined;
+  MyReservation: undefined;
+  MyInfo: {
+    navigation: NativeStackNavigationProp<RootStackParamList>;
+    route: RouteProp<MainTabParamList, 'MyInfo'>;
   };
-  NewChat: {
-    roomUuid: string;
-  };
-  Settlement: {
-    roomUuid: string;
-  };
+};
+
+export type PaxiStackParamList = {
+  PaxiIntro: undefined;
   PaxiStart: undefined;
   PaxiRoomList: undefined;
   CreatePaxiRoomScreen: undefined;
-  Login: undefined;
-  UserDetail: undefined;
-  Developer: undefined;
-  Reservation: undefined;
+};
+
+export type PlaceReservationStackParamList = {
   PlaceReservation: undefined;
   PlaceDetail: {
     placeId: string;
@@ -40,32 +47,43 @@ export type RootStackParamList = {
     placeName: string;
     placeId: string;
   };
-  Whitebook: undefined;
-  Benefits: undefined;
+};
+
+export type ClubStackParamList = {
   Club: undefined;
   ClubDetail: {
     clubId: string;
     clubName: string;
   };
+};
+
+export type AssociationStackParamList = {
   Association: undefined;
   AssociationDetail: {
     associationId: string;
     associationName: string;
   };
-  CampusShuttle: undefined;
 };
 
-export type AuthStackParamList = {
-  Landing: undefined;
-  Login: undefined;
-};
-
-export type MainTabParamList = {
-  Home: undefined;
-  Paxi: undefined;
-  MyReservation: undefined;
-  MyInfo: {
-    navigation: NativeStackNavigationProp<RootStackParamList>;
-    route: RouteProp<MainTabParamList, 'MyInfo'>;
+export type OtherStackParamList = {
+  Auth: undefined;
+  Main: {
+    userId: string;
+    userData: any;
   };
+  Chat: {
+    roomUuid: string;
+  };
+  NewChat: {
+    roomUuid: string;
+  };
+  Settlement: {
+    roomUuid: string;
+  };
+  Login: undefined;
+  UserDetail: undefined;
+  Developer: undefined;
+  Whitebook: undefined;
+  Benefits: undefined;
+  CampusShuttle: undefined;
 };

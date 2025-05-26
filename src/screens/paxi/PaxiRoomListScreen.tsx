@@ -56,11 +56,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       .get('/user/onboarding-status')
       .then(res => {
         if (res.data.onboardingStatus === false) {
-          Alert.alert(
-            '안내',
-            '택시 서비스가 처음이군요! 닉네임을 설정해주세요.',
-          );
-          navigation.navigate('PaxiStart');
+          navigation.navigate('PaxiIntro');
         }
       })
       .catch(err => {

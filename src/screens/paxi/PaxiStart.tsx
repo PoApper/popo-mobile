@@ -10,6 +10,7 @@ import {
   Alert,
   Animated,
   Easing,
+  Image,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -35,6 +36,7 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
       .then(res => {
         if (res.status === 201) {
           Alert.alert('성공', '닉네임을 성공적으로 생성했습니다.');
+          navigation.navigate('PaxiRoomList');
         }
       });
   };
@@ -92,11 +94,17 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="Paxi 닉네임 설정하기" />
+      <CommonHeader navigation={navigation} title="닉네임 설정하기" />
 
       <View style={styles.container}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>PAXI에 오신 것을 환영합니다! 👋</Text>
+        </View>
+        <View style={styles.subTitleContainer}>
+          <Text style={styles.subTitleText}>사용할 닉네임을 등록해주세요.</Text>
+        </View>
+
         <View style={{width: '100%', marginBottom: 8}}>
-          <Text style={[styles.titleText, {color: textColor}]}>닉네임</Text>
           <View style={styles.inputContainer}>
             <TextInput
               style={[
@@ -134,6 +142,15 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
           </View>
         </View>
 
+        <View style={styles.taxiImageContainer}>
+          <Image
+            source={require('../../../assets/paxi_taxi.png')}
+            style={styles.taxiImage}
+          />
+        </View>
+      </View>
+
+      <View style={styles.bottomContainer}>
         <TouchableOpacity
           style={[styles.nextButton, {backgroundColor: 'black'}]}
           onPress={() => {
@@ -181,21 +198,33 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     flex: 1,
   },
+  titleContainer: {
+    width: '100%',
+    marginTop: 48,
+    marginBottom: 30,
+  },
   titleText: {
-    fontSize: 15,
+    fontSize: 26,
     letterSpacing: -0.5,
     fontWeight: '700',
     color: '#000',
     textAlign: 'left',
     width: '100%',
+    marginBottom: 20,
+  },
+  subTitleContainer: {
+    width: '100%',
     marginBottom: 10,
   },
+  subTitleText: {
+    fontSize: 18,
+    color: '#000',
+    textAlign: 'left',
+  },
   nextButton: {
-    borderRadius: 6,
-    backgroundColor: '#FB5353',
-    width: '100%',
-    marginTop: 20,
-    height: 40,
+    backgroundColor: '#111',
+    borderRadius: 24,
+    height: 48,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -213,11 +242,11 @@ const styles = StyleSheet.create({
   },
   roomInput: {
     flex: 1,
-    height: 48,
+    height: 36,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 16,
-    fontSize: 16,
+    fontSize: 14,
   },
   diceButton: {
     width: 48,
@@ -227,10 +256,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
+    flex: 1,
     alignItems: 'center',
     paddingRight: '5%',
     paddingLeft: '5%',
     paddingTop: '5%',
     marginBottom: 0,
+  },
+  taxiImageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  taxiImage: {
+    width: 280,
+    height: 280,
+  },
+  bottomContainer: {
+    paddingHorizontal: 24,
+    paddingBottom: 32,
+    backgroundColor: '#fff',
   },
 });

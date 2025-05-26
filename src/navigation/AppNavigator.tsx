@@ -20,6 +20,7 @@ import DeveloperPage from '@screens/auth/DeveloperPage';
 import PaxiRoomListScreen from '@screens/paxi/PaxiRoomListScreen';
 import PaxiCreateRoomScreen from '@screens/paxi/CreatePaxiRoomScreen';
 import NewChatScreen from '@screens/NewChatScreen';
+import PaxiIntroScreen from '@screens/paxi/PaxiIntro';
 import PaxiStartScreen from '@screens/paxi/PaxiStart';
 
 // Place Reservation Screens
@@ -79,6 +80,7 @@ const AppNavigator = () => {
           <Stack.Screen name="Developer" component={DeveloperPage} />
 
           {/* Paxi Screens */}
+          <Stack.Screen name="PaxiIntro" component={PaxiIntroScreen} />
           <Stack.Screen name="PaxiStart" component={PaxiStartScreen} />
           <Stack.Screen name="PaxiRoomList" component={PaxiRoomListScreen} />
           <Stack.Screen
