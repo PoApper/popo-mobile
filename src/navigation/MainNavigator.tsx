@@ -7,7 +7,7 @@ import {MainTabParamList} from '@navigation/types';
 import HomeScreen from '@screens/HomeScreen';
 import UserDetailScreen from '@screens/auth/UserDetailScreen';
 import ReservationScreen from '@screens/ReservationScreen';
-import PaxiRoomListScreen from '@screens/PaxiRoomListScreen';
+import PaxiRoomListScreen from '@screens/paxi/PaxiRoomListScreen';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 

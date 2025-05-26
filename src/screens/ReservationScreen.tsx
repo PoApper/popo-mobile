@@ -17,8 +17,8 @@ import EquipReservationList from '../components/EquipReservationList';
 import TaxiChatList from '../components/TaxiChatList';
 
 type ReservationScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
-  route: RouteProp<RootStackParamList, 'Reservation'>;
+  navigation?: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
+  route?: RouteProp<RootStackParamList, 'Reservation'>;
 };
 
 type TabType = 'place' | 'equipment' | 'taxi';
@@ -49,11 +49,15 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <View style={[styles.header, {borderBottomColor: borderColor}]}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
-        </TouchableOpacity>
+        {navigation && (
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}>
+            <Text style={[styles.backButtonText, {color: textColor}]}>
+              뒤로
+            </Text>
+          </TouchableOpacity>
+        )}
         <Text style={[styles.headerTitle, {color: textColor}]}>내 일정</Text>
         <View style={styles.placeholderButton} />
       </View>
@@ -105,11 +109,11 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
 
       <View style={{flex: 1}}>
         {activeTab === 'place' ? (
-          <ReservationList navigation={navigation} />
+          <ReservationList navigation={navigation!} />
         ) : activeTab === 'equipment' ? (
-          <EquipReservationList navigation={navigation} />
+          <EquipReservationList navigation={navigation!} />
         ) : (
-          <TaxiChatList navigation={navigation} />
+          <TaxiChatList navigation={navigation!} />
         )}
       </View>
     </SafeAreaView>

@@ -10,8 +10,9 @@ import SignupScreen from '@screens/auth/SignupScreen';
 import UserDetailScreen from '@screens/auth/UserDetailScreen';
 import DeveloperPage from '@screens/auth/DeveloperPage';
 import ReservationScreen from '@screens/ReservationScreen';
-import NewPaxiRoomScreen from '@screens/NewPaxiRoomScreen';
-import PaxiRoomListScreen from '@screens/PaxiRoomListScreen';
+import PaxiRoomListScreen from '@screens/paxi/PaxiRoomListScreen';
+import PaxiCreateRoomScreen from '@screens/paxi/CreatePaxiRoomScreen';
+import NewChatScreen from '@screens/NewChatScreen';
 import PlaceReservationScreen from '@screens/place-reservation/PlaceReservationScreen';
 import PlaceDetailReservationScreen from '@screens/place-reservation/PlaceDetailReservationScreen';
 import PlaceReservationApplyScreen from '@screens/place-reservation/PlaceReservationApplyScreen';
@@ -59,14 +60,14 @@ const AppNavigator = () => {
           screenOptions={{
             headerShown: false,
           }}>
-          <Stack.Screen name="PaxiStart" component={PaxiStartScreen} />
-          <Stack.Screen name="Chat" component={ChatScreen} />
+          {/* <Stack.Screen name="PaxiStart" component={PaxiStartScreen} /> */}
+          {/* <Stack.Screen name="Chat" component={ChatScreen} /> */}
           <Stack.Screen name="NewChat" component={NewChatScreen} />
-          <Stack.Screen name="Settlement" component={SettlementScreen} />
+          {/* <Stack.Screen name="Settlement" component={SettlementScreen} /> */}
           <Stack.Screen name="PaxiRoomList" component={PaxiRoomListScreen} />
           <Stack.Screen
             name="CreatePaxiRoomScreen"
-            component={CreatePaxiRoomScreen}
+            component={PaxiCreateRoomScreen}
           />
           <Stack.Screen name="Landing" component={LandingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
