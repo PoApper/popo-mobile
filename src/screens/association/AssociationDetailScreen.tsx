@@ -13,8 +13,9 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '../../navigation/types';
-import api from '../../utils/api';
+
+import {RootStackParamList} from '@navigation/types';
+import api from '@utils/api';
 
 type AssociationDetailScreenProps = {
   navigation: NativeStackNavigationProp<

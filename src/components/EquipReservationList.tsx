@@ -11,9 +11,10 @@ import {
   Alert,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
-import api from '../utils/api';
 import axios from 'axios';
+
+import {RootStackParamList} from '@navigation/types';
+import api from '@utils/api';
 
 interface Equipment {
   uuid: string;

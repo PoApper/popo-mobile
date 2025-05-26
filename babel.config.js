@@ -12,5 +12,32 @@ module.exports = {
         allowUndefined: true,
       },
     ],
+    [
+      'module-resolver',
+      {
+        root: ['./src'],
+        extensions: [
+          '.ios.ts',
+          '.android.ts',
+          '.ts',
+          '.ios.tsx',
+          '.android.tsx',
+          '.tsx',
+          '.jsx',
+          '.js',
+          '.json',
+        ],
+        alias: {
+          '~': './src',
+          '@components': './src/components',
+          '@screens': './src/screens',
+          '@assets': './src/assets',
+          '@utils': './src/utils',
+          '@navigation': './src/navigation',
+          '@interfaces': './src/interfaces',
+          '@styles': './src/styles',
+        },
+      },
+    ],
   ],
 };

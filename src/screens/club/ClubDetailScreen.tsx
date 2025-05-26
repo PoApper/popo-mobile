@@ -13,9 +13,10 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '../../navigation/types';
-import {ClubType} from '../../types/club';
-import api from '../../utils/api';
+
+import {RootStackParamList} from '@navigation/types';
+import {ClubType} from '@interfaces/club';
+import api from '@utils/api';
 
 type ClubDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'ClubDetail'>;

@@ -13,7 +13,8 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+
+import {RootStackParamList} from '@navigation/types';
 
 type CampusShuttleScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'CampusShuttle'>;
