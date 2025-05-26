@@ -12,12 +12,14 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../navigation/types';
-import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import api from '../../utils/api';
-import Environment from '../../utils/environment';
+import axios from 'axios';
+
+import {RootStackParamList} from '@navigation/types';
+import api from '@utils/api';
+import Environment from '@utils/environment';
+import CommonHeader from '@components/CommonHeader';
 
 type UserDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserDetail'>;
@@ -134,17 +136,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>
-          사용자 정보
-        </Text>
-        <View style={styles.placeholderButton} />
-      </View>
+      <CommonHeader navigation={navigation} title="사용자 정보" />
 
       <ScrollView
         style={styles.container}
@@ -313,28 +305,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  backButton: {
-    padding: 8,
-  },
-  backButtonText: {
-    fontSize: 16,
-  },
-  placeholderButton: {
-    width: 40,
   },
   profileCard: {
     borderRadius: 12,

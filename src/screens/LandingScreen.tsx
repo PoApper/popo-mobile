@@ -2,7 +2,8 @@ import React, {useEffect} from 'react';
 import {StyleSheet, View, Image, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+
+import {RootStackParamList} from '@navigation/types';
 
 type LandingScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Landing'>;

@@ -13,7 +13,9 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+
+import {RootStackParamList} from '@navigation/types';
+import CommonHeader from '@components/CommonHeader';
 
 type CampusShuttleScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'CampusShuttle'>;
@@ -28,7 +30,6 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({navigation}) => {
     flex: 1,
   };
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
-  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
 
   const images = [
     require('../../assets/shuttle-faculty-apartment-area.png'),
@@ -42,17 +43,7 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({navigation}) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>
-          셔틀버스 시간표
-        </Text>
-        <View style={styles.placeholderButton} />
-      </View>
+      <CommonHeader navigation={navigation} title="셔틀버스 시간표" />
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.section}>
@@ -170,27 +161,6 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  backButton: {
-    padding: 8,
-  },
-  backButtonText: {
-    fontSize: 16,
-  },
-  placeholderButton: {
-    width: 40,
-  },
   scrollView: {
     flex: 1,
   },

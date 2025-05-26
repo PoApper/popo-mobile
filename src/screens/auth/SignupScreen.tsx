@@ -13,10 +13,11 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../navigation/types';
-import api from '../../utils/api';
-import PrivacyPolicy from '../../components/PrivacyPolicy';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
+import {RootStackParamList} from '@navigation/types';
+import api from '@utils/api';
+import PrivacyPolicy from '@components/PrivacyPolicy';
 
 type SignupScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Signup'>;

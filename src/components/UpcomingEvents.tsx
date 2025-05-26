@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, ScrollView, useColorScheme} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import api from '../utils/api';
 
+import api from '@utils/api';
 interface Place {
   uuid: string;
   name: string;
