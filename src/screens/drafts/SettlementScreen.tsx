@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
-import paxi_api from '../utils/paxi_api';
+import {RootStackParamList} from '../../navigation/types';
+import paxi_api from '../../utils/paxi_api';
 
 import {RouteProp, useRoute} from '@react-navigation/native';
 

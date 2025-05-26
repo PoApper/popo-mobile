@@ -12,12 +12,12 @@ import {
   Alert,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+import {RootStackParamList} from '../../navigation/types';
 import {io, Socket} from 'socket.io-client';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {RouteProp, useRoute} from '@react-navigation/native';
-import paxi_api from '../utils/paxi_api';
+import paxi_api from '../../utils/paxi_api';
 
 interface MessageData {
   uuid: string;

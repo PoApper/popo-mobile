@@ -19,7 +19,7 @@ import DeveloperPage from '@screens/auth/DeveloperPage';
 // Paxi Screens
 import PaxiRoomListScreen from '@screens/paxi/PaxiRoomListScreen';
 import PaxiCreateRoomScreen from '@screens/paxi/CreatePaxiRoomScreen';
-import NewChatScreen from '@screens/NewChatScreen';
+import NewChatScreen from '@screens/paxi/NewChatScreen';
 import PaxiIntroScreen from '@screens/paxi/PaxiIntro';
 import PaxiStartScreen from '@screens/paxi/PaxiStart';
 

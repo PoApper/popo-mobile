@@ -23,9 +23,9 @@ import {
   borderColor,
   backgroundColor,
   common,
-} from '../styles/default';
-import {socketFactory} from '../utils/socket-factory';
-import ChatMessage from '../components/chat/chatMessage';
+} from '../../styles/default';
+import {socketFactory} from '../../utils/socket-factory';
+import ChatMessage from '../../components/chat/chatMessage';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Benefits'>;
@@ -38,6 +38,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const route = useRoute<ChatScreenRouteProp>();
   const {roomUuid} = route.params;
 
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [roomInfo, setRoomInfo] = useState<ChatRoomInfo>({} as ChatRoomInfo);
   const [myInfo, setMyInfo] = useState<PaxiUser>({} as PaxiUser);
   const [chatList, setChatList] = useState<MessageData[]>([]);
@@ -57,7 +58,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
   const getMyInfo = async () => {
     paxi_api
-      .get('/auth/me')
+      .get('/auth/verifyToken')
       .then(res => {
         setMyInfo(res.data);
       })
@@ -155,8 +156,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         </Text>
         <TouchableOpacity
           style={{marginRight: 10}}
-          // TODO
-          onPress={() => {}}>
+          onPress={() => setSidebarVisible(!sidebarVisible)}>
           <Icon name="menu" size={30} color={'black'} />
         </TouchableOpacity>
       </View>
