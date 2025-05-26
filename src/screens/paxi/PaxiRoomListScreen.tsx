@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,13 +12,15 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import moment from 'moment';
 
 import {MainTabParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import DropdownFilter from '@components/DropdownFilter';
-import {RoomDataType, ParsedRoomDataType} from '@interfaces/paxi';
+import {RoomDataType} from '@interfaces/paxi';
 import {RefreshButton} from '@components/room/RefreshButton';
 import {RoomListCard} from '@components/room/RoomListCard';
+import CommonHeader from '@components/CommonHeader';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<MainTabParamList, 'Paxi'>;
@@ -29,52 +31,33 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
-  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
+
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
     flex: 1,
   };
 
-  const [roomData, setRoomData] = useState<ParsedRoomDataType[]>([]);
+  const [roomData, setRoomData] = useState<RoomDataType[]>([]);
 
-  const getUserDataAndRequest = useCallback(async () => {
-    try {
-      const response = await paxi_api.get('/room');
-      const parsedData = parseRoomData(response.data);
-      setRoomData(parsedData);
-    } catch (error: string | any) {
-      console.error('Error:', error);
-      Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + error.message);
-    }
-  }, []); // 여기에 들어가는 의존성도 필요하면 추가
+  const getRoomList = async () => {
+    paxi_api
+      .get('/room')
+      .then(res => {
+        setRoomData(res.data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + error.message);
+      });
+  };
 
   useEffect(() => {
-    getUserDataAndRequest();
-  }, [getUserDataAndRequest]);
-
-  const refreshRoomData = () => getUserDataAndRequest();
+    getRoomList();
+  }, []);
 
   const filterDeparture = (selected: string | null) => {
     console.log('selected', selected);
   };
-
-  const parseRoomData = (items: RoomDataType[]) =>
-    items.map((item: RoomDataType) => ({
-      uuid: item.uuid,
-      title: item.title,
-      departureTime: new Date(item.departureTime).toLocaleString('ko-KR', {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-      }),
-      remain: item.maxParticipant - item.currentParticipant,
-      total: item.maxParticipant,
-      departure: item.departureLocation,
-      destination: item.destinationLocation,
-    }));
 
   const dropdownStyle = [
     styles.button,
@@ -90,18 +73,10 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>Paxi</Text>
-        <View style={styles.placeholderButton} />
-      </View>
+      <CommonHeader navigation={navigation} title="Paxi" />
 
       <View style={[styles.conditionNavigator]}>
-        <RefreshButton onPress={() => refreshRoomData()} />
+        <RefreshButton onPress={() => getRoomList()} />
 
         <DropdownFilter
           style={dropdownStyle}
@@ -170,11 +145,13 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
                 uuid={room.uuid}
                 key={index}
                 title={room.title}
-                departureTime={room.departureTime}
-                remain={room.remain}
-                total={room.total}
-                departure={room.departure}
-                destination={room.destination}
+                departureTime={moment(room.departureTime).format(
+                  'YYYY-MM-DD HH:mm',
+                )}
+                remain={room.maxParticipant - room.currentParticipant}
+                total={room.maxParticipant}
+                departure={room.departureLocation}
+                destination={room.destinationLocation}
               />
             ))
           ) : (

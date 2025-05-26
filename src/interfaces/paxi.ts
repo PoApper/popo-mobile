@@ -69,13 +69,3 @@ export interface RoomDataType {
   createdAt: string;
   updatedAt: string;
 }
-
-export interface ParsedRoomDataType {
-  uuid: string;
-  title: string;
-  departureTime: string;
-  remain: number;
-  total: number;
-  departure: string;
-  destination: string;
-}

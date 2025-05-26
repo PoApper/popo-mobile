@@ -7,12 +7,12 @@ import {
   TouchableOpacity,
   useColorScheme,
 } from 'react-native';
-import {RootStackParamList} from '@navigation/types';
+import {MainTabParamList, RootStackParamList} from '@navigation/types';
 
 type CommonHeaderProps = {
   navigation: NativeStackNavigationProp<
-    RootStackParamList,
-    keyof RootStackParamList
+    any | MainTabParamList | RootStackParamList,
+    any | keyof MainTabParamList | keyof RootStackParamList
   >;
   title: string;
 };
