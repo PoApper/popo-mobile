@@ -21,6 +21,7 @@ import paxi_api from '@utils/paxi_api';
 import {textColor, borderColor, backgroundColor, common} from '@styles/default';
 import {socketFactory} from '@utils/socket-factory';
 import ChatMessage from '@components/chat/chatMessage';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Benefits'>;
@@ -156,24 +157,30 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      <FlatList
-        data={chatList}
-        renderItem={({item}) => <ChatMessage message={item} />}
-        keyExtractor={item => item.uuid}
-        style={{flex: 1, padding: 10}}
-      />
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={[styles.textInput]}
-          value={newChat}
-          onChangeText={setNewChat}
-          multiline={true}
+      <KeyboardAwareScrollView
+        contentContainerStyle={{flex: 1, paddingBottom: 80}}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        extraScrollHeight={80}>
+        <FlatList
+          data={chatList}
+          renderItem={({item}) => <ChatMessage message={item} />}
+          keyExtractor={item => item.uuid}
+          style={{flex: 1, padding: 10}}
         />
-        <TouchableOpacity style={styles.sendButton} onPress={sendChat}>
-          <Icon name="send" size={20} color="white" />
-        </TouchableOpacity>
-      </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={[styles.textInput]}
+            value={newChat}
+            onChangeText={setNewChat}
+            multiline={true}
+          />
+          <TouchableOpacity style={styles.sendButton} onPress={sendChat}>
+            <Icon name="send" size={20} color="white" />
+          </TouchableOpacity>
+        </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };

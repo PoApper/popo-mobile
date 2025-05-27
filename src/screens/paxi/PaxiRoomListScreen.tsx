@@ -21,6 +21,8 @@ import {RefreshButton} from '@components/room/RefreshButton';
 import {RoomListCard} from '@components/room/RoomListCard';
 import CommonHeader from '@components/CommonHeader';
 import api from '@utils/api';
+import {PAXI_LOCATIONS} from '@utils/locations';
+import RoomFilterDatePicker from '@components/room/RoomFilterDatePicker';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
@@ -32,6 +34,8 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const [showEmptyRoom, setShowEmptyRoom] = useState(false);
   const [roomData, setRoomData] = useState<RoomDataType[]>([]);
   const [userUuid, setUserUuid] = useState<string>('');
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
 
@@ -105,32 +109,20 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <DropdownFilter
           style={dropdownStyle}
           defaultText={'출발지'}
-          categories={[
-            {id: 'fruit', name: '과일'},
-            {id: 'fruit2', name: '과일'},
-          ]}
+          categories={PAXI_LOCATIONS}
           onSelect={selected => filterDeparture(selected)}
         />
 
         <DropdownFilter
           style={dropdownStyle}
           defaultText={'도착지'}
-          categories={[{id: 'fruit', name: '과일'}]}
+          categories={PAXI_LOCATIONS}
           onSelect={selected => console.log('선택된 카테고리:', selected)}
         />
 
-        <DropdownFilter
-          style={dropdownStyle}
-          defaultText={'날짜'}
-          categories={[{id: 'fruit', name: '과일'}]}
-          onSelect={selected => console.log('선택된 카테고리:', selected)}
-        />
-
-        <DropdownFilter
-          style={dropdownStyle}
-          defaultText={'시간'}
-          categories={[{id: 'fruit', name: '과일'}]}
-          onSelect={selected => console.log('선택된 카테고리:', selected)}
+        <RoomFilterDatePicker
+          selectedDate={selectedDate}
+          onDateChange={date => setSelectedDate(date)}
         />
       </View>
 

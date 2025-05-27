@@ -14,6 +14,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/types';
 import axios from 'axios';
 import paxi_api from '../utils/paxi_api';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface RoomData {
   title: string;
@@ -25,7 +26,7 @@ interface RoomData {
 }
 
 interface TaxiChatListProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
 }
 
 const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
@@ -123,28 +124,19 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
           {formatDateTime(item.departureTime)}
         </Text>
       </View>
-
-      <View>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Chat', {roomUuid: item.uuid})}
-          style={{backgroundColor: 'red'}}>
-          <Text>Prev Chat Screen</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{backgroundColor: 'blue'}}
-          onPress={() => navigation.navigate('NewChat', {roomUuid: item.uuid})}>
-          <Text>New Chat Screen</Text>
-        </TouchableOpacity>
-      </View>
-      <View
+      <TouchableOpacity
         style={{
           width: 48,
           height: 48,
           backgroundColor: '#F3F4F6',
           borderRadius: 8,
           marginLeft: 12,
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
-      />
+        onPress={() => navigation.navigate('NewChat', {roomUuid: item.uuid})}>
+        <Icon name="message" size={22} color="#222" />
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 
