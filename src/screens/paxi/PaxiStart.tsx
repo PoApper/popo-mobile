@@ -28,6 +28,17 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
   const [nickname, setNickname] = useState('');
   const spinValue = useRef(new Animated.Value(0)).current;
 
+  const colors = {
+    background: isDarkMode ? '#121212' : '#fff',
+    text: isDarkMode ? '#FFFFFF' : '#000000',
+    inputBackground: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+    inputBorder: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+    inputPlaceholder: isDarkMode ? '#555' : '#d0d0d0',
+    diceButtonBackground: isDarkMode ? '#2C2C2C' : '#F4F4F6',
+    buttonBackground: isDarkMode ? '#2C2C2C' : '#111',
+    bottomContainerBackground: isDarkMode ? '#121212' : '#fff',
+  };
+
   const setNickName = async () => {
     paxi_api
       .post('/user/nickname', {
@@ -61,9 +72,8 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
     getUserInfo();
   }, []);
 
-  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#121212' : '#fff',
+    backgroundColor: colors.background,
     flex: 1,
   };
 
@@ -98,10 +108,14 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
 
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>PAXI에 오신 것을 환영합니다! 👋</Text>
+          <Text style={[styles.titleText, {color: colors.text}]}>
+            PAXI에 오신 것을 환영합니다! 👋
+          </Text>
         </View>
         <View style={styles.subTitleContainer}>
-          <Text style={styles.subTitleText}>사용할 닉네임을 등록해주세요.</Text>
+          <Text style={[styles.subTitleText, {color: colors.text}]}>
+            사용할 닉네임을 등록해주세요.
+          </Text>
         </View>
 
         <View style={{width: '100%', marginBottom: 8}}>
@@ -110,13 +124,13 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
               style={[
                 styles.roomInput,
                 {
-                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-                  backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
-                  color: textColor,
+                  borderColor: colors.inputBorder,
+                  backgroundColor: colors.inputBackground,
+                  color: colors.text,
                 },
               ]}
               placeholder="닉네임을 입력해주세요."
-              placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+              placeholderTextColor={colors.inputPlaceholder}
               value={nickname}
               onChangeText={setNickname}
             />
@@ -124,7 +138,7 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
               style={[
                 styles.diceButton,
                 {
-                  backgroundColor: isDarkMode ? '#2C2C2C' : '#F4F4F6',
+                  backgroundColor: colors.diceButtonBackground,
                 },
               ]}
               onPress={() => {
@@ -132,11 +146,7 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
                 getUserInfo();
               }}>
               <Animated.View style={{transform: [{rotate: spin}]}}>
-                <Icon
-                  name="casino"
-                  size={24}
-                  color={isDarkMode ? '#FFFFFF' : '#000000'}
-                />
+                <Icon name="casino" size={24} color={colors.text} />
               </Animated.View>
             </TouchableOpacity>
           </View>
@@ -150,9 +160,16 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
         </View>
       </View>
 
-      <View style={styles.bottomContainer}>
+      <View
+        style={[
+          styles.bottomContainer,
+          {backgroundColor: colors.bottomContainerBackground},
+        ]}>
         <TouchableOpacity
-          style={[styles.nextButton, {backgroundColor: 'black'}]}
+          style={[
+            styles.nextButton,
+            {backgroundColor: colors.buttonBackground},
+          ]}
           onPress={() => {
             if (!nickname) {
               Alert.alert('오류', '닉네임을 입력해주세요.');
@@ -194,10 +211,6 @@ const styles = StyleSheet.create({
   placeholderButton: {
     width: 40,
   },
-  backgroundStyle: {
-    backgroundColor: '#ffffff',
-    flex: 1,
-  },
   titleContainer: {
     width: '100%',
     marginTop: 48,
@@ -207,7 +220,6 @@ const styles = StyleSheet.create({
     fontSize: 26,
     letterSpacing: -0.5,
     fontWeight: '700',
-    color: '#000',
     textAlign: 'left',
     width: '100%',
     marginBottom: 20,
@@ -218,11 +230,9 @@ const styles = StyleSheet.create({
   },
   subTitleText: {
     fontSize: 18,
-    color: '#000',
     textAlign: 'left',
   },
   nextButton: {
-    backgroundColor: '#111',
     borderRadius: 24,
     height: 48,
     justifyContent: 'center',
@@ -276,6 +286,5 @@ const styles = StyleSheet.create({
   bottomContainer: {
     paddingHorizontal: 24,
     paddingBottom: 32,
-    backgroundColor: '#fff',
   },
 });
