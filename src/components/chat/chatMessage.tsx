@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, useColorScheme} from 'react-native';
-import {MessageData} from '../../types/paxi';
-import {textColor} from '../../styles/default';
+import {MessageData} from '@interfaces/paxi';
+import {textColor} from '@styles/default';
 
 interface ChatMessageProps {
   message: MessageData;
@@ -83,7 +83,7 @@ const NormalMessage = ({message}: {message: MessageData}) => {
       />
       <View>
         <Text style={[styles.messageSender, {color: textColor(isDarkMode)}]}>
-          {message.senderName ?? 'senderName'}
+          {message.senderNickname ?? 'senderName'}
         </Text>
         <View style={styles.messageArea}>
           <View

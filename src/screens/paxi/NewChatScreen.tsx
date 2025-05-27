@@ -18,14 +18,9 @@ import {Socket} from 'socket.io-client';
 import {ChatRoomInfo, MessageData, PaxiUser} from '@interfaces/paxi';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import {
-  textColor,
-  borderColor,
-  backgroundColor,
-  common,
-} from '../../styles/default';
-import {socketFactory} from '../../utils/socket-factory';
-import ChatMessage from '../../components/chat/chatMessage';
+import {textColor, borderColor, backgroundColor, common} from '@styles/default';
+import {socketFactory} from '@utils/socket-factory';
+import ChatMessage from '@components/chat/chatMessage';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Benefits'>;

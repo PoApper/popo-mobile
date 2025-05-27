@@ -25,7 +25,7 @@ export interface ChatRoomInfo {
 export interface MessageData {
   uuid: string;
   senderUuid: string;
-  senderName: string;
+  senderNickname: string;
   message: string;
   messageType: string;
   createdAt: any;
