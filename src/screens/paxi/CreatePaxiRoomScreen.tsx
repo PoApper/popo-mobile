@@ -13,11 +13,13 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import moment from 'moment';
+
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import DropdownMenu from '@components/DropdownMenu';
 import CommonHeader from '@components/CommonHeader';
-import moment from 'moment';
+import {PAXI_LOCATIONS} from '@utils/locations';
 
 type CreatePaxiRoomScreenProps = {
   navigation: NativeStackNavigationProp<
@@ -77,22 +79,6 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
       });
   }
 
-  const showDatePicker = () => {
-    setDatePickerVisible(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisible(false);
-  };
-
-  const showTimePicker = () => {
-    setTimePickerVisible(true);
-  };
-
-  const hideTimePicker = () => {
-    setTimePickerVisible(false);
-  };
-
   const handleDateConfirm = (date: Date) => {
     setSelectedDateTime(
       new Date(
@@ -104,7 +90,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
         selectedDateTime.getSeconds(),
       ),
     );
-    hideDatePicker();
+    setDatePickerVisible(false);
   };
 
   const handleTimeConfirm = (time: Date) => {
@@ -118,7 +104,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
         time.getSeconds(),
       ),
     );
-    hideTimePicker();
+    setTimePickerVisible(false);
   };
 
   const checkInputValid = () => {
@@ -150,14 +136,6 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
     {
       backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
     },
-  ];
-
-  const locations = [
-    {name: '지곡회관'},
-    {name: '학생회관'},
-    {name: '체인지업그라운드'},
-    {name: '포항역'},
-    {name: '터미널'},
   ];
 
   const TextInputStyle = [
@@ -204,7 +182,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                   textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
                   textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
                   defaultText={'어디서 출발하시나요?'}
-                  categories={locations}
+                  categories={PAXI_LOCATIONS}
                   onSelect={selected => setDepartureName(selected ?? '출발지')}
                 />
               </View>
@@ -222,7 +200,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                   textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
                   textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
                   defaultText={'어디로 떠나시나요?'}
-                  categories={locations}
+                  categories={PAXI_LOCATIONS}
                   onSelect={selected => setArrivalName(selected ?? '도착지')}
                 />
               </View>
@@ -251,7 +229,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                 }}
-                onPress={showDatePicker}>
+                onPress={() => setDatePickerVisible(true)}>
                 <Text style={{color: textColor}}>
                   {moment(selectedDateTime).format('YYYY년 MM월 DD일')}
                 </Text>
@@ -273,7 +251,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                 }}
-                onPress={showTimePicker}>
+                onPress={() => setTimePickerVisible(true)}>
                 <Text style={{color: textColor}}>
                   {selectedDateTime.toLocaleTimeString([], {
                     hour: '2-digit',
@@ -288,7 +266,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             isVisible={isDatePickerVisible}
             mode="date"
             onConfirm={handleDateConfirm}
-            onCancel={hideDatePicker}
+            onCancel={() => setDatePickerVisible(false)}
             minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
             maximumDate={
               new Date(new Date().setDate(new Date().getDate() + 30))
@@ -302,7 +280,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             isVisible={isTimePickerVisible}
             mode="time"
             onConfirm={handleTimeConfirm}
-            onCancel={hideTimePicker}
+            onCancel={() => setTimePickerVisible(false)}
             is24Hour={true}
             confirmTextIOS="확인"
             cancelTextIOS="취소"
