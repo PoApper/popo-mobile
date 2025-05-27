@@ -93,7 +93,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="Paxi" />
+      <CommonHeader navigation={navigation} title="Paxi" isBackHome={true} />
 
       <View style={[styles.conditionNavigator]}>
         <RefreshButton onPress={() => getRoomList()} />

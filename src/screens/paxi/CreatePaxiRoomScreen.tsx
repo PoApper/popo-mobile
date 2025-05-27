@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,7 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
@@ -33,15 +33,24 @@ interface NewRoomBody {
   maxParticipant: number;
 }
 
+// 10분 단위로 올림
+function roundUpToNearest10Minutes(date: Date) {
+  const ms = 1000 * 60 * 10;
+  return new Date(Math.ceil(date.getTime() / ms) * ms);
+}
+
 const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const [roomName, setRoomName] = useState('');
   const [roomDetails, setRoomDetails] = useState('');
   const [departureName, setDepartureName] = useState('');
   const [arrivalName, setArrivalName] = useState('');
   const [maxParticipants, setMaxParticipants] = useState(4);
-  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [selectedDateTime, setSelectedDateTime] = useState(
+    roundUpToNearest10Minutes(new Date()),
+  );
+  const [isDatePickerVisible, setDatePickerVisible] = useState(false);
+  const [isTimePickerVisible, setTimePickerVisible] = useState(false);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   async function createNewRoom() {
     const body: NewRoomBody = {
@@ -67,36 +76,48 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
       });
   }
 
-  const onDatePicked = (event: any, selectedDate?: Date) => {
-    selectedDate = selectedDate || new Date();
-    setSelectedDateTime(
-      prev =>
-        new Date(
-          selectedDate.getFullYear(),
-          selectedDate.getMonth(),
-          selectedDate.getDate(),
-          prev.getHours(),
-          prev.getMinutes(),
-          prev.getSeconds(),
-        ),
-    );
-    setShowDatePicker(false);
+  const showDatePicker = () => {
+    setDatePickerVisible(true);
   };
 
-  const onTimePicked = (event: any, selectedTime?: Date) => {
-    selectedTime = selectedTime || new Date();
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
+  };
+
+  const showTimePicker = () => {
+    setTimePickerVisible(true);
+  };
+
+  const hideTimePicker = () => {
+    setTimePickerVisible(false);
+  };
+
+  const handleDateConfirm = (date: Date) => {
     setSelectedDateTime(
-      prev =>
-        new Date(
-          prev.getFullYear(),
-          prev.getMonth(),
-          prev.getDate(),
-          selectedTime.getHours(),
-          selectedTime.getMinutes(),
-          selectedTime.getSeconds(),
-        ),
+      new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        selectedDateTime.getHours(),
+        selectedDateTime.getMinutes(),
+        selectedDateTime.getSeconds(),
+      ),
     );
-    setShowTimePicker(false);
+    hideDatePicker();
+  };
+
+  const handleTimeConfirm = (time: Date) => {
+    setSelectedDateTime(
+      new Date(
+        selectedDateTime.getFullYear(),
+        selectedDateTime.getMonth(),
+        selectedDateTime.getDate(),
+        time.getHours(),
+        time.getMinutes(),
+        time.getSeconds(),
+      ),
+    );
+    hideTimePicker();
   };
 
   const checkInputValid = () => {
@@ -150,6 +171,13 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
     },
   ];
 
+  // 날짜를 한글 형식으로 포맷 (YYYY년 MM월 DD일)
+  const formatDate = (d: Date) =>
+    `${d.getFullYear()}년 ${String(d.getMonth() + 1).padStart(
+      2,
+      '0',
+    )}월 ${String(d.getDate()).padStart(2, '0')}일`;
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -168,7 +196,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
         <View style={styles.placeholderButton} />
       </View>
 
-      <ScrollView contentContainerStyle={{padding: 20}}>
+      <ScrollView ref={scrollViewRef} contentContainerStyle={{padding: 20}}>
         <View style={styles.formSection}>
           <View>
             <Text style={[styles.label, {color: textColor}]}>방 제목</Text>
@@ -230,24 +258,20 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               <TouchableOpacity
                 style={{
                   borderWidth: 1,
-                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                  borderColor: isDatePickerVisible
+                    ? '#FB5353'
+                    : isDarkMode
+                    ? '#2C2C2C'
+                    : '#D0D0D0',
                   borderRadius: 6,
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                 }}
-                onPress={() => setShowDatePicker(true)}>
+                onPress={showDatePicker}>
                 <Text style={{color: textColor}}>
-                  {selectedDateTime.toLocaleDateString()}
+                  {formatDate(selectedDateTime)}
                 </Text>
               </TouchableOpacity>
-              {showDatePicker && (
-                <DateTimePicker
-                  value={selectedDateTime}
-                  mode="date"
-                  display="default"
-                  onChange={onDatePicked}
-                />
-              )}
             </View>
             <View style={{width: '48%'}}>
               <Text style={[styles.titleText, {color: textColor}]}>
@@ -256,12 +280,16 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               <TouchableOpacity
                 style={{
                   borderWidth: 1,
-                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                  borderColor: isTimePickerVisible
+                    ? '#FB5353'
+                    : isDarkMode
+                    ? '#2C2C2C'
+                    : '#D0D0D0',
                   borderRadius: 6,
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                 }}
-                onPress={() => setShowTimePicker(true)}>
+                onPress={showTimePicker}>
                 <Text style={{color: textColor}}>
                   {selectedDateTime.toLocaleTimeString([], {
                     hour: '2-digit',
@@ -269,17 +297,34 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                   })}
                 </Text>
               </TouchableOpacity>
-
-              {showTimePicker && (
-                <DateTimePicker
-                  value={selectedDateTime}
-                  mode="time"
-                  display="default"
-                  onChange={onTimePicked}
-                />
-              )}
             </View>
           </View>
+
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleDateConfirm}
+            onCancel={hideDatePicker}
+            minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
+            maximumDate={
+              new Date(new Date().setDate(new Date().getDate() + 30))
+            }
+            locale="ko-KR"
+            confirmTextIOS="확인"
+            cancelTextIOS="취소"
+          />
+
+          <DateTimePickerModal
+            isVisible={isTimePickerVisible}
+            mode="time"
+            onConfirm={handleTimeConfirm}
+            onCancel={hideTimePicker}
+            is24Hour={true}
+            confirmTextIOS="확인"
+            cancelTextIOS="취소"
+            minimumDate={roundUpToNearest10Minutes(new Date())}
+            minuteInterval={10}
+          />
 
           <Text style={[styles.titleText, {color: textColor}]}>상세내용</Text>
           <TextInput
