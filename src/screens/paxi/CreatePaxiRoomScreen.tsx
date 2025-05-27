@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,15 +7,17 @@ import {
   TouchableOpacity,
   useColorScheme,
   StatusBar,
-  ScrollView,
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import DropdownMenu from '@components/DropdownMenu';
+import CommonHeader from '@components/CommonHeader';
+import moment from 'moment';
 
 type CreatePaxiRoomScreenProps = {
   navigation: NativeStackNavigationProp<
@@ -50,7 +52,6 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   );
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [isTimePickerVisible, setTimePickerVisible] = useState(false);
-  const scrollViewRef = useRef<ScrollView>(null);
 
   async function createNewRoom() {
     const body: NewRoomBody = {
@@ -144,10 +145,6 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#121212' : '#fff',
-    flex: 1,
-  };
 
   const dropdownStyle = [
     {
@@ -171,32 +168,19 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
     },
   ];
 
-  // 날짜를 한글 형식으로 포맷 (YYYY년 MM월 DD일)
-  const formatDate = (d: Date) =>
-    `${d.getFullYear()}년 ${String(d.getMonth() + 1).padStart(
-      2,
-      '0',
-    )}월 ${String(d.getDate()).padStart(2, '0')}일`;
-
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView
+      style={{flex: 1, backgroundColor: isDarkMode ? '#121212' : '#fff'}}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+        backgroundColor={isDarkMode ? '#121212' : '#fff'}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>
-          방 생성하기
-        </Text>
-        <View style={styles.placeholderButton} />
-      </View>
-
-      <ScrollView ref={scrollViewRef} contentContainerStyle={{padding: 20}}>
+      <CommonHeader navigation={navigation} title="방 생성하기" />
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        extraScrollHeight={100}>
         <View style={styles.formSection}>
           <View>
             <Text style={[styles.label, {color: textColor}]}>방 제목</Text>
@@ -269,7 +253,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 }}
                 onPress={showDatePicker}>
                 <Text style={{color: textColor}}>
-                  {formatDate(selectedDateTime)}
+                  {moment(selectedDateTime).format('YYYY년 MM월 DD일')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -367,7 +351,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                   paddingVertical: 10,
                 }}
                 onPress={() =>
-                  setMaxParticipants(Math.max(1, maxParticipants - 1))
+                  setMaxParticipants(Math.max(2, maxParticipants - 1))
                 }>
                 <Text
                   style={{
@@ -405,20 +389,20 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               </TouchableOpacity>
             </View>
           </View>
-
-          <TouchableOpacity
-            style={[
-              styles.nextButton,
-              {
-                backgroundColor: isDarkMode ? '#FB5353' : '#fff',
-              },
-            ]}
-            onPress={() => checkInputValid()}
-            disabled={!roomName || !departureName || !arrivalName}>
-            <Text style={styles.nextButtonText}>방 생성하기</Text>
-          </TouchableOpacity>
         </View>
-      </ScrollView>
+        <TouchableOpacity
+          style={[styles.createButton]}
+          onPress={() => checkInputValid()}
+          disabled={
+            !roomName ||
+            !departureName ||
+            !arrivalName ||
+            !selectedDateTime ||
+            !roomDetails
+          }>
+          <Text style={styles.createButtonText}>방 생성하기</Text>
+        </TouchableOpacity>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
@@ -426,25 +410,13 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
 export default CreatePaxiRoomScreen;
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+  container: {
     flex: 1,
-    textAlign: 'center',
-  },
-  backButton: {
-    padding: 8,
-  },
-  backButtonText: {
-    fontSize: 16,
+    alignItems: 'center',
+    paddingRight: '5%',
+    paddingLeft: '5%',
+    paddingTop: '5%',
+    marginBottom: 0,
   },
   placeholderButton: {
     width: 40,
@@ -461,7 +433,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginBottom: 10,
   },
-  nextButton: {
+  createButton: {
     borderRadius: 6,
     backgroundColor: '#FB5353',
     width: '100%',
@@ -470,7 +442,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  nextButtonText: {
+  createButtonText: {
     fontSize: 13,
     fontWeight: '500',
     fontFamily: 'Pretendard',
@@ -493,13 +465,6 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     marginBottom: 16,
-  },
-  container: {
-    alignItems: 'center',
-    paddingRight: '5%',
-    paddingLeft: '5%',
-    paddingTop: '5%',
-    marginBottom: 0,
   },
   inputWrapper: {
     backgroundColor: '#fff',
