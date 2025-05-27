@@ -7,17 +7,22 @@ import {
   TouchableOpacity,
   useColorScheme,
 } from 'react-native';
-import {RootStackParamList} from '@navigation/types';
+import {MainTabParamList, RootStackParamList} from '@navigation/types';
 
 type CommonHeaderProps = {
   navigation: NativeStackNavigationProp<
-    RootStackParamList,
-    keyof RootStackParamList
+    any | MainTabParamList | RootStackParamList,
+    any | keyof MainTabParamList | keyof RootStackParamList
   >;
   title: string;
+  isBackHome?: boolean;
 };
 
-const CommonHeader = ({navigation, title}: CommonHeaderProps) => {
+const CommonHeader = ({
+  navigation,
+  title,
+  isBackHome = false,
+}: CommonHeaderProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
@@ -27,7 +32,13 @@ const CommonHeader = ({navigation, title}: CommonHeaderProps) => {
     <View style={[styles.header, {borderBottomColor: borderColor}]}>
       <TouchableOpacity
         style={styles.backButton}
-        onPress={() => navigation.goBack()}>
+        onPress={() => {
+          if (isBackHome) {
+            navigation.navigate('Main');
+          } else {
+            navigation.goBack();
+          }
+        }}>
         <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
       </TouchableOpacity>
       <Text style={[styles.headerTitle, {color: textColor}]}>{title}</Text>
