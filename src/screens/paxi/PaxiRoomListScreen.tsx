@@ -12,7 +12,6 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import moment from 'moment';
 
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
@@ -21,23 +20,25 @@ import {RoomDataType} from '@interfaces/paxi';
 import {RefreshButton} from '@components/room/RefreshButton';
 import {RoomListCard} from '@components/room/RoomListCard';
 import CommonHeader from '@components/CommonHeader';
+import api from '@utils/api';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
 const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
-  const [isChecked, setIsChecked] = useState(false);
-
   const isDarkMode = useColorScheme() === 'dark';
+
+  const [showEmptyRoom, setShowEmptyRoom] = useState(false);
+  const [roomData, setRoomData] = useState<RoomDataType[]>([]);
+  const [userUuid, setUserUuid] = useState<string>('');
+
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
     flex: 1,
   };
-
-  const [roomData, setRoomData] = useState<RoomDataType[]>([]);
 
   const getRoomList = async () => {
     paxi_api
@@ -63,6 +64,9 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         console.error('Error:', err);
         Alert.alert('실패', 'Paxi 유저 확인에 실패했습니다: ' + err.message);
       });
+    api.get('/auth/myInfo').then(res => {
+      setUserUuid(res.data.uuid);
+    });
   };
 
   useEffect(() => {
@@ -132,24 +136,23 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
       <TouchableOpacity
         style={styles.checkboxContainer}
-        onPress={() => setIsChecked(!isChecked)}>
+        onPress={() => setShowEmptyRoom(!showEmptyRoom)}>
         <View
           style={[
             styles.checkbox,
             {borderColor: isDarkMode ? '#555' : '#D0D0D0'},
-            isChecked && {
+            showEmptyRoom && {
               backgroundColor: isDarkMode ? '#FFFFFF' : 'black',
               borderColor: isDarkMode ? '#FFFFFF' : 'black',
             },
           ]}>
-          {isChecked && (
-            <Text
-              style={[
-                styles.checkmark,
-                {color: isDarkMode ? '#000000' : '#FFFFFF'},
-              ]}>
-              ✓
-            </Text>
+          {showEmptyRoom && (
+            <Icon
+              name="check"
+              size={20}
+              color={isDarkMode ? '#000000' : '#FFFFFF'}
+              style={styles.checkmark}
+            />
           )}
         </View>
         <Text style={{fontSize: 15, color: textColor}}>빈 방만 보기</Text>
@@ -161,18 +164,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <View style={{padding: 16}}>
           {roomData.length > 0 ? (
             roomData.map((room, index) => (
-              <RoomListCard
-                uuid={room.uuid}
-                key={index}
-                title={room.title}
-                departureTime={moment(room.departureTime).format(
-                  'YYYY-MM-DD HH:mm',
-                )}
-                remain={room.maxParticipant - room.currentParticipant}
-                total={room.maxParticipant}
-                departure={room.departureLocation}
-                destination={room.destinationLocation}
-              />
+              <RoomListCard key={index} roomData={room} userUuid={userUuid} />
             ))
           ) : (
             <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>
