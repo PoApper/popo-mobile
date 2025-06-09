@@ -325,6 +325,7 @@ const PlaceReservationApplyScreen = ({
                 color: textColor,
                 backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
                 borderColor: borderColor,
+                textAlignVertical: 'top',
               },
             ]}
             value={desc}
