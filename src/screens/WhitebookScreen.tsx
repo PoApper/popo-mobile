@@ -68,13 +68,7 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
 
   const handleLinkPress = async (link: string) => {
     try {
-      const supported = await Linking.canOpenURL(link);
-
-      if (supported) {
-        await Linking.openURL(link);
-      } else {
-        Alert.alert('오류', '이 링크를 열 수 없습니다.', [{text: '확인'}]);
-      }
+      await Linking.openURL(link);
     } catch (error) {
       Alert.alert('오류', '링크를 여는 중 문제가 발생했습니다.', [
         {text: '확인'},

@@ -2,6 +2,7 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useColorScheme} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import {MainTabParamList} from '@navigation/types';
 import HomeScreen from '@screens/HomeScreen';
@@ -13,6 +14,7 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 
 const MainNavigator = () => {
   const isDarkMode = useColorScheme() === 'dark';
+  const insets = useSafeAreaInsets();
 
   return (
     <Tab.Navigator
@@ -22,6 +24,8 @@ const MainNavigator = () => {
           backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
           borderTopColor: isDarkMode ? '#333333' : '#E5E7EB',
           paddingTop: 5,
+          paddingBottom: insets.bottom,
+          height: 60 + insets.bottom,
         },
         tabBarActiveTintColor: '#4F46E5',
         tabBarInactiveTintColor: isDarkMode ? '#888888' : '#6B7280',
