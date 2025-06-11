@@ -15,6 +15,7 @@ import {RootStackParamList} from '../navigation/types';
 import axios from 'axios';
 import paxi_api from '../utils/paxi_api';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import moment from 'moment';
 
 interface RoomData {
   title: string;
@@ -78,20 +79,6 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
     fetchReservations();
   }, []);
 
-  const formatDateTime = (dateTimeStr: string): string => {
-    if (!dateTimeStr) {
-      return '';
-    }
-    const date = new Date(dateTimeStr);
-    // YYYY-MM-DD HH:mm 형식
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-      2,
-      '0',
-    )}-${String(date.getDate()).padStart(2, '0')} ${String(
-      date.getHours(),
-    ).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-  };
-
   const renderReservationItem = ({item}: {item: RoomData}) => (
     <TouchableOpacity
       style={{
@@ -121,7 +108,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
             styles.detailValue,
             {color: textColor, marginTop: 4, fontSize: 14, fontWeight: '400'},
           ]}>
-          {formatDateTime(item.departureTime)}
+          {moment(item.departureTime).format('YYYY-MM-DD HH:mm')} 출발
         </Text>
       </View>
       <TouchableOpacity
@@ -228,12 +215,12 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
 const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
   },
   reservationTitle: {
     fontSize: 18,
     fontWeight: '600',
-    marginRight: 8,
+    marginBottom: 4,
   },
   statusBadge: {
     paddingHorizontal: 8,
