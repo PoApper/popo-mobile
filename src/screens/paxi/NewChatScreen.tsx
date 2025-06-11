@@ -22,7 +22,7 @@ import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import {textColor, borderColor, backgroundColor, common} from '@styles/default';
 import {socketFactory} from '@utils/socket-factory';
-import ChatMessage from '@components/chat/chatMessage';
+import ChatMessage from '@components/chat/ChatMessage';
 import SidebarModal from '@components/chat/SidebarModal';
 
 type NewChatScreenProps = {
@@ -128,7 +128,6 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     const newChatData = {
       ...data,
       senderName: 'senderName',
-      isMe: data.senderUuid === myInfo.uuid,
     };
     setChatList(prev => [newChatData, ...prev]);
   };
@@ -173,7 +172,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
         <FlatList
           data={chatList}
-          renderItem={({item}) => <ChatMessage message={item} />}
+          renderItem={({item}) => (
+            <ChatMessage message={item} user_uuid={myInfo.uuid} />
+          )}
           keyExtractor={item => item.uuid}
           style={styles.messagesList}
           contentContainerStyle={styles.messagesContainer}

@@ -31,7 +31,6 @@ export interface MessageData {
   createdAt: any;
   updatedAt: any;
   avatar: any;
-  isMe: boolean;
 }
 
 export interface SettlementData {
