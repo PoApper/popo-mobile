@@ -8,6 +8,8 @@ import {
   useColorScheme,
   StatusBar,
   FlatList,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp, useRoute} from '@react-navigation/native';
@@ -21,7 +23,7 @@ import paxi_api from '@utils/paxi_api';
 import {textColor, borderColor, backgroundColor, common} from '@styles/default';
 import {socketFactory} from '@utils/socket-factory';
 import ChatMessage from '@components/chat/chatMessage';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import SidebarModal from '@components/chat/SidebarModal';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Benefits'>;
@@ -157,16 +159,27 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      <KeyboardAwareScrollView
-        contentContainerStyle={{flex: 1, paddingBottom: 80}}
-        keyboardShouldPersistTaps="handled"
-        enableOnAndroid={true}
-        extraScrollHeight={80}>
+      <SidebarModal
+        modalVisible={sidebarVisible}
+        setModalVisible={setSidebarVisible}
+        roomData={roomInfo}
+        // roomUuid={roomUuid}
+        // navigation={navigation}
+      />
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
         <FlatList
           data={chatList}
           renderItem={({item}) => <ChatMessage message={item} />}
           keyExtractor={item => item.uuid}
-          style={{flex: 1, padding: 10}}
+          style={styles.messagesList}
+          contentContainerStyle={styles.messagesContainer}
+          inverted
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         />
 
         <View style={styles.inputContainer}>
@@ -174,13 +187,18 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
             style={[styles.textInput]}
             value={newChat}
             onChangeText={setNewChat}
+            placeholder="메시지를 입력하세요..."
             multiline={true}
+            maxLength={1000}
           />
-          <TouchableOpacity style={styles.sendButton} onPress={sendChat}>
+          <TouchableOpacity
+            style={[styles.sendButton, {opacity: newChat.trim() ? 1 : 0.5}]}
+            onPress={sendChat}
+            disabled={!newChat.trim()}>
             <Icon name="send" size={20} color="white" />
           </TouchableOpacity>
         </View>
-      </KeyboardAwareScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -188,29 +206,44 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 export default NewChatScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  messagesList: {
+    flex: 1,
+    paddingHorizontal: 10,
+  },
+  messagesContainer: {
+    paddingTop: 10,
+  },
   inputContainer: {
     flexDirection: 'row',
-    paddingTop: 5,
+    paddingTop: 10,
     paddingBottom: 10,
     paddingHorizontal: 10,
-    alignItems: 'center',
+    alignItems: 'flex-end',
+    backgroundColor: 'white',
+    borderTopWidth: 0.5,
+    borderTopColor: '#e0e0e0',
   },
   textInput: {
     flex: 1,
-    height: 40,
+    minHeight: 40,
+    maxHeight: 100,
     textAlignVertical: 'top',
-    borderWidth: 0.5,
-    backgroundColor: '#f2f3f5',
-    borderColor: '#ccc',
-    borderRadius: 10,
+    borderWidth: 1,
+    backgroundColor: '#f8f9fa',
+    borderColor: '#e0e0e0',
+    borderRadius: 20,
     paddingHorizontal: 15,
-    alignItems: 'center',
+    paddingVertical: 10,
+    fontSize: 16,
   },
   sendButton: {
-    marginLeft: 5,
+    marginLeft: 8,
     height: 40,
     width: 40,
-    backgroundColor: 'black',
+    backgroundColor: '#007AFF',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,

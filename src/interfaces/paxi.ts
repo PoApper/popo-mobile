@@ -19,7 +19,7 @@ export interface ChatRoomInfo {
   description: string;
   payerUuid: string;
   payAmount: number;
-  roomUser: UserData[];
+  room_users: UserData[];
 }
 
 export interface MessageData {
