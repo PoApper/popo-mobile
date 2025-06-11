@@ -1,22 +1,10 @@
-import {
-  Alert,
-  FlatList,
-  ListRenderItemInfo,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {UserData} from '@interfaces/paxi';
 
-interface ParticipantsListProps {
-  users: UserData[];
-}
-
-const renderMemberItem = ({item}: ListRenderItemInfo<UserData>) => {
+const ParticipantItem = ({userInfo}: {userInfo: UserData}) => {
   const banUser = () => {
-    Alert.alert('추방', `유저 ${item.nickname}를 추방하시겠습니까?`, [
+    Alert.alert('추방', `유저 ${userInfo.nickname}를 추방하시겠습니까?`, [
       {
         text: '아니오',
         style: 'cancel',
@@ -32,7 +20,7 @@ const renderMemberItem = ({item}: ListRenderItemInfo<UserData>) => {
   };
 
   const reportUser = () => {
-    Alert.alert('신고', `유저 ${item.nickname}를 신고하시겠습니까?`, [
+    Alert.alert('신고', `유저 ${userInfo.nickname}를 신고하시겠습니까?`, [
       {
         text: '아니오',
         style: 'cancel',
@@ -52,7 +40,7 @@ const renderMemberItem = ({item}: ListRenderItemInfo<UserData>) => {
         {/* 프로필 사진 대체 원 */}
         <View style={styles.avatarCircle}>
           <View style={{width: 36, height: 36, position: 'relative'}}>
-            {item.isPaid && (
+            {userInfo.isPaid && (
               <Icon
                 name="check-circle-outline"
                 style={{position: 'absolute', bottom: 0, right: 0}}
@@ -60,7 +48,7 @@ const renderMemberItem = ({item}: ListRenderItemInfo<UserData>) => {
                 color="green"
               />
             )}
-            {item.isOwner && (
+            {userInfo.isOwner && (
               <Icon
                 name="verified"
                 style={{position: 'absolute', top: 0, left: 0}}
@@ -72,15 +60,15 @@ const renderMemberItem = ({item}: ListRenderItemInfo<UserData>) => {
         </View>
         <View>
           <View style={styles.nameRow}>
-            <Text style={styles.nameText}>{item.nickname}</Text>
+            <Text style={styles.nameText}>{userInfo.nickname}</Text>
           </View>
-          {item.isOwner && !item.isPaid && (
+          {userInfo.isOwner && !userInfo.isPaid && (
             <Text style={styles.subText}>방장</Text>
           )}
-          {item.isPaid && !item.isOwner && (
+          {userInfo.isPaid && !userInfo.isOwner && (
             <Text style={styles.subText}>송금 완료</Text>
           )}
-          {item.isPaid && item.isOwner && (
+          {userInfo.isPaid && userInfo.isOwner && (
             <Text style={styles.subText}>방장 & 송금 완료</Text>
           )}
         </View>
@@ -97,20 +85,7 @@ const renderMemberItem = ({item}: ListRenderItemInfo<UserData>) => {
   );
 };
 
-const ParticipantsList = ({users}: ParticipantsListProps) => {
-  console.log('participants list', users);
-
-  return (
-    <FlatList
-      style={{width: '100%', paddingHorizontal: 0}}
-      data={users}
-      keyExtractor={item => item.userUuid}
-      renderItem={renderMemberItem}
-    />
-  );
-};
-
-export default ParticipantsList;
+export default ParticipantItem;
 
 const styles = StyleSheet.create({
   userRow: {

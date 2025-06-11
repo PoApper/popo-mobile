@@ -14,13 +14,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {ChatRoomInfo} from '@interfaces/paxi';
 import RoomInfoBox from '@components/chat/RoomInfoBox';
-import ParticipantsList from '@components/chat/ParticipantsList';
+import ParticipantItem from '@components/chat/ParticipantsItem';
 
 interface SidebarModalProps {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
   roomData: ChatRoomInfo;
-  roomUuid?: string;
   navigation?: any;
   // leaveRoom?: () => void;
 }
@@ -29,7 +28,6 @@ const SidebarModal = ({
   modalVisible,
   setModalVisible,
   roomData,
-  roomUuid,
   navigation,
 }: // leaveRoom,
 SidebarModalProps) => {
@@ -92,29 +90,41 @@ SidebarModalProps) => {
                 </Text>
               </View>
 
-              <ParticipantsList users={roomData.room_users} />
+              {/* 참여자 목록 */}
+              <View style={{flex: 1, width: '100%'}}>
+                {roomData?.room_users?.map(user => (
+                  <ParticipantItem userInfo={user} key={user.userUuid} />
+                ))}
+              </View>
 
-              {/* <View
-          style={{
-            width: '100%',
-            height: 50,
-            justifyContent: 'center',
-          }}>
-          <TouchableOpacity
-            style={styles.leaveRoomButton}
-            onPress={leaveRoom}>
-            <Icon name="logout" size={30} color="black" />
-          </TouchableOpacity>
-        </View> */}
-
+              {/* 정산 요청 버튼 */}
               <View style={styles.rowCenter}>
                 <TouchableOpacity
                   style={styles.primaryButton}
                   onPress={() => {
                     setModalVisible(false);
-                    navigation.navigate('Settlement', {roomUuid: roomUuid});
+                    navigation.navigate('Settlement', {
+                      roomUuid: roomData.uuid,
+                    });
                   }}>
                   <Text style={styles.buttonText}>정산 요청하기</Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* Spacer to push logout button to bottom */}
+              <View style={{flex: 1}} />
+
+              {/* 채팅방 나가기/공유하기 버튼 */}
+              <View
+                style={{
+                  width: '100%',
+                  height: 50,
+                  justifyContent: 'center',
+                }}>
+                <TouchableOpacity
+                  style={styles.leaveRoomButton}
+                  onPress={() => {}}>
+                  <Icon name="logout" size={30} color="black" />
                 </TouchableOpacity>
               </View>
             </Pressable>
