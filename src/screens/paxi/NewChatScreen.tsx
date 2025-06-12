@@ -26,10 +26,10 @@ import ChatMessage from '@components/chat/ChatMessage';
 import SidebarModal from '@components/chat/SidebarModal';
 
 type NewChatScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Benefits'>;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
 };
 
-type ChatScreenRouteProp = RouteProp<RootStackParamList, 'Chat'>;
+type ChatScreenRouteProp = RouteProp<RootStackParamList, 'NewChat'>;
 
 const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -162,7 +162,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         modalVisible={sidebarVisible}
         setModalVisible={setSidebarVisible}
         roomData={roomInfo}
-        // navigation={navigation}
+        navigation={navigation}
       />
 
       <KeyboardAvoidingView

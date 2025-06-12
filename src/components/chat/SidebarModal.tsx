@@ -15,12 +15,14 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {ChatRoomInfo} from '@interfaces/paxi';
 import RoomInfoBox from '@components/chat/RoomInfoBox';
 import ParticipantItem from '@components/chat/ParticipantsItem';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '@navigation/types';
 
 interface SidebarModalProps {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
   roomData: ChatRoomInfo;
-  navigation?: any;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
   // leaveRoom?: () => void;
 }
 
@@ -118,8 +120,8 @@ SidebarModalProps) => {
               <View
                 style={{
                   width: '100%',
-                  height: 50,
                   justifyContent: 'center',
+                  alignItems: 'flex-start',
                 }}>
                 <TouchableOpacity
                   style={styles.leaveRoomButton}
@@ -187,8 +189,6 @@ const styles = StyleSheet.create({
     color: '#007AFF',
   },
   leaveRoomButton: {
-    width: 50,
-    height: 50,
     alignItems: 'center',
   },
   settlementRequest: {
