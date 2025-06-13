@@ -43,6 +43,28 @@ export interface SettlementData {
   roomUuid: string;
 }
 
+export interface SettlementCreateData {
+  payAmount: number;
+  currentParticipant: number;
+  payerBankName: string;
+  payerAccountNumber: string;
+  payerAccountHolderName: string;
+  updateAccount: boolean;
+  roomUuid: string;
+}
+
+export interface SettlementInfoData {
+  roomUuid: string;
+  payerUuid: string;
+  payerNickname: string;
+  payerAccountNumber: string;
+  payerAccountHolderName: string;
+  payerBankName: string;
+  payAmount: number;
+  currentParticipant: number;
+  payAmountPerPerson: number;
+}
+
 export interface PaxiUser {
   uuid: string;
   name: string;

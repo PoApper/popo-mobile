@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
   messageContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
+    maxWidth: '90%',
     gap: 5,
   },
   messageSender: {
@@ -68,6 +69,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 7,
     paddingHorizontal: 12,
+    maxWidth: '90%',
   },
   messageText: {
     fontSize: 14,

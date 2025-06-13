@@ -13,26 +13,15 @@ const MyMessage = ({message}: {message: MessageData}) => {
         {
           flexDirection: 'row',
           alignItems: 'flex-end',
+          maxWidth: '90%',
           gap: 5,
         },
       ]}>
-      <Text
-        style={{
-          color: textColor(isDarkMode),
-          fontSize: 12,
-          letterSpacing: -0.3,
-          fontWeight: 'bold',
-        }}>
+      <Text style={styles.timeText}>
         {moment(message.createdAt).format('HH:mm')}
       </Text>
       <View style={styles.messageBubble}>
-        <Text
-          style={{
-            fontSize: 14,
-            letterSpacing: -0.4,
-            color: '#000',
-            marginBottom: 4,
-          }}>
+        <Text style={[styles.messageText, {color: textColor(isDarkMode)}]}>
           {message.message}
         </Text>
       </View>
@@ -52,5 +41,20 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 7,
     paddingHorizontal: 12,
+    maxWidth: '90%',
+  },
+  timeText: {
+    color: '#9b9b9b',
+    fontSize: 12,
+    letterSpacing: -0.3,
+    fontWeight: 'bold',
+    alignSelf: 'flex-end',
+    marginBottom: 2,
+  },
+  messageText: {
+    fontSize: 14,
+    letterSpacing: -0.4,
+    flexWrap: 'wrap',
+    lineHeight: 18,
   },
 });
