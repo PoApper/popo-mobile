@@ -86,4 +86,6 @@ export type OtherStackParamList = {
   Whitebook: undefined;
   Benefits: undefined;
   CampusShuttle: undefined;
+  EquipmentReservation: undefined;
+  Reservation: undefined;
 };
