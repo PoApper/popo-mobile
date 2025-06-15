@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
+  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -15,59 +16,20 @@ import {RootStackParamList} from '@navigation/types';
 import {LocaleConfig} from 'react-native-calendars';
 import CalendarKoreanLocales from '../../utils/calendar-locales';
 import {Calendar} from 'react-native-calendars';
+import PoPoAxios from '../../utils/api'; // 실제 axios 인스턴스 경로에 맞게 수정 필요
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';
 
-// 목데이터 예시
-type EquipmentItem = {
-  id: string;
+// API 타입에 맞게 수정
+interface IEquipment {
+  uuid: string;
   name: string;
-  price: number;
   description: string;
-  image: any;
-};
-const equipmentData: Record<'동아리연합회' | '생활관자치회', EquipmentItem[]> =
-  {
-    동아리연합회: [
-      {
-        id: '1',
-        name: 'DSLR 카메라',
-        price: 5000,
-        description: '',
-        image: require('../../../assets/camera.png'), // 실제 이미지 경로로 교체 필요
-      },
-      {
-        id: '2',
-        name: 'INSTA360, 360도 액션캠',
-        price: 5000,
-        description: '',
-        image: require('../../../assets/camera.png'),
-      },
-      {
-        id: '3',
-        name: '드럼 마이크 세트',
-        price: 5000,
-        description: '',
-        image: require('../../../assets/camera.png'),
-      },
-      {
-        id: '4',
-        name: '메인 믹서',
-        price: 5000,
-        description: '',
-        image: require('../../../assets/camera.png'),
-      },
-      {
-        id: '5',
-        name: '2',
-        price: 5000,
-        description: 'INSTA360, 360도 액션캠',
-        image: require('../../../assets/camera.png'),
-      },
-    ],
-    생활관자치회: [],
-  };
+  fee: number;
+  image_url?: string;
+  max_minutes: number;
+}
 
 type EquipmentReservationScreenProps = {
   navigation: NativeStackNavigationProp<
@@ -76,13 +38,27 @@ type EquipmentReservationScreenProps = {
   >;
 };
 
-const tabs = ['동아리연합회', '생활관자치회'];
+const tabs = [
+  {label: '동아리연합회', value: 'dongyeon'},
+  {label: '생활관자치회', value: 'dormunion'},
+];
+
+// 이모지 제거 함수 (숫자 등 일반 문자는 남기고 이모지만 제거)
+function removeEmoji(str: string) {
+  // 이모지 유니코드만 제거, 숫자/한글/영문 등은 남김
+  return str.replace(
+    /([\u2700-\u27BF]|[\uE000-\uF8FF]|[\uD83C-\uDBFF\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83D[\uDE00-\uDE4F])/g,
+    '',
+  );
+}
 
 const EquipmentReservationScreen = ({
   navigation,
 }: EquipmentReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [selectedTab, setSelectedTab] = useState('동아리연합회');
+  const [selectedTab, setSelectedTab] = useState('dongyeon');
+  const [equipmentList, setEquipmentList] = useState<IEquipment[]>([]);
+  const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
 
   const backgroundStyle = {
@@ -92,21 +68,51 @@ const EquipmentReservationScreen = ({
   const textColor = isDarkMode ? '#000' : '#000';
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
 
-  const renderEquipmentItem = ({item}: any) => (
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      setLoading(true);
+      try {
+        const res = await PoPoAxios.get<IEquipment[]>(
+          `equip/owner/${selectedTab}`,
+        );
+        // 이름순 정렬
+        const sorted = res.data.sort((a, b) => a.name.localeCompare(b.name));
+        setEquipmentList(sorted);
+      } catch (e) {
+        setEquipmentList([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEquipment();
+  }, [selectedTab]);
+
+  const renderEquipmentItem = ({item}: {item: IEquipment}) => (
     <View style={styles.equipmentItem}>
-      <Image source={item.image} style={styles.equipmentImage} />
+      {item.image_url ? (
+        <Image source={{uri: item.image_url}} style={styles.equipmentImage} />
+      ) : (
+        <View style={[styles.equipmentImage, {backgroundColor: '#eee'}]} />
+      )}
       <View style={styles.equipmentInfo}>
         <Text style={[styles.equipmentName, {color: textColor}]}>
-          {item.name}
+          {removeEmoji(item.name)}
         </Text>
-        {item.description ? (
-          <Text style={styles.equipmentDesc}>{item.description}</Text>
-        ) : null}
-        <Text style={styles.equipmentPrice}>
-          {item.price.toLocaleString()}원
-        </Text>
+        <Text style={styles.equipmentPrice}>{item.fee.toLocaleString()}원</Text>
       </View>
-      <TouchableOpacity style={styles.detailButton}>
+      <TouchableOpacity
+        style={styles.detailButton}
+        onPress={() => {
+          Alert.alert(
+            '장비 상세정보',
+            `이름: ${removeEmoji(item.name)}\n모델명/설명: ${
+              item.description || '-'
+            }\n가격: ${item.fee.toLocaleString()}원\n최대 사용 시간: ${
+              item.max_minutes
+            }분`,
+            [{text: '닫기', style: 'cancel'}],
+          );
+        }}>
         <Text style={styles.detailButtonText}>상세정보</Text>
       </TouchableOpacity>
     </View>
@@ -132,17 +138,20 @@ const EquipmentReservationScreen = ({
       <View style={styles.tabContainer}>
         {tabs.map(tab => (
           <TouchableOpacity
-            key={tab}
-            style={[styles.tab, selectedTab === tab && styles.selectedTab]}
-            onPress={() => setSelectedTab(tab)}>
+            key={tab.value}
+            style={[
+              styles.tab,
+              selectedTab === tab.value && styles.selectedTab,
+            ]}
+            onPress={() => setSelectedTab(tab.value)}>
             <Text
               style={[
                 styles.tabText,
-                selectedTab === tab && styles.selectedTabText,
+                selectedTab === tab.value && styles.selectedTabText,
               ]}>
-              {tab}
+              {tab.label}
             </Text>
-            {selectedTab === tab && <View style={styles.tabUnderline} />}
+            {selectedTab === tab.value && <View style={styles.tabUnderline} />}
           </TouchableOpacity>
         ))}
       </View>
@@ -150,13 +159,13 @@ const EquipmentReservationScreen = ({
       {/* 장비 리스트 */}
       <View style={styles.equipmentListContainer}>
         <FlatList
-          data={equipmentData[selectedTab as '동아리연합회' | '생활관자치회']}
-          keyExtractor={item => item.id}
+          data={equipmentList}
+          keyExtractor={item => item.uuid}
           renderItem={renderEquipmentItem}
           contentContainerStyle={styles.equipmentList}
           ListEmptyComponent={
             <Text style={{textAlign: 'center', marginTop: 40}}>
-              장비가 없습니다.
+              {loading ? '불러오는 중...' : '장비가 없습니다.'}
             </Text>
           }
         />
