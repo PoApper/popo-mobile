@@ -91,8 +91,8 @@ android {
         applicationId "com.popomobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "1.0.0-25.05.18-FCM"
+        versionCode Integer.parseInt(System.getenv("ANDROID_VERSION_CODE"))
+        versionName System.getenv("ANDROID_VERSION_NAME")
     }
     signingConfigs {
         debug {
@@ -105,7 +105,7 @@ android {
             storeFile file(POPO_UPLOAD_STORE_FILE)
             storePassword System.getenv("POPO_KEYSTORE_PASSWORD")
             keyAlias POPO_UPLOAD_KEY_ALIAS
-            keyPassword System.getenv("POPO_KEY_PASSWORD")
+            keyPassword System.getenv("POPO_KEYSTORE_PASSWORD")
         }
     }
     buildTypes {

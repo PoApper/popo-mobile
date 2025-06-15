@@ -5,36 +5,42 @@ import {
   TouchableOpacity,
   useColorScheme,
   Alert,
+  StyleSheet,
 } from 'react-native';
 
-import {StyleSheet} from 'react-native';
-import paxi_api from '../../utils/paxi_api';
+import paxi_api from '@utils/paxi_api';
+import {RoomDataType} from '@interfaces/paxi';
 
 interface RoomContainerProps {
-  uuid: string;
-  title: string;
-  departureTime: string;
-  remain: number;
-  total: number;
-  departure: string;
-  destination: string;
+  roomData: RoomDataType;
+  userUuid: string;
 }
 
 export const RoomListCard: React.FC<RoomContainerProps> = ({
-  uuid,
-  title,
-  departureTime,
-  remain,
-  total,
-  departure,
-  destination,
+  roomData,
+  userUuid,
 }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#222222';
   const backgroundColor = isDarkMode ? '#1A1A1A' : '#fff';
   const subTextColor = isDarkMode ? '#888' : '#666';
 
+  const remain = roomData.maxParticipant - roomData.currentParticipant;
+
   const askJoinRoom = () => {
+    if (userUuid === roomData.ownerUuid) {
+      Alert.alert(
+        '잠깐!',
+        '자신이 만든 방에는 참여할 수 없습니다. 내 일정에서 방 목록을 확인해주세요.',
+        [
+          {
+            text: '확인',
+          },
+        ],
+      );
+      return;
+    }
+
     Alert.alert('참여하기', '방에 참여하시겠습니까?', [
       {
         text: '취소',
@@ -43,9 +49,8 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       {
         text: '확인',
         onPress: () => {
-          console.log('방 참여 요청:', uuid);
           paxi_api
-            .post(`/room/join/${uuid}`)
+            .post(`/room/join/${roomData.uuid}`)
             .then(response => {
               console.log('response.data:', response.data);
               console.log('response.status', response.status);
@@ -81,7 +86,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
           <View style={styles.titleContainer}>
             <Text
               style={[
-                remain < total
+                remain < roomData.maxParticipant
                   ? [
                       styles.possible,
                       {
@@ -99,23 +104,25 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                       },
                     ],
               ]}>
-              {remain < total ? '참여 가능' : '마감'}
+              {remain < roomData.maxParticipant ? '참여 가능' : '마감'}
             </Text>
-            <Text style={[styles.title, {color: textColor}]}>{title}</Text>
+            <Text style={[styles.title, {color: textColor}]}>
+              {roomData.title}
+            </Text>
           </View>
           <View style={styles.details}>
             <Text style={[styles.detailsText, {color: textColor}]}>
-              {departure}
+              {roomData.departureLocation}
             </Text>
             <Text style={[styles.arrow, {color: textColor}]}>
               {'  - - - - >  '}
             </Text>
             <Text style={[styles.detailsText, {color: textColor}]}>
-              {destination}
+              {roomData.destinationLocation}
             </Text>
           </View>
           <Text style={[styles.departureTime, {color: subTextColor}]}>
-            {departureTime}
+            {roomData.departureTime}
           </Text>
         </View>
       </View>

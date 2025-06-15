@@ -17,8 +17,8 @@ import EquipReservationList from '../components/EquipReservationList';
 import TaxiChatList from '../components/TaxiChatList';
 
 type ReservationScreenProps = {
-  navigation?: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
-  route?: RouteProp<RootStackParamList, 'Reservation'>;
+  navigation?: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
+  route?: RouteProp<RootStackParamList, 'MyReservation'>;
 };
 
 type TabType = 'place' | 'equipment' | 'taxi';

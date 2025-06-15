@@ -8,6 +8,8 @@ import {
   useColorScheme,
   StatusBar,
   FlatList,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp, useRoute} from '@react-navigation/native';
@@ -18,20 +20,16 @@ import {Socket} from 'socket.io-client';
 import {ChatRoomInfo, MessageData, PaxiUser} from '@interfaces/paxi';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import {
-  textColor,
-  borderColor,
-  backgroundColor,
-  common,
-} from '../../styles/default';
-import {socketFactory} from '../../utils/socket-factory';
-import ChatMessage from '../../components/chat/chatMessage';
+import {textColor, borderColor, backgroundColor, common} from '@styles/default';
+import {socketFactory} from '@utils/socket-factory';
+import ChatMessage from '@components/chat/ChatMessage';
+import SidebarModal from '@components/chat/SidebarModal';
 
 type NewChatScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Benefits'>;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
 };
 
-type ChatScreenRouteProp = RouteProp<RootStackParamList, 'Chat'>;
+type ChatScreenRouteProp = RouteProp<RootStackParamList, 'NewChat'>;
 
 const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -109,6 +107,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const sendChat = async () => {
     if (!socket) {
       console.error('소켓이 아직 연결되지 않았습니다.');
+      initSocket();
       return;
     }
 
@@ -129,8 +128,6 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     // TODO: myUuid는 상수값으로 설정.
     const newChatData = {
       ...data,
-      senderName: 'senderName',
-      isMe: data.senderUuid === myInfo.uuid,
     };
     setChatList(prev => [newChatData, ...prev]);
   };
@@ -161,24 +158,48 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      <FlatList
-        data={chatList}
-        renderItem={({item}) => <ChatMessage message={item} />}
-        keyExtractor={item => item.uuid}
-        style={{flex: 1, padding: 10}}
+      <SidebarModal
+        modalVisible={sidebarVisible}
+        setModalVisible={setSidebarVisible}
+        roomData={roomInfo}
+        myUuid={myInfo.uuid}
+        navigation={navigation}
       />
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={[styles.textInput]}
-          value={newChat}
-          onChangeText={setNewChat}
-          multiline={true}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
+        <FlatList
+          data={chatList}
+          renderItem={({item}) => (
+            <ChatMessage message={item} user_uuid={myInfo.uuid} />
+          )}
+          keyExtractor={item => item.uuid}
+          style={styles.messagesList}
+          contentContainerStyle={styles.messagesContainer}
+          inverted
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         />
-        <TouchableOpacity style={styles.sendButton} onPress={sendChat}>
-          <Icon name="send" size={20} color="white" />
-        </TouchableOpacity>
-      </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={[styles.textInput]}
+            value={newChat}
+            onChangeText={setNewChat}
+            placeholder="메시지를 입력하세요..."
+            multiline={true}
+            maxLength={1000}
+          />
+          <TouchableOpacity
+            style={[styles.sendButton, {opacity: newChat.trim() ? 1 : 0.5}]}
+            onPress={sendChat}
+            disabled={!newChat.trim()}>
+            <Icon name="send" size={20} color="white" />
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -186,26 +207,41 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 export default NewChatScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  messagesList: {
+    flex: 1,
+    paddingHorizontal: 10,
+  },
+  messagesContainer: {
+    paddingTop: 10,
+  },
   inputContainer: {
     flexDirection: 'row',
-    paddingTop: 5,
+    paddingTop: 10,
     paddingBottom: 10,
     paddingHorizontal: 10,
-    alignItems: 'center',
+    alignItems: 'flex-end',
+    backgroundColor: 'white',
+    borderTopWidth: 0.5,
+    borderTopColor: '#e0e0e0',
   },
   textInput: {
     flex: 1,
-    height: 40,
+    minHeight: 40,
+    maxHeight: 100,
     textAlignVertical: 'top',
-    borderWidth: 0.5,
-    backgroundColor: '#f2f3f5',
-    borderColor: '#ccc',
-    borderRadius: 10,
+    borderWidth: 1,
+    backgroundColor: '#f8f9fa',
+    borderColor: '#e0e0e0',
+    borderRadius: 16,
     paddingHorizontal: 15,
-    alignItems: 'center',
+    paddingVertical: 10,
+    fontSize: 16,
   },
   sendButton: {
-    marginLeft: 5,
+    marginLeft: 8,
     height: 40,
     width: 40,
     backgroundColor: 'black',
