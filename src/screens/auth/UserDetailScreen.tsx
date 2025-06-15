@@ -20,6 +20,7 @@ import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import Environment from '@utils/environment';
 import CommonHeader from '@components/CommonHeader';
+import { reset_auth } from '@utils/reset';
 
 type UserDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserDetail'>;
@@ -79,17 +80,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
       // 공통 API 유틸리티 사용
       await api.get('/auth/logout');
 
-      // 인증 정보 초기화
-      if (await EncryptedStorage.getItem('auth_token')) {
-        await EncryptedStorage.removeItem('auth_token');
-      }
-      if (await EncryptedStorage.getItem('isAuthenticated')) {
-        await EncryptedStorage.removeItem('isAuthenticated');
-      }
-      if (await EncryptedStorage.getItem('user_info')) {
-        await EncryptedStorage.removeItem('user_info');
-      }
-      await CookieManager.clearAll();
+      await reset_auth();
 
       // 로그아웃 성공 후 처리
       Alert.alert('로그아웃', '성공적으로 로그아웃되었습니다.');
@@ -97,11 +88,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
     } catch (error) {
       console.error('로그아웃 오류:', error);
 
-      // 로그아웃 실패해도 로컬 인증 정보는 삭제
-      await EncryptedStorage.removeItem('auth_token');
-      await EncryptedStorage.removeItem('isAuthenticated');
-      await EncryptedStorage.removeItem('user_info');
-      await CookieManager.clearAll();
+      await reset_auth();
 
       Alert.alert('오류', '로그아웃 중 오류가 발생했습니다.');
       navigation.replace('Login');

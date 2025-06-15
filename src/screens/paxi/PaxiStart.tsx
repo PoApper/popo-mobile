@@ -14,10 +14,13 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '@navigation/types';
-import paxi_api from '@utils/paxi_api';
-import CommonHeader from '@components/CommonHeader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
+import {RootStackParamList} from '@navigation/types';
+import CommonHeader from '@components/CommonHeader';
+import api from '@utils/api';
+import paxi_api from '@utils/paxi_api';
+import { reset_auth } from '@utils/reset';
 
 type PaxiStartScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PaxiStart'>;
@@ -46,8 +49,16 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
       })
       .then(res => {
         if (res.status === 201) {
-          Alert.alert('성공', '닉네임을 성공적으로 생성했습니다.');
-          navigation.navigate('PaxiRoomList');
+          Alert.alert('성공', '닉네임을 성공적으로 생성했습니다. 원활한 서비스를 위해 재로그인 해주세요.', [
+            {
+              text: '확인',
+              onPress: async () => {
+                await api.get('/auth/logout');
+                await reset_auth();
+                navigation.navigate('Login');
+              },
+            },
+          ]);
         }
       });
   };
@@ -188,29 +199,6 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
 export default PaxiStartScreen;
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    flex: 1,
-    textAlign: 'center',
-  },
-  backButton: {
-    padding: 8,
-  },
-  backButtonText: {
-    fontSize: 16,
-  },
-  placeholderButton: {
-    width: 40,
-  },
   titleContainer: {
     width: '100%',
     marginTop: 48,
@@ -252,11 +240,14 @@ const styles = StyleSheet.create({
   },
   roomInput: {
     flex: 1,
-    height: 36,
+    height: 40,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 16,
+    paddingVertical: 8,
     fontSize: 14,
+    lineHeight: 20,
+    textAlignVertical: 'center',
   },
   diceButton: {
     width: 48,

@@ -171,13 +171,8 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
           resizeMode="contain"
         />
         <Text style={[styles.emptyText, {color: textColor}]}>
-          예약 내역이 없습니다.
+          택시 예약 내역이 없습니다.
         </Text>
-        <TouchableOpacity
-          style={styles.newReservationButton}
-          onPress={() => Alert.alert('알림', '새 예약 기능은 준비 중입니다.')}>
-          <Text style={styles.newReservationButtonText}>새 예약 만들기</Text>
-        </TouchableOpacity>
       </View>
     );
   }
