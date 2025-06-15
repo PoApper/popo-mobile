@@ -1,8 +1,17 @@
 import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {UserData} from '@interfaces/paxi';
+import paxi_api from '@utils/paxi_api';
+import React from 'react';
 
-const ParticipantItem = ({userInfo}: {userInfo: UserData}) => {
+interface ParticipantItemProps {
+  userInfo: UserData;
+  roomUuid: string;
+  myUuid: string;
+  ownerUuid: string;
+}
+
+const ParticipantItem = ({userInfo, roomUuid, myUuid, ownerUuid}: ParticipantItemProps) => {
   const banUser = () => {
     Alert.alert('추방', `유저 ${userInfo.nickname}를 추방하시겠습니까?`, [
       {
@@ -12,8 +21,14 @@ const ParticipantItem = ({userInfo}: {userInfo: UserData}) => {
       {
         text: '추방',
         onPress: () => {
-          // TODO: 추방 요청 보내기
-          Alert.alert('처리 완료', '요청이 처리되었습니다.');
+          paxi_api.put(`/room/kick/${roomUuid}`, {
+            userUuid: userInfo.userUuid,
+            reason: '추방 사유 (테스트 중)', // TODO: 추방 사유 입력 받기
+          }).then(() => {
+            Alert.alert('처리 완료', '요청이 처리되었습니다.');
+          }).catch(() => {
+            Alert.alert('추방 실패', '추방 요청에 실패했습니다.');
+          });
         },
       },
     ]);
@@ -28,8 +43,15 @@ const ParticipantItem = ({userInfo}: {userInfo: UserData}) => {
       {
         text: '신고',
         onPress: () => {
-          // TODO: 신고 요청 보내기
-          Alert.alert('처리 완료', '요청이 처리되었습니다.');
+          paxi_api.post('report', {
+            targetRoomUuid: roomUuid,
+            targetUserUuid: userInfo.userUuid,
+            reason: '신고 사유 (테스트 중)', // TODO: 신고 사유 입력 받기
+          }).then(() => {
+            Alert.alert('처리 완료', '요청이 처리되었습니다.');
+          }).catch(() => {
+            Alert.alert('신고 실패', '신고 요청에 실패했습니다.');
+          });
         },
       },
     ]);
@@ -37,7 +59,7 @@ const ParticipantItem = ({userInfo}: {userInfo: UserData}) => {
   return (
     <View style={styles.userRow}>
       <View style={styles.rowCenter}>
-        {/* 프로필 사진 대체 원 */}
+        {/* TODO: 프로필 사진 대체 */}
         <View style={styles.avatarCircle}>
           <View style={{width: 36, height: 36, position: 'relative'}}>
             {userInfo.isPaid && (
@@ -48,7 +70,7 @@ const ParticipantItem = ({userInfo}: {userInfo: UserData}) => {
                 color="green"
               />
             )}
-            {userInfo.isOwner && (
+            {ownerUuid === userInfo.userUuid && (
               <Icon
                 name="verified"
                 style={{position: 'absolute', top: 0, left: 0}}
@@ -62,7 +84,7 @@ const ParticipantItem = ({userInfo}: {userInfo: UserData}) => {
           <View style={styles.nameRow}>
             <Text style={styles.nameText}>{userInfo.nickname}</Text>
           </View>
-          {userInfo.isOwner && !userInfo.isPaid && (
+          {ownerUuid === userInfo.userUuid && !userInfo.isPaid && (
             <Text style={styles.subText}>방장</Text>
           )}
           {userInfo.isPaid && !userInfo.isOwner && (
@@ -74,12 +96,20 @@ const ParticipantItem = ({userInfo}: {userInfo: UserData}) => {
         </View>
       </View>
       <View style={styles.rowCenter}>
-        <TouchableOpacity style={styles.grayButton} onPress={banUser}>
-          <Text>추방</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.grayButton} onPress={reportUser}>
-          <Text>신고</Text>
-        </TouchableOpacity>
+        {
+          myUuid !== userInfo.userUuid && ownerUuid === myUuid ? (
+            <TouchableOpacity style={styles.grayButton} onPress={banUser} disabled={myUuid === userInfo.userUuid}>
+              <Text>추방</Text>
+            </TouchableOpacity>
+          ) : null
+        }
+        {
+          myUuid !== userInfo.userUuid ? (
+            <TouchableOpacity style={styles.grayButton} onPress={reportUser} disabled={myUuid === userInfo.userUuid}>
+              <Text>신고</Text>
+            </TouchableOpacity>
+          ) : null
+        }
       </View>
     </View>
   );

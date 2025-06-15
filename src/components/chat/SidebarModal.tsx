@@ -23,6 +23,7 @@ interface SidebarModalProps {
   setModalVisible: (visible: boolean) => void;
   roomData: ChatRoomInfo;
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
+  myUuid: string;
   // leaveRoom?: () => void;
 }
 
@@ -31,6 +32,7 @@ const SidebarModal = ({
   setModalVisible,
   roomData,
   navigation,
+  myUuid,
 }: // leaveRoom,
 SidebarModalProps) => {
   const screenWidth = Dimensions.get('window').width;
@@ -95,7 +97,13 @@ SidebarModalProps) => {
               {/* 참여자 목록 */}
               <View style={{flex: 1, width: '100%'}}>
                 {roomData?.room_users?.map(user => (
-                  <ParticipantItem userInfo={user} key={user.userUuid} />
+                  <ParticipantItem
+                    userInfo={user}
+                    key={user.userUuid}
+                    roomUuid={roomData.uuid}
+                    myUuid={myUuid}
+                    ownerUuid={roomData.ownerUuid}
+                  />
                 ))}
               </View>
 

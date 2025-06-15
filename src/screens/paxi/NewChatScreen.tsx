@@ -162,6 +162,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         modalVisible={sidebarVisible}
         setModalVisible={setSidebarVisible}
         roomData={roomInfo}
+        myUuid={myInfo.uuid}
         navigation={navigation}
       />
 

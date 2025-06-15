@@ -35,15 +35,20 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
   const [accountName, setAccountName] = useState<string | undefined>(undefined);
   const [totalCost, setTotalCost] = useState<number | undefined>(undefined);
   const [isUpdateAccount, setIsUpdateAccount] = useState<boolean>(false);
+  const [isAlreadyRequested, setIsAlreadyRequested] = useState<boolean>(false);
 
   useEffect(() => {
     paxi_api.get(`/room/${roomUuid}/settlement`).then(res => {
       const settlementInfo = res.data as SettlementInfoData;
+      if (settlementInfo.payAmount > 0) {
+        setIsAlreadyRequested(true);
+      }
       console.log(settlementInfo);
       setbankName(settlementInfo.payerBankName);
       setAccountNumber(settlementInfo.payerAccountNumber);
       setAccountName(settlementInfo.payerAccountHolderName);
       setTotalCost(settlementInfo.payAmount);
+      setIsAlreadyRequested(true);
     });
   }, []);
 
@@ -100,6 +105,14 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         <View style={styles.placeholderButton} />
       </View>
 
+      {
+        isAlreadyRequested && (
+          <View style={styles.alreadyRequestedContainer}>
+            <Text style={styles.alreadyRequestedText}>이미 생성된 정산 요청이 있습니다.</Text>
+          </View>
+        )
+      }
+
       <ScrollView>
         <View style={styles.container}>
           <View style={{width: '100%', marginBottom: 8}}>
@@ -113,7 +126,11 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                   color: textColor,
                 },
+                {
+                  backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
+                }
               ]}
+              editable={!isAlreadyRequested}
               placeholder="은행명을 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={bankName}
@@ -132,7 +149,11 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                   color: textColor,
                 },
+                {
+                  backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
+                },
               ]}
+              editable={!isAlreadyRequested}
               placeholder="계좌번호를 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={accountNumber}
@@ -156,7 +177,11 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                   color: textColor,
                 },
+                {
+                  backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
+                },
               ]}
+              editable={!isAlreadyRequested}
               placeholder="계좌주명을 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={accountName}
@@ -175,7 +200,11 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                   color: textColor,
                 },
+                {
+                  backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
+                },
               ]}
+              editable={!isAlreadyRequested}
               placeholder="정산금액을 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={totalCost?.toString()}
@@ -221,12 +250,14 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
           style={[
             styles.nextButton,
             {
-              backgroundColor: 'black',
+              backgroundColor: isAlreadyRequested ? '#d0d0d0' : 'black',
             },
           ]}
           onPress={() => checkInputValid()}
-          disabled={!bankName || !accountNumber || !accountName}>
-          <Text style={styles.nextButtonText}>정산 요청하기</Text>
+          disabled={!bankName || !accountNumber || !accountName || isAlreadyRequested}>
+          <Text style={[styles.nextButtonText, {color: isAlreadyRequested ? '#808080' : '#ffffff'}]}>
+            정산 요청하기
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -375,5 +406,17 @@ const styles = StyleSheet.create({
   checkboxText: {
     fontSize: 14,
     flex: 1,
+  },
+  alreadyRequestedContainer: {
+    backgroundColor: '#FFE500', // warning color (yellow)
+    padding: 16,
+    borderRadius: 6,
+    marginBottom: 10,
+    marginTop: 10,
+    marginLeft: '5%',
+    marginRight: '5%',
+  },
+  alreadyRequestedText: {
+    fontSize: 14,
   },
 });
