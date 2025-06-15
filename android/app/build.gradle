@@ -105,7 +105,7 @@ android {
             storeFile file(POPO_UPLOAD_STORE_FILE)
             storePassword System.getenv("POPO_KEYSTORE_PASSWORD")
             keyAlias POPO_UPLOAD_KEY_ALIAS
-            keyPassword System.getenv("POPO_KEY_PASSWORD")
+            keyPassword System.getenv("POPO_KEYSTORE_PASSWORD")
         }
     }
     buildTypes {

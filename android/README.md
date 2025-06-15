@@ -2,11 +2,20 @@
 
 ## Gradle
 
+`android/` 경로에서 실행해야 합니다.
+
 ```bash
-$  ./gradlew clean
+$ ./gradlew clean
 ```
 
 ### Build
+
+`android/app` 경로에 아래 두 파일이 있는지 확인합니다.
+
+- `popo-release-key.keystore` (GooglePlay)
+- `google-services.json` (Firebase)
+
+그리고 `POPO_KEYSTORE_PASSWORD`가 잘 설정 되어 있는지 확인합니다.
 
 ```bash
 # APK 빌드
