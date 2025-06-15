@@ -40,6 +40,7 @@ import WhitebookScreen from '@screens/WhitebookScreen';
 import BenefitsScreen from '@screens/BenefitsScreen';
 import CampusShuttleScreen from '@screens/CampusShuttle';
 import EquipmentReservationScreen from '@screens/equipment-reservation/EquipmentReservationScreen';
+import EquipmentReservationApplyScreen from '@screens/equipment-reservation/EquipmentReservationApplyScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -120,6 +121,10 @@ const AppNavigator = () => {
           <Stack.Screen
             name="EquipmentReservation"
             component={EquipmentReservationScreen}
+          />
+          <Stack.Screen
+            name="EquipmentReservationApply"
+            component={EquipmentReservationApplyScreen}
           />
           <Stack.Screen name="Reservation" component={ReservationScreen} />
 

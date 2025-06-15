@@ -87,5 +87,8 @@ export type OtherStackParamList = {
   Benefits: undefined;
   CampusShuttle: undefined;
   EquipmentReservation: undefined;
+  EquipmentReservationApply: {
+    association: string;
+  };
   Reservation: undefined;
 };

@@ -173,7 +173,13 @@ const EquipmentReservationScreen = ({
 
       {/* 예약 신청하기 버튼 */}
       <View style={styles.reserveButtonWrapper}>
-        <TouchableOpacity style={styles.reserveButton}>
+        <TouchableOpacity
+          style={styles.reserveButton}
+          onPress={() =>
+            navigation.navigate('EquipmentReservationApply', {
+              association: selectedTab,
+            })
+          }>
           <Text style={styles.reserveButtonText}>예약 신청하기</Text>
         </TouchableOpacity>
       </View>
