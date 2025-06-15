@@ -12,11 +12,15 @@ interface ParticipantItemProps {
   ownerUuid: string;
 }
 
-const ParticipantItem = ({userInfo, roomUuid, myUuid, ownerUuid}: ParticipantItemProps) => {
+const ParticipantItem = ({
+  userInfo,
+  roomUuid,
+  myUuid,
+  ownerUuid,
+}: ParticipantItemProps) => {
   const isOwner = ownerUuid === userInfo.userUuid;
   const isMe = myUuid === userInfo.userUuid;
   const isMeOwner = myUuid === ownerUuid;
-
 
   const banUser = () => {
     Alert.alert('추방', `유저 '${userInfo.nickname}'님을 추방하시겠습니까?`, [
@@ -27,14 +31,17 @@ const ParticipantItem = ({userInfo, roomUuid, myUuid, ownerUuid}: ParticipantIte
       {
         text: '추방',
         onPress: () => {
-          paxi_api.put(`/room/kick/${roomUuid}`, {
-            userUuid: userInfo.userUuid,
-            reason: '추방 사유 (테스트 중)', // TODO: 추방 사유 입력 받기
-          }).then(() => {
-            Alert.alert('처리 완료', '요청이 처리되었습니다.');
-          }).catch(() => {
-            Alert.alert('추방 실패', '추방 요청에 실패했습니다.');
-          });
+          paxi_api
+            .put(`/room/kick/${roomUuid}`, {
+              userUuid: userInfo.userUuid,
+              reason: '추방 사유 (테스트 중)', // TODO: 추방 사유 입력 받기
+            })
+            .then(() => {
+              Alert.alert('처리 완료', '요청이 처리되었습니다.');
+            })
+            .catch(() => {
+              Alert.alert('추방 실패', '추방 요청에 실패했습니다.');
+            });
         },
       },
     ]);
@@ -49,15 +56,18 @@ const ParticipantItem = ({userInfo, roomUuid, myUuid, ownerUuid}: ParticipantIte
       {
         text: '신고',
         onPress: () => {
-          paxi_api.post('report', {
-            targetRoomUuid: roomUuid,
-            targetUserUuid: userInfo.userUuid,
-            reason: '신고 사유 (테스트 중)', // TODO: 신고 사유 입력 받기
-          }).then(() => {
-            Alert.alert('처리 완료', '요청이 처리되었습니다.');
-          }).catch(() => {
-            Alert.alert('신고 실패', '신고 요청에 실패했습니다.');
-          });
+          paxi_api
+            .post('report', {
+              targetRoomUuid: roomUuid,
+              targetUserUuid: userInfo.userUuid,
+              reason: '신고 사유 (테스트 중)', // TODO: 신고 사유 입력 받기
+            })
+            .then(() => {
+              Alert.alert('처리 완료', '요청이 처리되었습니다.');
+            })
+            .catch(() => {
+              Alert.alert('신고 실패', '신고 요청에 실패했습니다.');
+            });
         },
       },
     ]);
@@ -102,20 +112,22 @@ const ParticipantItem = ({userInfo, roomUuid, myUuid, ownerUuid}: ParticipantIte
         </View>
       </View>
       <View style={styles.rowCenter}>
-        {
-          !isMe && isMeOwner ? (
-            <TouchableOpacity style={styles.grayButton} onPress={banUser} disabled={isMe}>
-              <Text>추방</Text>
-            </TouchableOpacity>
-          ) : null
-        }
-        {
-          !isMe ? (
-            <TouchableOpacity style={styles.grayButton} onPress={reportUser} disabled={isMe}>
-              <Text>신고</Text>
-            </TouchableOpacity>
-          ) : null
-        }
+        {!isMe && isMeOwner ? (
+          <TouchableOpacity
+            style={styles.grayButton}
+            onPress={banUser}
+            disabled={isMe}>
+            <Text>추방</Text>
+          </TouchableOpacity>
+        ) : null}
+        {!isMe ? (
+          <TouchableOpacity
+            style={styles.grayButton}
+            onPress={reportUser}
+            disabled={isMe}>
+            <Text>신고</Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
     </View>
   );

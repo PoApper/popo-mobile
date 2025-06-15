@@ -138,17 +138,24 @@ SidebarModalProps) => {
                   onPress={() => {
                     Alert.alert('채팅방 나가기', '채팅방을 나가시겠습니까?', [
                       {text: '취소', style: 'cancel'},
-                      {text: '나가기', onPress: () => {
-                        paxi_api.put(`/room/leave/${roomData.uuid}`)
-                        .then(() => {
-                          setModalVisible(false);
-                          navigation.navigate('Home');
-                        })
-                        .catch((err) => {
-                          console.log('채팅방 나가기 실패', err);
-                          Alert.alert('채팅방 나가기 실패', `채팅방 나가기에 실패했습니다.\n${err.response.data.message}`);
-                        })
-                      }},
+                      {
+                        text: '나가기',
+                        onPress: () => {
+                          paxi_api
+                            .put(`/room/leave/${roomData.uuid}`)
+                            .then(() => {
+                              setModalVisible(false);
+                              navigation.navigate('Home');
+                            })
+                            .catch(err => {
+                              console.log('채팅방 나가기 실패', err);
+                              Alert.alert(
+                                '채팅방 나가기 실패',
+                                `채팅방 나가기에 실패했습니다.\n${err.response.data.message}`,
+                              );
+                            });
+                        },
+                      },
                     ]);
                   }}>
                   <Icon name="logout" size={30} color="black" />

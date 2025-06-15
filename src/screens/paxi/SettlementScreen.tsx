@@ -105,13 +105,13 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         <View style={styles.placeholderButton} />
       </View>
 
-      {
-        isAlreadyRequested && (
-          <View style={styles.alreadyRequestedContainer}>
-            <Text style={styles.alreadyRequestedText}>이미 생성된 정산 요청이 있습니다.</Text>
-          </View>
-        )
-      }
+      {isAlreadyRequested && (
+        <View style={styles.alreadyRequestedContainer}>
+          <Text style={styles.alreadyRequestedText}>
+            이미 생성된 정산 요청이 있습니다.
+          </Text>
+        </View>
+      )}
 
       <ScrollView>
         <View style={styles.container}>
@@ -128,7 +128,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                 },
                 {
                   backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
-                }
+                },
               ]}
               editable={!isAlreadyRequested}
               placeholder="은행명을 입력해주세요."
@@ -254,8 +254,14 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
             },
           ]}
           onPress={() => checkInputValid()}
-          disabled={!bankName || !accountNumber || !accountName || isAlreadyRequested}>
-          <Text style={[styles.nextButtonText, {color: isAlreadyRequested ? '#808080' : '#ffffff'}]}>
+          disabled={
+            !bankName || !accountNumber || !accountName || isAlreadyRequested
+          }>
+          <Text
+            style={[
+              styles.nextButtonText,
+              {color: isAlreadyRequested ? '#808080' : '#ffffff'},
+            ]}>
             정산 요청하기
           </Text>
         </TouchableOpacity>
