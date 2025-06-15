@@ -1,8 +1,9 @@
+import React from 'react';
 import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import {UserData} from '@interfaces/paxi';
 import paxi_api from '@utils/paxi_api';
-import React from 'react';
 
 interface ParticipantItemProps {
   userInfo: UserData;
@@ -12,8 +13,13 @@ interface ParticipantItemProps {
 }
 
 const ParticipantItem = ({userInfo, roomUuid, myUuid, ownerUuid}: ParticipantItemProps) => {
+  const isOwner = ownerUuid === userInfo.userUuid;
+  const isMe = myUuid === userInfo.userUuid;
+  const isMeOwner = myUuid === ownerUuid;
+
+
   const banUser = () => {
-    Alert.alert('추방', `유저 ${userInfo.nickname}를 추방하시겠습니까?`, [
+    Alert.alert('추방', `유저 '${userInfo.nickname}'님을 추방하시겠습니까?`, [
       {
         text: '아니오',
         style: 'cancel',
@@ -35,7 +41,7 @@ const ParticipantItem = ({userInfo, roomUuid, myUuid, ownerUuid}: ParticipantIte
   };
 
   const reportUser = () => {
-    Alert.alert('신고', `유저 ${userInfo.nickname}를 신고하시겠습니까?`, [
+    Alert.alert('신고', `유저 '${userInfo.nickname}'님을 신고하시겠습니까?`, [
       {
         text: '아니오',
         style: 'cancel',
@@ -70,7 +76,7 @@ const ParticipantItem = ({userInfo, roomUuid, myUuid, ownerUuid}: ParticipantIte
                 color="green"
               />
             )}
-            {ownerUuid === userInfo.userUuid && (
+            {isOwner && (
               <Icon
                 name="verified"
                 style={{position: 'absolute', top: 0, left: 0}}
@@ -84,28 +90,28 @@ const ParticipantItem = ({userInfo, roomUuid, myUuid, ownerUuid}: ParticipantIte
           <View style={styles.nameRow}>
             <Text style={styles.nameText}>{userInfo.nickname}</Text>
           </View>
-          {ownerUuid === userInfo.userUuid && !userInfo.isPaid && (
+          {!userInfo.isPaid && isOwner && (
             <Text style={styles.subText}>방장</Text>
           )}
-          {userInfo.isPaid && !userInfo.isOwner && (
+          {userInfo.isPaid && !isOwner && (
             <Text style={styles.subText}>송금 완료</Text>
           )}
-          {userInfo.isPaid && userInfo.isOwner && (
+          {userInfo.isPaid && isOwner && (
             <Text style={styles.subText}>방장 & 송금 완료</Text>
           )}
         </View>
       </View>
       <View style={styles.rowCenter}>
         {
-          myUuid !== userInfo.userUuid && ownerUuid === myUuid ? (
-            <TouchableOpacity style={styles.grayButton} onPress={banUser} disabled={myUuid === userInfo.userUuid}>
+          !isMe && isMeOwner ? (
+            <TouchableOpacity style={styles.grayButton} onPress={banUser} disabled={isMe}>
               <Text>추방</Text>
             </TouchableOpacity>
           ) : null
         }
         {
-          myUuid !== userInfo.userUuid ? (
-            <TouchableOpacity style={styles.grayButton} onPress={reportUser} disabled={myUuid === userInfo.userUuid}>
+          !isMe ? (
+            <TouchableOpacity style={styles.grayButton} onPress={reportUser} disabled={isMe}>
               <Text>신고</Text>
             </TouchableOpacity>
           ) : null
