@@ -1,5 +1,5 @@
-import CookieManager from "@react-native-cookies/cookies";
-import EncryptedStorage from "react-native-encrypted-storage";
+import CookieManager from '@react-native-cookies/cookies';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 export async function reset_auth() {
   if (await EncryptedStorage.getItem('auth_token')) {

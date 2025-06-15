@@ -59,21 +59,21 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       paxi_api
-      .get('/user/onboarding-status')
-      .then(res => {
-        if (res.data.onboardingStatus === false) {
-          navigation.navigate('PaxiIntro');
-        } else {
-          api.get('/auth/myInfo').then(res => {
-            setUserUuid(res.data.uuid);
-          });
-          getRoomList();
-        }
-      })
-      .catch(err => {
-        console.error('Error:', err);
-        Alert.alert('실패', 'Paxi 유저 확인에 실패했습니다: ' + err.message);
-      });
+        .get('/user/onboarding-status')
+        .then(res => {
+          if (res.data.onboardingStatus === false) {
+            navigation.navigate('PaxiIntro');
+          } else {
+            api.get('/auth/myInfo').then(res => {
+              setUserUuid(res.data.uuid);
+            });
+            getRoomList();
+          }
+        })
+        .catch(err => {
+          console.error('Error:', err);
+          Alert.alert('실패', 'Paxi 유저 확인에 실패했습니다: ' + err.message);
+        });
     });
 
     return unsubscribe;

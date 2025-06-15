@@ -21,7 +21,7 @@ import {getAuthToken} from '@utils/auth-token';
 import api from '@utils/api';
 import paxi_api from '@utils/paxi_api';
 import CommonHeader from '@components/CommonHeader';
-import { POPO_API_URL } from '@utils/api';
+import {POPO_API_URL} from '@utils/api';
 
 type DeveloperPageProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Developer'>;
@@ -111,7 +111,7 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
             {backgroundColor: cardBgColor, borderColor},
           ]}>
           <View style={styles.detailSection}>
-          <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
               <View style={styles.sectionTitleRow}>
                 <View style={styles.titleContainer}>
                   <Text

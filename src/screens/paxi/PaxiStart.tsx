@@ -20,7 +20,7 @@ import {RootStackParamList} from '@navigation/types';
 import CommonHeader from '@components/CommonHeader';
 import api from '@utils/api';
 import paxi_api from '@utils/paxi_api';
-import { reset_auth } from '@utils/reset';
+import {reset_auth} from '@utils/reset';
 
 type PaxiStartScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PaxiStart'>;
@@ -49,16 +49,20 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
       })
       .then(res => {
         if (res.status === 201) {
-          Alert.alert('성공', '닉네임을 성공적으로 생성했습니다. 원활한 서비스를 위해 재로그인 해주세요.', [
-            {
-              text: '확인',
-              onPress: async () => {
-                await api.get('/auth/logout');
-                await reset_auth();
-                navigation.navigate('Login');
+          Alert.alert(
+            '성공',
+            '닉네임을 성공적으로 생성했습니다. 원활한 서비스를 위해 재로그인 해주세요.',
+            [
+              {
+                text: '확인',
+                onPress: async () => {
+                  await api.get('/auth/logout');
+                  await reset_auth();
+                  navigation.navigate('Login');
+                },
               },
-            },
-          ]);
+            ],
+          );
         }
       });
   };
