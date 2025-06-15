@@ -345,15 +345,15 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   reserveButtonWrapper: {
-    width: 320,
+    width: '100%',
     alignSelf: 'center',
-    paddingHorizontal: 0,
+    paddingHorizontal: 20,
     marginTop: 0,
     marginBottom: 12,
   },
   reserveButton: {
     backgroundColor: '#222',
-    borderRadius: 16,
+    borderRadius: 8,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
