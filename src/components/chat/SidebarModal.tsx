@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Animated,
   Dimensions,
+  Alert,
 } from 'react-native';
 import {useEffect, useRef} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -17,6 +18,7 @@ import RoomInfoBox from '@components/chat/RoomInfoBox';
 import ParticipantItem from '@components/chat/ParticipantsItem';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
+import paxi_api from '@utils/paxi_api';
 
 interface SidebarModalProps {
   modalVisible: boolean;
@@ -133,7 +135,22 @@ SidebarModalProps) => {
                 }}>
                 <TouchableOpacity
                   style={styles.leaveRoomButton}
-                  onPress={() => {}}>
+                  onPress={() => {
+                    Alert.alert('채팅방 나가기', '채팅방을 나가시겠습니까?', [
+                      {text: '취소', style: 'cancel'},
+                      {text: '나가기', onPress: () => {
+                        paxi_api.put(`/room/leave/${roomData.uuid}`)
+                        .then(() => {
+                          setModalVisible(false);
+                          navigation.navigate('Home');
+                        })
+                        .catch((err) => {
+                          console.log('채팅방 나가기 실패', err);
+                          Alert.alert('채팅방 나가기 실패', `채팅방 나가기에 실패했습니다.\n${err.response.data.message}`);
+                        })
+                      }},
+                    ]);
+                  }}>
                   <Icon name="logout" size={30} color="black" />
                 </TouchableOpacity>
               </View>

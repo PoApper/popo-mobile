@@ -107,6 +107,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const sendChat = async () => {
     if (!socket) {
       console.error('소켓이 아직 연결되지 않았습니다.');
+      initSocket();
       return;
     }
 
@@ -127,7 +128,6 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     // TODO: myUuid는 상수값으로 설정.
     const newChatData = {
       ...data,
-      senderName: 'senderName',
     };
     setChatList(prev => [newChatData, ...prev]);
   };
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: '#f8f9fa',
     borderColor: '#e0e0e0',
-    borderRadius: 20,
+    borderRadius: 16,
     paddingHorizontal: 15,
     paddingVertical: 10,
     fontSize: 16,
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     height: 40,
     width: 40,
-    backgroundColor: '#007AFF',
+    backgroundColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
