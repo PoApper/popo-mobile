@@ -19,8 +19,8 @@ import paxi_api from '@utils/paxi_api';
 interface ReportModalProps {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
-  roomUuid: string,
-  userData: UserData | undefined,
+  roomUuid: string;
+  userData: UserData | undefined;
 }
 
 const ReportModal = ({
@@ -28,8 +28,7 @@ const ReportModal = ({
   setModalVisible,
   roomUuid,
   userData,
-}:
-ReportModalProps) => {
+}: ReportModalProps) => {
   const modalWidth = Dimensions.get('window').width * 0.7;
   const modalHeight = Dimensions.get('window').height * 0.5;
 
@@ -44,17 +43,18 @@ ReportModalProps) => {
     if (userData === undefined) {
       return;
     }
-    paxi_api.post('report', {
-      targetRoomUuid: roomUuid,
-      targetUserUuid: userData?.userUuid,
-      reason: reason,
-    })
-    .then(() => {
-      Alert.alert('처리 완료', '요청이 처리되었습니다.');
-    })
-    .catch(() => {
-      Alert.alert('신고 실패', '신고 요청에 실패했습니다.');
-    });
+    paxi_api
+      .post('report', {
+        targetRoomUuid: roomUuid,
+        targetUserUuid: userData?.userUuid,
+        reason: reason,
+      })
+      .then(() => {
+        Alert.alert('처리 완료', '요청이 처리되었습니다.');
+      })
+      .catch(() => {
+        Alert.alert('신고 실패', '신고 요청에 실패했습니다.');
+      });
   };
 
   return (
@@ -64,13 +64,23 @@ ReportModalProps) => {
       onRequestClose={handleClose}>
       <Pressable style={styles.overlay} onPress={handleClose}>
         <SafeAreaView style={styles.modalContent}>
-          <Pressable style={[{width: modalWidth, height: modalHeight}, styles.innerContent]} onPress={() => {}}>
+          <Pressable
+            style={[
+              {width: modalWidth, height: modalHeight},
+              styles.innerContent,
+            ]}
+            onPress={() => {}}>
             <View style={{flex: 1, width: '100%', marginBottom: 20}}>
-              <View style={{flexDirection: 'row', alignContent: 'center', gap: 5}}>
+              <View
+                style={{flexDirection: 'row', alignContent: 'center', gap: 5}}>
                 <Icon name="warning-amber" size={30} color="black" />
                 <Text style={styles.modalTitle}>신고하기</Text>
               </View>
-              <Text style={{marginBottom: 10, fontWeight: 'bold'}}>정말로 <Text style={{color: 'darkblue'}}>{userData?.nickname}</Text>님을 신고하실건가요?</Text>
+              <Text style={{marginBottom: 10, fontWeight: 'bold'}}>
+                정말로{' '}
+                <Text style={{color: 'darkblue'}}>{userData?.nickname}</Text>
+                님을 신고하실건가요?
+              </Text>
               <TextInput
                 style={[styles.textInput]}
                 value={reportText}
@@ -86,9 +96,15 @@ ReportModalProps) => {
             {/* 신고 요청 버튼 */}
             <View style={styles.buttonView}>
               <TouchableOpacity
-                style={[styles.reportButton, {backgroundColor: reportText.length === 0 ? 'grey' : 'black'}]}
+                style={[
+                  styles.reportButton,
+                  {backgroundColor: reportText.length === 0 ? 'grey' : 'black'},
+                ]}
                 disabled={reportText.length === 0}
-                onPress={() => {handleReport(reportText); handleClose();}}>
+                onPress={() => {
+                  handleReport(reportText);
+                  handleClose();
+                }}>
                 <Text style={styles.reportButtonText}>신고하기</Text>
               </TouchableOpacity>
               <TouchableOpacity
