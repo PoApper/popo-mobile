@@ -3,6 +3,7 @@
  */
 
 import React, {useEffect} from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppNavigator from './src/navigation/AppNavigator';
 import {
@@ -48,9 +49,11 @@ const App = () => {
   }, []);
 
   return (
-    <SafeAreaProvider>
-      <AppNavigator />
-    </SafeAreaProvider>
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <AppNavigator />
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 };
 
