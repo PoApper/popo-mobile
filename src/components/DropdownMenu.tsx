@@ -93,15 +93,15 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const selectedBg = isDarkMode ? '#232323' : '#f8f8f8';
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <TouchableOpacity
         ref={buttonRef}
         onPress={openDropdown}
         style={[
           styles.button,
           {
-            borderColor,
-            backgroundColor,
+            borderColor: borderColor,
+            backgroundColor: backgroundColor,
             borderRadius: 6,
             height: 42,
             minWidth: 100,

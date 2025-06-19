@@ -134,6 +134,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
 
   const dropdownStyle = [
     {
+      flex: 1,
       backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
     },
   ];
@@ -178,11 +179,13 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 <View style={styles.dotBlack} />
 
                 <DropdownMenu
-                  style={[{width: 300}, dropdownStyle]}
+                  style={dropdownStyle}
                   textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
                   textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
                   defaultText={'어디서 출발하시나요?'}
-                  categories={PAXI_LOCATIONS}
+                  categories={PAXI_LOCATIONS.filter(
+                    item => item.id !== arrivalName,
+                  )}
                   onSelect={selected => setDepartureName(selected ?? '출발지')}
                 />
               </View>
@@ -196,11 +199,13 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 <View style={styles.dotRed} />
 
                 <DropdownMenu
-                  style={[{width: 300}, dropdownStyle]}
+                  style={dropdownStyle}
                   textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
                   textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
                   defaultText={'어디로 떠나시나요?'}
-                  categories={PAXI_LOCATIONS}
+                  categories={PAXI_LOCATIONS.filter(
+                    item => item.id !== departureName,
+                  )}
                   onSelect={selected => setArrivalName(selected ?? '도착지')}
                 />
               </View>
@@ -443,6 +448,7 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     marginBottom: 16,
+    textAlignVertical: 'top',
   },
   inputWrapper: {
     backgroundColor: '#fff',
@@ -456,6 +462,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 10,
     height: 42,
+    width: '100%',
   },
   separator: {
     height: 1,
