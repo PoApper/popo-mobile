@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -28,6 +28,26 @@ interface IEquipment {
   fee: number;
   image_url?: string;
   max_minutes: number;
+}
+
+interface IUser {
+  uuid: string;
+  name: string;
+  email: string;
+}
+
+interface IEquipReservation {
+  uuid: string;
+  booker: IUser;
+  equipments: IEquipment[];
+  date: string;
+  description: string;
+  start_time: string;
+  end_time: string;
+  phone: string;
+  status: string;
+  title: string;
+  created_at: Date;
 }
 
 type EquipmentReservationApplyScreenProps = {
@@ -73,6 +93,8 @@ const EquipmentReservationApplyScreen = ({
   const [tempEndTime, setTempEndTime] = useState(new Date());
   const scrollViewRef = useRef<ScrollView>(null);
   const [showEquipmentList, setShowEquipmentList] = useState(false);
+  const [reservedEquipments, setReservedEquipments] = useState<string[]>([]);
+  const [loadingReservations, setLoadingReservations] = useState(false);
 
   // 장비 리스트 불러오기
   useEffect(() => {
@@ -88,6 +110,67 @@ const EquipmentReservationApplyScreen = ({
     };
     fetchEquipment();
   }, [association]);
+
+  // 예약된 장비 확인
+  const checkReservedEquipments = useCallback(async () => {
+    if (!date || !startTime || !endTime) {
+      return;
+    }
+
+    try {
+      setLoadingReservations(true);
+      const dateStr = `${date.getFullYear()}${String(
+        date.getMonth() + 1,
+      ).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}`;
+
+      const response = await PoPoAxios.get<IEquipReservation[]>(
+        '/reservation-equip',
+        {
+          params: {
+            owner: association,
+            date: dateStr,
+          },
+        },
+      );
+
+      const startTimeStr = `${String(startTime.getHours()).padStart(
+        2,
+        '0',
+      )}${String(startTime.getMinutes()).padStart(2, '0')}`;
+      const endTimeStr = `${String(endTime.getHours()).padStart(
+        2,
+        '0',
+      )}${String(endTime.getMinutes()).padStart(2, '0')}`;
+
+      const reservations = response.data || [];
+      const overlappingReservations = reservations.filter(reservation => {
+        // 예약이 'canceled' 상태이면 충돌 검사에서 제외
+        if (reservation.status === 'canceled') {
+          return false;
+        }
+        return (
+          reservation.start_time < endTimeStr &&
+          startTimeStr < reservation.end_time
+        );
+      });
+
+      const reservedUUIDs = overlappingReservations.flatMap(reservation =>
+        reservation.equipments.map(equipment => equipment.uuid),
+      );
+
+      setReservedEquipments(reservedUUIDs);
+    } catch (error) {
+      console.error('예약 확인 실패:', error);
+      setReservedEquipments([]);
+    } finally {
+      setLoadingReservations(false);
+    }
+  }, [association, date, endTime, startTime]);
+
+  // 날짜나 시간이 변경될 때 예약된 장비 확인
+  useEffect(() => {
+    checkReservedEquipments();
+  }, [checkReservedEquipments]);
 
   // 30분 단위로 시간 올림
   const roundUpToNearest30Minutes = (date: Date) => {
@@ -165,10 +248,24 @@ const EquipmentReservationApplyScreen = ({
       Alert.alert('알림', '예약할 장비를 선택해주세요.');
       return;
     }
+
+    // 예약된 장비가 선택되었는지 확인
+    const hasReservedEquipment = selectedEquipments.some(equipment =>
+      reservedEquipments.includes(equipment.uuid),
+    );
+
+    if (hasReservedEquipment) {
+      Alert.alert(
+        '알림',
+        '이미 예약된 장비가 포함되어 있습니다. 장비 목록을 다시 확인해주세요.',
+      );
+      return;
+    }
+
     // 예약 정보 확인 팝업
     Alert.alert(
       '',
-      `협회: ${association}\n예약 장비: ${selectedEquipments
+      `예약 장비: ${selectedEquipments
         .map(e => e.name)
         .join(', ')}\n예약 날짜: ${formatDate(
         date,
@@ -183,8 +280,45 @@ const EquipmentReservationApplyScreen = ({
         {text: '취소', style: 'cancel'},
         {
           text: '예약하기',
-          onPress: () => {
-            /* TODO: API 연동 */ navigation.goBack();
+          onPress: async () => {
+            try {
+              // 날짜와 시간을 요구사항에 맞는 형식으로 변환
+              const dateStr = `${date.getFullYear()}${String(
+                date.getMonth() + 1,
+              ).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}`;
+              const startTimeStr = `${String(startTime.getHours()).padStart(
+                2,
+                '0',
+              )}${String(startTime.getMinutes()).padStart(2, '0')}`;
+              const endTimeStr = `${String(endTime.getHours()).padStart(
+                2,
+                '0',
+              )}${String(endTime.getMinutes()).padStart(2, '0')}`;
+
+              await PoPoAxios.post<IEquipReservation>('/reservation-equip', {
+                equipments: selectedEquipments.map(e => e.uuid),
+                owner: association,
+                phone: phone,
+                title: title,
+                description: desc,
+                date: dateStr,
+                start_time: startTimeStr,
+                end_time: endTimeStr,
+              });
+
+              Alert.alert('성공', '예약이 성공적으로 생성되었습니다.', [
+                {
+                  text: '확인',
+                  onPress: () => navigation.goBack(),
+                },
+              ]);
+            } catch (error) {
+              console.error('예약 생성 실패:', error);
+              Alert.alert(
+                '오류',
+                '예약 생성에 실패했습니다. 다시 시도해주세요.',
+              );
+            }
           },
         },
       ],
@@ -258,13 +392,13 @@ const EquipmentReservationApplyScreen = ({
 
         <ScrollView
           ref={scrollViewRef}
-          contentContainerStyle={{padding: 20}}
+          contentContainerStyle={styles.scrollContainer}
           keyboardShouldPersistTaps="handled">
           <View style={styles.formSection}>
             <Text style={[styles.label, {color: textColor}]}>
               사용자 <Text style={{color: '#FB5353'}}>*</Text>
             </Text>
-            <View style={{minHeight: 48, justifyContent: 'center'}}>
+            <View style={styles.userInfoContainer}>
               {userLoading ? (
                 <ActivityIndicator size="small" color={subTextColor} />
               ) : (
@@ -275,7 +409,6 @@ const EquipmentReservationApplyScreen = ({
                     {
                       color: isDarkMode ? '#888888' : '#AAA',
                       backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
-                      borderColor: borderColor,
                     },
                   ]}
                   value={userName}
@@ -294,7 +427,6 @@ const EquipmentReservationApplyScreen = ({
                 {
                   color: textColor,
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                  borderColor: borderColor,
                 },
               ]}
               value={phone}
@@ -313,7 +445,6 @@ const EquipmentReservationApplyScreen = ({
                 {
                   color: textColor,
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                  borderColor: borderColor,
                 },
               ]}
               value={title}
@@ -327,12 +458,10 @@ const EquipmentReservationApplyScreen = ({
             <TextInput
               style={[
                 styles.input,
+                styles.descriptionInput,
                 {
-                  height: 80,
                   color: textColor,
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                  borderColor: borderColor,
-                  textAlignVertical: 'top',
                 },
               ]}
               value={desc}
@@ -347,14 +476,9 @@ const EquipmentReservationApplyScreen = ({
             <TouchableOpacity
               style={[
                 styles.input,
+                styles.equipmentSelector,
                 {
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  alignItems: 'center',
-                  minHeight: 48,
-                  marginBottom: 8,
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
-                  borderColor: borderColor,
                 },
               ]}
               onPress={e => {
@@ -364,84 +488,59 @@ const EquipmentReservationApplyScreen = ({
               activeOpacity={0.8}>
               {selectedEquipments.length > 0 ? (
                 selectedEquipments.map(equip => (
-                  <View
-                    key={equip.uuid}
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      backgroundColor: '#E5E7EB',
-                      borderRadius: 16,
-                      paddingHorizontal: 10,
-                      paddingVertical: 4,
-                      marginRight: 8,
-                      marginBottom: 4,
-                    }}>
-                    <Text style={{fontSize: 14, marginRight: 4}}>
+                  <View key={equip.uuid} style={styles.selectedEquipmentItem}>
+                    <Text style={styles.selectedEquipmentText}>
                       {equip.name}
                     </Text>
                     <TouchableOpacity onPress={() => toggleEquipment(equip)}>
-                      <Text
-                        style={{
-                          color: '#FB5353',
-                          fontWeight: 'bold',
-                          fontSize: 16,
-                        }}>
-                        ×
-                      </Text>
+                      <Text style={styles.removeButtonText}>×</Text>
                     </TouchableOpacity>
                   </View>
                 ))
               ) : (
-                <Text
-                  style={{
-                    color: subTextColor,
-                    fontSize: 16,
-                    paddingLeft: 4,
-                    lineHeight: 24,
-                  }}>
+                <Text style={[styles.placeholderText, {color: subTextColor}]}>
                   예약할 장비들을 선택해주세요.
                 </Text>
               )}
             </TouchableOpacity>
             {showEquipmentList && (
-              <ScrollView style={{maxHeight: 220, marginTop: 4}}>
-                {equipmentList.length === 0 ? (
-                  <Text
-                    style={{textAlign: 'center', marginTop: 40, color: '#888'}}>
-                    장비가 없습니다.
-                  </Text>
+              <ScrollView style={styles.equipmentListScrollView}>
+                {loadingReservations ? (
+                  <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="small" color={subTextColor} />
+                    <Text style={[styles.loadingText, {color: subTextColor}]}>
+                      예약 상태 확인 중...
+                    </Text>
+                  </View>
+                ) : equipmentList.length === 0 ? (
+                  <Text style={styles.emptyListText}>장비가 없습니다.</Text>
                 ) : (
                   equipmentList.map(item => {
                     const selected = !!selectedEquipments.find(
                       e => e.uuid === item.uuid,
                     );
+                    const isReserved = reservedEquipments.includes(item.uuid);
+
                     return (
                       <TouchableOpacity
                         key={item.uuid}
                         onPress={() => toggleEquipment(item)}
                         disabled={selected}
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          paddingVertical: 14,
-                          paddingHorizontal: 20,
-                          backgroundColor: selected ? '#F3F4F6' : '#fff',
-                          opacity: selected ? 0.5 : 1,
-                          borderBottomWidth: 1,
-                          borderColor: '#F3F4F6',
-                        }}>
-                        <Text style={{fontSize: 16, color: '#222', flex: 1}}>
+                        style={[
+                          styles.equipmentItem,
+                          (selected || isReserved) &&
+                            styles.disabledEquipmentItem,
+                        ]}>
+                        <Text
+                          style={[
+                            styles.equipmentName,
+                            isReserved && styles.reservedEquipmentName,
+                          ]}>
                           {item.name}
                         </Text>
-                        {selected && (
-                          <Text
-                            style={{
-                              color: '#FB5353',
-                              fontWeight: 'bold',
-                              fontSize: 16,
-                            }}>
-                            ✔
-                          </Text>
+                        {selected && <Text style={styles.checkIcon}>✔</Text>}
+                        {isReserved && !selected && (
+                          <Text style={styles.reservedText}>(예약됨)</Text>
                         )}
                       </TouchableOpacity>
                     );
@@ -450,15 +549,8 @@ const EquipmentReservationApplyScreen = ({
               </ScrollView>
             )}
             {/* 날짜/시간 선택 */}
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'flex-end',
-                justifyContent: 'space-between',
-                gap: 8,
-                marginBottom: 8,
-              }}>
-              <View style={{flex: 1.5}}>
+            <View style={styles.dateTimePickerContainer}>
+              <View style={styles.datePickerWrapper}>
                 <Text
                   style={[styles.label, {color: textColor, marginBottom: 13}]}>
                   날짜 <Text style={{color: '#FB5353'}}>*</Text>
@@ -472,12 +564,12 @@ const EquipmentReservationApplyScreen = ({
                       borderColor: showDatePicker ? '#FB5353' : borderColor,
                     },
                   ]}>
-                  <Text style={{color: textColor, textAlign: 'center'}}>
+                  <Text style={[styles.datePickerText, {color: textColor}]}>
                     {formatDate(date)}
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{flex: 1}}>
+              <View style={styles.timePickerWrapper}>
                 <Text
                   style={[styles.label, {color: textColor, marginBottom: 13}]}>
                   시작 시간 <Text style={{color: '#FB5353'}}>*</Text>
@@ -491,7 +583,7 @@ const EquipmentReservationApplyScreen = ({
                       borderColor: showStartPicker ? '#FB5353' : borderColor,
                     },
                   ]}>
-                  <Text style={{color: textColor, textAlign: 'center'}}>
+                  <Text style={[styles.datePickerText, {color: textColor}]}>
                     {startTime.toLocaleTimeString([], {
                       hour: '2-digit',
                       minute: '2-digit',
@@ -499,7 +591,7 @@ const EquipmentReservationApplyScreen = ({
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{flex: 1}}>
+              <View style={styles.timePickerWrapper}>
                 <Text
                   style={[styles.label, {color: textColor, marginBottom: 13}]}>
                   종료 시간 <Text style={{color: '#FB5353'}}>*</Text>
@@ -513,7 +605,7 @@ const EquipmentReservationApplyScreen = ({
                       borderColor: showEndPicker ? '#FB5353' : borderColor,
                     },
                   ]}>
-                  <Text style={{color: textColor, textAlign: 'center'}}>
+                  <Text style={[styles.datePickerText, {color: textColor}]}>
                     {endTime.toLocaleTimeString([], {
                       hour: '2-digit',
                       minute: '2-digit',
@@ -552,19 +644,12 @@ const EquipmentReservationApplyScreen = ({
             )}
             {showDatePicker && Platform.OS === 'ios' && (
               <TouchableOpacity
-                style={{
-                  marginTop: 8,
-                  alignSelf: 'flex-end',
-                  backgroundColor: '#FB5353',
-                  borderRadius: 8,
-                  paddingVertical: 8,
-                  paddingHorizontal: 20,
-                }}
+                style={styles.iosPickerConfirmButton}
                 onPress={() => {
                   setShowDatePicker(false);
                   setDate(tempDate);
                 }}>
-                <Text style={{color: '#fff', fontWeight: 'bold'}}>확인</Text>
+                <Text style={styles.iosPickerConfirmText}>확인</Text>
               </TouchableOpacity>
             )}
             {showStartPicker && (
@@ -604,14 +689,7 @@ const EquipmentReservationApplyScreen = ({
             )}
             {showStartPicker && Platform.OS === 'ios' && (
               <TouchableOpacity
-                style={{
-                  marginTop: 8,
-                  alignSelf: 'flex-end',
-                  backgroundColor: '#FB5353',
-                  borderRadius: 8,
-                  paddingVertical: 8,
-                  paddingHorizontal: 20,
-                }}
+                style={styles.iosPickerConfirmButton}
                 onPress={() => {
                   setShowStartPicker(false);
                   if (isTimeAfterNow(date, tempStartTime)) {
@@ -626,7 +704,7 @@ const EquipmentReservationApplyScreen = ({
                     );
                   }
                 }}>
-                <Text style={{color: '#fff', fontWeight: 'bold'}}>확인</Text>
+                <Text style={styles.iosPickerConfirmText}>확인</Text>
               </TouchableOpacity>
             )}
             {showEndPicker && (
@@ -656,14 +734,7 @@ const EquipmentReservationApplyScreen = ({
             )}
             {showEndPicker && Platform.OS === 'ios' && (
               <TouchableOpacity
-                style={{
-                  marginTop: 8,
-                  alignSelf: 'flex-end',
-                  backgroundColor: '#FB5353',
-                  borderRadius: 8,
-                  paddingVertical: 8,
-                  paddingHorizontal: 20,
-                }}
+                style={styles.iosPickerConfirmButton}
                 onPress={() => {
                   setShowEndPicker(false);
                   if (tempEndTime > startTime) {
@@ -674,63 +745,32 @@ const EquipmentReservationApplyScreen = ({
                     setEndTime(newEndTime);
                   }
                 }}>
-                <Text style={{color: '#fff', fontWeight: 'bold'}}>확인</Text>
+                <Text style={styles.iosPickerConfirmText}>확인</Text>
               </TouchableOpacity>
             )}
           </View>
           {/* 하단 버튼 */}
           <View
-            style={{
-              paddingHorizontal: 0,
-              paddingVertical: 20,
-              backgroundColor: isDarkMode ? '#121212' : '#fff',
-            }}>
+            style={[
+              styles.bottomButtonContainer,
+              {backgroundColor: isDarkMode ? '#121212' : '#fff'},
+            ]}>
             {selectedEquipments.length > 0 && (
-              <View
-                style={{
-                  alignItems: 'center',
-                  marginBottom: 16,
-                  paddingHorizontal: 20,
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 8,
-                  }}>
-                  <Text
-                    style={{
-                      color: textColor,
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                    }}>
+              <View style={styles.totalPriceContainer}>
+                <View style={styles.totalPriceWrapper}>
+                  <Text style={[styles.totalPriceLabel, {color: textColor}]}>
                     총 예약비
                   </Text>
-                  <Text
-                    style={{
-                      color: '#FB5353',
-                      fontSize: 20,
-                      fontWeight: 'bold',
-                    }}>
+                  <Text style={styles.totalPriceValue}>
                     {totalPrice.toLocaleString()}원
                   </Text>
                 </View>
               </View>
             )}
             <TouchableOpacity
-              style={{
-                backgroundColor: '#222',
-                borderRadius: 8,
-                paddingVertical: 16,
-                alignItems: 'center',
-                width: '100%',
-                maxWidth: 400,
-                alignSelf: 'center',
-              }}
+              style={styles.reservationButton}
               onPress={handleReservation}>
-              <Text style={{color: '#fff', fontSize: 16, fontWeight: 'bold'}}>
-                예약 생성하기
-              </Text>
+              <Text style={styles.reservationButtonText}>예약 생성하기</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -740,6 +780,9 @@ const EquipmentReservationApplyScreen = ({
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    padding: 20,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -778,22 +821,155 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   disabledInput: {},
-  bottomButtonContainer: {
+  descriptionInput: {
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  equipmentSelector: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    minHeight: 48,
+    marginBottom: 8,
+  },
+  selectedEquipmentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#E5E7EB',
+    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginRight: 8,
+    marginBottom: 4,
+  },
+  selectedEquipmentText: {
+    fontSize: 14,
+    marginRight: 4,
+  },
+  removeButtonText: {
+    color: '#FB5353',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  placeholderText: {
+    fontSize: 16,
+    paddingLeft: 4,
+    lineHeight: 24,
+  },
+  equipmentListScrollView: {
+    maxHeight: 220,
+    marginTop: 4,
+  },
+  loadingContainer: {
     padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#fff',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 8,
+  },
+  emptyListText: {
+    textAlign: 'center',
+    marginTop: 40,
+    color: '#888',
+  },
+  equipmentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderColor: '#F3F4F6',
+  },
+  disabledEquipmentItem: {
+    backgroundColor: '#F3F4F6',
+    opacity: 0.5,
+  },
+  equipmentName: {
+    fontSize: 16,
+    color: '#222',
+    flex: 1,
+  },
+  reservedEquipmentName: {
+    color: '#888',
+    textDecorationLine: 'line-through',
+  },
+  checkIcon: {
+    color: '#FB5353',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  reservedText: {
+    color: '#888',
+    fontSize: 12,
+  },
+  dateTimePickerContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    gap: 8,
+    marginBottom: 8,
+  },
+  datePickerWrapper: {
+    flex: 1.5,
+  },
+  timePickerWrapper: {
+    flex: 1,
+  },
+  datePickerText: {
+    textAlign: 'center',
+  },
+  iosPickerConfirmButton: {
+    marginTop: 8,
+    alignSelf: 'flex-end',
+    backgroundColor: '#FB5353',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+  },
+  iosPickerConfirmText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  bottomButtonContainer: {
+    paddingHorizontal: 0,
+    paddingVertical: 20,
+  },
+  totalPriceContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+    paddingHorizontal: 20,
+  },
+  totalPriceWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  totalPriceLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  totalPriceValue: {
+    color: '#FB5353',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   reservationButton: {
-    backgroundColor: '#FB5353',
+    backgroundColor: '#222',
     borderRadius: 8,
     paddingVertical: 16,
     alignItems: 'center',
+    width: '100%',
+    maxWidth: 400,
+    alignSelf: 'center',
   },
   reservationButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  userInfoContainer: {
+    minHeight: 48,
+    justifyContent: 'center',
   },
 });
 
