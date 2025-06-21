@@ -141,6 +141,12 @@ const EquipmentReservationApplyScreen = ({
     });
   };
 
+  // 총 가격 계산
+  const totalPrice = selectedEquipments.reduce(
+    (acc, equipment) => acc + equipment.fee,
+    0,
+  );
+
   // 예약 생성
   const handleReservation = () => {
     if (!phone.trim()) {
@@ -679,6 +685,38 @@ const EquipmentReservationApplyScreen = ({
               paddingVertical: 20,
               backgroundColor: isDarkMode ? '#121212' : '#fff',
             }}>
+            {selectedEquipments.length > 0 && (
+              <View
+                style={{
+                  alignItems: 'center',
+                  marginBottom: 16,
+                  paddingHorizontal: 20,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 8,
+                  }}>
+                  <Text
+                    style={{
+                      color: textColor,
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                    }}>
+                    총 예약비
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#FB5353',
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                    }}>
+                    {totalPrice.toLocaleString()}원
+                  </Text>
+                </View>
+              </View>
+            )}
             <TouchableOpacity
               style={{
                 backgroundColor: '#222',
