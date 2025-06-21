@@ -6646,6 +6646,11 @@ react-native-calendars@^1.1310.0:
   optionalDependencies:
     moment "^2.29.4"
 
+react-native-device-info@^14.0.4:
+  version "14.0.4"
+  resolved "https://registry.npmjs.org/react-native-device-info/-/react-native-device-info-14.0.4.tgz"
+  integrity sha512-NX0wMAknSDBeFnEnSFQ8kkAcQrFHrG4Cl0mVjoD+0++iaKrOupiGpBXqs8xR0SeJyPC5zpdPl4h/SaBGly6UxA==
+
 react-native-dotenv@^3.4.11:
   version "3.4.11"
   resolved "https://registry.npmjs.org/react-native-dotenv/-/react-native-dotenv-3.4.11.tgz"
