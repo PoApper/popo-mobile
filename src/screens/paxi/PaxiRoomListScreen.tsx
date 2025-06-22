@@ -37,6 +37,9 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
+  const [selectedDeparture, setSelectedDeparture] = useState<string | null>('');
+  const [selectedArrival, setSelectedArrival] = useState<string | null>('');
+
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
 
   const backgroundStyle = {
@@ -79,10 +82,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
     return unsubscribe;
   }, [navigation]);
 
-  const filterDeparture = (selected: string | null) => {
-    console.log('selected', selected);
-  };
-
   const dropdownStyle = [
     styles.button,
     {
@@ -105,15 +104,19 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <DropdownFilter
           style={dropdownStyle}
           defaultText={'출발지'}
-          categories={PAXI_LOCATIONS}
-          onSelect={selected => filterDeparture(selected)}
+          categories={PAXI_LOCATIONS.filter(
+            item => item.id !== selectedArrival,
+          )}
+          onSelect={selected => setSelectedDeparture(selected)}
         />
 
         <DropdownFilter
           style={dropdownStyle}
           defaultText={'도착지'}
-          categories={PAXI_LOCATIONS}
-          onSelect={selected => console.log('선택된 카테고리:', selected)}
+          categories={PAXI_LOCATIONS.filter(
+            item => item.id !== selectedDeparture,
+          )}
+          onSelect={selected => setSelectedArrival(selected)}
         />
 
         <RoomFilterDatePicker
