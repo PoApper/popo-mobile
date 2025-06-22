@@ -35,8 +35,6 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
   defaultText = '필터선택',
   showDefaultTextInDropDown = true,
   style,
-  textStyle,
-  textSelectedStyle,
   dropdownStyle,
 }) => {
   const [visible, setVisible] = useState(false);
@@ -84,7 +82,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
             {
               color: isDarkMode ? '#FFFFFF' : '#000000',
             },
-            selected ? textSelectedStyle : textStyle,
+            selected ? {fontWeight: 'bold'} : null,
           ]}>
           {selected
             ? categories.find(cat => cat.id === selected)?.name
@@ -127,9 +125,12 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
                       ]}
                       onPress={() => handleSelect(item.id || null)}>
                       <Text
-                        style={{
-                          color: isDarkMode ? '#FFFFFF' : '#000000',
-                        }}>
+                        style={[
+                          {
+                            color: isDarkMode ? '#FFFFFF' : '#000000',
+                          },
+                          selected === item.id ? {fontWeight: 'bold'} : null,
+                        ]}>
                         {item.name}
                       </Text>
                     </TouchableOpacity>
