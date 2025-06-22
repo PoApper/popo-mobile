@@ -82,14 +82,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
     return unsubscribe;
   }, [navigation]);
 
-  const dropdownStyle = [
-    styles.button,
-    {
-      borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
-      backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
-    },
-  ];
-
   return (
     <SafeAreaView style={[backgroundStyle]}>
       <StatusBar
@@ -102,20 +94,16 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <RefreshButton onPress={() => getRoomList()} />
 
         <DropdownFilter
-          style={dropdownStyle}
           placeholderText={'출발지'}
-          categories={PAXI_LOCATIONS.filter(
-            item => item.id !== selectedArrival,
-          )}
+          options={PAXI_LOCATIONS.filter(item => item.id !== selectedArrival)}
+          selected={selectedDeparture}
           onSelect={selected => setSelectedDeparture(selected)}
         />
 
         <DropdownFilter
-          style={dropdownStyle}
           placeholderText={'도착지'}
-          categories={PAXI_LOCATIONS.filter(
-            item => item.id !== selectedDeparture,
-          )}
+          options={PAXI_LOCATIONS.filter(item => item.id !== selectedDeparture)}
+          selected={selectedArrival}
           onSelect={selected => setSelectedArrival(selected)}
         />
 

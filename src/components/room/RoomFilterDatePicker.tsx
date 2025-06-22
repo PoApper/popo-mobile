@@ -25,8 +25,8 @@ const RoomFilterDatePicker = ({
   const dropdownStyle = [
     styles.button,
     {
-      borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
-      backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
+      backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+      borderColor: isDarkMode ? '#2C2C2C' : '#E5E7EB',
     },
     selectedDate
       ? {
@@ -92,8 +92,10 @@ export default RoomFilterDatePicker;
 const styles = StyleSheet.create({
   button: {
     borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
+    borderRadius: 10,
+    height: 38,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 15,
   },
 });
