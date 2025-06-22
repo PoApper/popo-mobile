@@ -20,8 +20,10 @@ const RoomFilterDatePicker = ({
   onDateChange,
 }: RoomFilterDatePickerProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
 
+  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const dropdownStyle = [
     styles.button,
     {
@@ -30,14 +32,10 @@ const RoomFilterDatePicker = ({
     },
     selectedDate
       ? {
-          backgroundColor: '#0000001A',
+          backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F4F6',
         }
       : {},
   ];
-
-  const handleDateConfirm = (date: Date) => {
-    onDateChange(date);
-  };
 
   return (
     <View>
@@ -52,7 +50,7 @@ const RoomFilterDatePicker = ({
           onPress={() => setDatePickerVisible(true)}
           activeOpacity={0.8}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text>
+            <Text style={{color: textColor}}>
               {selectedDate
                 ? moment(selectedDate).format('YYYY-MM-DD')
                 : '날짜'}
@@ -75,7 +73,7 @@ const RoomFilterDatePicker = ({
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
-        onConfirm={handleDateConfirm}
+        onConfirm={date => onDateChange(date)}
         onCancel={() => setDatePickerVisible(false)}
         minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
         maximumDate={new Date(new Date().setDate(new Date().getDate() + 30))}
