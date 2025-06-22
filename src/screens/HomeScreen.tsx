@@ -43,7 +43,8 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   // 사용자 정보 가져오기
   useEffect(() => {
     const fetchUserInfo = async () => {
-      api.get('/auth/myInfo')
+      api
+        .get('/auth/myInfo')
         .then(response => {
           const userData = response.data;
           setUserName(userData.name || '사용자');

@@ -136,7 +136,9 @@ export const getFCMToken = async () => {
     }
 
     // 기타 에러 처리
-    const deviceInfo = isEmulator ? `${deviceBrand} ${deviceModel} (Emulator)` : `${deviceBrand} ${deviceModel} (Real Device)`;
+    const deviceInfo = isEmulator
+      ? `${deviceBrand} ${deviceModel} (Emulator)`
+      : `${deviceBrand} ${deviceModel} (Real Device)`;
     console.error(`FCM Error on ${deviceInfo}:`);
     if (error.code) {
       console.error('Error code:', error.code);
