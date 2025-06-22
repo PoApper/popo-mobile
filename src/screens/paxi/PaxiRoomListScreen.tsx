@@ -103,7 +103,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
         <DropdownFilter
           style={dropdownStyle}
-          defaultText={'출발지'}
+          placeholderText={'출발지'}
           categories={PAXI_LOCATIONS.filter(
             item => item.id !== selectedArrival,
           )}
@@ -112,7 +112,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
         <DropdownFilter
           style={dropdownStyle}
-          defaultText={'도착지'}
+          placeholderText={'도착지'}
           categories={PAXI_LOCATIONS.filter(
             item => item.id !== selectedDeparture,
           )}

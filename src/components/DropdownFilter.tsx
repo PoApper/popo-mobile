@@ -23,8 +23,8 @@ interface Category {
 interface DropdownFilterProps {
   style?: StyleProp<ViewStyle>;
   dropdownStyle?: StyleProp<ViewStyle>;
-  defaultText?: string;
-  showDefaultTextInDropDown?: boolean;
+  placeholderText?: string;
+  showplaceholderTextInDropDown?: boolean;
   categories: Category[];
   onSelect: (selectedCategory: string | null) => void;
 }
@@ -32,8 +32,8 @@ interface DropdownFilterProps {
 const DropdownFilter: React.FC<DropdownFilterProps> = ({
   categories,
   onSelect,
-  defaultText = '필터선택',
-  showDefaultTextInDropDown = true,
+  placeholderText = '필터선택',
+  showplaceholderTextInDropDown = true,
   style,
   dropdownStyle,
 }) => {
@@ -86,7 +86,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
           ]}>
           {selected
             ? categories.find(cat => cat.id === selected)?.name
-            : defaultText}
+            : placeholderText}
         </Text>
       </TouchableOpacity>
 
@@ -108,7 +108,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
                 ]}>
                 <FlatList
                   data={[
-                    ...(showDefaultTextInDropDown
+                    ...(showplaceholderTextInDropDown
                       ? [{id: '', name: '전체보기'}]
                       : []),
                     ...categories,

@@ -7,6 +7,21 @@ export const textColor = (isDarkMode: boolean) =>
 export const borderColor = (isDarkMode: boolean) =>
   isDarkMode ? '#2C2C2C' : '#E5E7EB';
 
+export const colors = {
+  dark: {
+    background: '#121212',
+    text: '#FFFFFF',
+    placeholder: '#888888',
+    border: '#2C2C2C',
+  },
+  light: {
+    background: '#fff',
+    text: '#000000',
+    placeholder: '#AAA',
+    border: '#E5E7EB',
+  },
+};
+
 export const common = StyleSheet.create({
   safeArea: {
     flex: 1,

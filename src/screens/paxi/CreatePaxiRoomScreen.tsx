@@ -132,17 +132,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
 
-  const dropdownStyle = [
-    {
-      flex: 1,
-      backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
-    },
-  ];
-
   const TextInputStyle = [
     {
       color: isDarkMode ? '#888888' : '#AAA',
-      backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
       borderColor: borderColor,
     },
   ];
@@ -176,17 +168,20 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             <Text style={[styles.label, {color: textColor}]}>위치</Text>
             <View style={[styles.inputWrapper, TextInputStyle]}>
               <View style={styles.inputWithDot}>
-                <View style={styles.dotBlack} />
+                <View
+                  style={[
+                    styles.dotBlack,
+                    {backgroundColor: isDarkMode ? 'white' : 'black'},
+                  ]}
+                />
 
                 <DropdownMenu
-                  style={dropdownStyle}
-                  textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
-                  textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
-                  defaultText={'어디서 출발하시나요?'}
-                  categories={PAXI_LOCATIONS.filter(
+                  placeholderText={'어디서 출발하시나요?'}
+                  options={PAXI_LOCATIONS.filter(
                     item => item.id !== arrivalName,
                   )}
                   onSelect={selected => setDepartureName(selected ?? '출발지')}
+                  selected={departureName}
                 />
               </View>
               <View
@@ -199,14 +194,12 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 <View style={styles.dotRed} />
 
                 <DropdownMenu
-                  style={dropdownStyle}
-                  textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
-                  textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
-                  defaultText={'어디로 떠나시나요?'}
-                  categories={PAXI_LOCATIONS.filter(
+                  placeholderText={'어디로 떠나시나요?'}
+                  options={PAXI_LOCATIONS.filter(
                     item => item.id !== departureName,
                   )}
                   onSelect={selected => setArrivalName(selected ?? '도착지')}
+                  selected={arrivalName}
                 />
               </View>
             </View>
@@ -299,7 +292,6 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               styles.roomInput,
               {
                 color: isDarkMode ? '#888888' : '#AAA',
-                backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
                 borderColor: borderColor,
               },
               {
@@ -435,7 +427,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 15,
     fontWeight: '500',
-    marginBottom: 4,
+    marginBottom: 8,
     marginTop: 8,
   },
   formSection: {
@@ -451,7 +443,6 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   inputWrapper: {
-    backgroundColor: '#fff',
     borderRadius: 7,
     borderWidth: 1,
     borderColor: '#d0d0d0',
@@ -474,7 +465,6 @@ const styles = StyleSheet.create({
     width: 5,
     height: 5,
     borderRadius: 4,
-    backgroundColor: 'black',
     marginLeft: 5,
     marginRight: 10,
   },
