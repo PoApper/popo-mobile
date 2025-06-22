@@ -1,8 +1,6 @@
 import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import {Alert} from 'react-native';
-import {navigationRef} from '../navigation/RootNavigation';
 
 // EventEmitter 타입 선언
 declare global {
