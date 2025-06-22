@@ -17,9 +17,9 @@ import moment from 'moment';
 
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import DropdownMenu from '@components/DropdownMenu';
-import CommonHeader from '@components/CommonHeader';
 import {PAXI_LOCATIONS} from '@utils/locations';
+import CommonHeader from '@components/CommonHeader';
+import DropdownMenu from '@components/room/DropdownMenu';
 
 type CreatePaxiRoomScreenProps = {
   navigation: NativeStackNavigationProp<

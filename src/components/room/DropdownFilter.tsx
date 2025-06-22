@@ -1,3 +1,7 @@
+/**
+ * Use for filter the location in PaxiRoomListScreen
+ */
+
 import React, {useState, useRef} from 'react';
 import {
   View,

@@ -1,3 +1,7 @@
+/**
+ * Use for select the location in CreatePaxiRoomScreen
+ */
+
 import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
