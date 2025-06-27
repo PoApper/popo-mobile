@@ -815,7 +815,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   input: {
-    borderWidth: 1,
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
