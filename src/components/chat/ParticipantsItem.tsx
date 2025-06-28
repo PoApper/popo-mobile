@@ -1,9 +1,17 @@
 import React from 'react';
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {UserData} from '@interfaces/paxi';
 import paxi_api from '@utils/paxi_api';
+import {getColor} from '@utils/userchat-background';
 
 interface ParticipantItemProps {
   userInfo: UserData;
@@ -78,6 +86,11 @@ const ParticipantItem = ({
         {/* TODO: 프로필 사진 대체 */}
         <View style={styles.avatarCircle}>
           <View style={{width: 36, height: 36, position: 'relative'}}>
+            <Image
+              source={require('../../../assets/baby_phonix.png')}
+              style={[styles.profileImg, {backgroundColor: getColor(userInfo.nickname)}]}
+              resizeMode="contain"
+            />
             {userInfo.isPaid && (
               <Icon
                 name="check-circle-outline"
@@ -151,7 +164,12 @@ const styles = StyleSheet.create({
   avatarCircle: {
     width: 36,
     height: 36,
-    backgroundColor: '#ddd',
+    borderRadius: 18,
+    marginRight: 10,
+  },
+  profileImg: {
+    width: 36,
+    height: 36,
     borderRadius: 18,
     marginRight: 10,
   },
