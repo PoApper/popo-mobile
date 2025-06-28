@@ -6,10 +6,13 @@ import {
   useColorScheme,
   Alert,
   StyleSheet,
+  Image,
 } from 'react-native';
 
 import paxi_api from '@utils/paxi_api';
 import {RoomDataType} from '@interfaces/paxi';
+import DottedArrow from './DottedArrow';
+import {isoStringToFormattedText} from '@utils/isostring-format';
 
 interface RoomContainerProps {
   roomData: RoomDataType;
@@ -106,23 +109,53 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
               ]}>
               {remain < roomData.maxParticipant ? '참여 가능' : '마감'}
             </Text>
-            <Text style={[styles.title, {color: textColor}]}>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={[styles.title, {color: textColor, maxWidth: 180}]}>
               {roomData.title}
             </Text>
+            <View style={{flexDirection: 'row', gap: '5', marginLeft: 'auto'}}>
+              {roomData.currentParticipant < roomData.maxParticipant ? (
+                <Image
+                  source={require('../../../assets/baby_phonix.png')}
+                  style={styles.logoImage}
+                  resizeMode="contain"
+                />
+              ) : (
+                <Image
+                  source={require('../../../assets/baby_phonix_disabled.png')}
+                  style={styles.logoImage}
+                  resizeMode="contain"
+                />
+              )}
+              <Text
+                style={[
+                  styles.participantNumText,
+                  {
+                    color:
+                      roomData.currentParticipant < roomData.maxParticipant
+                        ? '#FA5721'
+                        : '#4f4f4f',
+                  },
+                ]}>
+                {roomData.currentParticipant}/{roomData.maxParticipant}
+              </Text>
+            </View>
           </View>
           <View style={styles.details}>
             <Text style={[styles.detailsText, {color: textColor}]}>
               {roomData.departureLocation}
             </Text>
-            <Text style={[styles.arrow, {color: textColor}]}>
-              {'  - - - - >  '}
-            </Text>
+
+            <DottedArrow width={100} height={25} color={'white'} />
+
             <Text style={[styles.detailsText, {color: textColor}]}>
               {roomData.destinationLocation}
             </Text>
           </View>
           <Text style={[styles.departureTime, {color: subTextColor}]}>
-            {roomData.departureTime}
+            {isoStringToFormattedText(roomData.departureTime)} 출발
           </Text>
         </View>
       </View>
@@ -158,11 +191,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  participantNumText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  logoImage: {
+    width: 20,
+    height: 20,
+  },
   possible: {
     fontSize: 13,
     letterSpacing: -0.1,
     fontWeight: '700',
-    borderRadius: 3,
+    borderRadius: 10,
     paddingHorizontal: 5,
     paddingVertical: 2,
   },
@@ -170,7 +211,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     letterSpacing: -0.1,
     fontWeight: '700',
-    borderRadius: 3,
+    borderRadius: 10,
     paddingHorizontal: 5,
     paddingVertical: 2,
   },
