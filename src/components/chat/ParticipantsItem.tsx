@@ -88,7 +88,10 @@ const ParticipantItem = ({
           <View style={{width: 36, height: 36, position: 'relative'}}>
             <Image
               source={require('../../../assets/baby_phonix.png')}
-              style={[styles.profileImg, {backgroundColor: getColor(userInfo.nickname)}]}
+              style={[
+                styles.profileImg,
+                {backgroundColor: getColor(userInfo.nickname)},
+              ]}
               resizeMode="contain"
             />
             {userInfo.isPaid && (

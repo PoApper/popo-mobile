@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  useColorScheme,
-  Image,
-} from 'react-native';
+import {View, Text, StyleSheet, useColorScheme, Image} from 'react-native';
 import moment from 'moment';
 
 import {MessageData} from '@interfaces/paxi';
@@ -22,7 +16,10 @@ const ParticipantMessage = ({message}: ParticipantMessageProps) => {
     <View style={styles.messageContainer}>
       <Image
         source={require('../../../assets/baby_phonix.png')}
-        style={[styles.profileImg, {backgroundColor: getColor(message.senderNickname)}]}
+        style={[
+          styles.profileImg,
+          {backgroundColor: getColor(message.senderNickname)},
+        ]}
         resizeMode="contain"
       />
       <View>

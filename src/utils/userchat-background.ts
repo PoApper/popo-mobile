@@ -21,4 +21,3 @@ const chatUserBackgroundColorMap = [
 export function getColor(text: string) {
   return chatUserBackgroundColorMap[fastHash(text)];
 }
-
