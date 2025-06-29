@@ -82,8 +82,8 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       id: '2',
       icon: 'computer',
       title: '장비예약',
-      active: false,
-      onPress: () => navigation.navigate('Login'),
+      active: true,
+      onPress: () => navigation.navigate('EquipmentReservation'),
     },
     {
       id: '3',
