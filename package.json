@@ -15,6 +15,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@notifee/react-native": "^9.1.8",
     "@react-native-community/checkbox": "^0.5.17",
     "@react-native-community/datetimepicker": "^8.3.0",
     "@react-native-cookies/cookies": "^6.2.1",
