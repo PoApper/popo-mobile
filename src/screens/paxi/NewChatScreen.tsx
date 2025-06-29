@@ -95,8 +95,6 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     setSocket(socket);
   };
 
-  console.log('myinfo', myInfo);
-
   useEffect(() => {
     getRoomInfo();
     getMyInfo();
