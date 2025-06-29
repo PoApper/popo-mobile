@@ -20,7 +20,7 @@ import ReportModal from '@components/chat/ReportModal';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import BanModal from './banModal';
+import BanModal from '@components/chat/BanModal';
 
 interface SidebarModalProps {
   modalVisible: boolean;

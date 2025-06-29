@@ -13,7 +13,6 @@ import {
 
 import {UserData} from '@interfaces/paxi';
 import {TextInput} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import paxi_api from '@utils/paxi_api';
 
 interface ReportModalProps {
@@ -29,8 +28,8 @@ const ReportModal = ({
   roomUuid,
   userData,
 }: ReportModalProps) => {
-  const modalWidth = Dimensions.get('window').width * 0.7;
-  const modalHeight = Dimensions.get('window').height * 0.5;
+  const modalWidth = Dimensions.get('window').width * 0.8;
+  const modalHeight = Dimensions.get('window').height * 0.3;
 
   const [reportText, setReportText] = useState<string>('');
 
@@ -73,10 +72,9 @@ const ReportModal = ({
             <View style={{flex: 1, width: '100%', marginBottom: 20}}>
               <View
                 style={{flexDirection: 'row', alignContent: 'center', gap: 5}}>
-                <Icon name="warning-amber" size={30} color="black" />
                 <Text style={styles.modalTitle}>신고하기</Text>
               </View>
-              <Text style={{marginBottom: 10, fontWeight: 'bold'}}>
+              <Text style={{marginBottom: 10}}>
                 정말로{' '}
                 <Text style={{color: 'darkblue'}}>{userData?.nickname}</Text>
                 님을 신고하실건가요?
