@@ -41,26 +41,29 @@ const UpcomingEvents = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchReservations = async () => {
-      try {
-        const response = await api.get<PaginatedResponse>(
-          'https://api.popo-dev.poapper.club/reservation-place/user',
-          {
-            params: {
-              skip: 0,
-              take: 5,
-            },
+    api
+      .get<PaginatedResponse>(
+        'https://api.popo-dev.poapper.club/reservation-place/user',
+        {
+          params: {
+            skip: 0,
+            take: 5,
           },
-        );
+        },
+      )
+      .then(response => {
         setReservations(response.data.items);
-      } catch (error) {
-        console.error('예약 정보 조회 오류:', error);
-      } finally {
+      })
+      .catch(error => {
+        if (error.response.status === 401) {
+          // navigation.navigate('Login');
+        } else {
+          console.error('예약 정보 조회 오류:', error);
+        }
+      })
+      .finally(() => {
         setIsLoading(false);
-      }
-    };
-
-    fetchReservations();
+      });
   }, []);
 
   const formatDate = (dateString: string) => {

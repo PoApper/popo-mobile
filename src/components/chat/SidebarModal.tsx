@@ -68,8 +68,6 @@ SidebarModalProps) => {
     }
   }, [modalVisible, slideAnim, screenWidth]);
 
-  console.log('modal', roomData);
-
   return (
     <Modal
       transparent={true}

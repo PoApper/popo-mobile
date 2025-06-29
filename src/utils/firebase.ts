@@ -42,51 +42,28 @@ export const requestUserPermission = async () => {
 
 // Firebase 메시징 토큰 가져오기
 export const getFCMToken = async () => {
+  // 1. 권한 요청 단계
+  let hasPermission: boolean;
   try {
-    // 먼저 권한 요청
-    const hasPermission = await requestUserPermission();
+    hasPermission = await requestUserPermission();
     if (!hasPermission) {
       console.log('Notification permissions not granted');
       return null;
     }
     console.log('Notification permissions granted');
+  } catch (error: any) {
+    console.error('Failed to request user permission:', error);
+    return null;
+  }
 
-    // iOS 시뮬레이터에서는 FCM 토큰을 받을 수 없음
-    if (Platform.OS === 'ios' && __DEV__) {
-      console.warn(
-        'iOS Simulator detected: FCM tokens are not available in simulator',
-      );
-      return null;
-    }
-
-    // 토큰 가져오기 시도
+  // 3. FCM 토큰 가져오기 단계
+  try {
     console.log('Attempting to get FCM token...');
     const fcmToken = await messaging().getToken();
+    console.log('FCM token successfully retrieved');
     return fcmToken;
   } catch (error: any) {
-    console.error('Failed to get FCM token. Full error:', error);
-
-    // APNS 토큰 관련 에러 처리
-    if (
-      error.code === 'messaging/unknown' &&
-      error.message.includes('No APNS token')
-    ) {
-      console.warn(
-        'APNS token not available. This is expected in iOS simulator or if APNS is not properly configured.',
-      );
-      if (Platform.OS === 'ios' && __DEV__) {
-        console.warn(
-          'Note: Push notifications do not work in iOS simulator. Test on a real device.',
-        );
-      }
-    } else {
-      if (error.code) {
-        console.error('Error code:', error.code);
-      }
-      if (error.message) {
-        console.error('Error message:', error.message);
-      }
-    }
+    console.error('Failed to get FCM token:', error);
     return null;
   }
 };
