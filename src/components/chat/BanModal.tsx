@@ -28,7 +28,7 @@ const BanModal = ({
   roomUuid,
   userData,
 }: BanModalProps) => {
-  const modalWidth = Dimensions.get('window').width * 0.8;
+  const modalWidth = Dimensions.get('window').width * 0.75;
   const modalHeight = Dimensions.get('window').height * 0.3;
 
   const [banText, setBanText] = useState<string>('');
@@ -78,8 +78,9 @@ const BanModal = ({
                 <Text style={styles.modalTitle}>추방하기</Text>
               </View>
               <Text style={{marginBottom: 10}}>
-                정말로 '<Text style={{color: 'red'}}>{userData?.nickname}</Text>
-                ' 님을 추방하실건가요?
+                '<Text style={{color: 'red'}}>{userData?.nickname}</Text>'님을
+                {'\n'}
+                정말로 추방하실건가요?
               </Text>
               <TextInput
                 style={[styles.textInput]}
@@ -101,7 +102,7 @@ const BanModal = ({
                 <Text style={styles.cancelButtonText}>취소</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.banButton, {backgroundColor: 'black'}]}
+                style={styles.banButton}
                 disabled={banText.length === 0}
                 onPress={() => {
                   handleBan(banText);
@@ -148,8 +149,8 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     borderWidth: 1,
     borderColor: '#e0e0e0',
-    borderRadius: 10,
-    paddingHorizontal: 15,
+    borderRadius: 6,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     fontSize: 12,
   },
@@ -159,12 +160,12 @@ const styles = StyleSheet.create({
   },
   banButton: {
     paddingHorizontal: 20,
-    width: '25%',
+    flex: 1,
     height: 35,
     backgroundColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 14,
+    borderRadius: 11,
   },
   banButtonText: {
     color: '#fff',
@@ -172,12 +173,12 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     paddingHorizontal: 20,
-    width: '25%',
+    flex: 1,
     height: 35,
     backgroundColor: '#f2f2f2',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 14,
+    borderRadius: 11,
   },
   cancelButtonText: {
     color: 'black',

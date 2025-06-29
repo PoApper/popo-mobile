@@ -28,7 +28,7 @@ const ReportModal = ({
   roomUuid,
   userData,
 }: ReportModalProps) => {
-  const modalWidth = Dimensions.get('window').width * 0.8;
+  const modalWidth = Dimensions.get('window').width * 0.75;
   const modalHeight = Dimensions.get('window').height * 0.3;
 
   const [reportText, setReportText] = useState<string>('');
@@ -71,13 +71,17 @@ const ReportModal = ({
             onPress={() => {}}>
             <View style={{flex: 1, width: '100%', marginBottom: 20}}>
               <View
-                style={{flexDirection: 'row', alignContent: 'center', gap: 5}}>
+                style={{
+                  flexDirection: 'row',
+                  alignContent: 'center',
+                  marginBottom: 10,
+                }}>
                 <Text style={styles.modalTitle}>신고하기</Text>
               </View>
               <Text style={{marginBottom: 10}}>
-                정말로{' '}
-                <Text style={{color: 'darkblue'}}>{userData?.nickname}</Text>
-                님을 신고하실건가요?
+                '<Text style={{color: 'red'}}>{userData?.nickname}</Text>'님을
+                {'\n'}
+                정말로 신고하실건가요?
               </Text>
               <TextInput
                 style={[styles.textInput]}
@@ -94,21 +98,18 @@ const ReportModal = ({
             {/* 신고 요청 버튼 */}
             <View style={styles.buttonView}>
               <TouchableOpacity
-                style={[
-                  styles.reportButton,
-                  {backgroundColor: reportText.length === 0 ? 'grey' : 'black'},
-                ]}
+                style={styles.cancelButton}
+                onPress={() => handleClose()}>
+                <Text style={styles.cancelButtonText}>취소</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.reportButton}
                 disabled={reportText.length === 0}
                 onPress={() => {
                   handleReport(reportText);
                   handleClose();
                 }}>
-                <Text style={styles.reportButtonText}>신고하기</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={() => handleClose()}>
-                <Text style={styles.cancelButtonText}>취소하기</Text>
+                <Text style={styles.reportButtonText}>신고</Text>
               </TouchableOpacity>
             </View>
           </Pressable>
@@ -139,8 +140,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   modalTitle: {
-    fontSize: 25,
-    letterSpacing: -0.4,
+    fontSize: 20,
     fontWeight: 'bold',
     color: 'black',
   },
@@ -150,10 +150,10 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     borderWidth: 1,
     borderColor: '#e0e0e0',
-    borderRadius: 16,
-    paddingHorizontal: 15,
+    borderRadius: 6,
+    paddingHorizontal: 10,
     paddingVertical: 10,
-    fontSize: 16,
+    fontSize: 12,
   },
   buttonView: {
     flexDirection: 'row',
@@ -161,11 +161,12 @@ const styles = StyleSheet.create({
   },
   reportButton: {
     paddingHorizontal: 20,
-    height: 40,
+    flex: 1,
+    height: 35,
     backgroundColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 20,
+    borderRadius: 11,
   },
   reportButtonText: {
     color: '#fff',
@@ -173,11 +174,12 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     paddingHorizontal: 20,
-    height: 40,
+    flex: 1,
+    height: 35,
     backgroundColor: '#f2f2f2',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 20,
+    borderRadius: 11,
   },
   cancelButtonText: {
     color: 'black',
