@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,10 +12,11 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../navigation/types';
-import paxi_api from '../../utils/paxi_api';
-
 import {RouteProp, useRoute} from '@react-navigation/native';
+
+import {RootStackParamList} from '@navigation/types';
+import paxi_api from '@utils/paxi_api';
+import {SettlementCreateData, SettlementInfoData} from '@interfaces/paxi';
 
 type SettlementScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Settlement'>;
@@ -23,69 +24,61 @@ type SettlementScreenProps = {
 
 type SettlementScreenRouteProp = RouteProp<RootStackParamList, 'Settlement'>;
 
-interface SettlementData {
-  payAmount: number;
-  payerBankName: string;
-  payerAccountNumber: string;
-  payerAccountHolderName: string;
-  updateAccount: boolean;
-  roomUuid: string;
-}
-
-async function requestSettlement(settlementData: SettlementData) {
-  try {
-    console.log(settlementData.roomUuid);
-    const res = await paxi_api.post(
-      `/room/${settlementData.roomUuid}/settlement2`,
-      {
-        payAmount: settlementData.payAmount,
-        payerAccountNumber: settlementData.payerAccountNumber,
-        payerAccountHolderName: settlementData.payerAccountHolderName,
-        payerBankName: settlementData.payerBankName,
-        updateAccount: settlementData.updateAccount,
-      },
-    );
-
-    return res.status;
-  } catch (error: string | any) {
-    console.error('Error:', error);
-  }
-}
-
 const SettlementScreen = ({navigation}: SettlementScreenProps) => {
   const route = useRoute<SettlementScreenRouteProp>();
   const {roomUuid} = route.params;
 
-  const [bankName, setbankName] = useState('');
-  const [accountNumber, setAccountNumber] = useState('');
-  const [accountName, setAccountName] = useState('');
-  const [totalCost, setTotalCost] = useState('');
+  const [bankName, setbankName] = useState<string | undefined>(undefined);
+  const [accountNumber, setAccountNumber] = useState<string | undefined>(
+    undefined,
+  );
+  const [accountName, setAccountName] = useState<string | undefined>(undefined);
+  const [totalCost, setTotalCost] = useState<number | undefined>(undefined);
+  const [isUpdateAccount, setIsUpdateAccount] = useState<boolean>(false);
+  const [isAlreadyRequested, setIsAlreadyRequested] = useState<boolean>(false);
+
+  useEffect(() => {
+    paxi_api.get(`/room/${roomUuid}/settlement`).then(res => {
+      const settlementInfo = res.data as SettlementInfoData;
+      if (settlementInfo.payAmount > 0) {
+        setIsAlreadyRequested(true);
+      }
+      console.log(settlementInfo);
+      setbankName(settlementInfo.payerBankName);
+      setAccountNumber(settlementInfo.payerAccountNumber);
+      setAccountName(settlementInfo.payerAccountHolderName);
+      setTotalCost(settlementInfo.payAmount);
+      setIsAlreadyRequested(true);
+    });
+  }, []);
 
   const checkInputValid = () => {
     if (!bankName || !accountNumber || !accountName || !totalCost) {
       Alert.alert('오류', '모든 필수 필드를 입력해주세요.');
       return;
-    } else {
-      requestSettlement({
-        payerBankName: bankName,
+    }
+    paxi_api
+      .post(`/room/${roomUuid}/settlement`, {
+        payAmount: Number(totalCost),
         payerAccountNumber: accountNumber,
         payerAccountHolderName: accountName,
-        payAmount: Number(totalCost),
-        roomUuid: roomUuid,
-        updateAccount: false,
+        payerBankName: bankName,
+        updateAccount: isUpdateAccount,
+      } as SettlementCreateData)
+      .then(res => {
+        if (res.status !== 201) {
+          Alert.alert('실패', `response: ${res.status}`);
+        } else {
+          Alert.alert('성공', '정산 요청을 보냈습니다.');
+          navigation.goBack();
+        }
       })
-        .then(result => {
-          if (result !== 201) {
-            Alert.alert('실패', 'response: ' + result?.toString());
-          } else {
-            Alert.alert('성공', '정산 요청을 보냈습니다.');
-            navigation.goBack();
-          }
-        })
-        .catch(error => {
-          Alert.alert('실패', '정산 요청에 실패했습니다: ' + error.message);
-        });
-    }
+      .catch(error => {
+        Alert.alert(
+          '실패',
+          `정산 요청에 실패했습니다: ${error.message} ${error.response.data.message}`,
+        );
+      });
   };
 
   const isDarkMode = useColorScheme() === 'dark';
@@ -112,6 +105,14 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         <View style={styles.placeholderButton} />
       </View>
 
+      {isAlreadyRequested && (
+        <View style={styles.alreadyRequestedContainer}>
+          <Text style={styles.alreadyRequestedText}>
+            이미 생성된 정산 요청이 있습니다.
+          </Text>
+        </View>
+      )}
+
       <ScrollView>
         <View style={styles.container}>
           <View style={{width: '100%', marginBottom: 8}}>
@@ -125,7 +126,11 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                   color: textColor,
                 },
+                {
+                  backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
+                },
               ]}
+              editable={!isAlreadyRequested}
               placeholder="은행명을 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={bankName}
@@ -144,11 +149,20 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                   color: textColor,
                 },
+                {
+                  backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
+                },
               ]}
+              editable={!isAlreadyRequested}
               placeholder="계좌번호를 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={accountNumber}
-              onChangeText={setAccountNumber}
+              onChangeText={text => {
+                // 숫자만 허용
+                const numericText = text.replace(/[^0-9]/g, '');
+                setAccountNumber(numericText);
+              }}
+              keyboardType="numeric"
             />
           </View>
 
@@ -163,7 +177,11 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                   color: textColor,
                 },
+                {
+                  backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
+                },
               ]}
+              editable={!isAlreadyRequested}
               placeholder="계좌주명을 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={accountName}
@@ -182,16 +200,49 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                   color: textColor,
                 },
+                {
+                  backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
+                },
               ]}
+              editable={!isAlreadyRequested}
               placeholder="정산금액을 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
-              value={totalCost}
-              onChangeText={setTotalCost}
+              value={totalCost?.toString()}
+              onChangeText={text => {
+                // 숫자만 허용
+                const numericText = text.replace(/[^0-9]/g, '');
+                if (numericText == '') {
+                  setTotalCost(undefined);
+                } else {
+                  setTotalCost(Number(numericText));
+                }
+              }}
+              keyboardType="numeric"
             />
             <Text style={[styles.infoText]}>
               총 금액을 입력해주세요! 자동으로 N분의 1 처리한 금액을
               요청해드릴게요.
             </Text>
+          </View>
+
+          <View style={[styles.checkboxContainer, {marginTop: 20}]}>
+            <TouchableOpacity
+              style={styles.checkboxRow}
+              onPress={() => setIsUpdateAccount(!isUpdateAccount)}>
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    backgroundColor: isUpdateAccount ? '#000' : 'transparent',
+                    borderColor: isDarkMode ? '#555' : '#D0D0D0',
+                  },
+                ]}>
+                {isUpdateAccount && <Text style={styles.checkmark}>✓</Text>}
+              </View>
+              <Text style={[styles.checkboxText, {color: textColor}]}>
+                이 계좌 정보를 기본값으로 업데이트
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -199,12 +250,20 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
           style={[
             styles.nextButton,
             {
-              backgroundColor: 'black',
+              backgroundColor: isAlreadyRequested ? '#d0d0d0' : 'black',
             },
           ]}
           onPress={() => checkInputValid()}
-          disabled={!bankName || !accountNumber || !accountName}>
-          <Text style={styles.nextButtonText}>정산 요청하기</Text>
+          disabled={
+            !bankName || !accountNumber || !accountName || isAlreadyRequested
+          }>
+          <Text
+            style={[
+              styles.nextButtonText,
+              {color: isAlreadyRequested ? '#808080' : '#ffffff'},
+            ]}>
+            정산 요청하기
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -328,5 +387,42 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: 'red',
     marginRight: 10,
+  },
+  checkboxContainer: {
+    width: '100%',
+  },
+  checkboxRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderRadius: 3,
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkmark: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  checkboxText: {
+    fontSize: 14,
+    flex: 1,
+  },
+  alreadyRequestedContainer: {
+    backgroundColor: '#FFE500', // warning color (yellow)
+    padding: 16,
+    borderRadius: 6,
+    marginBottom: 10,
+    marginTop: 10,
+    marginLeft: '5%',
+    marginRight: '5%',
+  },
+  alreadyRequestedText: {
+    fontSize: 14,
   },
 });

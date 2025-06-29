@@ -11,9 +11,11 @@ import {
   Alert,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+import {RootStackParamList} from '../../navigation/types';
 import axios from 'axios';
-import paxi_api from '../utils/paxi_api';
+import paxi_api from '../../utils/paxi_api';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import moment from 'moment';
 
 interface RoomData {
   title: string;
@@ -25,7 +27,7 @@ interface RoomData {
 }
 
 interface TaxiChatListProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
 }
 
 const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
@@ -77,20 +79,6 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
     fetchReservations();
   }, []);
 
-  const formatDateTime = (dateTimeStr: string): string => {
-    if (!dateTimeStr) {
-      return '';
-    }
-    const date = new Date(dateTimeStr);
-    // YYYY-MM-DD HH:mm 형식
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-      2,
-      '0',
-    )}-${String(date.getDate()).padStart(2, '0')} ${String(
-      date.getHours(),
-    ).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-  };
-
   const renderReservationItem = ({item}: {item: RoomData}) => (
     <TouchableOpacity
       style={{
@@ -120,31 +108,22 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
             styles.detailValue,
             {color: textColor, marginTop: 4, fontSize: 14, fontWeight: '400'},
           ]}>
-          {formatDateTime(item.departureTime)}
+          {moment(item.departureTime).format('YYYY-MM-DD HH:mm')} 출발
         </Text>
       </View>
-
-      <View>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Chat', {roomUuid: item.uuid})}
-          style={{backgroundColor: 'red'}}>
-          <Text>Prev Chat Screen</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{backgroundColor: 'blue'}}
-          onPress={() => navigation.navigate('NewChat', {roomUuid: item.uuid})}>
-          <Text>New Chat Screen</Text>
-        </TouchableOpacity>
-      </View>
-      <View
+      <TouchableOpacity
         style={{
           width: 48,
           height: 48,
           backgroundColor: '#F3F4F6',
           borderRadius: 8,
           marginLeft: 12,
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
-      />
+        onPress={() => navigation.navigate('NewChat', {roomUuid: item.uuid})}>
+        <Icon name="message" size={22} color="#222" />
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 
@@ -187,18 +166,13 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
     return (
       <View style={styles.emptyContainer}>
         <Image
-          source={require('../../assets/icon/POPO_typography_bg_removed_cropped.png')}
+          source={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
           style={styles.emptyImage}
           resizeMode="contain"
         />
         <Text style={[styles.emptyText, {color: textColor}]}>
-          예약 내역이 없습니다.
+          택시 예약 내역이 없습니다.
         </Text>
-        <TouchableOpacity
-          style={styles.newReservationButton}
-          onPress={() => Alert.alert('알림', '새 예약 기능은 준비 중입니다.')}>
-          <Text style={styles.newReservationButtonText}>새 예약 만들기</Text>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -236,12 +210,12 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
 const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
   },
   reservationTitle: {
     fontSize: 18,
     fontWeight: '600',
-    marginRight: 8,
+    marginBottom: 4,
   },
   statusBadge: {
     paddingHorizontal: 8,

@@ -48,8 +48,8 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
         const userData = response.data;
         setUserName(userData.name || '사용자');
       } catch (error) {
-        console.error('저장된 사용자 정보 로드 오류:', error);
-        setUserName('사용자');
+        // navigate to login screen
+        navigation.navigate('Login');
       }
     };
 

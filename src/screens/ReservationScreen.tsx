@@ -11,20 +11,22 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '../navigation/types';
-import ReservationList from '../components/ReservationList';
-import EquipReservationList from '../components/EquipReservationList';
-import TaxiChatList from '../components/TaxiChatList';
+
+import {RootStackParamList} from '@navigation/types';
+import ReservationList from '@components/ReservationList';
+import EquipReservationList from '@components/EquipReservationList';
+import TaxiChatList from '@components/chat/TaxiChatList';
 
 type ReservationScreenProps = {
-  navigation?: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
-  route?: RouteProp<RootStackParamList, 'Reservation'>;
+  navigation?: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
+  route?: RouteProp<RootStackParamList, 'MyReservation'>;
 };
 
 type TabType = 'place' | 'equipment' | 'taxi';
 
 const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+
   const [activeTab, setActiveTab] = useState<TabType>('place');
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
 

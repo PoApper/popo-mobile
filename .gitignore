@@ -91,3 +91,7 @@ ios/*/build/
 # Firebase
 google-services.json
 GoogleService-info.plist
+
+# Android
+*.aab
+*.apk

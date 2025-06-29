@@ -19,19 +19,18 @@ export interface ChatRoomInfo {
   description: string;
   payerUuid: string;
   payAmount: number;
-  roomUser: UserData[];
+  room_users: UserData[];
 }
 
 export interface MessageData {
   uuid: string;
   senderUuid: string;
-  senderName: string;
+  senderNickname: string;
   message: string;
   messageType: string;
   createdAt: any;
   updatedAt: any;
   avatar: any;
-  isMe: boolean;
 }
 
 export interface SettlementData {
@@ -42,6 +41,28 @@ export interface SettlementData {
   payerAccountHolderName: string;
   updateAccount: boolean;
   roomUuid: string;
+}
+
+export interface SettlementCreateData {
+  payAmount: number;
+  currentParticipant: number;
+  payerBankName: string;
+  payerAccountNumber: string;
+  payerAccountHolderName: string;
+  updateAccount: boolean;
+  roomUuid: string;
+}
+
+export interface SettlementInfoData {
+  roomUuid: string;
+  payerUuid: string;
+  payerNickname: string;
+  payerAccountNumber: string;
+  payerAccountHolderName: string;
+  payerBankName: string;
+  payAmount: number;
+  currentParticipant: number;
+  payAmountPerPerson: number;
 }
 
 export interface PaxiUser {

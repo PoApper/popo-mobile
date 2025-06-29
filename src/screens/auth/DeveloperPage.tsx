@@ -21,6 +21,7 @@ import {getAuthToken} from '@utils/auth-token';
 import api from '@utils/api';
 import paxi_api from '@utils/paxi_api';
 import CommonHeader from '@components/CommonHeader';
+import {POPO_API_URL} from '@utils/api';
 
 type DeveloperPageProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Developer'>;
@@ -110,6 +111,40 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
             {backgroundColor: cardBgColor, borderColor},
           ]}>
           <View style={styles.detailSection}>
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+              <View style={styles.sectionTitleRow}>
+                <View style={styles.titleContainer}>
+                  <Text
+                    style={[
+                      styles.detailLabel,
+                      {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                    ]}>
+                    API URL
+                  </Text>
+                </View>
+                <View style={styles.iconContainer}>
+                  {userDataState?.uuid && (
+                    <TouchableOpacity
+                      style={styles.copyIconButton}
+                      onPress={() => copyToClipboard(userDataState.uuid)}>
+                      <Icon
+                        name="content-copy"
+                        size={16}
+                        color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+              <View style={styles.tokenContainer}>
+                <Text
+                  style={[styles.tokenValue, {color: textColor}]}
+                  selectable={true}>
+                  {POPO_API_URL || '정보 없음'}
+                </Text>
+              </View>
+            </View>
+
             {/* UUID 정보 */}
             <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
               <View style={styles.sectionTitleRow}>

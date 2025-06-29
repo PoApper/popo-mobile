@@ -7,15 +7,19 @@ import {
   TouchableOpacity,
   useColorScheme,
   StatusBar,
-  ScrollView,
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import moment from 'moment';
+
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import DropdownMenu from '@components/DropdownMenu';
+import {PAXI_LOCATIONS} from '@utils/locations';
+import CommonHeader from '@components/CommonHeader';
+import DropdownMenu from '@components/room/DropdownMenu';
 
 type CreatePaxiRoomScreenProps = {
   navigation: NativeStackNavigationProp<
@@ -33,15 +37,23 @@ interface NewRoomBody {
   maxParticipant: number;
 }
 
+// 10분 단위로 올림
+function roundUpToNearest10Minutes(date: Date) {
+  const ms = 1000 * 60 * 10;
+  return new Date(Math.ceil(date.getTime() / ms) * ms);
+}
+
 const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const [roomName, setRoomName] = useState('');
   const [roomDetails, setRoomDetails] = useState('');
   const [departureName, setDepartureName] = useState('');
   const [arrivalName, setArrivalName] = useState('');
   const [maxParticipants, setMaxParticipants] = useState(4);
-  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [selectedDateTime, setSelectedDateTime] = useState(
+    roundUpToNearest10Minutes(new Date()),
+  );
+  const [isDatePickerVisible, setDatePickerVisible] = useState(false);
+  const [isTimePickerVisible, setTimePickerVisible] = useState(false);
 
   async function createNewRoom() {
     const body: NewRoomBody = {
@@ -67,36 +79,32 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
       });
   }
 
-  const onDatePicked = (event: any, selectedDate?: Date) => {
-    selectedDate = selectedDate || new Date();
+  const handleDateConfirm = (date: Date) => {
     setSelectedDateTime(
-      prev =>
-        new Date(
-          selectedDate.getFullYear(),
-          selectedDate.getMonth(),
-          selectedDate.getDate(),
-          prev.getHours(),
-          prev.getMinutes(),
-          prev.getSeconds(),
-        ),
+      new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        selectedDateTime.getHours(),
+        selectedDateTime.getMinutes(),
+        selectedDateTime.getSeconds(),
+      ),
     );
-    setShowDatePicker(false);
+    setDatePickerVisible(false);
   };
 
-  const onTimePicked = (event: any, selectedTime?: Date) => {
-    selectedTime = selectedTime || new Date();
+  const handleTimeConfirm = (time: Date) => {
     setSelectedDateTime(
-      prev =>
-        new Date(
-          prev.getFullYear(),
-          prev.getMonth(),
-          prev.getDate(),
-          selectedTime.getHours(),
-          selectedTime.getMinutes(),
-          selectedTime.getSeconds(),
-        ),
+      new Date(
+        selectedDateTime.getFullYear(),
+        selectedDateTime.getMonth(),
+        selectedDateTime.getDate(),
+        time.getHours(),
+        time.getMinutes(),
+        time.getSeconds(),
+      ),
     );
-    setShowTimePicker(false);
+    setTimePickerVisible(false);
   };
 
   const checkInputValid = () => {
@@ -123,52 +131,27 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#121212' : '#fff',
-    flex: 1,
-  };
-
-  const dropdownStyle = [
-    {
-      backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
-    },
-  ];
-
-  const locations = [
-    {name: '지곡회관'},
-    {name: '학생회관'},
-    {name: '체인지업그라운드'},
-    {name: '포항역'},
-    {name: '터미널'},
-  ];
 
   const TextInputStyle = [
     {
       color: isDarkMode ? '#888888' : '#AAA',
-      backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
       borderColor: borderColor,
     },
   ];
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView
+      style={{flex: 1, backgroundColor: isDarkMode ? '#121212' : '#fff'}}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+        backgroundColor={isDarkMode ? '#121212' : '#fff'}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>
-          방 생성하기
-        </Text>
-        <View style={styles.placeholderButton} />
-      </View>
-
-      <ScrollView contentContainerStyle={{padding: 20}}>
+      <CommonHeader navigation={navigation} title="방 생성하기" />
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        extraScrollHeight={100}>
         <View style={styles.formSection}>
           <View>
             <Text style={[styles.label, {color: textColor}]}>방 제목</Text>
@@ -185,15 +168,20 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             <Text style={[styles.label, {color: textColor}]}>위치</Text>
             <View style={[styles.inputWrapper, TextInputStyle]}>
               <View style={styles.inputWithDot}>
-                <View style={styles.dotBlack} />
+                <View
+                  style={[
+                    styles.dotBlack,
+                    {backgroundColor: isDarkMode ? 'white' : 'black'},
+                  ]}
+                />
 
                 <DropdownMenu
-                  style={[{width: 300}, dropdownStyle]}
-                  textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
-                  textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
-                  defaultText={'어디서 출발하시나요?'}
-                  categories={locations}
+                  placeholderText={'어디서 출발하시나요?'}
+                  options={PAXI_LOCATIONS.filter(
+                    item => item.id !== arrivalName,
+                  )}
                   onSelect={selected => setDepartureName(selected ?? '출발지')}
+                  selected={departureName}
                 />
               </View>
               <View
@@ -206,12 +194,12 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 <View style={styles.dotRed} />
 
                 <DropdownMenu
-                  style={[{width: 300}, dropdownStyle]}
-                  textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
-                  textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
-                  defaultText={'어디로 떠나시나요?'}
-                  categories={locations}
+                  placeholderText={'어디로 떠나시나요?'}
+                  options={PAXI_LOCATIONS.filter(
+                    item => item.id !== departureName,
+                  )}
                   onSelect={selected => setArrivalName(selected ?? '도착지')}
+                  selected={arrivalName}
                 />
               </View>
             </View>
@@ -230,24 +218,20 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               <TouchableOpacity
                 style={{
                   borderWidth: 1,
-                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                  borderColor: isDatePickerVisible
+                    ? '#FB5353'
+                    : isDarkMode
+                    ? '#2C2C2C'
+                    : '#D0D0D0',
                   borderRadius: 6,
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                 }}
-                onPress={() => setShowDatePicker(true)}>
+                onPress={() => setDatePickerVisible(true)}>
                 <Text style={{color: textColor}}>
-                  {selectedDateTime.toLocaleDateString()}
+                  {moment(selectedDateTime).format('YYYY년 MM월 DD일')}
                 </Text>
               </TouchableOpacity>
-              {showDatePicker && (
-                <DateTimePicker
-                  value={selectedDateTime}
-                  mode="date"
-                  display="default"
-                  onChange={onDatePicked}
-                />
-              )}
             </View>
             <View style={{width: '48%'}}>
               <Text style={[styles.titleText, {color: textColor}]}>
@@ -256,12 +240,16 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               <TouchableOpacity
                 style={{
                   borderWidth: 1,
-                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                  borderColor: isTimePickerVisible
+                    ? '#FB5353'
+                    : isDarkMode
+                    ? '#2C2C2C'
+                    : '#D0D0D0',
                   borderRadius: 6,
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                 }}
-                onPress={() => setShowTimePicker(true)}>
+                onPress={() => setTimePickerVisible(true)}>
                 <Text style={{color: textColor}}>
                   {selectedDateTime.toLocaleTimeString([], {
                     hour: '2-digit',
@@ -269,17 +257,34 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                   })}
                 </Text>
               </TouchableOpacity>
-
-              {showTimePicker && (
-                <DateTimePicker
-                  value={selectedDateTime}
-                  mode="time"
-                  display="default"
-                  onChange={onTimePicked}
-                />
-              )}
             </View>
           </View>
+
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleDateConfirm}
+            onCancel={() => setDatePickerVisible(false)}
+            minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
+            maximumDate={
+              new Date(new Date().setDate(new Date().getDate() + 30))
+            }
+            locale="ko-KR"
+            confirmTextIOS="확인"
+            cancelTextIOS="취소"
+          />
+
+          <DateTimePickerModal
+            isVisible={isTimePickerVisible}
+            mode="time"
+            onConfirm={handleTimeConfirm}
+            onCancel={() => setTimePickerVisible(false)}
+            is24Hour={true}
+            confirmTextIOS="확인"
+            cancelTextIOS="취소"
+            minimumDate={roundUpToNearest10Minutes(new Date())}
+            minuteInterval={10}
+          />
 
           <Text style={[styles.titleText, {color: textColor}]}>상세내용</Text>
           <TextInput
@@ -287,7 +292,6 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               styles.roomInput,
               {
                 color: isDarkMode ? '#888888' : '#AAA',
-                backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
                 borderColor: borderColor,
               },
               {
@@ -322,7 +326,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                   paddingVertical: 10,
                 }}
                 onPress={() =>
-                  setMaxParticipants(Math.max(1, maxParticipants - 1))
+                  setMaxParticipants(Math.max(2, maxParticipants - 1))
                 }>
                 <Text
                   style={{
@@ -360,20 +364,20 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               </TouchableOpacity>
             </View>
           </View>
-
-          <TouchableOpacity
-            style={[
-              styles.nextButton,
-              {
-                backgroundColor: isDarkMode ? '#FB5353' : '#fff',
-              },
-            ]}
-            onPress={() => checkInputValid()}
-            disabled={!roomName || !departureName || !arrivalName}>
-            <Text style={styles.nextButtonText}>방 생성하기</Text>
-          </TouchableOpacity>
         </View>
-      </ScrollView>
+        <TouchableOpacity
+          style={[styles.createButton]}
+          onPress={() => checkInputValid()}
+          disabled={
+            !roomName ||
+            !departureName ||
+            !arrivalName ||
+            !selectedDateTime ||
+            !roomDetails
+          }>
+          <Text style={styles.createButtonText}>방 생성하기</Text>
+        </TouchableOpacity>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
@@ -381,25 +385,13 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
 export default CreatePaxiRoomScreen;
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+  container: {
     flex: 1,
-    textAlign: 'center',
-  },
-  backButton: {
-    padding: 8,
-  },
-  backButtonText: {
-    fontSize: 16,
+    alignItems: 'center',
+    paddingRight: '5%',
+    paddingLeft: '5%',
+    paddingTop: '5%',
+    marginBottom: 0,
   },
   placeholderButton: {
     width: 40,
@@ -416,7 +408,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginBottom: 10,
   },
-  nextButton: {
+  createButton: {
     borderRadius: 6,
     backgroundColor: '#FB5353',
     width: '100%',
@@ -425,7 +417,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  nextButtonText: {
+  createButtonText: {
     fontSize: 13,
     fontWeight: '500',
     fontFamily: 'Pretendard',
@@ -435,7 +427,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 15,
     fontWeight: '500',
-    marginBottom: 4,
+    marginBottom: 8,
     marginTop: 8,
   },
   formSection: {
@@ -448,16 +440,9 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     marginBottom: 16,
-  },
-  container: {
-    alignItems: 'center',
-    paddingRight: '5%',
-    paddingLeft: '5%',
-    paddingTop: '5%',
-    marginBottom: 0,
+    textAlignVertical: 'top',
   },
   inputWrapper: {
-    backgroundColor: '#fff',
     borderRadius: 7,
     borderWidth: 1,
     borderColor: '#d0d0d0',
@@ -468,6 +453,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 10,
     height: 42,
+    width: '100%',
   },
   separator: {
     height: 1,
@@ -479,7 +465,6 @@ const styles = StyleSheet.create({
     width: 5,
     height: 5,
     borderRadius: 4,
-    backgroundColor: 'black',
     marginLeft: 5,
     marginRight: 10,
   },
