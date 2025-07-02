@@ -8,11 +8,11 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
+import moment from 'moment';
 
 import paxi_api from '@utils/paxi_api';
 import {RoomDataType} from '@interfaces/paxi';
 import DottedArrow from './DottedArrow';
-import {isoStringToFormattedText} from '@utils/isostring-format';
 
 interface RoomContainerProps {
   roomData: RoomDataType;
@@ -155,7 +155,10 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
             </Text>
           </View>
           <Text style={[styles.departureTime, {color: subTextColor}]}>
-            {isoStringToFormattedText(roomData.departureTime)} 출발
+            {moment(roomData.departureTime).format(
+              'YYYY년 MM월 DD일 HH시 mm분',
+            )}{' '}
+            출발
           </Text>
         </View>
       </View>
