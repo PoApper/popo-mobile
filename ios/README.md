@@ -2,7 +2,8 @@
 
 `package.json` 파일에 변동이 있으면, 꼭 ios에서도 CocoaPods의 의존성이 업뎃 되도록 합니다.
 
-```
+```bash
+$ cd ios
 $ pod install
 ```
 
@@ -13,6 +14,7 @@ $ pod install
 $ cd ios
 $ rm -rf Pods
 $ rm -f Podfile.lock
+$ rm -rf build
 
 # on any dir
 $ rm -rf ~/Library/Developer/Xcode/DerivedData/*

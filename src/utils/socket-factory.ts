@@ -1,7 +1,7 @@
 import {io} from 'socket.io-client';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-const SOCKET_URL = 'https://api.paxi-dev.popo.poapper.club';
+const SOCKET_URL = 'https://api.paxi.popo-dev.poapper.club';
 
 export const socketFactory = async () => {
   const token = (await EncryptedStorage.getItem('auth_token')) ?? '';

@@ -1,8 +1,16 @@
 # Android
 
+## Emulator
+
+Google Play에 접속 가능한 Emulator를 사용해야 합니다. Google Play 접속이 가능해야 Emulator에서 Firebase Token 값을 받을 수 있습니다.
+
+`Pixel 9 Pro` 계열의 Emulator 사용을 권장 합니다. `Medium Phone API 36.0`과 같은 Emulator는 Google Play에 접속이 안 되는 경우가 있습니다.
+
 ## Gradle
 
 `android/` 경로에서 실행해야 합니다.
+
+빌드 캐시를 초기화 하거나, `build.gradle`, `AndroidManifest.xml` 파일이 수정된 후에는 아래의 `clean` 명령어를 수행합니다.
 
 ```bash
 $ ./gradlew clean

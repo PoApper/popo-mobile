@@ -46,7 +46,6 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
     const fetchAuthToken = async () => {
       try {
         const token = await getAuthToken();
-        console.log('정상적으로 가져온 authTokenData', token);
         setAuthTokenData(token);
       } catch (error) {
         console.error('Auth Token 가져오기 오류:', error);

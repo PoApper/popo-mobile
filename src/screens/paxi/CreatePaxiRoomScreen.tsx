@@ -17,9 +17,9 @@ import moment from 'moment';
 
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import DropdownMenu from '@components/DropdownMenu';
-import CommonHeader from '@components/CommonHeader';
 import {PAXI_LOCATIONS} from '@utils/locations';
+import CommonHeader from '@components/CommonHeader';
+import DropdownMenu from '@components/room/DropdownMenu';
 
 type CreatePaxiRoomScreenProps = {
   navigation: NativeStackNavigationProp<
@@ -132,16 +132,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
 
-  const dropdownStyle = [
-    {
-      backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
-    },
-  ];
-
   const TextInputStyle = [
     {
       color: isDarkMode ? '#888888' : '#AAA',
-      backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
       borderColor: borderColor,
     },
   ];
@@ -175,15 +168,20 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             <Text style={[styles.label, {color: textColor}]}>위치</Text>
             <View style={[styles.inputWrapper, TextInputStyle]}>
               <View style={styles.inputWithDot}>
-                <View style={styles.dotBlack} />
+                <View
+                  style={[
+                    styles.dotBlack,
+                    {backgroundColor: isDarkMode ? 'white' : 'black'},
+                  ]}
+                />
 
                 <DropdownMenu
-                  style={[{width: 300}, dropdownStyle]}
-                  textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
-                  textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
-                  defaultText={'어디서 출발하시나요?'}
-                  categories={PAXI_LOCATIONS}
+                  placeholderText={'어디서 출발하시나요?'}
+                  options={PAXI_LOCATIONS.filter(
+                    item => item.id !== arrivalName,
+                  )}
                   onSelect={selected => setDepartureName(selected ?? '출발지')}
+                  selected={departureName}
                 />
               </View>
               <View
@@ -196,12 +194,12 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 <View style={styles.dotRed} />
 
                 <DropdownMenu
-                  style={[{width: 300}, dropdownStyle]}
-                  textStyle={{color: isDarkMode ? '#555' : '#d0d0d0'}}
-                  textSelectedStyle={{color: isDarkMode ? 'white' : 'black'}}
-                  defaultText={'어디로 떠나시나요?'}
-                  categories={PAXI_LOCATIONS}
+                  placeholderText={'어디로 떠나시나요?'}
+                  options={PAXI_LOCATIONS.filter(
+                    item => item.id !== departureName,
+                  )}
                   onSelect={selected => setArrivalName(selected ?? '도착지')}
+                  selected={arrivalName}
                 />
               </View>
             </View>
@@ -294,7 +292,6 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               styles.roomInput,
               {
                 color: isDarkMode ? '#888888' : '#AAA',
-                backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
                 borderColor: borderColor,
               },
               {
@@ -430,7 +427,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 15,
     fontWeight: '500',
-    marginBottom: 4,
+    marginBottom: 8,
     marginTop: 8,
   },
   formSection: {
@@ -443,9 +440,9 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     marginBottom: 16,
+    textAlignVertical: 'top',
   },
   inputWrapper: {
-    backgroundColor: '#fff',
     borderRadius: 7,
     borderWidth: 1,
     borderColor: '#d0d0d0',
@@ -456,6 +453,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 10,
     height: 42,
+    width: '100%',
   },
   separator: {
     height: 1,
@@ -467,7 +465,6 @@ const styles = StyleSheet.create({
     width: 5,
     height: 5,
     borderRadius: 4,
-    backgroundColor: 'black',
     marginLeft: 5,
     marginRight: 10,
   },

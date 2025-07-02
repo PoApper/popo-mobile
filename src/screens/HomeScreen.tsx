@@ -43,14 +43,19 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   // 사용자 정보 가져오기
   useEffect(() => {
     const fetchUserInfo = async () => {
-      try {
-        const response = await api.get('/auth/myInfo');
-        const userData = response.data;
-        setUserName(userData.name || '사용자');
-      } catch (error) {
-        // navigate to login screen
-        navigation.navigate('Login');
-      }
+      api
+        .get('/auth/myInfo')
+        .then(response => {
+          const userData = response.data;
+          setUserName(userData.name || '사용자');
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            navigation.navigate('Login');
+          } else {
+            console.error('사용자 정보 조회 오류:', error);
+          }
+        });
     };
 
     fetchUserInfo();
@@ -77,8 +82,8 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       id: '2',
       icon: 'computer',
       title: '장비예약',
-      active: false,
-      onPress: () => navigation.navigate('Login'),
+      active: true,
+      onPress: () => navigation.navigate('EquipmentReservation'),
     },
     {
       id: '3',

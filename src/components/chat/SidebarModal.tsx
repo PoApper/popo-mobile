@@ -10,15 +10,17 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import {useEffect, useRef} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import {ChatRoomInfo} from '@interfaces/paxi';
+import {ChatRoomInfo, UserData} from '@interfaces/paxi';
 import RoomInfoBox from '@components/chat/RoomInfoBox';
 import ParticipantItem from '@components/chat/ParticipantsItem';
+import ReportModal from '@components/chat/ReportModal';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
+import BanModal from '@components/chat/BanModal';
 
 interface SidebarModalProps {
   modalVisible: boolean;
@@ -39,6 +41,10 @@ const SidebarModal = ({
 SidebarModalProps) => {
   const screenWidth = Dimensions.get('window').width;
   const slideAnim = useRef(new Animated.Value(screenWidth * 0.8)).current;
+
+  const [reportModalVisible, setReportModalVisible] = useState<boolean>(false);
+  const [banModalVisible, setBanModalVisible] = useState<boolean>(false);
+  const [selectedUserData, setSelectedUserData] = useState<UserData>();
 
   const handleClose = () => {
     Animated.timing(slideAnim, {
@@ -61,8 +67,6 @@ SidebarModalProps) => {
       }).start();
     }
   }, [modalVisible, slideAnim, screenWidth]);
-
-  console.log('modal', roomData);
 
   return (
     <Modal
@@ -102,9 +106,11 @@ SidebarModalProps) => {
                   <ParticipantItem
                     userInfo={user}
                     key={user.userUuid}
-                    roomUuid={roomData.uuid}
                     myUuid={myUuid}
                     ownerUuid={roomData.ownerUuid}
+                    setReportModal={setReportModalVisible}
+                    setBanModal={setBanModalVisible}
+                    setSelectedUserData={setSelectedUserData}
                   />
                 ))}
               </View>
@@ -122,6 +128,20 @@ SidebarModalProps) => {
                   <Text style={styles.buttonText}>정산 요청하기</Text>
                 </TouchableOpacity>
               </View>
+
+              <ReportModal
+                modalVisible={reportModalVisible}
+                setModalVisible={setReportModalVisible}
+                roomUuid={roomData.uuid}
+                userData={selectedUserData}
+              />
+
+              <BanModal
+                modalVisible={banModalVisible}
+                setModalVisible={setBanModalVisible}
+                roomUuid={roomData.uuid}
+                userData={selectedUserData}
+              />
 
               {/* Spacer to push logout button to bottom */}
               <View style={{flex: 1}} />
