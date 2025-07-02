@@ -72,6 +72,8 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
     ]);
   };
 
+  const isPossible = remain < roomData.maxParticipant;
+
   return (
     <TouchableOpacity
       style={[
@@ -87,34 +89,37 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       <View style={styles.cardContent}>
         <View style={styles.mainInfo}>
           <View style={styles.titleContainer}>
-            <Text
+            <View
               style={[
-                remain < roomData.maxParticipant
-                  ? [
-                      styles.possible,
-                      {
-                        backgroundColor: isDarkMode ? '#fff3f3' : '#FFF0F0',
-                        color: '#fb5353',
-                      },
-                    ]
-                  : [
-                      styles.impossible,
-                      {
-                        backgroundColor: isDarkMode
-                          ? 'rgba(217,217,217,0.83)'
-                          : '#F3F3F3',
-                        color: '#909090',
-                      },
-                    ],
+                styles.statusContainer,
+                {
+                  backgroundColor: isPossible
+                    ? isDarkMode
+                      ? '#fff3f3'
+                      : '#FFF0F0'
+                    : isDarkMode
+                    ? 'rgba(217,217,217,0.83)'
+                    : '#F3F3F3',
+                },
               ]}>
-              {remain < roomData.maxParticipant ? '참여 가능' : '마감'}
-            </Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={[styles.title, {color: textColor, maxWidth: 180}]}>
-              {roomData.title}
-            </Text>
+              <Text
+                style={[
+                  styles.statusText,
+                  {
+                    color: isPossible ? '#fb5353' : '#909090',
+                  },
+                ]}>
+                {isPossible ? '참여 가능' : '마감'}
+              </Text>
+            </View>
+            <View>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={[styles.title, {color: textColor, maxWidth: 180}]}>
+                {roomData.title}
+              </Text>
+            </View>
             <View style={{flexDirection: 'row', gap: '5', marginLeft: 'auto'}}>
               {roomData.currentParticipant < roomData.maxParticipant ? (
                 <Image
@@ -202,21 +207,14 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
-  possible: {
-    fontSize: 13,
-    letterSpacing: -0.1,
-    fontWeight: '700',
-    borderRadius: 10,
+  statusContainer: {
+    borderRadius: 3,
     paddingHorizontal: 5,
     paddingVertical: 2,
   },
-  impossible: {
+  statusText: {
     fontSize: 13,
-    letterSpacing: -0.1,
     fontWeight: '700',
-    borderRadius: 10,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
   },
   details: {
     flexDirection: 'row',
