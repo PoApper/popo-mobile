@@ -12,7 +12,7 @@ declare global {
 }
 
 // API 기본 URL
-export const PAXI_API_URL = 'https://api.paxi-dev.popo.poapper.club';
+export const PAXI_API_URL = 'https://api.paxi.popo-dev.poapper.club';
 
 console.log('현재 API URL:', PAXI_API_URL);
 
