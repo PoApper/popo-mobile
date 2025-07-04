@@ -14,15 +14,18 @@ const getEnvironment = () => {
         isProduction: false,
         isTestFlight: false,
         isDevelopment: true,
+        gitSha: '4204e48e37f2d3ab67739b0c8bbc2643d5cff1f6', // 현재 git SHA
       };
     }
-    const {ENV_CONFIG, API_URL} = NativeModules.SourceCode.constantsToExport;
+    const {ENV_CONFIG, API_URL, GIT_SHA} =
+      NativeModules.SourceCode.constantsToExport;
     return {
       environmentName: ENV_CONFIG || 'Development',
       apiUrl: API_URL || 'https://api.popo-dev.poapper.club',
       isProduction: ENV_CONFIG === 'Production',
       isTestFlight: ENV_CONFIG === 'TestFlight',
       isDevelopment: ENV_CONFIG === 'Debug' || !ENV_CONFIG,
+      gitSha: GIT_SHA || '4204e48e37f2d3ab67739b0c8bbc2643d5cff1f6',
     };
   }
 
@@ -33,6 +36,7 @@ const getEnvironment = () => {
     isProduction: false,
     isTestFlight: false,
     isDevelopment: true,
+    gitSha: '4204e48e37f2d3ab67739b0c8bbc2643d5cff1f6', // 현재 git SHA
   };
 };
 
