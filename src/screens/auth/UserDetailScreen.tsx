@@ -242,23 +242,6 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   : '정보 없음'}
               </Text>
             </View>
-
-            {/* 앱 버전 정보 */}
-            <View
-              style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
-              <Text
-                style={[
-                  styles.detailLabel,
-                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-                ]}>
-                앱 버전
-              </Text>
-              <Text style={[styles.detailValue, {color: textColor}]}>
-                {Environment.gitSha.substring(0, 20)}
-                {'\n'}
-                {Environment.gitSha.substring(20)}
-              </Text>
-            </View>
           </View>
         </View>
 
