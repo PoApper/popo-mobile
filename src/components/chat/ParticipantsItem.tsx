@@ -15,71 +15,35 @@ import {getColor} from '@utils/userchat-background';
 
 interface ParticipantItemProps {
   userInfo: UserData;
-  roomUuid: string;
   myUuid: string;
   ownerUuid: string;
+  setReportModal: (visible: boolean) => void;
+  setBanModal: (visible: boolean) => void;
+  setSelectedUserData: (userData: UserData) => void;
 }
 
 const ParticipantItem = ({
   userInfo,
-  roomUuid,
   myUuid,
   ownerUuid,
+  setReportModal,
+  setBanModal,
+  setSelectedUserData,
 }: ParticipantItemProps) => {
   const isOwner = ownerUuid === userInfo.userUuid;
   const isMe = myUuid === userInfo.userUuid;
   const isMeOwner = myUuid === ownerUuid;
 
-  const banUser = () => {
-    Alert.alert('추방', `유저 '${userInfo.nickname}'님을 추방하시겠습니까?`, [
-      {
-        text: '아니오',
-        style: 'cancel',
-      },
-      {
-        text: '추방',
-        onPress: () => {
-          paxi_api
-            .put(`/room/kick/${roomUuid}`, {
-              userUuid: userInfo.userUuid,
-              reason: '추방 사유 (테스트 중)', // TODO: 추방 사유 입력 받기
-            })
-            .then(() => {
-              Alert.alert('처리 완료', '요청이 처리되었습니다.');
-            })
-            .catch(() => {
-              Alert.alert('추방 실패', '추방 요청에 실패했습니다.');
-            });
-        },
-      },
-    ]);
+  const reportUser = () => {
+    setReportModal(true);
+    setSelectedUserData(userInfo);
   };
 
-  const reportUser = () => {
-    Alert.alert('신고', `유저 '${userInfo.nickname}'님을 신고하시겠습니까?`, [
-      {
-        text: '아니오',
-        style: 'cancel',
-      },
-      {
-        text: '신고',
-        onPress: () => {
-          paxi_api
-            .post('report', {
-              targetRoomUuid: roomUuid,
-              targetUserUuid: userInfo.userUuid,
-              reason: '신고 사유 (테스트 중)', // TODO: 신고 사유 입력 받기
-            })
-            .then(() => {
-              Alert.alert('처리 완료', '요청이 처리되었습니다.');
-            })
-            .catch(() => {
-              Alert.alert('신고 실패', '신고 요청에 실패했습니다.');
-            });
-        },
-      },
-    ]);
+  const banUser = () => {
+    setBanModal(true);
+    setSelectedUserData(userInfo);
   };
+
   return (
     <View style={styles.userRow}>
       <View style={styles.rowCenter}>

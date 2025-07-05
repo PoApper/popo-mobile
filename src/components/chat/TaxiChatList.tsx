@@ -11,9 +11,9 @@ import {
   Alert,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/types';
+import {RootStackParamList} from '../../navigation/types';
 import axios from 'axios';
-import paxi_api from '../utils/paxi_api';
+import paxi_api from '../../utils/paxi_api';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 
@@ -166,7 +166,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
     return (
       <View style={styles.emptyContainer}>
         <Image
-          source={require('../../assets/icon/POPO_typography_bg_removed_cropped.png')}
+          source={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
           style={styles.emptyImage}
           resizeMode="contain"
         />

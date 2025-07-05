@@ -15,14 +15,14 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import DropdownFilter from '@components/DropdownFilter';
-import {RoomDataType} from '@interfaces/paxi';
-import {RefreshButton} from '@components/room/RefreshButton';
-import {RoomListCard} from '@components/room/RoomListCard';
-import CommonHeader from '@components/CommonHeader';
 import api from '@utils/api';
 import {PAXI_LOCATIONS} from '@utils/locations';
+import {RoomDataType} from '@interfaces/paxi';
+import CommonHeader from '@components/CommonHeader';
+import DropdownFilter from '@components/room/DropdownFilter';
+import {RefreshButton} from '@components/room/RefreshButton';
 import RoomFilterDatePicker from '@components/room/RoomFilterDatePicker';
+import {RoomListCard} from '@components/room/RoomListCard';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
@@ -36,6 +36,9 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const [userUuid, setUserUuid] = useState<string>('');
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  const [selectedDeparture, setSelectedDeparture] = useState<string | null>('');
+  const [selectedArrival, setSelectedArrival] = useState<string | null>('');
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
 
@@ -79,18 +82,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
     return unsubscribe;
   }, [navigation]);
 
-  const filterDeparture = (selected: string | null) => {
-    console.log('selected', selected);
-  };
-
-  const dropdownStyle = [
-    styles.button,
-    {
-      borderColor: isDarkMode ? '#2C2C2C' : '#f4f4f6',
-      backgroundColor: isDarkMode ? '#1A1A1A' : 'white',
-    },
-  ];
-
   return (
     <SafeAreaView style={[backgroundStyle]}>
       <StatusBar
@@ -103,17 +94,17 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <RefreshButton onPress={() => getRoomList()} />
 
         <DropdownFilter
-          style={dropdownStyle}
-          defaultText={'출발지'}
-          categories={PAXI_LOCATIONS}
-          onSelect={selected => filterDeparture(selected)}
+          placeholderText={'출발지'}
+          options={PAXI_LOCATIONS.filter(item => item.id !== selectedArrival)}
+          selected={selectedDeparture}
+          onSelect={selected => setSelectedDeparture(selected)}
         />
 
         <DropdownFilter
-          style={dropdownStyle}
-          defaultText={'도착지'}
-          categories={PAXI_LOCATIONS}
-          onSelect={selected => console.log('선택된 카테고리:', selected)}
+          placeholderText={'도착지'}
+          options={PAXI_LOCATIONS.filter(item => item.id !== selectedDeparture)}
+          selected={selectedArrival}
+          onSelect={selected => setSelectedArrival(selected)}
         />
 
         <RoomFilterDatePicker
