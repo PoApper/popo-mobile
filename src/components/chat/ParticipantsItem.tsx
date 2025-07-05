@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Alert,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -10,7 +9,6 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {UserData} from '@interfaces/paxi';
-import paxi_api from '@utils/paxi_api';
 import {getColor} from '@utils/userchat-background';
 
 interface ParticipantItemProps {
