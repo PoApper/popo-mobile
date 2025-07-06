@@ -6,10 +6,13 @@ import {
   useColorScheme,
   Alert,
   StyleSheet,
+  Image,
 } from 'react-native';
+import moment from 'moment';
 
 import paxi_api from '@utils/paxi_api';
 import {RoomDataType} from '@interfaces/paxi';
+import DottedArrow from './DottedArrow';
 
 interface RoomContainerProps {
   roomData: RoomDataType;
@@ -69,6 +72,8 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
     ]);
   };
 
+  const isPossible = remain < roomData.maxParticipant;
+
   return (
     <TouchableOpacity
       style={[
@@ -84,45 +89,81 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       <View style={styles.cardContent}>
         <View style={styles.mainInfo}>
           <View style={styles.titleContainer}>
-            <Text
+            <View
               style={[
-                remain < roomData.maxParticipant
-                  ? [
-                      styles.possible,
-                      {
-                        backgroundColor: isDarkMode ? '#fff3f3' : '#FFF0F0',
-                        color: '#fb5353',
-                      },
-                    ]
-                  : [
-                      styles.impossible,
-                      {
-                        backgroundColor: isDarkMode
-                          ? 'rgba(217,217,217,0.83)'
-                          : '#F3F3F3',
-                        color: '#909090',
-                      },
-                    ],
+                styles.statusContainer,
+                {
+                  backgroundColor: isPossible
+                    ? isDarkMode
+                      ? '#fff3f3'
+                      : '#FFF0F0'
+                    : isDarkMode
+                    ? 'rgba(217,217,217,0.83)'
+                    : '#F3F3F3',
+                },
               ]}>
-              {remain < roomData.maxParticipant ? '참여 가능' : '마감'}
-            </Text>
-            <Text style={[styles.title, {color: textColor}]}>
-              {roomData.title}
-            </Text>
+              <Text
+                style={[
+                  styles.statusText,
+                  {
+                    color: isPossible ? '#fb5353' : '#909090',
+                  },
+                ]}>
+                {isPossible ? '참여 가능' : '마감'}
+              </Text>
+            </View>
+            <View>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={[styles.title, {color: textColor, maxWidth: 180}]}>
+                {roomData.title}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', gap: '5', marginLeft: 'auto'}}>
+              {roomData.currentParticipant < roomData.maxParticipant ? (
+                <Image
+                  source={require('../../../assets/baby_phonix.png')}
+                  style={styles.logoImage}
+                  resizeMode="contain"
+                />
+              ) : (
+                <Image
+                  source={require('../../../assets/baby_phonix_disabled.png')}
+                  style={styles.logoImage}
+                  resizeMode="contain"
+                />
+              )}
+              <Text
+                style={[
+                  styles.participantNumText,
+                  {
+                    color:
+                      roomData.currentParticipant < roomData.maxParticipant
+                        ? '#FA5721'
+                        : '#4f4f4f',
+                  },
+                ]}>
+                {roomData.currentParticipant}/{roomData.maxParticipant}
+              </Text>
+            </View>
           </View>
           <View style={styles.details}>
             <Text style={[styles.detailsText, {color: textColor}]}>
               {roomData.departureLocation}
             </Text>
-            <Text style={[styles.arrow, {color: textColor}]}>
-              {'  - - - - >  '}
-            </Text>
+
+            <DottedArrow width={100} height={25} color={'white'} />
+
             <Text style={[styles.detailsText, {color: textColor}]}>
               {roomData.destinationLocation}
             </Text>
           </View>
           <Text style={[styles.departureTime, {color: subTextColor}]}>
-            {roomData.departureTime}
+            {moment(roomData.departureTime).format(
+              'YYYY년 MM월 DD일 HH시 mm분',
+            )}{' '}
+            출발
           </Text>
         </View>
       </View>
@@ -158,21 +199,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  possible: {
-    fontSize: 13,
-    letterSpacing: -0.1,
-    fontWeight: '700',
+  participantNumText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  logoImage: {
+    width: 20,
+    height: 20,
+  },
+  statusContainer: {
     borderRadius: 3,
     paddingHorizontal: 5,
     paddingVertical: 2,
   },
-  impossible: {
+  statusText: {
     fontSize: 13,
-    letterSpacing: -0.1,
     fontWeight: '700',
-    borderRadius: 3,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
   },
   details: {
     flexDirection: 'row',
