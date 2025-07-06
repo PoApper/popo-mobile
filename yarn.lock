@@ -2051,17 +2051,17 @@
   dependencies:
     invariant "^2.2.4"
 
-"@react-native-firebase/app@^22.0.0", "@react-native-firebase/app@22.0.0":
-  version "22.0.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-22.0.0.tgz"
-  integrity sha512-fbagoIrTJy8edCTiEI7OeAUqO5XoifMirEKoXJDHlsFrPJBfxqMGDhSJutUoWLNHt8KxDtLG9JWnKuW23ISq2Q==
+"@react-native-firebase/app@^22.2.1", "@react-native-firebase/app@22.2.1":
+  version "22.2.1"
+  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-22.2.1.tgz"
+  integrity sha512-FNekjZgvLLBWLNMGKfKUHR4TTu8OY1YnvlQV9HaNboF5U5+CvTcK8IKycXKdhVP8YfcILTaM3AFraoQsQsy3/w==
   dependencies:
     firebase "11.3.1"
 
-"@react-native-firebase/messaging@^22.0.0":
-  version "22.0.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-22.0.0.tgz"
-  integrity sha512-l9wVECx1FdK5W5FK2PjnEnPFVg0bDvMuA5CUOzLhItnRAXKsvR8ovo/YCZxWqF16PxSlxxcBgDISHqlppH2Svw==
+"@react-native-firebase/messaging@^22.2.1":
+  version "22.2.1"
+  resolved "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-22.2.1.tgz"
+  integrity sha512-gSl171dIeLwKgJYZVHeRHBW8vw61qlsLobimOaW1fjX5rrN8llMUB5FJ8Gbd+00w9uaUTn02eWODcV6ZOjn/9g==
 
 "@react-native/assets-registry@0.78.2":
   version "0.78.2"
