@@ -6,39 +6,14 @@ import React, {useEffect} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppNavigator from './src/navigation/AppNavigator';
-import {
-  requestUserPermission,
-  getFCMToken,
-  displayNotification,
-} from './src/utils/firebase';
-import paxi_api from './src/utils/paxi_api';
+import {requestUserPermission, displayNotification} from './src/utils/firebase';
 import messaging from '@react-native-firebase/messaging';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {navigationRef} from './src/navigation/RootNavigation';
 
 const App = () => {
   useEffect(() => {
-    const initializeFCM = async () => {
-      const hasPermission = await requestUserPermission();
-      if (hasPermission) {
-        const token = await getFCMToken();
-        if (token) {
-          paxi_api
-            .post('/push/key/', {
-              key: token,
-            })
-            .then(res => {
-              console.log('토큰 전송 성공', res);
-            })
-            .catch(err => {
-              const msg = err.response.data.message;
-              console.log('토큰 전송 실패', msg);
-            });
-        }
-      }
-    };
-
-    initializeFCM();
+    requestUserPermission();
 
     const handlePendingNavigation = async () => {
       // const pendingNavigation = await EncryptedStorage.getItem('pendingNavigation'); // for debug
@@ -62,7 +37,9 @@ const App = () => {
         navigateToChat();
       }
     };
-    handlePendingNavigation();
+
+    // handle delay of `setItem` in index.js
+    setTimeout(handlePendingNavigation, 100);
 
     const unsubscribe = messaging().onMessage(remoteMessage => {
       // NOTE: On iOS simulator, the message is not received when Forground.
