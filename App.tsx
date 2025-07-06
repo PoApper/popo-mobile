@@ -6,12 +6,10 @@ import React, {useEffect} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppNavigator from './src/navigation/AppNavigator';
-import {
-  requestUserPermission,
-  getFCMToken,
-  onTokenRefresh,
-} from './src/utils/firebase';
+import {requestUserPermission, getFCMToken} from './src/utils/firebase';
 import paxi_api from './src/utils/paxi_api';
+import messaging from '@react-native-firebase/messaging';
+import {Alert} from 'react-native';
 
 const App = () => {
   useEffect(() => {
@@ -20,7 +18,6 @@ const App = () => {
       if (hasPermission) {
         const token = await getFCMToken();
         if (token) {
-          // console.log('FCM Token:', token);
           paxi_api
             .post('/push/key/', {
               key: token,
@@ -38,11 +35,12 @@ const App = () => {
 
     initializeFCM();
 
-    // 토큰 갱신 리스너 설정
-    const unsubscribe = onTokenRefresh(newToken => {
-      console.log('New FCM Token:', newToken);
-      // TODO: 여기에서 새로운 토큰을 서버에 전송
-      // await sendTokenToServer(newToken);
+    const unsubscribe = messaging().onMessage(remoteMessage => {
+      console.log('New FCM Token:', remoteMessage);
+      Alert.alert(
+        'New FCM Token:',
+        `메시지를 받았습니다. ${remoteMessage.data?.title}`,
+      );
     });
 
     return () => unsubscribe();
