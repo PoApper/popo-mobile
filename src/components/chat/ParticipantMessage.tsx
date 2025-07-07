@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   messageContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    maxWidth: '90%',
+    maxWidth: '80%',
     gap: 5,
   },
   messageSender: {
