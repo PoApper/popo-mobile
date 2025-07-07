@@ -13,23 +13,22 @@ interface RoomInfoBoxProps {
   myUuid: string;
 }
 
-const RoomInfoBox = ({
-  roomData,
-  navigation,
-  myUuid,
-}: RoomInfoBoxProps) => {
+const RoomInfoBox = ({roomData, navigation, myUuid}: RoomInfoBoxProps) => {
   const isOwner = myUuid === roomData.ownerUuid;
   return (
     <View style={styles.infoBox}>
-      {isOwner &&
-        <TouchableOpacity style={styles.editButton} onPress={() =>
-          navigation.navigate('ModifyPaxiRoom', {
-            roomUuid: roomData.uuid,
-        })}>
+      {isOwner && (
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() =>
+            navigation.navigate('ModifyPaxiRoom', {
+              roomUuid: roomData.uuid,
+            })
+          }>
           <Icon name="edit" size={14} color="#999" />
           <Text style={styles.editText}>수정하기</Text>
         </TouchableOpacity>
-      }
+      )}
 
       <View style={styles.labelRow}>
         <Text style={styles.labelText}>출발지</Text>

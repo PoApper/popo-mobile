@@ -92,7 +92,10 @@ const AppNavigator = () => {
             component={PaxiCreateRoomScreen}
           />
           <Stack.Screen name="NewChat" component={NewChatScreen} />
-          <Stack.Screen name="ModifyPaxiRoom" component={ModifyPaxiRoomScreen} />
+          <Stack.Screen
+            name="ModifyPaxiRoom"
+            component={ModifyPaxiRoomScreen}
+          />
           <Stack.Screen name="Settlement" component={SettlementScreen} />
 
           {/* Place Reservation Screens */}

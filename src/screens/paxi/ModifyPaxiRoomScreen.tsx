@@ -23,10 +23,7 @@ import DropdownMenu from '@components/room/DropdownMenu';
 import {RouteProp, useRoute} from '@react-navigation/native';
 
 type ModifyPaxiRoomScreenProps = {
-  navigation: NativeStackNavigationProp<
-    RootStackParamList,
-    'ModifyPaxiRoom'
-  >;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'ModifyPaxiRoom'>;
 };
 
 interface ModifyRoomBody {
@@ -44,7 +41,10 @@ function roundUpToNearest10Minutes(date: Date) {
   return new Date(Math.ceil(date.getTime() / ms) * ms);
 }
 
-type SettlementScreenRouteProp = RouteProp<RootStackParamList, 'ModifyPaxiRoom'>;
+type SettlementScreenRouteProp = RouteProp<
+  RootStackParamList,
+  'ModifyPaxiRoom'
+>;
 
 const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
   const route = useRoute<SettlementScreenRouteProp>();
@@ -70,7 +70,9 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
         setRoomDetails(roomInfo.description);
         setDepartureName(roomInfo.departureLocation);
         setArrivalName(roomInfo.destinationLocation);
-        setSelectedDateTime(roundUpToNearest10Minutes(new Date(roomInfo.departureTime)));
+        setSelectedDateTime(
+          roundUpToNearest10Minutes(new Date(roomInfo.departureTime)),
+        );
         setMaxParticipant(roomInfo.maxParticipant);
       })
       .catch(err => {
