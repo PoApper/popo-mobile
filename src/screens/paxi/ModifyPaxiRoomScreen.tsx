@@ -93,8 +93,17 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
       .patch(`room/${roomUuid}`, body)
       .then(res => {
         if (res.status === 200) {
-          Alert.alert('성공', '성공적으로 방의 정보를 변경했습니다.');
-          navigation.goBack();
+          Alert.alert(
+            '성공',
+            '성공적으로 방의 정보를 변경했습니다.',
+            [
+              {
+                text: '확인',
+                onPress: () => navigation.goBack(),
+              },
+            ],
+            {cancelable: false},
+          );
         }
       })
       .catch(error => {
