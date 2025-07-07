@@ -181,9 +181,19 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
           keyboardShouldPersistTaps="handled"
         />
 
-        <View style={[styles.inputContainer, {backgroundColor: backgroundColor(isDarkMode)}]}>
+        <View
+          style={[
+            styles.inputContainer,
+            {backgroundColor: backgroundColor(isDarkMode)},
+          ]}>
           <TextInput
-            style={[styles.textInput, {backgroundColor: isDarkMode ? '#444' : '#eee', color: backgroundColor(!isDarkMode)}]}
+            style={[
+              styles.textInput,
+              {
+                backgroundColor: isDarkMode ? '#444' : '#eee',
+                color: backgroundColor(!isDarkMode),
+              },
+            ]}
             value={newChat}
             onChangeText={setNewChat}
             placeholder="메시지를 입력하세요..."
@@ -192,7 +202,13 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
             maxLength={1000}
           />
           <TouchableOpacity
-            style={[styles.sendButton, {opacity: newChat.trim() ? 1 : 0.5, backgroundColor: isDarkMode ? 'white' : 'black'}]}
+            style={[
+              styles.sendButton,
+              {
+                opacity: newChat.trim() ? 1 : 0.5,
+                backgroundColor: isDarkMode ? 'white' : 'black',
+              },
+            ]}
             onPress={sendChat}
             disabled={!newChat.trim()}>
             <Icon name="send" size={20} color={backgroundColor(isDarkMode)} />
