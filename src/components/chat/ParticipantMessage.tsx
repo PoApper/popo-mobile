@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 14,
     letterSpacing: -0.4,
-    marginBottom: 4,
   },
   createdTime: {
     fontSize: 12,

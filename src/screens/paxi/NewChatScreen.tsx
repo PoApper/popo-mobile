@@ -165,7 +165,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       />
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.container}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
         <FlatList
@@ -183,10 +183,11 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
         <View style={[styles.inputContainer, {backgroundColor: backgroundColor(isDarkMode)}]}>
           <TextInput
-            style={[styles.textInput, {backgroundColor: backgroundColor(isDarkMode), color: backgroundColor(!isDarkMode)}]}
+            style={[styles.textInput, {backgroundColor: isDarkMode ? '#444' : '#eee', color: backgroundColor(!isDarkMode)}]}
             value={newChat}
             onChangeText={setNewChat}
             placeholder="메시지를 입력하세요..."
+            placeholderTextColor={backgroundColor(!isDarkMode)}
             multiline={true}
             maxLength={1000}
           />
@@ -222,18 +223,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: 'flex-end',
     backgroundColor: 'white',
-    borderTopWidth: 0.5,
-    borderTopColor: '#e0e0e0',
   },
   textInput: {
     flex: 1,
     minHeight: 40,
     maxHeight: 100,
     textAlignVertical: 'top',
-    borderWidth: 1,
-    backgroundColor: '#f8f9fa',
-    borderColor: '#e0e0e0',
-    borderRadius: 16,
+    borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 10,
     fontSize: 16,

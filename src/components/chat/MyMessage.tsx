@@ -38,7 +38,6 @@ export default MyMessage;
 const styles = StyleSheet.create({
   messageContainer: {
     alignSelf: 'flex-end',
-    marginBottom: 10,
   },
   messageBubble: {
     borderRadius: 20,
