@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   messageBubble: {
-    backgroundColor: '#f2f3f5',
     borderRadius: 20,
     paddingVertical: 7,
     paddingHorizontal: 12,

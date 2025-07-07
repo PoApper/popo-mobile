@@ -152,7 +152,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         <TouchableOpacity
           style={{marginRight: 10}}
           onPress={() => setSidebarVisible(!sidebarVisible)}>
-          <Icon name="menu" size={30} color={'black'} />
+          <Icon name="menu" size={30} color={textColor(isDarkMode)} />
         </TouchableOpacity>
       </View>
 
@@ -181,9 +181,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
           keyboardShouldPersistTaps="handled"
         />
 
-        <View style={styles.inputContainer}>
+        <View style={[styles.inputContainer, {backgroundColor: backgroundColor(isDarkMode)}]}>
           <TextInput
-            style={[styles.textInput]}
+            style={[styles.textInput, {backgroundColor: backgroundColor(isDarkMode), color: backgroundColor(!isDarkMode)}]}
             value={newChat}
             onChangeText={setNewChat}
             placeholder="메시지를 입력하세요..."
@@ -191,10 +191,10 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
             maxLength={1000}
           />
           <TouchableOpacity
-            style={[styles.sendButton, {opacity: newChat.trim() ? 1 : 0.5}]}
+            style={[styles.sendButton, {opacity: newChat.trim() ? 1 : 0.5, backgroundColor: isDarkMode ? 'white' : 'black'}]}
             onPress={sendChat}
             disabled={!newChat.trim()}>
-            <Icon name="send" size={20} color="white" />
+            <Icon name="send" size={20} color={backgroundColor(isDarkMode)} />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
