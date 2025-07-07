@@ -9,6 +9,7 @@ import {
   Animated,
   Dimensions,
   Alert,
+  useColorScheme,
 } from 'react-native';
 import {useState, useEffect, useRef} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -21,6 +22,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import BanModal from '@components/chat/BanModal';
+import {backgroundColor, textColor} from '@styles/default';
 
 interface SidebarModalProps {
   modalVisible: boolean;
@@ -39,6 +41,7 @@ const SidebarModal = ({
   myUuid,
 }: // leaveRoom,
 SidebarModalProps) => {
+  const isDarkMode = useColorScheme() === 'dark';
   const screenWidth = Dimensions.get('window').width;
   const slideAnim = useRef(new Animated.Value(screenWidth * 0.8)).current;
 
@@ -79,6 +82,7 @@ SidebarModalProps) => {
             styles.modalContainer,
             {
               transform: [{translateX: slideAnim}],
+              backgroundColor: backgroundColor(isDarkMode),
             },
           ]}>
           <SafeAreaView style={styles.modalContent}>
@@ -98,6 +102,18 @@ SidebarModalProps) => {
                 <Text style={styles.countText}>
                   {roomData?.currentParticipant}
                 </Text>
+
+                {/* 정산 요청 버튼 */}
+                <TouchableOpacity
+                  style={[styles.primaryButton, {marginLeft: 20, backgroundColor: isDarkMode ? '#333' : '#000'}]}
+                  onPress={() => {
+                    setModalVisible(false);
+                    navigation.navigate('Settlement', {
+                      roomUuid: roomData.uuid,
+                    });
+                  }}>
+                  <Text style={[styles.buttonText]}>정산 요청하기</Text>
+                </TouchableOpacity>
               </View>
 
               {/* 참여자 목록 */}
@@ -113,20 +129,6 @@ SidebarModalProps) => {
                     setSelectedUserData={setSelectedUserData}
                   />
                 ))}
-              </View>
-
-              {/* 정산 요청 버튼 */}
-              <View style={styles.rowCenter}>
-                <TouchableOpacity
-                  style={styles.primaryButton}
-                  onPress={() => {
-                    setModalVisible(false);
-                    navigation.navigate('Settlement', {
-                      roomUuid: roomData.uuid,
-                    });
-                  }}>
-                  <Text style={styles.buttonText}>정산 요청하기</Text>
-                </TouchableOpacity>
               </View>
 
               <ReportModal
@@ -178,7 +180,7 @@ SidebarModalProps) => {
                       },
                     ]);
                   }}>
-                  <Icon name="logout" size={30} color="black" />
+                  <Icon name="logout" size={30} color={textColor(isDarkMode)} />
                 </TouchableOpacity>
               </View>
             </Pressable>
@@ -389,12 +391,12 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
   primaryButton: {
+    flex: 1,
     backgroundColor: '#000',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 6,
-    width: '100%',
   },
   buttonText: {
     color: '#fff',
