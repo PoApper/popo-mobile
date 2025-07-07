@@ -105,7 +105,13 @@ SidebarModalProps) => {
 
                 {/* 정산 요청 버튼 */}
                 <TouchableOpacity
-                  style={[styles.primaryButton, {marginLeft: 20, backgroundColor: isDarkMode ? '#333' : '#000'}]}
+                  style={[
+                    styles.primaryButton,
+                    {
+                      marginLeft: 20,
+                      backgroundColor: isDarkMode ? '#333' : '#000',
+                    },
+                  ]}
                   onPress={() => {
                     setModalVisible(false);
                     navigation.navigate('Settlement', {

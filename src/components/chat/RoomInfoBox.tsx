@@ -19,7 +19,11 @@ interface RoomInfoBoxProps {
 const RoomInfoBox = ({roomData}: RoomInfoBoxProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={[styles.infoBox, {backgroundColor: isDarkMode ? "#333" : "#f2f3f5"}]}>
+    <View
+      style={[
+        styles.infoBox,
+        {backgroundColor: isDarkMode ? '#333' : '#f2f3f5'},
+      ]}>
       <TouchableOpacity style={styles.editButton} onPress={() => {}}>
         <Icon name="edit" size={14} color="#999" />
         <Text style={styles.editText}>수정하기</Text>
@@ -35,8 +39,7 @@ const RoomInfoBox = ({roomData}: RoomInfoBoxProps) => {
           style={[styles.location, {color: textColor(isDarkMode)}]}
           numberOfLines={1}
           adjustsFontSizeToFit
-          minimumFontScale={0.5}
-        >
+          minimumFontScale={0.5}>
           {roomData?.departureLocation}
         </Text>
         <Text style={[styles.arrow, {color: textColor(isDarkMode)}]}>→</Text>
@@ -44,8 +47,7 @@ const RoomInfoBox = ({roomData}: RoomInfoBoxProps) => {
           style={[styles.location, {color: textColor(isDarkMode)}]}
           numberOfLines={1}
           adjustsFontSizeToFit
-          minimumFontScale={0.5}
-        >
+          minimumFontScale={0.5}>
           {roomData?.destinationLocation}
         </Text>
       </View>
@@ -68,7 +70,10 @@ const RoomInfoBox = ({roomData}: RoomInfoBoxProps) => {
         </Svg>
       </View>
 
-      <Text style={[styles.extraInfo, {color: isDarkMode ? '#999' : '#4F4F4F'}]}>{roomData?.description}</Text>
+      <Text
+        style={[styles.extraInfo, {color: isDarkMode ? '#999' : '#4F4F4F'}]}>
+        {roomData?.description}
+      </Text>
     </View>
   );
 };

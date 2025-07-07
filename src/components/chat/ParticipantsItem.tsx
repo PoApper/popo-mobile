@@ -44,7 +44,8 @@ const ParticipantItem = ({
   };
 
   return (
-    <View style={[styles.userRow, {backgroundColor: backgroundColor(isDarkMode)}]}>
+    <View
+      style={[styles.userRow, {backgroundColor: backgroundColor(isDarkMode)}]}>
       <View style={styles.rowCenter}>
         {/* TODO: 프로필 사진 대체 */}
         <View style={styles.avatarCircle}>
@@ -67,25 +68,29 @@ const ParticipantItem = ({
             )}
           </View>
         </View>
-        {isMe &&
-          <View style={{
-            width: 20,
-            height: 20,
-            borderRadius: 15,
-            marginRight: 10,
-            backgroundColor: isDarkMode ? "#222" : "#eee",
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
+        {isMe && (
+          <View
+            style={{
+              width: 20,
+              height: 20,
+              borderRadius: 15,
+              marginRight: 10,
+              backgroundColor: isDarkMode ? '#222' : '#eee',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
             <Text style={{fontSize: 11, color: textColor(isDarkMode)}}>나</Text>
           </View>
-        }
+        )}
         <View>
           <View style={styles.nameRow}>
-            <Text style={[styles.nameText, {color: textColor(isDarkMode)}]}>{userInfo.nickname}</Text>
+            <Text style={[styles.nameText, {color: textColor(isDarkMode)}]}>
+              {userInfo.nickname}
+            </Text>
           </View>
           {(userInfo.isPaid || isOwner) && (
-            <Text style={[styles.subText, {color: isDarkMode ? '#999' : '#666'}]}>
+            <Text
+              style={[styles.subText, {color: isDarkMode ? '#999' : '#666'}]}>
               {isOwner && userInfo.isPaid
                 ? '방장 & 송금 완료'
                 : isOwner
@@ -98,7 +103,10 @@ const ParticipantItem = ({
       <View style={styles.rowCenter}>
         {!isMe && isMeOwner ? (
           <TouchableOpacity
-            style={[styles.grayButton, {backgroundColor: isDarkMode ? '#333' : '#eee'}]}
+            style={[
+              styles.grayButton,
+              {backgroundColor: isDarkMode ? '#333' : '#eee'},
+            ]}
             onPress={banUser}
             disabled={isMe}>
             <Text style={{color: textColor(isDarkMode)}}>추방</Text>
@@ -106,7 +114,10 @@ const ParticipantItem = ({
         ) : null}
         {!isMe ? (
           <TouchableOpacity
-            style={[styles.grayButton, {backgroundColor: isDarkMode ? '#333' : '#eee'}]}
+            style={[
+              styles.grayButton,
+              {backgroundColor: isDarkMode ? '#333' : '#eee'},
+            ]}
             onPress={reportUser}
             disabled={isMe}>
             <Text style={{color: textColor(isDarkMode)}}>신고</Text>
