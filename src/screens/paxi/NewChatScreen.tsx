@@ -17,13 +17,14 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Socket} from 'socket.io-client';
 
-import {ChatRoomInfo, MessageData, PaxiUser} from '@interfaces/paxi';
+import {ChatRoomInfo, MessageData, PaxiUser, SettlementData} from '@interfaces/paxi';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import {textColor, borderColor, backgroundColor, common} from '@styles/default';
 import {socketFactory} from '@utils/socket-factory';
 import ChatMessage from '@components/chat/ChatMessage';
 import SidebarModal from '@components/chat/SidebarModal';
+import SettlementInfoBox from '@components/chat/SettlementInfoBox';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
@@ -43,6 +44,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const [newChat, setNewChat] = useState<string>('');
   const [socket, setSocket] = useState<Socket | null>(null);
 
+  const [settlementData, setSettlementData] = useState<SettlementData>({} as SettlementData);
+  const [isSettlement, setIsSettlement] = useState<boolean>(false);
+
   const getRoomInfo = async () => {
     paxi_api
       .get(`/room/${roomUuid}`)
@@ -51,6 +55,18 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       })
       .catch(err => {
         console.error(err);
+      });
+  };
+
+  const getSettlementInfo = async () => {
+    paxi_api
+      .get(`/room/${roomUuid}/settlement`)
+      .then(res => {
+        setIsSettlement(true);
+        setSettlementData(res.data);
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
 
@@ -92,11 +108,18 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       console.debug('삭제될 메시지:', data);
       // deleteChatData(data);
     });
+
+    socket.on('newSettlement', data => {
+      console.debug('새 정산 요청:', data);
+      setIsSettlement(true);
+      setSettlementData(data);
+    });
     setSocket(socket);
   };
 
   useEffect(() => {
     getRoomInfo();
+    getSettlementInfo();
     getMyInfo();
     getChatList();
     initSocket();
@@ -163,6 +186,19 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         myUuid={myInfo.uuid}
         navigation={navigation}
       />
+
+      {isSettlement &&
+        <View
+          style={{
+            position: 'absolute',
+            width: '100%',
+            marginTop: 70,
+            paddingHorizontal: 10,
+            zIndex: 999,
+        }}>
+          <SettlementInfoBox settlementData={settlementData} />
+        </View>
+      }
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
