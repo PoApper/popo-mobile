@@ -42,6 +42,7 @@ import BenefitsScreen from '@screens/BenefitsScreen';
 import CampusShuttleScreen from '@screens/CampusShuttle';
 import EquipmentReservationScreen from '@screens/equipment-reservation/EquipmentReservationScreen';
 import EquipmentReservationApplyScreen from '@screens/equipment-reservation/EquipmentReservationApplyScreen';
+import ModifyPaxiRoomScreen from '../screens/paxi/ModifyPaxiRoomScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -91,6 +92,7 @@ const AppNavigator = () => {
             component={PaxiCreateRoomScreen}
           />
           <Stack.Screen name="NewChat" component={NewChatScreen} />
+          <Stack.Screen name="ModifyPaxiRoom" component={ModifyPaxiRoomScreen} />
           <Stack.Screen name="Settlement" component={SettlementScreen} />
 
           {/* Place Reservation Screens */}

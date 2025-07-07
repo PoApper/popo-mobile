@@ -83,7 +83,11 @@ SidebarModalProps) => {
           ]}>
           <SafeAreaView style={styles.modalContent}>
             <Pressable style={styles.innerContent} onPress={() => {}}>
-              <RoomInfoBox roomData={roomData} />
+              <RoomInfoBox
+                roomData={roomData}
+                navigation={navigation}
+                myUuid={myUuid}
+              />
 
               <View
                 style={[
