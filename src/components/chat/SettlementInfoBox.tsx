@@ -1,24 +1,27 @@
+import {useEffect, useState} from 'react';
 import {
   View,
   TouchableOpacity,
   Text,
   StyleSheet,
   Alert,
+  useColorScheme,
 } from 'react-native';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import {SettlementData} from '@interfaces/paxi';
 import paxi_api from '@utils/paxi_api';
-import { useState } from 'react';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import {textColor} from '@styles/default';
 
 interface SettlementInfoBoxProps {
+  isPaid: boolean | undefined;
   settlementData: SettlementData;
 }
 
 async function completeSettlement(settlementData: SettlementData) {
   try {
-    const res = await paxi_api.patch(`/room/${settlementData.roomUuid}/pay2`, {
+    const res = await paxi_api.patch(`/room/${settlementData.roomUuid}/pay`, {
       isPaid: true,
     });
 
@@ -28,10 +31,21 @@ async function completeSettlement(settlementData: SettlementData) {
   }
 }
 
-const SettlementInfoBox = ({settlementData}: SettlementInfoBoxProps) => {
-  const [isCompleteSettlement, setIsCompleteSettlement] = useState<boolean>(false);
+const SettlementInfoBox = ({
+  isPaid,
+  settlementData,
+}: SettlementInfoBoxProps) => {
+  const isDarkMode = useColorScheme() === 'dark';
+  const isCompleteSettlement = isPaid === true;
+  const [showInfo, setShowInfo] = useState<boolean>(true);
 
-  const settlementSend = () => {
+  useEffect(() => {
+    if (typeof isPaid === 'boolean') {
+      setShowInfo(!isPaid);
+    }
+  }, [isPaid]);
+
+  const settlementSendAlert = () => {
     Alert.alert('송금 확인', '송금을 완료하셨습니까?', [
       {
         text: '아니오',
@@ -59,44 +73,72 @@ const SettlementInfoBox = ({settlementData}: SettlementInfoBoxProps) => {
     ]);
   };
 
-  // TODO: 복사 버튼 만들기
-  // TODO: 정산 완료시, 내용 숨기기 & 내용 확장 가능
   return (
-    <View style={styles.backgroundContainer}>
-      {isCompleteSettlement &&
-      <View style={{flexDirection: 'row', gap: 10}}>
-        <Icon name={'check'} size={20} color={'green'}/>
-        <Text style={{
-          fontSize: 15,
-          fontWeight: '600',
-          color: 'green',
-        }}>정산이 완료되었습니다.</Text>
-        <Icon name={'down_arrow'} size={20} color={'black'}/>
-      </View>
-      }
-      {!isCompleteSettlement &&
+    <View style={[styles.backgroundContainer, {backgroundColor: isDarkMode ? '#222' : '#f2f3f5'}]}>
+      {!showInfo &&
+      <TouchableOpacity
+        onPress={() => setShowInfo(true)}
+        style={{flexDirection: 'row', gap: 10, margin: 10}}>
+        {isCompleteSettlement &&
         <>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>정산 요청 안내</Text>
-            <Text style={styles.payAmountText}>{settlementData.payAmount}원</Text>
-          </View>
-          <View style={styles.payerInfoContainer}>
-            <View style={{marginTop: 10}}>
-              <Text style={styles.infoText}>계좌주명: {settlementData.payerAccountHolderName}</Text>
-              <Text style={styles.infoText}>계좌번호: {settlementData.payerBankName} {settlementData.payerAccountNumber}</Text>
-              <TouchableOpacity
-                onPress={() => {}}>
-                <Icon name={'content-copy'} size={20} color={'black'} />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <Text style={styles.warnText}>꼭! 송금 후 완료 버튼을 눌러 주세요!</Text>
-          <TouchableOpacity
-            style={styles.sendBtn}
-            onPress={() => settlementSend()}>
-            <Text style={styles.sendBtnText}>송금 완료 알림을 보냅니다</Text>
-          </TouchableOpacity>
+          <Icon name={'check'} size={20} color={'green'}/>
+          <Text style={{
+            fontSize: 15,
+            fontWeight: '600',
+            color: 'green',
+          }}>정산이 완료되었습니다.</Text>
         </>
+        }
+        {!isCompleteSettlement &&
+        <>
+          <Icon name={'warning'} size={20} color={'#e45b63'}/>
+          <Text style={{
+            fontSize: 15,
+            fontWeight: '600',
+            color: '#e45b63',
+          }}>정산이 아직 완료되지 않았습니다.</Text>
+        </>
+        }
+        <View style={{flex: 1}} />
+        <Icon name={'keyboard-arrow-down'} size={20} color={textColor(isDarkMode)}/>
+      </TouchableOpacity>
+      }
+      {showInfo &&
+        <View style={{margin: 10}}>
+          <TouchableOpacity
+            onPress={() => setShowInfo(false)}
+            style={{width: '100%', flexDirection: 'row'}}>
+            <View style={{flex: 1}}/>
+            <Icon name={'keyboard-arrow-up'} size={20} color={textColor(isDarkMode)}/>
+          </TouchableOpacity>
+          <View style={{margin: 5, alignItems: 'center',}}>
+            <View style={styles.titleContainer}>
+              <Text style={[styles.titleText, {color: textColor(isDarkMode)}]}>정산 안내</Text>
+              <Text style={[styles.payAmountText, {color: textColor(isDarkMode)}]}>{settlementData.payAmount}원</Text>
+            </View>
+            <View style={styles.payerInfoContainer}>
+              <View style={{marginTop: 10}}>
+                <Text style={[styles.infoText, {color: isDarkMode ? '#aaa' : '#4f4f4f'}]}>계좌주명: {settlementData.payerAccountHolderName}</Text>
+                <TouchableOpacity
+                  style={{flexDirection: 'row', gap: 5, alignItems: 'center'}}
+                  onPress={() => Clipboard.setString(`${settlementData.payerAccountNumber} ${settlementData.payerBankName}`)}>
+                    <Text style={[styles.infoText, {color: isDarkMode ? '#aaa' : '#4f4f4f'}]}>계좌번호: {settlementData.payerBankName} {settlementData.payerAccountNumber}</Text>
+                  <Icon name={'content-copy'} size={12} color={isDarkMode ? '#aaa' : '#4f4f4f'} />
+                </TouchableOpacity>
+              </View>
+            </View>
+            {!isCompleteSettlement &&
+            <>
+              <Text style={styles.warnText}>꼭! 송금 후 완료 버튼을 눌러 주세요!</Text>
+              <TouchableOpacity
+                style={[styles.sendBtn, {backgroundColor: isDarkMode ? '#333' : 'black'}]}
+                onPress={settlementSendAlert}>
+                <Text style={styles.sendBtnText}>송금 완료 알림을 보냅니다</Text>
+              </TouchableOpacity>
+            </>
+            }
+          </View>
+        </View>
       }
     </View>
   );
@@ -106,17 +148,12 @@ export default SettlementInfoBox;
 
 const styles = StyleSheet.create({
   backgroundContainer: {
-    backgroundColor: '#f2f3f5',
-    padding: 25,
-    paddingBottom: 15,
     borderRadius: 12,
-    alignItems: 'center',
   },
   titleText: {
     fontSize: 22,
     letterSpacing: -0.7,
     fontWeight: '600',
-    color: 'black',
   },
   payAmountText: {
     fontSize: 22,
@@ -138,7 +175,6 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 13,
     letterSpacing: -0.4,
-    color: '#4f4f4f',
   },
   warnText: {
   fontSize: 12,

@@ -17,7 +17,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Socket} from 'socket.io-client';
 
-import {ChatRoomInfo, MessageData, PaxiUser, SettlementData} from '@interfaces/paxi';
+import {UserData, ChatRoomInfo, MessageData, PaxiUser, SettlementData} from '@interfaces/paxi';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import {textColor, borderColor, backgroundColor, common} from '@styles/default';
@@ -46,6 +46,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
   const [settlementData, setSettlementData] = useState<SettlementData>({} as SettlementData);
   const [isSettlement, setIsSettlement] = useState<boolean>(false);
+  const [isPaid, setIsPaid] = useState<boolean | undefined>(false);
 
   const getRoomInfo = async () => {
     paxi_api
@@ -125,6 +126,16 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     initSocket();
   }, []);
 
+  useEffect(() => {
+    if (!myInfo?.uuid || !Array.isArray(roomInfo?.room_users)) return;
+
+    const matchedUser = roomInfo.room_users.find(
+      (user: UserData) => user.userUuid === myInfo.uuid
+    );
+
+    setIsPaid(matchedUser?.isPaid);
+  }, [roomInfo, myInfo]);
+
   const sendChat = async () => {
     if (!socket) {
       console.error('소켓이 아직 연결되지 않았습니다.');
@@ -196,7 +207,10 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
             paddingHorizontal: 10,
             zIndex: 999,
         }}>
-          <SettlementInfoBox settlementData={settlementData} />
+          <SettlementInfoBox
+            isPaid={isPaid}
+            settlementData={settlementData}
+          />
         </View>
       }
 
