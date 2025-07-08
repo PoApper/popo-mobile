@@ -74,72 +74,123 @@ const SettlementInfoBox = ({
   };
 
   return (
-    <View style={[styles.backgroundContainer, {backgroundColor: isDarkMode ? '#222' : '#f2f3f5'}]}>
-      {!showInfo &&
-      <TouchableOpacity
-        onPress={() => setShowInfo(true)}
-        style={{flexDirection: 'row', gap: 10, margin: 10}}>
-        {isCompleteSettlement &&
-        <>
-          <Icon name={'check'} size={20} color={'green'}/>
-          <Text style={{
-            fontSize: 15,
-            fontWeight: '600',
-            color: 'green',
-          }}>정산이 완료되었습니다.</Text>
-        </>
-        }
-        {!isCompleteSettlement &&
-        <>
-          <Icon name={'warning'} size={20} color={'#e45b63'}/>
-          <Text style={{
-            fontSize: 15,
-            fontWeight: '600',
-            color: '#e45b63',
-          }}>정산이 아직 완료되지 않았습니다.</Text>
-        </>
-        }
-        <View style={{flex: 1}} />
-        <Icon name={'keyboard-arrow-down'} size={20} color={textColor(isDarkMode)}/>
-      </TouchableOpacity>
-      }
-      {showInfo &&
+    <View
+      style={[
+        styles.backgroundContainer,
+        {backgroundColor: isDarkMode ? '#222' : '#f2f3f5'},
+      ]}>
+      {!showInfo && (
+        <TouchableOpacity
+          onPress={() => setShowInfo(true)}
+          style={{flexDirection: 'row', gap: 10, margin: 10}}>
+          {isCompleteSettlement && (
+            <>
+              <Icon name={'check'} size={20} color={'green'} />
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: '600',
+                  color: 'green',
+                }}>
+                정산이 완료되었습니다.
+              </Text>
+            </>
+          )}
+          {!isCompleteSettlement && (
+            <>
+              <Icon name={'warning'} size={20} color={'#e45b63'} />
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: '600',
+                  color: '#e45b63',
+                }}>
+                정산이 아직 완료되지 않았습니다.
+              </Text>
+            </>
+          )}
+          <View style={{flex: 1}} />
+          <Icon
+            name={'keyboard-arrow-down'}
+            size={20}
+            color={textColor(isDarkMode)}
+          />
+        </TouchableOpacity>
+      )}
+      {showInfo && (
         <View style={{margin: 10}}>
           <TouchableOpacity
             onPress={() => setShowInfo(false)}
             style={{width: '100%', flexDirection: 'row'}}>
-            <View style={{flex: 1}}/>
-            <Icon name={'keyboard-arrow-up'} size={20} color={textColor(isDarkMode)}/>
+            <View style={{flex: 1}} />
+            <Icon
+              name={'keyboard-arrow-up'}
+              size={20}
+              color={textColor(isDarkMode)}
+            />
           </TouchableOpacity>
-          <View style={{margin: 5, alignItems: 'center',}}>
+          <View style={{margin: 5, alignItems: 'center'}}>
             <View style={styles.titleContainer}>
-              <Text style={[styles.titleText, {color: textColor(isDarkMode)}]}>정산 안내</Text>
-              <Text style={[styles.payAmountText, {color: textColor(isDarkMode)}]}>{settlementData.payAmount}원</Text>
+              <Text style={[styles.titleText, {color: textColor(isDarkMode)}]}>
+                정산 안내
+              </Text>
+              <Text
+                style={[styles.payAmountText, {color: textColor(isDarkMode)}]}>
+                {settlementData.payAmount}원
+              </Text>
             </View>
             <View style={styles.payerInfoContainer}>
               <View style={{marginTop: 10}}>
-                <Text style={[styles.infoText, {color: isDarkMode ? '#aaa' : '#4f4f4f'}]}>계좌주명: {settlementData.payerAccountHolderName}</Text>
+                <Text
+                  style={[
+                    styles.infoText,
+                    {color: isDarkMode ? '#aaa' : '#4f4f4f'},
+                  ]}>
+                  계좌주명: {settlementData.payerAccountHolderName}
+                </Text>
                 <TouchableOpacity
                   style={{flexDirection: 'row', gap: 5, alignItems: 'center'}}
-                  onPress={() => Clipboard.setString(`${settlementData.payerAccountNumber} ${settlementData.payerBankName}`)}>
-                    <Text style={[styles.infoText, {color: isDarkMode ? '#aaa' : '#4f4f4f'}]}>계좌번호: {settlementData.payerBankName} {settlementData.payerAccountNumber}</Text>
-                  <Icon name={'content-copy'} size={12} color={isDarkMode ? '#aaa' : '#4f4f4f'} />
+                  onPress={() =>
+                    Clipboard.setString(
+                      `${settlementData.payerAccountNumber} ${settlementData.payerBankName}`,
+                    )
+                  }>
+                  <Text
+                    style={[
+                      styles.infoText,
+                      {color: isDarkMode ? '#aaa' : '#4f4f4f'},
+                    ]}>
+                    계좌번호: {settlementData.payerBankName}{' '}
+                    {settlementData.payerAccountNumber}
+                  </Text>
+                  <Icon
+                    name={'content-copy'}
+                    size={12}
+                    color={isDarkMode ? '#aaa' : '#4f4f4f'}
+                  />
                 </TouchableOpacity>
               </View>
             </View>
-            {!isCompleteSettlement &&
-            <>
-              <Text style={styles.warnText}>꼭! 송금 후 완료 버튼을 눌러 주세요!</Text>
-              <TouchableOpacity
-                style={[styles.sendBtn, {backgroundColor: isDarkMode ? '#333' : 'black'}]}
-                onPress={settlementSendAlert}>
-                <Text style={styles.sendBtnText}>송금 완료 알림을 보냅니다</Text>
-              </TouchableOpacity>
-            </>
-            }
+            {!isCompleteSettlement && (
+              <>
+                <Text style={styles.warnText}>
+                  꼭! 송금 후 완료 버튼을 눌러 주세요!
+                </Text>
+                <TouchableOpacity
+                  style={[
+                    styles.sendBtn,
+                    {backgroundColor: isDarkMode ? '#333' : 'black'},
+                  ]}
+                  onPress={settlementSendAlert}>
+                  <Text style={styles.sendBtnText}>
+                    송금 완료 알림을 보냅니다
+                  </Text>
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         </View>
-      }
+      )}
     </View>
   );
 };
@@ -177,21 +228,21 @@ const styles = StyleSheet.create({
     letterSpacing: -0.4,
   },
   warnText: {
-  fontSize: 12,
-  letterSpacing: -0.4,
-  fontWeight: '600',
-  marginTop: 10,
-  color: '#e45b63',
-},
+    fontSize: 12,
+    letterSpacing: -0.4,
+    fontWeight: '600',
+    marginTop: 10,
+    color: '#e45b63',
+  },
   sendBtn: {
-  backgroundColor: '#000',
-  width: '90%',
-  alignItems: 'center',
-  paddingVertical: 8,
-  borderRadius: 6,
-  marginTop: 5,
-  justifyContent: 'center',
-},
+    backgroundColor: '#000',
+    width: '90%',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderRadius: 6,
+    marginTop: 5,
+    justifyContent: 'center',
+  },
   sendBtnText: {
     fontSize: 14,
     letterSpacing: -0.4,

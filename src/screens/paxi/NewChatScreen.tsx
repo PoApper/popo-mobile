@@ -17,7 +17,13 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Socket} from 'socket.io-client';
 
-import {UserData, ChatRoomInfo, MessageData, PaxiUser, SettlementData} from '@interfaces/paxi';
+import {
+  UserData,
+  ChatRoomInfo,
+  MessageData,
+  PaxiUser,
+  SettlementData,
+} from '@interfaces/paxi';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import {textColor, borderColor, backgroundColor, common} from '@styles/default';
@@ -44,7 +50,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const [newChat, setNewChat] = useState<string>('');
   const [socket, setSocket] = useState<Socket | null>(null);
 
-  const [settlementData, setSettlementData] = useState<SettlementData>({} as SettlementData);
+  const [settlementData, setSettlementData] = useState<SettlementData>(
+    {} as SettlementData,
+  );
   const [isSettlement, setIsSettlement] = useState<boolean>(false);
   const [isPaid, setIsPaid] = useState<boolean | undefined>(false);
 
@@ -130,7 +138,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     if (!myInfo?.uuid || !Array.isArray(roomInfo?.room_users)) return;
 
     const matchedUser = roomInfo.room_users.find(
-      (user: UserData) => user.userUuid === myInfo.uuid
+      (user: UserData) => user.userUuid === myInfo.uuid,
     );
 
     setIsPaid(matchedUser?.isPaid);
@@ -198,7 +206,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         navigation={navigation}
       />
 
-      {isSettlement &&
+      {isSettlement && (
         <View
           style={{
             position: 'absolute',
@@ -206,13 +214,10 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
             marginTop: 70,
             paddingHorizontal: 10,
             zIndex: 999,
-        }}>
-          <SettlementInfoBox
-            isPaid={isPaid}
-            settlementData={settlementData}
-          />
+          }}>
+          <SettlementInfoBox isPaid={isPaid} settlementData={settlementData} />
         </View>
-      }
+      )}
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
