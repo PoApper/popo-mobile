@@ -10,6 +10,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp, useRoute} from '@react-navigation/native';
@@ -64,6 +65,12 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       })
       .catch(err => {
         console.error(err);
+        Alert.alert('Error', err.response.data.message, [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('Home'),
+          },
+        ]);
       });
   };
 
