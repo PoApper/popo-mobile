@@ -135,7 +135,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   }, []);
 
   useEffect(() => {
-    if (!myInfo?.uuid || !Array.isArray(roomInfo?.room_users)) return;
+    if (!myInfo?.uuid || !Array.isArray(roomInfo?.room_users)) {
+      return;
+    }
 
     const matchedUser = roomInfo.room_users.find(
       (user: UserData) => user.userUuid === myInfo.uuid,
