@@ -1,9 +1,5 @@
 source 'https://cdn.cocoapods.org/'
 
-# Firebase 설정
-$RNFirebaseAsStaticFramework = true
-$FirebaseSDKVersion = '11.12.0'
-
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
@@ -18,7 +14,10 @@ platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
 # Firebase requires use_frameworks
+# https://rnfirebase.io/#altering-cocoapods-to-use-frameworks
 use_frameworks! :linkage => :static
+$RNFirebaseAsStaticFramework = true
+$FirebaseSDKVersion = '11.12.0'
 
 # 전역적으로 modular_headers 설정
 use_modular_headers!

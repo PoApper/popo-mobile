@@ -47,9 +47,16 @@ const ParticipantItem = ({
     <View
       style={[styles.userRow, {backgroundColor: backgroundColor(isDarkMode)}]}>
       <View style={styles.rowCenter}>
-        {/* TODO: 프로필 사진 대체 */}
         <View style={styles.avatarCircle}>
           <View style={{width: 36, height: 36, position: 'relative'}}>
+            <Image
+              source={require('../../../assets/baby_phonix.png')}
+              style={[
+                styles.profileImg,
+                {backgroundColor: getColor(userInfo.nickname)},
+              ]}
+              resizeMode="contain"
+            />
             {userInfo.isPaid && (
               <Icon
                 name="check-circle-outline"
@@ -134,7 +141,7 @@ const styles = StyleSheet.create({
   userRow: {
     paddingVertical: 12,
     borderRadius: 10,
-    marginBottom: 8,
+    marginBottom: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -145,13 +152,19 @@ const styles = StyleSheet.create({
   avatarCircle: {
     width: 36,
     height: 36,
-    backgroundColor: '#ddd',
+    borderRadius: 18,
+    marginRight: 10,
+  },
+  profileImg: {
+    width: 36,
+    height: 36,
     borderRadius: 18,
     marginRight: 10,
   },
   nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 2,
   },
   nameText: {
     fontSize: 14,
