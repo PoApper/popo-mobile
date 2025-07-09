@@ -242,23 +242,6 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   : '정보 없음'}
               </Text>
             </View>
-
-            {/* 앱 버전 정보 */}
-            <View
-              style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
-              <Text
-                style={[
-                  styles.detailLabel,
-                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-                ]}>
-                앱 버전
-              </Text>
-              <Text style={[styles.detailValue, {color: textColor}]}>
-                {Environment.gitSha.substring(0, 20)}
-                {'\n'}
-                {Environment.gitSha.substring(20)}
-              </Text>
-            </View>
           </View>
         </View>
 
@@ -287,7 +270,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
 
         {/* 개발자 페이지 버튼 */}
         {!Environment.isProduction && (
-          <View style={{marginBottom: 48, marginTop: 16}}>
+          <View style={{marginTop: 16}}>
             <TouchableOpacity
               style={[styles.buttonContainer, {backgroundColor: '#4F46E5'}]}
               onPress={() => navigation.navigate('Developer')}>
@@ -298,6 +281,12 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
             </Text>
           </View>
         )}
+
+        <View style={{marginTop: 16, marginBottom: 48}}>
+          <Text style={{fontSize: 12, color: '#6B7280'}}>
+            Version: {Environment.gitSha.substring(0, 12)}
+          </Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
