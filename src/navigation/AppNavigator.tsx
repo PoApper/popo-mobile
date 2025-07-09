@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import {navigationRef} from './RootNavigation';
 
 // Navigation
 import {RootStackParamList} from '@navigation/types';
@@ -70,7 +71,7 @@ const AppNavigator = () => {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <Stack.Navigator
           initialRouteName={isAuthenticated ? 'Main' : 'Landing'}
           screenOptions={{

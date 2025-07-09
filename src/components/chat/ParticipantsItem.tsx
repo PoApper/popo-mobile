@@ -1,8 +1,9 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {UserData} from '@interfaces/paxi';
+import {getColor} from '@utils/userchat-background';
 
 interface ParticipantItemProps {
   userInfo: UserData;
@@ -38,9 +39,16 @@ const ParticipantItem = ({
   return (
     <View style={styles.userRow}>
       <View style={styles.rowCenter}>
-        {/* TODO: 프로필 사진 대체 */}
         <View style={styles.avatarCircle}>
           <View style={{width: 36, height: 36, position: 'relative'}}>
+            <Image
+              source={require('../../../assets/baby_phonix.png')}
+              style={[
+                styles.profileImg,
+                {backgroundColor: getColor(userInfo.nickname)},
+              ]}
+              resizeMode="contain"
+            />
             {userInfo.isPaid && (
               <Icon
                 name="check-circle-outline"
@@ -63,15 +71,17 @@ const ParticipantItem = ({
           <View style={styles.nameRow}>
             <Text style={styles.nameText}>{userInfo.nickname}</Text>
           </View>
-          {!userInfo.isPaid && isOwner && (
-            <Text style={styles.subText}>방장</Text>
-          )}
-          {userInfo.isPaid && !isOwner && (
-            <Text style={styles.subText}>송금 완료</Text>
-          )}
-          {userInfo.isPaid && isOwner && (
-            <Text style={styles.subText}>방장 & 송금 완료</Text>
-          )}
+          <View>
+            {!userInfo.isPaid && isOwner && (
+              <Text style={styles.subText}>방장</Text>
+            )}
+            {userInfo.isPaid && !isOwner && (
+              <Text style={styles.subText}>송금 완료</Text>
+            )}
+            {userInfo.isPaid && isOwner && (
+              <Text style={styles.subText}>방장 & 송금 완료</Text>
+            )}
+          </View>
         </View>
       </View>
       <View style={styles.rowCenter}>
@@ -101,9 +111,8 @@ export default ParticipantItem;
 const styles = StyleSheet.create({
   userRow: {
     backgroundColor: '#fff',
-    paddingVertical: 12,
     borderRadius: 10,
-    marginBottom: 8,
+    marginBottom: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -114,13 +123,19 @@ const styles = StyleSheet.create({
   avatarCircle: {
     width: 36,
     height: 36,
-    backgroundColor: '#ddd',
+    borderRadius: 18,
+    marginRight: 10,
+  },
+  profileImg: {
+    width: 36,
+    height: 36,
     borderRadius: 18,
     marginRight: 10,
   },
   nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 2,
   },
   nameText: {
     fontSize: 14,
