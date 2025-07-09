@@ -14,7 +14,12 @@ interface RoomInfoBoxProps {
   myUuid: string;
 }
 
-const RoomInfoBox = ({roomData, setModalVisible, navigation, myUuid}: RoomInfoBoxProps) => {
+const RoomInfoBox = ({
+  roomData,
+  setModalVisible,
+  navigation,
+  myUuid,
+}: RoomInfoBoxProps) => {
   const isOwner = myUuid === roomData.ownerUuid;
   return (
     <View style={styles.infoBox}>
