@@ -5,11 +5,13 @@ import {
   TouchableOpacity,
   View,
   useColorScheme,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {UserData} from '@interfaces/paxi';
 import {textColor, backgroundColor} from '@styles/default';
+import { getColor } from '@utils/userchat-background';
 
 interface ParticipantItemProps {
   userInfo: UserData;
@@ -141,7 +143,6 @@ const styles = StyleSheet.create({
   userRow: {
     paddingVertical: 12,
     borderRadius: 10,
-    marginBottom: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
