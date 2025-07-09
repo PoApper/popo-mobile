@@ -9,22 +9,24 @@ import {ChatRoomInfo} from '@interfaces/paxi';
 
 interface RoomInfoBoxProps {
   roomData: ChatRoomInfo;
+  setModalVisible: (visible: boolean) => void;
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
   myUuid: string;
 }
 
-const RoomInfoBox = ({roomData, navigation, myUuid}: RoomInfoBoxProps) => {
+const RoomInfoBox = ({roomData, setModalVisible, navigation, myUuid}: RoomInfoBoxProps) => {
   const isOwner = myUuid === roomData.ownerUuid;
   return (
     <View style={styles.infoBox}>
       {isOwner && (
         <TouchableOpacity
           style={styles.editButton}
-          onPress={() =>
+          onPress={() => {
+            setModalVisible(false);
             navigation.navigate('ModifyPaxiRoom', {
               roomUuid: roomData.uuid,
-            })
-          }>
+            });
+          }}>
           <Icon name="edit" size={14} color="#999" />
           <Text style={styles.editText}>수정하기</Text>
         </TouchableOpacity>

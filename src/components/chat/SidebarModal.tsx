@@ -87,6 +87,7 @@ SidebarModalProps) => {
                 roomData={roomData}
                 navigation={navigation}
                 myUuid={myUuid}
+                setModalVisible={setModalVisible}
               />
 
               <View
