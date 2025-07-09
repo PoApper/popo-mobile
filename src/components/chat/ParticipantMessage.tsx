@@ -1,8 +1,9 @@
-import {View, Text, StyleSheet, useColorScheme} from 'react-native';
+import {View, Text, StyleSheet, useColorScheme, Image} from 'react-native';
 import moment from 'moment';
 
 import {MessageData} from '@interfaces/paxi';
 import {textColor} from '@styles/default';
+import {getColor} from '@utils/userchat-background';
 
 interface ParticipantMessageProps {
   message: MessageData;
@@ -13,14 +14,13 @@ const ParticipantMessage = ({message}: ParticipantMessageProps) => {
 
   return (
     <View style={styles.messageContainer}>
-      <View
-        style={{
-          width: 35,
-          height: 35,
-          borderRadius: 17.5,
-          backgroundColor: '#ddd',
-          marginRight: 8,
-        }}
+      <Image
+        source={require('../../../assets/baby_phonix.png')}
+        style={[
+          styles.profileImg,
+          {backgroundColor: getColor(message.senderNickname)},
+        ]}
+        resizeMode="contain"
       />
       <View>
         <Text style={[styles.messageSender, {color: textColor(isDarkMode)}]}>
@@ -53,6 +53,12 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     maxWidth: '90%',
     gap: 5,
+  },
+  profileImg: {
+    width: 35,
+    height: 35,
+    borderRadius: 17.5,
+    marginRight: 8,
   },
   messageSender: {
     fontSize: 13,
