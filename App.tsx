@@ -6,43 +6,47 @@ import React, {useEffect} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppNavigator from './src/navigation/AppNavigator';
-import {
-  requestUserPermission,
-  getFCMToken,
-  onTokenRefresh,
-} from './src/utils/firebase';
-import paxi_api from './src/utils/paxi_api';
+import {requestUserPermission, displayNotification} from './src/utils/firebase';
+import messaging from '@react-native-firebase/messaging';
+import EncryptedStorage from 'react-native-encrypted-storage';
+import {navigationRef} from './src/navigation/RootNavigation';
 
 const App = () => {
   useEffect(() => {
-    const initializeFCM = async () => {
-      const hasPermission = await requestUserPermission();
-      if (hasPermission) {
-        const token = await getFCMToken();
-        if (token) {
-          // console.log('FCM Token:', token);
-          paxi_api
-            .post('/push/key/', {
-              key: token,
-            })
-            .then(res => {
-              console.log('토큰 전송 성공', res);
-            })
-            .catch(err => {
-              const msg = err.response.data.message;
-              console.log('토큰 전송 실패', msg);
-            });
-        }
+    requestUserPermission();
+
+    const handlePendingNavigation = async () => {
+      // const pendingNavigation = await EncryptedStorage.getItem('pendingNavigation'); // for debug
+      const roomUuid = await EncryptedStorage.getItem('roomUuid');
+
+      // roomUuid가 있으면 NewChat 스크린으로 이동
+      if (roomUuid) {
+        const navigateToChat = () => {
+          if (navigationRef.isReady()) {
+            navigationRef.current?.navigate('NewChat', {roomUuid});
+            // 사용 후 저장된 값 삭제
+            EncryptedStorage.removeItem('roomUuid');
+            EncryptedStorage.removeItem('pendingNavigation');
+          } else {
+            // 네비게이션이 아직 준비되지 않았으면 다시 시도
+            setTimeout(navigateToChat, 100);
+          }
+        };
+
+        // 네비게이션 시도 시작
+        navigateToChat();
       }
     };
 
-    initializeFCM();
+    // handle delay of `setItem` in index.js
+    setTimeout(handlePendingNavigation, 100);
 
-    // 토큰 갱신 리스너 설정
-    const unsubscribe = onTokenRefresh(newToken => {
-      console.log('New FCM Token:', newToken);
-      // TODO: 여기에서 새로운 토큰을 서버에 전송
-      // await sendTokenToServer(newToken);
+    const unsubscribe = messaging().onMessage(remoteMessage => {
+      // NOTE: On iOS simulator, the message is not received when Forground.
+      displayNotification(
+        remoteMessage.notification?.title as string,
+        remoteMessage.notification?.body as string,
+      );
     });
 
     return () => unsubscribe();
