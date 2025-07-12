@@ -58,7 +58,7 @@ const UpcomingEvents = () => {
         if (error.response.status === 401) {
           // navigation.navigate('Login');
         } else {
-          console.error('예약 정보 조회 오류:', error);
+          console.error('일정 정보 조회 오류:', error);
         }
       })
       .finally(() => {
@@ -81,7 +81,7 @@ const UpcomingEvents = () => {
             styles.sectionTitle,
             {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
           ]}>
-          나의 최근 예약
+          나의 최근 일정
         </Text>
         <View style={[styles.scheduleCard]} />
       </View>
@@ -96,14 +96,14 @@ const UpcomingEvents = () => {
             styles.sectionTitle,
             {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
           ]}>
-          나의 최근 예약
+          나의 최근 일정
         </Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.scheduleScroll}>
           <View style={[styles.scheduleCard, {backgroundColor: '#4D61DD'}]}>
-            <Text style={styles.scheduleTitle}>최근 예약 내역이 없습니다</Text>
+            <Text style={styles.scheduleTitle}>최근 일정이 없습니다</Text>
           </View>
         </ScrollView>
       </View>
@@ -117,7 +117,7 @@ const UpcomingEvents = () => {
           styles.sectionTitle,
           {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
         ]}>
-        나의 최근 예약
+        나의 최근 일정
       </Text>
       <ScrollView
         horizontal
