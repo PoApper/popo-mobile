@@ -23,6 +23,7 @@ import DropdownFilter from '@components/room/DropdownFilter';
 import {RefreshButton} from '@components/room/RefreshButton';
 import RoomFilterDatePicker from '@components/room/RoomFilterDatePicker';
 import {RoomListCard} from '@components/room/RoomListCard';
+import moment from 'moment';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
@@ -142,14 +143,31 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         showsVerticalScrollIndicator={false}>
         <View style={{padding: 16}}>
           {roomData.length > 0 ? (
-            roomData.map((room, index) => (
-              <RoomListCard
-                key={index}
-                roomData={room}
-                userUuid={userUuid}
-                navigation={navigation as any}
-              />
-            ))
+            roomData
+              .filter(
+                room =>
+                  !selectedDeparture ||
+                  room.departureLocation === selectedDeparture,
+              )
+              .filter(
+                room =>
+                  !selectedArrival ||
+                  room.destinationLocation === selectedArrival,
+              )
+              .filter(
+                room =>
+                  !selectedDate ||
+                  moment(room.departureTime).format('YYYY-MM-DD') ===
+                    moment(selectedDate).format('YYYY-MM-DD'),
+              )
+              .map((room, index) => (
+                <RoomListCard
+                  key={index}
+                  roomData={room}
+                  userUuid={userUuid}
+                  navigation={navigation as any}
+                />
+              ))
           ) : (
             <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>
               현재 등록된 카풀이 없습니다.
