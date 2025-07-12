@@ -68,8 +68,16 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
       .post('room', body)
       .then(res => {
         if (res.status === 201) {
-          Alert.alert('성공', '방을 성공적으로 생성했습니다.');
-          navigation.goBack();
+          Alert.alert('성공', '방을 성공적으로 생성했습니다.', [
+            {
+              text: '확인',
+              onPress: () => {
+                navigation.navigate('NewChat', {
+                  roomUuid: res.data.uuid as string,
+                });
+              },
+            },
+          ]);
         }
       })
       .catch(error => {
