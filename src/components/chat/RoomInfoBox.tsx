@@ -30,7 +30,11 @@ const RoomInfoBox = ({
   const isOwner = myUuid === roomData.ownerUuid;
   const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={[styles.infoBox, {backgroundColor: isDarkMode ? '#333' : '#f2f3f5'},]}>
+    <View
+      style={[
+        styles.infoBox,
+        {backgroundColor: isDarkMode ? '#333' : '#f2f3f5'},
+      ]}>
       {isOwner && (
         <TouchableOpacity
           style={styles.editButton}
