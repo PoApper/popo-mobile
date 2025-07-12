@@ -88,6 +88,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     socket.on('newMessage', data => {
       console.debug('메시지 수신:', data);
       appendChat(data);
+      if (data.senderUuid == null) {
+        getRoomInfo();
+      }
     });
 
     socket.on('updatedMessage', data => {
