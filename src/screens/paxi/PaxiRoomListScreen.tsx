@@ -143,7 +143,12 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <View style={{padding: 16}}>
           {roomData.length > 0 ? (
             roomData.map((room, index) => (
-              <RoomListCard key={index} roomData={room} userUuid={userUuid} />
+              <RoomListCard
+                key={index}
+                roomData={room}
+                userUuid={userUuid}
+                navigation={navigation as any}
+              />
             ))
           ) : (
             <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>

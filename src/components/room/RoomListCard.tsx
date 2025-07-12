@@ -13,15 +13,19 @@ import moment from 'moment';
 import paxi_api from '@utils/paxi_api';
 import {RoomDataType} from '@interfaces/paxi';
 import DottedArrow from './DottedArrow';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '@navigation/types';
 
 interface RoomContainerProps {
   roomData: RoomDataType;
   userUuid: string;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
 }
 
 export const RoomListCard: React.FC<RoomContainerProps> = ({
   roomData,
   userUuid,
+  navigation,
 }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#222222';
@@ -29,18 +33,11 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
   const subTextColor = isDarkMode ? '#888' : '#666';
 
   const remain = roomData.maxParticipant - roomData.currentParticipant;
+  const isOwner = userUuid === roomData.ownerUuid;
 
   const askJoinRoom = () => {
-    if (userUuid === roomData.ownerUuid) {
-      Alert.alert(
-        '잠깐!',
-        '자신이 만든 방에는 참여할 수 없습니다. 내 일정에서 방 목록을 확인해주세요.',
-        [
-          {
-            text: '확인',
-          },
-        ],
-      );
+    if (isOwner) {
+      navigation.navigate('NewChat', {roomUuid: roomData.uuid});
       return;
     }
 
@@ -93,7 +90,11 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
               style={[
                 styles.statusContainer,
                 {
-                  backgroundColor: isPossible
+                  backgroundColor: isOwner
+                    ? isDarkMode
+                      ? '#fff3f3'
+                      : '#FFF0F0'
+                    : isPossible
                     ? isDarkMode
                       ? '#fff3f3'
                       : '#FFF0F0'
@@ -106,10 +107,14 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                 style={[
                   styles.statusText,
                   {
-                    color: isPossible ? '#fb5353' : '#909090',
+                    color: isOwner
+                      ? '#909090'
+                      : isPossible
+                      ? '#fb5353'
+                      : '#909090',
                   },
                 ]}>
-                {isPossible ? '참여 가능' : '마감'}
+                {isOwner ? '내가 생성한 방' : isPossible ? '참여 가능' : '마감'}
               </Text>
             </View>
             <View>
