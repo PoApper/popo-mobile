@@ -8,26 +8,42 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import Svg, {Line} from 'react-native-svg';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '@navigation/types';
 
 import {ChatRoomInfo} from '@interfaces/paxi';
 import {textColor} from '@styles/default';
 
 interface RoomInfoBoxProps {
   roomData: ChatRoomInfo;
+  setModalVisible: (visible: boolean) => void;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
+  myUuid: string;
 }
 
-const RoomInfoBox = ({roomData}: RoomInfoBoxProps) => {
+const RoomInfoBox = ({
+  roomData,
+  setModalVisible,
+  navigation,
+  myUuid,
+}: RoomInfoBoxProps) => {
+  const isOwner = myUuid === roomData.ownerUuid;
   const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View
-      style={[
-        styles.infoBox,
-        {backgroundColor: isDarkMode ? '#333' : '#f2f3f5'},
-      ]}>
-      <TouchableOpacity style={styles.editButton} onPress={() => {}}>
-        <Icon name="edit" size={14} color="#999" />
-        <Text style={styles.editText}>수정하기</Text>
-      </TouchableOpacity>
+    <View style={[styles.infoBox, {backgroundColor: isDarkMode ? '#333' : '#f2f3f5'},]}>
+      {isOwner && (
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => {
+            setModalVisible(false);
+            navigation.navigate('ModifyPaxiRoom', {
+              roomUuid: roomData.uuid,
+            });
+          }}>
+          <Icon name="edit" size={14} color="#999" />
+          <Text style={styles.editText}>수정하기</Text>
+        </TouchableOpacity>
+      )}
 
       <View style={styles.labelRow}>
         <Text style={styles.labelText}>출발지</Text>

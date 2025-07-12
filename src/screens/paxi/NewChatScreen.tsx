@@ -162,7 +162,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         <TouchableOpacity
           style={{marginRight: 10}}
           onPress={() => setSidebarVisible(!sidebarVisible)}>
-          <Icon name="menu" size={30} color={'black'} />
+          <Icon name="menu" size={30} color={textColor(isDarkMode)} />
         </TouchableOpacity>
       </View>
 
@@ -175,7 +175,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       />
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.container}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
         <FlatList
@@ -191,20 +191,37 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
           keyboardShouldPersistTaps="handled"
         />
 
-        <View style={styles.inputContainer}>
+        <View
+          style={[
+            styles.inputContainer,
+            {backgroundColor: backgroundColor(isDarkMode)},
+          ]}>
           <TextInput
-            style={[styles.textInput]}
+            style={[
+              styles.textInput,
+              {
+                backgroundColor: isDarkMode ? '#444' : '#eee',
+                color: backgroundColor(!isDarkMode),
+              },
+            ]}
             value={newChat}
             onChangeText={setNewChat}
             placeholder="메시지를 입력하세요..."
+            placeholderTextColor={backgroundColor(!isDarkMode)}
             multiline={true}
             maxLength={1000}
           />
           <TouchableOpacity
-            style={[styles.sendButton, {opacity: newChat.trim() ? 1 : 0.5}]}
+            style={[
+              styles.sendButton,
+              {
+                opacity: newChat.trim() ? 1 : 0.5,
+                backgroundColor: isDarkMode ? 'white' : 'black',
+              },
+            ]}
             onPress={sendChat}
             disabled={!newChat.trim()}>
-            <Icon name="send" size={20} color="white" />
+            <Icon name="send" size={20} color={backgroundColor(isDarkMode)} />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -232,18 +249,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: 'flex-end',
     backgroundColor: 'white',
-    borderTopWidth: 0.5,
-    borderTopColor: '#e0e0e0',
   },
   textInput: {
     flex: 1,
     minHeight: 40,
     maxHeight: 100,
     textAlignVertical: 'top',
-    borderWidth: 1,
-    backgroundColor: '#f8f9fa',
-    borderColor: '#e0e0e0',
-    borderRadius: 16,
+    borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 10,
     fontSize: 16,

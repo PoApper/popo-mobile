@@ -36,7 +36,7 @@ const ParticipantMessage = ({message}: ParticipantMessageProps) => {
               {message.message}
             </Text>
           </View>
-          <Text style={[styles.createdTime, {color: textColor(isDarkMode)}]}>
+          <Text style={[styles.createdTime]}>
             {moment(message.createdAt).format('HH:mm')}
           </Text>
         </View>
@@ -50,8 +50,8 @@ export default ParticipantMessage;
 const styles = StyleSheet.create({
   messageContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    maxWidth: '90%',
+    alignItems: 'flex-start',
+    maxWidth: '80%',
     gap: 5,
   },
   profileImg: {
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   messageBubble: {
-    backgroundColor: '#f2f3f5',
     borderRadius: 20,
     paddingVertical: 7,
     paddingHorizontal: 12,
@@ -80,11 +79,11 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 14,
     letterSpacing: -0.4,
-    marginBottom: 4,
   },
   createdTime: {
     fontSize: 12,
     letterSpacing: -0.3,
     fontWeight: 'bold',
+    color: '#9b9b9b',
   },
 });
