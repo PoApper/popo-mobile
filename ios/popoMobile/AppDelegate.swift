@@ -2,13 +2,13 @@ import UIKit
 import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
-import FirebaseCore
+import Firebase
 
 @main
 class AppDelegate: RCTAppDelegate {
   override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    // Firebase 초기화 - 안전하게 처리
     if let filePath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist") {
+      // https://rnfirebase.io/#configure-firebase-with-ios-credentials-react-native-077
       FirebaseApp.configure()
     } else {
       print("[FIREBASE] Warning: GoogleService-Info.plist not found!")

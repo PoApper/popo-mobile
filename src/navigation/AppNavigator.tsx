@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import {navigationRef} from './RootNavigation';
 
 // Navigation
 import {RootStackParamList} from '@navigation/types';
@@ -42,6 +43,7 @@ import BenefitsScreen from '@screens/BenefitsScreen';
 import CampusShuttleScreen from '@screens/CampusShuttle';
 import EquipmentReservationScreen from '@screens/equipment-reservation/EquipmentReservationScreen';
 import EquipmentReservationApplyScreen from '@screens/equipment-reservation/EquipmentReservationApplyScreen';
+import ModifyPaxiRoomScreen from '../screens/paxi/ModifyPaxiRoomScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -69,7 +71,7 @@ const AppNavigator = () => {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <Stack.Navigator
           initialRouteName={isAuthenticated ? 'Main' : 'Landing'}
           screenOptions={{
@@ -91,6 +93,10 @@ const AppNavigator = () => {
             component={PaxiCreateRoomScreen}
           />
           <Stack.Screen name="NewChat" component={NewChatScreen} />
+          <Stack.Screen
+            name="ModifyPaxiRoom"
+            component={ModifyPaxiRoomScreen}
+          />
           <Stack.Screen name="Settlement" component={SettlementScreen} />
 
           {/* Place Reservation Screens */}

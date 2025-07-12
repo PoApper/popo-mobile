@@ -19,6 +19,7 @@ import axios from 'axios';
 import {RootStackParamList} from '@navigation/types';
 import api, {POPO_API_URL} from '@utils/api';
 import {getFCMToken} from '@utils/firebase';
+import paxi_api from '@utils/paxi_api';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -85,8 +86,6 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
 
           // 2. 안전한 저장소에 토큰 저장 (앱 재시작 시 사용)
           await EncryptedStorage.setItem('auth_token', tokenValue);
-
-          console.log('인증 토큰 저장 완료');
         } else {
           Alert.alert('오류', '인증 토큰을 찾을 수 없습니다.');
         }
@@ -103,16 +102,17 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       await EncryptedStorage.setItem('isAuthenticated', 'true');
 
       // FCM 토큰 가져오기 및 저장
-      try {
-        const fcmToken = await getFCMToken();
-        if (fcmToken) {
-          console.log('FCM 토큰 발급 성공');
-          // TODO: FCM 토큰을 서버에 전송하는 API 호출
-          // await api.post('/users/fcm-token', { token: fcmToken });
-        }
-      } catch (fcmError) {
-        console.error('FCM 토큰 발급 실패:', fcmError);
-      }
+      getFCMToken()
+        .then(fcmToken => {
+          if (fcmToken) {
+            paxi_api.post('/push/key/', {
+              key: fcmToken,
+            });
+          }
+        })
+        .catch(fcmError => {
+          console.error('FCM 토큰 발급 실패:', fcmError);
+        });
 
       // 로그인 성공
       Alert.alert('로그인 성공', '환영합니다!');

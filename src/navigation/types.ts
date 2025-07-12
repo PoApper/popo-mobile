@@ -80,6 +80,9 @@ export type OtherStackParamList = {
   Settlement: {
     roomUuid: string;
   };
+  ModifyPaxiRoom: {
+    roomUuid: string;
+  };
   Login: undefined;
   UserDetail: undefined;
   Developer: undefined;
