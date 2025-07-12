@@ -74,6 +74,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               onPress: () => {
                 navigation.navigate('NewChat', {
                   roomUuid: res.data.uuid as string,
+                  from: 'roomList',
                 });
               },
             },

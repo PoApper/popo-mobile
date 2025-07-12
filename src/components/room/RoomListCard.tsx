@@ -37,7 +37,10 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
 
   const askJoinRoom = () => {
     if (isOwner) {
-      navigation.navigate('NewChat', {roomUuid: roomData.uuid});
+      navigation.navigate('NewChat', {
+        roomUuid: roomData.uuid,
+        from: 'roomList',
+      });
       return;
     }
 

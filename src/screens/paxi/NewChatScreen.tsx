@@ -35,7 +35,7 @@ type ChatScreenRouteProp = RouteProp<RootStackParamList, 'NewChat'>;
 const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const route = useRoute<ChatScreenRouteProp>();
-  const {roomUuid} = route.params;
+  const {roomUuid, from} = route.params;
 
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [roomInfo, setRoomInfo] = useState<ChatRoomInfo>({} as ChatRoomInfo);
@@ -152,7 +152,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         <TouchableOpacity
           style={common.backButton}
           onPress={() =>
-            navigation.navigate('Reservation', {selectedTab: 'taxi'})
+            from === 'roomList'
+              ? navigation.navigate('PaxiRoomList')
+              : navigation.navigate('Reservation', {selectedTab: 'taxi'})
           }>
           <Text style={[common.backButtonText, {color: textColor(isDarkMode)}]}>
             뒤로
