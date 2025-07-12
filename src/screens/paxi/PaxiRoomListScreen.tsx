@@ -8,6 +8,7 @@ import {
   StatusBar,
   useColorScheme,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -35,6 +36,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const [showEmptyRoom, setShowEmptyRoom] = useState(false);
   const [roomData, setRoomData] = useState<RoomDataType[]>([]);
   const [userUuid, setUserUuid] = useState<string>('');
+  const [refreshing, setRefreshing] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -58,6 +60,17 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         console.error('Error:', error);
         Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + error.message);
       });
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await getRoomList();
+    } catch (error) {
+      console.error('Refresh error:', error);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   useEffect(() => {
@@ -140,7 +153,15 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
       <ScrollView
         contentContainerStyle={{padding: 4}}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={isDarkMode ? ['#FFFFFF'] : ['#000000']}
+            tintColor={isDarkMode ? '#FFFFFF' : '#000000'}
+          />
+        }>
         <View style={{padding: 16}}>
           {roomData.length > 0 ? (
             roomData
