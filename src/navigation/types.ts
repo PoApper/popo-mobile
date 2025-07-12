@@ -93,5 +93,7 @@ export type OtherStackParamList = {
   EquipmentReservationApply: {
     association: string;
   };
-  Reservation: undefined;
+  Reservation: {
+    selectedTab?: string;
+  };
 };

@@ -151,7 +151,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         style={[common.header, {borderBottomColor: borderColor(isDarkMode)}]}>
         <TouchableOpacity
           style={common.backButton}
-          onPress={() => navigation.goBack()}>
+          onPress={() =>
+            navigation.navigate('Reservation', {selectedTab: 'taxi'})
+          }>
           <Text style={[common.backButtonText, {color: textColor(isDarkMode)}]}>
             뒤로
           </Text>
