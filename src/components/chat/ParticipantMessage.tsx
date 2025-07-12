@@ -1,8 +1,9 @@
-import {View, Text, StyleSheet, useColorScheme} from 'react-native';
+import {View, Text, StyleSheet, useColorScheme, Image} from 'react-native';
 import moment from 'moment';
 
 import {MessageData} from '@interfaces/paxi';
 import {textColor} from '@styles/default';
+import {getColor} from '@utils/userchat-background';
 
 interface ParticipantMessageProps {
   message: MessageData;
@@ -13,14 +14,13 @@ const ParticipantMessage = ({message}: ParticipantMessageProps) => {
 
   return (
     <View style={styles.messageContainer}>
-      <View
-        style={{
-          width: 35,
-          height: 35,
-          borderRadius: 17.5,
-          backgroundColor: '#ddd',
-          marginRight: 8,
-        }}
+      <Image
+        source={require('../../../assets/baby_phonix.png')}
+        style={[
+          styles.profileImg,
+          {backgroundColor: getColor(message.senderNickname)},
+        ]}
+        resizeMode="contain"
       />
       <View>
         <Text style={[styles.messageSender, {color: textColor(isDarkMode)}]}>
@@ -36,7 +36,7 @@ const ParticipantMessage = ({message}: ParticipantMessageProps) => {
               {message.message}
             </Text>
           </View>
-          <Text style={[styles.createdTime, {color: textColor(isDarkMode)}]}>
+          <Text style={[styles.createdTime]}>
             {moment(message.createdAt).format('HH:mm')}
           </Text>
         </View>
@@ -50,9 +50,15 @@ export default ParticipantMessage;
 const styles = StyleSheet.create({
   messageContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    maxWidth: '90%',
+    alignItems: 'flex-start',
+    maxWidth: '80%',
     gap: 5,
+  },
+  profileImg: {
+    width: 35,
+    height: 35,
+    borderRadius: 17.5,
+    marginRight: 8,
   },
   messageSender: {
     fontSize: 13,
@@ -65,7 +71,6 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   messageBubble: {
-    backgroundColor: '#f2f3f5',
     borderRadius: 20,
     paddingVertical: 7,
     paddingHorizontal: 12,
@@ -74,11 +79,11 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 14,
     letterSpacing: -0.4,
-    marginBottom: 4,
   },
   createdTime: {
     fontSize: 12,
     letterSpacing: -0.3,
     fontWeight: 'bold',
+    color: '#9b9b9b',
   },
 });

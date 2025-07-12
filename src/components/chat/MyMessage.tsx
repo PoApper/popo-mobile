@@ -20,7 +20,11 @@ const MyMessage = ({message}: {message: MessageData}) => {
       <Text style={styles.timeText}>
         {moment(message.createdAt).format('HH:mm')}
       </Text>
-      <View style={styles.messageBubble}>
+      <View
+        style={[
+          styles.messageBubble,
+          {backgroundColor: isDarkMode ? '#23262B' : '#f2f3f5'},
+        ]}>
         <Text style={[styles.messageText, {color: textColor(isDarkMode)}]}>
           {message.message}
         </Text>
@@ -34,10 +38,8 @@ export default MyMessage;
 const styles = StyleSheet.create({
   messageContainer: {
     alignSelf: 'flex-end',
-    marginBottom: 10,
   },
   messageBubble: {
-    backgroundColor: '#f2f3f5',
     borderRadius: 20,
     paddingVertical: 7,
     paddingHorizontal: 12,

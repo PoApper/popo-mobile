@@ -1,8 +1,11 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, useColorScheme} from 'react-native';
 
 import {MessageData} from '@interfaces/paxi';
+import {textColor} from '@styles/default';
 
 const SystemMessage = ({message}: {message: MessageData}) => {
+  const isDarkMode = useColorScheme() === 'dark';
+
   return (
     <View
       style={{
@@ -16,7 +19,7 @@ const SystemMessage = ({message}: {message: MessageData}) => {
         <Text
           style={{
             fontSize: 12,
-            color: '#000',
+            color: textColor(isDarkMode),
           }}>
           {message.message}
         </Text>
