@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,10 +7,11 @@ import {
   useColorScheme,
   StatusBar,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useFocusEffect} from '@react-navigation/native';
 
 import {RootStackParamList} from '@navigation/types';
 import ReservationList from '@components/ReservationList';
@@ -29,6 +30,8 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
 
   const [activeTab, setActiveTab] = useState<TabType>('place');
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -44,6 +47,26 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
     {id: 'taxi' as TabType, label: '택시 카풀'},
   ];
 
+  useFocusEffect(
+    useCallback(() => {
+      setRefreshKey(prev => prev + 1);
+      // 탭 포커스 시에도 새로고침 효과 표시
+      setRefreshing(true);
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 500);
+    }, [])
+  );
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setRefreshKey(prev => prev + 1);
+    // 새로고침 완료를 시뮬레이션하기 위해 약간의 지연 추가
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -55,9 +78,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}>
-            <Text style={[styles.backButtonText, {color: textColor}]}>
-              뒤로
-            </Text>
+            <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
           </TouchableOpacity>
         )}
         <Text style={[styles.headerTitle, {color: textColor}]}>내 일정</Text>
@@ -111,11 +132,26 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
 
       <View style={{flex: 1}}>
         {activeTab === 'place' ? (
-          <ReservationList navigation={navigation!} />
+          <ReservationList 
+            navigation={navigation!} 
+            refreshKey={refreshKey} 
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         ) : activeTab === 'equipment' ? (
-          <EquipReservationList navigation={navigation!} />
+          <EquipReservationList 
+            navigation={navigation!} 
+            refreshKey={refreshKey} 
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         ) : (
-          <TaxiChatList navigation={navigation!} />
+          <TaxiChatList 
+            navigation={navigation!} 
+            refreshKey={refreshKey} 
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
         )}
       </View>
     </SafeAreaView>

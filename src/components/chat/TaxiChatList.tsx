@@ -9,6 +9,7 @@ import {
   Image,
   useColorScheme,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
@@ -28,9 +29,12 @@ interface RoomData {
 
 interface TaxiChatListProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
+  refreshKey?: number;
+  refreshing?: boolean;
+  onRefresh?: () => void;
 }
 
-const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
+const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation, refreshKey, refreshing, onRefresh}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -77,7 +81,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
 
   useEffect(() => {
     fetchReservations();
-  }, []);
+  }, [refreshKey]);
 
   const renderReservationItem = ({item}: {item: RoomData}) => (
     <TouchableOpacity
@@ -155,7 +159,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
         <Text style={[styles.errorText, {color: textColor}]}>{error}</Text>
         <TouchableOpacity
           style={styles.retryButton}
-          onPress={() => fetchReservations(1)}>
+          onPress={() => fetchReservations()}>
           <Text style={styles.retryButtonText}>다시 시도</Text>
         </TouchableOpacity>
       </View>
@@ -189,6 +193,14 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
         ListFooterComponent={renderFooter}
         onScroll={handleScroll}
         scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing || false}
+            onRefresh={onRefresh}
+            colors={['#4F46E5']}
+            tintColor="#4F46E5"
+          />
+        }
       />
       {showScrollTop && (
         <TouchableOpacity
