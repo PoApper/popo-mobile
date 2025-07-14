@@ -1,4 +1,10 @@
-import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  useColorScheme,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import Svg, {Line} from 'react-native-svg';
@@ -6,6 +12,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 
 import {ChatRoomInfo} from '@interfaces/paxi';
+import {textColor} from '@styles/default';
 
 interface RoomInfoBoxProps {
   roomData: ChatRoomInfo;
@@ -21,8 +28,13 @@ const RoomInfoBox = ({
   myUuid,
 }: RoomInfoBoxProps) => {
   const isOwner = myUuid === roomData.ownerUuid;
+  const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.infoBox}>
+    <View
+      style={[
+        styles.infoBox,
+        {backgroundColor: isDarkMode ? '#333' : '#f2f3f5'},
+      ]}>
       {isOwner && (
         <TouchableOpacity
           style={styles.editButton}
@@ -43,12 +55,24 @@ const RoomInfoBox = ({
         <Text style={styles.labelText}>도착지</Text>
       </View>
       <View style={styles.routeInfo}>
-        <Text style={styles.location}>{roomData?.departureLocation}</Text>
-        <Text style={styles.arrow}>→</Text>
-        <Text style={styles.location}>{roomData?.destinationLocation}</Text>
+        <Text
+          style={[styles.location, {color: textColor(isDarkMode)}]}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.5}>
+          {roomData?.departureLocation}
+        </Text>
+        <Text style={[styles.arrow, {color: textColor(isDarkMode)}]}>→</Text>
+        <Text
+          style={[styles.location, {color: textColor(isDarkMode)}]}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.5}>
+          {roomData?.destinationLocation}
+        </Text>
       </View>
 
-      <Text style={styles.timeText}>
+      <Text style={[styles.timeText, {color: isDarkMode ? '#aaa' : '#666'}]}>
         {moment(roomData?.departureTime).format('Y년 M월 D일 HH:mm')} 출발
       </Text>
 
@@ -66,7 +90,10 @@ const RoomInfoBox = ({
         </Svg>
       </View>
 
-      <Text style={styles.extraInfo}>{roomData?.description}</Text>
+      <Text
+        style={[styles.extraInfo, {color: isDarkMode ? '#999' : '#4F4F4F'}]}>
+        {roomData?.description}
+      </Text>
     </View>
   );
 };
@@ -75,7 +102,6 @@ export default RoomInfoBox;
 
 const styles = StyleSheet.create({
   infoBox: {
-    backgroundColor: '#f2f3f5',
     borderRadius: 12,
     padding: 12,
     marginBottom: 12,
@@ -137,13 +163,11 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 10,
-    color: '#666',
     textAlign: 'center',
     marginBottom: 8,
   },
   extraInfo: {
     fontSize: 11,
-    color: '#4F4F4F',
     marginTop: 4,
   },
   dividerContainer: {
