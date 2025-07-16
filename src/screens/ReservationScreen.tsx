@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 
 import {RootStackParamList} from '@navigation/types';
 import ReservationList from '@components/ReservationList';
@@ -18,17 +18,28 @@ import EquipReservationList from '@components/EquipReservationList';
 import TaxiChatList from '@components/chat/TaxiChatList';
 
 type ReservationScreenProps = {
-  navigation?: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
-  route?: RouteProp<RootStackParamList, 'MyReservation'>;
+  navigation?: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
+  route?: RouteProp<RootStackParamList, 'Reservation'>;
 };
 
 type TabType = 'place' | 'equipment' | 'taxi';
 
 const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+  const route = useRoute<RouteProp<RootStackParamList, 'Reservation'>>();
 
   const [activeTab, setActiveTab] = useState<TabType>('place');
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
+
+  // 라우트 파라미터에서 selectedTab을 받아서 초기 탭 설정
+  useEffect(() => {
+    if (route.params?.selectedTab) {
+      const validTabs: TabType[] = ['place', 'equipment', 'taxi'];
+      if (validTabs.includes(route.params.selectedTab as TabType)) {
+        setActiveTab(route.params.selectedTab as TabType);
+      }
+    }
+  }, [route.params?.selectedTab]);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -54,7 +65,9 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
         {navigation && (
           <TouchableOpacity
             style={styles.backButton}
-            onPress={() => navigation.goBack()}>
+            onPress={() =>
+              navigation.navigate('Main', {userId: '', userData: {}})
+            }>
             <Text style={[styles.backButtonText, {color: textColor}]}>
               뒤로
             </Text>
@@ -111,11 +124,11 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
 
       <View style={{flex: 1}}>
         {activeTab === 'place' ? (
-          <ReservationList navigation={navigation!} />
+          <ReservationList navigation={navigation as any} />
         ) : activeTab === 'equipment' ? (
-          <EquipReservationList navigation={navigation!} />
+          <EquipReservationList navigation={navigation as any} />
         ) : (
-          <TaxiChatList navigation={navigation!} />
+          <TaxiChatList navigation={navigation as any} />
         )}
       </View>
     </SafeAreaView>

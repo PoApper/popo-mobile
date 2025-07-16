@@ -68,8 +68,17 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
       .post('room', body)
       .then(res => {
         if (res.status === 201) {
-          Alert.alert('성공', '방을 성공적으로 생성했습니다.');
-          navigation.goBack();
+          Alert.alert('성공', '방을 성공적으로 생성했습니다.', [
+            {
+              text: '확인',
+              onPress: () => {
+                navigation.navigate('NewChat', {
+                  roomUuid: res.data.uuid as string,
+                  from: 'roomList',
+                });
+              },
+            },
+          ]);
         }
       })
       .catch(error => {
@@ -324,7 +333,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 style={{
                   paddingHorizontal: 20,
                   paddingVertical: 10,
+                  opacity: maxParticipants === 2 ? 0.3 : 1,
                 }}
+                disabled={maxParticipants === 2}
                 onPress={() =>
                   setMaxParticipants(Math.max(2, maxParticipants - 1))
                 }>
@@ -350,7 +361,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 style={{
                   paddingHorizontal: 20,
                   paddingVertical: 10,
+                  opacity: maxParticipants === 4 ? 0.3 : 1,
                 }}
+                disabled={maxParticipants === 4}
                 onPress={() =>
                   setMaxParticipants(Math.min(4, maxParticipants + 1))
                 }>
