@@ -121,7 +121,12 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        onPress={() => navigation.navigate('NewChat', {roomUuid: item.uuid})}>
+        onPress={() =>
+          navigation.navigate('NewChat', {
+            roomUuid: item.uuid,
+            from: 'myReservation',
+          })
+        }>
         <Icon name="message" size={22} color="#222" />
       </TouchableOpacity>
     </TouchableOpacity>

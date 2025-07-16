@@ -76,6 +76,7 @@ export type OtherStackParamList = {
   };
   NewChat: {
     roomUuid: string;
+    from: 'roomList' | 'myReservation';
   };
   Settlement: {
     roomUuid: string;
@@ -93,5 +94,7 @@ export type OtherStackParamList = {
   EquipmentReservationApply: {
     association: string;
   };
-  Reservation: undefined;
+  Reservation: {
+    selectedTab?: string;
+  };
 };
