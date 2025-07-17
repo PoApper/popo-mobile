@@ -64,10 +64,9 @@ const UpcomingEvents = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAllEvents = async () => {
-      try {
-        // 장소 예약 데이터 가져오기
-        const placeResponse = await api.get<PaginatedResponse>(
+    const fetchPlaceEvents = () => {
+      return api
+        .get<PaginatedResponse>(
           'https://api.popo-dev.poapper.club/reservation-place/user',
           {
             params: {
@@ -75,13 +74,38 @@ const UpcomingEvents = () => {
               take: 10,
             },
           },
-        );
+        )
+        .then(res => {
+          return res.data.items;
+        })
+        .catch(err => {
+          console.error('장소 예약 데이터 조회 오류:', err);
+          return [];
+        });
+    };
+
+    const fetchTaxiEvents = () => {
+      return paxi_api
+        .get<TaxiRoom[]>('/room/my')
+        .then(res => {
+          return res.data.slice(0, 5);
+        })
+        .catch(err => {
+          console.error('택시 카풀 데이터 조회 오류:', err);
+          return [];
+        });
+    };
+
+    const fetchAllEvents = async () => {
+      try {
+        // 장소 예약 데이터 가져오기
+        const placeResponse = await fetchPlaceEvents();
 
         // 택시 카풀 데이터 가져오기
-        const taxiResponse = await paxi_api.get<TaxiRoom[]>('/room/my');
+        const taxiResponse = await fetchTaxiEvents();
 
         // 데이터 합치기
-        const placeEvents: CombinedEvent[] = placeResponse.data.items.map(
+        const placeEvents: CombinedEvent[] = placeResponse.map(
           (reservation: PlaceReservation) => ({
             id: `place_${reservation.uuid}`,
             type: 'place' as const,
@@ -94,7 +118,7 @@ const UpcomingEvents = () => {
           }),
         );
 
-        const taxiEvents: CombinedEvent[] = taxiResponse.data.map(
+        const taxiEvents: CombinedEvent[] = taxiResponse.map(
           (room: TaxiRoom) => ({
             id: `taxi_${room.uuid}`,
             type: 'taxi' as const,
@@ -205,14 +229,7 @@ const UpcomingEvents = () => {
             style={[
               styles.scheduleCard,
               {
-                backgroundColor:
-                  event.type === 'place'
-                    ? index % 2 === 0
-                      ? '#FF616B'
-                      : '#FF7BA5'
-                    : index % 2 === 0
-                    ? '#4CAF50'
-                    : '#8BC34A',
+                backgroundColor: index % 2 === 0 ? '#FF616B' : '#FF7BA5',
               },
             ]}>
             <View style={styles.eventHeader}>
@@ -225,6 +242,17 @@ const UpcomingEvents = () => {
               <Text style={styles.eventType}>
                 {event.type === 'place' ? '장소 예약' : '택시 카풀'}
               </Text>
+              {event.type === 'place' && (
+                <View style={styles.statusContainer}>
+                  <View
+                    style={[
+                      styles.statusBadge,
+                      {backgroundColor: getStatusColor(event.status)},
+                    ]}>
+                    <Text style={styles.statusText}>{event.status}</Text>
+                  </View>
+                </View>
+              )}
             </View>
             <Text style={styles.scheduleTitle}>{event.title}</Text>
             <View style={styles.scheduleInfo}>
@@ -247,17 +275,6 @@ const UpcomingEvents = () => {
                 {formatDate(event.date)} {event.time}
               </Text>
             </View>
-            {event.type === 'place' && (
-              <View style={styles.statusContainer}>
-                <View
-                  style={[
-                    styles.statusBadge,
-                    {backgroundColor: getStatusColor(event.status)},
-                  ]}>
-                  <Text style={styles.statusText}>{event.status}</Text>
-                </View>
-              </View>
-            )}
           </View>
         ))}
       </ScrollView>
@@ -321,7 +338,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   statusContainer: {
-    marginTop: 8,
+    marginLeft: 8, // marginTop에서 marginLeft로 변경하여 한 줄 정렬
   },
   statusBadge: {
     paddingHorizontal: 8,
