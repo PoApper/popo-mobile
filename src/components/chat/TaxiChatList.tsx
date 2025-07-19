@@ -186,7 +186,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   }
 
   return (
-    <>
+    <View style={{flex: 1}}>
       <FlatList
         ref={listRef}
         data={chatRooms}
@@ -205,6 +205,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
             tintColor="#4F46E5"
           />
         }
+        style={{flex: 1}}
       />
       {showScrollTop && (
         <TouchableOpacity
@@ -219,14 +220,13 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           <Text style={[styles.scrollTopText, {color: textColor}]}>↑</Text>
         </TouchableOpacity>
       )}
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   listContainer: {
-    flex: 1,
-    paddingHorizontal: 16,
+    padding: 16,
   },
   reservationTitle: {
     fontSize: 18,

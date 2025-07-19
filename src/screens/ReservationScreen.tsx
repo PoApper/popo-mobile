@@ -147,12 +147,14 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
             onRefresh={onRefresh}
           />
         ) : (
-          <TaxiChatList
-            navigation={navigation!}
-            refreshKey={refreshKey}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
+          <View style={{flex: 1}}>
+            <TaxiChatList
+              navigation={navigation!}
+              refreshKey={refreshKey}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          </View>
         )}
       </View>
     </SafeAreaView>
