@@ -19,7 +19,6 @@ import paxi_api from '@utils/paxi_api';
 import api from '@utils/api';
 import {PAXI_LOCATIONS} from '@utils/locations';
 import {RoomDataType} from '@interfaces/paxi';
-import CommonHeader from '@components/CommonHeader';
 import DropdownFilter from '@components/room/DropdownFilter';
 import {RefreshButton} from '@components/room/RefreshButton';
 import RoomFilterDatePicker from '@components/room/RoomFilterDatePicker';
@@ -102,8 +101,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="Paxi" isBackHome={true} />
-
       <View style={[styles.conditionNavigator]}>
         <RefreshButton onPress={() => getRoomList()} />
 
