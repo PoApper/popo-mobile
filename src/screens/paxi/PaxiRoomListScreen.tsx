@@ -132,15 +132,15 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
             styles.checkbox,
             {borderColor: isDarkMode ? '#555' : '#D0D0D0'},
             showEmptyRoom && {
-              backgroundColor: isDarkMode ? '#FFFFFF' : 'black',
-              borderColor: isDarkMode ? '#FFFFFF' : 'black',
+              backgroundColor: isDarkMode ? '#4F46E5' : 'black', // 다크모드에서 파란색 등으로
+              borderColor: isDarkMode ? '#4F46E5' : 'black',
             },
           ]}>
           {showEmptyRoom && (
             <Icon
               name="check"
               size={20}
-              color={isDarkMode ? '#000000' : '#FFFFFF'}
+              color="#FFFFFF" // 항상 흰색
               style={styles.checkmark}
             />
           )}
