@@ -98,8 +98,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         borderBottomWidth: 1,
         borderBottomColor: borderColor,
       }}
-      onPress={() => navigation.navigate('NewChat', {roomUuid: item.uuid})}
-    >
+      onPress={() => navigation.navigate('NewChat', {roomUuid: item.uuid})}>
       <View style={{flex: 1}}>
         <Text
           style={[styles.reservationTitle, {color: textColor}]}
@@ -130,8 +129,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           marginLeft: 12,
           justifyContent: 'center',
           alignItems: 'center',
-        }}
-      >
+        }}>
         <Icon name="message" size={22} color="#222" />
       </View>
     </TouchableOpacity>
