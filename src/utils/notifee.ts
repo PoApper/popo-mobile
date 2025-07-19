@@ -1,7 +1,6 @@
-import notifee, {AuthorizationStatus, EventType} from '@notifee/react-native';
+import notifee, {AuthorizationStatus} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
-import {navigate} from '../navigation/RootNavigation';
-// import {Platform} from 'react-native';
+// import {navigate} from '../navigation/RootNavigation';
 
 // Notifee 기반 권한 요청
 export const requestUserPermission = async () => {
@@ -69,17 +68,3 @@ export async function displayNotification(
     data, // 알림에 데이터 추가
   });
 }
-
-// 포어그라운드 알림 클릭 이벤트 리스너 등록
-notifee.onForegroundEvent(({type, detail}) => {
-  if (type === EventType.PRESS) {
-    const {notification} = detail;
-    if (notification?.data?.roomUuid) {
-      navigate('NewChat', {
-        roomUuid: notification.data.roomUuid,
-        from: 'roomList',
-      });
-    }
-    // 필요시 다른 분기 추가 가능
-  }
-});

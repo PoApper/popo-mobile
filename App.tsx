@@ -5,12 +5,14 @@
 import React, {useEffect} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import messaging from '@react-native-firebase/messaging';
+import EncryptedStorage from 'react-native-encrypted-storage';
+import notifee, {EventType} from '@notifee/react-native';
+
 import AppNavigator from './src/navigation/AppNavigator';
 import {requestUserPermission} from './src/utils/firebase';
 import {displayNotification} from './src/utils/notifee';
-import messaging from '@react-native-firebase/messaging';
-import EncryptedStorage from 'react-native-encrypted-storage';
-import {navigationRef} from './src/navigation/RootNavigation';
+import {navigate, navigationRef} from './src/navigation/RootNavigation';
 
 const App = () => {
   useEffect(() => {
@@ -58,7 +60,21 @@ const App = () => {
       displayNotification(
         remoteMessage.notification?.title as string,
         remoteMessage.notification?.body as string,
+        remoteMessage.data,
       );
+    });
+
+    // 포어그라운드 알림 클릭 이벤트 리스너 등록
+    notifee.onForegroundEvent(({type, detail}) => {
+      if (type === EventType.PRESS) {
+        const {notification} = detail;
+        if (notification?.data?.roomUuid) {
+          navigate('NewChat', {
+            roomUuid: notification.data.roomUuid,
+            from: 'roomList',
+          });
+        }
+      }
     });
 
     return () => unsubscribe();
