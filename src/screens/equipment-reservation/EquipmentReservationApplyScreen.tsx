@@ -14,6 +14,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
@@ -91,7 +92,7 @@ const EquipmentReservationApplyScreen = ({
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [tempEndTime, setTempEndTime] = useState(new Date());
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const [showEquipmentList, setShowEquipmentList] = useState(false);
   const [reservedEquipments, setReservedEquipments] = useState<string[]>([]);
   const [loadingReservations, setLoadingReservations] = useState(false);
@@ -325,29 +326,46 @@ const EquipmentReservationApplyScreen = ({
     );
   };
 
+  const openEquipListPicker = () => {
+    Keyboard.dismiss();
+    setShowDatePicker(false);
+    setShowStartPicker(false);
+    setShowEndPicker(false);
+    setShowEquipmentList(!showEquipmentList);
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToPosition(0, 500, true);
+    });
+  };
+
   // Picker 상태 관리 함수
   const openDatePicker = () => {
+    setShowEquipmentList(false);
+    Keyboard.dismiss();
     setShowDatePicker(true);
     setShowStartPicker(false);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 600, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 600, true);
     }, 100);
   };
   const openStartPicker = () => {
+    setShowEquipmentList(false);
+    Keyboard.dismiss();
     setShowDatePicker(false);
     setShowStartPicker(true);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 600, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 600, true);
     }, 100);
   };
   const openEndPicker = () => {
+    setShowEquipmentList(false);
+    Keyboard.dismiss();
     setShowDatePicker(false);
     setShowStartPicker(false);
     setShowEndPicker(true);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 600, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 600, true);
     }, 100);
   };
 
@@ -390,10 +408,79 @@ const EquipmentReservationApplyScreen = ({
           <View style={styles.placeholderButton} />
         </View>
 
-        <ScrollView
+        <KeyboardAwareScrollView
           ref={scrollViewRef}
           contentContainerStyle={styles.scrollContainer}
-          keyboardShouldPersistTaps="handled">
+          keyboardShouldPersistTaps="handled"
+          enableOnAndroid={true}
+          enableAutomaticScroll={true}
+          extraScrollHeight={20}
+          extraHeight={120}>
+          {/* 공지사항 섹션 */}
+          <View style={[styles.noticeSection, {borderColor: borderColor}]}>
+            <Text style={[styles.noticeTitle, {color: textColor}]}>
+              📢 예약 공지사항
+            </Text>
+            {association === 'dormunion' ? (
+              <View style={styles.noticeContent}>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  예약한 장비는 생활관자치회 사무실(생활관 4동)에서 수령하실 수
+                  있습니다. 🏢️
+                </Text>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  장비가 분실되거나 예약 시간을 초과할 경우, 차후 예약에 제한을
+                  둘 수 있습니다. 🚨
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.noticeContent}>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  <Text style={styles.noticeBold}>물품 대여 순서 :</Text> POPO
+                  신청&입금 - 카카오톡 채널 입장 - 승인 - 대여&반납
+                </Text>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  <Text style={styles.noticeBold}>예약비 입금 계좌 :</Text>{' '}
+                  부산은행 1122244813601 (안강현)
+                </Text>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  *입금자명은 예약자명과 동일하게 해주세요.
+                </Text>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  예약금 납부 후, 카카오톡 채널에 입장하여 대여자명 / 대여일 /
+                  대여품목 / 송금 화면 발송
+                </Text>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  <Text style={styles.noticeBold}>카카오톡 채널 링크 :</Text>{' '}
+                  동아리연합회 2025
+                </Text>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  <Text style={styles.noticeBold}>예시</Text>
+                  {'\n'}
+                  정종민{'\n'}
+                  3월 10일 월요일{'\n'}
+                  메인스피커1 / 오디오 인터페이스 / 유선 보컬 마이크 1~3
+                </Text>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  <Text style={styles.noticeBold}>대여/반납 시간 :</Text> 월 ~
+                  금 / 12:30 ~ 13:30
+                </Text>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  *그 외 시간에 대여와 반납은 어렵습니다.
+                </Text>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  <Text style={styles.noticeBold}>수령 장소 :</Text>{' '}
+                  동아리연합회 사무실(학생회관 301호)
+                </Text>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  장비 분실 및 반납 시간을 어길 시 책임을 물을 수 있습니다.
+                </Text>
+                <Text style={[styles.noticeText, {color: textColor}]}>
+                  <Text style={styles.noticeBold}>문의 :</Text> (운영관리부장
+                  장현웅) 010-5917-8295
+                </Text>
+              </View>
+            )}
+          </View>
           <View style={styles.formSection}>
             <Text style={[styles.label, {color: textColor}]}>
               사용자 <Text style={{color: '#FB5353'}}>*</Text>
@@ -481,10 +568,7 @@ const EquipmentReservationApplyScreen = ({
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
                 },
               ]}
-              onPress={e => {
-                e.stopPropagation && e.stopPropagation();
-                setShowEquipmentList(prev => !prev);
-              }}
+              onPress={openEquipListPicker}
               activeOpacity={0.8}>
               {selectedEquipments.length > 0 ? (
                 selectedEquipments.map(equip => (
@@ -773,7 +857,7 @@ const EquipmentReservationApplyScreen = ({
               <Text style={styles.reservationButtonText}>예약 생성하기</Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
@@ -969,6 +1053,29 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     minHeight: 48,
     justifyContent: 'center',
+  },
+  noticeSection: {
+    backgroundColor: '#FFF8F8',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#FFE5E5',
+  },
+  noticeTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  noticeContent: {
+    gap: 8,
+  },
+  noticeText: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  noticeBold: {
+    fontWeight: 'bold',
   },
 });
 
