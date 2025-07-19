@@ -89,7 +89,12 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
         borderBottomWidth: 1,
         borderBottomColor: borderColor,
       }}
-      onPress={() => navigation.navigate('Chat', {roomUuid: item.uuid})}>
+      onPress={() =>
+        navigation.navigate('NewChat', {
+          roomUuid: item.uuid,
+          from: 'myReservation',
+        })
+      }>
       <View style={{flex: 1}}>
         <Text
           style={[styles.reservationTitle, {color: textColor}]}
@@ -111,7 +116,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
           {moment(item.departureTime).format('YYYY-MM-DD HH:mm')} 출발
         </Text>
       </View>
-      <TouchableOpacity
+      <View
         style={{
           width: 48,
           height: 48,
@@ -120,15 +125,9 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
           marginLeft: 12,
           justifyContent: 'center',
           alignItems: 'center',
-        }}
-        onPress={() =>
-          navigation.navigate('NewChat', {
-            roomUuid: item.uuid,
-            from: 'myReservation',
-          })
-        }>
+        }}>
         <Icon name="message" size={22} color="#222" />
-      </TouchableOpacity>
+      </View>
     </TouchableOpacity>
   );
 
