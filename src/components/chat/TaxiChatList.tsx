@@ -100,7 +100,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation}) => {
           style={[styles.reservationTitle, {color: textColor}]}
           numberOfLines={1}
           ellipsizeMode="tail">
-          {`${item.title}`}
+          {item.title}
         </Text>
         <Text
           style={[styles.fromToText, {color: textColor}]}
