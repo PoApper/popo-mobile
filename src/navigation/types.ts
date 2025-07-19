@@ -68,8 +68,9 @@ export type AssociationStackParamList = {
 export type OtherStackParamList = {
   Auth: undefined;
   Main: {
-    userId: string;
-    userData: any;
+    userId?: string;
+    userData?: any;
+    tab?: string;
   };
   Chat: {
     roomUuid: string;

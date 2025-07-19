@@ -153,8 +153,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
           style={common.backButton}
           onPress={() =>
             from === 'roomList'
-              ? navigation.navigate('PaxiRoomList')
-              : navigation.navigate('Reservation', {selectedTab: 'taxi'})
+              ? navigation.navigate('Main', {tab: 'Paxi'})
+              : navigation.navigate('Main', {tab: 'MyReservation'})
           }>
           <Text style={[common.backButtonText, {color: textColor(isDarkMode)}]}>
             뒤로

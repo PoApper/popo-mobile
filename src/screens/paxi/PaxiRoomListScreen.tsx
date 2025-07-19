@@ -19,7 +19,6 @@ import paxi_api from '@utils/paxi_api';
 import api from '@utils/api';
 import {PAXI_LOCATIONS} from '@utils/locations';
 import {RoomDataType} from '@interfaces/paxi';
-import CommonHeader from '@components/CommonHeader';
 import DropdownFilter from '@components/room/DropdownFilter';
 import {RefreshButton} from '@components/room/RefreshButton';
 import RoomFilterDatePicker from '@components/room/RoomFilterDatePicker';
@@ -102,8 +101,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="Paxi" isBackHome={true} />
-
       <View style={[styles.conditionNavigator]}>
         <RefreshButton onPress={() => getRoomList()} />
 
@@ -135,15 +132,15 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
             styles.checkbox,
             {borderColor: isDarkMode ? '#555' : '#D0D0D0'},
             showEmptyRoom && {
-              backgroundColor: isDarkMode ? '#FFFFFF' : 'black',
-              borderColor: isDarkMode ? '#FFFFFF' : 'black',
+              backgroundColor: isDarkMode ? '#4F46E5' : 'black', // 다크모드에서 파란색 등으로
+              borderColor: isDarkMode ? '#4F46E5' : 'black',
             },
           ]}>
           {showEmptyRoom && (
             <Icon
               name="check"
               size={20}
-              color={isDarkMode ? '#000000' : '#FFFFFF'}
+              color="#FFFFFF" // 항상 흰색
               style={styles.checkmark}
             />
           )}

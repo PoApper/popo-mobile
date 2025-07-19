@@ -18,7 +18,7 @@ import UserDetailScreen from '@screens/auth/UserDetailScreen';
 import DeveloperPage from '@screens/auth/DeveloperPage';
 
 // Paxi Screens
-import PaxiRoomListScreen from '@screens/paxi/PaxiRoomListScreen';
+// import PaxiRoomListScreen from '@screens/paxi/PaxiRoomListScreen';
 import PaxiCreateRoomScreen from '@screens/paxi/CreatePaxiRoomScreen';
 import NewChatScreen from '@screens/paxi/NewChatScreen';
 import PaxiIntroScreen from '@screens/paxi/PaxiIntro';
@@ -87,7 +87,7 @@ const AppNavigator = () => {
           {/* Paxi Screens */}
           <Stack.Screen name="PaxiIntro" component={PaxiIntroScreen} />
           <Stack.Screen name="PaxiStart" component={PaxiStartScreen} />
-          <Stack.Screen name="PaxiRoomList" component={PaxiRoomListScreen} />
+          {/* <Stack.Screen name="PaxiRoomList" component={PaxiRoomListScreen} /> */}
           <Stack.Screen
             name="CreatePaxiRoomScreen"
             component={PaxiCreateRoomScreen}

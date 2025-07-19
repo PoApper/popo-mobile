@@ -49,6 +49,9 @@ SidebarModalProps) => {
   const [banModalVisible, setBanModalVisible] = useState<boolean>(false);
   const [selectedUserData, setSelectedUserData] = useState<UserData>();
 
+  const isIamOwner = myUuid == roomData.ownerUuid;
+  const roomPeopleCnt = roomData.currentParticipant;
+
   const handleClose = () => {
     Animated.timing(slideAnim, {
       toValue: screenWidth * 0.8,
@@ -174,19 +177,40 @@ SidebarModalProps) => {
                       {
                         text: '나가기',
                         onPress: () => {
-                          paxi_api
-                            .put(`/room/leave/${roomData.uuid}`)
-                            .then(() => {
-                              setModalVisible(false);
-                              navigation.navigate('Home');
-                            })
-                            .catch(err => {
-                              console.log('채팅방 나가기 실패', err);
-                              Alert.alert(
-                                '채팅방 나가기 실패',
-                                `채팅방 나가기에 실패했습니다.\n${err.response.data.message}`,
-                              );
-                            });
+                          if (isIamOwner && roomPeopleCnt == 1) {
+                            paxi_api
+                              .delete(`/room/${roomData.uuid}`)
+                              .then(() => {
+                                setModalVisible(false);
+                                navigation.navigate('Main', {
+                                  tab: 'MyReservation',
+                                });
+                              })
+                              .catch(err => {
+                                console.error(
+                                  `자신이 소유한 채팅방(${roomData.uuid}) 나가기 실패`,
+                                  err,
+                                );
+                                Alert.alert(
+                                  '채팅방 나가기 실패',
+                                  `채팅방 나가기에 실패했습니다.\n${err.response.data.message}`,
+                                );
+                              });
+                          } else {
+                            paxi_api
+                              .put(`/room/leave/${roomData.uuid}`)
+                              .then(() => {
+                                setModalVisible(false);
+                                navigation.navigate('Home');
+                              })
+                              .catch(err => {
+                                console.error('채팅방 나가기 실패', err);
+                                Alert.alert(
+                                  '채팅방 나가기 실패',
+                                  `채팅방 나가기에 실패했습니다.\n${err.response.data.message}`,
+                                );
+                              });
+                          }
                         },
                       },
                     ]);
