@@ -16,12 +16,14 @@ type CommonHeaderProps = {
   >;
   title: string;
   isBackHome?: boolean;
+  noBackButton?: boolean;
 };
 
 const CommonHeader = ({
   navigation,
   title,
   isBackHome = false,
+  noBackButton = false,
 }: CommonHeaderProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -30,17 +32,21 @@ const CommonHeader = ({
 
   return (
     <View style={[styles.header, {borderBottomColor: borderColor}]}>
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => {
-          if (isBackHome) {
-            navigation.navigate('Main');
-          } else {
-            navigation.goBack();
-          }
-        }}>
-        <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
-      </TouchableOpacity>
+      {noBackButton ? (
+        <View style={styles.placeholderButton} />
+      ) : (
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => {
+            if (isBackHome) {
+              navigation.navigate('Main');
+            } else {
+              navigation.goBack();
+            }
+          }}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+        </TouchableOpacity>
+      )}
       <Text style={[styles.headerTitle, {color: textColor}]}>{title}</Text>
       <View style={styles.placeholderButton} />
     </View>

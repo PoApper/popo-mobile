@@ -47,7 +47,6 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   };
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
-  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
 
   const tabs = [
     {id: 'place' as TabType, label: '장소 예약'},
@@ -61,22 +60,6 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
-        {navigation && (
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() =>
-              navigation.navigate('Main', {userId: '', userData: {}})
-            }>
-            <Text style={[styles.backButtonText, {color: textColor}]}>
-              뒤로
-            </Text>
-          </TouchableOpacity>
-        )}
-        <Text style={[styles.headerTitle, {color: textColor}]}>내 일정</Text>
-        <View style={styles.placeholderButton} />
-      </View>
-
       <View style={{flex: 0}}>
         <ScrollView
           horizontal

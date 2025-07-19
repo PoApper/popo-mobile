@@ -60,7 +60,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
       title: roomName,
       description: roomDetails,
       destinationLocation: arrivalName,
-      maxParticipant: 4,
+      maxParticipant: maxParticipants,
       departureTime: selectedDateTime.toISOString(),
       departureLocation: departureName,
     };
@@ -295,7 +295,16 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             minuteInterval={10}
           />
 
-          <Text style={[styles.titleText, {color: textColor}]}>상세내용</Text>
+          <Text
+            style={[
+              styles.titleText,
+              {color: textColor, flexDirection: 'row', alignItems: 'center'},
+            ]}>
+            상세내용{' '}
+            <Text style={{color: textColor, fontSize: 12, opacity: 0.5}}>
+              (선택)
+            </Text>
+          </Text>
           <TextInput
             style={[
               styles.roomInput,
@@ -382,11 +391,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
           style={[styles.createButton]}
           onPress={() => checkInputValid()}
           disabled={
-            !roomName ||
-            !departureName ||
-            !arrivalName ||
-            !selectedDateTime ||
-            !roomDetails
+            !roomName || !departureName || !arrivalName || !selectedDateTime
           }>
           <Text style={styles.createButtonText}>방 생성하기</Text>
         </TouchableOpacity>
