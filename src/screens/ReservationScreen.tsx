@@ -7,7 +7,6 @@ import {
   useColorScheme,
   StatusBar,
   ScrollView,
-  RefreshControl,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -55,7 +54,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
       setTimeout(() => {
         setRefreshing(false);
       }, 500);
-    }, [])
+    }, []),
   );
 
   const onRefresh = useCallback(() => {
@@ -78,7 +77,9 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}>
-            <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+            <Text style={[styles.backButtonText, {color: textColor}]}>
+              뒤로
+            </Text>
           </TouchableOpacity>
         )}
         <Text style={[styles.headerTitle, {color: textColor}]}>내 일정</Text>
@@ -132,23 +133,23 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
 
       <View style={{flex: 1}}>
         {activeTab === 'place' ? (
-          <ReservationList 
-            navigation={navigation!} 
-            refreshKey={refreshKey} 
+          <ReservationList
+            navigation={navigation!}
+            refreshKey={refreshKey}
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
         ) : activeTab === 'equipment' ? (
-          <EquipReservationList 
-            navigation={navigation!} 
-            refreshKey={refreshKey} 
+          <EquipReservationList
+            navigation={navigation!}
+            refreshKey={refreshKey}
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
         ) : (
-          <TaxiChatList 
-            navigation={navigation!} 
-            refreshKey={refreshKey} 
+          <TaxiChatList
+            navigation={navigation!}
+            refreshKey={refreshKey}
             refreshing={refreshing}
             onRefresh={onRefresh}
           />

@@ -34,7 +34,12 @@ interface TaxiChatListProps {
   onRefresh?: () => void;
 }
 
-const TaxiChatList: React.FC<TaxiChatListProps> = ({navigation, refreshKey, refreshing, onRefresh}) => {
+const TaxiChatList: React.FC<TaxiChatListProps> = ({
+  navigation,
+  refreshKey,
+  refreshing,
+  onRefresh,
+}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

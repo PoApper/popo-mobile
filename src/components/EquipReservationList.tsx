@@ -53,7 +53,12 @@ interface ReservationListProps {
   onRefresh?: () => void;
 }
 
-const ReservationList: React.FC<ReservationListProps> = ({navigation, refreshKey, refreshing, onRefresh}) => {
+const ReservationList: React.FC<ReservationListProps> = ({
+  navigation,
+  refreshKey,
+  refreshing,
+  onRefresh,
+}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -273,8 +278,6 @@ const ReservationList: React.FC<ReservationListProps> = ({navigation, refreshKey
           </View>
         ))}
       </View>
-
-
 
       {item.description && (
         <View style={styles.reservationDetail}>
