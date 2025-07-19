@@ -14,6 +14,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
@@ -91,7 +92,7 @@ const EquipmentReservationApplyScreen = ({
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [tempEndTime, setTempEndTime] = useState(new Date());
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const [showEquipmentList, setShowEquipmentList] = useState(false);
   const [reservedEquipments, setReservedEquipments] = useState<string[]>([]);
   const [loadingReservations, setLoadingReservations] = useState(false);
@@ -325,29 +326,46 @@ const EquipmentReservationApplyScreen = ({
     );
   };
 
+  const openEquipListPicker = () => {
+    Keyboard.dismiss();
+    setShowDatePicker(false);
+    setShowStartPicker(false);
+    setShowEndPicker(false);
+    setShowEquipmentList(!showEquipmentList);
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToPosition(0, 500, true);
+    });
+  };
+
   // Picker 상태 관리 함수
   const openDatePicker = () => {
+    setShowEquipmentList(false);
+    Keyboard.dismiss();
     setShowDatePicker(true);
     setShowStartPicker(false);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 600, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 600, true);
     }, 100);
   };
   const openStartPicker = () => {
+    setShowEquipmentList(false);
+    Keyboard.dismiss();
     setShowDatePicker(false);
     setShowStartPicker(true);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 600, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 600, true);
     }, 100);
   };
   const openEndPicker = () => {
+    setShowEquipmentList(false);
+    Keyboard.dismiss();
     setShowDatePicker(false);
     setShowStartPicker(false);
     setShowEndPicker(true);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 600, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 600, true);
     }, 100);
   };
 
@@ -390,10 +408,14 @@ const EquipmentReservationApplyScreen = ({
           <View style={styles.placeholderButton} />
         </View>
 
-        <ScrollView
+        <KeyboardAwareScrollView
           ref={scrollViewRef}
           contentContainerStyle={styles.scrollContainer}
-          keyboardShouldPersistTaps="handled">
+          keyboardShouldPersistTaps="handled"
+          enableOnAndroid={true}
+          enableAutomaticScroll={true}
+          extraScrollHeight={20}
+          extraHeight={120}>
           {/* 공지사항 섹션 */}
           <View style={[styles.noticeSection, {borderColor: borderColor}]}>
             <Text style={[styles.noticeTitle, {color: textColor}]}>
@@ -546,10 +568,7 @@ const EquipmentReservationApplyScreen = ({
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
                 },
               ]}
-              onPress={e => {
-                e.stopPropagation && e.stopPropagation();
-                setShowEquipmentList(prev => !prev);
-              }}
+              onPress={openEquipListPicker}
               activeOpacity={0.8}>
               {selectedEquipments.length > 0 ? (
                 selectedEquipments.map(equip => (
@@ -838,7 +857,7 @@ const EquipmentReservationApplyScreen = ({
               <Text style={styles.reservationButtonText}>예약 생성하기</Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
