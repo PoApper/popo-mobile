@@ -76,11 +76,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
     try {
       // 공통 API 유틸리티 사용
       await api.get('/auth/logout');
-
       await reset_auth();
-
-      // 로그아웃 성공 후 처리
-      Alert.alert('로그아웃', '성공적으로 로그아웃되었습니다.');
       navigation.replace('Login');
     } catch (error) {
       console.error('로그아웃 오류:', error);
