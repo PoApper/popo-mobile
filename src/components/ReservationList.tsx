@@ -208,7 +208,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
           onPress: async () => {
             setIsLoading(true);
             try {
-              await api.post(`/reservation-place/${id}/cancel`);
+              await api.delete(`/reservation-place/${id}`);
               Alert.alert('완료', '예약이 취소되었습니다.');
               fetchReservations();
             } catch (error) {

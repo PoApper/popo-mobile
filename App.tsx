@@ -5,25 +5,39 @@
 import React, {useEffect} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import AppNavigator from './src/navigation/AppNavigator';
-import {requestUserPermission, displayNotification} from './src/utils/firebase';
 import messaging from '@react-native-firebase/messaging';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import {navigationRef} from './src/navigation/RootNavigation';
+import notifee, {EventType} from '@notifee/react-native';
+
+import AppNavigator from './src/navigation/AppNavigator';
+import {requestUserPermission} from './src/utils/firebase';
+import {displayNotification} from './src/utils/notifee';
+import {navigate, navigationRef} from './src/navigation/RootNavigation';
 
 const App = () => {
   useEffect(() => {
     requestUserPermission();
 
     const handlePendingNavigation = async () => {
-      // const pendingNavigation = await EncryptedStorage.getItem('pendingNavigation'); // for debug
-      const roomUuid = await EncryptedStorage.getItem('roomUuid');
+      const roomUuidData = await EncryptedStorage.getItem('roomUuid');
+      let roomUuid: string | undefined,
+        from: 'roomList' | 'myReservation' = 'roomList';
+      if (roomUuidData) {
+        try {
+          const parsed = JSON.parse(roomUuidData);
+          roomUuid = parsed.roomUuid;
+          from = parsed.from;
+        } catch {
+          roomUuid = roomUuidData;
+          from = 'roomList';
+        }
+      }
 
       // roomUuid가 있으면 NewChat 스크린으로 이동
       if (roomUuid) {
         const navigateToChat = () => {
           if (navigationRef.isReady()) {
-            navigationRef.current?.navigate('NewChat', {roomUuid});
+            navigationRef.current?.navigate('NewChat', {roomUuid, from});
             // 사용 후 저장된 값 삭제
             EncryptedStorage.removeItem('roomUuid');
             EncryptedStorage.removeItem('pendingNavigation');
@@ -46,7 +60,21 @@ const App = () => {
       displayNotification(
         remoteMessage.notification?.title as string,
         remoteMessage.notification?.body as string,
+        remoteMessage.data,
       );
+    });
+
+    // 포어그라운드 알림 클릭 이벤트 리스너 등록
+    notifee.onForegroundEvent(({type, detail}) => {
+      if (type === EventType.PRESS) {
+        const {notification} = detail;
+        if (notification?.data?.roomUuid) {
+          navigate('NewChat', {
+            roomUuid: notification.data.roomUuid,
+            from: 'roomList',
+          });
+        }
+      }
     });
 
     return () => unsubscribe();

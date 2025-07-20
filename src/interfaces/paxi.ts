@@ -82,7 +82,7 @@ export interface RoomDataType {
   destinationLocation: string;
   maxParticipant: number;
   currentParticipant: number;
-  departureTime: string;
+  departureTime: string; // Date
   status: string;
   description: string;
   payerUuid: string;

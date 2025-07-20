@@ -98,13 +98,18 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         borderBottomWidth: 1,
         borderBottomColor: borderColor,
       }}
-      onPress={() => navigation.navigate('NewChat', {roomUuid: item.uuid})}>
+      onPress={() =>
+        navigation.navigate('NewChat', {
+          roomUuid: item.uuid,
+          from: 'myReservation',
+        })
+      }>
       <View style={{flex: 1}}>
         <Text
           style={[styles.reservationTitle, {color: textColor}]}
           numberOfLines={1}
           ellipsizeMode="tail">
-          {`${item.title}`}
+          {item.title}
         </Text>
         <Text
           style={[styles.fromToText, {color: textColor}]}

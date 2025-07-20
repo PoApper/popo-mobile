@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RouteProp, useFocusEffect} from '@react-navigation/native';
+import {RouteProp, useFocusEffect, useRoute} from '@react-navigation/native';
 
 import {RootStackParamList} from '@navigation/types';
 import ReservationList from '@components/ReservationList';
@@ -18,19 +18,30 @@ import EquipReservationList from '@components/EquipReservationList';
 import TaxiChatList from '@components/chat/TaxiChatList';
 
 type ReservationScreenProps = {
-  navigation?: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
-  route?: RouteProp<RootStackParamList, 'MyReservation'>;
+  navigation?: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
+  route?: RouteProp<RootStackParamList, 'Reservation'>;
 };
 
 type TabType = 'place' | 'equipment' | 'taxi';
 
 const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+  const route = useRoute<RouteProp<RootStackParamList, 'Reservation'>>();
 
   const [activeTab, setActiveTab] = useState<TabType>('place');
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
   const [refreshKey, setRefreshKey] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
+
+  // 라우트 파라미터에서 selectedTab을 받아서 초기 탭 설정
+  useEffect(() => {
+    if (route.params?.selectedTab) {
+      const validTabs: TabType[] = ['place', 'equipment', 'taxi'];
+      if (validTabs.includes(route.params.selectedTab as TabType)) {
+        setActiveTab(route.params.selectedTab as TabType);
+      }
+    }
+  }, [route.params?.selectedTab]);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -38,7 +49,6 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   };
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
-  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
 
   const tabs = [
     {id: 'place' as TabType, label: '장소 예약'},
@@ -72,20 +82,6 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
-        {navigation && (
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}>
-            <Text style={[styles.backButtonText, {color: textColor}]}>
-              뒤로
-            </Text>
-          </TouchableOpacity>
-        )}
-        <Text style={[styles.headerTitle, {color: textColor}]}>내 일정</Text>
-        <View style={styles.placeholderButton} />
-      </View>
-
       <View style={{flex: 0}}>
         <ScrollView
           horizontal

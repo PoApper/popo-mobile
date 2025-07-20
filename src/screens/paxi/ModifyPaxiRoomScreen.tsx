@@ -320,7 +320,16 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
             minuteInterval={10}
           />
 
-          <Text style={[styles.titleText, {color: textColor}]}>상세내용</Text>
+          <Text
+            style={[
+              styles.titleText,
+              {color: textColor, flexDirection: 'row', alignItems: 'center'},
+            ]}>
+            상세내용{' '}
+            <Text style={{color: textColor, fontSize: 12, opacity: 0.5}}>
+              (선택)
+            </Text>
+          </Text>
           <TextInput
             style={[
               styles.roomInput,
@@ -343,11 +352,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
           style={[styles.createButton]}
           onPress={() => checkInputValid()}
           disabled={
-            !roomName ||
-            !departureName ||
-            !arrivalName ||
-            !selectedDateTime ||
-            !roomDetails
+            !roomName || !departureName || !arrivalName || !selectedDateTime
           }>
           <Text style={styles.createButtonText}>수정하기</Text>
         </TouchableOpacity>

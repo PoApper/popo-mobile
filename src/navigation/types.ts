@@ -68,14 +68,16 @@ export type AssociationStackParamList = {
 export type OtherStackParamList = {
   Auth: undefined;
   Main: {
-    userId: string;
-    userData: any;
+    userId?: string;
+    userData?: any;
+    tab?: string;
   };
   Chat: {
     roomUuid: string;
   };
   NewChat: {
     roomUuid: string;
+    from: 'roomList' | 'myReservation';
   };
   Settlement: {
     roomUuid: string;
@@ -93,5 +95,7 @@ export type OtherStackParamList = {
   EquipmentReservationApply: {
     association: string;
   };
-  Reservation: undefined;
+  Reservation: {
+    selectedTab?: string;
+  };
 };

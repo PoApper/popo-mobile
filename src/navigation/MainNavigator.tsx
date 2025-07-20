@@ -9,12 +9,22 @@ import HomeScreen from '@screens/HomeScreen';
 import UserDetailScreen from '@screens/auth/UserDetailScreen';
 import ReservationScreen from '@screens/ReservationScreen';
 import PaxiRoomListScreen from '@screens/paxi/PaxiRoomListScreen';
+import {useRoute} from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 const MainNavigator = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const insets = useSafeAreaInsets();
+
+  const route = useRoute();
+  const {tab} = (route.params as {tab: string}) || {};
+
+  const validTabs = ['Home', 'Paxi', 'MyReservation', 'MyInfo'] as const;
+  type TabName = (typeof validTabs)[number];
+  const tabParam = validTabs.includes(tab as TabName)
+    ? (tab as TabName)
+    : 'Home';
 
   return (
     <Tab.Navigator
@@ -29,7 +39,8 @@ const MainNavigator = () => {
         },
         tabBarActiveTintColor: '#4F46E5',
         tabBarInactiveTintColor: isDarkMode ? '#888888' : '#6B7280',
-      }}>
+      }}
+      initialRouteName={tabParam}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}
@@ -42,6 +53,7 @@ const MainNavigator = () => {
       />
       <Tab.Screen
         name="Paxi"
+        // name="PaxiRoomList"
         component={PaxiRoomListScreen}
         options={{
           tabBarLabel: 'Paxi',
