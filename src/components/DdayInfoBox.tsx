@@ -65,23 +65,7 @@ const DdayInfoBox = () => {
   }
 
   if (!latestEvent) {
-    return (
-      <View style={styles.locationHeader}>
-        <View
-          style={[
-            styles.locationBox,
-            {backgroundColor: isDarkMode ? '#2D3748' : '#E6EAF5'},
-          ]}>
-          <Text
-            style={[
-              styles.locationText,
-              {color: isDarkMode ? '#FFFFFF' : '#000000'},
-            ]}>
-            예정된 일정이 없습니다
-          </Text>
-        </View>
-      </View>
-    );
+    return null;
   }
 
   const dday = calculateDday(latestEvent.event_date);

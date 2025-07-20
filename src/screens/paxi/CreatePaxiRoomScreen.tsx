@@ -60,7 +60,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
       title: roomName,
       description: roomDetails,
       destinationLocation: arrivalName,
-      maxParticipant: 4,
+      maxParticipant: maxParticipants,
       departureTime: selectedDateTime.toISOString(),
       departureLocation: departureName,
     };
@@ -68,8 +68,17 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
       .post('room', body)
       .then(res => {
         if (res.status === 201) {
-          Alert.alert('성공', '방을 성공적으로 생성했습니다.');
-          navigation.goBack();
+          Alert.alert('성공', '방을 성공적으로 생성했습니다.', [
+            {
+              text: '확인',
+              onPress: () => {
+                navigation.navigate('NewChat', {
+                  roomUuid: res.data.uuid as string,
+                  from: 'roomList',
+                });
+              },
+            },
+          ]);
         }
       })
       .catch(error => {
@@ -286,7 +295,16 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             minuteInterval={10}
           />
 
-          <Text style={[styles.titleText, {color: textColor}]}>상세내용</Text>
+          <Text
+            style={[
+              styles.titleText,
+              {color: textColor, flexDirection: 'row', alignItems: 'center'},
+            ]}>
+            상세내용{' '}
+            <Text style={{color: textColor, fontSize: 12, opacity: 0.5}}>
+              (선택)
+            </Text>
+          </Text>
           <TextInput
             style={[
               styles.roomInput,
@@ -324,7 +342,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 style={{
                   paddingHorizontal: 20,
                   paddingVertical: 10,
+                  opacity: maxParticipants === 2 ? 0.3 : 1,
                 }}
+                disabled={maxParticipants === 2}
                 onPress={() =>
                   setMaxParticipants(Math.max(2, maxParticipants - 1))
                 }>
@@ -350,7 +370,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 style={{
                   paddingHorizontal: 20,
                   paddingVertical: 10,
+                  opacity: maxParticipants === 4 ? 0.3 : 1,
                 }}
+                disabled={maxParticipants === 4}
                 onPress={() =>
                   setMaxParticipants(Math.min(4, maxParticipants + 1))
                 }>
@@ -369,11 +391,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
           style={[styles.createButton]}
           onPress={() => checkInputValid()}
           disabled={
-            !roomName ||
-            !departureName ||
-            !arrivalName ||
-            !selectedDateTime ||
-            !roomDetails
+            !roomName || !departureName || !arrivalName || !selectedDateTime
           }>
           <Text style={styles.createButtonText}>방 생성하기</Text>
         </TouchableOpacity>

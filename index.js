@@ -20,7 +20,13 @@ messaging()
         JSON.stringify(remoteMessage),
       );
       if (remoteMessage.data.roomUuid) {
-        EncryptedStorage.setItem('roomUuid', remoteMessage.data.roomUuid);
+        EncryptedStorage.setItem(
+          'roomUuid',
+          JSON.stringify({
+            roomUuid: remoteMessage.data.roomUuid,
+            from: 'roomList',
+          }),
+        );
       }
     }
   });

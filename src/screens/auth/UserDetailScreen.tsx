@@ -17,7 +17,6 @@ import axios from 'axios';
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import Environment from '@utils/environment';
-import CommonHeader from '@components/CommonHeader';
 import {reset_auth} from '@utils/reset';
 
 type UserDetailScreenProps = {
@@ -77,11 +76,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
     try {
       // 공통 API 유틸리티 사용
       await api.get('/auth/logout');
-
       await reset_auth();
-
-      // 로그아웃 성공 후 처리
-      Alert.alert('로그아웃', '성공적으로 로그아웃되었습니다.');
       navigation.replace('Login');
     } catch (error) {
       console.error('로그아웃 오류:', error);
@@ -121,8 +116,6 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="사용자 정보" />
-
       <ScrollView
         style={styles.container}
         contentContainerStyle={{flexGrow: 1}}>
@@ -244,13 +237,6 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
             </View>
           </View>
         </View>
-
-        {/* 내 예약 확인하기 버튼 */}
-        <TouchableOpacity
-          style={[styles.buttonContainer, {backgroundColor: '#FF616B'}]}
-          onPress={() => navigation.navigate('Reservation')}>
-          <Text style={styles.reservationButtonText}>내 예약 확인하기</Text>
-        </TouchableOpacity>
 
         <TouchableOpacity
           style={[

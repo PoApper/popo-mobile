@@ -9,6 +9,7 @@ import {
   Image,
   useColorScheme,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
@@ -46,10 +47,18 @@ interface PaginatedResponse {
 }
 
 interface ReservationListProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
+  refreshKey?: number;
+  refreshing?: boolean;
+  onRefresh?: () => void;
 }
 
-const ReservationList: React.FC<ReservationListProps> = ({navigation}) => {
+const ReservationList: React.FC<ReservationListProps> = ({
+  navigation,
+  refreshKey,
+  refreshing,
+  onRefresh,
+}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -139,7 +148,7 @@ const ReservationList: React.FC<ReservationListProps> = ({navigation}) => {
 
   useEffect(() => {
     fetchReservations();
-  }, []);
+  }, [refreshKey]);
 
   const formatDate = (dateStr: string): string => {
     if (!dateStr || dateStr.length !== 8) {
@@ -198,7 +207,7 @@ const ReservationList: React.FC<ReservationListProps> = ({navigation}) => {
           onPress: async () => {
             setIsLoading(true);
             try {
-              await api.post(`/reservation-place/${id}/cancel`);
+              await api.delete(`/reservation-equip/${id}`);
               Alert.alert('완료', '예약이 취소되었습니다.');
               fetchReservations();
             } catch (error) {
@@ -214,7 +223,7 @@ const ReservationList: React.FC<ReservationListProps> = ({navigation}) => {
     );
   };
 
-  const renderReservationItem = ({item}: {item: PlaceReservation}) => (
+  const renderReservationItem = ({item}: {item: EquipmentReservation}) => (
     <View
       style={[
         styles.reservationCard,
@@ -269,21 +278,6 @@ const ReservationList: React.FC<ReservationListProps> = ({navigation}) => {
           </View>
         ))}
       </View>
-
-      {item.place?.location && (
-        <View style={styles.reservationDetail}>
-          <Text
-            style={[
-              styles.detailLabel,
-              {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-            ]}>
-            위치
-          </Text>
-          <Text style={[styles.detailValue, {color: textColor}]}>
-            {item.place.location}
-          </Text>
-        </View>
-      )}
 
       {item.description && (
         <View style={styles.reservationDetail}>
@@ -373,6 +367,14 @@ const ReservationList: React.FC<ReservationListProps> = ({navigation}) => {
         ListFooterComponent={renderFooter}
         onScroll={handleScroll}
         scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing || false}
+            onRefresh={onRefresh}
+            colors={['#4F46E5']}
+            tintColor="#4F46E5"
+          />
+        }
       />
       {showScrollTop && (
         <TouchableOpacity

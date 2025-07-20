@@ -8,6 +8,7 @@ import {
   StatusBar,
   useColorScheme,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -18,11 +19,11 @@ import paxi_api from '@utils/paxi_api';
 import api from '@utils/api';
 import {PAXI_LOCATIONS} from '@utils/locations';
 import {RoomDataType} from '@interfaces/paxi';
-import CommonHeader from '@components/CommonHeader';
 import DropdownFilter from '@components/room/DropdownFilter';
 import {RefreshButton} from '@components/room/RefreshButton';
 import RoomFilterDatePicker from '@components/room/RoomFilterDatePicker';
 import {RoomListCard} from '@components/room/RoomListCard';
+import moment from 'moment';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
@@ -34,6 +35,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const [showEmptyRoom, setShowEmptyRoom] = useState(false);
   const [roomData, setRoomData] = useState<RoomDataType[]>([]);
   const [userUuid, setUserUuid] = useState<string>('');
+  const [refreshing, setRefreshing] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -57,6 +59,17 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         console.error('Error:', error);
         Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + error.message);
       });
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await getRoomList();
+    } catch (error) {
+      console.error('Refresh error:', error);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   useEffect(() => {
@@ -88,8 +101,6 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="Paxi" isBackHome={true} />
-
       <View style={[styles.conditionNavigator]}>
         <RefreshButton onPress={() => getRoomList()} />
 
@@ -121,15 +132,15 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
             styles.checkbox,
             {borderColor: isDarkMode ? '#555' : '#D0D0D0'},
             showEmptyRoom && {
-              backgroundColor: isDarkMode ? '#FFFFFF' : 'black',
-              borderColor: isDarkMode ? '#FFFFFF' : 'black',
+              backgroundColor: isDarkMode ? '#4F46E5' : 'black', // 다크모드에서 파란색 등으로
+              borderColor: isDarkMode ? '#4F46E5' : 'black',
             },
           ]}>
           {showEmptyRoom && (
             <Icon
               name="check"
               size={20}
-              color={isDarkMode ? '#000000' : '#FFFFFF'}
+              color="#FFFFFF" // 항상 흰색
               style={styles.checkmark}
             />
           )}
@@ -139,12 +150,42 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
       <ScrollView
         contentContainerStyle={{padding: 4}}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={isDarkMode ? ['#FFFFFF'] : ['#000000']}
+            tintColor={isDarkMode ? '#FFFFFF' : '#000000'}
+          />
+        }>
         <View style={{padding: 16}}>
           {roomData.length > 0 ? (
-            roomData.map((room, index) => (
-              <RoomListCard key={index} roomData={room} userUuid={userUuid} />
-            ))
+            roomData
+              .filter(
+                room =>
+                  !selectedDeparture ||
+                  room.departureLocation === selectedDeparture,
+              )
+              .filter(
+                room =>
+                  !selectedArrival ||
+                  room.destinationLocation === selectedArrival,
+              )
+              .filter(
+                room =>
+                  !selectedDate ||
+                  moment(room.departureTime).format('YYYY-MM-DD') ===
+                    moment(selectedDate).format('YYYY-MM-DD'),
+              )
+              .map((room, index) => (
+                <RoomListCard
+                  key={index}
+                  roomData={room}
+                  userUuid={userUuid}
+                  navigation={navigation as any}
+                />
+              ))
           ) : (
             <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>
               현재 등록된 카풀이 없습니다.
