@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback} from 'react';
+import React, {useState, useRef, useCallback, useEffect} from 'react';
 import {
   View,
   Text,
@@ -125,6 +125,15 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
     socketRef.current = newSocket;
   };
+
+  useEffect(() => {
+    if (socketRef.current?.connected) {
+      getRoomInfo();
+      getMyInfo();
+      getChatList();
+      initSocket();
+    }
+  }, [reconnectAttempt]);
 
   useFocusEffect(
     useCallback(() => {
