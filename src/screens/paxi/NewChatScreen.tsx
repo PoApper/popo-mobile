@@ -131,7 +131,6 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       getRoomInfo();
       getMyInfo();
       getChatList();
-      initSocket();
     }
   }, [reconnectAttempt]);
 
