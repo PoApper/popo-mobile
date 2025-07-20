@@ -99,7 +99,11 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
   const initSocket = async () => {
     console.debug('새 웹소켓 생성 중...');
-    const newSocket = await socketFactory(setSocketConnected, setReconnectAttempt, reconnectAttemptRef);
+    const newSocket = await socketFactory(
+      setSocketConnected,
+      setReconnectAttempt,
+      reconnectAttemptRef,
+    );
 
     newSocket.on('newMessage', data => {
       console.debug('메시지 수신:', data);
@@ -122,16 +126,18 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     socketRef.current = newSocket;
   };
 
-  useFocusEffect(useCallback(() => {
-    getRoomInfo();
-    getMyInfo();
-    getChatList();
-    initSocket();
+  useFocusEffect(
+    useCallback(() => {
+      getRoomInfo();
+      getMyInfo();
+      getChatList();
+      initSocket();
 
-    return () => {
-      releaseCurrentSocket();
-    };
-  }, []));
+      return () => {
+        releaseCurrentSocket();
+      };
+    }, []),
+  );
 
   const sendChat = async () => {
     if (!socketRef.current || !socketRef.current?.connected) {
@@ -189,24 +195,40 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      {!socketConnected &&
+      {!socketConnected && (
         <View style={styles.socketConnection}>
-          <View style={[styles.socketConnectionInner, {backgroundColor: isDarkMode ? '#333' : '#eee'}]}>
-            {reconnectAttempt === 0 &&
+          <View
+            style={[
+              styles.socketConnectionInner,
+              {backgroundColor: isDarkMode ? '#333' : '#eee'},
+            ]}>
+            {reconnectAttempt === 0 && (
               <>
-                <Icon name="link" size={18} color={isDarkMode ? '#FFFFFF' : '#000000'} />
-                <Text style={{color: textColor(isDarkMode)}}>서버에 접속하고 있습니다</Text>
+                <Icon
+                  name="link"
+                  size={18}
+                  color={isDarkMode ? '#FFFFFF' : '#000000'}
+                />
+                <Text style={{color: textColor(isDarkMode)}}>
+                  서버에 접속하고 있습니다
+                </Text>
               </>
-            }
-            {reconnectAttempt !== 0 &&
+            )}
+            {reconnectAttempt !== 0 && (
               <>
-                <Icon name="link-off" size={18} color={isDarkMode ? '#FFFFFF' : '#000000'} />
-                <Text style={{color: textColor(isDarkMode)}}>서버와 접속이 끊어졌습니다. 재연결 시도 {reconnectAttempt}회</Text>
+                <Icon
+                  name="link-off"
+                  size={18}
+                  color={isDarkMode ? '#FFFFFF' : '#000000'}
+                />
+                <Text style={{color: textColor(isDarkMode)}}>
+                  서버와 접속이 끊어졌습니다. 재연결 시도 {reconnectAttempt}회
+                </Text>
               </>
-            }
+            )}
           </View>
         </View>
-      }
+      )}
 
       <SidebarModal
         modalVisible={sidebarVisible}

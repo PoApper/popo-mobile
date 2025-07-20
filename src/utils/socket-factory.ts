@@ -1,13 +1,13 @@
 import {io} from 'socket.io-client';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { Socket } from 'socket.io-client';
+import {Socket} from 'socket.io-client';
 
 const SOCKET_URL = 'https://api.paxi.popo-dev.poapper.club';
 
 export const socketFactory = async (
   setSocketConnected: React.Dispatch<React.SetStateAction<boolean>>,
   setReconnectAttempt: React.Dispatch<React.SetStateAction<number>>,
-  reconnectAttemptRef: React.RefObject<number>
+  reconnectAttemptRef: React.RefObject<number>,
 ): Promise<Socket> => {
   const token = (await EncryptedStorage.getItem('auth_token')) ?? '';
   const socket = io(`${SOCKET_URL}?Authentication=${token}`, {
