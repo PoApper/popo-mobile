@@ -43,7 +43,6 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const [chatList, setChatList] = useState<MessageData[]>([]);
   const [newChat, setNewChat] = useState<string>('');
   const socketRef = useRef<Socket | null>(null);
-  const reconnectAttemptRef = useRef<number>(0);
   const [reconnectAttempt, setReconnectAttempt] = useState<number>(0);
   const [socketConnected, setSocketConnected] = useState<boolean>(false);
 
@@ -97,12 +96,22 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     }
   };
 
+  const onSocketConnected = async () => {
+    setSocketConnected(true);
+    setReconnectAttempt(0);
+    paxi_api.post(`/room/join/${roomUuid}`);
+  };
+
+  const onSocketDisconnected = () => {
+    setSocketConnected(false);
+    setReconnectAttempt(prevNum => prevNum + 1);
+  };
+
   const initSocket = async () => {
     console.debug('새 웹소켓 생성 중...');
     const newSocket = await socketFactory(
-      setSocketConnected,
-      setReconnectAttempt,
-      reconnectAttemptRef,
+      onSocketConnected,
+      onSocketDisconnected,
     );
 
     newSocket.on('newMessage', data => {
