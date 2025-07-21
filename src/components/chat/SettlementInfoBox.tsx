@@ -136,7 +136,7 @@ const SettlementInfoBox = ({
               </Text>
               <Text
                 style={[styles.payAmountText, {color: textColor(isDarkMode)}]}>
-                {settlementData.payAmount}원
+                {settlementData.payAmount.toLocaleString('en-US')}원
               </Text>
             </View>
             <View style={styles.payerInfoContainer}>
