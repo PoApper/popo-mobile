@@ -225,9 +225,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       {isSettlement && (
         <View
           style={{
-            position: 'absolute',
             width: '100%',
-            marginTop: 70,
+            marginTop: 20,
             paddingHorizontal: 10,
             zIndex: 999,
           }}>
