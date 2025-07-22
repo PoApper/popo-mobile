@@ -18,6 +18,7 @@ import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import Environment from '@utils/environment';
 import {reset_auth} from '@utils/reset';
+import paxi_api from '@utils/paxi_api';
 
 type UserDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserDetail'>;
@@ -28,6 +29,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(false);
   const [userDataState, setUserData] = useState<any>(null);
+  const [isPaxiUser, setIsPaxiUser] = useState<boolean>(false);
+  const [paxiUserData, setPaxiUserData] = useState<any>(null);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -40,11 +43,9 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
 
   // 사용자 프로필 정보 가져오기
   const fetchUserProfile = async () => {
-    setIsLoading(true);
     try {
-      const response = await api.get('/auth/myInfo');
-      const userData = response.data;
-      setUserData(userData);
+      const res = await api.get('/auth/myInfo');
+      setUserData(res.data);
     } catch (err) {
       console.error('프로필 정보 조회 오류:', err);
       if (axios.isAxiosError(err) && err.response?.status === 401) {
@@ -52,23 +53,21 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
           {text: '확인', onPress: () => navigation.navigate('Login')},
         ]);
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  // 인증 오류 처리
-  // const handleAuthError = async () => {
-  //   // 인증 정보 초기화
-  //   await EncryptedStorage.removeItem('auth_token');
-  //   await EncryptedStorage.removeItem('isAuthenticated');
-  //   await EncryptedStorage.removeItem('user_info');
-  //   await CookieManager.clearAll();
-
-  //   Alert.alert('인증 오류', '세션이 만료되었습니다. 다시 로그인해주세요.', [
-  //     { text: '확인', onPress: () => navigation.replace('Login') },
-  //   ]);
-  // };
+  const fetchPaxiInfo = async () => {
+    paxi_api
+      .get('/user/my')
+      .then(res => {
+        setPaxiUserData(res.data);
+        setIsPaxiUser(true);
+      })
+      .catch(err => {
+        console.error(err);
+        setIsPaxiUser(false);
+      });
+  };
 
   // 로그아웃 처리 함수
   const handleLogout = async () => {
@@ -92,7 +91,10 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
 
   // 컴포넌트 마운트 시 프로필 정보 가져오기
   useEffect(() => {
-    fetchUserProfile();
+    setIsLoading(true);
+    Promise.all([fetchUserProfile(), fetchPaxiInfo()]).finally(() => {
+      setIsLoading(false);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -159,34 +161,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
 
           <View style={styles.detailSection}>
             <Text style={[styles.sectionTitle, {color: textColor}]}>
-              계정 정보
+              POPO 계정 정보
             </Text>
-            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
-              <Text
-                style={[
-                  styles.detailLabel,
-                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-                ]}>
-                이메일
-              </Text>
-              <Text style={[styles.detailValue, {color: textColor}]}>
-                {userDataState?.email || '정보 없음'}
-              </Text>
-            </View>
-
-            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
-              <Text
-                style={[
-                  styles.detailLabel,
-                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-                ]}>
-                이름
-              </Text>
-              <Text style={[styles.detailValue, {color: textColor}]}>
-                {userDataState?.name || '정보 없음'}
-              </Text>
-            </View>
-
             <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
               <Text
                 style={[
@@ -236,6 +212,45 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
               </Text>
             </View>
           </View>
+
+          {isPaxiUser ? (
+            <View style={[styles.detailSection, {borderColor: 'transparent'}]}>
+              <Text style={[styles.sectionTitle, {color: textColor}]}>
+                Paxi 정보
+              </Text>
+              <View
+                style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+                <Text
+                  style={[
+                    styles.detailLabel,
+                    {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                  ]}>
+                  닉네임
+                </Text>
+                <Text style={[styles.detailValue, {color: textColor}]}>
+                  {paxiUserData?.nickname || '정보 없음'}
+                </Text>
+              </View>
+
+              <View
+                style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
+                <Text
+                  style={[
+                    styles.detailLabel,
+                    {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                  ]}>
+                  등록 계좌
+                </Text>
+                <Text style={[styles.detailValue, {color: textColor}]}>
+                  {paxiUserData?.bankName &&
+                  paxiUserData?.accountNumber &&
+                  paxiUserData?.accountHolder
+                    ? `${paxiUserData?.bankName} ${paxiUserData?.accountNumber} (${paxiUserData?.accountHolder})`
+                    : '정보 없음'}
+                </Text>
+              </View>
+            </View>
+          ) : null}
         </View>
 
         <TouchableOpacity
