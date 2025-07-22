@@ -17,7 +17,11 @@ import moment from 'moment';
 
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import {PAXI_LOCATIONS} from '@utils/locations';
+import {
+  PAXI_LOCATIONS,
+  getPaxiDistanceInfo,
+  getPaxiDurationInfo,
+} from '@utils/locations';
 import CommonHeader from '@components/CommonHeader';
 import DropdownMenu from '@components/room/DropdownMenu';
 import {RouteProp, useRoute} from '@react-navigation/native';
@@ -237,6 +241,30 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
                 />
               </View>
             </View>
+            {departureName && arrivalName ? (
+              <View
+                style={{
+                  backgroundColor: isDarkMode ? '#232323' : '#F0F0F0',
+                  borderRadius: 8,
+                  padding: 12,
+                  marginTop: 8,
+                  marginBottom: 8,
+                }}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text
+                    style={{
+                      color: textColor,
+                      fontSize: 13,
+                      fontWeight: '500',
+                      marginRight: 4,
+                    }}>
+                    거리: {getPaxiDistanceInfo(departureName, arrivalName)} |
+                    예상 소요시간:{' '}
+                    {getPaxiDurationInfo(departureName, arrivalName)}
+                  </Text>
+                </View>
+              </View>
+            ) : null}
           </View>
 
           <View
