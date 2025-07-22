@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '@utils/api';
 import paxi_api from '@utils/paxi_api';
 import moment from 'moment';
+import {formatReservationTime} from '../utils/popo-datetime';
 
 interface Place {
   uuid: string;
@@ -111,7 +112,9 @@ const UpcomingEvents = () => {
             type: 'place' as const,
             title: reservation.title,
             date: reservation.date,
-            time: `${reservation.start_time} - ${reservation.end_time}`,
+            time: `${formatReservationTime(
+              reservation.start_time,
+            )} - ${formatReservationTime(reservation.end_time)}`,
             location: reservation.place?.name || '장소 미정',
             status: reservation.status,
             data: reservation,

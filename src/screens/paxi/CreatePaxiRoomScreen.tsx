@@ -17,7 +17,11 @@ import moment from 'moment';
 
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import {PAXI_LOCATIONS} from '@utils/locations';
+import {
+  getPaxiDistanceInfo,
+  getPaxiDurationInfo,
+  PAXI_LOCATIONS,
+} from '@utils/locations';
 import CommonHeader from '@components/CommonHeader';
 import DropdownMenu from '@components/room/DropdownMenu';
 
@@ -183,7 +187,6 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                     {backgroundColor: isDarkMode ? 'white' : 'black'},
                   ]}
                 />
-
                 <DropdownMenu
                   placeholderText={'어디서 출발하시나요?'}
                   options={PAXI_LOCATIONS.filter(
@@ -212,6 +215,30 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 />
               </View>
             </View>
+            {departureName && arrivalName ? (
+              <View
+                style={{
+                  backgroundColor: isDarkMode ? '#232323' : '#F0F0F0',
+                  borderRadius: 8,
+                  padding: 12,
+                  marginTop: 8,
+                  marginBottom: 8,
+                }}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text
+                    style={{
+                      color: textColor,
+                      fontSize: 13,
+                      fontWeight: '500',
+                      marginRight: 4,
+                    }}>
+                    거리: {getPaxiDistanceInfo(departureName, arrivalName)} |
+                    예상 소요시간:{' '}
+                    {getPaxiDurationInfo(departureName, arrivalName)}
+                  </Text>
+                </View>
+              </View>
+            ) : null}
           </View>
 
           <View
