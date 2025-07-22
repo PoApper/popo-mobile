@@ -66,9 +66,29 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
     whiteBookItems.sort((a, b) => a.title.localeCompare(b.title));
   }
 
-  const handleLinkPress = async (link: string) => {
+  const handleLinkPress = async (title: string, link: string) => {
     try {
-      await Linking.openURL(link);
+      const alert_title = link.includes('cdn.popo.poapper.club')
+        ? 'POPO 사이트로 이동 합니다'
+        : link.includes('postech.ac.kr')
+        ? 'POSTECH 사이트로 이동 합니다.'
+        : '외부 사이트로 이동 합니다.';
+      const txt =
+        link.includes('cdn.popo.poapper.club') || link.includes('postech.ac.kr')
+          ? `'${title}'로 이동 합니다.`
+          : `'${link}'로 이동 합니다.`;
+      Alert.alert(alert_title, txt, [
+        {
+          text: '취소',
+          style: 'cancel',
+        },
+        {
+          text: '확인',
+          onPress: () => {
+            Linking.openURL(link);
+          },
+        },
+      ]);
     } catch (error) {
       Alert.alert('오류', '링크를 여는 중 문제가 발생했습니다.', [
         {text: '확인'},
@@ -133,7 +153,7 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
               if (item.title === '교내 셔틀버스 시간표') {
                 navigation.navigate('CampusShuttle');
               } else {
-                handleLinkPress(item.link);
+                handleLinkPress(item.title, item.link);
               }
             }}>
             <View style={styles.textContainer}>

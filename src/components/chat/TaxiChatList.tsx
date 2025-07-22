@@ -184,7 +184,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           resizeMode="contain"
         />
         <Text style={[styles.emptyText, {color: textColor}]}>
-          택시 예약 내역이 없습니다.
+          택시 카풀 내역이 없습니다.
         </Text>
       </View>
     );
