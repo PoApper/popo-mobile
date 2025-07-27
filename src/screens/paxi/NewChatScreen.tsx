@@ -157,22 +157,22 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       // deleteChatData(data);
     });
 
-<!-- <<<<<<< paxi-chatroom-settlementview -->
-    socket.on('newSettlement', data => {
+    newSocket.on('newSettlement', data => {
       console.debug('새 정산 요청:', data);
       setIsSettlement(true);
       setSettlementData(data);
     });
-    setSocket(socket);
+    socketRef.current = newSocket;
   };
 
   useEffect(() => {
-    getRoomInfo();
-    getSettlementInfo();
-    getMyInfo();
-    getChatList();
-    initSocket();
-  }, []);
+    if (socketRef.current?.connected) {
+      getRoomInfo();
+      getSettlementInfo();
+      getMyInfo();
+      getChatList();
+    }
+  }, [reconnectAttempt]);
 
   useEffect(() => {
     if (!myInfo?.uuid || !Array.isArray(roomInfo?.room_users)) {
@@ -186,27 +186,12 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     setIsPaid(matchedUser?.isPaid);
   }, [roomInfo, myInfo]);
 
-  const sendChat = async () => {
-    if (!socket) {
-      console.error('소켓이 아직 연결되지 않았습니다.');
-=======
-    socketRef.current = newSocket;
-  };
-
-  useEffect(() => {
-    if (socketRef.current?.connected) {
-      getRoomInfo();
-      getMyInfo();
-      getChatList();
-    }
-  }, [reconnectAttempt]);
-
   useFocusEffect(
     useCallback(() => {
       getRoomInfo();
       getMyInfo();
       getChatList();
-// >>>>>>> main
+      getSettlementInfo();
       initSocket();
 
       return () => {
