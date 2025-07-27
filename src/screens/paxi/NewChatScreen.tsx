@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useRef, useCallback, useEffect} from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
   Alert,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {RouteProp, useRoute, useFocusEffect} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Socket} from 'socket.io-client';
@@ -49,7 +49,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const [myInfo, setMyInfo] = useState<PaxiUser>({} as PaxiUser);
   const [chatList, setChatList] = useState<MessageData[]>([]);
   const [newChat, setNewChat] = useState<string>('');
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const socketRef = useRef<Socket | null>(null);
+  const [reconnectAttempt, setReconnectAttempt] = useState<number>(0);
+  const [socketConnected, setSocketConnected] = useState<boolean>(false);
 
   const [settlementData, setSettlementData] = useState<SettlementData>(
     {} as SettlementData,
@@ -108,9 +110,36 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       });
   };
 
+  const releaseCurrentSocket = () => {
+    if (socketRef.current) {
+      console.debug('웹소켓 삭제 중...');
+      socketRef.current.offAny();
+      socketRef.current.removeAllListeners();
+      socketRef.current.disconnect();
+      socketRef.current = null;
+      console.debug('웹소켓 삭제 완료');
+    }
+  };
+
+  const onSocketConnected = async () => {
+    setSocketConnected(true);
+    setReconnectAttempt(0);
+    paxi_api.post(`/room/join/${roomUuid}`);
+  };
+
+  const onSocketDisconnected = () => {
+    setSocketConnected(false);
+    setReconnectAttempt(prevNum => prevNum + 1);
+  };
+
   const initSocket = async () => {
-    const socket = await socketFactory();
-    socket.on('newMessage', data => {
+    console.debug('새 웹소켓 생성 중...');
+    const newSocket = await socketFactory(
+      onSocketConnected,
+      onSocketDisconnected,
+    );
+
+    newSocket.on('newMessage', data => {
       console.debug('메시지 수신:', data);
       appendChat(data);
       if (data.senderUuid == null) {
@@ -118,16 +147,17 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       }
     });
 
-    socket.on('updatedMessage', data => {
+    newSocket.on('updatedMessage', data => {
       console.debug('갱신될 메시지:', data);
       // updateChatData(data);
     });
 
-    socket.on('deletedMessage', data => {
+    newSocket.on('deletedMessage', data => {
       console.debug('삭제될 메시지:', data);
       // deleteChatData(data);
     });
 
+<!-- <<<<<<< paxi-chatroom-settlementview -->
     socket.on('newSettlement', data => {
       console.debug('새 정산 요청:', data);
       setIsSettlement(true);
@@ -159,7 +189,35 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const sendChat = async () => {
     if (!socket) {
       console.error('소켓이 아직 연결되지 않았습니다.');
+=======
+    socketRef.current = newSocket;
+  };
+
+  useEffect(() => {
+    if (socketRef.current?.connected) {
+      getRoomInfo();
+      getMyInfo();
+      getChatList();
+    }
+  }, [reconnectAttempt]);
+
+  useFocusEffect(
+    useCallback(() => {
+      getRoomInfo();
+      getMyInfo();
+      getChatList();
+// >>>>>>> main
       initSocket();
+
+      return () => {
+        releaseCurrentSocket();
+      };
+    }, []),
+  );
+
+  const sendChat = async () => {
+    if (!socketRef.current || !socketRef.current?.connected) {
+      Alert.alert('에러', '서버 연결이 불안정하여 메시지를 보낼 수 없습니다.');
       return;
     }
 
@@ -177,7 +235,6 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   };
 
   const appendChat = (data: MessageData) => {
-    // TODO: myUuid는 상수값으로 설정.
     const newChatData = {
       ...data,
     };
@@ -213,6 +270,41 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
           <Icon name="menu" size={30} color={textColor(isDarkMode)} />
         </TouchableOpacity>
       </View>
+
+      {!socketConnected && (
+        <View style={styles.socketConnection}>
+          <View
+            style={[
+              styles.socketConnectionInner,
+              {backgroundColor: isDarkMode ? '#333' : '#eee'},
+            ]}>
+            {reconnectAttempt === 0 && (
+              <>
+                <Icon
+                  name="link"
+                  size={18}
+                  color={isDarkMode ? '#FFFFFF' : '#000000'}
+                />
+                <Text style={{color: textColor(isDarkMode)}}>
+                  서버에 접속하고 있습니다
+                </Text>
+              </>
+            )}
+            {reconnectAttempt !== 0 && (
+              <>
+                <Icon
+                  name="link-off"
+                  size={18}
+                  color={isDarkMode ? '#FFFFFF' : '#000000'}
+                />
+                <Text style={{color: textColor(isDarkMode)}}>
+                  서버와 접속이 끊어졌습니다. 재연결 시도 {reconnectAttempt}회
+                </Text>
+              </>
+            )}
+          </View>
+        </View>
+      )}
 
       <SidebarModal
         modalVisible={sidebarVisible}
@@ -265,6 +357,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
               },
             ]}
             value={newChat}
+            editable={socketConnected}
             onChangeText={setNewChat}
             placeholder="메시지를 입력하세요..."
             placeholderTextColor={backgroundColor(!isDarkMode)}
@@ -328,5 +421,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
+  },
+  socketConnection: {
+    paddingHorizontal: 10,
+    marginTop: 10,
+    position: 'absolute',
+    zIndex: 20,
+    width: '100%',
+    height: 50,
+    top: 60,
+  },
+  socketConnectionInner: {
+    borderRadius: 5,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: 5,
   },
 });
