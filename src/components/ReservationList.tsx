@@ -48,7 +48,10 @@ interface PaginatedResponse {
 }
 
 interface ReservationListProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    'MyReservation' | 'Reservation'
+  >;
   refreshKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;
@@ -408,6 +411,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
 const styles = StyleSheet.create({
   listContainer: {
     padding: 16,
+    paddingBottom: 100,
   },
   reservationCard: {
     borderRadius: 12,
