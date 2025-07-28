@@ -41,19 +41,43 @@ interface TaxiRoom {
   status: string;
 }
 
+interface Equipment {
+  uuid: string;
+  name: string;
+  description: string;
+  equip_owner: string;
+  region: string;
+  staff_email: string;
+  image_url: string;
+}
+
+interface EquipmentReservation {
+  uuid: string;
+  booker_id: string;
+  phone: string;
+  title: string;
+  description: string;
+  date: string; // YYYYMMDD
+  start_time: string; // HHmm
+  end_time: string; // HHmm
+  status: '심사중' | '통과' | '거절';
+  created_at: Date;
+  equipments: Equipment[];
+}
+
 interface CombinedEvent {
   id: string;
-  type: 'place' | 'taxi';
+  type: 'place' | 'taxi' | 'equipment';
   title: string;
   date: string;
   time: string;
   location: string;
   status: string;
-  data: PlaceReservation | TaxiRoom;
+  data: PlaceReservation | TaxiRoom | EquipmentReservation;
 }
 
-type PaginatedResponse = {
-  items: PlaceReservation[];
+type PaginatedResponse<T> = {
+  items: T[];
   total: number;
   page: number;
   take: number;
@@ -67,7 +91,7 @@ const UpcomingEvents = () => {
   useEffect(() => {
     const fetchPlaceEvents = () => {
       return api
-        .get<PaginatedResponse>(
+        .get<PaginatedResponse<PlaceReservation>>(
           'https://api.popo-dev.poapper.club/reservation-place/user',
           {
             params: {
@@ -97,6 +121,26 @@ const UpcomingEvents = () => {
         });
     };
 
+    const fetchEquipmentEvents = () => {
+      return api
+        .get<PaginatedResponse<EquipmentReservation>>(
+          'https://api.popo-dev.poapper.club/reservation-equip/user',
+          {
+            params: {
+              skip: 0,
+              take: 10,
+            },
+          },
+        )
+        .then(res => {
+          return res.data.items;
+        })
+        .catch(err => {
+          console.error('장비 예약 데이터 조회 오류:', err);
+          return [];
+        });
+    };
+
     const fetchAllEvents = async () => {
       try {
         // 장소 예약 데이터 가져오기
@@ -104,6 +148,9 @@ const UpcomingEvents = () => {
 
         // 택시 카풀 데이터 가져오기
         const taxiResponse = await fetchTaxiEvents();
+
+        // 장비 예약 데이터 가져오기
+        const equipmentResponse = await fetchEquipmentEvents();
 
         // 데이터 합치기
         const placeEvents: CombinedEvent[] = placeResponse.map(
@@ -134,8 +181,29 @@ const UpcomingEvents = () => {
           }),
         );
 
+        const equipmentEvents: CombinedEvent[] = equipmentResponse.map(
+          (reservation: EquipmentReservation) => ({
+            id: `equipment_${reservation.uuid}`,
+            type: 'equipment' as const,
+            title: reservation.title,
+            date: reservation.date,
+            time: `${formatReservationTime(
+              reservation.start_time,
+            )} - ${formatReservationTime(reservation.end_time)}`,
+            location:
+              reservation.equipments?.map(e => e.name).join(', ') ||
+              '장비 미정',
+            status: reservation.status,
+            data: reservation,
+          }),
+        );
+
         // 모든 이벤트를 날짜 내림차순(가장 최근 일정이 먼저)으로 정렬
-        const allEvents = [...placeEvents, ...taxiEvents].sort((a, b) => {
+        const allEvents = [
+          ...placeEvents,
+          ...taxiEvents,
+          ...equipmentEvents,
+        ].sort((a, b) => {
           const dateA = moment(a.date, 'YYYYMMDD');
           const dateB = moment(b.date, 'YYYYMMDD');
           return dateB.diff(dateA); // 내림차순
@@ -172,8 +240,17 @@ const UpcomingEvents = () => {
     }
   };
 
-  const getEventIcon = (type: 'place' | 'taxi') => {
-    return type === 'place' ? 'place' : 'directions-car';
+  const getEventIcon = (type: 'place' | 'taxi' | 'equipment') => {
+    switch (type) {
+      case 'place':
+        return 'place';
+      case 'taxi':
+        return 'directions-car';
+      case 'equipment':
+        return 'computer';
+      default:
+        return 'event';
+    }
   };
 
   if (isLoading) {
@@ -243,7 +320,11 @@ const UpcomingEvents = () => {
                 style={styles.eventIcon}
               />
               <Text style={styles.eventType}>
-                {event.type === 'place' ? '장소 예약' : '택시 카풀'}
+                {event.type === 'place'
+                  ? '장소 예약'
+                  : event.type === 'taxi'
+                  ? '택시 카풀'
+                  : '장비 예약'}
               </Text>
               {event.type === 'place' && (
                 <View style={styles.statusContainer}>
