@@ -83,7 +83,11 @@ type PaginatedResponse<T> = {
   take: number;
 };
 
-const UpcomingEvents = () => {
+interface UpcomingEventsProps {
+  refreshKey?: number;
+}
+
+const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [combinedEvents, setCombinedEvents] = useState<CombinedEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -142,6 +146,10 @@ const UpcomingEvents = () => {
     };
 
     const fetchAllEvents = async () => {
+      console.log(
+        'UpcomingEvents: Fetching all events, refreshKey:',
+        refreshKey,
+      );
       try {
         // 장소 예약 데이터 가져오기
         const placeResponse = await fetchPlaceEvents();
@@ -218,7 +226,7 @@ const UpcomingEvents = () => {
     };
 
     fetchAllEvents();
-  }, []);
+  }, [refreshKey]);
 
   const formatDate = (dateString: string) => {
     const year = dateString.substring(0, 4);
