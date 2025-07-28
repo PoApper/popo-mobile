@@ -178,7 +178,7 @@ const PlaceReservationApplyScreen = ({
                 end_time: formattedEndTime,
               })
               .then(() => {
-                Alert.alert('알림', '예약이 완료되었습니다.', [
+                Alert.alert('알림', '예약을 생성 했습니다.', [
                   {
                     text: '확인',
                     onPress: () => navigation.goBack(),
