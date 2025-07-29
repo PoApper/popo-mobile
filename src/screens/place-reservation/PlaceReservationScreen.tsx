@@ -5,16 +5,18 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   useColorScheme,
   StatusBar,
   ActivityIndicator,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../navigation/types';
-import api from '../../utils/api';
-import LazyImage from '../../components/LazyImage';
+import {RootStackParamList} from '@navigation/types';
+import api from '@utils/api';
+import LazyImage from '@components/LazyImage';
+import CommonHeader from '@components/CommonHeader';
 
 type PlaceReservationScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PlaceReservation'>;
@@ -52,7 +54,6 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
   };
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
-  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
   const backgroundSecondary = isDarkMode ? '#2C2C2C' : '#F3F3F3';
 
   useEffect(() => {
@@ -94,15 +95,8 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>장소 예약</Text>
-        <View style={styles.placeholderButton} />
-      </View>
+
+      <CommonHeader navigation={navigation} title="장소 예약" />
 
       {/* 건물 선택 네비게이션 */}
       <ScrollView
