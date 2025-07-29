@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 6,
+    elevation: 4,
   },
   textContainer: {
     flex: 1,
