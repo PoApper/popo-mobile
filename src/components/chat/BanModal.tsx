@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   Modal,
   Pressable,
@@ -32,6 +32,7 @@ const BanModal = ({
   const modalHeight = Dimensions.get('window').height * 0.3;
 
   const [banText, setBanText] = useState<string>('');
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleClose = () => {
     setBanText('');
@@ -55,6 +56,15 @@ const BanModal = ({
       });
   };
 
+  useEffect(() => {
+    if (modalVisible) {
+      const timeout = setTimeout(() => setIsVisible(true), 10);
+      return () => clearTimeout(timeout);
+    } else {
+      setIsVisible(false);
+    }
+  }, [modalVisible]);
+
   return (
     <Modal
       transparent={true}
@@ -62,56 +72,58 @@ const BanModal = ({
       onRequestClose={handleClose}>
       <Pressable style={styles.overlay} onPress={handleClose}>
         <SafeAreaView style={styles.modalContent}>
-          <Pressable
-            style={[
-              {width: modalWidth, height: modalHeight},
-              styles.innerContent,
-            ]}
-            onPress={() => {}}>
-            <View style={{flex: 1, width: '100%', marginBottom: 20}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignContent: 'center',
-                  marginBottom: 10,
-                }}>
-                <Text style={styles.modalTitle}>추방하기</Text>
+          {isVisible && (
+            <Pressable
+              style={[
+                {width: modalWidth, height: modalHeight},
+                styles.innerContent,
+              ]}
+              onPress={() => {}}>
+              <View style={{flex: 1, width: '100%', marginBottom: 20}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignContent: 'center',
+                    marginBottom: 10,
+                  }}>
+                  <Text style={styles.modalTitle}>추방하기</Text>
+                </View>
+                <Text style={{marginBottom: 10}}>
+                  '<Text style={{color: 'red'}}>{userData?.nickname}</Text>'님을
+                  {'\n'}
+                  정말로 추방하실건가요?
+                </Text>
+                <TextInput
+                  style={[styles.textInput]}
+                  value={banText}
+                  onChangeText={setBanText}
+                  placeholder="사유를 입력해주세요. (200자 이내)"
+                  placeholderTextColor="#999"
+                  multiline={true}
+                  maxLength={200}
+                  scrollEnabled={true}
+                />
               </View>
-              <Text style={{marginBottom: 10}}>
-                '<Text style={{color: 'red'}}>{userData?.nickname}</Text>'님을
-                {'\n'}
-                정말로 추방하실건가요?
-              </Text>
-              <TextInput
-                style={[styles.textInput]}
-                value={banText}
-                onChangeText={setBanText}
-                placeholder="사유를 입력해주세요. (200자 이내)"
-                placeholderTextColor="#999"
-                multiline={true}
-                maxLength={200}
-                scrollEnabled={true}
-              />
-            </View>
 
-            {/* 추방 요청 버튼 */}
-            <View style={styles.buttonView}>
-              <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={() => handleClose()}>
-                <Text style={styles.cancelButtonText}>취소</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.banButton}
-                disabled={banText.length === 0}
-                onPress={() => {
-                  handleBan(banText);
-                  handleClose();
-                }}>
-                <Text style={styles.banButtonText}>추방</Text>
-              </TouchableOpacity>
-            </View>
-          </Pressable>
+              {/* 추방 요청 버튼 */}
+              <View style={styles.buttonView}>
+                <TouchableOpacity
+                  style={styles.cancelButton}
+                  onPress={() => handleClose()}>
+                  <Text style={styles.cancelButtonText}>취소</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.banButton}
+                  disabled={banText.length === 0}
+                  onPress={() => {
+                    handleBan(banText);
+                    handleClose();
+                  }}>
+                  <Text style={styles.banButtonText}>추방</Text>
+                </TouchableOpacity>
+              </View>
+            </Pressable>
+          )}
         </SafeAreaView>
       </Pressable>
     </Modal>

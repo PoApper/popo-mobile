@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   Modal,
   Pressable,
@@ -32,6 +32,7 @@ const ReportModal = ({
   const modalHeight = Dimensions.get('window').height * 0.3;
 
   const [reportText, setReportText] = useState<string>('');
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleClose = () => {
     setReportText('');
@@ -56,6 +57,15 @@ const ReportModal = ({
       });
   };
 
+  useEffect(() => {
+    if (modalVisible) {
+      const timeout = setTimeout(() => setIsVisible(true), 10);
+      return () => clearTimeout(timeout);
+    } else {
+      setIsVisible(false);
+    }
+  }, [modalVisible]);
+
   return (
     <Modal
       transparent={true}
@@ -63,56 +73,58 @@ const ReportModal = ({
       onRequestClose={handleClose}>
       <Pressable style={styles.overlay} onPress={handleClose}>
         <SafeAreaView style={styles.modalContent}>
-          <Pressable
-            style={[
-              {width: modalWidth, height: modalHeight},
-              styles.innerContent,
-            ]}
-            onPress={() => {}}>
-            <View style={{flex: 1, width: '100%', marginBottom: 20}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignContent: 'center',
-                  marginBottom: 10,
-                }}>
-                <Text style={styles.modalTitle}>신고하기</Text>
+          {isVisible && (
+            <Pressable
+              style={[
+                {width: modalWidth, height: modalHeight},
+                styles.innerContent,
+              ]}
+              onPress={() => {}}>
+              <View style={{flex: 1, width: '100%', marginBottom: 20}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignContent: 'center',
+                    marginBottom: 10,
+                  }}>
+                  <Text style={styles.modalTitle}>신고하기</Text>
+                </View>
+                <Text style={{marginBottom: 10}}>
+                  '<Text style={{color: 'red'}}>{userData?.nickname}</Text>'님을
+                  {'\n'}
+                  정말로 신고하실건가요?
+                </Text>
+                <TextInput
+                  style={[styles.textInput]}
+                  value={reportText}
+                  onChangeText={setReportText}
+                  placeholder="사유를 입력해주세요. (200자 이내)"
+                  placeholderTextColor="#999"
+                  multiline={true}
+                  maxLength={200}
+                  scrollEnabled={true}
+                />
               </View>
-              <Text style={{marginBottom: 10}}>
-                '<Text style={{color: 'red'}}>{userData?.nickname}</Text>'님을
-                {'\n'}
-                정말로 신고하실건가요?
-              </Text>
-              <TextInput
-                style={[styles.textInput]}
-                value={reportText}
-                onChangeText={setReportText}
-                placeholder="사유를 입력해주세요. (200자 이내)"
-                placeholderTextColor="#999"
-                multiline={true}
-                maxLength={200}
-                scrollEnabled={true}
-              />
-            </View>
 
-            {/* 신고 요청 버튼 */}
-            <View style={styles.buttonView}>
-              <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={() => handleClose()}>
-                <Text style={styles.cancelButtonText}>취소</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.reportButton}
-                disabled={reportText.length === 0}
-                onPress={() => {
-                  handleReport(reportText);
-                  handleClose();
-                }}>
-                <Text style={styles.reportButtonText}>신고</Text>
-              </TouchableOpacity>
-            </View>
-          </Pressable>
+              {/* 신고 요청 버튼 */}
+              <View style={styles.buttonView}>
+                <TouchableOpacity
+                  style={styles.cancelButton}
+                  onPress={() => handleClose()}>
+                  <Text style={styles.cancelButtonText}>취소</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.reportButton}
+                  disabled={reportText.length === 0}
+                  onPress={() => {
+                    handleReport(reportText);
+                    handleClose();
+                  }}>
+                  <Text style={styles.reportButtonText}>신고</Text>
+                </TouchableOpacity>
+              </View>
+            </Pressable>
+          )}
         </SafeAreaView>
       </Pressable>
     </Modal>
