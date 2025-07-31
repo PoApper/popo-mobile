@@ -36,12 +36,15 @@ const SettlementInfoBox = ({
   settlementData,
 }: SettlementInfoBoxProps) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const isCompleteSettlement = isPaid === true;
-  const [showInfo, setShowInfo] = useState<boolean>(true);
+  const [isCompleteSettlement, setIsCompleteSettlement] = useState<
+    boolean | undefined
+  >(isPaid);
+  const [showInfo, setShowInfo] = useState<boolean>(!isPaid);
 
   useEffect(() => {
     if (typeof isPaid === 'boolean') {
       setShowInfo(!isPaid);
+      setIsCompleteSettlement(isPaid);
     }
   }, [isPaid]);
 
@@ -72,6 +75,10 @@ const SettlementInfoBox = ({
       },
     ]);
   };
+
+  if (isCompleteSettlement === undefined || isPaid === undefined) {
+    return null;
+  }
 
   return (
     <View
