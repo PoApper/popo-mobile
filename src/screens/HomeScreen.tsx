@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useFocusEffect} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {RootStackParamList} from '@navigation/types';
@@ -60,6 +61,16 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 
     fetchUserInfo();
   }, []);
+
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  // 화면이 포커스될 때마다 새로고침
+  useFocusEffect(
+    useCallback(() => {
+      console.log('HomeScreen focused - refreshing data');
+      setRefreshKey(prev => prev + 1);
+    }, []),
+  );
 
   const handleMoveSite = async (url: string) => {
     try {
@@ -184,7 +195,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
         </View>
 
         {/* 다가오는 일정 */}
-        <UpcomingEvents />
+        <UpcomingEvents refreshKey={refreshKey} />
 
         {/* 서비스 그리드 */}
         <View style={styles.servicesSection}>

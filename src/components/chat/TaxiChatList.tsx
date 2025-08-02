@@ -28,7 +28,10 @@ interface RoomData {
 }
 
 interface TaxiChatListProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    'MyReservation' | 'Reservation'
+  >;
   refreshKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;
