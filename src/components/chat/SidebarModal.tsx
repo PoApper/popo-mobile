@@ -11,18 +11,18 @@ import {
   Alert,
   useColorScheme,
 } from 'react-native';
-import { useState, useEffect, useRef } from 'react';
+import {useState, useEffect, useRef} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { ChatRoomInfo, UserData } from '@interfaces/paxi';
+import {ChatRoomInfo, UserData} from '@interfaces/paxi';
 import RoomInfoBox from '@components/chat/RoomInfoBox';
 import ParticipantItem from '@components/chat/ParticipantsItem';
 import ReportModal from '@components/chat/ReportModal';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@navigation/types';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import BanModal from '@components/chat/BanModal';
-import { backgroundColor, textColor } from '@styles/default';
+import {backgroundColor, textColor} from '@styles/default';
 
 interface SidebarModalProps {
   modalVisible: boolean;
@@ -40,7 +40,7 @@ const SidebarModal = ({
   navigation,
   myUuid,
 }: // leaveRoom,
-  SidebarModalProps) => {
+SidebarModalProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const screenWidth = Dimensions.get('window').width;
   const slideAnim = useRef(new Animated.Value(screenWidth * 0.8)).current;
@@ -106,13 +106,13 @@ const SidebarModal = ({
             style={[
               styles.modalContainer,
               {
-                transform: [{ translateX: slideAnim }],
+                transform: [{translateX: slideAnim}],
                 opacity: opacityAnim,
                 backgroundColor: backgroundColor(isDarkMode),
               },
             ]}>
             <SafeAreaView style={styles.modalContent}>
-              <Pressable style={styles.innerContent} onPress={() => { }}>
+              <Pressable style={styles.innerContent} onPress={() => {}}>
                 <RoomInfoBox
                   roomData={roomData}
                   navigation={navigation}
@@ -154,7 +154,8 @@ const SidebarModal = ({
                 </View>
 
                 {/* 참여자 목록 */}
-                <View style={{ flex: 1, width: '100%', gap: 10, marginBottom: 10 }}>
+                <View
+                  style={{flex: 1, width: '100%', gap: 10, marginBottom: 10}}>
                   {roomData?.room_users?.map(
                     user =>
                       user.status === 'JOINED' && (
@@ -186,7 +187,7 @@ const SidebarModal = ({
                 />
 
                 {/* Spacer to push logout button to bottom */}
-                <View style={{ flex: 1 }} />
+                <View style={{flex: 1}} />
 
                 {/* 채팅방 나가기/공유하기 버튼 */}
                 <View
@@ -199,7 +200,7 @@ const SidebarModal = ({
                     style={styles.leaveRoomButton}
                     onPress={() => {
                       Alert.alert('채팅방 나가기', '채팅방을 나가시겠습니까?', [
-                        { text: '취소', style: 'cancel' },
+                        {text: '취소', style: 'cancel'},
                         {
                           text: '나가기',
                           onPress: () => {

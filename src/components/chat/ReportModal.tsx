@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import {
   Modal,
   Pressable,
@@ -12,10 +12,10 @@ import {
   useColorScheme,
 } from 'react-native';
 
-import { UserData } from '@interfaces/paxi';
-import { TextInput } from 'react-native-gesture-handler';
+import {UserData} from '@interfaces/paxi';
+import {TextInput} from 'react-native-gesture-handler';
 import paxi_api from '@utils/paxi_api';
-import { backgroundColor, textColor } from '@styles/default';
+import {backgroundColor, textColor} from '@styles/default';
 
 interface ReportModalProps {
   modalVisible: boolean;
@@ -80,12 +80,14 @@ const ReportModal = ({
             <Pressable
               style={[
                 {
-                  width: modalWidth, height: modalHeight, backgroundColor: backgroundColor(isDarkMode),
+                  width: modalWidth,
+                  height: modalHeight,
+                  backgroundColor: backgroundColor(isDarkMode),
                 },
                 styles.innerContent,
               ]}
-              onPress={() => { }}>
-              <View style={{ flex: 1, width: '100%', marginBottom: 20 }}>
+              onPress={() => {}}>
+              <View style={{flex: 1, width: '100%', marginBottom: 20}}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -93,12 +95,12 @@ const ReportModal = ({
                     marginBottom: 10,
                   }}>
                   <Text
-                    style={[styles.modalTitle, { color: textColor(isDarkMode) }]}>
+                    style={[styles.modalTitle, {color: textColor(isDarkMode)}]}>
                     신고하기
                   </Text>
                 </View>
-                <Text style={{ marginBottom: 10, color: textColor(isDarkMode) }}>
-                  <Text style={{ color: 'red' }}>{userData?.nickname}</Text>님을
+                <Text style={{marginBottom: 10, color: textColor(isDarkMode)}}>
+                  <Text style={{color: 'red'}}>{userData?.nickname}</Text>님을
                   {'\n'}
                   정말로 신고하실건가요?
                 </Text>
@@ -125,13 +127,13 @@ const ReportModal = ({
                 <TouchableOpacity
                   style={[
                     styles.cancelButton,
-                    { backgroundColor: isDarkMode ? '#222' : '#f2f2f2' },
+                    {backgroundColor: isDarkMode ? '#222' : '#f2f2f2'},
                   ]}
                   onPress={() => handleClose()}>
                   <Text
                     style={[
                       styles.cancelButtonText,
-                      { color: textColor(isDarkMode) },
+                      {color: textColor(isDarkMode)},
                     ]}>
                     취소
                   </Text>
@@ -139,7 +141,7 @@ const ReportModal = ({
                 <TouchableOpacity
                   style={[
                     styles.reportButton,
-                    { backgroundColor: isDarkMode ? '#333' : 'black' },
+                    {backgroundColor: isDarkMode ? '#333' : 'black'},
                   ]}
                   disabled={reportText.length === 0}
                   onPress={() => {
@@ -151,9 +153,9 @@ const ReportModal = ({
               </View>
             </Pressable>
           )}
-        </SafeAreaView >
-      </Pressable >
-    </Modal >
+        </SafeAreaView>
+      </Pressable>
+    </Modal>
   );
 };
 

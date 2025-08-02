@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import {
   Modal,
   Pressable,
@@ -12,10 +12,10 @@ import {
   useColorScheme,
 } from 'react-native';
 
-import { UserData } from '@interfaces/paxi';
-import { TextInput } from 'react-native-gesture-handler';
+import {UserData} from '@interfaces/paxi';
+import {TextInput} from 'react-native-gesture-handler';
 import paxi_api from '@utils/paxi_api';
-import { backgroundColor, textColor } from '@styles/default';
+import {backgroundColor, textColor} from '@styles/default';
 
 interface BanModalProps {
   modalVisible: boolean;
@@ -87,8 +87,8 @@ const BanModal = ({
                 },
                 styles.innerContent,
               ]}
-              onPress={() => { }}>
-              <View style={{ flex: 1, width: '100%', marginBottom: 20 }}>
+              onPress={() => {}}>
+              <View style={{flex: 1, width: '100%', marginBottom: 20}}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -96,12 +96,12 @@ const BanModal = ({
                     marginBottom: 10,
                   }}>
                   <Text
-                    style={[styles.modalTitle, { color: textColor(isDarkMode) }]}>
+                    style={[styles.modalTitle, {color: textColor(isDarkMode)}]}>
                     추방하기
                   </Text>
                 </View>
-                <Text style={{ marginBottom: 10, color: textColor(isDarkMode) }}>
-                  <Text style={{ color: 'red' }}>{userData?.nickname}</Text>님을
+                <Text style={{marginBottom: 10, color: textColor(isDarkMode)}}>
+                  <Text style={{color: 'red'}}>{userData?.nickname}</Text>님을
                   {'\n'}
                   정말로 추방하실건가요?
                 </Text>
@@ -126,12 +126,24 @@ const BanModal = ({
               {/* 추방 요청 버튼 */}
               <View style={styles.buttonView}>
                 <TouchableOpacity
-                  style={styles.cancelButton}
+                  style={[
+                    styles.cancelButton,
+                    {backgroundColor: isDarkMode ? '#222' : '#f2f2f2'},
+                  ]}
                   onPress={() => handleClose()}>
-                  <Text style={styles.cancelButtonText}>취소</Text>
+                  <Text
+                    style={[
+                      styles.cancelButtonText,
+                      {color: textColor(isDarkMode)},
+                    ]}>
+                    취소
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.banButton}
+                  style={[
+                    styles.banButton,
+                    {backgroundColor: isDarkMode ? '#333' : 'black'},
+                  ]}
                   disabled={banText.length === 0}
                   onPress={() => {
                     handleBan(banText);
