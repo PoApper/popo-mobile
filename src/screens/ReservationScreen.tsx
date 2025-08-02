@@ -77,7 +77,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   }, []);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={backgroundStyle} edges={['top', 'left', 'right']}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
