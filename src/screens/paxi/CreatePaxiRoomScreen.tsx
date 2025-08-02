@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,13 +9,13 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import moment from 'moment';
 
-import { RootStackParamList } from '@navigation/types';
+import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import {
   getPaxiDistanceInfo,
@@ -47,7 +47,7 @@ function roundUpToNearest10Minutes(date: Date) {
   return new Date(Math.ceil(date.getTime() / ms) * ms);
 }
 
-const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
+const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const [roomName, setRoomName] = useState('');
   const [roomDetails, setRoomDetails] = useState('');
   const [departureName, setDepartureName] = useState('');
@@ -91,7 +91,6 @@ const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
         Alert.alert('실패', `방을 생성하는데 실패했습니다:\n${message}`);
       });
   }
-
 
   const handleDateConfirm = (date: Date) => {
     const combined = new Date(
@@ -137,7 +136,8 @@ const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
     setTimePickerVisible(false);
   };
 
-  const isToday = (date: Date) => new Date().toDateString() === date.toDateString();
+  const isToday = (date: Date) =>
+    new Date().toDateString() === date.toDateString();
 
   const checkInputValid = () => {
     if (!roomName || !departureName || !arrivalName) {
@@ -173,7 +173,7 @@ const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: isDarkMode ? '#121212' : '#fff' }}>
+      style={{flex: 1, backgroundColor: isDarkMode ? '#121212' : '#fff'}}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={isDarkMode ? '#121212' : '#fff'}
@@ -186,7 +186,7 @@ const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
         extraScrollHeight={100}>
         <View style={styles.formSection}>
           <View>
-            <Text style={[styles.label, { color: textColor }]}>방 제목</Text>
+            <Text style={[styles.label, {color: textColor}]}>방 제목</Text>
             <TextInput
               style={[styles.roomInput, TextInputStyle]}
               placeholder="제목을 입력해주세요."
@@ -196,14 +196,14 @@ const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
             />
           </View>
 
-          <View style={{ marginBottom: 8 }}>
-            <Text style={[styles.label, { color: textColor }]}>위치</Text>
+          <View style={{marginBottom: 8}}>
+            <Text style={[styles.label, {color: textColor}]}>위치</Text>
             <View style={[styles.inputWrapper, TextInputStyle]}>
               <View style={styles.inputWithDot}>
                 <View
                   style={[
                     styles.dotBlack,
-                    { backgroundColor: isDarkMode ? 'white' : 'black' },
+                    {backgroundColor: isDarkMode ? 'white' : 'black'},
                   ]}
                 />
                 <DropdownMenu
@@ -218,7 +218,7 @@ const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
               <View
                 style={[
                   styles.separator,
-                  { backgroundColor: isDarkMode ? '#2C2C2C' : '#d0d0d0' },
+                  {backgroundColor: isDarkMode ? '#2C2C2C' : '#d0d0d0'},
                 ]}
               />
               <View style={styles.inputWithDot}>
@@ -243,7 +243,7 @@ const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
                   marginTop: 8,
                   marginBottom: 8,
                 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text
                     style={{
                       color: textColor,
@@ -268,28 +268,28 @@ const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
               width: '100%',
               marginBottom: 12,
             }}>
-            <View style={{ width: '48%' }}>
-              <Text style={[styles.titleText, { color: textColor }]}>날짜</Text>
+            <View style={{width: '48%'}}>
+              <Text style={[styles.titleText, {color: textColor}]}>날짜</Text>
               <TouchableOpacity
                 style={{
                   borderWidth: 1,
                   borderColor: isDatePickerVisible
                     ? '#FB5353'
                     : isDarkMode
-                      ? '#2C2C2C'
-                      : '#D0D0D0',
+                    ? '#2C2C2C'
+                    : '#D0D0D0',
                   borderRadius: 6,
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                 }}
                 onPress={() => setDatePickerVisible(true)}>
-                <Text style={{ color: textColor }}>
+                <Text style={{color: textColor}}>
                   {moment(selectedDateTime).format('YYYY년 MM월 DD일')}
                 </Text>
               </TouchableOpacity>
             </View>
-            <View style={{ width: '48%' }}>
-              <Text style={[styles.titleText, { color: textColor }]}>
+            <View style={{width: '48%'}}>
+              <Text style={[styles.titleText, {color: textColor}]}>
                 출발시각
               </Text>
               <TouchableOpacity
@@ -298,14 +298,14 @@ const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
                   borderColor: isTimePickerVisible
                     ? '#FB5353'
                     : isDarkMode
-                      ? '#2C2C2C'
-                      : '#D0D0D0',
+                    ? '#2C2C2C'
+                    : '#D0D0D0',
                   borderRadius: 6,
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                 }}
                 onPress={() => setTimePickerVisible(true)}>
-                <Text style={{ color: textColor }}>
+                <Text style={{color: textColor}}>
                   {selectedDateTime.toLocaleTimeString([], {
                     hour: '2-digit',
                     minute: '2-digit',
@@ -340,15 +340,17 @@ const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
             confirmTextIOS="확인"
             cancelTextIOS="취소"
             minimumDate={roundUpToNearest10Minutes(
-              isToday(selectedDateTime) ? new Date() : new Date(
-                selectedDateTime.getFullYear(),
-                selectedDateTime.getMonth(),
-                selectedDateTime.getDate(),
-                0,
-                0,
-                0,
-                0
-              )
+              isToday(selectedDateTime)
+                ? new Date()
+                : new Date(
+                    selectedDateTime.getFullYear(),
+                    selectedDateTime.getMonth(),
+                    selectedDateTime.getDate(),
+                    0,
+                    0,
+                    0,
+                    0,
+                  ),
             )}
             minuteInterval={10}
           />
@@ -356,10 +358,10 @@ const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
           <Text
             style={[
               styles.titleText,
-              { color: textColor, flexDirection: 'row', alignItems: 'center' },
+              {color: textColor, flexDirection: 'row', alignItems: 'center'},
             ]}>
             상세내용{' '}
-            <Text style={{ color: textColor, fontSize: 12, opacity: 0.5 }}>
+            <Text style={{color: textColor, fontSize: 12, opacity: 0.5}}>
               (선택)
             </Text>
           </Text>
@@ -381,7 +383,7 @@ const CreatePaxiRoomScreen = ({ navigation }: CreatePaxiRoomScreenProps) => {
             onChangeText={setRoomDetails}
           />
 
-          <Text style={[styles.label, { color: textColor }]}>최대 인원</Text>
+          <Text style={[styles.label, {color: textColor}]}>최대 인원</Text>
           <View
             style={{
               alignItems: 'flex-start',
