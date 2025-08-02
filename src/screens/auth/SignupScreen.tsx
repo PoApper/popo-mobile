@@ -44,8 +44,7 @@ const isOkSignup = (
     name &&
     userType &&
     password.length >= 8 &&
-    password === confirmPassword &&
-    email.includes('@postech.ac.kr')
+    password === confirmPassword
   );
 };
 
@@ -78,14 +77,6 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
 
     if (password !== confirmPassword) {
       setError('비밀번호가 일치하지 않습니다.');
-      return;
-    }
-
-    // 이메일 형식 검사
-    if (email.includes('@')) {
-      setError(
-        '유효한 POVIS ID를 입력해주세요. @postech.ac.kr는 포함할 필요 없습니다.',
-      );
       return;
     }
 

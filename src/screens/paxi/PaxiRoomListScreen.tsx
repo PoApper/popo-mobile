@@ -96,7 +96,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   }, [navigation]);
 
   return (
-    <SafeAreaView style={[backgroundStyle]}>
+    <SafeAreaView style={[backgroundStyle]} edges={['top', 'left', 'right']}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
@@ -149,7 +149,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       </TouchableOpacity>
 
       <ScrollView
-        contentContainerStyle={{padding: 4}}
+        contentContainerStyle={{padding: 4, paddingBottom: 100}}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
