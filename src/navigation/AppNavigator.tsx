@@ -14,6 +14,7 @@ import MainNavigator from '@navigation/MainNavigator';
 import LandingScreen from '@screens/LandingScreen';
 import LoginScreen from '@screens/auth/LoginScreen';
 import SignupScreen from '@screens/auth/SignupScreen';
+import LeaveScreen from '@screens/auth/LeaveScreen';
 import UserDetailScreen from '@screens/auth/UserDetailScreen';
 import DeveloperPage from '@screens/auth/DeveloperPage';
 
@@ -81,6 +82,7 @@ const AppNavigator = () => {
           <Stack.Screen name="Landing" component={LandingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
+          <Stack.Screen name="Leave" component={LeaveScreen} />
           <Stack.Screen name="UserDetail" component={UserDetailScreen} />
           <Stack.Screen name="Developer" component={DeveloperPage} />
 
