@@ -269,6 +269,17 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
           </Text>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          style={[
+            styles.buttonContainer,
+            {backgroundColor: isDarkMode ? '#DC2626' : '#EF4444'},
+          ]}
+          onPress={() => navigation.navigate('Leave')}>
+          <Text style={[styles.leaveButtonText, {color: '#FFFFFF'}]}>
+            회원 탈퇴
+          </Text>
+        </TouchableOpacity>
+
         {/* 개발자 페이지 버튼 */}
         {!Environment.isProduction && (
           <View style={{marginTop: 16}}>
@@ -413,6 +424,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   logoutButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  leaveButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
