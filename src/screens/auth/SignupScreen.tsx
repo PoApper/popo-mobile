@@ -88,7 +88,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
 
     api
       .post('/auth/signin', {
-        email: email + '@postech.ac.kr',
+        email: email.includes('@') ? email : `${email}@postech.ac.kr`,
         password,
         name,
         userType,
@@ -174,7 +174,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.label,
                 {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
               ]}>
-              POVIS ID*
+              Email
             </Text>
             <TextInput
               style={[
@@ -185,20 +185,23 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                   borderColor: isDarkMode ? '#555555' : '#E5E7EB',
                 },
               ]}
-              placeholder="POVIS ID를 입력해주세요"
+              placeholder="Email 또는 POVIS ID를 입력해주세요"
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
               keyboardType="email-address"
               autoCapitalize="none"
               value={email}
               onChangeText={setEmail}
             />
+            {/*
+            테스트 기간 동안은 다른 이메일도 허용
             <Text
               style={[
                 styles.emailHintText,
                 {color: isDarkMode ? '#AAAAAA' : '#9CA3AF'},
               ]}>
-              POVIS 이메일로 인증메일이 발송 됩니다.
+              POVIS 이메일로 인증메일이 발송 됩니다. (테스트 기간 동안은 )
             </Text>
+            */}
 
             <Text
               style={[
