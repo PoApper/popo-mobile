@@ -153,6 +153,13 @@ const SettlementInfoBox = ({
                     styles.infoText,
                     {color: isDarkMode ? '#aaa' : '#4f4f4f'},
                   ]}>
+                  정산 요청자: {settlementData.payerNickname}
+                </Text>
+                <Text
+                  style={[
+                    styles.infoText,
+                    {color: isDarkMode ? '#aaa' : '#4f4f4f'},
+                  ]}>
                   계좌주명: {settlementData.payerAccountHolderName}
                 </Text>
                 <TouchableOpacity
@@ -233,6 +240,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 13,
     letterSpacing: -0.4,
+    marginBottom: 4,
   },
   warnText: {
     fontSize: 12,
