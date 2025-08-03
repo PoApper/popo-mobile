@@ -16,6 +16,7 @@ import {RootStackParamList} from '@navigation/types';
 import ReservationList from '@components/ReservationList';
 import EquipReservationList from '@components/EquipReservationList';
 import TaxiChatList from '@components/chat/TaxiChatList';
+import paxi_api from '@utils/paxi_api';
 
 type ReservationScreenProps = {
   navigation?: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
@@ -28,6 +29,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const route = useRoute<RouteProp<RootStackParamList, 'Reservation'>>();
 
+  const [isPaxiUser, setIsPaxiUser] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('place');
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
   const [refreshKey, setRefreshKey] = useState(0);
@@ -35,6 +37,17 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
 
   // 라우트 파라미터에서 selectedTab을 받아서 초기 탭 설정
   useEffect(() => {
+    const checkPaxiUser = async () => {
+      paxi_api
+        .get('/user/onboarding-status')
+        .then(res => {
+          setIsPaxiUser(res.data.onboardingStatus);
+        })
+        .catch(err => {
+          console.error('Paxi user check error:', err);
+        });
+    };
+    checkPaxiUser();
     if (route.params?.selectedTab) {
       const validTabs: TabType[] = ['place', 'equipment', 'taxi'];
       if (validTabs.includes(route.params.selectedTab as TabType)) {
@@ -142,7 +155,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
-        ) : (
+        ) : isPaxiUser ? (
           <View style={{flex: 1}}>
             <TaxiChatList
               navigation={navigation!}
@@ -150,6 +163,37 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
               refreshing={refreshing}
               onRefresh={onRefresh}
             />
+          </View>
+        ) : (
+          <View
+            style={[
+              styles.paxiSignupContainer,
+              {backgroundColor: backgroundStyle.backgroundColor},
+            ]}>
+            <View style={styles.paxiSignupContent}>
+              <Text style={[styles.paxiSignupTitle, {color: textColor}]}>
+                Paxi 서비스 사용 동의가 필요합니다
+              </Text>
+              <Text
+                style={[
+                  styles.paxiSignupDescription,
+                  {color: isDarkMode ? '#AAAAAA' : '#666666'},
+                ]}>
+                택시 카풀 서비스를 이용하려면{'\n'}
+                Paxi 서비스 사용 동의가 필요합니다.{'\n'}
+                동의 후 다시 시도해주세요.
+              </Text>
+              <TouchableOpacity
+                style={[
+                  styles.paxiSignupButton,
+                  {backgroundColor: isDarkMode ? '#3B82F6' : '#3B82F6'},
+                ]}
+                onPress={() => navigation?.navigate('PaxiIntro')}>
+                <Text style={styles.paxiSignupButtonText}>
+                  Paxi 서비스 사용 동의 페이지로 이동
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       </View>
@@ -204,6 +248,45 @@ const styles = StyleSheet.create({
     marginTop: 4,
     height: 2,
     borderRadius: 1,
+  },
+  paxiSignupContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  paxiSignupContent: {
+    alignItems: 'center',
+    maxWidth: 300,
+  },
+  paxiSignupTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    fontFamily: 'Pretendard',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  paxiSignupDescription: {
+    fontSize: 16,
+    fontWeight: '400',
+    fontFamily: 'Pretendard',
+    textAlign: 'center',
+    lineHeight: 24,
+    marginBottom: 32,
+  },
+  paxiSignupButton: {
+    borderRadius: 8,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    minWidth: 200,
+    alignItems: 'center',
+  },
+  paxiSignupButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    fontFamily: 'Pretendard',
+    color: '#FFFFFF',
+    textAlign: 'center',
   },
 });
 
