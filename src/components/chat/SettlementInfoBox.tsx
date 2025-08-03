@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -10,9 +10,9 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Clipboard from '@react-native-clipboard/clipboard';
 
-import {SettlementData} from '@interfaces/paxi';
+import { SettlementData } from '@interfaces/paxi';
 import paxi_api from '@utils/paxi_api';
-import {textColor} from '@styles/default';
+import { textColor } from '@styles/default';
 
 interface SettlementInfoBoxProps {
   isPaid: boolean | undefined;
@@ -36,15 +36,11 @@ const SettlementInfoBox = ({
   settlementData,
 }: SettlementInfoBoxProps) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [isCompleteSettlement, setIsCompleteSettlement] = useState<
-    boolean | undefined
-  >(isPaid);
   const [showInfo, setShowInfo] = useState<boolean>(!isPaid);
 
   useEffect(() => {
     if (typeof isPaid === 'boolean') {
       setShowInfo(!isPaid);
-      setIsCompleteSettlement(isPaid);
     }
   }, [isPaid]);
 
@@ -76,7 +72,7 @@ const SettlementInfoBox = ({
     ]);
   };
 
-  if (isCompleteSettlement === undefined || isPaid === undefined) {
+  if (isPaid === undefined) {
     return null;
   }
 
@@ -84,13 +80,13 @@ const SettlementInfoBox = ({
     <View
       style={[
         styles.backgroundContainer,
-        {backgroundColor: isDarkMode ? '#222' : '#f2f3f5'},
+        { backgroundColor: isDarkMode ? '#222' : '#f2f3f5' },
       ]}>
       {!showInfo && (
         <TouchableOpacity
           onPress={() => setShowInfo(true)}
-          style={{flexDirection: 'row', gap: 10, margin: 10}}>
-          {isCompleteSettlement && (
+          style={{ flexDirection: 'row', gap: 10, margin: 10 }}>
+          {isPaid && (
             <>
               <Icon name={'check'} size={20} color={'green'} />
               <Text
@@ -103,7 +99,7 @@ const SettlementInfoBox = ({
               </Text>
             </>
           )}
-          {!isCompleteSettlement && (
+          {!isPaid && (
             <>
               <Icon name={'warning'} size={20} color={'#e45b63'} />
               <Text
@@ -116,7 +112,7 @@ const SettlementInfoBox = ({
               </Text>
             </>
           )}
-          <View style={{flex: 1}} />
+          <View style={{ flex: 1 }} />
           <Icon
             name={'keyboard-arrow-down'}
             size={20}
@@ -125,38 +121,38 @@ const SettlementInfoBox = ({
         </TouchableOpacity>
       )}
       {showInfo && (
-        <View style={{margin: 10}}>
+        <View style={{ margin: 10 }}>
           <TouchableOpacity
             onPress={() => setShowInfo(false)}
-            style={{width: '100%', flexDirection: 'row'}}>
-            <View style={{flex: 1}} />
+            style={{ width: '100%', flexDirection: 'row' }}>
+            <View style={{ flex: 1 }} />
             <Icon
               name={'keyboard-arrow-up'}
               size={20}
               color={textColor(isDarkMode)}
             />
           </TouchableOpacity>
-          <View style={{margin: 5, alignItems: 'center'}}>
+          <View style={{ margin: 5, alignItems: 'center' }}>
             <View style={styles.titleContainer}>
-              <Text style={[styles.titleText, {color: textColor(isDarkMode)}]}>
+              <Text style={[styles.titleText, { color: textColor(isDarkMode) }]}>
                 정산 안내
               </Text>
               <Text
-                style={[styles.payAmountText, {color: textColor(isDarkMode)}]}>
+                style={[styles.payAmountText, { color: textColor(isDarkMode) }]}>
                 {settlementData.payAmount?.toLocaleString()}원
               </Text>
             </View>
             <View style={styles.payerInfoContainer}>
-              <View style={{marginTop: 10}}>
+              <View style={{ marginTop: 10 }}>
                 <Text
                   style={[
                     styles.infoText,
-                    {color: isDarkMode ? '#aaa' : '#4f4f4f'},
+                    { color: isDarkMode ? '#aaa' : '#4f4f4f' },
                   ]}>
                   계좌주명: {settlementData.payerAccountHolderName}
                 </Text>
                 <TouchableOpacity
-                  style={{flexDirection: 'row', gap: 5, alignItems: 'center'}}
+                  style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}
                   onPress={() =>
                     Clipboard.setString(
                       `${settlementData.payerAccountNumber} ${settlementData.payerBankName}`,
@@ -165,7 +161,7 @@ const SettlementInfoBox = ({
                   <Text
                     style={[
                       styles.infoText,
-                      {color: isDarkMode ? '#aaa' : '#4f4f4f'},
+                      { color: isDarkMode ? '#aaa' : '#4f4f4f' },
                     ]}>
                     계좌번호: {settlementData.payerBankName}{' '}
                     {settlementData.payerAccountNumber}
@@ -178,7 +174,7 @@ const SettlementInfoBox = ({
                 </TouchableOpacity>
               </View>
             </View>
-            {!isCompleteSettlement && (
+            {!isPaid && (
               <>
                 <Text style={styles.warnText}>
                   꼭! 송금 후 완료 버튼을 눌러 주세요!
@@ -186,7 +182,7 @@ const SettlementInfoBox = ({
                 <TouchableOpacity
                   style={[
                     styles.sendBtn,
-                    {backgroundColor: isDarkMode ? '#333' : 'black'},
+                    { backgroundColor: isDarkMode ? '#333' : 'black' },
                   ]}
                   onPress={settlementSendAlert}>
                   <Text style={styles.sendBtnText}>

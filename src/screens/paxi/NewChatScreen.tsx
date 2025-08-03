@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback, useEffect} from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,11 +12,11 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RouteProp, useRoute, useFocusEffect} from '@react-navigation/native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp, useRoute, useFocusEffect } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Socket} from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 
 import {
   UserData,
@@ -25,10 +25,10 @@ import {
   PaxiUser,
   SettlementData,
 } from '@interfaces/paxi';
-import {RootStackParamList} from '@navigation/types';
+import { RootStackParamList } from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import {textColor, borderColor, backgroundColor, common} from '@styles/default';
-import {socketFactory} from '@utils/socket-factory';
+import { textColor, borderColor, backgroundColor, common } from '@styles/default';
+import { socketFactory } from '@utils/socket-factory';
 import ChatMessage from '@components/chat/ChatMessage';
 import SidebarModal from '@components/chat/SidebarModal';
 import SettlementInfoBox from '@components/chat/SettlementInfoBox';
@@ -39,10 +39,10 @@ type NewChatScreenProps = {
 
 type ChatScreenRouteProp = RouteProp<RootStackParamList, 'NewChat'>;
 
-const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
+const NewChatScreen: React.FC<NewChatScreenProps> = ({ navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const route = useRoute<ChatScreenRouteProp>();
-  const {roomUuid, from} = route.params;
+  const { roomUuid, from } = route.params;
 
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [roomInfo, setRoomInfo] = useState<ChatRoomInfo>({} as ChatRoomInfo);
@@ -57,7 +57,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     {} as SettlementData,
   );
   const [isSettlement, setIsSettlement] = useState<boolean>(false);
-  const [isPaid, setIsPaid] = useState<boolean | undefined>(false);
+  const [isPaid, setIsPaid] = useState<boolean | undefined>(undefined);
 
   const getRoomInfo = async () => {
     paxi_api
@@ -228,29 +228,29 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
   return (
     <SafeAreaView
-      style={{backgroundColor: backgroundColor(isDarkMode), flex: 1}}>
+      style={{ backgroundColor: backgroundColor(isDarkMode), flex: 1 }}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundColor(isDarkMode)}
       />
       <View
-        style={[common.header, {borderBottomColor: borderColor(isDarkMode)}]}>
+        style={[common.header, { borderBottomColor: borderColor(isDarkMode) }]}>
         <TouchableOpacity
           style={common.backButton}
           onPress={() =>
             from === 'roomList'
-              ? navigation.navigate('Main', {tab: 'Paxi'})
-              : navigation.navigate('Main', {tab: 'MyReservation'})
+              ? navigation.navigate('Main', { tab: 'Paxi' })
+              : navigation.navigate('Main', { tab: 'MyReservation' })
           }>
-          <Text style={[common.backButtonText, {color: textColor(isDarkMode)}]}>
+          <Text style={[common.backButtonText, { color: textColor(isDarkMode) }]}>
             뒤로
           </Text>
         </TouchableOpacity>
-        <Text style={[common.headerTitle, {color: textColor(isDarkMode)}]}>
+        <Text style={[common.headerTitle, { color: textColor(isDarkMode) }]}>
           {roomInfo?.title}
         </Text>
         <TouchableOpacity
-          style={{marginRight: 10}}
+          style={{ marginRight: 10 }}
           onPress={() => setSidebarVisible(!sidebarVisible)}>
           <Icon name="menu" size={30} color={textColor(isDarkMode)} />
         </TouchableOpacity>
@@ -261,14 +261,14 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
           <View
             style={[
               styles.socketConnectionInner,
-              {backgroundColor: isDarkMode ? '#333' : '#eee'},
+              { backgroundColor: isDarkMode ? '#333' : '#eee' },
             ]}>
             <Icon
               name="link-off"
               size={18}
               color={isDarkMode ? '#FFFFFF' : '#000000'}
             />
-            <Text style={{color: textColor(isDarkMode)}}>
+            <Text style={{ color: textColor(isDarkMode) }}>
               서버와 접속이 끊어졌습니다. 재연결 시도 {reconnectAttempt}회
             </Text>
           </View>
@@ -301,7 +301,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
         <FlatList
           data={chatList}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <ChatMessage message={item} user_uuid={myInfo.uuid} />
           )}
           keyExtractor={item => item.uuid}
@@ -315,7 +315,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         <View
           style={[
             styles.inputContainer,
-            {backgroundColor: backgroundColor(isDarkMode)},
+            { backgroundColor: backgroundColor(isDarkMode) },
           ]}>
           <TextInput
             style={[
