@@ -118,32 +118,51 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
   }
 
   const handleDateConfirm = (date: Date) => {
-    setSelectedDateTime(
-      new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        selectedDateTime.getHours(),
-        selectedDateTime.getMinutes(),
-        selectedDateTime.getSeconds(),
-      ),
+    const combined = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      selectedDateTime.getHours(),
+      selectedDateTime.getMinutes(),
+      selectedDateTime.getSeconds(),
     );
+
+    const now = new Date();
+
+    if (combined.getTime() < now.getTime()) {
+      Alert.alert('오류', '현재 이후의 시각만 선택할 수 있습니다.');
+      setSelectedDateTime(roundUpToNearest10Minutes(now));
+    } else {
+      setSelectedDateTime(combined);
+    }
+
     setDatePickerVisible(false);
   };
 
   const handleTimeConfirm = (time: Date) => {
-    setSelectedDateTime(
-      new Date(
-        selectedDateTime.getFullYear(),
-        selectedDateTime.getMonth(),
-        selectedDateTime.getDate(),
-        time.getHours(),
-        time.getMinutes(),
-        time.getSeconds(),
-      ),
+    const combined = new Date(
+      selectedDateTime.getFullYear(),
+      selectedDateTime.getMonth(),
+      selectedDateTime.getDate(),
+      time.getHours(),
+      time.getMinutes(),
+      time.getSeconds(),
     );
+
+    const now = new Date();
+
+    if (combined.getTime() < now.getTime()) {
+      Alert.alert('오류', '현재 이후의 시각만 선택할 수 있습니다.');
+      setSelectedDateTime(roundUpToNearest10Minutes(now));
+    } else {
+      setSelectedDateTime(combined);
+    }
+
     setTimePickerVisible(false);
   };
+
+  const isToday = (date: Date) =>
+    new Date().toDateString() === date.toDateString();
 
   const checkInputValid = () => {
     if (!roomName || !departureName || !arrivalName) {
@@ -325,6 +344,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="date"
+            date={selectedDateTime}
             onConfirm={handleDateConfirm}
             onCancel={() => setDatePickerVisible(false)}
             minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
@@ -339,12 +359,25 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
           <DateTimePickerModal
             isVisible={isTimePickerVisible}
             mode="time"
+            date={selectedDateTime}
             onConfirm={handleTimeConfirm}
             onCancel={() => setTimePickerVisible(false)}
             is24Hour={true}
             confirmTextIOS="확인"
             cancelTextIOS="취소"
-            minimumDate={roundUpToNearest10Minutes(new Date())}
+            minimumDate={roundUpToNearest10Minutes(
+              isToday(selectedDateTime)
+                ? new Date()
+                : new Date(
+                    selectedDateTime.getFullYear(),
+                    selectedDateTime.getMonth(),
+                    selectedDateTime.getDate(),
+                    0,
+                    0,
+                    0,
+                    0,
+                  ),
+            )}
             minuteInterval={10}
           />
 
