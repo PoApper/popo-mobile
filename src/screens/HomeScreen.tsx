@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   serviceTitle: {
-    fontSize: 12,
+    fontSize: 14,
     marginTop: 8,
     textAlign: 'center',
   },
