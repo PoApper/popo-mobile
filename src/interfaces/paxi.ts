@@ -34,6 +34,8 @@ export interface MessageData {
 }
 
 export interface SettlementData {
+  payerUuid: string;
+  payerNickname: string;
   payAmount: number;
   currentParticipant: number;
   payerBankName: string;
