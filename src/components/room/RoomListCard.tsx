@@ -36,6 +36,11 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
   const isOwner = userUuid === roomData.ownerUuid;
 
   const askJoinRoom = () => {
+    if (roomData.currentParticipant >= roomData.maxParticipant) {
+      Alert.alert('마감', '방이 마감되었습니다.');
+      return;
+    }
+
     if (isOwner) {
       navigation.navigate('NewChat', {
         roomUuid: roomData.uuid,
