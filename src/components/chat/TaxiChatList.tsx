@@ -313,8 +313,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   emptyImage: {
-    width: 150,
-    height: 60,
+    height: 100,
     marginBottom: 24,
     opacity: 0.6,
   },

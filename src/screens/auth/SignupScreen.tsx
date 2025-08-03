@@ -174,7 +174,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.label,
                 {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
               ]}>
-              Email
+              Email*
             </Text>
             <TextInput
               style={[
@@ -439,12 +439,12 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   logoImage: {
-    width: 150,
-    height: 60,
+    height: 100,
   },
   headerText: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginTop: -10,
     marginBottom: 24,
     textAlign: 'center',
   },

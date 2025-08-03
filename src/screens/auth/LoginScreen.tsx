@@ -168,9 +168,6 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             style={styles.logoImage}
             resizeMode="contain"
           />
-          <Text style={[styles.loginScreenTitle, {color: textColor}]}>
-            로그인/회원가입
-          </Text>
         </View>
 
         <View style={styles.formContainer}>
@@ -305,21 +302,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logoImage: {
-    width: 500,
-    height: 100,
-  },
-  loginScreenTitle: {
-    fontSize: 22,
-    letterSpacing: -0.2,
-    fontWeight: '600',
-    fontFamily: 'Pretendard',
-    color: '#000',
-    textAlign: 'center',
-    width: 169,
+    height: 200,
   },
   formContainer: {
     width: '100%',
-    marginTop: 34,
+    marginTop: 10,
   },
   input: {
     backgroundColor: '#FFFFFF',
