@@ -55,11 +55,13 @@ const EquipmentReservationScreen = ({
   const [loading, setLoading] = useState(false);
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#fff' : '#fff',
+    backgroundColor: isDarkMode ? '#1a1a1a' : '#fff',
     flex: 1,
   };
-  const textColor = isDarkMode ? '#000' : '#000';
+  const textColor = isDarkMode ? '#ffffff' : '#000000';
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
+  const secondaryTextColor = isDarkMode ? '#a0a0a0' : '#888888';
+  const buttonBackgroundColor = isDarkMode ? '#3a3a3a' : '#F6F7F9';
 
   useEffect(() => {
     const fetchEquipment = async () => {
@@ -85,16 +87,23 @@ const EquipmentReservationScreen = ({
       {item.image_url ? (
         <Image source={{uri: item.image_url}} style={styles.equipmentImage} />
       ) : (
-        <View style={[styles.equipmentImage, {backgroundColor: '#eee'}]} />
+        <View
+          style={[
+            styles.equipmentImage,
+            {backgroundColor: isDarkMode ? '#3a3a3a' : '#eee'},
+          ]}
+        />
       )}
       <View style={styles.equipmentInfo}>
         <Text style={[styles.equipmentName, {color: textColor}]}>
           {removeEmoji(item.name)}
         </Text>
-        <Text style={styles.equipmentPrice}>{item.fee.toLocaleString()}원</Text>
+        <Text style={[styles.equipmentPrice, {color: secondaryTextColor}]}>
+          {item.fee.toLocaleString()}원
+        </Text>
       </View>
       <TouchableOpacity
-        style={styles.detailButton}
+        style={[styles.detailButton, {backgroundColor: buttonBackgroundColor}]}
         onPress={() => {
           Alert.alert(
             '장비 상세정보',
@@ -106,7 +115,9 @@ const EquipmentReservationScreen = ({
             [{text: '닫기', style: 'cancel'}],
           );
         }}>
-        <Text style={styles.detailButtonText}>상세정보</Text>
+        <Text style={[styles.detailButtonText, {color: textColor}]}>
+          상세정보
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -114,7 +125,7 @@ const EquipmentReservationScreen = ({
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
-        barStyle={isDarkMode ? 'dark-content' : 'dark-content'}
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <View style={[styles.header, {borderBottomColor: borderColor}]}>
@@ -140,11 +151,17 @@ const EquipmentReservationScreen = ({
             <Text
               style={[
                 styles.tabText,
+                {color: secondaryTextColor},
                 selectedTab === tab.value && styles.selectedTabText,
+                selectedTab === tab.value && {color: textColor},
               ]}>
               {tab.label}
             </Text>
-            {selectedTab === tab.value && <View style={styles.tabUnderline} />}
+            {selectedTab === tab.value && (
+              <View
+                style={[styles.tabUnderline, {backgroundColor: textColor}]}
+              />
+            )}
           </TouchableOpacity>
         ))}
       </View>
@@ -159,7 +176,7 @@ const EquipmentReservationScreen = ({
               <View key={item.uuid}>{renderEquipmentItem({item})}</View>
             ))
           ) : (
-            <Text style={styles.emptyListText}>
+            <Text style={[styles.emptyListText, {color: secondaryTextColor}]}>
               {loading ? '불러오는 중...' : '장비가 없습니다.'}
             </Text>
           )}
@@ -218,18 +235,15 @@ const styles = StyleSheet.create({
   selectedTab: {},
   tabText: {
     fontSize: 16,
-    color: '#888',
     fontWeight: '500',
   },
   selectedTabText: {
-    color: '#000',
     fontWeight: 'bold',
   },
   tabUnderline: {
     marginTop: 4,
     height: 2,
     width: '100%',
-    backgroundColor: '#000',
     borderRadius: 1,
   },
   equipmentListContainer: {
@@ -251,7 +265,6 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 8,
     marginRight: 16,
-    backgroundColor: '#eee',
   },
   equipmentInfo: {
     flex: 1,
@@ -263,15 +276,12 @@ const styles = StyleSheet.create({
   },
   equipmentDesc: {
     fontSize: 13,
-    color: '#888',
     marginBottom: 2,
   },
   equipmentPrice: {
     fontSize: 13,
-    color: '#888',
   },
   detailButton: {
-    backgroundColor: '#F6F7F9',
     borderRadius: 999,
     paddingVertical: 8,
     paddingHorizontal: 20,
@@ -279,7 +289,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   detailButtonText: {
-    color: '#222',
     fontSize: 14,
     fontWeight: '600',
   },

@@ -51,6 +51,7 @@ SidebarModalProps) => {
 
   const isIamOwner = myUuid == roomData.ownerUuid;
   const roomPeopleCnt = roomData.currentParticipant;
+  const isIamPayer = roomData.payerUuid == myUuid;
 
   const handleClose = () => {
     Animated.timing(slideAnim, {
@@ -121,10 +122,17 @@ SidebarModalProps) => {
                     },
                   ]}
                   onPress={() => {
-                    setModalVisible(false);
-                    navigation.navigate('Settlement', {
-                      roomUuid: roomData.uuid,
-                    });
+                    if (isIamPayer || !roomData.payerUuid) {
+                      setModalVisible(false);
+                      navigation.navigate('Settlement', {
+                        roomUuid: roomData.uuid,
+                      });
+                    } else if (roomData.payerUuid.length > 0) {
+                      Alert.alert(
+                        '이미 정산 요청이 있습니다.',
+                        '방에 생성된 정산 요청이 이미 있습니다. 확인 후 정산을 진행해주세요.',
+                      );
+                    }
                   }}>
                   <Text style={[styles.buttonText]}>정산 요청하기</Text>
                 </TouchableOpacity>
