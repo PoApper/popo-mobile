@@ -53,7 +53,7 @@ const BanModal = ({
       })
       .then(data => {
         console.log('추방 성공: ', data);
-        Alert.alert('처리 완료', '요청이 처리되었습니다.');
+        Alert.alert('처리 완료', '추방 요청이 처리되었습니다.');
       })
       .catch(error => {
         Alert.alert('추방 실패', error.response.data.message);

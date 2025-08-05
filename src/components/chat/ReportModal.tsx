@@ -53,7 +53,7 @@ const ReportModal = ({
         reason: reason,
       })
       .then(() => {
-        Alert.alert('처리 완료', '요청이 처리되었습니다.');
+        Alert.alert('처리 완료', '신고 요청이 처리되었습니다.');
       })
       .catch(() => {
         Alert.alert('신고 실패', '신고 요청에 실패했습니다.');
