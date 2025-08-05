@@ -57,7 +57,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     {} as SettlementData,
   );
   const [isSettlement, setIsSettlement] = useState<boolean>(false);
-  const [isPaid, setIsPaid] = useState<boolean | undefined>(false);
+  const [isPaid, setIsPaid] = useState<boolean | undefined>(undefined);
 
   const getRoomInfo = async () => {
     paxi_api
@@ -256,37 +256,21 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      {!socketConnected && (
+      {!socketConnected && reconnectAttempt !== 0 && (
         <View style={styles.socketConnection}>
           <View
             style={[
               styles.socketConnectionInner,
               {backgroundColor: isDarkMode ? '#333' : '#eee'},
             ]}>
-            {reconnectAttempt === 0 && (
-              <>
-                <Icon
-                  name="link"
-                  size={18}
-                  color={isDarkMode ? '#FFFFFF' : '#000000'}
-                />
-                <Text style={{color: textColor(isDarkMode)}}>
-                  서버에 접속하고 있습니다
-                </Text>
-              </>
-            )}
-            {reconnectAttempt !== 0 && (
-              <>
-                <Icon
-                  name="link-off"
-                  size={18}
-                  color={isDarkMode ? '#FFFFFF' : '#000000'}
-                />
-                <Text style={{color: textColor(isDarkMode)}}>
-                  서버와 접속이 끊어졌습니다. 재연결 시도 {reconnectAttempt}회
-                </Text>
-              </>
-            )}
+            <Icon
+              name="link-off"
+              size={18}
+              color={isDarkMode ? '#FFFFFF' : '#000000'}
+            />
+            <Text style={{color: textColor(isDarkMode)}}>
+              서버와 접속이 끊어졌습니다. 재연결 시도 {reconnectAttempt}회
+            </Text>
           </View>
         </View>
       )}
@@ -299,7 +283,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         navigation={navigation}
       />
 
-      {isSettlement && (
+      {isSettlement && isPaid && settlementData && (
         <View
           style={{
             width: '100%',
@@ -411,7 +395,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginTop: 10,
     position: 'absolute',
-    zIndex: 20,
+    zIndex: 1000,
     width: '100%',
     height: 50,
     top: 60,
