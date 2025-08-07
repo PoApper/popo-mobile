@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useCallback, useMemo} from 'react';
+import React, {useEffect, useState, useRef, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,6 @@ import {
   StatusBar,
   TouchableOpacity,
   TextInput,
-  ScrollView,
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
