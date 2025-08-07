@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -16,12 +16,16 @@ import {
   Dimensions,
   Pressable,
 } from 'react-native';
-import { GestureHandlerRootView, Gesture, GestureDetector } from 'react-native-gesture-handler';
+import {
+  GestureHandlerRootView,
+  Gesture,
+  GestureDetector,
+} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
 
-import { RootStackParamList } from '@navigation/types';
+import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 
 interface Place {
@@ -79,12 +83,13 @@ const ReservationList: React.FC<ReservationListProps> = ({
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedReservation, setSelectedReservation] = useState<PlaceReservation | null>(null);
+  const [selectedReservation, setSelectedReservation] =
+    useState<PlaceReservation | null>(null);
   const listRef = useRef<FlatList>(null);
   const itemsPerPage = 10;
 
   // Modal animation values
-  const { height: screenHeight } = Dimensions.get('window');
+  const {height: screenHeight} = Dimensions.get('window');
   const translateY = useRef(new Animated.Value(0)).current;
   const modalOpacity = useRef(new Animated.Value(0)).current;
 
@@ -116,7 +121,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
         },
       );
 
-      const { items } = response.data;
+      const {items} = response.data;
       const sortedReservations = [...items].sort((a, b) => {
         const dateA = new Date(formatDate(a.date));
         const dateB = new Date(formatDate(b.date));
@@ -135,7 +140,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
       if (axios.isAxiosError(err)) {
         if (err.response?.status === 401) {
           Alert.alert('인증 만료', '다시 로그인해주세요.', [
-            { text: '확인', onPress: () => navigation.navigate('Login') },
+            {text: '확인', onPress: () => navigation.navigate('Login')},
           ]);
         } else {
           setError('예약 정보를 불러오는데 실패했습니다.');
@@ -161,7 +166,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
   };
 
   const scrollToTop = () => {
-    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+    listRef.current?.scrollToOffset({offset: 0, animated: true});
   };
 
   useEffect(() => {
@@ -225,20 +230,20 @@ const ReservationList: React.FC<ReservationListProps> = ({
           },
         },
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case '통과':
-        return { name: 'check-circle', color: '#10B981' };
+        return {name: 'check-circle', color: '#10B981'};
       case '심사중':
-        return { name: 'access-time', color: '#F59E0B' };
+        return {name: 'access-time', color: '#F59E0B'};
       case '거절':
-        return { name: 'cancel', color: '#EF4444' };
+        return {name: 'cancel', color: '#EF4444'};
       default:
-        return { name: 'help', color: '#6B7280' };
+        return {name: 'help', color: '#6B7280'};
     }
   };
 
@@ -283,13 +288,13 @@ const ReservationList: React.FC<ReservationListProps> = ({
   };
 
   const panGesture = Gesture.Pan()
-    .onChange((event) => {
+    .onChange(event => {
       // Only allow downward movement (positive translationY)
       if (event.translationY >= 0) {
         translateY.setValue(event.translationY);
       }
     })
-    .onFinalize((event) => {
+    .onFinalize(event => {
       // Close modal if dragged down significantly or with high velocity
       if (event.translationY > 100 || event.velocityY > 500) {
         closeModal();
@@ -308,42 +313,40 @@ const ReservationList: React.FC<ReservationListProps> = ({
     }
   };
 
-  const renderReservationItem = ({ item }: { item: PlaceReservation }) => {
+  const renderReservationItem = ({item}: {item: PlaceReservation}) => {
     const statusIcon = getStatusIcon(item.status);
     const subtitleColor = isDarkMode ? '#BBBBBB' : '#6B7280';
     const iconBgColor = isDarkMode ? '#2A2A2A' : '#F3F4F6';
 
     return (
       <TouchableOpacity
-        style={[
-          styles.simpleReservationItem,
-          { borderBottomColor: borderColor },
-        ]}
+        style={[styles.simpleReservationItem, {borderBottomColor: borderColor}]}
         onPress={() => openModal(item)}
         onLongPress={() => handleLongPress(item)}
         delayLongPress={500}>
         <View style={styles.itemContent}>
           <Text
-            style={[styles.itemTitle, { color: textColor }]}
+            style={[styles.itemTitle, {color: textColor}]}
             numberOfLines={1}
             ellipsizeMode="tail">
             {item.title || '제목 없음'}
           </Text>
           <Text
-            style={[styles.itemSubtitle, { color: subtitleColor }]}
+            style={[styles.itemSubtitle, {color: subtitleColor}]}
             numberOfLines={1}
             ellipsizeMode="tail">
             {item.place?.name || '장소 이름 없음'}
           </Text>
-          <Text
-            style={[styles.itemDateTime, { color: subtitleColor }]}>
+          <Text style={[styles.itemDateTime, {color: subtitleColor}]}>
             {new Date(formatDate(item.date)).toLocaleDateString('ko-KR', {
               month: 'short',
               day: 'numeric',
-            })} {formatTime(item.start_time)}
+            })}{' '}
+            {formatTime(item.start_time)}
           </Text>
         </View>
-        <View style={[styles.statusIconContainer, { backgroundColor: iconBgColor }]}>
+        <View
+          style={[styles.statusIconContainer, {backgroundColor: iconBgColor}]}>
           <Icon name={statusIcon.name} size={24} color={statusIcon.color} />
         </View>
       </TouchableOpacity>
@@ -365,7 +368,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4F46E5" />
-        <Text style={[styles.loadingText, { color: textColor }]}>
+        <Text style={[styles.loadingText, {color: textColor}]}>
           예약 정보를 불러오는 중...
         </Text>
       </View>
@@ -375,7 +378,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
   if (error) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={[styles.errorText, { color: textColor }]}>{error}</Text>
+        <Text style={[styles.errorText, {color: textColor}]}>{error}</Text>
         <TouchableOpacity
           style={styles.retryButton}
           onPress={() => fetchReservations(1)}>
@@ -393,7 +396,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
           style={styles.emptyImage}
           resizeMode="contain"
         />
-        <Text style={[styles.emptyText, { color: textColor }]}>
+        <Text style={[styles.emptyText, {color: textColor}]}>
           장소 예약 내역이 없습니다.
         </Text>
       </View>
@@ -426,10 +429,12 @@ const ReservationList: React.FC<ReservationListProps> = ({
         <TouchableOpacity
           style={[
             styles.scrollTopButton,
-            isDarkMode ? styles.scrollTopButtonDark : styles.scrollTopButtonLight,
+            isDarkMode
+              ? styles.scrollTopButtonDark
+              : styles.scrollTopButtonLight,
           ]}
           onPress={scrollToTop}>
-          <Text style={[styles.scrollTopText, { color: textColor }]}>↑</Text>
+          <Text style={[styles.scrollTopText, {color: textColor}]}>↑</Text>
         </TouchableOpacity>
       )}
 
@@ -442,10 +447,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
         <GestureHandlerRootView style={styles.gestureContainer}>
           <Pressable style={styles.modalOverlay} onPress={closeModal}>
             <Animated.View
-              style={[
-                styles.modalOverlayAnimated,
-                { opacity: modalOpacity },
-              ]}
+              style={[styles.modalOverlayAnimated, {opacity: modalOpacity}]}
             />
           </Pressable>
 
@@ -455,128 +457,206 @@ const ReservationList: React.FC<ReservationListProps> = ({
                 styles.modalContent,
                 {
                   backgroundColor: cardBgColor,
-                  transform: [{ translateY }],
+                  transform: [{translateY}],
                 },
               ]}>
-
               <View style={styles.modalHeader}>
                 {/* Drag handle indicator */}
                 <View style={styles.dragHandle} />
                 <View style={styles.modalHeaderContent}>
-                  <Text style={[styles.modalTitle, { color: textColor }]}>
+                  <Text style={[styles.modalTitle, {color: textColor}]}>
                     예약 상세정보
                   </Text>
                 </View>
               </View>
 
               <ScrollView style={styles.modalBody}>
-                {selectedReservation && (() => {
-                  const modalLabelColor = isDarkMode ? '#BBBBBB' : '#6B7280';
-                  const modalValueColor = textColor;
-                  const statusIcon = getStatusIcon(selectedReservation.status);
+                {selectedReservation &&
+                  (() => {
+                    const modalLabelColor = isDarkMode ? '#BBBBBB' : '#6B7280';
+                    const modalValueColor = textColor;
+                    const statusIcon = getStatusIcon(
+                      selectedReservation.status,
+                    );
 
-                  return (
-                    <>
-                      <View style={styles.modalDetailSection}>
-                        <Text style={[styles.modalLabel, { color: modalLabelColor }]}>
-                          제목
-                        </Text>
-                        <Text style={[styles.modalValue, { color: modalValueColor }]}>
-                          {selectedReservation.title || '제목 없음'}
-                        </Text>
-                      </View>
-
-                      <View style={styles.modalDetailSection}>
-                        <Text style={[styles.modalLabel, { color: modalLabelColor }]}>
-                          상태
-                        </Text>
-                        <View style={styles.statusContainer}>
-                          <Icon
-                            name={statusIcon.name}
-                            size={20}
-                            color={statusIcon.color}
-                          />
-                          <Text style={[styles.modalValue, styles.statusTextWithMargin, { color: modalValueColor }]}>
-                            {getStatusText(selectedReservation.status)}
-                          </Text>
-                        </View>
-                      </View>
-
-                      <View style={styles.modalDetailSection}>
-                        <Text style={[styles.modalLabel, { color: modalLabelColor }]}>
-                          장소
-                        </Text>
-                        <Text style={[styles.modalValue, { color: modalValueColor }]}>
-                          {selectedReservation.place?.name || '장소 이름 없음'}
-                        </Text>
-                      </View>
-
-                      {selectedReservation.place?.location && (
+                    return (
+                      <>
                         <View style={styles.modalDetailSection}>
-                          <Text style={[styles.modalLabel, { color: modalLabelColor }]}>
-                            위치
+                          <Text
+                            style={[
+                              styles.modalLabel,
+                              {color: modalLabelColor},
+                            ]}>
+                            제목
                           </Text>
-                          <Text style={[styles.modalValue, { color: modalValueColor }]}>
-                            {selectedReservation.place.location}
+                          <Text
+                            style={[
+                              styles.modalValue,
+                              {color: modalValueColor},
+                            ]}>
+                            {selectedReservation.title || '제목 없음'}
                           </Text>
                         </View>
-                      )}
 
-                      <View style={styles.modalDetailSection}>
-                        <Text style={[styles.modalLabel, { color: modalLabelColor }]}>
-                          날짜
-                        </Text>
-                        <Text style={[styles.modalValue, { color: modalValueColor }]}>
-                          {new Date(formatDate(selectedReservation.date)).toLocaleDateString('ko-KR', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          })}
-                        </Text>
-                      </View>
-
-                      <View style={styles.modalDetailSection}>
-                        <Text style={[styles.modalLabel, { color: modalLabelColor }]}>
-                          시간
-                        </Text>
-                        <Text style={[styles.modalValue, { color: modalValueColor }]}>
-                          {formatTime(selectedReservation.start_time)} - {formatTime(selectedReservation.end_time)}
-                        </Text>
-                      </View>
-
-                      {selectedReservation.description && (
                         <View style={styles.modalDetailSection}>
-                          <Text style={[styles.modalLabel, { color: modalLabelColor }]}>
-                            설명
+                          <Text
+                            style={[
+                              styles.modalLabel,
+                              {color: modalLabelColor},
+                            ]}>
+                            상태
                           </Text>
-                          <Text style={[styles.modalValue, { color: modalValueColor }]}>
-                            {selectedReservation.description}
-                          </Text>
+                          <View style={styles.statusContainer}>
+                            <Icon
+                              name={statusIcon.name}
+                              size={20}
+                              color={statusIcon.color}
+                            />
+                            <Text
+                              style={[
+                                styles.modalValue,
+                                styles.statusTextWithMargin,
+                                {color: modalValueColor},
+                              ]}>
+                              {getStatusText(selectedReservation.status)}
+                            </Text>
+                          </View>
                         </View>
-                      )}
 
-                      {selectedReservation.phone && (
                         <View style={styles.modalDetailSection}>
-                          <Text style={[styles.modalLabel, { color: modalLabelColor }]}>
-                            연락처
+                          <Text
+                            style={[
+                              styles.modalLabel,
+                              {color: modalLabelColor},
+                            ]}>
+                            장소
                           </Text>
-                          <Text style={[styles.modalValue, { color: modalValueColor }]}>
-                            {selectedReservation.phone}
+                          <Text
+                            style={[
+                              styles.modalValue,
+                              {color: modalValueColor},
+                            ]}>
+                            {selectedReservation.place?.name ||
+                              '장소 이름 없음'}
                           </Text>
                         </View>
-                      )}
 
-                      {selectedReservation.status !== '거절' && (
-                        <TouchableOpacity
-                          style={[styles.modalCancelButton, styles.cancelButtonBg]}
-                          onPress={() => handleCancelReservation(selectedReservation.uuid)}>
-                          <Icon name="cancel" size={20} color="#FFFFFF" />
-                          <Text style={styles.modalCancelButtonText}>예약 취소</Text>
-                        </TouchableOpacity>
-                      )}
-                    </>
-                  );
-                })()}
+                        {selectedReservation.place?.location && (
+                          <View style={styles.modalDetailSection}>
+                            <Text
+                              style={[
+                                styles.modalLabel,
+                                {color: modalLabelColor},
+                              ]}>
+                              위치
+                            </Text>
+                            <Text
+                              style={[
+                                styles.modalValue,
+                                {color: modalValueColor},
+                              ]}>
+                              {selectedReservation.place.location}
+                            </Text>
+                          </View>
+                        )}
+
+                        <View style={styles.modalDetailSection}>
+                          <Text
+                            style={[
+                              styles.modalLabel,
+                              {color: modalLabelColor},
+                            ]}>
+                            날짜
+                          </Text>
+                          <Text
+                            style={[
+                              styles.modalValue,
+                              {color: modalValueColor},
+                            ]}>
+                            {new Date(
+                              formatDate(selectedReservation.date),
+                            ).toLocaleDateString('ko-KR', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            })}
+                          </Text>
+                        </View>
+
+                        <View style={styles.modalDetailSection}>
+                          <Text
+                            style={[
+                              styles.modalLabel,
+                              {color: modalLabelColor},
+                            ]}>
+                            시간
+                          </Text>
+                          <Text
+                            style={[
+                              styles.modalValue,
+                              {color: modalValueColor},
+                            ]}>
+                            {formatTime(selectedReservation.start_time)} -{' '}
+                            {formatTime(selectedReservation.end_time)}
+                          </Text>
+                        </View>
+
+                        {selectedReservation.description && (
+                          <View style={styles.modalDetailSection}>
+                            <Text
+                              style={[
+                                styles.modalLabel,
+                                {color: modalLabelColor},
+                              ]}>
+                              설명
+                            </Text>
+                            <Text
+                              style={[
+                                styles.modalValue,
+                                {color: modalValueColor},
+                              ]}>
+                              {selectedReservation.description}
+                            </Text>
+                          </View>
+                        )}
+
+                        {selectedReservation.phone && (
+                          <View style={styles.modalDetailSection}>
+                            <Text
+                              style={[
+                                styles.modalLabel,
+                                {color: modalLabelColor},
+                              ]}>
+                              연락처
+                            </Text>
+                            <Text
+                              style={[
+                                styles.modalValue,
+                                {color: modalValueColor},
+                              ]}>
+                              {selectedReservation.phone}
+                            </Text>
+                          </View>
+                        )}
+
+                        {selectedReservation.status !== '거절' && (
+                          <TouchableOpacity
+                            style={[
+                              styles.modalCancelButton,
+                              styles.cancelButtonBg,
+                            ]}
+                            onPress={() =>
+                              handleCancelReservation(selectedReservation.uuid)
+                            }>
+                            <Icon name="cancel" size={20} color="#FFFFFF" />
+                            <Text style={styles.modalCancelButtonText}>
+                              예약 취소
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </>
+                    );
+                  })()}
               </ScrollView>
             </Animated.View>
           </GestureDetector>
@@ -597,7 +677,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 1,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 6,
