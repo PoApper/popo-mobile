@@ -20,6 +20,7 @@ import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '@navigation/types';
 import PoPoAxios from '../../utils/api';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 interface IEquipment {
   uuid: string;
@@ -91,7 +92,7 @@ const EquipmentReservationApplyScreen = ({
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [tempEndTime, setTempEndTime] = useState(new Date());
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<any>(null);
   const [showEquipmentList, setShowEquipmentList] = useState(false);
   const [reservedEquipments, setReservedEquipments] = useState<string[]>([]);
   const [loadingReservations, setLoadingReservations] = useState(false);
@@ -199,12 +200,16 @@ const EquipmentReservationApplyScreen = ({
   }, [startTime, endTime]);
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#121212' : '#fff',
+    backgroundColor: isDarkMode ? '#1a1a1a' : '#fff',
     flex: 1,
   };
-  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const textColor = isDarkMode ? '#ffffff' : '#000000';
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
-  const subTextColor = isDarkMode ? '#888888' : '#6B7280';
+  const subTextColor = isDarkMode ? '#a0a0a0' : '#6B7280';
+  const inputBackgroundColor = isDarkMode ? '#2a2a2a' : '#F9FAFB';
+  const disabledInputBackgroundColor = isDarkMode ? '#3a3a3a' : '#F3F3F3';
+  const noticeBackgroundColor = isDarkMode ? '#2a2a2a' : '#FFF8F8';
+  const noticeBorderColor = isDarkMode ? '#3a3a3a' : '#FFE5E5';
 
   // 날짜를 한글 형식으로 포맷 (YYYY년 MM월 DD일)
   const formatDate = (d: Date) =>
@@ -398,13 +403,23 @@ const EquipmentReservationApplyScreen = ({
         <View style={styles.placeholderButton} />
       </View>
 
-      <ScrollView
+      <KeyboardAwareScrollView
         ref={scrollViewRef}
         contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="always"
-        showsVerticalScrollIndicator={true}>
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+        extraScrollHeight={20}
+        extraHeight={120}>
         {/* 공지사항 섹션 */}
-        <View style={[styles.noticeSection, {borderColor: borderColor}]}>
+        <View
+          style={[
+            styles.noticeSection,
+            {
+              borderColor: noticeBorderColor,
+              backgroundColor: noticeBackgroundColor,
+            },
+          ]}>
           <Text style={[styles.noticeTitle, {color: textColor}]}>
             📢 예약 공지사항
           </Text>
@@ -468,6 +483,7 @@ const EquipmentReservationApplyScreen = ({
             </View>
           )}
         </View>
+
         <View style={styles.formSection}>
           <Text style={[styles.label, {color: textColor}]}>
             사용자 <Text style={{color: '#FB5353'}}>*</Text>
@@ -482,7 +498,7 @@ const EquipmentReservationApplyScreen = ({
                   styles.disabledInput,
                   {
                     color: isDarkMode ? '#888888' : '#AAA',
-                    backgroundColor: isDarkMode ? '#2C2C2C' : '#F3F3F3',
+                    backgroundColor: disabledInputBackgroundColor,
                   },
                 ]}
                 value={userName}
@@ -500,7 +516,7 @@ const EquipmentReservationApplyScreen = ({
               styles.input,
               {
                 color: textColor,
-                backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                backgroundColor: inputBackgroundColor,
               },
             ]}
             value={phone}
@@ -518,7 +534,7 @@ const EquipmentReservationApplyScreen = ({
               styles.input,
               {
                 color: textColor,
-                backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                backgroundColor: inputBackgroundColor,
               },
             ]}
             value={title}
@@ -535,7 +551,7 @@ const EquipmentReservationApplyScreen = ({
               styles.descriptionInput,
               {
                 color: textColor,
-                backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                backgroundColor: inputBackgroundColor,
               },
             ]}
             value={desc}
@@ -552,15 +568,23 @@ const EquipmentReservationApplyScreen = ({
               styles.input,
               styles.equipmentSelector,
               {
-                backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                backgroundColor: inputBackgroundColor,
               },
             ]}
             onPress={openEquipListPicker}
             activeOpacity={0.8}>
             {selectedEquipments.length > 0 ? (
               selectedEquipments.map(equip => (
-                <View key={equip.uuid} style={styles.selectedEquipmentItem}>
-                  <Text style={styles.selectedEquipmentText}>{equip.name}</Text>
+                <View
+                  key={equip.uuid}
+                  style={[
+                    styles.selectedEquipmentItem,
+                    {backgroundColor: isDarkMode ? '#3a3a3a' : '#E5E7EB'},
+                  ]}>
+                  <Text
+                    style={[styles.selectedEquipmentText, {color: textColor}]}>
+                    {equip.name}
+                  </Text>
                   <TouchableOpacity onPress={() => toggleEquipment(equip)}>
                     <Text style={styles.removeButtonText}>×</Text>
                   </TouchableOpacity>
@@ -582,7 +606,9 @@ const EquipmentReservationApplyScreen = ({
                   </Text>
                 </View>
               ) : equipmentList.length === 0 ? (
-                <Text style={styles.emptyListText}>장비가 없습니다.</Text>
+                <Text style={[styles.emptyListText, {color: subTextColor}]}>
+                  장비가 없습니다.
+                </Text>
               ) : (
                 equipmentList.map(item => {
                   const selected = !!selectedEquipments.find(
@@ -597,19 +623,28 @@ const EquipmentReservationApplyScreen = ({
                       disabled={selected}
                       style={[
                         styles.equipmentItem,
+                        {borderColor: isDarkMode ? '#3a3a3a' : '#F3F4F6'},
                         (selected || isReserved) &&
                           styles.disabledEquipmentItem,
+                        (selected || isReserved) && {
+                          backgroundColor: isDarkMode ? '#2a2a2a' : '#F3F4F6',
+                        },
                       ]}>
                       <Text
                         style={[
                           styles.equipmentName,
+                          {color: textColor},
                           isReserved && styles.reservedEquipmentName,
+                          isReserved && {color: subTextColor},
                         ]}>
                         {item.name}
                       </Text>
                       {selected && <Text style={styles.checkIcon}>✔</Text>}
                       {isReserved && !selected && (
-                        <Text style={styles.reservedText}>(예약됨)</Text>
+                        <Text
+                          style={[styles.reservedText, {color: subTextColor}]}>
+                          (예약됨)
+                        </Text>
                       )}
                     </TouchableOpacity>
                   );
@@ -629,7 +664,7 @@ const EquipmentReservationApplyScreen = ({
                 style={[
                   styles.input,
                   {
-                    backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                    backgroundColor: inputBackgroundColor,
                     borderColor: showDatePicker ? '#FB5353' : borderColor,
                   },
                 ]}>
@@ -648,7 +683,7 @@ const EquipmentReservationApplyScreen = ({
                 style={[
                   styles.input,
                   {
-                    backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                    backgroundColor: inputBackgroundColor,
                     borderColor: showStartPicker ? '#FB5353' : borderColor,
                   },
                 ]}>
@@ -670,7 +705,7 @@ const EquipmentReservationApplyScreen = ({
                 style={[
                   styles.input,
                   {
-                    backgroundColor: isDarkMode ? '#1A1A1A' : '#F9FAFB',
+                    backgroundColor: inputBackgroundColor,
                     borderColor: showEndPicker ? '#FB5353' : borderColor,
                   },
                 ]}>
@@ -822,7 +857,7 @@ const EquipmentReservationApplyScreen = ({
         <View
           style={[
             styles.bottomButtonContainer,
-            {backgroundColor: isDarkMode ? '#121212' : '#fff'},
+            {backgroundColor: backgroundStyle.backgroundColor},
           ]}>
           {selectedEquipments.length > 0 && (
             <View style={styles.totalPriceContainer}>
@@ -842,7 +877,7 @@ const EquipmentReservationApplyScreen = ({
             <Text style={styles.reservationButtonText}>예약 생성하기</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
