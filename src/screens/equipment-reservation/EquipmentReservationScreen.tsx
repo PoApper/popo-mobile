@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  ScrollView,
+  FlatList,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '@navigation/types';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@navigation/types';
 import PoPoAxios from '../../utils/api'; // 실제 axios 인스턴스 경로에 맞게 수정 필요
 
 // API 타입에 맞게 수정
@@ -33,18 +33,18 @@ type EquipmentReservationScreenProps = {
 };
 
 const tabs = [
-  {label: '동아리연합회', value: 'dongyeon'},
-  {label: '생활관자치회', value: 'dormunion'},
+  { label: '동아리연합회', value: 'dongyeon' },
+  { label: '생활관자치회', value: 'dormunion' },
 ];
 
-// 이모지 제거 함수 (숫자 등 일반 문자는 남기고 이모지만 제거)
-function removeEmoji(str: string) {
+// 이모지 제거 함수 (숫자 등 일반 문자는 남기고 이모지만 제거) - 메모이제이션을 위해 컴포넌트 외부로 이동
+const removeEmoji = (str: string) => {
   // 이모지 유니코드만 제거, 숫자/한글/영문 등은 남김
   return str.replace(
     /([\u2700-\u27BF]|[\uE000-\uF8FF]|[\uD83C-\uDBFF\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83D[\uDE00-\uDE4F])/g,
     '',
   );
-}
+};
 
 const EquipmentReservationScreen = ({
   navigation,
@@ -54,14 +54,22 @@ const EquipmentReservationScreen = ({
   const [equipmentList, setEquipmentList] = useState<IEquipment[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#1a1a1a' : '#fff',
-    flex: 1,
-  };
-  const textColor = isDarkMode ? '#ffffff' : '#000000';
-  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
-  const secondaryTextColor = isDarkMode ? '#a0a0a0' : '#888888';
-  const buttonBackgroundColor = isDarkMode ? '#3a3a3a' : '#F6F7F9';
+  // 메모이제이션으로 불필요한 재계산 방지
+  const styles_memo = useMemo(() => ({
+    backgroundStyle: {
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#fff',
+      flex: 1,
+    },
+    textColor: isDarkMode ? '#ffffff' : '#000000',
+    borderColor: isDarkMode ? '#2C2C2C' : '#E5E7EB',
+    secondaryTextColor: isDarkMode ? '#a0a0a0' : '#888888',
+    buttonBackgroundColor: isDarkMode ? '#3a3a3a' : '#F6F7F9',
+    placeholderImageStyle: {
+      backgroundColor: isDarkMode ? '#3a3a3a' : '#eee',
+    },
+  }), [isDarkMode]);
+
+  const { backgroundStyle, textColor, borderColor, secondaryTextColor, buttonBackgroundColor, placeholderImageStyle } = styles_memo;
 
   useEffect(() => {
     const fetchEquipment = async () => {
@@ -82,45 +90,47 @@ const EquipmentReservationScreen = ({
     fetchEquipment();
   }, [selectedTab]);
 
-  const renderEquipmentItem = ({item}: {item: IEquipment}) => (
+  // 렌더 함수 메모이제이션
+  const renderEquipmentItem = useCallback(({ item }: { item: IEquipment }) => (
     <View style={styles.equipmentItem}>
       {item.image_url ? (
-        <Image source={{uri: item.image_url}} style={styles.equipmentImage} />
+        <Image source={{ uri: item.image_url }} style={styles.equipmentImage} />
       ) : (
         <View
           style={[
             styles.equipmentImage,
-            {backgroundColor: isDarkMode ? '#3a3a3a' : '#eee'},
+            placeholderImageStyle,
           ]}
         />
       )}
       <View style={styles.equipmentInfo}>
-        <Text style={[styles.equipmentName, {color: textColor}]}>
+        <Text style={[styles.equipmentName, { color: textColor }]}>
           {removeEmoji(item.name)}
         </Text>
-        <Text style={[styles.equipmentPrice, {color: secondaryTextColor}]}>
+        <Text style={[styles.equipmentPrice, { color: secondaryTextColor }]}>
           {item.fee.toLocaleString()}원
         </Text>
       </View>
       <TouchableOpacity
-        style={[styles.detailButton, {backgroundColor: buttonBackgroundColor}]}
+        style={[styles.detailButton, { backgroundColor: buttonBackgroundColor }]}
         onPress={() => {
           Alert.alert(
             '장비 상세정보',
-            `이름: ${removeEmoji(item.name)}\n모델명/설명: ${
-              item.description || '-'
-            }\n가격: ${item.fee.toLocaleString()}원\n최대 사용 시간: ${
-              item.max_minutes
+            `이름: ${removeEmoji(item.name)}\n모델명/설명: ${item.description || '-'
+            }\n가격: ${item.fee.toLocaleString()}원\n최대 사용 시간: ${item.max_minutes
             }분`,
-            [{text: '닫기', style: 'cancel'}],
+            [{ text: '닫기', style: 'cancel' }],
           );
         }}>
-        <Text style={[styles.detailButtonText, {color: textColor}]}>
+        <Text style={[styles.detailButtonText, { color: textColor }]}>
           상세정보
         </Text>
       </TouchableOpacity>
     </View>
-  );
+  ), [textColor, secondaryTextColor, buttonBackgroundColor, placeholderImageStyle]);
+
+  // FlatList keyExtractor 메모이제이션
+  const keyExtractor = useCallback((item: IEquipment) => item.uuid, []);
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -128,13 +138,13 @@ const EquipmentReservationScreen = ({
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
+      <View style={[styles.header, { borderBottomColor: borderColor }]}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>장비 예약</Text>
+        <Text style={[styles.headerTitle, { color: textColor }]}>장비 예약</Text>
         <View style={styles.placeholderButton} />
       </View>
 
@@ -151,15 +161,15 @@ const EquipmentReservationScreen = ({
             <Text
               style={[
                 styles.tabText,
-                {color: secondaryTextColor},
+                { color: secondaryTextColor },
                 selectedTab === tab.value && styles.selectedTabText,
-                selectedTab === tab.value && {color: textColor},
+                selectedTab === tab.value && { color: textColor },
               ]}>
               {tab.label}
             </Text>
             {selectedTab === tab.value && (
               <View
-                style={[styles.tabUnderline, {backgroundColor: textColor}]}
+                style={[styles.tabUnderline, { backgroundColor: textColor }]}
               />
             )}
           </TouchableOpacity>
@@ -168,19 +178,27 @@ const EquipmentReservationScreen = ({
 
       {/* 장비 리스트 */}
       <View style={styles.equipmentListContainer}>
-        <ScrollView
+        <FlatList
+          data={equipmentList}
+          renderItem={renderEquipmentItem}
+          keyExtractor={keyExtractor}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.equipmentList}>
-          {equipmentList.length > 0 ? (
-            equipmentList.map(item => (
-              <View key={item.uuid}>{renderEquipmentItem({item})}</View>
-            ))
-          ) : (
-            <Text style={[styles.emptyListText, {color: secondaryTextColor}]}>
+          contentContainerStyle={styles.equipmentList}
+          removeClippedSubviews={true}
+          initialNumToRender={10}
+          maxToRenderPerBatch={5}
+          windowSize={10}
+          getItemLayout={(data, index) => ({
+            length: 79, // approximate height of each item (paddingVertical: 15 * 2 + content height ~49)
+            offset: 79 * index,
+            index,
+          })}
+          ListEmptyComponent={
+            <Text style={[styles.emptyListText, { color: secondaryTextColor }]}>
               {loading ? '불러오는 중...' : '장비가 없습니다.'}
             </Text>
-          )}
-        </ScrollView>
+          }
+        />
       </View>
 
       {/* 예약 신청하기 버튼 - 하단 고정 */}

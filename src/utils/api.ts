@@ -6,8 +6,8 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 declare global {
   var eventEmitter:
     | {
-        emit: (event: string, ...args: any[]) => void;
-      }
+      emit: (event: string, ...args: any[]) => void;
+    }
     | undefined;
 }
 
