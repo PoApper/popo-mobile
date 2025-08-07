@@ -7,12 +7,12 @@ import {
   StatusBar,
   TouchableOpacity,
   TextInput,
-  ScrollView,
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -384,6 +384,55 @@ const EquipmentReservationApplyScreen = ({
     return selectedDateTime > now;
   };
 
+  // 장비 아이템 렌더 함수 메모이제이션
+  const renderEquipmentItem = useCallback(
+    ({item}: {item: IEquipment}) => {
+      const selected = !!selectedEquipments.find(e => e.uuid === item.uuid);
+      const isReserved = reservedEquipments.includes(item.uuid);
+
+      return (
+        <TouchableOpacity
+          key={item.uuid}
+          onPress={() => toggleEquipment(item)}
+          disabled={selected}
+          style={[
+            styles.equipmentItem,
+            {borderColor: isDarkMode ? '#3a3a3a' : '#F3F4F6'},
+            (selected || isReserved) && styles.disabledEquipmentItem,
+            (selected || isReserved) && {
+              backgroundColor: isDarkMode ? '#2a2a2a' : '#F3F4F6',
+            },
+          ]}>
+          <Text
+            style={[
+              styles.equipmentName,
+              {color: textColor},
+              isReserved && styles.reservedEquipmentName,
+              isReserved && {color: subTextColor},
+            ]}>
+            {item.name}
+          </Text>
+          {selected && <Text style={styles.checkIcon}>✔</Text>}
+          {isReserved && !selected && (
+            <Text style={[styles.reservedText, {color: subTextColor}]}>
+              (예약됨)
+            </Text>
+          )}
+        </TouchableOpacity>
+      );
+    },
+    [
+      selectedEquipments,
+      reservedEquipments,
+      isDarkMode,
+      textColor,
+      subTextColor,
+      toggleEquipment,
+    ],
+  );
+
+  const keyExtractor = useCallback((item: IEquipment) => item.uuid, []);
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -608,7 +657,7 @@ const EquipmentReservationApplyScreen = ({
               )}
             </TouchableOpacity>
             {showEquipmentList && (
-              <ScrollView style={styles.equipmentListScrollView}>
+              <View style={styles.equipmentListScrollView}>
                 {loadingReservations ? (
                   <View style={styles.loadingContainer}>
                     <ActivityIndicator size="small" color={subTextColor} />
@@ -616,55 +665,25 @@ const EquipmentReservationApplyScreen = ({
                       예약 상태 확인 중...
                     </Text>
                   </View>
-                ) : equipmentList.length === 0 ? (
-                  <Text style={[styles.emptyListText, {color: subTextColor}]}>
-                    장비가 없습니다.
-                  </Text>
                 ) : (
-                  equipmentList.map(item => {
-                    const selected = !!selectedEquipments.find(
-                      e => e.uuid === item.uuid,
-                    );
-                    const isReserved = reservedEquipments.includes(item.uuid);
-
-                    return (
-                      <TouchableOpacity
-                        key={item.uuid}
-                        onPress={() => toggleEquipment(item)}
-                        disabled={selected}
-                        style={[
-                          styles.equipmentItem,
-                          {borderColor: isDarkMode ? '#3a3a3a' : '#F3F4F6'},
-                          (selected || isReserved) &&
-                            styles.disabledEquipmentItem,
-                          (selected || isReserved) && {
-                            backgroundColor: isDarkMode ? '#2a2a2a' : '#F3F4F6',
-                          },
-                        ]}>
-                        <Text
-                          style={[
-                            styles.equipmentName,
-                            {color: textColor},
-                            isReserved && styles.reservedEquipmentName,
-                            isReserved && {color: subTextColor},
-                          ]}>
-                          {item.name}
-                        </Text>
-                        {selected && <Text style={styles.checkIcon}>✔</Text>}
-                        {isReserved && !selected && (
-                          <Text
-                            style={[
-                              styles.reservedText,
-                              {color: subTextColor},
-                            ]}>
-                            (예약됨)
-                          </Text>
-                        )}
-                      </TouchableOpacity>
-                    );
-                  })
+                  <FlatList
+                    data={equipmentList}
+                    renderItem={renderEquipmentItem}
+                    keyExtractor={keyExtractor}
+                    style={{maxHeight: 200}}
+                    removeClippedSubviews={true}
+                    initialNumToRender={5}
+                    maxToRenderPerBatch={3}
+                    windowSize={5}
+                    ListEmptyComponent={
+                      <Text
+                        style={[styles.emptyListText, {color: subTextColor}]}>
+                        장비가 없습니다.
+                      </Text>
+                    }
+                  />
                 )}
-              </ScrollView>
+              </View>
             )}
             {/* 날짜/시간 선택 */}
             <View style={styles.dateTimePickerContainer}>
