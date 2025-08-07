@@ -16,7 +16,7 @@ import {
   Dimensions,
   Pressable,
 } from 'react-native';
-import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios from 'axios';
@@ -282,20 +282,16 @@ const ReservationList: React.FC<ReservationListProps> = ({
     });
   };
 
-  const handlePanGesture = (event: any) => {
-    const { translationY } = event.nativeEvent;
-    // Only allow downward movement (positive translationY)
-    if (translationY >= 0) {
-      translateY.setValue(translationY);
-    }
-  };
-
-  const handlePanStateChange = (event: any) => {
-    if (event.nativeEvent.oldState === 4) { // ACTIVE
-      const { translationY, velocityY } = event.nativeEvent;
-
+  const panGesture = Gesture.Pan()
+    .onChange((event) => {
+      // Only allow downward movement (positive translationY)
+      if (event.translationY >= 0) {
+        translateY.setValue(event.translationY);
+      }
+    })
+    .onFinalize((event) => {
       // Close modal if dragged down significantly or with high velocity
-      if (translationY > 100 || velocityY > 500) {
+      if (event.translationY > 100 || event.velocityY > 500) {
         closeModal();
       } else {
         // Snap back to original position
@@ -304,8 +300,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
           useNativeDriver: true,
         }).start();
       }
-    }
-  };
+    });
 
   const handleLongPress = (item: PlaceReservation) => {
     if (item.status !== '거절') {
@@ -454,9 +449,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
             />
           </Pressable>
 
-          <PanGestureHandler
-            onGestureEvent={handlePanGesture}
-            onHandlerStateChange={handlePanStateChange}>
+          <GestureDetector gesture={panGesture}>
             <Animated.View
               style={[
                 styles.modalContent,
@@ -586,7 +579,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                 })()}
               </ScrollView>
             </Animated.View>
-          </PanGestureHandler>
+          </GestureDetector>
         </GestureHandlerRootView>
       </Modal>
     </>
