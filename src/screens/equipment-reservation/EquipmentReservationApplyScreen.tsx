@@ -13,14 +13,13 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '@navigation/types';
 import PoPoAxios from '../../utils/api';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 interface IEquipment {
   uuid: string;
@@ -187,9 +186,9 @@ const EquipmentReservationApplyScreen = ({
     const now = new Date();
     const roundedTime = roundUpToNearest30Minutes(now);
     setStartTime(roundedTime);
-    const endTime = new Date(roundedTime);
-    endTime.setMinutes(endTime.getMinutes() + 30);
-    setEndTime(endTime);
+    const newEndTime = new Date(roundedTime);
+    newEndTime.setMinutes(newEndTime.getMinutes() + 30);
+    setEndTime(newEndTime);
   }, []);
 
   // 종료 시간이 시작 시간보다 빠르면 자동 보정
@@ -337,7 +336,7 @@ const EquipmentReservationApplyScreen = ({
     setShowEndPicker(false);
     setShowEquipmentList(!showEquipmentList);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 500, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 500, true);
     });
   };
 
@@ -349,7 +348,7 @@ const EquipmentReservationApplyScreen = ({
     setShowStartPicker(false);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 600, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 600, true);
     }, 100);
   };
   const openStartPicker = () => {
@@ -359,7 +358,7 @@ const EquipmentReservationApplyScreen = ({
     setShowStartPicker(true);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 600, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 600, true);
     }, 100);
   };
   const openEndPicker = () => {
@@ -369,7 +368,7 @@ const EquipmentReservationApplyScreen = ({
     setShowStartPicker(false);
     setShowEndPicker(true);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 600, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 600, true);
     }, 100);
   };
 
@@ -483,10 +482,9 @@ const EquipmentReservationApplyScreen = ({
             </View>
           )}
         </View>
-
         <View style={styles.formSection}>
           <Text style={[styles.label, {color: textColor}]}>
-            사용자 <Text style={{color: '#FB5353'}}>*</Text>
+            사용자 <Text style={styles.requiredText}>*</Text>
           </Text>
           <View style={styles.userInfoContainer}>
             {userLoading ? (
@@ -509,7 +507,7 @@ const EquipmentReservationApplyScreen = ({
             )}
           </View>
           <Text style={[styles.label, {color: textColor}]}>
-            전화번호 <Text style={{color: '#FB5353'}}>*</Text>
+            전화번호 <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
             style={[
@@ -527,7 +525,7 @@ const EquipmentReservationApplyScreen = ({
             maxLength={13}
           />
           <Text style={[styles.label, {color: textColor}]}>
-            예약 제목 <Text style={{color: '#FB5353'}}>*</Text>
+            예약 제목 <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
             style={[
@@ -543,7 +541,7 @@ const EquipmentReservationApplyScreen = ({
             placeholderTextColor={subTextColor}
           />
           <Text style={[styles.label, {color: textColor}]}>
-            설명 <Text style={{color: '#FB5353'}}>*</Text>
+            설명 <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
             style={[
@@ -561,7 +559,7 @@ const EquipmentReservationApplyScreen = ({
             multiline
           />
           <Text style={[styles.label, {color: textColor}]}>
-            장비 선택 <Text style={{color: '#FB5353'}}>*</Text>
+            장비 선택 <Text style={styles.requiredText}>*</Text>
           </Text>
           <TouchableOpacity
             style={[
@@ -656,8 +654,8 @@ const EquipmentReservationApplyScreen = ({
           <View style={styles.dateTimePickerContainer}>
             <View style={styles.datePickerWrapper}>
               <Text
-                style={[styles.label, {color: textColor, marginBottom: 13}]}>
-                날짜 <Text style={{color: '#FB5353'}}>*</Text>
+                style={[styles.label, styles.pickerLabel, {color: textColor}]}>
+                날짜 <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 onPress={openDatePicker}
@@ -675,8 +673,8 @@ const EquipmentReservationApplyScreen = ({
             </View>
             <View style={styles.timePickerWrapper}>
               <Text
-                style={[styles.label, {color: textColor, marginBottom: 13}]}>
-                시작 시간 <Text style={{color: '#FB5353'}}>*</Text>
+                style={[styles.label, styles.pickerLabel, {color: textColor}]}>
+                시작 시간 <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 onPress={openStartPicker}
@@ -697,8 +695,8 @@ const EquipmentReservationApplyScreen = ({
             </View>
             <View style={styles.timePickerWrapper}>
               <Text
-                style={[styles.label, {color: textColor, marginBottom: 13}]}>
-                종료 시간 <Text style={{color: '#FB5353'}}>*</Text>
+                style={[styles.label, styles.pickerLabel, {color: textColor}]}>
+                종료 시간 <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 onPress={openEndPicker}
@@ -917,6 +915,12 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     marginTop: 8,
   },
+  pickerLabel: {
+    marginBottom: 13,
+  },
+  requiredText: {
+    color: '#FB5353',
+  },
   input: {
     borderRadius: 8,
     padding: 12,
@@ -937,7 +941,6 @@ const styles = StyleSheet.create({
   selectedEquipmentItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E5E7EB',
     borderRadius: 16,
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -972,7 +975,6 @@ const styles = StyleSheet.create({
   emptyListText: {
     textAlign: 'center',
     marginTop: 40,
-    color: '#888',
   },
   equipmentItem: {
     flexDirection: 'row',
@@ -980,19 +982,15 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderColor: '#F3F4F6',
   },
   disabledEquipmentItem: {
-    backgroundColor: '#F3F4F6',
     opacity: 0.5,
   },
   equipmentName: {
     fontSize: 16,
-    color: '#222',
     flex: 1,
   },
   reservedEquipmentName: {
-    color: '#888',
     textDecorationLine: 'line-through',
   },
   checkIcon: {
@@ -1001,7 +999,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   reservedText: {
-    color: '#888',
     fontSize: 12,
   },
   dateTimePickerContainer: {
@@ -1074,12 +1071,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   noticeSection: {
-    backgroundColor: '#FFF8F8',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#FFE5E5',
   },
   noticeTitle: {
     fontSize: 16,
