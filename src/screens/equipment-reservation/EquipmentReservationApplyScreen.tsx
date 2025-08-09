@@ -7,11 +7,11 @@ import {
   StatusBar,
   TouchableOpacity,
   TextInput,
-  ScrollView,
   Alert,
   Keyboard,
   Platform,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -383,6 +383,55 @@ const EquipmentReservationApplyScreen = ({
     return selectedDateTime > now;
   };
 
+  // 장비 아이템 렌더 함수 메모이제이션
+  const renderEquipmentItem = useCallback(
+    ({item}: {item: IEquipment}) => {
+      const selected = !!selectedEquipments.find(e => e.uuid === item.uuid);
+      const isReserved = reservedEquipments.includes(item.uuid);
+
+      return (
+        <TouchableOpacity
+          key={item.uuid}
+          onPress={() => toggleEquipment(item)}
+          disabled={selected}
+          style={[
+            styles.equipmentItem,
+            {borderColor: isDarkMode ? '#3a3a3a' : '#F3F4F6'},
+            (selected || isReserved) && styles.disabledEquipmentItem,
+            (selected || isReserved) && {
+              backgroundColor: isDarkMode ? '#2a2a2a' : '#F3F4F6',
+            },
+          ]}>
+          <Text
+            style={[
+              styles.equipmentName,
+              {color: textColor},
+              isReserved && styles.reservedEquipmentName,
+              isReserved && {color: subTextColor},
+            ]}>
+            {item.name}
+          </Text>
+          {selected && <Text style={styles.checkIcon}>✔</Text>}
+          {isReserved && !selected && (
+            <Text style={[styles.reservedText, {color: subTextColor}]}>
+              (예약됨)
+            </Text>
+          )}
+        </TouchableOpacity>
+      );
+    },
+    [
+      selectedEquipments,
+      reservedEquipments,
+      isDarkMode,
+      textColor,
+      subTextColor,
+      toggleEquipment,
+    ],
+  );
+
+  const keyExtractor = useCallback((item: IEquipment) => item.uuid, []);
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -482,6 +531,7 @@ const EquipmentReservationApplyScreen = ({
             </View>
           )}
         </View>
+
         <View style={styles.formSection}>
           <Text style={[styles.label, {color: textColor}]}>
             사용자 <Text style={styles.requiredText}>*</Text>
@@ -595,7 +645,7 @@ const EquipmentReservationApplyScreen = ({
             )}
           </TouchableOpacity>
           {showEquipmentList && (
-            <ScrollView style={styles.equipmentListScrollView}>
+            <View style={styles.equipmentListScrollView}>
               {loadingReservations ? (
                 <View style={styles.loadingContainer}>
                   <ActivityIndicator size="small" color={subTextColor} />
@@ -603,52 +653,24 @@ const EquipmentReservationApplyScreen = ({
                     예약 상태 확인 중...
                   </Text>
                 </View>
-              ) : equipmentList.length === 0 ? (
-                <Text style={[styles.emptyListText, {color: subTextColor}]}>
-                  장비가 없습니다.
-                </Text>
               ) : (
-                equipmentList.map(item => {
-                  const selected = !!selectedEquipments.find(
-                    e => e.uuid === item.uuid,
-                  );
-                  const isReserved = reservedEquipments.includes(item.uuid);
-
-                  return (
-                    <TouchableOpacity
-                      key={item.uuid}
-                      onPress={() => toggleEquipment(item)}
-                      disabled={selected}
-                      style={[
-                        styles.equipmentItem,
-                        {borderColor: isDarkMode ? '#3a3a3a' : '#F3F4F6'},
-                        (selected || isReserved) &&
-                          styles.disabledEquipmentItem,
-                        (selected || isReserved) && {
-                          backgroundColor: isDarkMode ? '#2a2a2a' : '#F3F4F6',
-                        },
-                      ]}>
-                      <Text
-                        style={[
-                          styles.equipmentName,
-                          {color: textColor},
-                          isReserved && styles.reservedEquipmentName,
-                          isReserved && {color: subTextColor},
-                        ]}>
-                        {item.name}
-                      </Text>
-                      {selected && <Text style={styles.checkIcon}>✔</Text>}
-                      {isReserved && !selected && (
-                        <Text
-                          style={[styles.reservedText, {color: subTextColor}]}>
-                          (예약됨)
-                        </Text>
-                      )}
-                    </TouchableOpacity>
-                  );
-                })
+                <FlatList
+                  data={equipmentList}
+                  renderItem={renderEquipmentItem}
+                  keyExtractor={keyExtractor}
+                  style={{maxHeight: 200}}
+                  removeClippedSubviews={true}
+                  initialNumToRender={5}
+                  maxToRenderPerBatch={3}
+                  windowSize={5}
+                  ListEmptyComponent={
+                    <Text style={[styles.emptyListText, {color: subTextColor}]}>
+                      장비가 없습니다.
+                    </Text>
+                  }
+                />
               )}
-            </ScrollView>
+            </View>
           )}
           {/* 날짜/시간 선택 */}
           <View style={styles.dateTimePickerContainer}>
@@ -716,141 +738,153 @@ const EquipmentReservationApplyScreen = ({
               </TouchableOpacity>
             </View>
           </View>
-          {/* DateTimePicker 및 예외처리 */}
-          {showDatePicker && (
-            <DateTimePicker
-              value={tempDate}
-              mode="date"
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              minimumDate={new Date()}
-              maximumDate={
-                new Date(new Date().setDate(new Date().getDate() + 30))
-              }
-              locale="ko-KR"
-              onChange={(event, selectedDate) => {
-                if (Platform.OS === 'android') {
-                  if (event.type === 'set' && selectedDate) {
-                    setShowDatePicker(false);
-                    setDate(selectedDate);
-                  } else if (event.type === 'dismissed') {
-                    setShowDatePicker(false);
-                  }
-                } else {
-                  if (selectedDate) {
-                    setTempDate(selectedDate);
-                  }
-                }
-              }}
-              onTouchCancel={() => setShowDatePicker(false)}
-            />
-          )}
-          {showDatePicker && Platform.OS === 'ios' && (
-            <TouchableOpacity
-              style={styles.iosPickerConfirmButton}
-              onPress={() => {
-                setShowDatePicker(false);
-                setDate(tempDate);
-              }}>
-              <Text style={styles.iosPickerConfirmText}>확인</Text>
-            </TouchableOpacity>
-          )}
-          {showStartPicker && (
-            <DateTimePicker
-              value={tempStartTime}
-              mode="time"
-              is24Hour
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              minuteInterval={30}
-              onChange={(event, selected) => {
-                if (Platform.OS === 'android') {
-                  if (event.type === 'set' && selected) {
-                    setShowStartPicker(false);
-                    const roundedTime = roundUpToNearest30Minutes(selected);
-                    if (isTimeAfterNow(date, roundedTime)) {
-                      setStartTime(roundedTime);
-                      const newEndTime = new Date(roundedTime);
-                      newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                      setEndTime(newEndTime);
-                    } else {
-                      Alert.alert(
-                        '알림',
-                        '현재 시간보다 이후의 시간을 선택해주세요.',
-                      );
-                    }
-                  } else if (event.type === 'dismissed') {
-                    setShowStartPicker(false);
-                  }
-                } else {
-                  if (selected) {
-                    setTempStartTime(roundUpToNearest30Minutes(selected));
-                  }
-                }
-              }}
-              onTouchCancel={() => setShowStartPicker(false)}
-            />
-          )}
-          {showStartPicker && Platform.OS === 'ios' && (
-            <TouchableOpacity
-              style={styles.iosPickerConfirmButton}
-              onPress={() => {
-                setShowStartPicker(false);
-                if (isTimeAfterNow(date, tempStartTime)) {
-                  setStartTime(tempStartTime);
-                  const newEndTime = new Date(tempStartTime);
-                  newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                  setEndTime(newEndTime);
-                } else {
-                  Alert.alert(
-                    '알림',
-                    '현재 시간보다 이후의 시간을 선택해주세요.',
-                  );
-                }
-              }}>
-              <Text style={styles.iosPickerConfirmText}>확인</Text>
-            </TouchableOpacity>
-          )}
-          {showEndPicker && (
-            <DateTimePicker
-              value={tempEndTime}
-              mode="time"
-              is24Hour
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              minuteInterval={30}
-              minimumDate={startTime}
-              onChange={(event, selected) => {
-                if (Platform.OS === 'android') {
-                  if (event.type === 'set' && selected) {
-                    setShowEndPicker(false);
-                    setEndTime(roundUpToNearest30Minutes(selected));
-                  } else if (event.type === 'dismissed') {
-                    setShowEndPicker(false);
-                  }
-                } else {
-                  if (selected) {
-                    setTempEndTime(roundUpToNearest30Minutes(selected));
-                  }
-                }
-              }}
-              onTouchCancel={() => setShowEndPicker(false)}
-            />
-          )}
-          {showEndPicker && Platform.OS === 'ios' && (
-            <TouchableOpacity
-              style={styles.iosPickerConfirmButton}
-              onPress={() => {
-                setShowEndPicker(false);
-                if (tempEndTime > startTime) {
-                  setEndTime(tempEndTime);
-                } else {
-                  const newEndTime = new Date(startTime);
-                  newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                  setEndTime(newEndTime);
-                }
-              }}>
-              <Text style={styles.iosPickerConfirmText}>확인</Text>
-            </TouchableOpacity>
+          {selectedEquipments.length > 0 && (
+            <View style={styles.totalPriceContainer}>
+              <View style={styles.totalPriceWrapper}>
+                <Text style={[styles.totalPriceLabel, {color: textColor}]}>
+                  총 예약비
+                </Text>
+                <Text style={styles.totalPriceValue}>
+                  {totalPrice.toLocaleString()}원
+                </Text>
+              </View>
+            </View>
           )}
         </View>
+        {/* DateTimePicker 및 예외처리 */}
+        {showDatePicker && (
+          <DateTimePicker
+            value={tempDate}
+            mode="date"
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            minimumDate={new Date()}
+            maximumDate={
+              new Date(new Date().setDate(new Date().getDate() + 30))
+            }
+            locale="ko-KR"
+            onChange={(event, selectedDate) => {
+              if (Platform.OS === 'android') {
+                if (event.type === 'set' && selectedDate) {
+                  setShowDatePicker(false);
+                  setDate(selectedDate);
+                } else if (event.type === 'dismissed') {
+                  setShowDatePicker(false);
+                }
+              } else {
+                if (selectedDate) {
+                  setTempDate(selectedDate);
+                }
+              }
+            }}
+            onTouchCancel={() => setShowDatePicker(false)}
+          />
+        )}
+        {showDatePicker && Platform.OS === 'ios' && (
+          <TouchableOpacity
+            style={styles.iosPickerConfirmButton}
+            onPress={() => {
+              setShowDatePicker(false);
+              setDate(tempDate);
+            }}>
+            <Text style={styles.iosPickerConfirmText}>확인</Text>
+          </TouchableOpacity>
+        )}
+        {showStartPicker && (
+          <DateTimePicker
+            value={tempStartTime}
+            mode="time"
+            is24Hour
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            minuteInterval={30}
+            onChange={(event, selected) => {
+              if (Platform.OS === 'android') {
+                if (event.type === 'set' && selected) {
+                  setShowStartPicker(false);
+                  const roundedTime = roundUpToNearest30Minutes(selected);
+                  if (isTimeAfterNow(date, roundedTime)) {
+                    setStartTime(roundedTime);
+                    const newEndTime = new Date(roundedTime);
+                    newEndTime.setMinutes(newEndTime.getMinutes() + 30);
+                    setEndTime(newEndTime);
+                  } else {
+                    Alert.alert(
+                      '알림',
+                      '현재 시간보다 이후의 시간을 선택해주세요.',
+                    );
+                  }
+                } else if (event.type === 'dismissed') {
+                  setShowStartPicker(false);
+                }
+              } else {
+                if (selected) {
+                  setTempStartTime(roundUpToNearest30Minutes(selected));
+                }
+              }
+            }}
+            onTouchCancel={() => setShowStartPicker(false)}
+          />
+        )}
+        {showStartPicker && Platform.OS === 'ios' && (
+          <TouchableOpacity
+            style={styles.iosPickerConfirmButton}
+            onPress={() => {
+              setShowStartPicker(false);
+              if (isTimeAfterNow(date, tempStartTime)) {
+                setStartTime(tempStartTime);
+                const newEndTime = new Date(tempStartTime);
+                newEndTime.setMinutes(newEndTime.getMinutes() + 30);
+                setEndTime(newEndTime);
+              } else {
+                Alert.alert(
+                  '알림',
+                  '현재 시간보다 이후의 시간을 선택해주세요.',
+                );
+              }
+            }}>
+            <Text style={styles.iosPickerConfirmText}>확인</Text>
+          </TouchableOpacity>
+        )}
+        {showEndPicker && (
+          <DateTimePicker
+            value={tempEndTime}
+            mode="time"
+            is24Hour
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            minuteInterval={30}
+            minimumDate={startTime}
+            onChange={(event, selected) => {
+              if (Platform.OS === 'android') {
+                if (event.type === 'set' && selected) {
+                  setShowEndPicker(false);
+                  setEndTime(roundUpToNearest30Minutes(selected));
+                } else if (event.type === 'dismissed') {
+                  setShowEndPicker(false);
+                }
+              } else {
+                if (selected) {
+                  setTempEndTime(roundUpToNearest30Minutes(selected));
+                }
+              }
+            }}
+            onTouchCancel={() => setShowEndPicker(false)}
+          />
+        )}
+        {showEndPicker && Platform.OS === 'ios' && (
+          <TouchableOpacity
+            style={styles.iosPickerConfirmButton}
+            onPress={() => {
+              setShowEndPicker(false);
+              if (tempEndTime > startTime) {
+                setEndTime(tempEndTime);
+              } else {
+                const newEndTime = new Date(startTime);
+                newEndTime.setMinutes(newEndTime.getMinutes() + 30);
+                setEndTime(newEndTime);
+              }
+            }}>
+            <Text style={styles.iosPickerConfirmText}>확인</Text>
+          </TouchableOpacity>
+        )}
         {/* 하단 버튼 */}
         <View
           style={[

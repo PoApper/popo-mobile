@@ -57,28 +57,47 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
       Alert.alert('오류', '모든 필수 필드를 입력해주세요.');
       return;
     }
-    paxi_api
-      .post(`/room/${roomUuid}/settlement`, {
-        payAmount: Number(totalCost),
-        payerAccountNumber: accountNumber,
-        payerAccountHolderName: accountName,
-        payerBankName: bankName,
-        updateAccount: isUpdateAccount,
-      } as SettlementCreateData)
-      .then(res => {
-        if (res.status !== 201) {
-          Alert.alert('실패', `response: ${res.status}`);
-        } else {
-          Alert.alert('성공', '정산 요청을 보냈습니다.');
-          navigation.goBack();
-        }
-      })
-      .catch(error => {
-        Alert.alert(
-          '실패',
-          `정산 요청에 실패했습니다: ${error.message} ${error.response.data.message}`,
-        );
-      });
+    if (isAlreadyRequested) {
+      paxi_api
+        .put(`/room/${roomUuid}/settlement`, {
+          payAmount: Number(totalCost),
+          payerAccountNumber: accountNumber,
+          payerAccountHolderName: accountName,
+          payerBankName: bankName,
+          updateAccount: isUpdateAccount,
+        } as SettlementCreateData)
+        .then(res => {
+          if (res.status !== 200) {
+            Alert.alert('실패', `response: ${res.status}`);
+          } else {
+            Alert.alert('성공', '정산 요청을 수정했습니다.');
+            navigation.goBack();
+          }
+        });
+    } else {
+      paxi_api
+        .post(`/room/${roomUuid}/settlement`, {
+          payAmount: Number(totalCost),
+          payerAccountNumber: accountNumber,
+          payerAccountHolderName: accountName,
+          payerBankName: bankName,
+          updateAccount: isUpdateAccount,
+        } as SettlementCreateData)
+        .then(res => {
+          if (res.status !== 201) {
+            Alert.alert('실패', `response: ${res.status}`);
+          } else {
+            Alert.alert('성공', '정산 요청을 보냈습니다.');
+            navigation.goBack();
+          }
+        })
+        .catch(error => {
+          Alert.alert(
+            '실패',
+            `정산 요청에 실패했습니다: ${error.message} ${error.response.data.message}`,
+          );
+        });
+    }
   };
 
   const isDarkMode = useColorScheme() === 'dark';
@@ -108,7 +127,8 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
       {isAlreadyRequested && (
         <View style={styles.alreadyRequestedContainer}>
           <Text style={styles.alreadyRequestedText}>
-            이미 생성된 정산 요청이 있습니다.
+            이미 생성된 정산 요청이 있습니다.{'\n'}
+            정산 내용을 수정하시겠습니까?
           </Text>
         </View>
       )}
@@ -126,11 +146,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                   color: textColor,
                 },
-                {
-                  backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
-                },
               ]}
-              editable={!isAlreadyRequested}
               placeholder="은행명을 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={bankName}
@@ -149,11 +165,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                   color: textColor,
                 },
-                {
-                  backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
-                },
               ]}
-              editable={!isAlreadyRequested}
               placeholder="계좌번호를 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={accountNumber}
@@ -177,11 +189,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                   color: textColor,
                 },
-                {
-                  backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
-                },
               ]}
-              editable={!isAlreadyRequested}
               placeholder="계좌주명을 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={accountName}
@@ -200,11 +208,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                   backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
                   color: textColor,
                 },
-                {
-                  backgroundColor: isAlreadyRequested ? '#f0f0f0' : '#FFFFFF',
-                },
               ]}
-              editable={!isAlreadyRequested}
               placeholder="정산금액을 입력해주세요."
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={totalCost?.toString()}
@@ -250,19 +254,13 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
           style={[
             styles.nextButton,
             {
-              backgroundColor: isAlreadyRequested ? '#d0d0d0' : 'black',
+              backgroundColor: isDarkMode ? '#2C2C2C' : '#000',
             },
           ]}
           onPress={() => checkInputValid()}
-          disabled={
-            !bankName || !accountNumber || !accountName || isAlreadyRequested
-          }>
-          <Text
-            style={[
-              styles.nextButtonText,
-              {color: isAlreadyRequested ? '#808080' : '#ffffff'},
-            ]}>
-            정산 요청하기
+          disabled={!bankName || !accountNumber || !accountName}>
+          <Text style={[styles.nextButtonText]}>
+            {isAlreadyRequested ? '정산 요청 수정' : '정산 요청하기'}
           </Text>
         </TouchableOpacity>
       </ScrollView>

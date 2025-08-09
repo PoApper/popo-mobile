@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   Modal,
   Pressable,
@@ -35,6 +35,7 @@ const BanModal = ({
   const isDarkMode = useColorScheme() === 'dark';
 
   const [banText, setBanText] = useState<string>('');
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleClose = () => {
     setBanText('');
@@ -52,13 +53,22 @@ const BanModal = ({
       })
       .then(data => {
         console.log('추방 성공: ', data);
-        Alert.alert('처리 완료', '요청이 처리되었습니다.');
+        Alert.alert('처리 완료', '추방 요청이 처리되었습니다.');
       })
       .catch(error => {
         Alert.alert('추방 실패', error.response.data.message);
         console.error('추방 실패. 사유: ', error.response);
       });
   };
+
+  useEffect(() => {
+    if (modalVisible) {
+      const timeout = setTimeout(() => setIsVisible(true), 10);
+      return () => clearTimeout(timeout);
+    } else {
+      setIsVisible(false);
+    }
+  }, [modalVisible]);
 
   return (
     <Modal
@@ -67,81 +77,83 @@ const BanModal = ({
       onRequestClose={handleClose}>
       <Pressable style={styles.overlay} onPress={handleClose}>
         <SafeAreaView style={styles.modalContent}>
-          <Pressable
-            style={[
-              {
-                width: modalWidth,
-                height: modalHeight,
-                backgroundColor: backgroundColor(isDarkMode),
-              },
-              styles.innerContent,
-            ]}
-            onPress={() => {}}>
-            <View style={{flex: 1, width: '100%', marginBottom: 20}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignContent: 'center',
-                  marginBottom: 10,
-                }}>
-                <Text
-                  style={[styles.modalTitle, {color: textColor(isDarkMode)}]}>
-                  추방하기
+          {isVisible && (
+            <Pressable
+              style={[
+                {
+                  width: modalWidth,
+                  height: modalHeight,
+                  backgroundColor: backgroundColor(isDarkMode),
+                },
+                styles.innerContent,
+              ]}
+              onPress={() => {}}>
+              <View style={{flex: 1, width: '100%', marginBottom: 20}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignContent: 'center',
+                    marginBottom: 10,
+                  }}>
+                  <Text
+                    style={[styles.modalTitle, {color: textColor(isDarkMode)}]}>
+                    추방하기
+                  </Text>
+                </View>
+                <Text style={{marginBottom: 10, color: textColor(isDarkMode)}}>
+                  <Text style={{color: 'red'}}>{userData?.nickname}</Text>님을
+                  {'\n'}
+                  정말로 추방하실건가요?
                 </Text>
-              </View>
-              <Text style={{marginBottom: 10, color: textColor(isDarkMode)}}>
-                <Text style={{color: 'red'}}>{userData?.nickname}</Text>님을
-                {'\n'}
-                정말로 추방하실건가요?
-              </Text>
-              <TextInput
-                style={[
-                  styles.textInput,
-                  {
-                    color: textColor(isDarkMode),
-                    borderColor: isDarkMode ? '#999' : '#e0e0e0',
-                  },
-                ]}
-                value={banText}
-                onChangeText={setBanText}
-                placeholder="사유를 입력해주세요. (200자 이내)"
-                placeholderTextColor="#999"
-                multiline={true}
-                maxLength={200}
-                scrollEnabled={true}
-              />
-            </View>
-
-            {/* 추방 요청 버튼 */}
-            <View style={styles.buttonView}>
-              <TouchableOpacity
-                style={[
-                  styles.cancelButton,
-                  {backgroundColor: isDarkMode ? '#222' : '#f2f2f2'},
-                ]}
-                onPress={() => handleClose()}>
-                <Text
+                <TextInput
                   style={[
-                    styles.cancelButtonText,
-                    {color: textColor(isDarkMode)},
-                  ]}>
-                  취소
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.banButton,
-                  {backgroundColor: isDarkMode ? '#333' : 'black'},
-                ]}
-                disabled={banText.length === 0}
-                onPress={() => {
-                  handleBan(banText);
-                  handleClose();
-                }}>
-                <Text style={styles.banButtonText}>추방</Text>
-              </TouchableOpacity>
-            </View>
-          </Pressable>
+                    styles.textInput,
+                    {
+                      color: textColor(isDarkMode),
+                      borderColor: isDarkMode ? '#999' : '#e0e0e0',
+                    },
+                  ]}
+                  value={banText}
+                  onChangeText={setBanText}
+                  placeholder="사유를 입력해주세요. (200자 이내)"
+                  placeholderTextColor="#999"
+                  multiline={true}
+                  maxLength={200}
+                  scrollEnabled={true}
+                />
+              </View>
+
+              {/* 추방 요청 버튼 */}
+              <View style={styles.buttonView}>
+                <TouchableOpacity
+                  style={[
+                    styles.cancelButton,
+                    {backgroundColor: isDarkMode ? '#222' : '#f2f2f2'},
+                  ]}
+                  onPress={() => handleClose()}>
+                  <Text
+                    style={[
+                      styles.cancelButtonText,
+                      {color: textColor(isDarkMode)},
+                    ]}>
+                    취소
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.banButton,
+                    {backgroundColor: isDarkMode ? '#333' : 'black'},
+                  ]}
+                  disabled={banText.length === 0}
+                  onPress={() => {
+                    handleBan(banText);
+                    handleClose();
+                  }}>
+                  <Text style={styles.banButtonText}>추방</Text>
+                </TouchableOpacity>
+              </View>
+            </Pressable>
+          )}
         </SafeAreaView>
       </Pressable>
     </Modal>

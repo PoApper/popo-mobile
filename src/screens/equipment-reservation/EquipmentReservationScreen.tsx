@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  ScrollView,
+  FlatList,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -37,14 +37,14 @@ const tabs = [
   {label: '생활관자치회', value: 'dormunion'},
 ];
 
-// 이모지 제거 함수 (숫자 등 일반 문자는 남기고 이모지만 제거)
-function removeEmoji(str: string) {
+// 이모지 제거 함수 (숫자 등 일반 문자는 남기고 이모지만 제거) - 메모이제이션을 위해 컴포넌트 외부로 이동
+const removeEmoji = (str: string) => {
   // 이모지 유니코드만 제거, 숫자/한글/영문 등은 남김
   return str.replace(
     /([\u2700-\u27BF]|[\uE000-\uF8FF]|[\uD83C-\uDBFF\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83D[\uDE00-\uDE4F])/g,
     '',
   );
-}
+};
 
 const EquipmentReservationScreen = ({
   navigation,
@@ -54,12 +54,32 @@ const EquipmentReservationScreen = ({
   const [equipmentList, setEquipmentList] = useState<IEquipment[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#fff' : '#fff',
-    flex: 1,
-  };
-  const textColor = isDarkMode ? '#000' : '#000';
-  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
+  // 메모이제이션으로 불필요한 재계산 방지
+  const styles_memo = useMemo(
+    () => ({
+      backgroundStyle: {
+        backgroundColor: isDarkMode ? '#1a1a1a' : '#fff',
+        flex: 1,
+      },
+      textColor: isDarkMode ? '#ffffff' : '#000000',
+      borderColor: isDarkMode ? '#2C2C2C' : '#E5E7EB',
+      secondaryTextColor: isDarkMode ? '#a0a0a0' : '#888888',
+      buttonBackgroundColor: isDarkMode ? '#3a3a3a' : '#F6F7F9',
+      placeholderImageStyle: {
+        backgroundColor: isDarkMode ? '#3a3a3a' : '#eee',
+      },
+    }),
+    [isDarkMode],
+  );
+
+  const {
+    backgroundStyle,
+    textColor,
+    borderColor,
+    secondaryTextColor,
+    buttonBackgroundColor,
+    placeholderImageStyle,
+  } = styles_memo;
 
   useEffect(() => {
     const fetchEquipment = async () => {
@@ -80,41 +100,60 @@ const EquipmentReservationScreen = ({
     fetchEquipment();
   }, [selectedTab]);
 
-  const renderEquipmentItem = ({item}: {item: IEquipment}) => (
-    <View style={styles.equipmentItem}>
-      {item.image_url ? (
-        <Image source={{uri: item.image_url}} style={styles.equipmentImage} />
-      ) : (
-        <View style={[styles.equipmentImage, {backgroundColor: '#eee'}]} />
-      )}
-      <View style={styles.equipmentInfo}>
-        <Text style={[styles.equipmentName, {color: textColor}]}>
-          {removeEmoji(item.name)}
-        </Text>
-        <Text style={styles.equipmentPrice}>{item.fee.toLocaleString()}원</Text>
+  // 렌더 함수 메모이제이션
+  const renderEquipmentItem = useCallback(
+    ({item}: {item: IEquipment}) => (
+      <View style={styles.equipmentItem}>
+        {item.image_url ? (
+          <Image source={{uri: item.image_url}} style={styles.equipmentImage} />
+        ) : (
+          <View style={[styles.equipmentImage, placeholderImageStyle]} />
+        )}
+        <View style={styles.equipmentInfo}>
+          <Text style={[styles.equipmentName, {color: textColor}]}>
+            {removeEmoji(item.name)}
+          </Text>
+          <Text style={[styles.equipmentPrice, {color: secondaryTextColor}]}>
+            {item.fee.toLocaleString()}원
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={[
+            styles.detailButton,
+            {backgroundColor: buttonBackgroundColor},
+          ]}
+          onPress={() => {
+            Alert.alert(
+              '장비 상세정보',
+              `이름: ${removeEmoji(item.name)}\n모델명/설명: ${
+                item.description || '-'
+              }\n가격: ${item.fee.toLocaleString()}원\n최대 사용 시간: ${
+                item.max_minutes
+              }분`,
+              [{text: '닫기', style: 'cancel'}],
+            );
+          }}>
+          <Text style={[styles.detailButtonText, {color: textColor}]}>
+            상세정보
+          </Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.detailButton}
-        onPress={() => {
-          Alert.alert(
-            '장비 상세정보',
-            `이름: ${removeEmoji(item.name)}\n모델명/설명: ${
-              item.description || '-'
-            }\n가격: ${item.fee.toLocaleString()}원\n최대 사용 시간: ${
-              item.max_minutes
-            }분`,
-            [{text: '닫기', style: 'cancel'}],
-          );
-        }}>
-        <Text style={styles.detailButtonText}>상세정보</Text>
-      </TouchableOpacity>
-    </View>
+    ),
+    [
+      textColor,
+      secondaryTextColor,
+      buttonBackgroundColor,
+      placeholderImageStyle,
+    ],
   );
+
+  // FlatList keyExtractor 메모이제이션
+  const keyExtractor = useCallback((item: IEquipment) => item.uuid, []);
 
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
-        barStyle={isDarkMode ? 'dark-content' : 'dark-content'}
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <View style={[styles.header, {borderBottomColor: borderColor}]}>
@@ -140,30 +179,44 @@ const EquipmentReservationScreen = ({
             <Text
               style={[
                 styles.tabText,
+                {color: secondaryTextColor},
                 selectedTab === tab.value && styles.selectedTabText,
+                selectedTab === tab.value && {color: textColor},
               ]}>
               {tab.label}
             </Text>
-            {selectedTab === tab.value && <View style={styles.tabUnderline} />}
+            {selectedTab === tab.value && (
+              <View
+                style={[styles.tabUnderline, {backgroundColor: textColor}]}
+              />
+            )}
           </TouchableOpacity>
         ))}
       </View>
 
       {/* 장비 리스트 */}
       <View style={styles.equipmentListContainer}>
-        <ScrollView
+        <FlatList
+          data={equipmentList}
+          renderItem={renderEquipmentItem}
+          keyExtractor={keyExtractor}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.equipmentList}>
-          {equipmentList.length > 0 ? (
-            equipmentList.map(item => (
-              <View key={item.uuid}>{renderEquipmentItem({item})}</View>
-            ))
-          ) : (
-            <Text style={styles.emptyListText}>
+          contentContainerStyle={styles.equipmentList}
+          removeClippedSubviews={true}
+          initialNumToRender={10}
+          maxToRenderPerBatch={5}
+          windowSize={10}
+          getItemLayout={(data, index) => ({
+            length: 79, // approximate height of each item (paddingVertical: 15 * 2 + content height ~49)
+            offset: 79 * index,
+            index,
+          })}
+          ListEmptyComponent={
+            <Text style={[styles.emptyListText, {color: secondaryTextColor}]}>
               {loading ? '불러오는 중...' : '장비가 없습니다.'}
             </Text>
-          )}
-        </ScrollView>
+          }
+        />
       </View>
 
       {/* 예약 신청하기 버튼 - 하단 고정 */}
@@ -218,18 +271,15 @@ const styles = StyleSheet.create({
   selectedTab: {},
   tabText: {
     fontSize: 16,
-    color: '#888',
     fontWeight: '500',
   },
   selectedTabText: {
-    color: '#000',
     fontWeight: 'bold',
   },
   tabUnderline: {
     marginTop: 4,
     height: 2,
     width: '100%',
-    backgroundColor: '#000',
     borderRadius: 1,
   },
   equipmentListContainer: {
@@ -251,7 +301,6 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 8,
     marginRight: 16,
-    backgroundColor: '#eee',
   },
   equipmentInfo: {
     flex: 1,
@@ -263,15 +312,12 @@ const styles = StyleSheet.create({
   },
   equipmentDesc: {
     fontSize: 13,
-    color: '#888',
     marginBottom: 2,
   },
   equipmentPrice: {
     fontSize: 13,
-    color: '#888',
   },
   detailButton: {
-    backgroundColor: '#F6F7F9',
     borderRadius: 999,
     paddingVertical: 8,
     paddingHorizontal: 20,
@@ -279,7 +325,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   detailButtonText: {
-    color: '#222',
     fontSize: 14,
     fontWeight: '600',
   },

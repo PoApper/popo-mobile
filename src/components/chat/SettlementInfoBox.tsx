@@ -36,8 +36,7 @@ const SettlementInfoBox = ({
   settlementData,
 }: SettlementInfoBoxProps) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const isCompleteSettlement = isPaid === true;
-  const [showInfo, setShowInfo] = useState<boolean>(true);
+  const [showInfo, setShowInfo] = useState<boolean>(!isPaid);
 
   useEffect(() => {
     if (typeof isPaid === 'boolean') {
@@ -73,6 +72,10 @@ const SettlementInfoBox = ({
     ]);
   };
 
+  if (isPaid === undefined) {
+    return null;
+  }
+
   return (
     <View
       style={[
@@ -83,7 +86,7 @@ const SettlementInfoBox = ({
         <TouchableOpacity
           onPress={() => setShowInfo(true)}
           style={{flexDirection: 'row', gap: 10, margin: 10}}>
-          {isCompleteSettlement && (
+          {isPaid && (
             <>
               <Icon name={'check'} size={20} color={'green'} />
               <Text
@@ -96,7 +99,7 @@ const SettlementInfoBox = ({
               </Text>
             </>
           )}
-          {!isCompleteSettlement && (
+          {!isPaid && (
             <>
               <Icon name={'warning'} size={20} color={'#e45b63'} />
               <Text
@@ -146,6 +149,13 @@ const SettlementInfoBox = ({
                     styles.infoText,
                     {color: isDarkMode ? '#aaa' : '#4f4f4f'},
                   ]}>
+                  정산 요청자: {settlementData.payerNickname}
+                </Text>
+                <Text
+                  style={[
+                    styles.infoText,
+                    {color: isDarkMode ? '#aaa' : '#4f4f4f'},
+                  ]}>
                   계좌주명: {settlementData.payerAccountHolderName}
                 </Text>
                 <TouchableOpacity
@@ -171,7 +181,7 @@ const SettlementInfoBox = ({
                 </TouchableOpacity>
               </View>
             </View>
-            {!isCompleteSettlement && (
+            {!isPaid && (
               <>
                 <Text style={styles.warnText}>
                   꼭! 송금 후 완료 버튼을 눌러 주세요!
@@ -226,6 +236,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 13,
     letterSpacing: -0.4,
+    marginBottom: 4,
   },
   warnText: {
     fontSize: 12,
