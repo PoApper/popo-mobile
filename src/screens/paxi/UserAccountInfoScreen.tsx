@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useFocusEffect} from '@react-navigation/native';
 
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
@@ -27,6 +28,10 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
   const [accountHolderName, setAccountHolderName] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [existingData, setExistingData] = useState<PaxiUserMy | null>(null);
+  const isPaxiAccountInfoExist =
+    existingData?.bankName &&
+    existingData?.accountNumber &&
+    existingData?.accountHolderName;
 
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
@@ -36,10 +41,12 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
     flex: 1,
   };
 
-  // 기존 계좌 정보 가져오기
-  useEffect(() => {
-    fetchUserAccountInfo();
-  }, []);
+  // 화면에 포커스할 때마다 계좌 정보 가져오기
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUserAccountInfo();
+    }, []),
+  );
 
   const fetchUserAccountInfo = async () => {
     try {
@@ -91,11 +98,15 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
         accountHolderName: accountHolderName.trim(),
       };
 
-      await paxi_api.put('/user/account', accountData);
+      if (isPaxiAccountInfoExist) {
+        await paxi_api.put('/user/account', accountData);
+      } else {
+        await paxi_api.post('/user/account', accountData);
+      }
 
       Alert.alert(
         '성공',
-        existingData?.bankName
+        isPaxiAccountInfoExist
           ? '계좌 정보가 수정되었습니다.'
           : '계좌 정보가 등록되었습니다.',
         [
@@ -235,7 +246,7 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
           <Text style={styles.saveButtonText}>
             {isLoading
               ? '처리 중...'
-              : existingData?.bankName
+              : isPaxiAccountInfoExist
               ? '계좌 정보 수정'
               : '계좌 정보 등록'}
           </Text>

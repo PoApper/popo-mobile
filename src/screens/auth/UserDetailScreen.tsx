@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useFocusEffect} from '@react-navigation/native';
 import axios from 'axios';
 
 import {RootStackParamList} from '@navigation/types';
@@ -32,6 +33,10 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const [userDataState, setUserData] = useState<any>(null);
   const [isPaxiUser, setIsPaxiUser] = useState<boolean>(false);
   const [paxiUserData, setPaxiUserData] = useState<PaxiUserMy | null>(null);
+  const isPaxiAccountInfoExist =
+    paxiUserData?.bankName &&
+    paxiUserData?.accountNumber &&
+    paxiUserData?.accountHolderName;
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -90,28 +95,15 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
     }
   };
 
-  // 컴포넌트 마운트 시 프로필 정보 가져오기
-  useEffect(() => {
-    setIsLoading(true);
-    Promise.all([fetchUserProfile(), fetchPaxiInfo()]).finally(() => {
-      setIsLoading(false);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // 로컬에 저장된 사용자 정보로 UI 초기화
-  useEffect(() => {
-    const loadStoredUserInfo = async () => {
-      try {
-        const res = await api.get('/auth/myInfo');
-        setUserData(res.data);
-      } catch (error) {
-        console.error('저장된 사용자 정보 로드 오류:', error);
-      }
-    };
-
-    loadStoredUserInfo();
-  }, []);
+  // 화면에 포커스할 때마다 프로필 정보 가져오기
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsLoading(true);
+      Promise.all([fetchUserProfile(), fetchPaxiInfo()]).finally(() => {
+        setIsLoading(false);
+      });
+    }, []),
+  );
 
   return (
     <SafeAreaView style={backgroundStyle} edges={['top', 'left', 'right']}>
@@ -251,13 +243,13 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                     onPress={() => {
                       navigation.navigate('UserAccountInfo');
                     }}>
-                    <Text style={styles.editButtonText}>수정</Text>
+                    <Text style={styles.editButtonText}>
+                      {isPaxiAccountInfoExist ? '수정' : '등록'}
+                    </Text>
                   </TouchableOpacity>
                 </View>
                 <Text style={[styles.detailValue, {color: textColor}]}>
-                  {paxiUserData?.bankName &&
-                  paxiUserData?.accountNumber &&
-                  paxiUserData?.accountHolderName
+                  {isPaxiAccountInfoExist
                     ? `${paxiUserData?.bankName} ${paxiUserData?.accountNumber} (${paxiUserData?.accountHolderName})`
                     : '정보 없음'}
                 </Text>
