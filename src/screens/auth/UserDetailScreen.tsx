@@ -19,6 +19,7 @@ import api from '@utils/api';
 import Environment from '@utils/environment';
 import {reset_auth} from '@utils/reset';
 import paxi_api from '@utils/paxi_api';
+import {PaxiUserMy} from '@interfaces/paxi';
 
 type UserDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserDetail'>;
@@ -30,7 +31,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userDataState, setUserData] = useState<any>(null);
   const [isPaxiUser, setIsPaxiUser] = useState<boolean>(false);
-  const [paxiUserData, setPaxiUserData] = useState<any>(null);
+  const [paxiUserData, setPaxiUserData] = useState<PaxiUserMy | null>(null);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -111,6 +112,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
 
     loadStoredUserInfo();
   }, []);
+
+  console.log('paxiUserData', paxiUserData);
 
   return (
     <SafeAreaView style={backgroundStyle} edges={['top', 'left', 'right']}>
@@ -244,8 +247,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                 <Text style={[styles.detailValue, {color: textColor}]}>
                   {paxiUserData?.bankName &&
                   paxiUserData?.accountNumber &&
-                  paxiUserData?.accountHolder
-                    ? `${paxiUserData?.bankName} ${paxiUserData?.accountNumber} (${paxiUserData?.accountHolder})`
+                  paxiUserData?.accountHolderName
+                    ? `${paxiUserData?.bankName} ${paxiUserData?.accountNumber} (${paxiUserData?.accountHolderName})`
                     : '정보 없음'}
                 </Text>
               </View>
