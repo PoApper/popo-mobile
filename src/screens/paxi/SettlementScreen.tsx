@@ -17,6 +17,7 @@ import {RouteProp, useRoute} from '@react-navigation/native';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import {SettlementCreateData, SettlementInfoData} from '@interfaces/paxi';
+import {PaxiUserMy} from '@interfaces/paxi';
 
 type SettlementScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Settlement'>;
@@ -135,6 +136,38 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
 
       <ScrollView>
         <View style={styles.container}>
+          {/* 내 계좌 정보 불러오기 버튼 */}
+          <TouchableOpacity
+            style={[
+              styles.loadAccountButton,
+              {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+            ]}
+            onPress={() => {
+              // TODO: 내 계좌 정보 불러오기 로직
+              paxi_api.get('/user/my').then(res => {
+                const userData = res.data as PaxiUserMy;
+                if (
+                  userData.bankName &&
+                  userData.accountNumber &&
+                  userData.accountHolderName
+                ) {
+                  setbankName(userData.bankName);
+                  setAccountNumber(userData.accountNumber);
+                  setAccountName(userData.accountHolderName);
+                } else {
+                  Alert.alert(
+                    '계좌 정보 없음',
+                    '등록된 계좌 정보가 없어서 불러 올 수 없습니다.',
+                  );
+                }
+              });
+              console.log('내 계좌 정보 불러오기');
+            }}>
+            <Text style={styles.loadAccountButtonText}>
+              내 계좌 정보 불러오기
+            </Text>
+          </TouchableOpacity>
+
           <View style={{width: '100%', marginBottom: 8}}>
             <Text style={[styles.titleText, {color: textColor}]}>은행명</Text>
             <TextInput
@@ -422,5 +455,20 @@ const styles = StyleSheet.create({
   },
   alreadyRequestedText: {
     fontSize: 14,
+  },
+  loadAccountButton: {
+    borderRadius: 6,
+    width: '100%',
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  loadAccountButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: 'Pretendard',
+    color: '#ffffff',
+    textAlign: 'center',
   },
 });
