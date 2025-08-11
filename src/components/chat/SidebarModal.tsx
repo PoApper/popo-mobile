@@ -142,10 +142,16 @@ SidebarModalProps) => {
                       {
                         marginLeft: 20,
                         backgroundColor: isDarkMode ? '#333' : '#000',
+                        opacity: roomData.currentParticipant === 1 ? 0.5 : 1,
                       },
                     ]}
                     onPress={() => {
-                      if (isIamPayer || !roomData.payerUuid) {
+                      if (roomData.currentParticipant === 1) {
+                        Alert.alert(
+                          '혼자 있는 채팅방',
+                          '혼자 있는 채팅방은 정산 요청이 불가능합니다.',
+                        );
+                      } else if (isIamPayer || !roomData.payerUuid) {
                         setModalVisible(false);
                         navigation.navigate('Settlement', {
                           roomUuid: roomData.uuid,
