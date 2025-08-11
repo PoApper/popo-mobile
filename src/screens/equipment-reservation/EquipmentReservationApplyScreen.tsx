@@ -738,18 +738,6 @@ const EquipmentReservationApplyScreen = ({
               </TouchableOpacity>
             </View>
           </View>
-          {selectedEquipments.length > 0 && (
-            <View style={styles.totalPriceContainer}>
-              <View style={styles.totalPriceWrapper}>
-                <Text style={[styles.totalPriceLabel, {color: textColor}]}>
-                  총 예약비
-                </Text>
-                <Text style={styles.totalPriceValue}>
-                  {totalPrice.toLocaleString()}원
-                </Text>
-              </View>
-            </View>
-          )}
         </View>
         {/* DateTimePicker 및 예외처리 */}
         {showDatePicker && (
