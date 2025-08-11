@@ -10,7 +10,18 @@ import {
   useColorScheme,
   Alert,
   RefreshControl,
+  Modal,
+  ScrollView,
+  Animated,
+  Dimensions,
+  Pressable,
 } from 'react-native';
+import {
+  GestureHandlerRootView,
+  Gesture,
+  GestureDetector,
+} from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
 
@@ -71,8 +82,16 @@ const ReservationList: React.FC<ReservationListProps> = ({
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedReservation, setSelectedReservation] =
+    useState<PlaceReservation | null>(null);
   const listRef = useRef<FlatList>(null);
   const itemsPerPage = 10;
+
+  // Modal animation values
+  const {height: screenHeight} = Dimensions.get('window');
+  const translateY = useRef(new Animated.Value(0)).current;
+  const modalOpacity = useRef(new Animated.Value(0)).current;
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const cardBgColor = isDarkMode ? '#1E1E1E' : '#FFFFFF';
@@ -171,19 +190,6 @@ const ReservationList: React.FC<ReservationListProps> = ({
     return `${timeStr.substring(0, 2)}:${timeStr.substring(2, 4)}`;
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case '통과':
-        return '#10B981';
-      case '심사중':
-        return '#6B7280';
-      case '거절':
-        return '#EF4444';
-      default:
-        return '#6B7280';
-    }
-  };
-
   const getStatusText = (status: string) => {
     switch (status) {
       case '통과':
@@ -213,6 +219,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
             try {
               await api.delete(`/reservation-place/${id}`);
               Alert.alert('완료', '예약이 취소되었습니다.');
+              closeModal();
               fetchReservations();
             } catch (error) {
               console.error('예약 취소 오류:', error);
@@ -227,97 +234,124 @@ const ReservationList: React.FC<ReservationListProps> = ({
     );
   };
 
-  const renderReservationItem = ({item}: {item: PlaceReservation}) => (
-    <View
-      style={[
-        styles.reservationCard,
-        {backgroundColor: cardBgColor, borderColor},
-      ]}>
-      <View style={styles.reservationHeader}>
-        <View style={styles.titleContainer}>
-          <Text style={[styles.reservationTitle, {color: textColor}]}>
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case '통과':
+        return {name: 'check-circle', color: '#10B981'};
+      case '심사중':
+        return {name: 'access-time', color: '#F59E0B'};
+      case '거절':
+        return {name: 'cancel', color: '#EF4444'};
+      default:
+        return {name: 'help', color: '#6B7280'};
+    }
+  };
+
+  const openModal = (item: PlaceReservation) => {
+    setSelectedReservation(item);
+    setModalVisible(true);
+
+    // Reset animation values and animate in
+    translateY.setValue(screenHeight);
+    modalOpacity.setValue(0);
+
+    Animated.parallel([
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(modalOpacity, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const closeModal = () => {
+    Animated.parallel([
+      Animated.timing(translateY, {
+        toValue: screenHeight,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+      Animated.timing(modalOpacity, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setModalVisible(false);
+      setSelectedReservation(null);
+    });
+  };
+
+  const panGesture = Gesture.Pan()
+    .onChange(event => {
+      // Only allow downward movement (positive translationY)
+      if (event.translationY >= 0) {
+        translateY.setValue(event.translationY);
+      }
+    })
+    .onFinalize(event => {
+      // Close modal if dragged down significantly or with high velocity
+      if (event.translationY > 100 || event.velocityY > 500) {
+        closeModal();
+      } else {
+        // Snap back to original position
+        Animated.spring(translateY, {
+          toValue: 0,
+          useNativeDriver: true,
+        }).start();
+      }
+    });
+
+  const handleLongPress = (item: PlaceReservation) => {
+    if (item.status !== '거절') {
+      handleCancelReservation(item.uuid);
+    }
+  };
+
+  const renderReservationItem = ({item}: {item: PlaceReservation}) => {
+    const statusIcon = getStatusIcon(item.status);
+    const subtitleColor = isDarkMode ? '#BBBBBB' : '#6B7280';
+    const iconBgColor = isDarkMode ? '#2A2A2A' : '#F3F4F6';
+
+    return (
+      <TouchableOpacity
+        style={[styles.simpleReservationItem, {borderBottomColor: borderColor}]}
+        onPress={() => openModal(item)}
+        onLongPress={() => handleLongPress(item)}
+        delayLongPress={500}>
+        <View style={styles.itemContent}>
+          <Text
+            style={[styles.itemTitle, {color: textColor}]}
+            numberOfLines={1}
+            ellipsizeMode="tail">
             {item.title || '제목 없음'}
+          </Text>
+          <Text
+            style={[styles.itemSubtitle, {color: subtitleColor}]}
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {item.place?.name || '장소 이름 없음'}
+          </Text>
+          <Text style={[styles.itemDateTime, {color: subtitleColor}]}>
+            {new Date(formatDate(item.date)).toLocaleDateString('ko-KR', {
+              month: 'short',
+              day: 'numeric',
+            })}{' '}
+            {formatTime(item.start_time)}
           </Text>
         </View>
         <View
-          style={[
-            styles.statusBadge,
-            {backgroundColor: getStatusColor(item.status)},
-          ]}>
-          <Text style={styles.statusText}>{getStatusText(item.status)}</Text>
+          style={[styles.statusIconContainer, {backgroundColor: iconBgColor}]}>
+          <Icon name={statusIcon.name} size={24} color={statusIcon.color} />
         </View>
-      </View>
-
-      <View style={styles.reservationDetail}>
-        <Text
-          style={[
-            styles.detailLabel,
-            {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-          ]}>
-          날짜 / 시간
-        </Text>
-        <Text style={[styles.detailValue, {color: textColor}]}>
-          {new Date(formatDate(item.date)).toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}{' '}
-          | {formatTime(item.start_time)}-{formatTime(item.end_time)}
-        </Text>
-      </View>
-
-      <View style={styles.reservationDetail}>
-        <Text
-          style={[
-            styles.detailLabel,
-            {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-          ]}>
-          장소
-        </Text>
-        <Text style={[styles.detailValue, {color: textColor}]}>
-          {item.place?.name || '장소 이름 없음'}
-        </Text>
-      </View>
-
-      {item.place?.location && (
-        <View style={styles.reservationDetail}>
-          <Text
-            style={[
-              styles.detailLabel,
-              {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-            ]}>
-            위치
-          </Text>
-          <Text style={[styles.detailValue, {color: textColor}]}>
-            {item.place.location}
-          </Text>
-        </View>
-      )}
-
-      {item.description && (
-        <View style={styles.reservationDetail}>
-          <Text
-            style={[
-              styles.detailLabel,
-              {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-            ]}>
-            설명
-          </Text>
-          <Text style={[styles.detailValue, {color: textColor}]}>
-            {item.description}
-          </Text>
-        </View>
-      )}
-
-      {item.status !== '거절' && (
-        <TouchableOpacity
-          style={styles.cancelButton}
-          onPress={() => handleCancelReservation(item.uuid)}>
-          <Text style={styles.cancelButtonText}>예약 취소</Text>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   const renderFooter = () => {
     if (!isLoadingMore) {
@@ -395,15 +429,239 @@ const ReservationList: React.FC<ReservationListProps> = ({
         <TouchableOpacity
           style={[
             styles.scrollTopButton,
-            {
-              backgroundColor: isDarkMode ? '#333' : '#fff',
-              shadowColor: isDarkMode ? '#000' : 'rgba(0, 0, 0, 0.3)',
-            },
+            isDarkMode
+              ? styles.scrollTopButtonDark
+              : styles.scrollTopButtonLight,
           ]}
           onPress={scrollToTop}>
           <Text style={[styles.scrollTopText, {color: textColor}]}>↑</Text>
         </TouchableOpacity>
       )}
+
+      {/* Details Modal */}
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={closeModal}>
+        <GestureHandlerRootView style={styles.gestureContainer}>
+          <Pressable style={styles.modalOverlay} onPress={closeModal}>
+            <Animated.View
+              style={[styles.modalOverlayAnimated, {opacity: modalOpacity}]}
+            />
+          </Pressable>
+
+          <GestureDetector gesture={panGesture}>
+            <Animated.View
+              style={[
+                styles.modalContent,
+                {
+                  backgroundColor: cardBgColor,
+                  transform: [{translateY}],
+                },
+              ]}>
+              <View style={styles.modalHeader}>
+                {/* Drag handle indicator */}
+                <View style={styles.dragHandle} />
+                <View style={styles.modalHeaderContent}>
+                  <Text style={[styles.modalTitle, {color: textColor}]}>
+                    예약 상세정보
+                  </Text>
+                </View>
+              </View>
+
+              <ScrollView style={styles.modalBody}>
+                {selectedReservation &&
+                  (() => {
+                    const modalLabelColor = isDarkMode ? '#BBBBBB' : '#6B7280';
+                    const modalValueColor = textColor;
+                    const statusIcon = getStatusIcon(
+                      selectedReservation.status,
+                    );
+
+                    return (
+                      <>
+                        <View style={styles.modalDetailSection}>
+                          <Text
+                            style={[
+                              styles.modalLabel,
+                              {color: modalLabelColor},
+                            ]}>
+                            제목
+                          </Text>
+                          <Text
+                            style={[
+                              styles.modalValue,
+                              {color: modalValueColor},
+                            ]}>
+                            {selectedReservation.title || '제목 없음'}
+                          </Text>
+                        </View>
+
+                        <View style={styles.modalDetailSection}>
+                          <Text
+                            style={[
+                              styles.modalLabel,
+                              {color: modalLabelColor},
+                            ]}>
+                            상태
+                          </Text>
+                          <View style={styles.statusContainer}>
+                            <Icon
+                              name={statusIcon.name}
+                              size={20}
+                              color={statusIcon.color}
+                            />
+                            <Text
+                              style={[
+                                styles.modalValue,
+                                styles.statusTextWithMargin,
+                                {color: modalValueColor},
+                              ]}>
+                              {getStatusText(selectedReservation.status)}
+                            </Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.modalDetailSection}>
+                          <Text
+                            style={[
+                              styles.modalLabel,
+                              {color: modalLabelColor},
+                            ]}>
+                            장소
+                          </Text>
+                          <Text
+                            style={[
+                              styles.modalValue,
+                              {color: modalValueColor},
+                            ]}>
+                            {selectedReservation.place?.name ||
+                              '장소 이름 없음'}
+                          </Text>
+                        </View>
+
+                        {selectedReservation.place?.location && (
+                          <View style={styles.modalDetailSection}>
+                            <Text
+                              style={[
+                                styles.modalLabel,
+                                {color: modalLabelColor},
+                              ]}>
+                              위치
+                            </Text>
+                            <Text
+                              style={[
+                                styles.modalValue,
+                                {color: modalValueColor},
+                              ]}>
+                              {selectedReservation.place.location}
+                            </Text>
+                          </View>
+                        )}
+
+                        <View style={styles.modalDetailSection}>
+                          <Text
+                            style={[
+                              styles.modalLabel,
+                              {color: modalLabelColor},
+                            ]}>
+                            날짜
+                          </Text>
+                          <Text
+                            style={[
+                              styles.modalValue,
+                              {color: modalValueColor},
+                            ]}>
+                            {new Date(
+                              formatDate(selectedReservation.date),
+                            ).toLocaleDateString('ko-KR', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            })}
+                          </Text>
+                        </View>
+
+                        <View style={styles.modalDetailSection}>
+                          <Text
+                            style={[
+                              styles.modalLabel,
+                              {color: modalLabelColor},
+                            ]}>
+                            시간
+                          </Text>
+                          <Text
+                            style={[
+                              styles.modalValue,
+                              {color: modalValueColor},
+                            ]}>
+                            {formatTime(selectedReservation.start_time)} -{' '}
+                            {formatTime(selectedReservation.end_time)}
+                          </Text>
+                        </View>
+
+                        {selectedReservation.description && (
+                          <View style={styles.modalDetailSection}>
+                            <Text
+                              style={[
+                                styles.modalLabel,
+                                {color: modalLabelColor},
+                              ]}>
+                              설명
+                            </Text>
+                            <Text
+                              style={[
+                                styles.modalValue,
+                                {color: modalValueColor},
+                              ]}>
+                              {selectedReservation.description}
+                            </Text>
+                          </View>
+                        )}
+
+                        {selectedReservation.phone && (
+                          <View style={styles.modalDetailSection}>
+                            <Text
+                              style={[
+                                styles.modalLabel,
+                                {color: modalLabelColor},
+                              ]}>
+                              연락처
+                            </Text>
+                            <Text
+                              style={[
+                                styles.modalValue,
+                                {color: modalValueColor},
+                              ]}>
+                              {selectedReservation.phone}
+                            </Text>
+                          </View>
+                        )}
+
+                        {selectedReservation.status !== '거절' && (
+                          <TouchableOpacity
+                            style={[
+                              styles.modalCancelButton,
+                              styles.cancelButtonBg,
+                            ]}
+                            onPress={() =>
+                              handleCancelReservation(selectedReservation.uuid)
+                            }>
+                            <Icon name="cancel" size={20} color="#FFFFFF" />
+                            <Text style={styles.modalCancelButtonText}>
+                              예약 취소
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </>
+                    );
+                  })()}
+              </ScrollView>
+            </Animated.View>
+          </GestureDetector>
+        </GestureHandlerRootView>
+      </Modal>
     </>
   );
 };
@@ -557,6 +815,130 @@ const styles = StyleSheet.create({
   scrollTopText: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  // New simplified item design
+  simpleReservationItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+  },
+  itemContent: {
+    flex: 1,
+  },
+  itemTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  itemSubtitle: {
+    fontSize: 14,
+    marginBottom: 2,
+  },
+  itemDateTime: {
+    fontSize: 12,
+    fontWeight: '400',
+  },
+  statusIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    marginLeft: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  // Modal styles
+  gestureContainer: {
+    flex: 1,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  modalOverlayAnimated: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: '80%',
+    minHeight: '50%',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  modalHeader: {
+    paddingTop: 12,
+  },
+  dragHandle: {
+    width: 40,
+    height: 4,
+    backgroundColor: '#D1D5DB',
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 12,
+  },
+  modalHeaderContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  closeButton: {
+    padding: 4,
+  },
+  modalBody: {
+    padding: 20,
+  },
+  modalDetailSection: {
+    marginBottom: 16,
+  },
+  modalLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 4,
+  },
+  modalValue: {
+    fontSize: 16,
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  modalCancelButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    marginTop: 12,
+    padding: 16,
+  },
+  modalCancelButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+  statusTextWithMargin: {
+    marginLeft: 8,
+  },
+  cancelButtonBg: {
+    backgroundColor: '#EF4444',
+  },
+  scrollTopButtonDark: {
+    backgroundColor: '#333',
+    shadowColor: '#000',
+  },
+  scrollTopButtonLight: {
+    backgroundColor: '#fff',
+    shadowColor: 'rgba(0, 0, 0, 0.3)',
   },
 });
 
