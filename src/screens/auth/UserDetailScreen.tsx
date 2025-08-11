@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useFocusEffect} from '@react-navigation/native';
 import axios from 'axios';
 
 import {RootStackParamList} from '@navigation/types';
@@ -19,6 +20,7 @@ import api from '@utils/api';
 import Environment from '@utils/environment';
 import {reset_auth} from '@utils/reset';
 import paxi_api from '@utils/paxi_api';
+import {PaxiUserMy} from '@interfaces/paxi';
 
 type UserDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserDetail'>;
@@ -30,7 +32,11 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userDataState, setUserData] = useState<any>(null);
   const [isPaxiUser, setIsPaxiUser] = useState<boolean>(false);
-  const [paxiUserData, setPaxiUserData] = useState<any>(null);
+  const [paxiUserData, setPaxiUserData] = useState<PaxiUserMy | null>(null);
+  const isPaxiAccountInfoExist =
+    paxiUserData?.bankName &&
+    paxiUserData?.accountNumber &&
+    paxiUserData?.accountHolderName;
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -89,28 +95,15 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
     }
   };
 
-  // 컴포넌트 마운트 시 프로필 정보 가져오기
-  useEffect(() => {
-    setIsLoading(true);
-    Promise.all([fetchUserProfile(), fetchPaxiInfo()]).finally(() => {
-      setIsLoading(false);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // 로컬에 저장된 사용자 정보로 UI 초기화
-  useEffect(() => {
-    const loadStoredUserInfo = async () => {
-      try {
-        const res = await api.get('/auth/myInfo');
-        setUserData(res.data);
-      } catch (error) {
-        console.error('저장된 사용자 정보 로드 오류:', error);
-      }
-    };
-
-    loadStoredUserInfo();
-  }, []);
+  // 화면에 포커스할 때마다 프로필 정보 가져오기
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsLoading(true);
+      Promise.all([fetchUserProfile(), fetchPaxiInfo()]).finally(() => {
+        setIsLoading(false);
+      });
+    }, []),
+  );
 
   return (
     <SafeAreaView style={backgroundStyle} edges={['top', 'left', 'right']}>
@@ -234,18 +227,30 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
 
               <View
                 style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
-                <Text
-                  style={[
-                    styles.detailLabel,
-                    {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-                  ]}>
-                  등록 계좌
-                </Text>
+                <View style={styles.detailHeader}>
+                  <Text
+                    style={[
+                      styles.detailLabel,
+                      {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                    ]}>
+                    등록 계좌
+                  </Text>
+                  <TouchableOpacity
+                    style={[
+                      styles.editButton,
+                      {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+                    ]}
+                    onPress={() => {
+                      navigation.navigate('UserAccountInfo');
+                    }}>
+                    <Text style={styles.editButtonText}>
+                      {isPaxiAccountInfoExist ? '수정' : '등록'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
                 <Text style={[styles.detailValue, {color: textColor}]}>
-                  {paxiUserData?.bankName &&
-                  paxiUserData?.accountNumber &&
-                  paxiUserData?.accountHolder
-                    ? `${paxiUserData?.bankName} ${paxiUserData?.accountNumber} (${paxiUserData?.accountHolder})`
+                  {isPaxiAccountInfoExist
+                    ? `${paxiUserData?.bankName} ${paxiUserData?.accountNumber} (${paxiUserData?.accountHolderName})`
                     : '정보 없음'}
                 </Text>
               </View>
@@ -465,6 +470,24 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  detailHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  editButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    minWidth: 50,
+    alignItems: 'center',
+  },
+  editButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 

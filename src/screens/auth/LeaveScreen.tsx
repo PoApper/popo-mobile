@@ -143,7 +143,14 @@ const LeaveScreen = ({navigation}: LeaveScreenProps) => {
           </Text>
         </View>
 
-        <View style={styles.warningContainer}>
+        <View
+          style={[
+            styles.warningContainer,
+            {
+              backgroundColor: isDarkMode ? '#2D1B1B' : '#FEF2F2',
+              borderColor: isDarkMode ? '#7F1D1D' : '#FECACA',
+            },
+          ]}>
           <Text style={[styles.warningTitle, {color: '#EF4444'}]}>
             ⚠️ 주의사항
           </Text>
@@ -179,8 +186,10 @@ const LeaveScreen = ({navigation}: LeaveScreenProps) => {
           <TouchableOpacity
             style={[
               styles.leaveButton,
-              {marginTop: 20},
-              isLoading && styles.leaveButtonDisabled,
+              {
+                marginTop: 20,
+                backgroundColor: isLoading ? '#FCA5A5' : '#EF4444',
+              },
             ]}
             onPress={handleLeave}
             disabled={isLoading}>
@@ -225,6 +234,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: 'Pretendard',
     textAlign: 'center',
+    marginTop: -12,
     marginBottom: 8,
   },
   subtitle: {
@@ -234,9 +244,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   warningContainer: {
-    backgroundColor: '#FEF2F2',
     borderWidth: 1,
-    borderColor: '#FECACA',
     borderRadius: 8,
     padding: 16,
     marginBottom: 24,
@@ -257,18 +265,15 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   textArea: {
-    backgroundColor: '#FFFFFF',
     minHeight: 80,
     borderWidth: 1,
     borderRadius: 6,
-    borderColor: '#D0D0D0',
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
   },
   leaveButton: {
     borderRadius: 6,
-    backgroundColor: '#EF4444',
     width: '100%',
     height: 44,
     justifyContent: 'center',
