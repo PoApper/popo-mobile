@@ -113,8 +113,6 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
     loadStoredUserInfo();
   }, []);
 
-  console.log('paxiUserData', paxiUserData);
-
   return (
     <SafeAreaView style={backgroundStyle} edges={['top', 'left', 'right']}>
       <StatusBar
@@ -237,13 +235,25 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
 
               <View
                 style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
-                <Text
-                  style={[
-                    styles.detailLabel,
-                    {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
-                  ]}>
-                  등록 계좌
-                </Text>
+                <View style={styles.detailHeader}>
+                  <Text
+                    style={[
+                      styles.detailLabel,
+                      {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                    ]}>
+                    등록 계좌
+                  </Text>
+                  <TouchableOpacity
+                    style={[
+                      styles.editButton,
+                      {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+                    ]}
+                    onPress={() => {
+                      navigation.navigate('UserAccountInfo');
+                    }}>
+                    <Text style={styles.editButtonText}>수정</Text>
+                  </TouchableOpacity>
+                </View>
                 <Text style={[styles.detailValue, {color: textColor}]}>
                   {paxiUserData?.bankName &&
                   paxiUserData?.accountNumber &&
@@ -462,6 +472,24 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  detailHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  editButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    minWidth: 50,
+    alignItems: 'center',
+  },
+  editButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 
