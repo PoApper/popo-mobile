@@ -54,6 +54,8 @@ SidebarModalProps) => {
 
   const isIamOwner = myUuid === roomData.ownerUuid;
   const roomPeopleCnt = roomData.currentParticipant;
+  const isSettlementRequestExist =
+    roomData.payerUuid != null && roomData.payerUuid.length > 0;
   const isIamPayer = roomData.payerUuid === myUuid;
 
   const handleClose = () => {
@@ -203,58 +205,73 @@ SidebarModalProps) => {
                 {/* Spacer to push logout button to bottom */}
                 <View style={{flex: 1}} />
 
-                {/* 채팅방 나가기/공유하기 버튼 */}
+                {/* 채팅방 나가기/완료하기 버튼 */}
                 <View
                   style={{
                     width: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}>
                   <TouchableOpacity
-                    style={styles.leaveRoomButton}
+                    style={[
+                      styles.leaveRoomButton,
+                      {opacity: isSettlementRequestExist ? 0.5 : 1},
+                    ]}
                     onPress={() => {
-                      Alert.alert('채팅방 나가기', '채팅방을 나가시겠습니까?', [
-                        {text: '취소', style: 'cancel'},
-                        {
-                          text: '나가기',
-                          onPress: () => {
-                            if (isIamOwner && roomPeopleCnt == 1) {
-                              paxi_api
-                                .delete(`/room/${roomData.uuid}`)
-                                .then(() => {
-                                  setModalVisible(false);
-                                  navigation.navigate('Main', {
-                                    tab: 'MyReservation',
-                                  });
-                                })
-                                .catch(err => {
-                                  console.error(
-                                    `자신이 소유한 채팅방(${roomData.uuid}) 나가기 실패`,
-                                    err,
-                                  );
-                                  Alert.alert(
-                                    '채팅방 나가기 실패',
-                                    `채팅방 나가기에 실패했습니다.\n${err.response.data.message}`,
-                                  );
-                                });
-                            } else {
-                              paxi_api
-                                .put(`/room/leave/${roomData.uuid}`)
-                                .then(() => {
-                                  setModalVisible(false);
-                                  navigation.navigate('Home');
-                                })
-                                .catch(err => {
-                                  console.error('채팅방 나가기 실패', err);
-                                  Alert.alert(
-                                    '채팅방 나가기 실패',
-                                    `채팅방 나가기에 실패했습니다.\n${err.response.data.message}`,
-                                  );
-                                });
-                            }
-                          },
-                        },
-                      ]);
+                      if (isSettlementRequestExist) {
+                        Alert.alert(
+                          '생성된 정산 요청이 있습니다.',
+                          '정산 요청이 있는 채팅방은 나갈 수 없습니다.\n정산이 완료된 후, 정산자가 채팅방을 직접 마감해주세요.',
+                        );
+                      } else {
+                        Alert.alert(
+                          '채팅방 나가기',
+                          '채팅방을 나가시겠습니까?',
+                          [
+                            {text: '취소', style: 'cancel'},
+                            {
+                              text: '나가기',
+                              onPress: () => {
+                                if (isIamOwner && roomPeopleCnt == 1) {
+                                  paxi_api
+                                    .delete(`/room/${roomData.uuid}`)
+                                    .then(() => {
+                                      setModalVisible(false);
+                                      navigation.navigate('Main', {
+                                        tab: 'MyReservation',
+                                      });
+                                    })
+                                    .catch(err => {
+                                      console.error(
+                                        `자신이 소유한 채팅방(${roomData.uuid}) 나가기 실패`,
+                                        err,
+                                      );
+                                      Alert.alert(
+                                        '채팅방 나가기 실패',
+                                        `채팅방 나가기에 실패했습니다.\n${err.response.data.message}`,
+                                      );
+                                    });
+                                } else {
+                                  paxi_api
+                                    .put(`/room/leave/${roomData.uuid}`)
+                                    .then(() => {
+                                      setModalVisible(false);
+                                      navigation.navigate('Home');
+                                    })
+                                    .catch(err => {
+                                      console.error('채팅방 나가기 실패', err);
+                                      Alert.alert(
+                                        '채팅방 나가기 실패',
+                                        `채팅방 나가기에 실패했습니다.\n${err.response.data.message}`,
+                                      );
+                                    });
+                                }
+                              },
+                            },
+                          ],
+                        );
+                      }
                     }}>
                     <Icon
                       name="logout"
@@ -262,6 +279,43 @@ SidebarModalProps) => {
                       color={textColor(isDarkMode)}
                     />
                   </TouchableOpacity>
+
+                  {/* 정산 완료 버튼 */}
+                  {isIamPayer && (
+                    <TouchableOpacity
+                      style={[
+                        styles.completeSettlementButton,
+                        {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+                      ]}
+                      onPress={() => {
+                        paxi_api
+                          .patch(`/room/${roomData.uuid}/complete`)
+                          .then(() => {
+                            Alert.alert('정산 완료', '정산이 완료되었습니다.', [
+                              {
+                                text: '확인',
+                                onPress: () => {
+                                  setModalVisible(false);
+                                  navigation.navigate('Main', {
+                                    tab: 'MyReservation',
+                                  });
+                                },
+                              },
+                            ]);
+                          })
+                          .catch(err => {
+                            console.error('정산 완료 실패', err);
+                            Alert.alert(
+                              '정산 완료 실패',
+                              `정산 완료에 실패했습니다.\n${err.response.data.message}`,
+                            );
+                          });
+                      }}>
+                      <Text style={styles.completeSettlementButtonText}>
+                        정산 완료
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </Pressable>
             </SafeAreaView>
@@ -505,6 +559,18 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 6,
     marginLeft: 6,
+  },
+  completeSettlementButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  completeSettlementButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 
