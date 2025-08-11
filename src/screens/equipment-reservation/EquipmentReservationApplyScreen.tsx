@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  TouchableWithoutFeedback,
   Keyboard,
   Platform,
   ActivityIndicator,
@@ -92,7 +91,7 @@ const EquipmentReservationApplyScreen = ({
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [tempEndTime, setTempEndTime] = useState(new Date());
-  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
+  const scrollViewRef = useRef<any>(null);
   const [showEquipmentList, setShowEquipmentList] = useState(false);
   const [reservedEquipments, setReservedEquipments] = useState<string[]>([]);
   const [loadingReservations, setLoadingReservations] = useState(false);
@@ -187,9 +186,9 @@ const EquipmentReservationApplyScreen = ({
     const now = new Date();
     const roundedTime = roundUpToNearest30Minutes(now);
     setStartTime(roundedTime);
-    const endTime = new Date(roundedTime);
-    endTime.setMinutes(endTime.getMinutes() + 30);
-    setEndTime(endTime);
+    const newEndTime = new Date(roundedTime);
+    newEndTime.setMinutes(newEndTime.getMinutes() + 30);
+    setEndTime(newEndTime);
   }, []);
 
   // 종료 시간이 시작 시간보다 빠르면 자동 보정
@@ -434,404 +433,365 @@ const EquipmentReservationApplyScreen = ({
   const keyExtractor = useCallback((item: IEquipment) => item.uuid, []);
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        if (showEquipmentList) {
-          setShowEquipmentList(false);
-        }
-        Keyboard.dismiss();
-      }}>
-      <SafeAreaView style={backgroundStyle}>
-        <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor={backgroundStyle.backgroundColor}
-        />
-        <View style={[styles.header, {borderBottomColor: borderColor}]}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}>
-            <Text style={[styles.backButtonText, {color: textColor}]}>
-              뒤로
-            </Text>
-          </TouchableOpacity>
-          <Text style={[styles.headerTitle, {color: textColor}]}>
-            장비 예약:{' '}
-            {association === 'dormunion' ? '생활관자치회' : '동아리연합회'}
+    <SafeAreaView style={backgroundStyle}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
+      <View style={[styles.header, {borderBottomColor: borderColor}]}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
+          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+        </TouchableOpacity>
+        <Text style={[styles.headerTitle, {color: textColor}]}>
+          장비 예약:{' '}
+          {association === 'dormunion' ? '생활관자치회' : '동아리연합회'}
+        </Text>
+        <View style={styles.placeholderButton} />
+      </View>
+
+      <KeyboardAwareScrollView
+        ref={scrollViewRef}
+        contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+        extraScrollHeight={20}
+        extraHeight={120}>
+        {/* 공지사항 섹션 */}
+        <View
+          style={[
+            styles.noticeSection,
+            {
+              borderColor: noticeBorderColor,
+              backgroundColor: noticeBackgroundColor,
+            },
+          ]}>
+          <Text style={[styles.noticeTitle, {color: textColor}]}>
+            📢 예약 공지사항
           </Text>
-          <View style={styles.placeholderButton} />
+          {association === 'dormunion' ? (
+            <View style={styles.noticeContent}>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                예약한 장비는 생활관자치회 사무실(생활관 4동)에서 수령하실 수
+                있습니다. 🏢️
+              </Text>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                장비가 분실되거나 예약 시간을 초과할 경우, 차후 예약에 제한을 둘
+                수 있습니다. 🚨
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.noticeContent}>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                <Text style={styles.noticeBold}>물품 대여 순서 :</Text> POPO
+                신청&입금 - 카카오톡 채널 입장 - 승인 - 대여&반납
+              </Text>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                <Text style={styles.noticeBold}>예약비 입금 계좌 :</Text>{' '}
+                부산은행 1122244813601 (안강현)
+              </Text>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                *입금자명은 예약자명과 동일하게 해주세요.
+              </Text>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                예약금 납부 후, 카카오톡 채널에 입장하여 대여자명 / 대여일 /
+                대여품목 / 송금 화면 발송
+              </Text>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                <Text style={styles.noticeBold}>카카오톡 채널 링크 :</Text>{' '}
+                동아리연합회 2025
+              </Text>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                <Text style={styles.noticeBold}>예시</Text>
+                {'\n'}
+                정종민{'\n'}
+                3월 10일 월요일{'\n'}
+                메인스피커1 / 오디오 인터페이스 / 유선 보컬 마이크 1~3
+              </Text>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                <Text style={styles.noticeBold}>대여/반납 시간 :</Text> 월 ~ 금
+                / 12:30 ~ 13:30
+              </Text>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                *그 외 시간에 대여와 반납은 어렵습니다.
+              </Text>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                <Text style={styles.noticeBold}>수령 장소 :</Text> 동아리연합회
+                사무실(학생회관 301호)
+              </Text>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                장비 분실 및 반납 시간을 어길 시 책임을 물을 수 있습니다.
+              </Text>
+              <Text style={[styles.noticeText, {color: textColor}]}>
+                <Text style={styles.noticeBold}>문의 :</Text> (운영관리부장
+                장현웅) 010-5917-8295
+              </Text>
+            </View>
+          )}
         </View>
 
-        <KeyboardAwareScrollView
-          ref={scrollViewRef}
-          contentContainerStyle={styles.scrollContainer}
-          keyboardShouldPersistTaps="handled"
-          enableOnAndroid={true}
-          enableAutomaticScroll={true}
-          extraScrollHeight={20}
-          extraHeight={120}>
-          {/* 공지사항 섹션 */}
-          <View
-            style={[
-              styles.noticeSection,
-              {
-                borderColor: noticeBorderColor,
-                backgroundColor: noticeBackgroundColor,
-              },
-            ]}>
-            <Text style={[styles.noticeTitle, {color: textColor}]}>
-              📢 예약 공지사항
-            </Text>
-            {association === 'dormunion' ? (
-              <View style={styles.noticeContent}>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  예약한 장비는 생활관자치회 사무실(생활관 4동)에서 수령하실 수
-                  있습니다. 🏢️
-                </Text>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  장비가 분실되거나 예약 시간을 초과할 경우, 차후 예약에 제한을
-                  둘 수 있습니다. 🚨
-                </Text>
-              </View>
+        <View style={styles.formSection}>
+          <Text style={[styles.label, {color: textColor}]}>
+            사용자 <Text style={styles.requiredText}>*</Text>
+          </Text>
+          <View style={styles.userInfoContainer}>
+            {userLoading ? (
+              <ActivityIndicator size="small" color={subTextColor} />
             ) : (
-              <View style={styles.noticeContent}>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  <Text style={styles.noticeBold}>물품 대여 순서 :</Text> POPO
-                  신청&입금 - 카카오톡 채널 입장 - 승인 - 대여&반납
-                </Text>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  <Text style={styles.noticeBold}>예약비 입금 계좌 :</Text>{' '}
-                  부산은행 1122244813601 (안강현)
-                </Text>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  *입금자명은 예약자명과 동일하게 해주세요.
-                </Text>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  예약금 납부 후, 카카오톡 채널에 입장하여 대여자명 / 대여일 /
-                  대여품목 / 송금 화면 발송
-                </Text>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  <Text style={styles.noticeBold}>카카오톡 채널 링크 :</Text>{' '}
-                  동아리연합회 2025
-                </Text>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  <Text style={styles.noticeBold}>예시</Text>
-                  {'\n'}
-                  정종민{'\n'}
-                  3월 10일 월요일{'\n'}
-                  메인스피커1 / 오디오 인터페이스 / 유선 보컬 마이크 1~3
-                </Text>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  <Text style={styles.noticeBold}>대여/반납 시간 :</Text> 월 ~
-                  금 / 12:30 ~ 13:30
-                </Text>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  *그 외 시간에 대여와 반납은 어렵습니다.
-                </Text>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  <Text style={styles.noticeBold}>수령 장소 :</Text>{' '}
-                  동아리연합회 사무실(학생회관 301호)
-                </Text>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  장비 분실 및 반납 시간을 어길 시 책임을 물을 수 있습니다.
-                </Text>
-                <Text style={[styles.noticeText, {color: textColor}]}>
-                  <Text style={styles.noticeBold}>문의 :</Text> (운영관리부장
-                  장현웅) 010-5917-8295
-                </Text>
-              </View>
+              <TextInput
+                style={[
+                  styles.input,
+                  styles.disabledInput,
+                  {
+                    color: isDarkMode ? '#888888' : '#AAA',
+                    backgroundColor: disabledInputBackgroundColor,
+                  },
+                ]}
+                value={userName}
+                editable={false}
+                placeholder="이름"
+                placeholderTextColor={subTextColor}
+              />
             )}
           </View>
-          <View style={styles.formSection}>
-            <Text style={[styles.label, {color: textColor}]}>
-              사용자 <Text style={{color: '#FB5353'}}>*</Text>
-            </Text>
-            <View style={styles.userInfoContainer}>
-              {userLoading ? (
-                <ActivityIndicator size="small" color={subTextColor} />
-              ) : (
-                <TextInput
+          <Text style={[styles.label, {color: textColor}]}>
+            전화번호 <Text style={styles.requiredText}>*</Text>
+          </Text>
+          <TextInput
+            style={[
+              styles.input,
+              {
+                color: textColor,
+                backgroundColor: inputBackgroundColor,
+              },
+            ]}
+            value={phone}
+            onChangeText={setPhone}
+            placeholder="010-xxxx-xxxx"
+            placeholderTextColor={subTextColor}
+            keyboardType="phone-pad"
+            maxLength={13}
+          />
+          <Text style={[styles.label, {color: textColor}]}>
+            예약 제목 <Text style={styles.requiredText}>*</Text>
+          </Text>
+          <TextInput
+            style={[
+              styles.input,
+              {
+                color: textColor,
+                backgroundColor: inputBackgroundColor,
+              },
+            ]}
+            value={title}
+            onChangeText={setTitle}
+            placeholder="예약 제목을 입력하세요"
+            placeholderTextColor={subTextColor}
+          />
+          <Text style={[styles.label, {color: textColor}]}>
+            설명 <Text style={styles.requiredText}>*</Text>
+          </Text>
+          <TextInput
+            style={[
+              styles.input,
+              styles.descriptionInput,
+              {
+                color: textColor,
+                backgroundColor: inputBackgroundColor,
+              },
+            ]}
+            value={desc}
+            onChangeText={setDesc}
+            placeholder="사용처를 반드시 작성 해주세요."
+            placeholderTextColor={subTextColor}
+            multiline
+          />
+          <Text style={[styles.label, {color: textColor}]}>
+            장비 선택 <Text style={styles.requiredText}>*</Text>
+          </Text>
+          <TouchableOpacity
+            style={[
+              styles.input,
+              styles.equipmentSelector,
+              {
+                backgroundColor: inputBackgroundColor,
+              },
+            ]}
+            onPress={openEquipListPicker}
+            activeOpacity={0.8}>
+            {selectedEquipments.length > 0 ? (
+              selectedEquipments.map(equip => (
+                <View
+                  key={equip.uuid}
                   style={[
-                    styles.input,
-                    styles.disabledInput,
-                    {
-                      color: isDarkMode ? '#888888' : '#AAA',
-                      backgroundColor: disabledInputBackgroundColor,
-                    },
-                  ]}
-                  value={userName}
-                  editable={false}
-                  placeholder="이름"
-                  placeholderTextColor={subTextColor}
+                    styles.selectedEquipmentItem,
+                    {backgroundColor: isDarkMode ? '#3a3a3a' : '#E5E7EB'},
+                  ]}>
+                  <Text
+                    style={[styles.selectedEquipmentText, {color: textColor}]}>
+                    {equip.name}
+                  </Text>
+                  <TouchableOpacity onPress={() => toggleEquipment(equip)}>
+                    <Text style={styles.removeButtonText}>×</Text>
+                  </TouchableOpacity>
+                </View>
+              ))
+            ) : (
+              <Text style={[styles.placeholderText, {color: subTextColor}]}>
+                예약할 장비들을 선택해주세요.
+              </Text>
+            )}
+          </TouchableOpacity>
+          {showEquipmentList && (
+            <View style={styles.equipmentListScrollView}>
+              {loadingReservations ? (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="small" color={subTextColor} />
+                  <Text style={[styles.loadingText, {color: subTextColor}]}>
+                    예약 상태 확인 중...
+                  </Text>
+                </View>
+              ) : (
+                <FlatList
+                  data={equipmentList}
+                  renderItem={renderEquipmentItem}
+                  keyExtractor={keyExtractor}
+                  style={{maxHeight: 200}}
+                  removeClippedSubviews={true}
+                  initialNumToRender={5}
+                  maxToRenderPerBatch={3}
+                  windowSize={5}
+                  ListEmptyComponent={
+                    <Text style={[styles.emptyListText, {color: subTextColor}]}>
+                      장비가 없습니다.
+                    </Text>
+                  }
                 />
               )}
             </View>
-            <Text style={[styles.label, {color: textColor}]}>
-              전화번호 <Text style={{color: '#FB5353'}}>*</Text>
-            </Text>
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  color: textColor,
-                  backgroundColor: inputBackgroundColor,
-                },
-              ]}
-              value={phone}
-              onChangeText={setPhone}
-              placeholder="010-xxxx-xxxx"
-              placeholderTextColor={subTextColor}
-              keyboardType="phone-pad"
-              maxLength={13}
-            />
-            <Text style={[styles.label, {color: textColor}]}>
-              예약 제목 <Text style={{color: '#FB5353'}}>*</Text>
-            </Text>
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  color: textColor,
-                  backgroundColor: inputBackgroundColor,
-                },
-              ]}
-              value={title}
-              onChangeText={setTitle}
-              placeholder="예약 제목을 입력하세요"
-              placeholderTextColor={subTextColor}
-            />
-            <Text style={[styles.label, {color: textColor}]}>
-              설명 <Text style={{color: '#FB5353'}}>*</Text>
-            </Text>
-            <TextInput
-              style={[
-                styles.input,
-                styles.descriptionInput,
-                {
-                  color: textColor,
-                  backgroundColor: inputBackgroundColor,
-                },
-              ]}
-              value={desc}
-              onChangeText={setDesc}
-              placeholder="사용처를 반드시 작성 해주세요."
-              placeholderTextColor={subTextColor}
-              multiline
-            />
-            <Text style={[styles.label, {color: textColor}]}>
-              장비 선택 <Text style={{color: '#FB5353'}}>*</Text>
-            </Text>
-            <TouchableOpacity
-              style={[
-                styles.input,
-                styles.equipmentSelector,
-                {
-                  backgroundColor: inputBackgroundColor,
-                },
-              ]}
-              onPress={openEquipListPicker}
-              activeOpacity={0.8}>
-              {selectedEquipments.length > 0 ? (
-                selectedEquipments.map(equip => (
-                  <View
-                    key={equip.uuid}
-                    style={[
-                      styles.selectedEquipmentItem,
-                      {backgroundColor: isDarkMode ? '#3a3a3a' : '#E5E7EB'},
-                    ]}>
-                    <Text
-                      style={[
-                        styles.selectedEquipmentText,
-                        {color: textColor},
-                      ]}>
-                      {equip.name}
-                    </Text>
-                    <TouchableOpacity onPress={() => toggleEquipment(equip)}>
-                      <Text style={styles.removeButtonText}>×</Text>
-                    </TouchableOpacity>
-                  </View>
-                ))
-              ) : (
-                <Text style={[styles.placeholderText, {color: subTextColor}]}>
-                  예약할 장비들을 선택해주세요.
-                </Text>
-              )}
-            </TouchableOpacity>
-            {showEquipmentList && (
-              <View style={styles.equipmentListScrollView}>
-                {loadingReservations ? (
-                  <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color={subTextColor} />
-                    <Text style={[styles.loadingText, {color: subTextColor}]}>
-                      예약 상태 확인 중...
-                    </Text>
-                  </View>
-                ) : (
-                  <FlatList
-                    data={equipmentList}
-                    renderItem={renderEquipmentItem}
-                    keyExtractor={keyExtractor}
-                    style={{maxHeight: 200}}
-                    removeClippedSubviews={true}
-                    initialNumToRender={5}
-                    maxToRenderPerBatch={3}
-                    windowSize={5}
-                    ListEmptyComponent={
-                      <Text
-                        style={[styles.emptyListText, {color: subTextColor}]}>
-                        장비가 없습니다.
-                      </Text>
-                    }
-                  />
-                )}
-              </View>
-            )}
-            {/* 날짜/시간 선택 */}
-            <View style={styles.dateTimePickerContainer}>
-              <View style={styles.datePickerWrapper}>
-                <Text
-                  style={[styles.label, {color: textColor, marginBottom: 13}]}>
-                  날짜 <Text style={{color: '#FB5353'}}>*</Text>
-                </Text>
-                <TouchableOpacity
-                  onPress={openDatePicker}
-                  style={[
-                    styles.input,
-                    {
-                      backgroundColor: inputBackgroundColor,
-                      borderColor: showDatePicker ? '#FB5353' : borderColor,
-                    },
-                  ]}>
-                  <Text style={[styles.datePickerText, {color: textColor}]}>
-                    {formatDate(date)}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.timePickerWrapper}>
-                <Text
-                  style={[styles.label, {color: textColor, marginBottom: 13}]}>
-                  시작 시간 <Text style={{color: '#FB5353'}}>*</Text>
-                </Text>
-                <TouchableOpacity
-                  onPress={openStartPicker}
-                  style={[
-                    styles.input,
-                    {
-                      backgroundColor: inputBackgroundColor,
-                      borderColor: showStartPicker ? '#FB5353' : borderColor,
-                    },
-                  ]}>
-                  <Text style={[styles.datePickerText, {color: textColor}]}>
-                    {startTime.toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.timePickerWrapper}>
-                <Text
-                  style={[styles.label, {color: textColor, marginBottom: 13}]}>
-                  종료 시간 <Text style={{color: '#FB5353'}}>*</Text>
-                </Text>
-                <TouchableOpacity
-                  onPress={openEndPicker}
-                  style={[
-                    styles.input,
-                    {
-                      backgroundColor: inputBackgroundColor,
-                      borderColor: showEndPicker ? '#FB5353' : borderColor,
-                    },
-                  ]}>
-                  <Text style={[styles.datePickerText, {color: textColor}]}>
-                    {endTime.toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            {/* DateTimePicker 및 예외처리 */}
-            {showDatePicker && (
-              <DateTimePicker
-                value={tempDate}
-                mode="date"
-                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                minimumDate={new Date()}
-                maximumDate={
-                  new Date(new Date().setDate(new Date().getDate() + 30))
-                }
-                locale="ko-KR"
-                onChange={(event, selectedDate) => {
-                  if (Platform.OS === 'android') {
-                    if (event.type === 'set' && selectedDate) {
-                      setShowDatePicker(false);
-                      setDate(selectedDate);
-                    } else if (event.type === 'dismissed') {
-                      setShowDatePicker(false);
-                    }
-                  } else {
-                    if (selectedDate) {
-                      setTempDate(selectedDate);
-                    }
-                  }
-                }}
-                onTouchCancel={() => setShowDatePicker(false)}
-              />
-            )}
-            {showDatePicker && Platform.OS === 'ios' && (
+          )}
+          {/* 날짜/시간 선택 */}
+          <View style={styles.dateTimePickerContainer}>
+            <View style={styles.datePickerWrapper}>
+              <Text
+                style={[styles.label, styles.pickerLabel, {color: textColor}]}>
+                날짜 <Text style={styles.requiredText}>*</Text>
+              </Text>
               <TouchableOpacity
-                style={styles.iosPickerConfirmButton}
-                onPress={() => {
-                  setShowDatePicker(false);
-                  setDate(tempDate);
-                }}>
-                <Text style={styles.iosPickerConfirmText}>확인</Text>
+                onPress={openDatePicker}
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor: inputBackgroundColor,
+                    borderColor: showDatePicker ? '#FB5353' : borderColor,
+                  },
+                ]}>
+                <Text style={[styles.datePickerText, {color: textColor}]}>
+                  {formatDate(date)}
+                </Text>
               </TouchableOpacity>
-            )}
-            {showStartPicker && (
-              <DateTimePicker
-                value={tempStartTime}
-                mode="time"
-                is24Hour
-                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                minuteInterval={30}
-                onChange={(event, selected) => {
-                  if (Platform.OS === 'android') {
-                    if (event.type === 'set' && selected) {
-                      setShowStartPicker(false);
-                      const roundedTime = roundUpToNearest30Minutes(selected);
-                      if (isTimeAfterNow(date, roundedTime)) {
-                        setStartTime(roundedTime);
-                        const newEndTime = new Date(roundedTime);
-                        newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                        setEndTime(newEndTime);
-                      } else {
-                        Alert.alert(
-                          '알림',
-                          '현재 시간보다 이후의 시간을 선택해주세요.',
-                        );
-                      }
-                    } else if (event.type === 'dismissed') {
-                      setShowStartPicker(false);
-                    }
-                  } else {
-                    if (selected) {
-                      setTempStartTime(roundUpToNearest30Minutes(selected));
-                    }
-                  }
-                }}
-                onTouchCancel={() => setShowStartPicker(false)}
-              />
-            )}
-            {showStartPicker && Platform.OS === 'ios' && (
+            </View>
+            <View style={styles.timePickerWrapper}>
+              <Text
+                style={[styles.label, styles.pickerLabel, {color: textColor}]}>
+                시작 시간 <Text style={styles.requiredText}>*</Text>
+              </Text>
               <TouchableOpacity
-                style={styles.iosPickerConfirmButton}
-                onPress={() => {
+                onPress={openStartPicker}
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor: inputBackgroundColor,
+                    borderColor: showStartPicker ? '#FB5353' : borderColor,
+                  },
+                ]}>
+                <Text style={[styles.datePickerText, {color: textColor}]}>
+                  {startTime.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.timePickerWrapper}>
+              <Text
+                style={[styles.label, styles.pickerLabel, {color: textColor}]}>
+                종료 시간 <Text style={styles.requiredText}>*</Text>
+              </Text>
+              <TouchableOpacity
+                onPress={openEndPicker}
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor: inputBackgroundColor,
+                    borderColor: showEndPicker ? '#FB5353' : borderColor,
+                  },
+                ]}>
+                <Text style={[styles.datePickerText, {color: textColor}]}>
+                  {endTime.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+        {/* DateTimePicker 및 예외처리 */}
+        {showDatePicker && (
+          <DateTimePicker
+            value={tempDate}
+            mode="date"
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            minimumDate={new Date()}
+            maximumDate={
+              new Date(new Date().setDate(new Date().getDate() + 30))
+            }
+            locale="ko-KR"
+            onChange={(event, selectedDate) => {
+              if (Platform.OS === 'android') {
+                if (event.type === 'set' && selectedDate) {
+                  setShowDatePicker(false);
+                  setDate(selectedDate);
+                } else if (event.type === 'dismissed') {
+                  setShowDatePicker(false);
+                }
+              } else {
+                if (selectedDate) {
+                  setTempDate(selectedDate);
+                }
+              }
+            }}
+            onTouchCancel={() => setShowDatePicker(false)}
+          />
+        )}
+        {showDatePicker && Platform.OS === 'ios' && (
+          <TouchableOpacity
+            style={styles.iosPickerConfirmButton}
+            onPress={() => {
+              setShowDatePicker(false);
+              setDate(tempDate);
+            }}>
+            <Text style={styles.iosPickerConfirmText}>확인</Text>
+          </TouchableOpacity>
+        )}
+        {showStartPicker && (
+          <DateTimePicker
+            value={tempStartTime}
+            mode="time"
+            is24Hour
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            minuteInterval={30}
+            onChange={(event, selected) => {
+              if (Platform.OS === 'android') {
+                if (event.type === 'set' && selected) {
                   setShowStartPicker(false);
-                  if (isTimeAfterNow(date, tempStartTime)) {
-                    setStartTime(tempStartTime);
-                    const newEndTime = new Date(tempStartTime);
+                  const roundedTime = roundUpToNearest30Minutes(selected);
+                  if (isTimeAfterNow(date, roundedTime)) {
+                    setStartTime(roundedTime);
+                    const newEndTime = new Date(roundedTime);
                     newEndTime.setMinutes(newEndTime.getMinutes() + 30);
                     setEndTime(newEndTime);
                   } else {
@@ -840,79 +800,105 @@ const EquipmentReservationApplyScreen = ({
                       '현재 시간보다 이후의 시간을 선택해주세요.',
                     );
                   }
-                }}>
-                <Text style={styles.iosPickerConfirmText}>확인</Text>
-              </TouchableOpacity>
-            )}
-            {showEndPicker && (
-              <DateTimePicker
-                value={tempEndTime}
-                mode="time"
-                is24Hour
-                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                minuteInterval={30}
-                minimumDate={startTime}
-                onChange={(event, selected) => {
-                  if (Platform.OS === 'android') {
-                    if (event.type === 'set' && selected) {
-                      setShowEndPicker(false);
-                      setEndTime(roundUpToNearest30Minutes(selected));
-                    } else if (event.type === 'dismissed') {
-                      setShowEndPicker(false);
-                    }
-                  } else {
-                    if (selected) {
-                      setTempEndTime(roundUpToNearest30Minutes(selected));
-                    }
-                  }
-                }}
-                onTouchCancel={() => setShowEndPicker(false)}
-              />
-            )}
-            {showEndPicker && Platform.OS === 'ios' && (
-              <TouchableOpacity
-                style={styles.iosPickerConfirmButton}
-                onPress={() => {
+                } else if (event.type === 'dismissed') {
+                  setShowStartPicker(false);
+                }
+              } else {
+                if (selected) {
+                  setTempStartTime(roundUpToNearest30Minutes(selected));
+                }
+              }
+            }}
+            onTouchCancel={() => setShowStartPicker(false)}
+          />
+        )}
+        {showStartPicker && Platform.OS === 'ios' && (
+          <TouchableOpacity
+            style={styles.iosPickerConfirmButton}
+            onPress={() => {
+              setShowStartPicker(false);
+              if (isTimeAfterNow(date, tempStartTime)) {
+                setStartTime(tempStartTime);
+                const newEndTime = new Date(tempStartTime);
+                newEndTime.setMinutes(newEndTime.getMinutes() + 30);
+                setEndTime(newEndTime);
+              } else {
+                Alert.alert(
+                  '알림',
+                  '현재 시간보다 이후의 시간을 선택해주세요.',
+                );
+              }
+            }}>
+            <Text style={styles.iosPickerConfirmText}>확인</Text>
+          </TouchableOpacity>
+        )}
+        {showEndPicker && (
+          <DateTimePicker
+            value={tempEndTime}
+            mode="time"
+            is24Hour
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            minuteInterval={30}
+            minimumDate={startTime}
+            onChange={(event, selected) => {
+              if (Platform.OS === 'android') {
+                if (event.type === 'set' && selected) {
                   setShowEndPicker(false);
-                  if (tempEndTime > startTime) {
-                    setEndTime(tempEndTime);
-                  } else {
-                    const newEndTime = new Date(startTime);
-                    newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                    setEndTime(newEndTime);
-                  }
-                }}>
-                <Text style={styles.iosPickerConfirmText}>확인</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-          {/* 하단 버튼 */}
-          <View
-            style={[
-              styles.bottomButtonContainer,
-              {backgroundColor: backgroundStyle.backgroundColor},
-            ]}>
-            {selectedEquipments.length > 0 && (
-              <View style={styles.totalPriceContainer}>
-                <View style={styles.totalPriceWrapper}>
-                  <Text style={[styles.totalPriceLabel, {color: textColor}]}>
-                    총 예약비
-                  </Text>
-                  <Text style={styles.totalPriceValue}>
-                    {totalPrice.toLocaleString()}원
-                  </Text>
-                </View>
+                  setEndTime(roundUpToNearest30Minutes(selected));
+                } else if (event.type === 'dismissed') {
+                  setShowEndPicker(false);
+                }
+              } else {
+                if (selected) {
+                  setTempEndTime(roundUpToNearest30Minutes(selected));
+                }
+              }
+            }}
+            onTouchCancel={() => setShowEndPicker(false)}
+          />
+        )}
+        {showEndPicker && Platform.OS === 'ios' && (
+          <TouchableOpacity
+            style={styles.iosPickerConfirmButton}
+            onPress={() => {
+              setShowEndPicker(false);
+              if (tempEndTime > startTime) {
+                setEndTime(tempEndTime);
+              } else {
+                const newEndTime = new Date(startTime);
+                newEndTime.setMinutes(newEndTime.getMinutes() + 30);
+                setEndTime(newEndTime);
+              }
+            }}>
+            <Text style={styles.iosPickerConfirmText}>확인</Text>
+          </TouchableOpacity>
+        )}
+        {/* 하단 버튼 */}
+        <View
+          style={[
+            styles.bottomButtonContainer,
+            {backgroundColor: backgroundStyle.backgroundColor},
+          ]}>
+          {selectedEquipments.length > 0 && (
+            <View style={styles.totalPriceContainer}>
+              <View style={styles.totalPriceWrapper}>
+                <Text style={[styles.totalPriceLabel, {color: textColor}]}>
+                  총 예약비
+                </Text>
+                <Text style={styles.totalPriceValue}>
+                  {totalPrice.toLocaleString()}원
+                </Text>
               </View>
-            )}
-            <TouchableOpacity
-              style={styles.reservationButton}
-              onPress={handleReservation}>
-              <Text style={styles.reservationButtonText}>예약 생성하기</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
+            </View>
+          )}
+          <TouchableOpacity
+            style={styles.reservationButton}
+            onPress={handleReservation}>
+            <Text style={styles.reservationButtonText}>예약 생성하기</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -950,6 +936,12 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginBottom: 4,
     marginTop: 8,
+  },
+  pickerLabel: {
+    marginBottom: 13,
+  },
+  requiredText: {
+    color: '#FB5353',
   },
   input: {
     borderRadius: 8,

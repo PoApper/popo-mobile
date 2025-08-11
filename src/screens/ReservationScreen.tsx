@@ -72,11 +72,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   useFocusEffect(
     useCallback(() => {
       setRefreshKey(prev => prev + 1);
-      // 탭 포커스 시에도 새로고침 효과 표시
-      setRefreshing(true);
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 500);
+      // 새로고침은 하되 시각적 제스처는 표시하지 않음
     }, []),
   );
 
