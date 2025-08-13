@@ -8,9 +8,9 @@ import {
   useColorScheme,
   StatusBar,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import moment from 'moment';
@@ -59,6 +59,25 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [isTimePickerVisible, setTimePickerVisible] = useState(false);
 
+  const isDarkMode = useColorScheme() === 'dark';
+
+  // ---- Palette & tokens ----
+  const C = {
+    bg: isDarkMode ? '#0E0F10' : '#FFFFFF',
+    card: isDarkMode ? '#161718' : '#F7F7F8',
+    text: isDarkMode ? '#EDEDED' : '#101113',
+    textSub: isDarkMode ? '#A7A7AD' : '#6B6F76',
+    border: isDarkMode ? '#2A2C2F' : '#E5E7EB',
+    borderStrong: isDarkMode ? '#3A3D41' : '#D1D5DB',
+    inputText: isDarkMode ? '#D0D0D3' : '#1F2328',
+    placeholder: isDarkMode ? '#5B6066' : '#B7BBC2',
+    accent: '#FB5353',
+    dotRed: '#FF5757',
+    dotBlack: isDarkMode ? '#FFFFFF' : '#111111',
+    press: isDarkMode ? '#1C1E22' : '#EFEFF1',
+    disabled: isDarkMode ? '#2A2C2F' : '#ECEDEF',
+  };
+
   async function createNewRoom() {
     const body: NewRoomBody = {
       title: roomName,
@@ -86,8 +105,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
         }
       })
       .catch(error => {
-        // const status = error.response.status;
-        const message = error.response.data.message;
+        const message = error?.response?.data?.message ?? '알 수 없는 오류';
         Alert.alert('실패', `방을 생성하는데 실패했습니다:\n${message}`);
       });
   }
@@ -160,52 +178,57 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
     }
   };
 
-  const isDarkMode = useColorScheme() === 'dark';
-  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
-  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
+  const inputBase = {
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 14,
+    fontSize: 16,
+    color: C.inputText,
+    borderColor: C.border,
+    backgroundColor: isDarkMode ? '#121315' : '#FFFFFF',
+  } as const;
 
-  const TextInputStyle = [
-    {
-      color: isDarkMode ? '#888888' : '#AAA',
-      borderColor: borderColor,
-    },
-  ];
+  const disabledCreate =
+    !roomName || !departureName || !arrivalName || !selectedDateTime;
 
   return (
-    <SafeAreaView
-      style={{flex: 1, backgroundColor: isDarkMode ? '#121212' : '#fff'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: C.bg}}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={isDarkMode ? '#121212' : '#fff'}
+        backgroundColor={C.bg}
       />
       <CommonHeader navigation={navigation} title="방 생성하기" />
-      <KeyboardAwareScrollView
-        contentContainerStyle={styles.container}
+      <ScrollView
+        style={{flex: 1}}
+        contentContainerStyle={[styles.container, {paddingHorizontal: 16}]}
         keyboardShouldPersistTaps="handled"
-        enableOnAndroid={true}
-        extraScrollHeight={100}>
+        showsVerticalScrollIndicator={false}>
         <View style={styles.formSection}>
+          {/* 방 제목 */}
           <View>
-            <Text style={[styles.label, {color: textColor}]}>방 제목</Text>
+            <Text style={[styles.label, {color: C.text}]}>방 제목</Text>
             <TextInput
-              style={[styles.roomInput, TextInputStyle]}
-              placeholder="제목을 입력해주세요."
-              placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+              style={[inputBase]}
+              placeholder="제목을 입력해주세요"
+              placeholderTextColor={C.placeholder}
               value={roomName}
               onChangeText={setRoomName}
+              accessibilityLabel="방 제목 입력"
+              returnKeyType="done"
             />
           </View>
 
-          <View style={{marginBottom: 8}}>
-            <Text style={[styles.label, {color: textColor}]}>위치</Text>
-            <View style={[styles.inputWrapper, TextInputStyle]}>
-              <View style={styles.inputWithDot}>
-                <View
-                  style={[
-                    styles.dotBlack,
-                    {backgroundColor: isDarkMode ? 'white' : 'black'},
-                  ]}
-                />
+          {/* 위치 */}
+          <View>
+            <Text style={[styles.label, {color: C.text}]}>위치</Text>
+
+            <View
+              style={[
+                styles.card,
+                {borderColor: C.border, backgroundColor: C.card},
+              ]}>
+              <View style={styles.row}>
+                <View style={[styles.dot, {backgroundColor: C.dotBlack}]} />
                 <DropdownMenu
                   placeholderText={'어디서 출발하시나요?'}
                   options={PAXI_LOCATIONS.filter(
@@ -215,15 +238,11 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                   selected={departureName}
                 />
               </View>
-              <View
-                style={[
-                  styles.separator,
-                  {backgroundColor: isDarkMode ? '#2C2C2C' : '#d0d0d0'},
-                ]}
-              />
-              <View style={styles.inputWithDot}>
-                <View style={styles.dotRed} />
 
+              <View style={[styles.divider, {backgroundColor: C.border}]} />
+
+              <View style={styles.row}>
+                <View style={[styles.dot, {backgroundColor: C.dotRed}]} />
                 <DropdownMenu
                   placeholderText={'어디로 떠나시나요?'}
                   options={PAXI_LOCATIONS.filter(
@@ -234,78 +253,57 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 />
               </View>
             </View>
+
             {departureName && arrivalName ? (
               <View
-                style={{
-                  backgroundColor: isDarkMode ? '#232323' : '#F0F0F0',
-                  borderRadius: 8,
-                  padding: 12,
-                  marginTop: 8,
-                  marginBottom: 8,
-                }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text
-                    style={{
-                      color: textColor,
-                      fontSize: 13,
-                      fontWeight: '500',
-                      marginRight: 4,
-                    }}>
-                    거리: {getPaxiDistanceInfo(departureName, arrivalName)} |
-                    예상 소요시간:{' '}
-                    {getPaxiDurationInfo(departureName, arrivalName)}
-                  </Text>
-                </View>
+                style={[
+                  styles.infoChip,
+                  {
+                    backgroundColor: isDarkMode ? '#1B1C1F' : '#F4F5F6',
+                    borderColor: C.border,
+                  },
+                ]}>
+                <Text style={{color: C.text, fontSize: 13, fontWeight: '600'}}>
+                  거리 {getPaxiDistanceInfo(departureName, arrivalName)} · 예상{' '}
+                  {getPaxiDurationInfo(departureName, arrivalName)}
+                </Text>
               </View>
             ) : null}
           </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '100%',
-              marginBottom: 12,
-            }}>
-            <View style={{width: '48%'}}>
-              <Text style={[styles.titleText, {color: textColor}]}>날짜</Text>
+          {/* 날짜/시간 */}
+          <View style={{flexDirection: 'row', gap: 12}}>
+            <View style={{flex: 1}}>
+              <Text style={[styles.label, {color: C.text}]}>날짜</Text>
               <TouchableOpacity
-                style={{
-                  borderWidth: 1,
-                  borderColor: isDatePickerVisible
-                    ? '#FB5353'
-                    : isDarkMode
-                    ? '#2C2C2C'
-                    : '#D0D0D0',
-                  borderRadius: 6,
-                  paddingVertical: 10,
-                  paddingHorizontal: 16,
-                }}
-                onPress={() => setDatePickerVisible(true)}>
-                <Text style={{color: textColor}}>
-                  {moment(selectedDateTime).format('YYYY년 MM월 DD일')}
+                style={[
+                  styles.selector,
+                  {
+                    borderColor: isDatePickerVisible ? C.accent : C.border,
+                    backgroundColor: isDarkMode ? '#121315' : '#FFFFFF',
+                  },
+                ]}
+                onPress={() => setDatePickerVisible(true)}
+                activeOpacity={0.7}>
+                <Text style={{color: C.text, fontSize: 16, fontWeight: '600'}}>
+                  {moment(selectedDateTime).format('YYYY.MM.DD')}
                 </Text>
               </TouchableOpacity>
             </View>
-            <View style={{width: '48%'}}>
-              <Text style={[styles.titleText, {color: textColor}]}>
-                출발시각
-              </Text>
+
+            <View style={{flex: 1}}>
+              <Text style={[styles.label, {color: C.text}]}>출발 시각</Text>
               <TouchableOpacity
-                style={{
-                  borderWidth: 1,
-                  borderColor: isTimePickerVisible
-                    ? '#FB5353'
-                    : isDarkMode
-                    ? '#2C2C2C'
-                    : '#D0D0D0',
-                  borderRadius: 6,
-                  paddingVertical: 10,
-                  paddingHorizontal: 16,
-                }}
-                onPress={() => setTimePickerVisible(true)}>
-                <Text style={{color: textColor}}>
+                style={[
+                  styles.selector,
+                  {
+                    borderColor: isTimePickerVisible ? C.accent : C.border,
+                    backgroundColor: isDarkMode ? '#121315' : '#FFFFFF',
+                  },
+                ]}
+                onPress={() => setTimePickerVisible(true)}
+                activeOpacity={0.7}>
+                <Text style={{color: C.text, fontSize: 16, fontWeight: '600'}}>
                   {selectedDateTime.toLocaleTimeString([], {
                     hour: '2-digit',
                     minute: '2-digit',
@@ -355,107 +353,85 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             minuteInterval={10}
           />
 
-          <Text
-            style={[
-              styles.titleText,
-              {color: textColor, flexDirection: 'row', alignItems: 'center'},
-            ]}>
-            상세내용{' '}
-            <Text style={{color: textColor, fontSize: 12, opacity: 0.5}}>
-              (선택)
+          {/* 상세내용 */}
+          <View>
+            <Text style={[styles.label, {color: C.text}]}>
+              상세내용{' '}
+              <Text style={{color: C.textSub, fontSize: 12}}>(선택)</Text>
             </Text>
-          </Text>
-          <TextInput
-            style={[
-              styles.roomInput,
-              {
-                color: isDarkMode ? '#888888' : '#AAA',
-                borderColor: borderColor,
-              },
-              {
-                height: 100,
-              },
-            ]}
-            multiline={true}
-            placeholder="세부사항을 입력해주세요."
-            placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
-            value={roomDetails}
-            onChangeText={setRoomDetails}
-          />
+            <TextInput
+              style={[inputBase, {height: 112, lineHeight: 22}]}
+              multiline
+              placeholder="세부사항을 입력해주세요"
+              placeholderTextColor={C.placeholder}
+              value={roomDetails}
+              onChangeText={setRoomDetails}
+              textAlignVertical="top"
+            />
+            <Text style={{color: C.textSub, fontSize: 12, marginTop: 6}}>
+              최대 100자
+            </Text>
+          </View>
 
-          <Text style={[styles.label, {color: textColor}]}>최대 인원</Text>
-          <View
-            style={{
-              alignItems: 'flex-start',
-            }}>
+          {/* 최대 인원 */}
+          <View>
+            <Text style={[styles.label, {color: C.text}]}>최대 인원</Text>
             <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                borderWidth: 1,
-                borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-                borderRadius: 50,
-                marginBottom: 10,
-                backgroundColor: isDarkMode ? '#232323' : '#F3F3F3',
-              }}>
+              style={[
+                styles.counter,
+                {
+                  borderColor: C.border,
+                  backgroundColor: C.card,
+                },
+              ]}>
               <TouchableOpacity
-                style={{
-                  paddingHorizontal: 20,
-                  paddingVertical: 10,
-                  opacity: maxParticipants === 2 ? 0.3 : 1,
-                }}
+                style={[
+                  styles.counterBtn,
+                  {opacity: maxParticipants === 2 ? 0.35 : 1},
+                ]}
                 disabled={maxParticipants === 2}
                 onPress={() =>
                   setMaxParticipants(Math.max(2, maxParticipants - 1))
-                }>
-                <Text
-                  style={{
-                    color: isDarkMode ? '#fff' : '#222',
-                    fontSize: 20,
-                  }}>
-                  -
-                </Text>
+                }
+                activeOpacity={0.6}>
+                <Text style={[styles.counterSign, {color: C.text}]}>−</Text>
               </TouchableOpacity>
-              <Text
-                style={{
-                  color: isDarkMode ? '#fff' : '#222',
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  minWidth: 32,
-                  textAlign: 'center',
-                }}>
+
+              <Text style={[styles.counterValue, {color: C.text}]}>
                 {maxParticipants}
               </Text>
+
               <TouchableOpacity
-                style={{
-                  paddingHorizontal: 20,
-                  paddingVertical: 10,
-                  opacity: maxParticipants === 4 ? 0.3 : 1,
-                }}
+                style={[
+                  styles.counterBtn,
+                  {opacity: maxParticipants === 4 ? 0.35 : 1},
+                ]}
                 disabled={maxParticipants === 4}
                 onPress={() =>
                   setMaxParticipants(Math.min(4, maxParticipants + 1))
-                }>
-                <Text
-                  style={{
-                    color: isDarkMode ? '#fff' : '#222',
-                    fontSize: 20,
-                  }}>
-                  +
-                </Text>
+                }
+                activeOpacity={0.6}>
+                <Text style={[styles.counterSign, {color: C.text}]}>＋</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
+
+        {/* 생성 버튼 */}
         <TouchableOpacity
-          style={[styles.createButton]}
-          onPress={() => checkInputValid()}
-          disabled={
-            !roomName || !departureName || !arrivalName || !selectedDateTime
-          }>
+          style={[
+            styles.createButton,
+            {
+              backgroundColor: disabledCreate ? C.disabled : C.accent,
+              opacity: disabledCreate ? 0.7 : 1,
+            },
+          ]}
+          onPress={checkInputValid}
+          disabled={disabledCreate}
+          activeOpacity={0.85}>
           <Text style={styles.createButtonText}>방 생성하기</Text>
         </TouchableOpacity>
-      </KeyboardAwareScrollView>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -464,94 +440,96 @@ export default CreatePaxiRoomScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
-    paddingRight: '5%',
-    paddingLeft: '5%',
-    paddingTop: '5%',
-    marginBottom: 0,
+    paddingTop: 12,
+    paddingBottom: 24,
   },
-  placeholderButton: {
-    width: 40,
+  formSection: {
+    gap: 16,
+    width: '100%',
   },
-  backgroundStyle: {
-    backgroundColor: '#ffffff',
-    flex: 1,
-  },
-  titleText: {
-    fontSize: 15,
-    letterSpacing: -0.5,
+  label: {
+    fontSize: 14,
     fontWeight: '700',
-    color: '#000',
-    textAlign: 'left',
-    marginBottom: 10,
+    letterSpacing: -0.2,
+    marginBottom: 8,
+  },
+  card: {
+    borderWidth: 1,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 12,
+    height: 48,
+    width: '100%',
+    gap: 10,
+  },
+  divider: {
+    height: 1,
+    marginLeft: '3%',
+    width: '94%',
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 6,
+    marginLeft: 10,
+  },
+  infoChip: {
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginTop: 10,
+  },
+  selector: {
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 14,
+    justifyContent: 'center',
+    minHeight: 40,
   },
   createButton: {
-    borderRadius: 6,
-    backgroundColor: '#FB5353',
+    borderRadius: 12,
     width: '100%',
-    marginTop: 20,
-    height: 40,
+    marginTop: 16,
+    height: 48,
     justifyContent: 'center',
     alignItems: 'center',
   },
   createButtonText: {
-    fontSize: 13,
-    fontWeight: '500',
-    fontFamily: 'Pretendard',
+    fontSize: 15,
+    fontWeight: '800',
     color: '#ffffff',
     textAlign: 'center',
+    letterSpacing: 0.2,
   },
-  label: {
-    fontSize: 15,
-    fontWeight: '500',
-    marginBottom: 8,
-    marginTop: 8,
-  },
-  formSection: {
-    marginTop: 0,
-    gap: 8,
-  },
-  roomInput: {
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 16,
-    textAlignVertical: 'top',
-  },
-  inputWrapper: {
-    borderRadius: 7,
-    borderWidth: 1,
-    borderColor: '#d0d0d0',
-    overflow: 'hidden',
-  },
-  inputWithDot: {
+  counter: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 10,
-    height: 42,
-    width: '100%',
+    alignSelf: 'flex-start',
+    borderWidth: 1,
+    height: 48,
+    minWidth: 172,
+    borderRadius: 24,
+    paddingHorizontal: 4,
+    justifyContent: 'space-between',
   },
-  separator: {
-    height: 1,
-    marginLeft: '2.5%',
-    width: '95%',
-    backgroundColor: '#d0d0d0',
+  counterBtn: {
+    paddingHorizontal: 18,
+    paddingVertical: 8,
   },
-  dotBlack: {
-    width: 5,
-    height: 5,
-    borderRadius: 4,
-    marginLeft: 5,
-    marginRight: 10,
+  counterSign: {
+    fontSize: 22,
+    fontWeight: '700',
   },
-  dotRed: {
-    width: 5,
-    height: 5,
-    borderRadius: 4,
-    backgroundColor: 'red',
-    marginLeft: 5,
-    marginRight: 10,
+  counterValue: {
+    fontSize: 18,
+    fontWeight: '800',
+    minWidth: 40,
+    textAlign: 'center',
   },
 });
