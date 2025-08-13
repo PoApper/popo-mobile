@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@navigation/types';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '@navigation/types';
 import {
   ClubCategoryKey,
   ClubCategoryValue,
@@ -45,12 +45,12 @@ interface ClubItem {
   youtube_url: string;
 }
 
-const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
+const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [selectedCategory, setSelectedCategory] = useState<ClubCategoryValue>(
     CLUB_CATEGORIES.performance1,
   );
-  const [textWidths, setTextWidths] = useState<{ [key: string]: number }>({});
+  const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
   const [clubs, setClubs] = useState<ClubItem[]>([]);
   const [sortType, setSortType] = useState('가나다순');
   const [isLoading, setIsLoading] = useState(true);
@@ -108,20 +108,20 @@ const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
             onPress={() => setSelectedCategory(category)}
             style={styles.typeTabWrapper}>
             <View
-              style={{ alignItems: 'center' }}
+              style={{alignItems: 'center'}}
               onLayout={e => {
                 const width = e.nativeEvent.layout.width;
                 if (textWidths[category] !== width) {
-                  setTextWidths(prev => ({ ...prev, [category]: width }));
+                  setTextWidths(prev => ({...prev, [category]: width}));
                 }
               }}>
               <Text
                 style={[
                   styles.typeTab,
-                  { color: isDarkMode ? '#888' : '#999' },
+                  {color: isDarkMode ? '#888' : '#999'},
                   selectedCategory === category && [
                     styles.selectedTypeText,
-                    { color: textColor },
+                    {color: textColor},
                   ],
                 ]}>
                 {category}
@@ -147,18 +147,18 @@ const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
             key={type}
             style={[
               styles.sortButton,
-              { borderColor: isDarkMode ? '#555' : '#ccc' },
+              {borderColor: isDarkMode ? '#555' : '#ccc'},
               sortType === type && [
                 styles.activeSort,
-                { backgroundColor: textColor },
+                {backgroundColor: textColor},
               ],
             ]}
             onPress={() => setSortType(type)}>
             <Text
               style={[
                 styles.sortButtonText,
-                { color: textColor },
-                sortType === type && { color: isDarkMode ? '#000' : '#fff' },
+                {color: textColor},
+                sortType === type && {color: isDarkMode ? '#000' : '#fff'},
               ]}>
               {type}
             </Text>
@@ -176,17 +176,17 @@ const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
           <View
             style={[
               styles.contentContainer,
-              { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' },
+              {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
             ]}>
-            <Text style={[styles.tempText, { color: textColor }]}>로딩중...</Text>
+            <Text style={[styles.tempText, {color: textColor}]}>로딩중...</Text>
           </View>
         ) : filteredClubs.length === 0 ? (
           <View
             style={[
               styles.contentContainer,
-              { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' },
+              {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
             ]}>
-            <Text style={[styles.tempText, { color: textColor }]}>
+            <Text style={[styles.tempText, {color: textColor}]}>
               등록된 동아리가 없습니다.
             </Text>
           </View>
@@ -196,7 +196,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
               key={club.uuid}
               style={[
                 styles.clubCard,
-                { backgroundColor: isDarkMode ? '#1A1A1A' : '#fff' },
+                {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
               ]}
               onPress={() =>
                 navigation.navigate('ClubDetail', {
@@ -207,21 +207,21 @@ const ClubScreen: React.FC<ClubScreenProps> = ({ navigation }) => {
               <View style={styles.cardContent}>
                 <View style={styles.imageContainer}>
                   <Image
-                    source={{ uri: club.image_url }}
+                    source={{uri: club.image_url}}
                     style={styles.clubImage}
                     resizeMode="contain"
                   />
                 </View>
                 <View style={styles.clubInfo}>
                   <Text
-                    style={[styles.clubName, { color: textColor }]}
+                    style={[styles.clubName, {color: textColor}]}
                     numberOfLines={1}>
                     {club.name}
                   </Text>
                   <Text
                     style={[
                       styles.clubDescription,
-                      { color: isDarkMode ? '#888' : '#666' },
+                      {color: isDarkMode ? '#888' : '#666'},
                     ]}
                     numberOfLines={2}>
                     {club.short_desc}
