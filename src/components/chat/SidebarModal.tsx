@@ -268,6 +268,8 @@ SidebarModalProps) => {
                           {
                             marginLeft: 20,
                             backgroundColor: isDarkMode ? '#333' : '#000',
+                            opacity:
+                              roomData.currentParticipant === 1 ? 0.5 : 1,
                           },
                         ]}
                         onPress={handleSettlementPress}>
@@ -369,14 +371,69 @@ SidebarModalProps) => {
                       alignItems: 'flex-start',
                     }}>
                     <TouchableOpacity
-                      style={styles.leaveRoomButton}
-                      onPress={handleLeavePress}>
+                      style={[
+                        styles.leaveRoomButton,
+                        {opacity: isSettlementRequestExist ? 0.5 : 1},
+                      ]}
+                      onPress={() => {
+                        if (isSettlementRequestExist) {
+                          Alert.alert(
+                            '생성된 정산 요청이 있습니다.',
+                            '정산 요청이 있는 채팅방은 나갈 수 없습니다.\n정산이 완료된 후, 정산자가 채팅방을 직접 마감해주세요.',
+                          );
+                        } else {
+                          handleLeavePress();
+                        }
+                      }}>
                       <Icon
                         name="logout"
                         size={30}
                         color={textColor(isDarkMode)}
                       />
                     </TouchableOpacity>
+
+                    {/* 정산 완료 버튼 */}
+                    {isIamPayer && (
+                      <TouchableOpacity
+                        style={[
+                          styles.completeSettlementButton,
+                          {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+                        ]}
+                        onPress={() => {
+                          paxi_api
+                            .patch(`/room/${roomData.uuid}/complete`)
+                            .then(() => {
+                              Alert.alert(
+                                '정산 완료',
+                                '정산이 완료되었습니다.',
+                                [
+                                  {
+                                    text: '확인',
+                                    onPress: () => {
+                                      setModalVisible(false);
+                                      navigation.navigate('Main', {
+                                        tab: 'MyReservation',
+                                      });
+                                    },
+                                  },
+                                ],
+                              );
+                            })
+                            .catch(err => {
+                              console.error('정산 완료 실패', err);
+                              Alert.alert(
+                                '정산 완료 실패',
+                                `정산 완료에 실패했습니다.\n${
+                                  err.response?.data?.message || ''
+                                }`,
+                              );
+                            });
+                        }}>
+                        <Text style={styles.completeSettlementButtonText}>
+                          정산 완료
+                        </Text>
+                      </TouchableOpacity>
+                    )}
                   </View>
                 </Pressable>
               </SafeAreaView>
