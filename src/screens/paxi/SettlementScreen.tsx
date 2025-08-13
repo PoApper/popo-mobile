@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,14 +10,14 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RouteProp, useRoute} from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp, useRoute } from '@react-navigation/native';
 
-import {RootStackParamList} from '@navigation/types';
+import { RootStackParamList } from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import {SettlementCreateData, SettlementInfoData} from '@interfaces/paxi';
-import {PaxiUserMy} from '@interfaces/paxi';
+import { SettlementCreateData, SettlementInfoData } from '@interfaces/paxi';
+import { PaxiUserMy } from '@interfaces/paxi';
 
 type SettlementScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Settlement'>;
@@ -25,9 +25,9 @@ type SettlementScreenProps = {
 
 type SettlementScreenRouteProp = RouteProp<RootStackParamList, 'Settlement'>;
 
-const SettlementScreen = ({navigation}: SettlementScreenProps) => {
+const SettlementScreen = ({ navigation }: SettlementScreenProps) => {
   const route = useRoute<SettlementScreenRouteProp>();
-  const {roomUuid} = route.params;
+  const { roomUuid } = route.params;
 
   const [bankName, setbankName] = useState<string | undefined>(undefined);
   const [accountNumber, setAccountNumber] = useState<string | undefined>(
@@ -115,13 +115,13 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
+      <View style={[styles.header, { borderBottomColor: borderColor }]}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>정산하기</Text>
+        <Text style={[styles.headerTitle, { color: textColor }]}>정산하기</Text>
         <View style={styles.placeholderButton} />
       </View>
 
@@ -134,155 +134,155 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         </View>
       )}
 
-      <ScrollView>
-        <View style={styles.container}>
-          {/* 내 계좌 정보 불러오기 버튼 */}
-          <TouchableOpacity
+      <ScrollView
+        style={{ flex: 1, paddingHorizontal: 15 }}
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}>
+        {/* 내 계좌 정보 불러오기 버튼 */}
+        <TouchableOpacity
+          style={[
+            styles.loadAccountButton,
+            { backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1' },
+          ]}
+          onPress={() => {
+            // TODO: 내 계좌 정보 불러오기 로직
+            paxi_api.get('/user/my').then(res => {
+              const userData = res.data as PaxiUserMy;
+              if (
+                userData.bankName &&
+                userData.accountNumber &&
+                userData.accountHolderName
+              ) {
+                setbankName(userData.bankName);
+                setAccountNumber(userData.accountNumber);
+                setAccountName(userData.accountHolderName);
+              } else {
+                Alert.alert(
+                  '계좌 정보 없음',
+                  '등록된 계좌 정보가 없어서 불러 올 수 없습니다.',
+                );
+              }
+            });
+            console.log('내 계좌 정보 불러오기');
+          }}>
+          <Text style={styles.loadAccountButtonText}>
+            내 계좌 정보 불러오기
+          </Text>
+        </TouchableOpacity>
+
+        <View style={{ width: '100%', marginBottom: 8 }}>
+          <Text style={[styles.titleText, { color: textColor }]}>은행명</Text>
+          <TextInput
             style={[
-              styles.loadAccountButton,
-              {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+              styles.roomInput,
+              {
+                marginBottom: 10,
+                borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+                color: textColor,
+              },
             ]}
-            onPress={() => {
-              // TODO: 내 계좌 정보 불러오기 로직
-              paxi_api.get('/user/my').then(res => {
-                const userData = res.data as PaxiUserMy;
-                if (
-                  userData.bankName &&
-                  userData.accountNumber &&
-                  userData.accountHolderName
-                ) {
-                  setbankName(userData.bankName);
-                  setAccountNumber(userData.accountNumber);
-                  setAccountName(userData.accountHolderName);
-                } else {
-                  Alert.alert(
-                    '계좌 정보 없음',
-                    '등록된 계좌 정보가 없어서 불러 올 수 없습니다.',
-                  );
-                }
-              });
-              console.log('내 계좌 정보 불러오기');
-            }}>
-            <Text style={styles.loadAccountButtonText}>
-              내 계좌 정보 불러오기
-            </Text>
-          </TouchableOpacity>
-
-          <View style={{width: '100%', marginBottom: 8}}>
-            <Text style={[styles.titleText, {color: textColor}]}>은행명</Text>
-            <TextInput
-              style={[
-                styles.roomInput,
-                {
-                  marginBottom: 10,
-                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-                  backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
-                  color: textColor,
-                },
-              ]}
-              placeholder="은행명을 입력해주세요."
-              placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
-              value={bankName}
-              onChangeText={setbankName}
-            />
-          </View>
-
-          <View style={{width: '100%', marginBottom: 8}}>
-            <Text style={[styles.titleText, {color: textColor}]}>계좌번호</Text>
-            <TextInput
-              style={[
-                styles.roomInput,
-                {
-                  marginBottom: 10,
-                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-                  backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
-                  color: textColor,
-                },
-              ]}
-              placeholder="계좌번호를 입력해주세요."
-              placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
-              value={accountNumber}
-              onChangeText={text => {
-                // 숫자만 허용
-                const numericText = text.replace(/[^0-9]/g, '');
-                setAccountNumber(numericText);
-              }}
-              keyboardType="numeric"
-            />
-          </View>
-
-          <View style={{width: '100%', marginBottom: 8}}>
-            <Text style={[styles.titleText, {color: textColor}]}>계좌주명</Text>
-            <TextInput
-              style={[
-                styles.roomInput,
-                {
-                  marginBottom: 10,
-                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-                  backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
-                  color: textColor,
-                },
-              ]}
-              placeholder="계좌주명을 입력해주세요."
-              placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
-              value={accountName}
-              onChangeText={setAccountName}
-            />
-          </View>
-
-          <View style={{width: '100%', marginBottom: 8}}>
-            <Text style={[styles.titleText, {color: textColor}]}>결제금액</Text>
-            <TextInput
-              style={[
-                styles.roomInput,
-                {
-                  marginBottom: 10,
-                  borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
-                  backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
-                  color: textColor,
-                },
-              ]}
-              placeholder="정산금액을 입력해주세요."
-              placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
-              value={totalCost?.toString()}
-              onChangeText={text => {
-                // 숫자만 허용
-                const numericText = text.replace(/[^0-9]/g, '');
-                if (numericText == '') {
-                  setTotalCost(undefined);
-                } else {
-                  setTotalCost(Number(numericText));
-                }
-              }}
-              keyboardType="numeric"
-            />
-            <Text style={[styles.infoText]}>
-              총 금액을 입력해주세요! 자동으로 N분의 1 처리한 금액을
-              요청해드릴게요.
-            </Text>
-          </View>
-
-          <View style={[styles.checkboxContainer, {marginTop: 20}]}>
-            <TouchableOpacity
-              style={styles.checkboxRow}
-              onPress={() => setIsUpdateAccount(!isUpdateAccount)}>
-              <View
-                style={[
-                  styles.checkbox,
-                  {
-                    backgroundColor: isUpdateAccount ? '#000' : 'transparent',
-                    borderColor: isDarkMode ? '#555' : '#D0D0D0',
-                  },
-                ]}>
-                {isUpdateAccount && <Text style={styles.checkmark}>✓</Text>}
-              </View>
-              <Text style={[styles.checkboxText, {color: textColor}]}>
-                이 계좌 정보를 기본값으로 업데이트
-              </Text>
-            </TouchableOpacity>
-          </View>
+            placeholder="은행명을 입력해주세요."
+            placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+            value={bankName}
+            onChangeText={setbankName}
+          />
         </View>
 
+        <View style={{ width: '100%', marginBottom: 8 }}>
+          <Text style={[styles.titleText, { color: textColor }]}>계좌번호</Text>
+          <TextInput
+            style={[
+              styles.roomInput,
+              {
+                marginBottom: 10,
+                borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+                color: textColor,
+              },
+            ]}
+            placeholder="계좌번호를 입력해주세요."
+            placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+            value={accountNumber}
+            onChangeText={text => {
+              // 숫자만 허용
+              const numericText = text.replace(/[^0-9]/g, '');
+              setAccountNumber(numericText);
+            }}
+            keyboardType="numeric"
+          />
+        </View>
+
+        <View style={{ width: '100%', marginBottom: 8 }}>
+          <Text style={[styles.titleText, { color: textColor }]}>계좌주명</Text>
+          <TextInput
+            style={[
+              styles.roomInput,
+              {
+                marginBottom: 10,
+                borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+                color: textColor,
+              },
+            ]}
+            placeholder="계좌주명을 입력해주세요."
+            placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+            value={accountName}
+            onChangeText={setAccountName}
+          />
+        </View>
+
+        <View style={{ width: '100%', marginBottom: 8 }}>
+          <Text style={[styles.titleText, { color: textColor }]}>결제금액</Text>
+          <TextInput
+            style={[
+              styles.roomInput,
+              {
+                marginBottom: 10,
+                borderColor: isDarkMode ? '#2C2C2C' : '#D0D0D0',
+                backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+                color: textColor,
+              },
+            ]}
+            placeholder="정산금액을 입력해주세요."
+            placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
+            value={totalCost?.toString()}
+            onChangeText={text => {
+              // 숫자만 허용
+              const numericText = text.replace(/[^0-9]/g, '');
+              if (numericText == '') {
+                setTotalCost(undefined);
+              } else {
+                setTotalCost(Number(numericText));
+              }
+            }}
+            keyboardType="numeric"
+          />
+          <Text style={[styles.infoText]}>
+            총 금액을 입력해주세요! 자동으로 N분의 1 처리한 금액을
+            요청해드릴게요.
+          </Text>
+        </View>
+
+        <View style={[styles.checkboxContainer, { marginTop: 20 }]}>
+          <TouchableOpacity
+            style={styles.checkboxRow}
+            onPress={() => setIsUpdateAccount(!isUpdateAccount)}>
+            <View
+              style={[
+                styles.checkbox,
+                {
+                  backgroundColor: isUpdateAccount ? '#000' : 'transparent',
+                  borderColor: isDarkMode ? '#555' : '#D0D0D0',
+                },
+              ]}>
+              {isUpdateAccount && <Text style={styles.checkmark}>✓</Text>}
+            </View>
+            <Text style={[styles.checkboxText, { color: textColor }]}>
+              이 계좌 정보를 기본값으로 업데이트
+            </Text>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity
           style={[
             styles.nextButton,
@@ -352,8 +352,7 @@ const styles = StyleSheet.create({
   nextButton: {
     borderRadius: 6,
     backgroundColor: '#FB5353',
-    width: '90%',
-    marginLeft: '5%',
+    width: '100%',
     marginTop: 20,
     height: 40,
     justifyContent: 'center',
@@ -380,10 +379,7 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: 'center',
-    paddingRight: '5%',
-    paddingLeft: '5%',
-    paddingTop: '5%',
-    marginBottom: 0,
+    paddingVertical: 20,
   },
   inputWrapper: {
     width: '100%',
