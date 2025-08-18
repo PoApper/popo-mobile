@@ -36,7 +36,7 @@ interface ClubItem {
   location: string;
   representative: string;
   contact: string;
-  clubType: ClubCategoryKey;
+  club_type: ClubCategoryKey;
   image_url: string;
   views: number;
   homepage_url: string;
@@ -86,7 +86,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
   };
 
   const filteredClubs = getSortedClubs(clubs).filter(
-    club => CLUB_CATEGORIES[club.clubType] === selectedCategory,
+    club => CLUB_CATEGORIES[club.club_type] === selectedCategory,
   );
 
   return (
