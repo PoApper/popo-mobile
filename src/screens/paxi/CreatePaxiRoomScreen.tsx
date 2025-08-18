@@ -10,7 +10,6 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import moment from 'moment';
@@ -24,6 +23,7 @@ import {
 } from '@utils/locations';
 import CommonHeader from '@components/CommonHeader';
 import DropdownMenu from '@components/room/DropdownMenu';
+import {AdaptiveKeyboardAvoidingScrollView} from '@components/AdaptiveKeyboardAvoidingScrollView';
 
 type CreatePaxiRoomScreenProps = {
   navigation: NativeStackNavigationProp<
@@ -179,11 +179,10 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
         backgroundColor={isDarkMode ? '#121212' : '#fff'}
       />
       <CommonHeader navigation={navigation} title="방 생성하기" />
-      <KeyboardAwareScrollView
+      <AdaptiveKeyboardAvoidingScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
-        enableOnAndroid={true}
-        extraScrollHeight={100}>
+        showsVerticalScrollIndicator={false}>
         <View style={styles.formSection}>
           <View>
             <Text style={[styles.label, {color: textColor}]}>방 제목</Text>
@@ -455,7 +454,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
           }>
           <Text style={styles.createButtonText}>방 생성하기</Text>
         </TouchableOpacity>
-      </KeyboardAwareScrollView>
+      </AdaptiveKeyboardAvoidingScrollView>
     </SafeAreaView>
   );
 };
@@ -464,7 +463,7 @@ export default CreatePaxiRoomScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
     paddingRight: '5%',
     paddingLeft: '5%',
