@@ -8,8 +8,6 @@ import {
   useColorScheme,
   StatusBar,
   FlatList,
-  KeyboardAvoidingView,
-  Platform,
   Alert,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -32,6 +30,7 @@ import {socketFactory} from '@utils/socket-factory';
 import ChatMessage from '@components/chat/ChatMessage';
 import SidebarModal from '@components/chat/SidebarModal';
 import SettlementInfoBox from '@components/chat/SettlementInfoBox';
+import {AdaptiveKeyboardAvoidingView} from '@components/AdaptiveKeyboardAvoidingView';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
@@ -295,10 +294,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         </View>
       )}
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.container}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
+      <AdaptiveKeyboardAvoidingView style={styles.container}>
         <FlatList
           data={chatList}
           renderItem={({item}) => (
@@ -346,7 +342,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
             <Icon name="send" size={20} color={backgroundColor(isDarkMode)} />
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+      </AdaptiveKeyboardAvoidingView>
     </SafeAreaView>
   );
 };
