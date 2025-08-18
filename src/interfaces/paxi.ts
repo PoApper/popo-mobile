@@ -6,6 +6,14 @@ export interface UserData {
   status: string;
 }
 
+export interface PaxiUserMy {
+  uuid: string;
+  nickname: string;
+  accountNumber: string;
+  accountHolderName: string;
+  bankName: string;
+}
+
 export interface ChatRoomInfo {
   uuid: string;
   title: string;
