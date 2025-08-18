@@ -9,7 +9,6 @@ import {
   TextInput,
   Alert,
   Keyboard,
-  Platform,
   ActivityIndicator,
   FlatList,
 } from 'react-native';
@@ -19,7 +18,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '@navigation/types';
 import PoPoAxios from '../../utils/api';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 interface IEquipment {
   uuid: string;
@@ -84,13 +83,10 @@ const EquipmentReservationApplyScreen = ({
   const [equipmentList, setEquipmentList] = useState<IEquipment[]>([]);
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [tempDate, setTempDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
-  const [tempStartTime, setTempStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
-  const [tempEndTime, setTempEndTime] = useState(new Date());
   const scrollViewRef = useRef<any>(null);
   const [showEquipmentModal, setShowEquipmentModal] = useState(false);
   const [reservedEquipments, setReservedEquipments] = useState<string[]>([]);
@@ -739,85 +735,34 @@ const EquipmentReservationApplyScreen = ({
         </View>
         {/* DateTimePicker 및 예외처리 */}
         {showDatePicker && (
-          <DateTimePicker
-            value={tempDate}
+          <DateTimePickerModal
+            isVisible={showDatePicker}
             mode="date"
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            onConfirm={date => {
+              setShowDatePicker(false);
+              setDate(date);
+            }}
+            onCancel={() => setShowDatePicker(false)}
+            date={date}
             minimumDate={new Date()}
             maximumDate={
               new Date(new Date().setDate(new Date().getDate() + 30))
             }
             locale="ko-KR"
-            onChange={(event, selectedDate) => {
-              if (Platform.OS === 'android') {
-                if (event.type === 'set' && selectedDate) {
-                  setShowDatePicker(false);
-                  setDate(selectedDate);
-                } else if (event.type === 'dismissed') {
-                  setShowDatePicker(false);
-                }
-              } else {
-                if (selectedDate) {
-                  setTempDate(selectedDate);
-                }
-              }
-            }}
-            onTouchCancel={() => setShowDatePicker(false)}
+            confirmTextIOS="확인"
+            cancelTextIOS="취소"
           />
-        )}
-        {showDatePicker && Platform.OS === 'ios' && (
-          <TouchableOpacity
-            style={styles.iosPickerConfirmButton}
-            onPress={() => {
-              setShowDatePicker(false);
-              setDate(tempDate);
-            }}>
-            <Text style={styles.iosPickerConfirmText}>확인</Text>
-          </TouchableOpacity>
         )}
         {showStartPicker && (
-          <DateTimePicker
-            value={tempStartTime}
+          <DateTimePickerModal
+            isVisible={showStartPicker}
             mode="time"
-            is24Hour
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-            minuteInterval={30}
-            onChange={(event, selected) => {
-              if (Platform.OS === 'android') {
-                if (event.type === 'set' && selected) {
-                  setShowStartPicker(false);
-                  const roundedTime = roundUpToNearest30Minutes(selected);
-                  if (isTimeAfterNow(date, roundedTime)) {
-                    setStartTime(roundedTime);
-                    const newEndTime = new Date(roundedTime);
-                    newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                    setEndTime(newEndTime);
-                  } else {
-                    Alert.alert(
-                      '알림',
-                      '현재 시간보다 이후의 시간을 선택해주세요.',
-                    );
-                  }
-                } else if (event.type === 'dismissed') {
-                  setShowStartPicker(false);
-                }
-              } else {
-                if (selected) {
-                  setTempStartTime(roundUpToNearest30Minutes(selected));
-                }
-              }
-            }}
-            onTouchCancel={() => setShowStartPicker(false)}
-          />
-        )}
-        {showStartPicker && Platform.OS === 'ios' && (
-          <TouchableOpacity
-            style={styles.iosPickerConfirmButton}
-            onPress={() => {
+            onConfirm={time => {
               setShowStartPicker(false);
-              if (isTimeAfterNow(date, tempStartTime)) {
-                setStartTime(tempStartTime);
-                const newEndTime = new Date(tempStartTime);
+              const roundedTime = roundUpToNearest30Minutes(time);
+              if (isTimeAfterNow(date, roundedTime)) {
+                setStartTime(roundedTime);
+                const newEndTime = new Date(roundedTime);
                 newEndTime.setMinutes(newEndTime.getMinutes() + 30);
                 setEndTime(newEndTime);
               } else {
@@ -826,50 +771,31 @@ const EquipmentReservationApplyScreen = ({
                   '현재 시간보다 이후의 시간을 선택해주세요.',
                 );
               }
-            }}>
-            <Text style={styles.iosPickerConfirmText}>확인</Text>
-          </TouchableOpacity>
-        )}
-        {showEndPicker && (
-          <DateTimePicker
-            value={tempEndTime}
-            mode="time"
-            is24Hour
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-            minuteInterval={30}
-            minimumDate={startTime}
-            onChange={(event, selected) => {
-              if (Platform.OS === 'android') {
-                if (event.type === 'set' && selected) {
-                  setShowEndPicker(false);
-                  setEndTime(roundUpToNearest30Minutes(selected));
-                } else if (event.type === 'dismissed') {
-                  setShowEndPicker(false);
-                }
-              } else {
-                if (selected) {
-                  setTempEndTime(roundUpToNearest30Minutes(selected));
-                }
-              }
             }}
-            onTouchCancel={() => setShowEndPicker(false)}
+            onCancel={() => setShowStartPicker(false)}
+            is24Hour
+            minuteInterval={30}
+            date={startTime}
+            confirmTextIOS="확인"
+            cancelTextIOS="취소"
           />
         )}
-        {showEndPicker && Platform.OS === 'ios' && (
-          <TouchableOpacity
-            style={styles.iosPickerConfirmButton}
-            onPress={() => {
+        {showEndPicker && (
+          <DateTimePickerModal
+            isVisible={showEndPicker}
+            mode="time"
+            onConfirm={time => {
               setShowEndPicker(false);
-              if (tempEndTime > startTime) {
-                setEndTime(tempEndTime);
-              } else {
-                const newEndTime = new Date(startTime);
-                newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                setEndTime(newEndTime);
-              }
-            }}>
-            <Text style={styles.iosPickerConfirmText}>확인</Text>
-          </TouchableOpacity>
+              setEndTime(roundUpToNearest30Minutes(time));
+            }}
+            onCancel={() => setShowEndPicker(false)}
+            is24Hour
+            minuteInterval={30}
+            date={endTime}
+            minimumDate={startTime}
+            confirmTextIOS="확인"
+            cancelTextIOS="취소"
+          />
         )}
         {/* 하단 버튼 */}
         <View
@@ -1090,18 +1016,6 @@ const styles = StyleSheet.create({
   },
   datePickerText: {
     textAlign: 'center',
-  },
-  iosPickerConfirmButton: {
-    marginTop: 8,
-    alignSelf: 'flex-end',
-    backgroundColor: '#FB5353',
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-  },
-  iosPickerConfirmText: {
-    color: '#fff',
-    fontWeight: 'bold',
   },
   bottomButtonContainer: {
     paddingHorizontal: 0,
