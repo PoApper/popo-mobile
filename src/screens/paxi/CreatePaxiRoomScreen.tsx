@@ -208,7 +208,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
           <View>
             <Text style={[styles.label, {color: C.text}]}>방 제목</Text>
             <TextInput
-              style={[inputBase]}
+              style={[inputBase, {height: 45}]}
               placeholder="제목을 입력해주세요"
               placeholderTextColor={C.placeholder}
               value={roomName}
@@ -360,7 +360,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               <Text style={{color: C.textSub, fontSize: 12}}>(선택)</Text>
             </Text>
             <TextInput
-              style={[inputBase, {height: 112, lineHeight: 22}]}
+              style={[inputBase, {height: 112}]}
               multiline
               placeholder="세부사항을 입력해주세요"
               placeholderTextColor={C.placeholder}
