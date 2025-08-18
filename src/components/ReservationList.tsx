@@ -668,19 +668,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
 
 const styles = StyleSheet.create({
   listContainer: {
-    padding: 16,
-    paddingBottom: 100,
-  },
-  reservationCard: {
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 6,
+    paddingHorizontal: 16,
   },
   reservationHeader: {
     flexDirection: 'row',
@@ -819,7 +807,7 @@ const styles = StyleSheet.create({
   // New simplified item design
   simpleReservationItem: {
     paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 4,
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
