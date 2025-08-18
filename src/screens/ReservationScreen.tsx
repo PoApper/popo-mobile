@@ -92,6 +92,18 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <View style={{flex: 0}}>
+        <Text
+          style={{
+            color: textColor,
+            marginTop: 20,
+            marginLeft: 20,
+            marginBottom: 10,
+            fontSize: 25,
+            fontWeight: 'bold',
+          }}>
+          내 일정
+        </Text>
+
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -102,7 +114,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
               onPress={() => setActiveTab(tab.id)}
               style={styles.typeTabWrapper}>
               <View style={styles.typeTabInner}>
-                <View style={styles.textWithUnderline}>
+                <View style={{alignItems: 'center'}}>
                   <Text
                     style={[
                       styles.typeTab,
@@ -118,17 +130,16 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
                     }}>
                     {tab.label}
                   </Text>
-                  {activeTab === tab.id && (
-                    <View
-                      style={[
-                        styles.underline,
-                        {
-                          width: (textWidths[tab.id] || 0) + 8,
-                          backgroundColor: textColor,
-                        },
-                      ]}
-                    />
-                  )}
+                  <View
+                    style={[
+                      styles.underline,
+                      {
+                        width: (textWidths[tab.id] || 0) + 8,
+                        backgroundColor:
+                          activeTab === tab.id ? textColor : 'transparent',
+                      },
+                    ]}
+                  />
                 </View>
               </View>
             </TouchableOpacity>
@@ -198,38 +209,15 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  backButton: {
-    padding: 8,
-  },
-  backButtonText: {
-    fontSize: 16,
-  },
-  placeholderButton: {
-    width: 40,
-  },
   typeNav: {
     paddingLeft: 16,
   },
   typeTabWrapper: {
-    paddingVertical: 12,
-    marginRight: 24,
+    width: 70,
+    paddingVertical: 5,
+    marginRight: 12,
   },
   typeTabInner: {
-    alignItems: 'center',
-  },
-  textWithUnderline: {
     alignItems: 'center',
   },
   typeTab: {
