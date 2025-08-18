@@ -1,7 +1,3 @@
-/**
- * Use for filter the location in PaxiRoomListScreen
- */
-
 import React, {useState, useRef} from 'react';
 import {
   View,
@@ -16,6 +12,7 @@ import {
   LayoutRectangle,
   useColorScheme,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface Option {
   id: string;
@@ -63,22 +60,41 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
         style={[
           styles.button,
           {
-            backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+            backgroundColor: isDarkMode
+              ? selected
+                ? '#2C2C2C'
+                : '#1A1A1A'
+              : selected
+              ? '#F3F4F6'
+              : '#FFFFFF',
             borderColor: isDarkMode ? '#2C2C2C' : '#E5E7EB',
           },
         ]}>
-        <Text
-          style={[
-            styles.buttonText,
-            {
-              color: isDarkMode ? '#FFFFFF' : '#000000',
-            },
-            selected ? {fontWeight: 'bold'} : null,
-          ]}>
-          {selected
-            ? options.find(cat => cat.id === selected)?.name
-            : placeholderText}
-        </Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text
+            style={[
+              styles.buttonText,
+              {
+                color: isDarkMode ? '#FFFFFF' : '#000000',
+              },
+              selected ? {fontWeight: 'bold'} : null,
+            ]}>
+            {selected
+              ? options.find(cat => cat.id === selected)?.name
+              : placeholderText}
+          </Text>
+          {selected && (
+            <TouchableOpacity
+              onPress={e => {
+                e.stopPropagation();
+                onSelect(null as any);
+              }}
+              style={{marginLeft: 8}}
+              activeOpacity={0.6}>
+              <Icon name="close" size={20} color="#888" />
+            </TouchableOpacity>
+          )}
+        </View>
       </TouchableOpacity>
 
       {visible && dropdownPosition && (
@@ -94,7 +110,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
                     position: 'absolute',
                     top: dropdownPosition.y,
                     left: dropdownPosition.x,
-                    width: dropdownPosition.width * 1.5,
+                    width: 130, // dropdownPosition.width * 1.5
                   },
                 ]}>
                 <FlatList
@@ -135,7 +151,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 10,
+    borderRadius: 19,
     borderWidth: 1,
     height: 38,
     justifyContent: 'center',
