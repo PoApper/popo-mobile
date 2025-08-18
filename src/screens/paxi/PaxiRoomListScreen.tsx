@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   StyleSheet,
   Text,
   View,
   ScrollView,
+  FlatList,
   TouchableOpacity,
   StatusBar,
   useColorScheme,
@@ -61,6 +62,31 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       });
   };
 
+  const filteredRoomData = useMemo(() => {
+    return roomData
+      .filter(
+        room =>
+          !selectedDeparture || room.departureLocation === selectedDeparture,
+      )
+      .filter(
+        room =>
+          !selectedArrival || room.destinationLocation === selectedArrival,
+      )
+      .filter(
+        room =>
+          !selectedDate ||
+          moment(room.departureTime).format('YYYY-MM-DD') ===
+            moment(selectedDate).format('YYYY-MM-DD'),
+      )
+      .filter(room => !showEmptyRoom || room.currentParticipant <= 1);
+  }, [
+    roomData,
+    selectedDeparture,
+    selectedArrival,
+    selectedDate,
+    showEmptyRoom,
+  ]);
+
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -101,7 +127,23 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.conditionNavigator]}>
+      <Text
+        style={{
+          color: textColor,
+          marginTop: 20,
+          marginLeft: 20,
+          marginBottom: 10,
+          fontSize: 25,
+          fontWeight: 'bold',
+        }}>
+        Paxi
+      </Text>
+
+      <ScrollView
+        horizontal
+        style={styles.conditionNavigatorScroll}
+        contentContainerStyle={[styles.conditionNavigatorContent]}
+        showsHorizontalScrollIndicator={false}>
         <RefreshButton onPress={() => getRoomList()} />
 
         <DropdownFilter
@@ -122,7 +164,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
           selectedDate={selectedDate}
           onDateChange={date => setSelectedDate(date)}
         />
-      </View>
+      </ScrollView>
 
       <TouchableOpacity
         style={styles.checkboxContainer}
@@ -148,8 +190,22 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <Text style={{fontSize: 15, color: textColor}}>빈 방만 보기</Text>
       </TouchableOpacity>
 
-      <ScrollView
-        contentContainerStyle={{padding: 4, paddingBottom: 100}}
+      <FlatList
+        data={filteredRoomData}
+        keyExtractor={item => item.uuid}
+        renderItem={({item}) => (
+          <RoomListCard
+            roomData={item}
+            userUuid={userUuid}
+            navigation={navigation as any}
+          />
+        )}
+        contentContainerStyle={{padding: 16, paddingBottom: 100}}
+        ListEmptyComponent={() => (
+          <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>
+            현재 등록된 카풀이 없습니다.
+          </Text>
+        )}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -158,51 +214,21 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
             colors={isDarkMode ? ['#FFFFFF'] : ['#000000']}
             tintColor={isDarkMode ? '#FFFFFF' : '#000000'}
           />
-        }>
-        <View style={{padding: 16}}>
-          {roomData.length > 0 ? (
-            roomData
-              .filter(
-                room =>
-                  !selectedDeparture ||
-                  room.departureLocation === selectedDeparture,
-              )
-              .filter(
-                room =>
-                  !selectedArrival ||
-                  room.destinationLocation === selectedArrival,
-              )
-              .filter(
-                room =>
-                  !selectedDate ||
-                  moment(room.departureTime).format('YYYY-MM-DD') ===
-                    moment(selectedDate).format('YYYY-MM-DD'),
-              )
-              .map((room, index) => (
-                <RoomListCard
-                  key={index}
-                  roomData={room}
-                  userUuid={userUuid}
-                  navigation={navigation as any}
-                />
-              ))
-          ) : (
-            <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>
-              현재 등록된 카풀이 없습니다.
-            </Text>
-          )}
-        </View>
-      </ScrollView>
+        }
+        initialNumToRender={10}
+        windowSize={10}
+        removeClippedSubviews
+      />
 
       <TouchableOpacity
         style={[
           styles.floatingButton,
           {
-            backgroundColor: isDarkMode ? '#FFFFFF' : 'black',
+            backgroundColor: isDarkMode ? '#444444' : '#222222',
           },
         ]}
         onPress={() => navigation.navigate('CreatePaxiRoomScreen')}>
-        <Icon name="add" size={30} color={isDarkMode ? '#000000' : 'white'} />
+        <Icon name="add" size={30} color={isDarkMode ? '#cccccc' : '#ffffff'} />
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -241,12 +267,14 @@ const styles = StyleSheet.create({
   placeholderButton: {
     width: 40,
   },
-  conditionNavigator: {
-    paddingLeft: 15,
+  conditionNavigatorScroll: {
     flexDirection: 'row',
-    gap: 5,
-    marginTop: 10,
-    marginBottom: 10,
+    flexGrow: 0,
+  },
+  conditionNavigatorContent: {
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    gap: 8,
   },
   titleContainer: {
     flexDirection: 'row',

@@ -73,7 +73,10 @@ const RoomFilterDatePicker = ({
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
-        onConfirm={date => onDateChange(date)}
+        onConfirm={date => {
+          onDateChange(date);
+          setDatePickerVisible(false);
+        }}
         onCancel={() => setDatePickerVisible(false)}
         minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
         maximumDate={new Date(new Date().setDate(new Date().getDate() + 30))}
@@ -90,7 +93,7 @@ export default RoomFilterDatePicker;
 const styles = StyleSheet.create({
   button: {
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 19,
     height: 38,
     justifyContent: 'center',
     alignItems: 'center',
