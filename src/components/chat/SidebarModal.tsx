@@ -164,7 +164,7 @@ SidebarModalProps) => {
         .put(`/room/leave/${roomData.uuid}`)
         .then(() => {
           setModalVisible(false);
-          navigation.navigate('Home');
+          navigation.navigate('Main', {tab: 'MyReservation'});
         })
         .catch(err => {
           console.error('채팅방 나가기 실패', err);
