@@ -88,6 +88,7 @@ export type OtherStackParamList = {
   };
   Login: undefined;
   UserDetail: undefined;
+  UserAccountInfo: undefined;
   Developer: undefined;
   Whitebook: undefined;
   Benefits: undefined;
