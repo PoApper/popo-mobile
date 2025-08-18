@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -53,13 +53,16 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';
 
-  const fetchReservations = async () => {
+  const fetchReservations = useCallback(async () => {
     try {
       const response = await paxi_api.get<RoomData[]>('/room/my');
-
-      console.log(response.data);
-
-      setChatRooms(response.data);
+      const sortedData = response.data.sort((a, b) => {
+        return (
+          new Date(b.departureTime).getTime() -
+          new Date(a.departureTime).getTime()
+        );
+      });
+      setChatRooms(sortedData);
     } catch (err) {
       console.error('예약 정보 조회 오류:', err);
       if (axios.isAxiosError(err)) {
@@ -76,7 +79,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [navigation]);
 
   const handleScroll = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y;
@@ -89,7 +92,42 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
 
   useEffect(() => {
     fetchReservations();
-  }, [refreshKey]);
+  }, [refreshKey, fetchReservations]);
+
+  const getStatusConfig = (status: string) => {
+    const statusMap = new Map([
+      [
+        'IN_SETTLEMENT',
+        {
+          text: '정산중',
+          lightMode: {
+            backgroundColor: '#FFF3F3',
+            textColor: '#E45B63',
+          },
+          darkMode: {
+            backgroundColor: '#4A1A1A',
+            textColor: '#FF6B73',
+          },
+        },
+      ],
+      [
+        'COMPLETED',
+        {
+          text: '종료됨',
+          lightMode: {
+            backgroundColor: '#F0FDF4',
+            textColor: '#16A34A',
+          },
+          darkMode: {
+            backgroundColor: '#1A3A1A',
+            textColor: '#4ADE80',
+          },
+        },
+      ],
+    ]);
+
+    return statusMap.get(status) || null;
+  };
 
   const renderReservationItem = ({item}: {item: RoomData}) => (
     <TouchableOpacity
@@ -120,14 +158,32 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           ellipsizeMode="tail">
           {`${item.departureLocation} → ${item.destinationLocation}`}
         </Text>
-        <Text
-          style={[
-            styles.detailValue,
-            {color: textColor, marginTop: 4, fontSize: 14, fontWeight: '400'},
-          ]}>
+        <Text style={[styles.detailValue, {color: textColor}]}>
           {moment(item.departureTime).format('YYYY-MM-DD HH:mm')} 출발
         </Text>
       </View>
+      {(() => {
+        const statusConfig = getStatusConfig(item.status);
+        if (!statusConfig) {
+          return null;
+        }
+
+        const colors = isDarkMode
+          ? statusConfig.darkMode
+          : statusConfig.lightMode;
+
+        return (
+          <View
+            style={[
+              styles.statusIconContainer,
+              {backgroundColor: colors.backgroundColor},
+            ]}>
+            <Text style={[styles.statusTextStyle, {color: colors.textColor}]}>
+              {statusConfig.text}
+            </Text>
+          </View>
+        );
+      })()}
       <View
         style={{
           width: 48,
@@ -234,10 +290,10 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
 
 const styles = StyleSheet.create({
   listContainer: {
-    padding: 16,
+    paddingHorizontal: 16,
   },
   reservationTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     marginBottom: 4,
   },
@@ -259,8 +315,19 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   detailValue: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: '500',
+  },
+  statusIconContainer: {
+    width: 50,
+    height: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statusTextStyle: {
+    fontSize: 10,
+    fontWeight: 'bold',
   },
   cancelButton: {
     backgroundColor: '#EF4444',
@@ -362,8 +429,7 @@ const styles = StyleSheet.create({
   fromToText: {
     fontSize: 14,
     fontWeight: '400',
-    marginTop: 4,
-    marginBottom: 4,
+    marginBottom: 2,
   },
 });
 

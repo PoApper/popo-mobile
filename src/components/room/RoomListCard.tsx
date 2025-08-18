@@ -28,11 +28,10 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
   navigation,
 }) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const textColor = isDarkMode ? '#FFFFFF' : '#222222';
-  const backgroundColor = isDarkMode ? '#1A1A1A' : '#fff';
-  const subTextColor = isDarkMode ? '#888' : '#666';
+  const textColor = isDarkMode ? '#EDEDED' : '#222222';
+  const backgroundColor = isDarkMode ? '#1A1A1A' : '#FFFFFF';
+  const subTextColor = isDarkMode ? '#A3A3A3' : '#666666';
 
-  const remain = roomData.maxParticipant - roomData.currentParticipant;
   const isOwner = userUuid === roomData.ownerUuid;
 
   const askJoinRoom = () => {
@@ -77,7 +76,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
     ]);
   };
 
-  const isPossible = remain < roomData.maxParticipant;
+  const isPossible = roomData.currentParticipant < roomData.maxParticipant;
 
   return (
     <TouchableOpacity
@@ -100,15 +99,15 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                 {
                   backgroundColor: isOwner
                     ? isDarkMode
-                      ? '#fff3f3'
-                      : '#FFF0F0'
+                      ? 'rgba(79,70,229,0.18)'
+                      : '#EEF2FF'
                     : isPossible
                     ? isDarkMode
-                      ? '#fff3f3'
-                      : '#FFF0F0'
+                      ? 'rgba(250,87,33,0.18)'
+                      : '#FFF4E6'
                     : isDarkMode
-                    ? 'rgba(217,217,217,0.83)'
-                    : '#F3F3F3',
+                    ? 'rgba(217,217,217,0.12)'
+                    : '#F3F4F6',
                 },
               ]}>
               <Text
@@ -116,13 +115,13 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                   styles.statusText,
                   {
                     color: isOwner
-                      ? '#909090'
+                      ? '#4F46E5'
                       : isPossible
-                      ? '#fb5353'
+                      ? '#FA5721'
                       : '#909090',
                   },
                 ]}>
-                {isOwner ? '내가 생성한 방' : isPossible ? '참여 가능' : '마감'}
+                {isOwner ? '내가 만든 방' : isPossible ? '참여 가능' : '마감'}
               </Text>
             </View>
             <View>
@@ -133,7 +132,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                 {roomData.title}
               </Text>
             </View>
-            <View style={{flexDirection: 'row', gap: '5', marginLeft: 'auto'}}>
+            <View style={{flexDirection: 'row', gap: 5, marginLeft: 'auto'}}>
               {roomData.currentParticipant < roomData.maxParticipant ? (
                 <Image
                   source={require('../../../assets/baby_phonix.png')}
@@ -166,7 +165,11 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
               {roomData.departureLocation}
             </Text>
 
-            <DottedArrow width={100} height={25} color={'white'} />
+            <DottedArrow
+              width={100}
+              height={25}
+              color={isDarkMode ? 'white' : 'black'}
+            />
 
             <Text style={[styles.detailsText, {color: textColor}]}>
               {roomData.destinationLocation}

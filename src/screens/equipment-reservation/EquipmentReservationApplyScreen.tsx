@@ -88,7 +88,7 @@ const EquipmentReservationApplyScreen = ({
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
   const scrollViewRef = useRef<any>(null);
-  const [showEquipmentList, setShowEquipmentList] = useState(false);
+  const [showEquipmentModal, setShowEquipmentModal] = useState(false);
   const [reservedEquipments, setReservedEquipments] = useState<string[]>([]);
   const [loadingReservations, setLoadingReservations] = useState(false);
 
@@ -96,15 +96,30 @@ const EquipmentReservationApplyScreen = ({
   useEffect(() => {
     const fetchEquipment = async () => {
       try {
+        console.log('장비 리스트 요청 시작');
+        console.log('association 값:', association);
+        console.log('API 엔드포인트:', `equip/owner/${association}`);
+
         const res = await PoPoAxios.get<IEquipment[]>(
           `equip/owner/${association}`,
         );
-        setEquipmentList(res.data);
-      } catch (e) {
+
+        console.log('장비 리스트 응답 성공:', res.data);
+        console.log('응답 데이터 길이:', res.data?.length || 0);
+
+        setEquipmentList(res.data || []);
+      } catch (e: any) {
+        console.error('장비 리스트 요청 실패:', e);
+        console.error('에러 상세:', e.response?.data || e.message);
         setEquipmentList([]);
       }
     };
-    fetchEquipment();
+
+    if (association) {
+      fetchEquipment();
+    } else {
+      console.log('association이 설정되지 않음');
+    }
   }, [association]);
 
   // 예약된 장비 확인
@@ -169,10 +184,10 @@ const EquipmentReservationApplyScreen = ({
   }, [checkReservedEquipments]);
 
   // 30분 단위로 시간 올림
-  const roundUpToNearest30Minutes = (date: Date) => {
-    const minutes = date.getMinutes();
+  const roundUpToNearest30Minutes = (inputDate: Date) => {
+    const minutes = inputDate.getMinutes();
     const roundedMinutes = Math.ceil(minutes / 30) * 30;
-    const newDate = new Date(date);
+    const newDate = new Date(inputDate);
     newDate.setMinutes(roundedMinutes);
     return newDate;
   };
@@ -214,7 +229,7 @@ const EquipmentReservationApplyScreen = ({
     )}월 ${String(d.getDate()).padStart(2, '0')}일`;
 
   // 장비 선택 토글
-  const toggleEquipment = (equipment: IEquipment) => {
+  const toggleEquipment = useCallback((equipment: IEquipment) => {
     setSelectedEquipments(prev => {
       if (prev.find(e => e.uuid === equipment.uuid)) {
         return prev.filter(e => e.uuid !== equipment.uuid);
@@ -222,7 +237,7 @@ const EquipmentReservationApplyScreen = ({
         return [...prev, equipment];
       }
     });
-  };
+  }, []);
 
   // 총 가격 계산
   const totalPrice = selectedEquipments.reduce(
@@ -330,15 +345,14 @@ const EquipmentReservationApplyScreen = ({
     setShowDatePicker(false);
     setShowStartPicker(false);
     setShowEndPicker(false);
-    setShowEquipmentList(!showEquipmentList);
-    setTimeout(() => {
-      scrollViewRef.current?.scrollToPosition(0, 500, true);
-    });
+    setShowEquipmentModal(true);
+    // 모달이 열릴 때 예약된 장비 상태 확인
+    checkReservedEquipments();
   };
 
   // Picker 상태 관리 함수
   const openDatePicker = () => {
-    setShowEquipmentList(false);
+    setShowEquipmentModal(false);
     Keyboard.dismiss();
     setShowDatePicker(true);
     setShowStartPicker(false);
@@ -348,7 +362,7 @@ const EquipmentReservationApplyScreen = ({
     }, 100);
   };
   const openStartPicker = () => {
-    setShowEquipmentList(false);
+    setShowEquipmentModal(false);
     Keyboard.dismiss();
     setShowDatePicker(false);
     setShowStartPicker(true);
@@ -358,7 +372,7 @@ const EquipmentReservationApplyScreen = ({
     }, 100);
   };
   const openEndPicker = () => {
-    setShowEquipmentList(false);
+    setShowEquipmentModal(false);
     Keyboard.dismiss();
     setShowDatePicker(false);
     setShowStartPicker(false);
@@ -379,6 +393,14 @@ const EquipmentReservationApplyScreen = ({
     return selectedDateTime > now;
   };
 
+  // 이모티콘 제거 함수
+  const removeEmoji = (text: string) => {
+    return text.replace(
+      /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu,
+      '',
+    );
+  };
+
   // 장비 아이템 렌더 함수 메모이제이션
   const renderEquipmentItem = useCallback(
     ({item}: {item: IEquipment}) => {
@@ -389,13 +411,16 @@ const EquipmentReservationApplyScreen = ({
         <TouchableOpacity
           key={item.uuid}
           onPress={() => toggleEquipment(item)}
-          disabled={selected}
+          disabled={isReserved}
           style={[
             styles.equipmentItem,
             {borderColor: isDarkMode ? '#3a3a3a' : '#F3F4F6'},
-            (selected || isReserved) && styles.disabledEquipmentItem,
-            (selected || isReserved) && {
+            isReserved && styles.disabledEquipmentItem,
+            isReserved && {
               backgroundColor: isDarkMode ? '#2a2a2a' : '#F3F4F6',
+            },
+            selected && {
+              backgroundColor: isDarkMode ? '#3a3a3a' : '#E5E7EB',
             },
           ]}>
           <Text
@@ -405,7 +430,7 @@ const EquipmentReservationApplyScreen = ({
               isReserved && styles.reservedEquipmentName,
               isReserved && {color: subTextColor},
             ]}>
-            {item.name}
+            {removeEmoji(item.name)}
           </Text>
           {selected && <Text style={styles.checkIcon}>✔</Text>}
           {isReserved && !selected && (
@@ -640,34 +665,7 @@ const EquipmentReservationApplyScreen = ({
               </Text>
             )}
           </TouchableOpacity>
-          {showEquipmentList && (
-            <View style={styles.equipmentListScrollView}>
-              {loadingReservations ? (
-                <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="small" color={subTextColor} />
-                  <Text style={[styles.loadingText, {color: subTextColor}]}>
-                    예약 상태 확인 중...
-                  </Text>
-                </View>
-              ) : (
-                <FlatList
-                  data={equipmentList}
-                  renderItem={renderEquipmentItem}
-                  keyExtractor={keyExtractor}
-                  style={{maxHeight: 200}}
-                  removeClippedSubviews={true}
-                  initialNumToRender={5}
-                  maxToRenderPerBatch={3}
-                  windowSize={5}
-                  ListEmptyComponent={
-                    <Text style={[styles.emptyListText, {color: subTextColor}]}>
-                      장비가 없습니다.
-                    </Text>
-                  }
-                />
-              )}
-            </View>
-          )}
+
           {/* 날짜/시간 선택 */}
           <View style={styles.dateTimePickerContainer}>
             <View style={styles.datePickerWrapper}>
@@ -824,6 +822,63 @@ const EquipmentReservationApplyScreen = ({
           </TouchableOpacity>
         </View>
       </KeyboardAwareScrollView>
+
+      {/* 장비 선택 팝업 (하단에서 슬라이드업) */}
+      {showEquipmentModal && (
+        <View style={styles.popupOverlay}>
+          <TouchableOpacity
+            style={styles.popupBackdrop}
+            onPress={() => setShowEquipmentModal(false)}
+            activeOpacity={1}
+          />
+          <View
+            style={[
+              styles.popupContent,
+              {backgroundColor: backgroundStyle.backgroundColor},
+            ]}>
+            {/* 팝업 헤더 */}
+            <View
+              style={[styles.popupHeader, {borderBottomColor: borderColor}]}>
+              <Text style={[styles.popupTitle, {color: textColor}]}>
+                장비 선택
+              </Text>
+              <TouchableOpacity
+                style={styles.popupCompleteButton}
+                onPress={() => setShowEquipmentModal(false)}>
+                <Text style={styles.popupCompleteText}>확인</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* 팝업 바디 */}
+            <View style={styles.popupBody}>
+              {/* 장비 개수 표시 */}
+              <Text style={[styles.popupInfoText, {color: textColor}]}>
+                ⚒️ 선택 가능한 장비: {equipmentList.length}개
+              </Text>
+
+              {/* 로딩 상태 표시 */}
+              {loadingReservations && (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="small" color={subTextColor} />
+                  <Text style={[styles.loadingText, {color: subTextColor}]}>
+                    예약 상태 확인 중...
+                  </Text>
+                </View>
+              )}
+
+              {/* 장비 리스트 */}
+              <FlatList
+                data={equipmentList}
+                renderItem={renderEquipmentItem}
+                keyExtractor={keyExtractor}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.popupEquipmentList}
+                style={styles.popupFlatList}
+              />
+            </View>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -909,10 +964,7 @@ const styles = StyleSheet.create({
     paddingLeft: 4,
     lineHeight: 24,
   },
-  equipmentListScrollView: {
-    maxHeight: 220,
-    marginTop: 4,
-  },
+
   loadingContainer: {
     padding: 20,
     alignItems: 'center',
@@ -1026,6 +1078,122 @@ const styles = StyleSheet.create({
   },
   noticeBold: {
     fontWeight: 'bold',
+  },
+  // 모달 스타일
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '90%',
+    maxHeight: '80%',
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  modalCloseButton: {
+    padding: 8,
+  },
+  modalCloseText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  modalBody: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+  modalEquipmentList: {
+    paddingBottom: 20,
+  },
+  // 팝업 스타일 (하단에서 슬라이드업)
+  popupOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1000,
+  },
+  popupBackdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  popupContent: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: '70%',
+    zIndex: 1001,
+  },
+  popupHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+  },
+  popupTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  popupCompleteButton: {
+    backgroundColor: '#FB5353',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  popupCompleteText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  popupBody: {
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+  popupInfoText: {
+    fontSize: 16,
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  popupEquipmentList: {
+    paddingBottom: 20,
+  },
+  popupFlatList: {
+    maxHeight: 400,
+  },
+  debugInfo: {
+    padding: 16,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  debugText: {
+    fontSize: 12,
+    marginBottom: 4,
   },
 });
 
