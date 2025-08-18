@@ -283,7 +283,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         navigation={navigation}
       />
 
-      {isSettlement && isPaid && settlementData && (
+      {isSettlement && settlementData && (
         <View
           style={{
             width: '100%',
