@@ -56,10 +56,13 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   const fetchReservations = useCallback(async () => {
     try {
       const response = await paxi_api.get<RoomData[]>('/room/my');
-
-      console.log(response.data);
-
-      setChatRooms(response.data);
+      const sortedData = response.data.sort((a, b) => {
+        return (
+          new Date(b.departureTime).getTime() -
+          new Date(a.departureTime).getTime()
+        );
+      });
+      setChatRooms(sortedData);
     } catch (err) {
       console.error('예약 정보 조회 오류:', err);
       if (axios.isAxiosError(err)) {
