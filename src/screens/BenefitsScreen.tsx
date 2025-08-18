@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
+  FlatList,
   useColorScheme,
   StatusBar,
 } from 'react-native';
@@ -14,28 +14,18 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import CommonHeader from '@components/CommonHeader';
+import AffiliateItem, {
+  BenefitAffiliateItem,
+} from '@components/benefits/AffiliateItem';
+import DiscountItem, {
+  BenefitDiscountItem,
+} from '@components/benefits/DiscountItem';
 
 type BenefitsScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Benefits'>;
 };
 
-interface BenefitAffiliateItem {
-  id: string;
-  title: string;
-  content_short: string;
-  content: string;
-  updatedAt: string;
-}
-
-interface BenefitDiscountItem {
-  id: string;
-  title: string;
-  region: string;
-  open_hour: string;
-  phone: string;
-  content: string;
-  updatedAt: string;
-}
+// Types imported from components
 
 const benefitTypes = ['제휴 업체', '할인 업체'];
 const sortTypes = ['등록순', '가나다순'];
@@ -52,19 +42,7 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
   const [discountBenefits, setDiscountBenefits] = useState<
     BenefitDiscountItem[]
   >([]);
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
-
-  const toggleExpand = (id: string) => {
-    setExpandedItems(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-      return newSet;
-    });
-  };
+  // Expansion handled within item components now
 
   const getSortedBenefits = (
     benefits: BenefitAffiliateItem[] | BenefitDiscountItem[],
@@ -77,6 +55,23 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
           new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
       );
     }
+  };
+
+  const dataForList = useMemo(() => {
+    return selectedType === '제휴 업체'
+      ? getSortedBenefits(officialBenefits)
+      : getSortedBenefits(discountBenefits);
+  }, [selectedType, officialBenefits, discountBenefits, sortType]);
+
+  const renderItem = ({
+    item,
+  }: {
+    item: BenefitAffiliateItem | BenefitDiscountItem;
+  }) => {
+    if (selectedType === '제휴 업체') {
+      return <AffiliateItem item={item as BenefitAffiliateItem} />;
+    }
+    return <DiscountItem item={item as BenefitDiscountItem} />;
   };
 
   useEffect(() => {
@@ -115,17 +110,14 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
       />
       <CommonHeader navigation={navigation} title="총학 제휴업체" />
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.typeNav}>
+      <View style={styles.typeNav}>
         {benefitTypes.map(type => (
           <TouchableOpacity
             key={type}
             onPress={() => setSelectedType(type)}
             style={styles.typeTabWrapper}>
             <View style={styles.typeTabInner}>
-              <View style={styles.textWithUnderline}>
+              <View style={{alignItems: 'center'}}>
                 <Text
                   style={[
                     styles.typeTab,
@@ -141,22 +133,21 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
                   }}>
                   {type}
                 </Text>
-                {selectedType === type && (
-                  <View
-                    style={[
-                      styles.underline,
-                      {
-                        width: (textWidths[type] || 0) + 8,
-                        backgroundColor: textColor,
-                      },
-                    ]}
-                  />
-                )}
+                <View
+                  style={[
+                    styles.underline,
+                    {
+                      width: (textWidths[type] || 0) + 8,
+                      backgroundColor:
+                        selectedType === type ? textColor : 'transparent',
+                    },
+                  ]}
+                />
               </View>
             </View>
           </TouchableOpacity>
         ))}
-      </ScrollView>
+      </View>
 
       <View style={styles.sortButtons}>
         {sortTypes.map(type => (
@@ -183,124 +174,14 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
         ))}
       </View>
 
-      <ScrollView
+      <FlatList
+        showsVerticalScrollIndicator={false}
         style={styles.container}
-        contentContainerStyle={{
-          paddingBottom: 20,
-          flexGrow: 1,
-        }}>
-        {selectedType === '제휴 업체'
-          ? getSortedBenefits(officialBenefits).map(item => {
-              const affiliateItem = item as BenefitAffiliateItem;
-              return (
-                <TouchableOpacity
-                  key={affiliateItem.id}
-                  style={[
-                    styles.itemContainer,
-                    {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
-                  ]}
-                  onPress={() => toggleExpand(affiliateItem.id)}>
-                  <View style={styles.textContainer}>
-                    <Text style={[styles.itemTitle, {color: textColor}]}>
-                      {affiliateItem.title}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.itemDescription,
-                        {color: isDarkMode ? '#888' : '#666'},
-                      ]}>
-                      {expandedItems.has(affiliateItem.id)
-                        ? affiliateItem.content
-                        : affiliateItem.content_short}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.expandIndicator,
-                        {color: isDarkMode ? '#888' : '#666'},
-                      ]}>
-                      {expandedItems.has(affiliateItem.id)
-                        ? '접기 ▲'
-                        : '더보기 ▼'}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            })
-          : getSortedBenefits(discountBenefits).map(item => {
-              const discountItem = item as BenefitDiscountItem;
-              return (
-                <TouchableOpacity
-                  key={discountItem.id}
-                  style={[
-                    styles.itemContainer,
-                    {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
-                  ]}
-                  onPress={() => toggleExpand(discountItem.id)}>
-                  <View style={styles.textContainer}>
-                    <Text style={[styles.itemTitle, {color: textColor}]}>
-                      {discountItem.title}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.itemDescription,
-                        {color: isDarkMode ? '#888' : '#666'},
-                      ]}>
-                      {discountItem.content}
-                    </Text>
-                    {expandedItems.has(discountItem.id) && (
-                      <View style={styles.detailsContainer}>
-                        <View style={styles.infoContainer}>
-                          <Text
-                            style={[
-                              styles.infoLabel,
-                              {color: isDarkMode ? '#888' : '#666'},
-                            ]}>
-                            📍 지역:
-                          </Text>
-                          <Text style={[styles.infoText, {color: textColor}]}>
-                            {discountItem.region}
-                          </Text>
-                        </View>
-                        <View style={styles.infoContainer}>
-                          <Text
-                            style={[
-                              styles.infoLabel,
-                              {color: isDarkMode ? '#888' : '#666'},
-                            ]}>
-                            🕒 영업시간:
-                          </Text>
-                          <Text style={[styles.infoText, {color: textColor}]}>
-                            {discountItem.open_hour}
-                          </Text>
-                        </View>
-                        <View style={styles.infoContainer}>
-                          <Text
-                            style={[
-                              styles.infoLabel,
-                              {color: isDarkMode ? '#888' : '#666'},
-                            ]}>
-                            📞 연락처:
-                          </Text>
-                          <Text style={[styles.infoText, {color: textColor}]}>
-                            {discountItem.phone}
-                          </Text>
-                        </View>
-                      </View>
-                    )}
-                    <Text
-                      style={[
-                        styles.expandIndicator,
-                        {color: isDarkMode ? '#888' : '#666'},
-                      ]}>
-                      {expandedItems.has(discountItem.id)
-                        ? '접기 ▲'
-                        : '상세정보 보기 ▼'}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-      </ScrollView>
+        contentContainerStyle={{paddingBottom: 20, flexGrow: 1}}
+        data={dataForList}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+      />
     </SafeAreaView>
   );
 };
@@ -308,14 +189,15 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    paddingTop: 16,
+    paddingTop: 8,
   },
   typeNav: {
     paddingLeft: 16,
+    flexDirection: 'row',
+    gap: 12,
   },
   typeTabWrapper: {
     paddingVertical: 12,
-    marginRight: 24,
   },
   typeTabInner: {
     alignItems: 'center',
@@ -389,14 +271,14 @@ const styles = StyleSheet.create({
   sortButtons: {
     flexDirection: 'row',
     paddingHorizontal: 15,
-    marginVertical: 10,
+    marginBottom: 10,
+    gap: 8,
   },
   sortButton: {
     paddingHorizontal: 15,
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    marginRight: 10,
   },
   activeSort: {
     borderColor: '#000',
