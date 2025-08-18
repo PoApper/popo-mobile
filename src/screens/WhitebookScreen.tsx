@@ -140,6 +140,7 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
       </View>
 
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={whiteBookItems}
         keyExtractor={item => item.uuid}
         contentContainerStyle={styles.listContainer}
@@ -177,7 +178,9 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
 
 const styles = StyleSheet.create({
   descriptionContainer: {
-    padding: 20,
+    paddingTop: 20,
+    paddingBottom: 5,
+    paddingHorizontal: 20,
   },
   descriptionText: {
     fontSize: 16,
@@ -187,7 +190,7 @@ const styles = StyleSheet.create({
   sortButtons: {
     flexDirection: 'row',
     paddingHorizontal: 15,
-    marginVertical: 10,
+    marginBottom: 10,
   },
   sortButton: {
     paddingHorizontal: 15,
