@@ -16,7 +16,7 @@ export const RefreshButton = ({onPress}: {onPress: () => void}) => {
       activeOpacity={0.7}>
       <Icon
         name="refresh"
-        size={18}
+        size={25}
         color={isDarkMode ? '#FFFFFF' : '#000000'}
       />
     </TouchableOpacity>
@@ -25,8 +25,8 @@ export const RefreshButton = ({onPress}: {onPress: () => void}) => {
 
 const styles = StyleSheet.create({
   refreshButton: {
-    padding: 10,
-    borderRadius: 10,
+    padding: 5,
+    borderRadius: 19,
     height: 38,
     width: 38,
     justifyContent: 'center',

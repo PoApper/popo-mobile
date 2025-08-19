@@ -15,7 +15,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 
 import {RootStackParamList} from '@navigation/types';
-import {ClubType} from '@interfaces/club';
+import {ClubCategoryKey} from '@interfaces/club';
 import api from '@utils/api';
 import CommonHeader from '@components/CommonHeader';
 
@@ -32,7 +32,7 @@ interface ClubItem {
   location: string;
   representative: string;
   contact: string;
-  clubType: ClubType;
+  clubType: ClubCategoryKey;
   image_url: string;
   views: number;
   homepage_url: string;
