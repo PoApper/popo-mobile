@@ -8,7 +8,6 @@ import {
   StatusBar,
   ScrollView,
   TextInput,
-  Platform,
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -16,7 +15,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
 import {RouteProp} from '@react-navigation/native';
 import api from '../../utils/api';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {LocaleConfig} from 'react-native-calendars';
 import CalendarKoreanLocales from '../../utils/calendar-locales';
 
@@ -50,13 +49,10 @@ const PlaceReservationApplyScreen = ({
   const [desc, setDesc] = useState('');
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [tempDate, setTempDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
-  const [tempStartTime, setTempStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
-  const [tempEndTime, setTempEndTime] = useState(new Date());
 
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -198,21 +194,6 @@ const PlaceReservationApplyScreen = ({
         },
       ],
     );
-  };
-
-  const onDateChange = (event: any, selectedDate?: Date) => {
-    if (Platform.OS === 'android') {
-      if (event.type === 'set' && selectedDate) {
-        setShowDatePicker(false);
-        setDate(selectedDate);
-      } else if (event.type === 'dismissed') {
-        setShowDatePicker(false);
-      }
-    } else {
-      if (selectedDate) {
-        setTempDate(selectedDate);
-      }
-    }
   };
 
   // Picker 상태 관리 함수 추가
@@ -408,86 +389,33 @@ const PlaceReservationApplyScreen = ({
             </View>
           </View>
           {showDatePicker && (
-            <DateTimePicker
-              value={tempDate}
+            <DateTimePickerModal
+              isVisible={showDatePicker}
               mode="date"
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onConfirm={date => {
+                setShowDatePicker(false);
+                setDate(date);
+              }}
+              onCancel={() => setShowDatePicker(false)}
               minimumDate={new Date()}
               maximumDate={
                 new Date(new Date().setDate(new Date().getDate() + 30))
               }
               locale="ko-KR"
-              onChange={onDateChange}
-              onTouchCancel={() => setShowDatePicker(false)}
+              confirmTextIOS="확인"
+              cancelTextIOS="취소"
             />
-          )}
-          {showDatePicker && Platform.OS === 'ios' && (
-            <TouchableOpacity
-              style={{
-                marginTop: 8,
-                alignSelf: 'flex-end',
-                backgroundColor: '#FB5353',
-                borderRadius: 8,
-                paddingVertical: 8,
-                paddingHorizontal: 20,
-              }}
-              onPress={() => {
-                setShowDatePicker(false);
-                setDate(tempDate);
-              }}>
-              <Text style={{color: '#fff', fontWeight: 'bold'}}>확인</Text>
-            </TouchableOpacity>
           )}
           {showStartPicker && (
-            <DateTimePicker
-              value={tempStartTime}
+            <DateTimePickerModal
+              isVisible={showStartPicker}
               mode="time"
-              is24Hour
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              minuteInterval={30}
-              onChange={(event, selected) => {
-                if (Platform.OS === 'android') {
-                  if (event.type === 'set' && selected) {
-                    setShowStartPicker(false);
-                    const roundedTime = roundUpToNearest30Minutes(selected);
-                    if (isTimeAfterNow(date, roundedTime)) {
-                      setStartTime(roundedTime);
-                      const newEndTime = new Date(roundedTime);
-                      newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                      setEndTime(newEndTime);
-                    } else {
-                      Alert.alert(
-                        '알림',
-                        '현재 시간보다 이후의 시간을 선택해주세요.',
-                      );
-                    }
-                  } else if (event.type === 'dismissed') {
-                    setShowStartPicker(false);
-                  }
-                } else {
-                  if (selected) {
-                    setTempStartTime(roundUpToNearest30Minutes(selected));
-                  }
-                }
-              }}
-              onTouchCancel={() => setShowStartPicker(false)}
-            />
-          )}
-          {showStartPicker && Platform.OS === 'ios' && (
-            <TouchableOpacity
-              style={{
-                marginTop: 8,
-                alignSelf: 'flex-end',
-                backgroundColor: '#FB5353',
-                borderRadius: 8,
-                paddingVertical: 8,
-                paddingHorizontal: 20,
-              }}
-              onPress={() => {
+              onConfirm={time => {
                 setShowStartPicker(false);
-                if (isTimeAfterNow(date, tempStartTime)) {
-                  setStartTime(tempStartTime);
-                  const newEndTime = new Date(tempStartTime);
+                const roundedTime = roundUpToNearest30Minutes(time);
+                if (isTimeAfterNow(date, roundedTime)) {
+                  setStartTime(roundedTime);
+                  const newEndTime = new Date(roundedTime);
                   newEndTime.setMinutes(newEndTime.getMinutes() + 30);
                   setEndTime(newEndTime);
                 } else {
@@ -496,57 +424,29 @@ const PlaceReservationApplyScreen = ({
                     '현재 시간보다 이후의 시간을 선택해주세요.',
                   );
                 }
-              }}>
-              <Text style={{color: '#fff', fontWeight: 'bold'}}>확인</Text>
-            </TouchableOpacity>
-          )}
-          {showEndPicker && (
-            <DateTimePicker
-              value={tempEndTime}
-              mode="time"
-              is24Hour
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-              minuteInterval={30}
-              minimumDate={startTime}
-              onChange={(event, selected) => {
-                if (Platform.OS === 'android') {
-                  if (event.type === 'set' && selected) {
-                    setShowEndPicker(false);
-                    setEndTime(roundUpToNearest30Minutes(selected));
-                  } else if (event.type === 'dismissed') {
-                    setShowEndPicker(false);
-                  }
-                } else {
-                  if (selected) {
-                    setTempEndTime(roundUpToNearest30Minutes(selected));
-                  }
-                }
               }}
-              onTouchCancel={() => setShowEndPicker(false)}
+              onCancel={() => setShowStartPicker(false)}
+              minuteInterval={30}
+              is24Hour
+              confirmTextIOS="확인"
+              cancelTextIOS="취소"
             />
           )}
-          {showEndPicker && Platform.OS === 'ios' && (
-            <TouchableOpacity
-              style={{
-                marginTop: 8,
-                alignSelf: 'flex-end',
-                backgroundColor: '#FB5353',
-                borderRadius: 8,
-                paddingVertical: 8,
-                paddingHorizontal: 20,
-              }}
-              onPress={() => {
+          {showEndPicker && (
+            <DateTimePickerModal
+              isVisible={showEndPicker}
+              mode="time"
+              onConfirm={time => {
                 setShowEndPicker(false);
-                if (tempEndTime > startTime) {
-                  setEndTime(tempEndTime);
-                } else {
-                  const newEndTime = new Date(startTime);
-                  newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                  setEndTime(newEndTime);
-                }
-              }}>
-              <Text style={{color: '#fff', fontWeight: 'bold'}}>확인</Text>
-            </TouchableOpacity>
+                setEndTime(roundUpToNearest30Minutes(time));
+              }}
+              onCancel={() => setShowEndPicker(false)}
+              minuteInterval={30}
+              is24Hour
+              minimumDate={startTime}
+              confirmTextIOS="확인"
+              cancelTextIOS="취소"
+            />
           )}
         </View>
       </ScrollView>
