@@ -107,7 +107,12 @@ const EquipmentReservationApplyScreen = ({
         console.log('장비 리스트 응답 성공:', res.data);
         console.log('응답 데이터 길이:', res.data?.length || 0);
 
-        setEquipmentList(res.data || []);
+        // 장비 리스트를 가나다순으로 정렬
+        const sortedEquipmentList = (res.data || []).sort((a, b) =>
+          a.name.localeCompare(b.name, 'ko-KR'),
+        );
+
+        setEquipmentList(sortedEquipmentList);
       } catch (e: any) {
         console.error('장비 리스트 요청 실패:', e);
         console.error('에러 상세:', e.response?.data || e.message);
