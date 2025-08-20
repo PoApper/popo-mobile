@@ -32,6 +32,7 @@ import {socketFactory} from '@utils/socket-factory';
 import ChatMessage from '@components/chat/ChatMessage';
 import SidebarModal from '@components/chat/SidebarModal';
 import SettlementInfoBox from '@components/chat/SettlementInfoBox';
+import MsgModifyModal from '@components/chat/MsgModifyModal';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
@@ -58,6 +59,10 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   );
   const [isSettlement, setIsSettlement] = useState<boolean>(false);
   const [isPaid, setIsPaid] = useState<boolean | undefined>(undefined);
+  const [showChatOptions, setShowChatOptions] = useState<boolean>(false);
+  const [selectedMsgData, setSelectedMsgData] = useState<MessageData>(
+    {} as MessageData,
+  );
 
   const getRoomInfo = async () => {
     paxi_api
@@ -283,6 +288,12 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         navigation={navigation}
       />
 
+      <MsgModifyModal
+        modalVisible={showChatOptions}
+        setModalVisible={setShowChatOptions}
+        msgData={selectedMsgData}
+      />
+
       {isSettlement && settlementData && (
         <View
           style={{
@@ -302,7 +313,12 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         <FlatList
           data={chatList}
           renderItem={({item}) => (
-            <ChatMessage message={item} user_uuid={myInfo.uuid} />
+            <ChatMessage
+              message={item}
+              user_uuid={myInfo.uuid}
+              setShowChatOptions={setShowChatOptions}
+              setSelectedMsgData={setSelectedMsgData}
+            />
           )}
           keyExtractor={item => item.uuid}
           style={styles.messagesList}
