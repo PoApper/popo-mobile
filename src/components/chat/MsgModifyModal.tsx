@@ -5,11 +5,13 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  useColorScheme,
 } from 'react-native';
 
-import {MessageData} from '@interfaces/paxi';
-import {Text, TextInput} from 'react-native-gesture-handler';
-import {useEffect, useState} from 'react';
+import { MessageData } from '@interfaces/paxi';
+import { Text, TextInput } from 'react-native-gesture-handler';
+import { useEffect, useState } from 'react';
+import { backgroundColor, textColor } from '@styles/default';
 
 interface MsgModifyModalProps {
   modalVisible: boolean;
@@ -22,12 +24,12 @@ const MsgModifyModal = ({
   setModalVisible,
   msgData,
 }: MsgModifyModalProps) => {
-  // const isDarkMode = useColorScheme() === 'dark';
+  const isDarkMode = useColorScheme() === 'dark';
   const [currentMsg, setCurrentMsg] = useState<string>('');
 
-  const handleModifyMsg = () => {};
+  const handleModifyMsg = () => { };
 
-  const handleDeleteMsg = () => {};
+  const handleDeleteMsg = () => { };
 
   const handleClose = () => {
     setModalVisible(false);
@@ -43,14 +45,26 @@ const MsgModifyModal = ({
       visible={modalVisible}
       onRequestClose={handleClose}>
       <Pressable style={styles.overlay} onPress={handleClose}>
-        <View style={styles.modalContainer}>
+        <View style={[styles.modalContainer, {
+          backgroundColor: backgroundColor(isDarkMode),
+        }]}>
           <SafeAreaView style={styles.modalContent}>
-            <Pressable style={styles.innerContent} onPress={() => {}}>
-              <View style={styles.rowLeft}>
-                <Text style={styles.modalTitle}>메시지 수정하기</Text>
+            <Pressable style={styles.innerContent} onPress={() => { }}>
+              <View style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                width: '100%',
+              }}>
+                <Text style={[styles.modalTitle, {
+                  color: textColor(isDarkMode),
+                }]}>메시지 수정하기</Text>
 
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, {
+                    borderColor: textColor(isDarkMode),
+                    color: textColor(isDarkMode),
+                  }]}
                   value={currentMsg}
                   onChangeText={setCurrentMsg}
                   placeholder="텍스트를 입력해주세요."
@@ -59,21 +73,26 @@ const MsgModifyModal = ({
                   scrollEnabled={true}
                 />
 
-                <Text>마지막 수정시각: {msgData.updatedAt}</Text>
-
-                <Text>
+                <View style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: 5,
+                }}>
                   <TouchableOpacity
-                    style={styles.button}
+                    style={[styles.button, {
+                      backgroundColor: isDarkMode ? '#333' : 'black',
+                    }]}
                     onPress={handleModifyMsg}>
                     <Text style={styles.buttonText}>수정하기</Text>
                   </TouchableOpacity>
-
                   <TouchableOpacity
-                    style={styles.button}
+                    style={[styles.button, {
+                      backgroundColor: isDarkMode ? '#333' : 'black',
+                    }]}
                     onPress={handleDeleteMsg}>
                     <Text style={styles.buttonText}>삭제하기</Text>
                   </TouchableOpacity>
-                </Text>
+                </View>
               </View>
             </Pressable>
           </SafeAreaView>
@@ -118,23 +137,18 @@ const styles = StyleSheet.create({
     height: 80,
     width: '100%',
     borderWidth: 1,
+    borderRadius: 10,
+    marginVertical: 10,
     padding: 10,
     textAlign: 'left',
     textAlignVertical: 'top',
   },
-  rowLeft: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    width: '100%',
-  },
   button: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 6,
+    flex: 1,
+    borderRadius: 10,
+    height: 35,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'black',
   },
   buttonText: {
     color: '#FFFFFF',
