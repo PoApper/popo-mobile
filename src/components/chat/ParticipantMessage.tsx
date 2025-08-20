@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, useColorScheme, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  useColorScheme,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import moment from 'moment';
 
 import {MessageData} from '@interfaces/paxi';
@@ -12,16 +19,22 @@ interface ParticipantMessageProps {
 const ParticipantMessage = ({message}: ParticipantMessageProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
+  const handlePressUser = () => {
+    // TODO: 유저 클릭 시에, 신고 모달 띄우기 (지금은 분탕치고 재빠르게 나가면 못 잡음)
+  };
+
   return (
     <View style={styles.messageContainer}>
-      <Image
-        source={require('../../../assets/baby_phonix.png')}
-        style={[
-          styles.profileImg,
-          {backgroundColor: getColor(message.senderNickname)},
-        ]}
-        resizeMode="contain"
-      />
+      <TouchableOpacity onPress={handlePressUser}>
+        <Image
+          source={require('../../../assets/baby_phonix.png')}
+          style={[
+            styles.profileImg,
+            {backgroundColor: getColor(message.senderNickname)},
+          ]}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
       <View>
         <Text style={[styles.messageSender, {color: textColor(isDarkMode)}]}>
           {message.senderNickname ?? 'senderName'}
