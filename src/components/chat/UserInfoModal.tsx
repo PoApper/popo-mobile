@@ -11,9 +11,9 @@ import {
   Alert,
 } from 'react-native';
 
-import { MessageData } from '@interfaces/paxi';
-import { backgroundColor, textColor } from '@styles/default';
-import { getColor } from '@utils/userchat-background';
+import {MessageData} from '@interfaces/paxi';
+import {backgroundColor, textColor} from '@styles/default';
+import {getColor} from '@utils/userchat-background';
 import paxi_api from '@utils/paxi_api';
 
 interface UserInfoModalProps {
@@ -75,27 +75,33 @@ const UserInfoModal = ({
       visible={modalVisible}
       onRequestClose={handleClose}>
       <Pressable style={styles.overlay} onPress={handleClose}>
-        <View style={[styles.modalContainer, {
-          backgroundColor: backgroundColor(isDarkMode),
-        }]}>
+        <View
+          style={[
+            styles.modalContainer,
+            {
+              backgroundColor: backgroundColor(isDarkMode),
+            },
+          ]}>
           <SafeAreaView style={styles.modalContent}>
-            <Pressable style={styles.innerContent} onPress={() => { }}>
-              <View style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                width: '100%',
-              }}>
+            <Pressable style={styles.innerContent} onPress={() => {}}>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  width: '100%',
+                }}>
                 <Image
                   source={require('../../../assets/baby_phonix.png')}
                   style={[
                     styles.profileImg,
-                    { backgroundColor: getColor(msgData.senderNickname ?? '') },
+                    {backgroundColor: getColor(msgData.senderNickname ?? '')},
                   ]}
                   resizeMode="contain"
                 />
 
-                <Text style={[styles.userNameText, { color: textColor(isDarkMode) }]}>
+                <Text
+                  style={[styles.userNameText, {color: textColor(isDarkMode)}]}>
                   {msgData.senderNickname}
                 </Text>
                 <Text
@@ -107,36 +113,45 @@ const UserInfoModal = ({
                     fontSize: 15,
                     marginBottom: 5,
                     fontWeight: '400',
-                  }}>선택된 메시지</Text>
+                  }}>
+                  선택된 메시지
+                </Text>
                 <Text
                   numberOfLines={3}
                   ellipsizeMode={'tail'}
-                  style={[styles.msgText, { color: textColor(isDarkMode) }]}>
+                  style={[styles.msgText, {color: textColor(isDarkMode)}]}>
                   {msgData.message}
                 </Text>
 
-                <View style={{
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  gap: 5,
-                }}>
+                <View
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 5,
+                  }}>
                   <TouchableOpacity
                     onPress={handleReport}
-                    style={[styles.button, {
-                      backgroundColor: isDarkMode ? '#333' : 'black',
-                    }]}>
+                    style={[
+                      styles.button,
+                      {
+                        backgroundColor: isDarkMode ? '#333' : 'black',
+                      },
+                    ]}>
                     <Text style={styles.buttonText}>신고하기</Text>
                   </TouchableOpacity>
-                  {isOwner &&
+                  {isOwner && (
                     <TouchableOpacity
                       onPress={handleBan}
-                      style={[styles.button, {
-                        backgroundColor: isDarkMode ? '#333' : 'black',
-                      }]}>
+                      style={[
+                        styles.button,
+                        {
+                          backgroundColor: isDarkMode ? '#333' : 'black',
+                        },
+                      ]}>
                       <Text style={styles.buttonText}>추방하기</Text>
                     </TouchableOpacity>
-                  }
+                  )}
                 </View>
               </View>
             </Pressable>

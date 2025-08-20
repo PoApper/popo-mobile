@@ -1,6 +1,6 @@
-import { View } from 'react-native';
+import {View} from 'react-native';
 
-import { MessageData } from '@interfaces/paxi';
+import {MessageData} from '@interfaces/paxi';
 import MyMessage from '@components/chat/MyMessage';
 import SystemMessage from '@components/chat/SystemMessage';
 import ParticipantMessage from '@components/chat/ParticipantMessage';
@@ -23,12 +23,9 @@ const ChatMessage = ({
   const isSystemMsg = message.senderUuid == null;
 
   return (
-    <View style={{ alignSelf: alignment, marginBottom: 10 }}>
+    <View style={{alignSelf: alignment, marginBottom: 10}}>
       {message.senderUuid === user_uuid ? (
-        <MyMessage
-          message={message}
-          handleMyMsgClick={handleMyMsgClick}
-        />
+        <MyMessage message={message} handleMyMsgClick={handleMyMsgClick} />
       ) : isSystemMsg ? (
         <SystemMessage message={message} />
       ) : (
