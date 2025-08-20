@@ -5,20 +5,18 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import {MessageData} from '@interfaces/paxi';
-import {textColor} from '@styles/default';
+import { MessageData } from '@interfaces/paxi';
+import { textColor } from '@styles/default';
 import moment from 'moment';
 
 interface MyMessageProps {
   message: MessageData;
-  setShowChatOptions: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedMsgData: React.Dispatch<React.SetStateAction<MessageData>>;
+  handleMyMsgClick: (msgData: MessageData) => void;
 }
 
 const MyMessage = ({
   message,
-  setShowChatOptions,
-  setSelectedMsgData,
+  handleMyMsgClick,
 }: MyMessageProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -37,15 +35,12 @@ const MyMessage = ({
         {moment(message.createdAt).format('HH:mm')}
       </Text>
       <TouchableOpacity
-        onLongPress={() => {
-          setSelectedMsgData(message);
-          setShowChatOptions(true);
-        }}
+        onLongPress={() => handleMyMsgClick(message)}
         style={[
           styles.messageBubble,
-          {backgroundColor: isDarkMode ? '#23262B' : '#f2f3f5'},
+          { backgroundColor: isDarkMode ? '#23262B' : '#f2f3f5' },
         ]}>
-        <Text style={[styles.messageText, {color: textColor(isDarkMode)}]}>
+        <Text style={[styles.messageText, { color: textColor(isDarkMode) }]}>
           {message.message}
         </Text>
       </TouchableOpacity>
