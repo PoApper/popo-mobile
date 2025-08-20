@@ -157,12 +157,17 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
     newSocket.on('updatedMessage', data => {
       console.debug('갱신될 메시지:', data);
-      // updateChatData(data);
+      updateChatData(data);
     });
 
     newSocket.on('deletedMessage', data => {
       console.debug('삭제될 메시지:', data);
-      // deleteChatData(data);
+      deleteChatData(data);
+    });
+
+    newSocket.on('updatedIsPaid', data => {
+      console.debug('정산 정보 수정:', data);
+      getRoomInfo();
     });
 
     newSocket.on('newSettlement', data => {
@@ -238,6 +243,16 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       ...data,
     };
     setChatList(prev => [newChatData, ...prev]);
+  };
+
+  const updateChatData = (data: MessageData) => {
+    setChatList(prev =>
+      prev.map(chat => (chat.uuid === data.uuid ? {...chat, ...data} : chat)),
+    );
+  };
+
+  const deleteChatData = (data: MessageData) => {
+    setChatList(prev => prev.filter(chat => chat.uuid !== data.uuid));
   };
 
   const handleUserClick = useCallback((msgData: MessageData) => {
