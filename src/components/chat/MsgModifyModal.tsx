@@ -6,12 +6,14 @@ import {
   SafeAreaView,
   TouchableOpacity,
   useColorScheme,
+  Alert,
 } from 'react-native';
 
 import { MessageData } from '@interfaces/paxi';
 import { Text, TextInput } from 'react-native-gesture-handler';
 import { useEffect, useState } from 'react';
 import { backgroundColor, textColor } from '@styles/default';
+import paxi_api from '@utils/paxi_api';
 
 interface MsgModifyModalProps {
   modalVisible: boolean;
@@ -27,9 +29,27 @@ const MsgModifyModal = ({
   const isDarkMode = useColorScheme() === 'dark';
   const [currentMsg, setCurrentMsg] = useState<string>('');
 
-  const handleModifyMsg = () => { };
+  const handleModifyMsg = async () => {
+    const res = await paxi_api.put(`/chat/${msgData.uuid}`, {
+      message: currentMsg,
+    });
+    if (res.status !== 200) {
+      Alert.alert('실패', '메시지 수정에 실패했습니다.');
+      return;
+    } else {
+      handleClose();
+    }
+  };
 
-  const handleDeleteMsg = () => { };
+  const handleDeleteMsg = async () => {
+    const res = await paxi_api.delete(`/chat/${msgData.uuid}`);
+    if (res.status !== 200) {
+      Alert.alert('실패', '메시지 삭제에 실패했습니다.');
+      return;
+    } else {
+      handleClose();
+    }
+  };
 
   const handleClose = () => {
     setModalVisible(false);
