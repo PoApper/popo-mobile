@@ -8,9 +8,16 @@ import ParticipantMessage from '@components/chat/ParticipantMessage';
 interface ChatMessageProps {
   message: MessageData;
   user_uuid: string;
+  setShowChatOptions: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedMsgData: React.Dispatch<React.SetStateAction<MessageData>>;
 }
 
-const ChatMessage = ({message, user_uuid}: ChatMessageProps) => {
+const ChatMessage = ({
+  message,
+  user_uuid,
+  setShowChatOptions,
+  setSelectedMsgData,
+}: ChatMessageProps) => {
   const alignment =
     message.senderUuid === user_uuid ? 'flex-end' : 'flex-start';
   const isSystemMsg = message.senderUuid == null;
@@ -18,7 +25,11 @@ const ChatMessage = ({message, user_uuid}: ChatMessageProps) => {
   return (
     <View style={{alignSelf: alignment, marginBottom: 10}}>
       {message.senderUuid === user_uuid ? (
-        <MyMessage message={message} />
+        <MyMessage
+          message={message}
+          setShowChatOptions={setShowChatOptions}
+          setSelectedMsgData={setSelectedMsgData}
+        />
       ) : isSystemMsg ? (
         <SystemMessage message={message} />
       ) : (
