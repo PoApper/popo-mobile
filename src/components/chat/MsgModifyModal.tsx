@@ -6,11 +6,12 @@ import {
   SafeAreaView,
   TouchableOpacity,
   useColorScheme,
+  Text,
+  TextInput,
   Alert,
 } from 'react-native';
 
 import { MessageData } from '@interfaces/paxi';
-import { Text, TextInput } from 'react-native-gesture-handler';
 import { useEffect, useState } from 'react';
 import { backgroundColor, textColor } from '@styles/default';
 import paxi_api from '@utils/paxi_api';
