@@ -5,8 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { MessageData } from '@interfaces/paxi';
-import { textColor } from '@styles/default';
+import {MessageData} from '@interfaces/paxi';
+import {textColor} from '@styles/default';
 import moment from 'moment';
 
 interface MyMessageProps {
@@ -14,10 +14,7 @@ interface MyMessageProps {
   handleMyMsgClick: (msgData: MessageData) => void;
 }
 
-const MyMessage = ({
-  message,
-  handleMyMsgClick,
-}: MyMessageProps) => {
+const MyMessage = ({message, handleMyMsgClick}: MyMessageProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
@@ -38,9 +35,9 @@ const MyMessage = ({
         onLongPress={() => handleMyMsgClick(message)}
         style={[
           styles.messageBubble,
-          { backgroundColor: isDarkMode ? '#23262B' : '#f2f3f5' },
+          {backgroundColor: isDarkMode ? '#23262B' : '#f2f3f5'},
         ]}>
-        <Text style={[styles.messageText, { color: textColor(isDarkMode) }]}>
+        <Text style={[styles.messageText, {color: textColor(isDarkMode)}]}>
           {message.message}
         </Text>
       </TouchableOpacity>

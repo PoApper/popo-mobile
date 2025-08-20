@@ -11,9 +11,9 @@ import {
   Alert,
 } from 'react-native';
 
-import { MessageData } from '@interfaces/paxi';
-import { useEffect, useState } from 'react';
-import { backgroundColor, textColor } from '@styles/default';
+import {MessageData} from '@interfaces/paxi';
+import {useEffect, useState} from 'react';
+import {backgroundColor, textColor} from '@styles/default';
 import paxi_api from '@utils/paxi_api';
 
 interface MsgModifyModalProps {
@@ -66,26 +66,40 @@ const MsgModifyModal = ({
       visible={modalVisible}
       onRequestClose={handleClose}>
       <Pressable style={styles.overlay} onPress={handleClose}>
-        <View style={[styles.modalContainer, {
-          backgroundColor: backgroundColor(isDarkMode),
-        }]}>
+        <View
+          style={[
+            styles.modalContainer,
+            {
+              backgroundColor: backgroundColor(isDarkMode),
+            },
+          ]}>
           <SafeAreaView style={styles.modalContent}>
-            <Pressable style={styles.innerContent} onPress={() => { }}>
-              <View style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                width: '100%',
-              }}>
-                <Text style={[styles.modalTitle, {
-                  color: textColor(isDarkMode),
-                }]}>메시지 수정하기</Text>
+            <Pressable style={styles.innerContent} onPress={() => {}}>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  width: '100%',
+                }}>
+                <Text
+                  style={[
+                    styles.modalTitle,
+                    {
+                      color: textColor(isDarkMode),
+                    },
+                  ]}>
+                  메시지 수정하기
+                </Text>
 
                 <TextInput
-                  style={[styles.input, {
-                    borderColor: textColor(isDarkMode),
-                    color: textColor(isDarkMode),
-                  }]}
+                  style={[
+                    styles.input,
+                    {
+                      borderColor: textColor(isDarkMode),
+                      color: textColor(isDarkMode),
+                    },
+                  ]}
                   value={currentMsg}
                   onChangeText={setCurrentMsg}
                   placeholder="텍스트를 입력해주세요."
@@ -94,22 +108,29 @@ const MsgModifyModal = ({
                   scrollEnabled={true}
                 />
 
-                <View style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  gap: 5,
-                }}>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 5,
+                  }}>
                   <TouchableOpacity
-                    style={[styles.button, {
-                      backgroundColor: isDarkMode ? '#333' : 'black',
-                    }]}
+                    style={[
+                      styles.button,
+                      {
+                        backgroundColor: isDarkMode ? '#333' : 'black',
+                      },
+                    ]}
                     onPress={handleModifyMsg}>
                     <Text style={styles.buttonText}>수정하기</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={[styles.button, {
-                      backgroundColor: isDarkMode ? '#333' : 'black',
-                    }]}
+                    style={[
+                      styles.button,
+                      {
+                        backgroundColor: isDarkMode ? '#333' : 'black',
+                      },
+                    ]}
                     onPress={handleDeleteMsg}>
                     <Text style={styles.buttonText}>삭제하기</Text>
                   </TouchableOpacity>

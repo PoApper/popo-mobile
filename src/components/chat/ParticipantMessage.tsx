@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import moment from 'moment';
 
-import { MessageData } from '@interfaces/paxi';
-import { textColor } from '@styles/default';
-import { getColor } from '@utils/userchat-background';
+import {MessageData} from '@interfaces/paxi';
+import {textColor} from '@styles/default';
+import {getColor} from '@utils/userchat-background';
 
 interface ParticipantMessageProps {
   message: MessageData;
@@ -30,22 +30,22 @@ const ParticipantMessage = ({
           source={require('../../../assets/baby_phonix.png')}
           style={[
             styles.profileImg,
-            { backgroundColor: getColor(message.senderNickname) },
+            {backgroundColor: getColor(message.senderNickname)},
           ]}
           resizeMode="contain"
         />
       </TouchableOpacity>
       <View>
-        <Text style={[styles.messageSender, { color: textColor(isDarkMode) }]}>
+        <Text style={[styles.messageSender, {color: textColor(isDarkMode)}]}>
           {message.senderNickname ?? 'senderName'}
         </Text>
         <View style={styles.messageArea}>
           <View
             style={[
               styles.messageBubble,
-              { backgroundColor: isDarkMode ? '#23262B' : '#f2f3f5' },
+              {backgroundColor: isDarkMode ? '#23262B' : '#f2f3f5'},
             ]}>
-            <Text style={[styles.messageText, { color: textColor(isDarkMode) }]}>
+            <Text style={[styles.messageText, {color: textColor(isDarkMode)}]}>
               {message.message}
             </Text>
           </View>
