@@ -1,3 +1,4 @@
 // 디버그 환경 설정
 ENV_CONFIG = Debug
 API_URL = https://api.popo-dev.poapper.club
+PAXI_URL = https://api.paxi.popo-dev.poapper.club

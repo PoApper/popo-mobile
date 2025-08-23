@@ -17,9 +17,16 @@ class AppDelegate: RCTAppDelegate {
     self.moduleName = "popoMobile"
     self.dependencyProvider = RCTAppDependencyProvider()
 
-    // You can add your custom initial props in the dictionary below.
-    // They will be passed down to the ViewController used by React Native.
-    self.initialProps = [:]
+    // 환경 변수를 React Native로 전달
+    let envConfig = Bundle.main.infoDictionary?["ENV_CONFIG"] as? String ?? "Development"
+    let apiUrl = Bundle.main.infoDictionary?["API_URL"] as? String ?? "https://api.popo-dev.poapper.club"
+    let paxiApiUrl = Bundle.main.infoDictionary?["PAXI_URL"] as? String ?? "https://api.paxi.popo-dev.poapper.club"
+
+    self.initialProps = [
+      "ENV_CONFIG": envConfig,
+      "API_URL": apiUrl,
+      "PAXI_URL": paxiApiUrl
+    ]
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
