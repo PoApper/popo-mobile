@@ -97,3 +97,7 @@ GoogleService-info.plist
 *.apk
 
 .vscode/
+
+
+# https://www.npmjs.com/package/react-native-config
+ios/tmp.xcconfig
