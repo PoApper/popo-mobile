@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, useColorScheme} from 'react-native';
-import axios from 'axios';
+import api from '../utils/api';
 
 type CalendarEvent = {
   id: number;
@@ -18,9 +18,7 @@ const DdayInfoBox = () => {
   useEffect(() => {
     const fetchLatestEvent = async () => {
       try {
-        const response = await axios.get(
-          'https://api.popo-dev.poapper.club/calendar/get-next-event',
-        );
+        const response = await api.get('calendar/get-next-event');
         const event = response.data;
 
         if (event) {

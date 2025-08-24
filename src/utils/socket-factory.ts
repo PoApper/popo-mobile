@@ -1,8 +1,9 @@
 import {io} from 'socket.io-client';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {Socket} from 'socket.io-client';
+import Environment from './environment';
 
-const SOCKET_URL = 'https://api.paxi.popo-dev.poapper.club';
+const SOCKET_URL = Environment.paxiApiUrl;
 
 export const socketFactory = async (
   onSocketConnected: () => void,

@@ -95,15 +95,12 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
   useEffect(() => {
     const fetchPlaceEvents = () => {
       return api
-        .get<PaginatedResponse<PlaceReservation>>(
-          'https://api.popo-dev.poapper.club/reservation-place/user',
-          {
-            params: {
-              skip: 0,
-              take: 10,
-            },
+        .get<PaginatedResponse<PlaceReservation>>('reservation-place/user', {
+          params: {
+            skip: 0,
+            take: 10,
           },
-        )
+        })
         .then(res => {
           return res.data.items;
         })
@@ -128,7 +125,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
     const fetchEquipmentEvents = () => {
       return api
         .get<PaginatedResponse<EquipmentReservation>>(
-          'https://api.popo-dev.poapper.club/reservation-equip/user',
+          'reservation-equip/user',
           {
             params: {
               skip: 0,
