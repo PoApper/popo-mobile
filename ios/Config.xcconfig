@@ -1,0 +1,12 @@
+//
+//  Config.xcconfig
+//  popoMobile
+//
+//  Created by Seokyun Ha on 8/24/25.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+// https://www.npmjs.com/package/react-native-config
+#include? "tmp.xcconfig"
