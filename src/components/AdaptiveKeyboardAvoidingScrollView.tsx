@@ -10,7 +10,7 @@ type Props = ScrollViewProps & {
 };
 
 export const AdaptiveKeyboardAvoidingScrollView: React.FC<Props> = ({
-  legacyExtraScrollHeight = 0,
+  legacyExtraScrollHeight = 100,
   viewIsInsideTabBar,
   keyboardShouldPersistTaps = 'handled',
   contentContainerStyle,
