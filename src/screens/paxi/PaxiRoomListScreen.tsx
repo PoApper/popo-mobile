@@ -220,16 +220,22 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         removeClippedSubviews
       />
 
-      <TouchableOpacity
-        style={[
-          styles.floatingButton,
-          {
-            backgroundColor: isDarkMode ? '#444444' : '#222222',
-          },
-        ]}
-        onPress={() => navigation.navigate('CreatePaxiRoomScreen')}>
-        <Icon name="add" size={30} color={isDarkMode ? '#cccccc' : '#ffffff'} />
-      </TouchableOpacity>
+      <View style={styles.floatingButtonWrapper}>
+        <TouchableOpacity
+          style={[
+            styles.floatingButton,
+            {
+              backgroundColor: isDarkMode ? '#444444' : '#222222',
+            },
+          ]}
+          onPress={() => navigation.navigate('CreatePaxiRoomScreen')}>
+          <Icon
+            name="add"
+            size={30}
+            color={isDarkMode ? '#cccccc' : '#ffffff'}
+          />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -317,12 +323,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
   },
-  floatingButton: {
+  floatingButtonWrapper: {
     position: 'absolute',
     bottom: 30,
     right: 30,
     width: 60,
     height: 60,
+  },
+  floatingButton: {
+    width: '100%',
+    height: '100%',
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
