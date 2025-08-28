@@ -119,7 +119,13 @@ const UserInfoModal = ({
                 <Text
                   numberOfLines={3}
                   ellipsizeMode={'tail'}
-                  style={[styles.msgText, {backgroundColor: isDarkMode ? '#222' : '#eee', color: textColor(isDarkMode)}]}>
+                  style={[
+                    styles.msgText,
+                    {
+                      backgroundColor: isDarkMode ? '#222' : '#eee',
+                      color: textColor(isDarkMode),
+                    },
+                  ]}>
                   {msgData.message}
                 </Text>
 
