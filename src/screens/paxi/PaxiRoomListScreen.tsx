@@ -193,6 +193,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       </TouchableOpacity>
 
       <FlatList
+        style={{flex: 1}}
         data={filteredRoomData}
         keyExtractor={item => item.uuid}
         renderItem={({item}) => (
@@ -260,18 +261,11 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
   },
-  backButton: {
-    padding: 8,
-  },
-  backButtonText: {
-    fontSize: 16,
-  },
-  placeholderButton: {
-    width: 40,
-  },
   conditionNavigatorScroll: {
     flexDirection: 'row',
     flexGrow: 0,
+    height: 46,
+    maxHeight: 46,
   },
   conditionNavigatorContent: {
     alignItems: 'center',
