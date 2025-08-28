@@ -158,10 +158,17 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     newSocket.on('updatedMessage', data => {
       console.debug('갱신될 메시지:', data);
       updateChatData(data);
+      updateChatData(data);
     });
 
     newSocket.on('deletedMessage', data => {
       console.debug('삭제될 메시지:', data);
+      deleteChatData(data);
+    });
+
+    newSocket.on('updatedIsPaid', data => {
+      console.debug('정산 정보 수정:', data);
+      getRoomInfo();
       deleteChatData(data);
     });
 
