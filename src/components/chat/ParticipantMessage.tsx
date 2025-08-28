@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, useColorScheme, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  useColorScheme,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import moment from 'moment';
 
 import {MessageData} from '@interfaces/paxi';
@@ -7,21 +14,27 @@ import {getColor} from '@utils/userchat-background';
 
 interface ParticipantMessageProps {
   message: MessageData;
+  handleUserClick: (msgData: MessageData) => void;
 }
 
-const ParticipantMessage = ({message}: ParticipantMessageProps) => {
+const ParticipantMessage = ({
+  message,
+  handleUserClick,
+}: ParticipantMessageProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <View style={styles.messageContainer}>
-      <Image
-        source={require('../../../assets/baby_phonix.png')}
-        style={[
-          styles.profileImg,
-          {backgroundColor: getColor(message.senderNickname)},
-        ]}
-        resizeMode="contain"
-      />
+      <TouchableOpacity onPress={() => handleUserClick(message)}>
+        <Image
+          source={require('../../../assets/baby_phonix.png')}
+          style={[
+            styles.profileImg,
+            {backgroundColor: getColor(message.senderNickname)},
+          ]}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
       <View>
         <Text style={[styles.messageSender, {color: textColor(isDarkMode)}]}>
           {message.senderNickname ?? 'senderName'}

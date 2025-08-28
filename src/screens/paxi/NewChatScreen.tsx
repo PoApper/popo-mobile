@@ -32,6 +32,8 @@ import {socketFactory} from '@utils/socket-factory';
 import ChatMessage from '@components/chat/ChatMessage';
 import SidebarModal from '@components/chat/SidebarModal';
 import SettlementInfoBox from '@components/chat/SettlementInfoBox';
+import MsgModifyModal from '@components/chat/MsgModifyModal';
+import UserInfoModal from '@components/chat/UserInfoModal';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
@@ -58,6 +60,11 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   );
   const [isSettlement, setIsSettlement] = useState<boolean>(false);
   const [isPaid, setIsPaid] = useState<boolean | undefined>(undefined);
+  const [showMyChatOptions, setShowMyChatOptions] = useState<boolean>(false);
+  const [selectedMsgData, setSelectedMsgData] = useState<MessageData>(
+    {} as MessageData,
+  );
+  const [showUserInfo, setShowUserInfo] = useState<boolean>(false);
 
   const getRoomInfo = async () => {
     paxi_api
@@ -233,6 +240,16 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     setChatList(prev => [newChatData, ...prev]);
   };
 
+  const handleUserClick = useCallback((msgData: MessageData) => {
+    setSelectedMsgData(msgData);
+    setShowUserInfo(_ => true);
+  }, []);
+
+  const handleMyMsgClick = useCallback((msgData: MessageData) => {
+    setSelectedMsgData(msgData);
+    setShowMyChatOptions(_ => true);
+  }, []);
+
   return (
     <SafeAreaView
       style={{backgroundColor: backgroundColor(isDarkMode), flex: 1}}>
@@ -290,6 +307,20 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         navigation={navigation}
       />
 
+      <MsgModifyModal
+        modalVisible={showMyChatOptions}
+        setModalVisible={setShowMyChatOptions}
+        msgData={selectedMsgData}
+      />
+
+      <UserInfoModal
+        modalVisible={showUserInfo}
+        setModalVisible={setShowUserInfo}
+        msgData={selectedMsgData}
+        roomUuid={roomUuid}
+        isOwner={roomInfo.ownerUuid === myInfo.uuid}
+      />
+
       {isSettlement && settlementData && (
         <View
           style={{
@@ -309,7 +340,12 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         <FlatList
           data={chatList}
           renderItem={({item}) => (
-            <ChatMessage message={item} user_uuid={myInfo.uuid} />
+            <ChatMessage
+              message={item}
+              user_uuid={myInfo.uuid}
+              handleUserClick={handleUserClick}
+              handleMyMsgClick={handleMyMsgClick}
+            />
           )}
           keyExtractor={item => item.uuid}
           style={styles.messagesList}
