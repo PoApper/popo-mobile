@@ -23,7 +23,7 @@ import {
   ChatRoomInfo,
   MessageData,
   PaxiUser,
-  SettlementData,
+  SettlementInfoData,
 } from '@interfaces/paxi';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
@@ -55,8 +55,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const [reconnectAttempt, setReconnectAttempt] = useState<number>(0);
   const [socketConnected, setSocketConnected] = useState<boolean>(false);
 
-  const [settlementData, setSettlementData] = useState<SettlementData>(
-    {} as SettlementData,
+  const [settlementData, setSettlementData] = useState<SettlementInfoData>(
+    {} as SettlementInfoData,
   );
   const [isSettlement, setIsSettlement] = useState<boolean>(false);
   const [isPaid, setIsPaid] = useState<boolean | undefined>(undefined);
