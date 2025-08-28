@@ -148,12 +148,12 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                   },
                 ]}>
                 {isOwner
-                  ? '내가 만든 방'
+                  ? '내가 방장'
                   : isJoinedRoom
                   ? '참여한 방'
                   : isPossible
                   ? '참여 가능'
-                  : '마감'}
+                  : '마감된 방'}
               </Text>
             </View>
             <View>
