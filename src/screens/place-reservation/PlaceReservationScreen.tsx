@@ -24,6 +24,8 @@ type PlaceReservationScreenProps = {
 
 const buildings = ['학생회관', '지곡회관', '커뮤니티센터', 'RC', '기타'];
 
+const sortTypes = ['가나다순', '조회순'];
+
 type Location = {
   id: string;
   name: string;
@@ -98,46 +100,45 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
 
       <CommonHeader navigation={navigation} title="장소 예약" />
 
-      {/* 건물 선택 네비게이션 */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={styles.buildingNav}>
+        style={styles.buildingNav}
+        contentContainerStyle={styles.typeNavContentContainer}>
         {buildings.map(building => (
           <TouchableOpacity
             key={building}
             onPress={() => setSelectedBuilding(building)}
             style={styles.buildingTabWrapper}>
-            <View style={styles.buildingTabInner}>
-              <View style={styles.textWithUnderline}>
-                <Text
-                  style={[
-                    styles.buildingTab,
-                    {color: isDarkMode ? '#888' : '#999'},
-                    selectedBuilding === building && [
-                      styles.selectedBuildingText,
-                      {color: textColor},
-                    ],
-                  ]}
-                  onLayout={e => {
-                    const width = e.nativeEvent.layout.width;
-                    setTextWidths(prev => ({...prev, [building]: width}));
-                  }}>
-                  {building}
-                </Text>
-
-                {selectedBuilding === building && (
-                  <View
-                    style={[
-                      styles.underline,
-                      {
-                        width: (textWidths[building] || 0) + 8,
-                        backgroundColor: textColor,
-                      },
-                    ]}
-                  />
-                )}
-              </View>
+            <View
+              style={{alignItems: 'center'}}
+              onLayout={e => {
+                const width = e.nativeEvent.layout.width;
+                if (textWidths[building] !== width) {
+                  setTextWidths(prev => ({...prev, [building]: width}));
+                }
+              }}>
+              <Text
+                style={[
+                  styles.buildingTab,
+                  {color: isDarkMode ? '#888' : '#999'},
+                  selectedBuilding === building && [
+                    styles.selectedBuildingText,
+                    {color: textColor},
+                  ],
+                ]}>
+                {building}
+              </Text>
+              <View
+                style={[
+                  styles.underline,
+                  {
+                    width: textWidths[building],
+                    backgroundColor:
+                      selectedBuilding === building ? textColor : 'transparent',
+                  },
+                ]}
+              />
             </View>
           </TouchableOpacity>
         ))}
@@ -145,7 +146,7 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
 
       {/* 정렬 버튼 */}
       <View style={styles.sortButtons}>
-        {['가나다순', '예약 많은 순'].map(type => (
+        {sortTypes.map(type => (
           <TouchableOpacity
             key={type}
             style={[
@@ -248,8 +249,19 @@ const styles = StyleSheet.create({
   placeholderButton: {
     width: 40,
   },
-  safeArea: {flex: 1, backgroundColor: '#fff'},
-  buildingNav: {flexDirection: 'row', paddingHorizontal: 15, marginTop: 20},
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  buildingNav: {
+    paddingVertical: 8,
+    minHeight: 48,
+    flexGrow: 0,
+  },
+  typeNavContentContainer: {
+    paddingHorizontal: 16,
+    gap: 12,
+  },
   selectedBuilding: {
     color: '#000',
     fontWeight: 'bold',
@@ -257,8 +269,9 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000',
   },
   buildingTabWrapper: {
-    alignItems: 'center',
-    margin: 2,
+    paddingVertical: 8,
+    height: 30,
+    justifyContent: 'center',
   },
   buildingTabInner: {
     alignItems: 'center',
@@ -271,12 +284,11 @@ const styles = StyleSheet.create({
   buildingTab: {
     fontSize: 16,
     color: '#999',
-    lineHeight: 20,
+    paddingHorizontal: 4,
   },
   selectedBuildingText: {
     color: '#000',
     fontWeight: 'bold',
-    lineHeight: 20,
   },
   underline: {
     marginTop: 4,
@@ -287,7 +299,6 @@ const styles = StyleSheet.create({
   sortButtons: {
     flexDirection: 'row',
     paddingHorizontal: 15,
-    marginTop: -580,
     marginBottom: 10,
   },
   sortButton: {
@@ -297,8 +308,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginRight: 10,
   },
-  activeSort: {borderColor: '#000'},
-  sortButtonText: {fontSize: 14},
+  activeSort: {
+    borderColor: '#000',
+  },
+  sortButtonText: {
+    fontSize: 14,
+  },
   locationItem: {
     flexDirection: 'row',
     alignItems: 'center',
