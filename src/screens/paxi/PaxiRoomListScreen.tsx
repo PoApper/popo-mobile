@@ -33,7 +33,7 @@ type PaxiRoomListScreenProps = {
 const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const [showEmptyRoom, setShowEmptyRoom] = useState(false);
+  const [hideFullRoom, setHideFullRoom] = useState(false);
   const [roomData, setRoomData] = useState<RoomDataType[]>([]);
   const [userUuid, setUserUuid] = useState<string>('');
   const [refreshing, setRefreshing] = useState(false);
@@ -78,13 +78,15 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
           moment(room.departureTime).format('YYYY-MM-DD') ===
             moment(selectedDate).format('YYYY-MM-DD'),
       )
-      .filter(room => !showEmptyRoom || room.currentParticipant <= 1);
+      .filter(
+        room => !hideFullRoom || room.currentParticipant < room.maxParticipant,
+      );
   }, [
     roomData,
     selectedDeparture,
     selectedArrival,
     selectedDate,
-    showEmptyRoom,
+    hideFullRoom,
   ]);
 
   const onRefresh = async () => {
@@ -168,17 +170,17 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
       <TouchableOpacity
         style={styles.checkboxContainer}
-        onPress={() => setShowEmptyRoom(!showEmptyRoom)}>
+        onPress={() => setHideFullRoom(!hideFullRoom)}>
         <View
           style={[
             styles.checkbox,
             {borderColor: isDarkMode ? '#555' : '#D0D0D0'},
-            showEmptyRoom && {
+            hideFullRoom && {
               backgroundColor: isDarkMode ? '#4F46E5' : 'black', // 다크모드에서 파란색 등으로
               borderColor: isDarkMode ? '#4F46E5' : 'black',
             },
           ]}>
-          {showEmptyRoom && (
+          {hideFullRoom && (
             <Icon
               name="check"
               size={20}
@@ -187,7 +189,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
             />
           )}
         </View>
-        <Text style={{fontSize: 15, color: textColor}}>빈 방만 보기</Text>
+        <Text style={{fontSize: 15, color: textColor}}>마감된 방 숨기기</Text>
       </TouchableOpacity>
 
       <FlatList
@@ -195,7 +197,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         keyExtractor={item => item.uuid}
         renderItem={({item}) => (
           <RoomListCard
-            roomData={item}
+            roomUuid={item.uuid}
             userUuid={userUuid}
             navigation={navigation as any}
           />
