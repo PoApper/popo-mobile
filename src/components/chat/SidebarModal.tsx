@@ -23,6 +23,7 @@ import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import BanModal from '@components/chat/BanModal';
 import {backgroundColor, textColor} from '@styles/default';
+import OwnerTransferModal from './OwnerTransferModal';
 
 interface SidebarModalProps {
   modalVisible: boolean;
@@ -51,6 +52,8 @@ SidebarModalProps) => {
   const [initialRenderDone, setInitialRenderDone] = useState(false);
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const [isVisible, setIsVisible] = useState(false);
+  const [transferModalVisible, setTransferModalVisible] =
+    useState<boolean>(false);
 
   const isIamOwner = myUuid === roomData.ownerUuid;
   const roomPeopleCnt = roomData.currentParticipant;
@@ -96,7 +99,120 @@ SidebarModalProps) => {
     } else {
       setInitialRenderDone(false);
     }
-  }, [modalVisible, slideAnim, screenWidth]);
+  }, [modalVisible, slideAnim, screenWidth, opacityAnim]);
+
+  const handleSettlementPress = () => {
+    if (isIamPayer || !roomData.payerUuid) {
+      setModalVisible(false);
+      navigation.navigate('Settlement', {
+        roomUuid: roomData.uuid,
+      });
+    }
+  };
+
+  const handleSettlementDeletePress = () => {
+    Alert.alert('정산 삭제', '정산 요청을 삭제하시겠습니까?', [
+      {text: '취소', style: 'cancel'},
+      {
+        text: '삭제',
+        onPress: () => {
+          paxi_api.delete(`/room/${roomData.uuid}/settlement`).then(res => {
+            if (res.status !== 200) {
+              Alert.alert('실패', `response: ${res.status}`);
+            } else {
+              Alert.alert('성공', '정산 요청을 삭제했습니다.');
+            }
+          });
+        },
+      },
+    ]);
+  };
+
+  const performLeave = async () => {
+    if (roomPeopleCnt === 1) {
+      // Last participant -> delete room
+      return paxi_api
+        .delete(`/room/${roomData.uuid}`)
+        .then(() => {
+          setModalVisible(false);
+          navigation.navigate('Main', {
+            tab: 'MyReservation',
+          });
+        })
+        .catch(err => {
+          console.error(
+            `자신이 소유한 채팅방(${roomData.uuid}) 나가기 실패`,
+            err,
+          );
+          Alert.alert(
+            '채팅방 나가기 실패',
+            `채팅방 나가기에 실패했습니다.\n${
+              err.response?.data?.message || ''
+            }`,
+          );
+        });
+    } else {
+      // Not a last participant -> leave
+      return paxi_api
+        .put(`/room/leave/${roomData.uuid}`)
+        .then(() => {
+          setModalVisible(false);
+          navigation.navigate('Main', {tab: 'MyReservation'});
+        })
+        .catch(err => {
+          console.error('채팅방 나가기 실패', err);
+          Alert.alert(
+            '채팅방 나가기 실패',
+            `채팅방 나가기에 실패했습니다.\n${
+              err.response?.data?.message || ''
+            }`,
+          );
+        });
+    }
+  };
+
+  const onSettlementEnd = () => {
+    paxi_api
+      .patch(`/room/${roomData.uuid}/complete`)
+      .then(() => {
+        Alert.alert('정산 완료', '정산이 완료되었습니다.', [
+          {
+            text: '확인',
+            onPress: () => {
+              setModalVisible(false);
+              navigation.navigate('Main', {
+                tab: 'MyReservation',
+              });
+            },
+          },
+        ]);
+      })
+      .catch(err => {
+        console.error('정산 완료 실패', err);
+        Alert.alert(
+          '정산 완료 실패',
+          `정산 완료에 실패했습니다.\n${err.response?.data?.message || ''}`,
+        );
+      });
+  };
+
+  const handleLeavePress = () => {
+    // If owner and there are other participants, open transfer modal first
+    if (isIamOwner && roomPeopleCnt > 1) {
+      setTransferModalVisible(true);
+      return;
+    }
+
+    Alert.alert('채팅방 나가기', '채팅방을 나가시겠습니까?', [
+      {text: '취소', style: 'cancel'},
+      {
+        text: '나가기',
+        onPress: () => {
+          performLeave();
+        },
+      },
+    ]);
+  };
 
   return (
     <Modal
@@ -138,35 +254,78 @@ SidebarModalProps) => {
                   </Text>
 
                   {/* 정산 요청 버튼 */}
-                  <TouchableOpacity
-                    style={[
-                      styles.primaryButton,
-                      {
-                        marginLeft: 20,
-                        backgroundColor: isDarkMode ? '#333' : '#000',
-                        opacity: roomData.currentParticipant === 1 ? 0.5 : 1,
-                      },
-                    ]}
-                    onPress={() => {
-                      if (roomData.currentParticipant === 1) {
-                        Alert.alert(
-                          '혼자 있는 채팅방',
-                          '혼자 있는 채팅방은 정산 요청이 불가능합니다.',
-                        );
-                      } else if (isIamPayer || !roomData.payerUuid) {
-                        setModalVisible(false);
-                        navigation.navigate('Settlement', {
-                          roomUuid: roomData.uuid,
-                        });
-                      } else if (roomData.payerUuid.length > 0) {
-                        Alert.alert(
-                          '이미 정산 요청이 있습니다.',
-                          '방에 생성된 정산 요청이 이미 있습니다. 확인 후 정산을 진행해주세요.',
-                        );
-                      }
-                    }}>
-                    <Text style={[styles.buttonText]}>정산 요청하기</Text>
-                  </TouchableOpacity>
+                  {(roomData.payerUuid?.length ?? 0) === 0 && (
+                    <TouchableOpacity
+                      style={[
+                        styles.settlementButton,
+                        {
+                          marginLeft: 20,
+                          backgroundColor: isDarkMode ? '#333' : '#000',
+                          opacity: roomData.currentParticipant === 1 ? 0.5 : 1,
+                        },
+                      ]}
+                      onPress={() => {
+                        if (roomData.currentParticipant === 1) {
+                          Alert.alert(
+                            '혼자 있는 채팅방',
+                            '혼자 있는 채팅방은 정산 요청이 불가능합니다.',
+                          );
+                        } else {
+                          handleSettlementPress();
+                        }
+                      }}>
+                      <Text style={[styles.buttonText]}>정산 요청하기</Text>
+                    </TouchableOpacity>
+                  )}
+                  {(roomData.payerUuid?.length ?? 0) > 0 && (
+                    <>
+                      {roomData.payerUuid === myUuid && (
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            gap: 5,
+                            flex: 1,
+                            marginLeft: 20,
+                          }}>
+                          <TouchableOpacity
+                            style={[
+                              styles.settlementButton,
+                              {backgroundColor: isDarkMode ? '#333' : '#000'},
+                            ]}
+                            onPress={handleSettlementPress}>
+                            <Text style={[styles.buttonText]}>정산 수정</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={[
+                              styles.settlementButton,
+                              {backgroundColor: isDarkMode ? '#333' : '#000'},
+                            ]}
+                            onPress={handleSettlementDeletePress}>
+                            <Text style={[styles.buttonText]}>정산 삭제</Text>
+                          </TouchableOpacity>
+                        </View>
+                      )}
+                      {roomData.payerUuid !== myUuid && (
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            gap: 5,
+                            flex: 1,
+                            marginLeft: 20,
+                          }}>
+                          <View
+                            style={[
+                              styles.settlementButton,
+                              {backgroundColor: isDarkMode ? '#333' : '#000'},
+                            ]}>
+                            <Text style={[styles.buttonText]}>
+                              정산을 진행 중입니다
+                            </Text>
+                          </View>
+                        </View>
+                      )}
+                    </>
+                  )}
                 </View>
 
                 {/* 참여자 목록 */}
@@ -225,52 +384,7 @@ SidebarModalProps) => {
                           '정산 요청이 있는 채팅방은 나갈 수 없습니다.\n정산이 완료된 후, 정산자가 채팅방을 직접 마감해주세요.',
                         );
                       } else {
-                        Alert.alert(
-                          '채팅방 나가기',
-                          '채팅방을 나가시겠습니까?',
-                          [
-                            {text: '취소', style: 'cancel'},
-                            {
-                              text: '나가기',
-                              onPress: () => {
-                                if (isIamOwner && roomPeopleCnt == 1) {
-                                  paxi_api
-                                    .delete(`/room/${roomData.uuid}`)
-                                    .then(() => {
-                                      setModalVisible(false);
-                                      navigation.navigate('Main', {
-                                        tab: 'MyReservation',
-                                      });
-                                    })
-                                    .catch(err => {
-                                      console.error(
-                                        `자신이 소유한 채팅방(${roomData.uuid}) 나가기 실패`,
-                                        err,
-                                      );
-                                      Alert.alert(
-                                        '채팅방 나가기 실패',
-                                        `채팅방 나가기에 실패했습니다.\n${err.response.data.message}`,
-                                      );
-                                    });
-                                } else {
-                                  paxi_api
-                                    .put(`/room/leave/${roomData.uuid}`)
-                                    .then(() => {
-                                      setModalVisible(false);
-                                      navigation.navigate('Home');
-                                    })
-                                    .catch(err => {
-                                      console.error('채팅방 나가기 실패', err);
-                                      Alert.alert(
-                                        '채팅방 나가기 실패',
-                                        `채팅방 나가기에 실패했습니다.\n${err.response.data.message}`,
-                                      );
-                                    });
-                                }
-                              },
-                            },
-                          ],
-                        );
+                        handleLeavePress();
                       }
                     }}>
                     <Icon
@@ -285,38 +399,23 @@ SidebarModalProps) => {
                     <TouchableOpacity
                       style={[
                         styles.completeSettlementButton,
-                        {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+                        {backgroundColor: isDarkMode ? '#333' : '#000'},
                       ]}
-                      onPress={() => {
-                        paxi_api
-                          .patch(`/room/${roomData.uuid}/complete`)
-                          .then(() => {
-                            Alert.alert('정산 완료', '정산이 완료되었습니다.', [
-                              {
-                                text: '확인',
-                                onPress: () => {
-                                  setModalVisible(false);
-                                  navigation.navigate('Main', {
-                                    tab: 'MyReservation',
-                                  });
-                                },
-                              },
-                            ]);
-                          })
-                          .catch(err => {
-                            console.error('정산 완료 실패', err);
-                            Alert.alert(
-                              '정산 완료 실패',
-                              `정산 완료에 실패했습니다.\n${err.response.data.message}`,
-                            );
-                          });
-                      }}>
+                      onPress={onSettlementEnd}>
                       <Text style={styles.completeSettlementButtonText}>
                         정산 완료
                       </Text>
                     </TouchableOpacity>
                   )}
                 </View>
+
+                <OwnerTransferModal
+                  modalVisible={transferModalVisible}
+                  setModalVisible={setTransferModalVisible}
+                  roomData={roomData}
+                  myUuid={myUuid}
+                  navigation={navigation}
+                />
               </Pressable>
             </SafeAreaView>
           </Animated.View>
@@ -357,21 +456,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     position: 'relative',
-  },
-  overlay2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContainer2: {
-    width: '80%',
-    height: '60%',
-    backgroundColor: 'white',
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
   },
   headerButton: {
     fontSize: 16,
@@ -507,13 +591,6 @@ const styles = StyleSheet.create({
     color: '#444',
     marginTop: 10,
   },
-  rowBetween: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    alignItems: 'center',
-    marginVertical: 12,
-  },
   rowCenter: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -525,9 +602,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 6,
   },
-  primaryButton: {
+  settlementButton: {
     flex: 1,
-    backgroundColor: '#000',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 10,
@@ -536,29 +612,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
-  },
-  userRow: {
-    backgroundColor: '#fff',
-    paddingVertical: 12,
-    borderRadius: 10,
-    marginBottom: 8,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  nameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  nameText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  grayButton: {
-    backgroundColor: '#eee',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 6,
-    marginLeft: 6,
   },
   completeSettlementButton: {
     paddingHorizontal: 16,
