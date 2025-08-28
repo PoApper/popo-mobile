@@ -33,7 +33,7 @@ type PaxiRoomListScreenProps = {
 const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const [showEmptyRoom, setShowEmptyRoom] = useState(false);
+  const [hideFullRoom, setHideFullRoom] = useState(false);
   const [roomData, setRoomData] = useState<RoomDataType[]>([]);
   const [userUuid, setUserUuid] = useState<string>('');
   const [refreshing, setRefreshing] = useState(false);
@@ -78,13 +78,15 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
           moment(room.departureTime).format('YYYY-MM-DD') ===
             moment(selectedDate).format('YYYY-MM-DD'),
       )
-      .filter(room => !showEmptyRoom || room.currentParticipant <= 1);
+      .filter(
+        room => !hideFullRoom || room.currentParticipant < room.maxParticipant,
+      );
   }, [
     roomData,
     selectedDeparture,
     selectedArrival,
     selectedDate,
-    showEmptyRoom,
+    hideFullRoom,
   ]);
 
   const onRefresh = async () => {
@@ -168,17 +170,17 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
       <TouchableOpacity
         style={styles.checkboxContainer}
-        onPress={() => setShowEmptyRoom(!showEmptyRoom)}>
+        onPress={() => setHideFullRoom(!hideFullRoom)}>
         <View
           style={[
             styles.checkbox,
             {borderColor: isDarkMode ? '#555' : '#D0D0D0'},
-            showEmptyRoom && {
+            hideFullRoom && {
               backgroundColor: isDarkMode ? '#4F46E5' : 'black', // 다크모드에서 파란색 등으로
               borderColor: isDarkMode ? '#4F46E5' : 'black',
             },
           ]}>
-          {showEmptyRoom && (
+          {hideFullRoom && (
             <Icon
               name="check"
               size={20}
@@ -187,15 +189,16 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
             />
           )}
         </View>
-        <Text style={{fontSize: 15, color: textColor}}>빈 방만 보기</Text>
+        <Text style={{fontSize: 15, color: textColor}}>마감된 방 숨기기</Text>
       </TouchableOpacity>
 
       <FlatList
+        style={{flex: 1}}
         data={filteredRoomData}
         keyExtractor={item => item.uuid}
         renderItem={({item}) => (
           <RoomListCard
-            roomData={item}
+            roomUuid={item.uuid}
             userUuid={userUuid}
             navigation={navigation as any}
           />
@@ -220,16 +223,22 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         removeClippedSubviews
       />
 
-      <TouchableOpacity
-        style={[
-          styles.floatingButton,
-          {
-            backgroundColor: isDarkMode ? '#444444' : '#222222',
-          },
-        ]}
-        onPress={() => navigation.navigate('CreatePaxiRoomScreen')}>
-        <Icon name="add" size={30} color={isDarkMode ? '#cccccc' : '#ffffff'} />
-      </TouchableOpacity>
+      <View style={styles.floatingButtonWrapper}>
+        <TouchableOpacity
+          style={[
+            styles.floatingButton,
+            {
+              backgroundColor: isDarkMode ? '#444444' : '#222222',
+            },
+          ]}
+          onPress={() => navigation.navigate('CreatePaxiRoomScreen')}>
+          <Icon
+            name="add"
+            size={30}
+            color={isDarkMode ? '#cccccc' : '#ffffff'}
+          />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -258,18 +267,11 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
   },
-  backButton: {
-    padding: 8,
-  },
-  backButtonText: {
-    fontSize: 16,
-  },
-  placeholderButton: {
-    width: 40,
-  },
   conditionNavigatorScroll: {
     flexDirection: 'row',
     flexGrow: 0,
+    height: 46,
+    maxHeight: 46,
   },
   conditionNavigatorContent: {
     alignItems: 'center',
@@ -317,12 +319,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
   },
-  floatingButton: {
+  floatingButtonWrapper: {
     position: 'absolute',
     bottom: 30,
     right: 30,
     width: 60,
     height: 60,
+  },
+  floatingButton: {
+    width: '100%',
+    height: '100%',
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -11,19 +11,19 @@ import {
 import moment from 'moment';
 
 import paxi_api from '@utils/paxi_api';
-import {RoomDataType} from '@interfaces/paxi';
 import DottedArrow from './DottedArrow';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
+import {ChatRoomInfo} from '~/src/interfaces/paxi';
 
 interface RoomContainerProps {
-  roomData: RoomDataType;
+  roomUuid: string;
   userUuid: string;
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
 }
 
 export const RoomListCard: React.FC<RoomContainerProps> = ({
-  roomData,
+  roomUuid,
   userUuid,
   navigation,
 }) => {
@@ -31,8 +31,26 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
   const textColor = isDarkMode ? '#EDEDED' : '#222222';
   const backgroundColor = isDarkMode ? '#1A1A1A' : '#FFFFFF';
   const subTextColor = isDarkMode ? '#A3A3A3' : '#666666';
+  const [roomData, setRoomData] = useState<ChatRoomInfo | null>(null);
 
-  const isOwner = userUuid === roomData.ownerUuid;
+  useEffect(() => {
+    paxi_api
+      .get(`/room/${roomUuid}`)
+      .then(res => {
+        setRoomData(res.data);
+      })
+      .catch(e => console.error(e));
+  }, [roomUuid]);
+
+  if (!roomData) {
+    return null;
+  }
+
+  const isOwner = userUuid === roomData?.ownerUuid;
+  const isPossible = roomData.currentParticipant < roomData.maxParticipant;
+  const isJoinedRoom = roomData.room_users
+    .map(user => user.userUuid)
+    .includes(userUuid);
 
   const askJoinRoom = () => {
     if (roomData.currentParticipant >= roomData.maxParticipant) {
@@ -40,7 +58,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       return;
     }
 
-    if (isOwner) {
+    if (isOwner || isJoinedRoom) {
       navigation.navigate('NewChat', {
         roomUuid: roomData.uuid,
         from: 'roomList',
@@ -63,6 +81,10 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
               console.log('response.status', response.status);
               if (response.status === 201) {
                 Alert.alert('성공', '방에 참여했습니다.');
+                navigation.navigate('NewChat', {
+                  roomUuid: roomData.uuid,
+                  from: 'roomList',
+                });
               } else {
                 Alert.alert('실패', '방 참여에 실패했습니다.');
               }
@@ -75,8 +97,6 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       },
     ]);
   };
-
-  const isPossible = roomData.currentParticipant < roomData.maxParticipant;
 
   return (
     <TouchableOpacity
@@ -101,6 +121,10 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                     ? isDarkMode
                       ? 'rgba(79,70,229,0.18)'
                       : '#EEF2FF'
+                    : isJoinedRoom
+                    ? isDarkMode
+                      ? 'rgba(110, 230, 24, 0.18)'
+                      : '#f1ffee'
                     : isPossible
                     ? isDarkMode
                       ? 'rgba(250,87,33,0.18)'
@@ -116,12 +140,20 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                   {
                     color: isOwner
                       ? '#4F46E5'
+                      : isJoinedRoom
+                      ? '#46e556'
                       : isPossible
                       ? '#FA5721'
                       : '#909090',
                   },
                 ]}>
-                {isOwner ? '내가 만든 방' : isPossible ? '참여 가능' : '마감'}
+                {isOwner
+                  ? '내가 방장'
+                  : isJoinedRoom
+                  ? '참여한 방'
+                  : isPossible
+                  ? '참여 가능'
+                  : '마감된 방'}
               </Text>
             </View>
             <View>

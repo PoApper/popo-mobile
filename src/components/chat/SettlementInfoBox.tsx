@@ -10,16 +10,16 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Clipboard from '@react-native-clipboard/clipboard';
 
-import {SettlementData} from '@interfaces/paxi';
+import {SettlementInfoData} from '@interfaces/paxi';
 import paxi_api from '@utils/paxi_api';
 import {textColor} from '@styles/default';
 
 interface SettlementInfoBoxProps {
   isPaid: boolean | undefined;
-  settlementData: SettlementData;
+  settlementData: SettlementInfoData;
 }
 
-async function completeSettlement(settlementData: SettlementData) {
+async function completeSettlement(settlementData: SettlementInfoData) {
   try {
     const res = await paxi_api.patch(`/room/${settlementData.roomUuid}/pay`, {
       isPaid: true,
@@ -139,11 +139,18 @@ const SettlementInfoBox = ({
               </Text>
               <Text
                 style={[styles.payAmountText, {color: textColor(isDarkMode)}]}>
-                {settlementData.payAmount?.toLocaleString()}원
+                {settlementData.payAmountPerPerson.toLocaleString()}원
               </Text>
             </View>
             <View style={styles.payerInfoContainer}>
               <View style={{marginTop: 10}}>
+                <Text
+                  style={[
+                    styles.infoText,
+                    {color: isDarkMode ? '#aaa' : '#4f4f4f'},
+                  ]}>
+                  총 금액: {settlementData.payAmount.toLocaleString()}원
+                </Text>
                 <Text
                   style={[
                     styles.infoText,
@@ -192,9 +199,7 @@ const SettlementInfoBox = ({
                     {backgroundColor: isDarkMode ? '#333' : 'black'},
                   ]}
                   onPress={settlementSendAlert}>
-                  <Text style={styles.sendBtnText}>
-                    송금 완료 알림을 보냅니다
-                  </Text>
+                  <Text style={styles.sendBtnText}>송금 완료</Text>
                 </TouchableOpacity>
               </>
             )}

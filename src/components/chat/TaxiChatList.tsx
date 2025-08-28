@@ -17,14 +17,25 @@ import axios from 'axios';
 import paxi_api from '../../utils/paxi_api';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
+import BanReasonModal from './BanReasonModal';
+import {UserData} from '@interfaces/paxi';
 
 interface RoomData {
-  title: string;
+  hasNewMessage: string;
+  kickedReason: string;
+  userStatus: string;
   uuid: string;
-  status: string;
-  departureTime: string;
+  title: string;
+  ownerUuid: string;
   departureLocation: string;
   destinationLocation: string;
+  maxParticipant: number;
+  currentParticipant: number;
+  departureTime: string;
+  status: string;
+  description: string;
+  payerUuid: string;
+  payAmount: number;
 }
 
 interface TaxiChatListProps {
@@ -48,6 +59,11 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [chatRooms, setChatRooms] = useState<RoomData[]>([]);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [selectedRoomData, setSelectedRoomData] = useState<RoomData>(
+    {} as RoomData,
+  );
+  const [userInfo, setUserInfo] = useState<UserData>({} as UserData);
+  const [showBanReasonModal, setShowBanReasonModal] = useState<boolean>(false);
   const listRef = useRef<FlatList>(null);
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
@@ -63,6 +79,9 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         );
       });
       setChatRooms(sortedData);
+
+      const resUser = await paxi_api.get<UserData>('/user/my');
+      setUserInfo(resUser.data);
     } catch (err) {
       console.error('예약 정보 조회 오류:', err);
       if (axios.isAxiosError(err)) {
@@ -81,6 +100,22 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
     }
   }, [navigation]);
 
+  const handleRoomClick = (roomData: RoomData) => {
+    const roomUuid = roomData.uuid;
+    setSelectedRoomData(roomData);
+    const clickedRoom = chatRooms.find(value => value.uuid === roomUuid);
+    if (!clickedRoom) {
+      return;
+    } else if (clickedRoom.userStatus === 'KICKED') {
+      setShowBanReasonModal(true);
+    } else {
+      navigation.navigate('NewChat', {
+        roomUuid: roomUuid,
+        from: 'myReservation',
+      });
+    }
+  };
+
   const handleScroll = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     setShowScrollTop(offsetY > 200);
@@ -94,12 +129,12 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
     fetchReservations();
   }, [refreshKey, fetchReservations]);
 
-  const getStatusConfig = (status: string) => {
+  const getUserStatusConfig = (status: string) => {
     const statusMap = new Map([
       [
-        'IN_SETTLEMENT',
+        'KICKED',
         {
-          text: '정산중',
+          text: '강퇴됨',
           lightMode: {
             backgroundColor: '#FFF3F3',
             textColor: '#E45B63',
@@ -107,6 +142,26 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           darkMode: {
             backgroundColor: '#4A1A1A',
             textColor: '#FF6B73',
+          },
+        },
+      ],
+    ]);
+    return statusMap.get(status) || null;
+  };
+
+  const getStatusConfig = (status: string) => {
+    const statusMap = new Map([
+      [
+        'IN_SETTLEMENT',
+        {
+          text: '정산중',
+          lightMode: {
+            backgroundColor: '#fffcf3',
+            textColor: '#e4cb5b',
+          },
+          darkMode: {
+            backgroundColor: '#6b600e',
+            textColor: '#fff36b',
           },
         },
       ],
@@ -139,12 +194,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         borderBottomWidth: 1,
         borderBottomColor: borderColor,
       }}
-      onPress={() =>
-        navigation.navigate('NewChat', {
-          roomUuid: item.uuid,
-          from: 'myReservation',
-        })
-      }>
+      onPress={() => handleRoomClick(item)}>
       <View style={{flex: 1}}>
         <Text
           style={[styles.reservationTitle, {color: textColor}]}
@@ -163,6 +213,25 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         </Text>
       </View>
       {(() => {
+        const userStatusConfig = getUserStatusConfig(item.userStatus);
+        if (userStatusConfig) {
+          const colors = isDarkMode
+            ? userStatusConfig.darkMode
+            : userStatusConfig.lightMode;
+
+          return (
+            <View
+              style={[
+                styles.statusIconContainer,
+                {backgroundColor: colors.backgroundColor},
+              ]}>
+              <Text style={[styles.statusTextStyle, {color: colors.textColor}]}>
+                {userStatusConfig.text}
+              </Text>
+            </View>
+          );
+        }
+
         const statusConfig = getStatusConfig(item.status);
         if (!statusConfig) {
           return null;
@@ -227,7 +296,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         <Text style={[styles.errorText, {color: textColor}]}>{error}</Text>
         <TouchableOpacity
           style={styles.retryButton}
-          onPress={() => fetchReservations()}>
+          onPress={fetchReservations}>
           <Text style={styles.retryButtonText}>다시 시도</Text>
         </TouchableOpacity>
       </View>
@@ -271,6 +340,14 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         }
         style={{flex: 1}}
       />
+
+      <BanReasonModal
+        modalVisible={showBanReasonModal}
+        setModalVisible={setShowBanReasonModal}
+        roomData={selectedRoomData}
+        userData={userInfo}
+      />
+
       {showScrollTop && (
         <TouchableOpacity
           style={[
