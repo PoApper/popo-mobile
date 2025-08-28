@@ -87,6 +87,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     paxi_api
       .get(`/room/${roomUuid}/settlement`)
       .then(res => {
+        console.log(res);
         setIsSettlement(true);
         setSettlementData(res.data);
       })
@@ -169,6 +170,12 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       setIsSettlement(true);
       setSettlementData(data);
     });
+
+    newSocket.on('deletedSettlement', data => {
+      console.debug('정산 요청 삭제:', data);
+      setIsSettlement(false);
+    });
+
     socketRef.current = newSocket;
   };
 

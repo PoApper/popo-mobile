@@ -171,6 +171,31 @@ SidebarModalProps) => {
     }
   };
 
+  const onSettlementEnd = () => {
+    paxi_api
+      .patch(`/room/${roomData.uuid}/complete`)
+      .then(() => {
+        Alert.alert('정산 완료', '정산이 완료되었습니다.', [
+          {
+            text: '확인',
+            onPress: () => {
+              setModalVisible(false);
+              navigation.navigate('Main', {
+                tab: 'MyReservation',
+              });
+            },
+          },
+        ]);
+      })
+      .catch(err => {
+        console.error('정산 완료 실패', err);
+        Alert.alert(
+          '정산 완료 실패',
+          `정산 완료에 실패했습니다.\n${err.response?.data?.message || ''}`,
+        );
+      });
+  };
+
   const handleLeavePress = () => {
     // If owner and there are other participants, open transfer modal first
     if (isIamOwner && roomPeopleCnt > 1) {
@@ -374,34 +399,9 @@ SidebarModalProps) => {
                     <TouchableOpacity
                       style={[
                         styles.completeSettlementButton,
-                        {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+                        {backgroundColor: isDarkMode ? '#333' : '#000'},
                       ]}
-                      onPress={() => {
-                        paxi_api
-                          .patch(`/room/${roomData.uuid}/complete`)
-                          .then(() => {
-                            Alert.alert('정산 완료', '정산이 완료되었습니다.', [
-                              {
-                                text: '확인',
-                                onPress: () => {
-                                  setModalVisible(false);
-                                  navigation.navigate('Main', {
-                                    tab: 'MyReservation',
-                                  });
-                                },
-                              },
-                            ]);
-                          })
-                          .catch(err => {
-                            console.error('정산 완료 실패', err);
-                            Alert.alert(
-                              '정산 완료 실패',
-                              `정산 완료에 실패했습니다.\n${
-                                err.response?.data?.message || ''
-                              }`,
-                            );
-                          });
-                      }}>
+                      onPress={onSettlementEnd}>
                       <Text style={styles.completeSettlementButtonText}>
                         정산 완료
                       </Text>
