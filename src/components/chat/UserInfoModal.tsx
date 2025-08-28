@@ -119,7 +119,7 @@ const UserInfoModal = ({
                 <Text
                   numberOfLines={3}
                   ellipsizeMode={'tail'}
-                  style={[styles.msgText, {color: textColor(isDarkMode)}]}>
+                  style={[styles.msgText, {backgroundColor: isDarkMode ? '#222' : '#eee', color: textColor(isDarkMode)}]}>
                   {msgData.message}
                 </Text>
 
@@ -202,7 +202,6 @@ const styles = StyleSheet.create({
   msgText: {
     width: '100%',
     height: 70,
-    backgroundColor: '#222',
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
