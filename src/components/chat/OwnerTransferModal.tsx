@@ -68,7 +68,7 @@ const OwnerTransferModal = ({
     try {
       setModalVisible(false);
       await paxi_api.post(`room/delegate/${roomData.uuid}`, {
-        uuid: selectedNewOwnerUuid,
+        userUuid: selectedNewOwnerUuid,
       });
       await performLeave();
     } catch (err: any) {
