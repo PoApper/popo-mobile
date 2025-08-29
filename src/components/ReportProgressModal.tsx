@@ -133,7 +133,12 @@ const ReportProgressModal = ({
                   />
                   {reportData.status === 'COMPLETED' && (
                     <>
-                      <View style={styles.divider} />
+                      <View
+                        style={[
+                          styles.divider,
+                          {backgroundColor: isDarkMode ? 'white' : '#ccc'},
+                        ]}
+                      />
                       <InfoRow
                         isDarkMode={isDarkMode}
                         label="처리자"
@@ -196,7 +201,6 @@ const styles = StyleSheet.create({
   divider: {
     width: '100%',
     height: 1,
-    backgroundColor: 'white',
     marginVertical: 10,
   },
   closeButton: {
