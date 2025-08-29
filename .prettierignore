@@ -8,3 +8,7 @@ ios/popoMobile.xcworkspace/
 android/app/.cxx/
 android/app/build/
 android/build/
+
+
+PULL_REQUEST_TEMPLATE.md
+ISSUE_TEMPLATE/
