@@ -238,15 +238,14 @@ const PlaceReservationApplyScreen = ({
         <View style={styles.placeholderButton} />
       </View>
 
-      <KeyboardAwareScrollView 
-        ref={scrollViewRef} 
+      <KeyboardAwareScrollView
+        ref={scrollViewRef}
         contentContainerStyle={{padding: 20}}
         enableOnAndroid={true}
         enableAutomaticScroll={true}
         keyboardShouldPersistTaps="handled"
         extraScrollHeight={20}
-        extraHeight={120}
-      >
+        extraHeight={120}>
         <View style={styles.infoSection}>
           <Text style={[styles.placeName, {color: textColor}]}>
             {placeName}
