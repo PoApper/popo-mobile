@@ -8,8 +8,8 @@ import {
   useColorScheme,
   StatusBar,
   Alert,
-  ScrollView,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -198,11 +198,15 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
         backgroundColor={C.bg}
       />
       <CommonHeader navigation={navigation} title="방 생성하기" />
-      <ScrollView
+      <KeyboardAwareScrollView
         style={{flex: 1}}
         contentContainerStyle={[styles.container, {paddingHorizontal: 16}]}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+        extraScrollHeight={20}
+        extraHeight={120}>
         <View style={styles.formSection}>
           {/* 방 제목 */}
           <View>
@@ -431,7 +435,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
           activeOpacity={0.85}>
           <Text style={styles.createButtonText}>방 생성하기</Text>
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
