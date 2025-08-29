@@ -76,7 +76,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 
   const ColorStyle = colors[isDarkMode ? 'dark' : 'light'];
 
-  const SELECTED_COLOR = '#007AFF';
+  const SELECTED_COLOR = '#ccc';
   const SELECTED_BG_COLOR = isDarkMode ? '#232323' : '#f8f8f8';
 
   return (

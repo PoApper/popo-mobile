@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   useColorScheme,
   StatusBar,
-  ScrollView,
   TextInput,
   Alert,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
@@ -238,7 +238,14 @@ const PlaceReservationApplyScreen = ({
         <View style={styles.placeholderButton} />
       </View>
 
-      <ScrollView ref={scrollViewRef} contentContainerStyle={{padding: 20}}>
+      <KeyboardAwareScrollView
+        ref={scrollViewRef}
+        contentContainerStyle={{padding: 20}}
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={20}
+        extraHeight={120}>
         <View style={styles.infoSection}>
           <Text style={[styles.placeName, {color: textColor}]}>
             {placeName}
@@ -449,7 +456,7 @@ const PlaceReservationApplyScreen = ({
             />
           )}
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       <View
         style={[
