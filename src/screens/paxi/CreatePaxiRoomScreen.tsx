@@ -8,7 +8,6 @@ import {
   useColorScheme,
   StatusBar,
   Alert,
-  ScrollView,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
