@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   useColorScheme,
   StatusBar,
+  ScrollView,
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import moment from 'moment';
@@ -204,11 +204,11 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
         backgroundColor={isDarkMode ? '#121212' : '#fff'}
       />
       <CommonHeader navigation={navigation} title="방 수정하기" />
-      <KeyboardAwareScrollView
+      <ScrollView
+        style={{flex: 1, paddingHorizontal: 10}}
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
-        enableOnAndroid={true}
-        extraScrollHeight={100}>
+        showsVerticalScrollIndicator={false}>
         <View style={styles.formSection}>
           <View>
             <Text style={[styles.label, {color: textColor}]}>방 제목</Text>
@@ -417,7 +417,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
           }>
           <Text style={styles.createButtonText}>수정하기</Text>
         </TouchableOpacity>
-      </KeyboardAwareScrollView>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -426,12 +426,10 @@ export default ModifyPaxiRoomScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
-    paddingRight: '5%',
-    paddingLeft: '5%',
-    paddingTop: '5%',
-    marginBottom: 0,
+    paddingTop: 10,
+    paddingBottom: 20,
+    paddingHorizontal: 5,
   },
   placeholderButton: {
     width: 40,
@@ -471,15 +469,14 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   formSection: {
-    marginTop: 0,
-    gap: 8,
+    gap: 10,
+    width: '100%',
   },
   roomInput: {
     borderWidth: 1,
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    marginBottom: 16,
     textAlignVertical: 'top',
   },
   inputWrapper: {
