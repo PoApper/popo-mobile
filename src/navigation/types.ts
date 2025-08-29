@@ -86,6 +86,7 @@ export type OtherStackParamList = {
   ModifyPaxiRoom: {
     roomUuid: string;
   };
+  PaxiReportList: undefined;
   Login: undefined;
   UserDetail: undefined;
   UserAccountInfo: undefined;
