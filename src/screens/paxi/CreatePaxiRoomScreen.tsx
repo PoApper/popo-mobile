@@ -443,6 +443,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 12,
     paddingBottom: 24,
+    paddingHorizontal: 16,
   },
   formSection: {
     gap: 16,
