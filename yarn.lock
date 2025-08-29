@@ -3905,6 +3905,11 @@ es-errors@^1.3.0:
   resolved "https://registry.npmjs.org/es-errors/-/es-errors-1.3.0.tgz"
   integrity sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==
 
+es-hangul@^2.3.5:
+  version "2.3.5"
+  resolved "https://registry.npmjs.org/es-hangul/-/es-hangul-2.3.5.tgz"
+  integrity sha512-1Fdd5jr48/6/BxU4ucMpByaI2dbFhonipsCgAHYi1UbAGNLT0ELwBj1cdepl9j9ERsDS9nf4Zy4tPSEccaOEOw==
+
 es-iterator-helpers@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/es-iterator-helpers/-/es-iterator-helpers-1.2.1.tgz"
