@@ -23,7 +23,7 @@ import {
   ChatRoomInfo,
   MessageData,
   PaxiUser,
-  SettlementData,
+  SettlementInfoData,
 } from '@interfaces/paxi';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
@@ -32,6 +32,8 @@ import {socketFactory} from '@utils/socket-factory';
 import ChatMessage from '@components/chat/ChatMessage';
 import SidebarModal from '@components/chat/SidebarModal';
 import SettlementInfoBox from '@components/chat/SettlementInfoBox';
+import MsgModifyModal from '@components/chat/MsgModifyModal';
+import UserInfoModal from '@components/chat/UserInfoModal';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
@@ -53,11 +55,16 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const [reconnectAttempt, setReconnectAttempt] = useState<number>(0);
   const [socketConnected, setSocketConnected] = useState<boolean>(false);
 
-  const [settlementData, setSettlementData] = useState<SettlementData>(
-    {} as SettlementData,
+  const [settlementData, setSettlementData] = useState<SettlementInfoData>(
+    {} as SettlementInfoData,
   );
   const [isSettlement, setIsSettlement] = useState<boolean>(false);
   const [isPaid, setIsPaid] = useState<boolean | undefined>(undefined);
+  const [showMyChatOptions, setShowMyChatOptions] = useState<boolean>(false);
+  const [selectedMsgData, setSelectedMsgData] = useState<MessageData>(
+    {} as MessageData,
+  );
+  const [showUserInfo, setShowUserInfo] = useState<boolean>(false);
 
   const getRoomInfo = async () => {
     paxi_api
@@ -80,6 +87,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     paxi_api
       .get(`/room/${roomUuid}/settlement`)
       .then(res => {
+        console.log(res);
         setIsSettlement(true);
         setSettlementData(res.data);
       })
@@ -149,12 +157,12 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
     newSocket.on('updatedMessage', data => {
       console.debug('갱신될 메시지:', data);
-      // updateChatData(data);
+      updateChatData(data);
     });
 
     newSocket.on('deletedMessage', data => {
       console.debug('삭제될 메시지:', data);
-      // deleteChatData(data);
+      deleteChatData(data);
     });
 
     newSocket.on('newSettlement', data => {
@@ -162,6 +170,12 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       setIsSettlement(true);
       setSettlementData(data);
     });
+
+    newSocket.on('deletedSettlement', data => {
+      console.debug('정산 요청 삭제:', data);
+      setIsSettlement(false);
+    });
+
     socketRef.current = newSocket;
   };
 
@@ -200,6 +214,16 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     }, []),
   );
 
+  const updateChatData = (data: MessageData) => {
+    setChatList(prev =>
+      prev.map(chat => (chat.uuid === data.uuid ? {...chat, ...data} : chat)),
+    );
+  };
+
+  const deleteChatData = (data: MessageData) => {
+    setChatList(prev => prev.filter(chat => chat.uuid !== data.uuid));
+  };
+
   const sendChat = async () => {
     if (!socketRef.current || !socketRef.current?.connected) {
       Alert.alert('에러', '서버 연결이 불안정하여 메시지를 보낼 수 없습니다.');
@@ -225,6 +249,16 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     };
     setChatList(prev => [newChatData, ...prev]);
   };
+
+  const handleUserClick = useCallback((msgData: MessageData) => {
+    setSelectedMsgData(msgData);
+    setShowUserInfo(_ => true);
+  }, []);
+
+  const handleMyMsgClick = useCallback((msgData: MessageData) => {
+    setSelectedMsgData(msgData);
+    setShowMyChatOptions(_ => true);
+  }, []);
 
   return (
     <SafeAreaView
@@ -283,6 +317,20 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         navigation={navigation}
       />
 
+      <MsgModifyModal
+        modalVisible={showMyChatOptions}
+        setModalVisible={setShowMyChatOptions}
+        msgData={selectedMsgData}
+      />
+
+      <UserInfoModal
+        modalVisible={showUserInfo}
+        setModalVisible={setShowUserInfo}
+        msgData={selectedMsgData}
+        roomUuid={roomUuid}
+        isOwner={roomInfo.ownerUuid === myInfo.uuid}
+      />
+
       {isSettlement && settlementData && (
         <View
           style={{
@@ -302,7 +350,12 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         <FlatList
           data={chatList}
           renderItem={({item}) => (
-            <ChatMessage message={item} user_uuid={myInfo.uuid} />
+            <ChatMessage
+              message={item}
+              user_uuid={myInfo.uuid}
+              handleUserClick={handleUserClick}
+              handleMyMsgClick={handleMyMsgClick}
+            />
           )}
           keyExtractor={item => item.uuid}
           style={styles.messagesList}
