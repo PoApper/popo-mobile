@@ -226,7 +226,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
               </View>
 
               <View
-                style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
+                style={[styles.detailItem, {borderBottomColor: borderColor}]}>
                 <View style={styles.detailHeader}>
                   <Text
                     style={[
@@ -253,6 +253,29 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                     ? `${paxiUserData?.bankName} ${paxiUserData?.accountNumber} (${paxiUserData?.accountHolderName})`
                     : '정보 없음'}
                 </Text>
+              </View>
+
+              <View
+                style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
+                <View style={styles.detailHeader}>
+                  <Text
+                    style={[
+                      styles.detailLabel,
+                      {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                    ]}>
+                    신고 관리
+                  </Text>
+                  <TouchableOpacity
+                    style={[
+                      styles.editButton,
+                      {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+                    ]}
+                    onPress={() => {
+                      navigation.navigate('PaxiReportList');
+                    }}>
+                    <Text style={styles.editButtonText}>내역 조회</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           ) : null}
