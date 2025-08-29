@@ -116,7 +116,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <KeyboardAwareScrollView 
+      <KeyboardAwareScrollView
         contentContainerStyle={styles.scrollContainer}
         enableOnAndroid={true}
         enableAutomaticScroll={true}
