@@ -9,6 +9,7 @@ import {
   ScrollView,
   ActivityIndicator,
   FlatList,
+  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
@@ -209,6 +210,22 @@ const PlaceDetailReservationScreen = ({
             <TouchableOpacity
               style={[styles.reserveButton]}
               onPress={() => {
+                // 선택된 날짜가 과거인지 검증
+                const today = new Date();
+                const selectedDateObj = new Date(
+                  parseInt(selectedDate.substring(0, 4)),
+                  parseInt(selectedDate.substring(4, 6)) - 1,
+                  parseInt(selectedDate.substring(6, 8))
+                );
+                
+                // 오늘 날짜의 시작 시간(00:00:00)과 비교
+                const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                
+                if (selectedDateObj < todayStart) {
+                  Alert.alert('알림', '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.');
+                  return;
+                }
+                
                 navigation.navigate('PlaceReservationApply', {
                   buildingName: placeDetail?.location || '',
                   placeName: placeDetail?.name || '',
