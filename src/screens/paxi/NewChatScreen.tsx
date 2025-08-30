@@ -72,15 +72,15 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
-      (e) => {
+      e => {
         setKeyboardHeight(e.endCoordinates.height);
-      }
+      },
     );
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => {
         setKeyboardHeight(0);
-      }
+      },
     );
 
     return () => {
@@ -395,7 +395,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
             styles.inputContainer,
             {
               backgroundColor: backgroundColor(isDarkMode),
-              paddingBottom: Platform.OS === 'android' ? keyboardHeight + 10 : 10,
+              paddingBottom:
+                Platform.OS === 'android' ? keyboardHeight + 10 : 10,
             },
           ]}>
           <TextInput
