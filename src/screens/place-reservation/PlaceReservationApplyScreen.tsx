@@ -47,7 +47,7 @@ const PlaceReservationApplyScreen = ({
   const [phone, setPhone] = useState('');
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
-  
+
   // 선택된 날짜가 있으면 해당 날짜로, 없으면 현재 날짜로 초기화
   const getInitialDate = () => {
     if (selectedDate) {
@@ -59,7 +59,7 @@ const PlaceReservationApplyScreen = ({
     }
     return new Date();
   };
-  
+
   const [date, setDate] = useState(getInitialDate());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [startTime, setStartTime] = useState(new Date());
