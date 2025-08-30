@@ -213,6 +213,7 @@ const PlaceDetailReservationScreen = ({
                   buildingName: placeDetail?.location || '',
                   placeName: placeDetail?.name || '',
                   placeId: placeId,
+                  selectedDate: selectedDate,
                 });
               }}>
               <Text style={styles.reserveButtonText}>예약 신청하기</Text>
