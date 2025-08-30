@@ -63,9 +63,14 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
     }
 
     if (isOwner || isJoinedRoom) {
+      paxi_api.post(`/room/join/${roomData.uuid}`).then(() => {
       navigation.navigate('NewChat', {
-        roomUuid: roomData.uuid,
-        from: 'roomList',
+          roomUuid: roomData.uuid,
+          from: 'roomList',
+        });
+      }).catch(error => {
+        console.error('Error:', error);
+        Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
       });
       return;
     }
