@@ -71,7 +71,7 @@ const ReportDataCard = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#222',
+          backgroundColor: isDarkMode ? '#222' : '#eee',
         }}>
         <Icon name={iconData.name} size={24} color={iconData.color} />
       </View>
