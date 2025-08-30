@@ -18,25 +18,7 @@ import paxi_api from '../../utils/paxi_api';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import BanReasonModal from './BanReasonModal';
-import {UserData} from '@interfaces/paxi';
-
-interface RoomData {
-  hasNewMessage: string;
-  kickedReason: string;
-  userStatus: string;
-  uuid: string;
-  title: string;
-  ownerUuid: string;
-  departureLocation: string;
-  destinationLocation: string;
-  maxParticipant: number;
-  currentParticipant: number;
-  departureTime: string;
-  status: string;
-  description: string;
-  payerUuid: string;
-  payAmount: number;
-}
+import {MyRoomData, UserData} from '@interfaces/paxi';
 
 interface TaxiChatListProps {
   navigation: NativeStackNavigationProp<
@@ -57,10 +39,10 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [chatRooms, setChatRooms] = useState<RoomData[]>([]);
+  const [chatRooms, setChatRooms] = useState<MyRoomData[]>([]);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [selectedRoomData, setSelectedRoomData] = useState<RoomData>(
-    {} as RoomData,
+  const [selectedRoomData, setSelectedRoomData] = useState<MyRoomData>(
+    {} as MyRoomData,
   );
   const [userInfo, setUserInfo] = useState<UserData>({} as UserData);
   const [showBanReasonModal, setShowBanReasonModal] = useState<boolean>(false);
@@ -71,7 +53,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
 
   const fetchReservations = useCallback(async () => {
     try {
-      const response = await paxi_api.get<RoomData[]>('/room/my');
+      const response = await paxi_api.get<MyRoomData[]>('/room/my');
       const sortedData = response.data.sort((a, b) => {
         return (
           new Date(b.departureTime).getTime() -
@@ -100,7 +82,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
     }
   }, [navigation]);
 
-  const handleRoomClick = (roomData: RoomData) => {
+  const handleRoomClick = (roomData: MyRoomData) => {
     const roomUuid = roomData.uuid;
     setSelectedRoomData(roomData);
     const clickedRoom = chatRooms.find(value => value.uuid === roomUuid);
@@ -184,7 +166,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
     return statusMap.get(status) || null;
   };
 
-  const renderReservationItem = ({item}: {item: RoomData}) => (
+  const renderReservationItem = ({item}: {item: MyRoomData}) => (
     <TouchableOpacity
       style={{
         paddingVertical: 12,
