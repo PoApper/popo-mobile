@@ -245,6 +245,19 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           justifyContent: 'center',
           alignItems: 'center',
         }}>
+        {item.hasNewMessage && (
+          <View
+            style={{
+              position: 'absolute',
+              top: 10,
+              right: 10,
+              width: 5,
+              height: 5,
+              borderRadius: 2.5,
+              backgroundColor: 'red',
+            }}
+          />
+        )}
         <Icon name="message" size={22} color="#222" />
       </View>
     </TouchableOpacity>
