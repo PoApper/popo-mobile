@@ -215,17 +215,24 @@ const PlaceDetailReservationScreen = ({
                 const selectedDateObj = new Date(
                   parseInt(selectedDate.substring(0, 4)),
                   parseInt(selectedDate.substring(4, 6)) - 1,
-                  parseInt(selectedDate.substring(6, 8))
+                  parseInt(selectedDate.substring(6, 8)),
                 );
-                
+
                 // 오늘 날짜의 시작 시간(00:00:00)과 비교
-                const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-                
+                const todayStart = new Date(
+                  today.getFullYear(),
+                  today.getMonth(),
+                  today.getDate(),
+                );
+
                 if (selectedDateObj < todayStart) {
-                  Alert.alert('알림', '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.');
+                  Alert.alert(
+                    '알림',
+                    '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.',
+                  );
                   return;
                 }
-                
+
                 navigation.navigate('PlaceReservationApply', {
                   buildingName: placeDetail?.location || '',
                   placeName: placeDetail?.name || '',
