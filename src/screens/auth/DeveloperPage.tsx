@@ -19,8 +19,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {RootStackParamList} from '@navigation/types';
 import {getAuthToken} from '@utils/auth-token';
 import api from '@utils/api';
-import paxi_api from '@utils/paxi_api';
 import CommonHeader from '@components/CommonHeader';
+import paxi_api, {PAXI_API_URL} from '@utils/paxi_api';
 import {POPO_API_URL} from '@utils/api';
 
 type DeveloperPageProps = {
@@ -140,6 +140,8 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
                   style={[styles.tokenValue, {color: textColor}]}
                   selectable={true}>
                   {POPO_API_URL || '정보 없음'}
+                  {'\n'}
+                  {PAXI_API_URL || '정보 없음'}
                 </Text>
               </View>
             </View>
