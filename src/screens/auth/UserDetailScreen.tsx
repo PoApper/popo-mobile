@@ -17,7 +17,7 @@ import axios from 'axios';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
-import Environment from '@utils/environment';
+import config from '@utils/config';
 import {reset_auth} from '@utils/reset';
 import paxi_api from '@utils/paxi_api';
 import {PaxiUserMy} from '@interfaces/paxi';
@@ -286,16 +286,13 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
         </TouchableOpacity>
 
         {/* 개발자 페이지 버튼 */}
-        {!Environment.isProduction && (
-          <View style={{marginTop: 16}}>
+        {config.ENV_CONFIG !== 'Production' && (
+          <View style={{marginBottom: 48, marginTop: 16}}>
             <TouchableOpacity
               style={[styles.buttonContainer, {backgroundColor: '#4F46E5'}]}
               onPress={() => navigation.navigate('Developer')}>
               <Text style={styles.developerButtonText}>개발자 페이지</Text>
             </TouchableOpacity>
-            <Text style={{fontSize: 12, color: '#6B7280'}}>
-              개발자 페이지는 에뮬레이터와 Test Flight에서만 접근 가능합니다.
-            </Text>
           </View>
         )}
 
