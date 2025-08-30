@@ -132,7 +132,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       onPress: () => {
         Alert.alert(
           '외부 링크 이동',
-          '생활관자치회 배달업체 페이지로 이동합니다. 계속하시겠습니까?',
+          '생활관자치회 배달업체 페이지로 이동합니다.',
           [
             {
               text: '취소',
@@ -155,7 +155,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       onPress: () =>
         Alert.alert(
           '외부 링크 이동',
-          '총학생회 구글 드라이브로 이동합니다. 계속하시겠습니까?',
+          '총학생회 구글 드라이브로 이동합니다.',
           [
             {
               text: '취소',
