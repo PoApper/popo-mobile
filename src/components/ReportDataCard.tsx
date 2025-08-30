@@ -1,5 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {textColor} from '@styles/default';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export interface ReportData {
   id: number;
@@ -24,6 +25,17 @@ interface ReportDataCardProps {
   setReport: (report: ReportData) => void;
 }
 
+const getReportStatusIcon = (status: string) => {
+  switch (status) {
+    case 'COMPLETED':
+      return {name: 'task-alt', color: '#10B981'};
+    case 'PENDING':
+      return {name: 'hourglass-empty', color: '#F59E0B'};
+    default:
+      return {name: 'help', color: '#6B7280'};
+  }
+};
+
 const ReportDataCard = ({
   reportData,
   isDarkMode,
@@ -33,6 +45,8 @@ const ReportDataCard = ({
     styles.itemDescription,
     {color: isDarkMode ? '#888' : '#666'},
   ];
+
+  const iconData = getReportStatusIcon(reportData.status);
 
   return (
     <TouchableOpacity
@@ -46,9 +60,20 @@ const ReportDataCard = ({
           사유) {reportData.reason}
         </Text>
         <Text style={itemDescriptionStyle}>
-          {new Date(reportData.createdAt).toLocaleString()} -{' '}
-          {reportData.status === 'PENDING' ? '처리 중' : '처리 완료'}
+          {new Date(reportData.createdAt).toLocaleString()}
         </Text>
+      </View>
+      <View
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: 5,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#222',
+        }}>
+        <Icon name={iconData.name} size={24} color={iconData.color} />
       </View>
     </TouchableOpacity>
   );
@@ -58,6 +83,9 @@ export default ReportDataCard;
 
 const styles = StyleSheet.create({
   itemContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
     marginBottom: 5,
   },

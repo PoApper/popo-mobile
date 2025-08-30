@@ -30,13 +30,15 @@ const InfoRow = ({
   value: string;
 }) => (
   <View style={{flexDirection: 'row', marginBottom: 6}}>
+    <Text style={{fontWeight: 'bold', color: textColor(isDarkMode), width: 50}}>
+      {label}
+    </Text>
     <Text
       numberOfLines={3}
       ellipsizeMode="tail"
-      style={{fontWeight: 'bold', color: textColor(isDarkMode), width: 50}}>
-      {label}
+      style={{color: textColor(isDarkMode), flex: 1}}>
+      {value}
     </Text>
-    <Text style={{color: textColor(isDarkMode), flex: 1}}>{value}</Text>
   </View>
 );
 
