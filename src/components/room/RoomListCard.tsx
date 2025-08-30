@@ -48,12 +48,19 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
 
   const isOwner = userUuid === roomData?.ownerUuid;
   const isPossible = roomData.currentParticipant < roomData.maxParticipant;
-  const isKickedRoom = roomData.room_users && roomData.room_users.some(user => user.userUuid === userUuid && user.status === 'KICKED');
+  const isKickedRoom =
+    roomData.room_users &&
+    roomData.room_users.some(
+      user => user.userUuid === userUuid && user.status === 'KICKED',
+    );
   const isJoinedRoom = roomData.room_users && !isKickedRoom;
 
   const askJoinRoom = () => {
-    if(isKickedRoom) {
-      Alert.alert('강퇴됨', '강퇴된 방에는 참여할 수 없습니다. \n자세한 사유는 내 일정 탭에서 확인해주세요.');
+    if (isKickedRoom) {
+      Alert.alert(
+        '강퇴됨',
+        '강퇴된 방에는 참여할 수 없습니다. \n자세한 사유는 내 일정 탭에서 확인해주세요.',
+      );
       return;
     }
 
@@ -63,15 +70,18 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
     }
 
     if (isOwner || isJoinedRoom) {
-      paxi_api.post(`/room/join/${roomData.uuid}`).then(() => {
-      navigation.navigate('NewChat', {
-          roomUuid: roomData.uuid,
-          from: 'roomList',
+      paxi_api
+        .post(`/room/join/${roomData.uuid}`)
+        .then(() => {
+          navigation.navigate('NewChat', {
+            roomUuid: roomData.uuid,
+            from: 'roomList',
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
         });
-      }).catch(error => {
-        console.error('Error:', error);
-        Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
-      });
       return;
     }
 
