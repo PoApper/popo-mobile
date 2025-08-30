@@ -48,11 +48,15 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
 
   const isOwner = userUuid === roomData?.ownerUuid;
   const isPossible = roomData.currentParticipant < roomData.maxParticipant;
-  const isJoinedRoom = roomData.room_users
-    .map(user => user.userUuid)
-    .includes(userUuid);
+  const isKickedRoom = roomData.room_users && roomData.room_users.some(user => user.userUuid === userUuid && user.status === 'KICKED');
+  const isJoinedRoom = roomData.room_users && !isKickedRoom;
 
   const askJoinRoom = () => {
+    if(isKickedRoom) {
+      Alert.alert('강퇴됨', '강퇴된 방에는 참여할 수 없습니다. \n자세한 사유는 내 일정 탭에서 확인해주세요.');
+      return;
+    }
+
     if (roomData.currentParticipant >= roomData.maxParticipant) {
       Alert.alert('마감', '방이 마감되었습니다.');
       return;
@@ -121,6 +125,10 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                     ? isDarkMode
                       ? 'rgba(79,70,229,0.18)'
                       : '#EEF2FF'
+                    : isKickedRoom
+                    ? isDarkMode
+                      ? 'rgba(230,110,110,0.18)'
+                      : '#FFEEEE'
                     : isJoinedRoom
                     ? isDarkMode
                       ? 'rgba(110, 230, 24, 0.18)'
@@ -140,6 +148,8 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                   {
                     color: isOwner
                       ? '#4F46E5'
+                      : isKickedRoom
+                      ? '#E55656'
                       : isJoinedRoom
                       ? '#46e556'
                       : isPossible
@@ -149,6 +159,8 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                 ]}>
                 {isOwner
                   ? '내가 방장'
+                  : isKickedRoom
+                  ? '강퇴됨'
                   : isJoinedRoom
                   ? '참여한 방'
                   : isPossible
