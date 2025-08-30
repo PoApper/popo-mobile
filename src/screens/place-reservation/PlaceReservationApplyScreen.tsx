@@ -67,7 +67,7 @@ const PlaceReservationApplyScreen = ({
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   // 30분 단위로 시간 올림
   const roundUpToNearest30Minutes = (date: Date) => {
@@ -215,7 +215,7 @@ const PlaceReservationApplyScreen = ({
     setShowStartPicker(false);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 600, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 600, true); // x, y, animated 순
     }, 100);
   };
   const openStartPicker = () => {
@@ -223,7 +223,7 @@ const PlaceReservationApplyScreen = ({
     setShowStartPicker(true);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 600, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 600, true);
     }, 100);
   };
   const openEndPicker = () => {
@@ -231,7 +231,7 @@ const PlaceReservationApplyScreen = ({
     setShowStartPicker(false);
     setShowEndPicker(true);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({y: 600, animated: true});
+      scrollViewRef.current?.scrollToPosition(0, 600, true);
     }, 100);
   };
 
