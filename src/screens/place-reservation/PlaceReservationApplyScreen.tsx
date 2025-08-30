@@ -35,7 +35,7 @@ const PlaceReservationApplyScreen = ({
   route,
 }: PlaceReservationApplyScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const {buildingName, placeName, placeId} = route.params;
+  const {buildingName, placeName, placeId, selectedDate} = route.params;
 
   // 사용자 정보
   const [userName, setUserName] = useState('');
@@ -47,7 +47,20 @@ const PlaceReservationApplyScreen = ({
   const [phone, setPhone] = useState('');
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
-  const [date, setDate] = useState(new Date());
+  
+  // 선택된 날짜가 있으면 해당 날짜로, 없으면 현재 날짜로 초기화
+  const getInitialDate = () => {
+    if (selectedDate) {
+      // YYYYMMDD 형식을 Date 객체로 변환
+      const year = parseInt(selectedDate.substring(0, 4));
+      const month = parseInt(selectedDate.substring(4, 6)) - 1; // 월은 0부터 시작
+      const day = parseInt(selectedDate.substring(6, 8));
+      return new Date(year, month, day);
+    }
+    return new Date();
+  };
+  
+  const [date, setDate] = useState(getInitialDate());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [startTime, setStartTime] = useState(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
