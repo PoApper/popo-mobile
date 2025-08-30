@@ -153,23 +153,19 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       title: '기록물관리',
       active: true,
       onPress: () =>
-        Alert.alert(
-          '외부 링크 이동',
-          '총학생회 구글 드라이브로 이동합니다.',
-          [
-            {
-              text: '취소',
-              style: 'cancel',
-            },
-            {
-              text: '확인',
-              onPress: () =>
-                handleMoveSite(
-                  'https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD',
-                ),
-            },
-          ],
-        ),
+        Alert.alert('외부 링크 이동', '총학생회 구글 드라이브로 이동합니다.', [
+          {
+            text: '취소',
+            style: 'cancel',
+          },
+          {
+            text: '확인',
+            onPress: () =>
+              handleMoveSite(
+                'https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD',
+              ),
+          },
+        ]),
     },
   ];
 
