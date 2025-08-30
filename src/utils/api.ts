@@ -2,6 +2,8 @@ import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
+import config from './config';
+
 // EventEmitter 타입 선언
 declare global {
   var eventEmitter:
@@ -12,7 +14,7 @@ declare global {
 }
 
 // API 기본 URL
-export const POPO_API_URL = 'https://api.popo-dev.poapper.club';
+export const POPO_API_URL = config.API_URL;
 
 console.log('현재 API URL:', POPO_API_URL);
 

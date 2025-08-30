@@ -1,6 +1,7 @@
 import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import config from './config';
 
 // EventEmitter 타입 선언
 declare global {
@@ -12,7 +13,7 @@ declare global {
 }
 
 // API 기본 URL
-export const PAXI_API_URL = 'https://api.paxi.popo-dev.poapper.club';
+export const PAXI_API_URL = config.PAXI_API_URL;
 
 console.log('현재 API URL:', PAXI_API_URL);
 
