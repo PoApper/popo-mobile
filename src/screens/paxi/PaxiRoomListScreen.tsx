@@ -33,7 +33,7 @@ type PaxiRoomListScreenProps = {
 const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const [hideFullRoom, setHideFullRoom] = useState(false);
+  const [hideFullRoom, setHideFullRoom] = useState(true);
   const [roomData, setRoomData] = useState<RoomDataType[]>([]);
   const [userUuid, setUserUuid] = useState<string>('');
   const [refreshing, setRefreshing] = useState(false);
