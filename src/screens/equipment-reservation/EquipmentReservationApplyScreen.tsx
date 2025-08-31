@@ -823,6 +823,7 @@ const EquipmentReservationApplyScreen = ({
           <TouchableOpacity
             style={styles.reservationButton}
             onPress={handleReservation}>
+              // TODO: 장소 예약이랑 색깔 및 단어 통일
             <Text style={styles.reservationButtonText}>예약 생성하기</Text>
           </TouchableOpacity>
         </View>
