@@ -108,7 +108,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       [RoomStatus.KICKED]: {
         backgroundColor: isDarkMode ? 'rgba(230,110,110,0.18)' : '#FFEEEE',
         textColor: '#E55656',
-        statusText: '강퇴됨',
+        statusText: '강퇴된 방',
       },
       [RoomStatus.JOINED]: {
         backgroundColor: isDarkMode ? 'rgba(110, 230, 24, 0.18)' : '#f1ffee',
