@@ -53,7 +53,9 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
     roomData.room_users.some(
       user => user.userUuid === userUuid && user.status === 'KICKED',
     );
-  const isJoinedRoom = roomData.room_users && !isKickedRoom;
+  const isJoinedRoom = roomData.room_users && roomData.room_users.some(
+    user => user.userUuid === userUuid && user.status !== 'KICKED',
+  );
 
   const askJoinRoom = () => {
     if (isKickedRoom) {
