@@ -46,13 +46,18 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
   };
 
   useEffect(() => {
-    paxi_api
-      .get(`/room/${roomUuid}`)
-      .then(res => {
-        setRoomData(res.data);
-      })
-      .catch(e => console.error(e));
+    fetchRoomData();
   }, [roomUuid]);
+
+  // 방 데이터 가져오기
+  const fetchRoomData = async () => {
+    try {
+      const response = await paxi_api.get(`/room/${roomUuid}`);
+      setRoomData(response.data);
+    } catch (error) {
+      console.error('방 데이터 가져오기 실패:', error);
+    }
+  };
 
   if (!roomData) {
     return null;
@@ -151,9 +156,9 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       .then(() => {
         navigateToChat();
       })
-      .catch(error => {
+      .catch((error: any) => {
         console.error('방 입장 실패:', error);
-        Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
+        Alert.alert('실패', '방 참여에 실패했습니다: ' + (error.message || '알 수 없는 오류'));
       });
   };
 
@@ -171,9 +176,9 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
           Alert.alert('실패', '방 참여에 실패했습니다.');
         }
       })
-      .catch(error => {
+      .catch((error: any) => {
         console.error('방 참여 실패:', error);
-        Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
+        Alert.alert('실패', '방 참여에 실패했습니다: ' + (error.message || '알 수 없는 오류'));
       });
   };
 
