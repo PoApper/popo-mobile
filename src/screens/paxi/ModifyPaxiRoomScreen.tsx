@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   useColorScheme,
   StatusBar,
-  ScrollView,
   Alert,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -204,11 +204,15 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
         backgroundColor={isDarkMode ? '#121212' : '#fff'}
       />
       <CommonHeader navigation={navigation} title="방 수정하기" />
-      <ScrollView
+      <KeyboardAwareScrollView
         style={{flex: 1, paddingHorizontal: 10}}
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+        extraScrollHeight={20}
+        extraHeight={120}>
         <View style={styles.formSection}>
           <View>
             <Text style={[styles.label, {color: textColor}]}>방 제목</Text>
@@ -417,7 +421,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
           }>
           <Text style={styles.createButtonText}>수정하기</Text>
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };

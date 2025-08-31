@@ -9,8 +9,8 @@ import {
   Alert,
   StatusBar,
   useColorScheme,
-  ScrollView,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import CookieManager from '@react-native-cookies/cookies';
@@ -125,12 +125,17 @@ const LeaveScreen = ({navigation}: LeaveScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
+      <KeyboardAwareScrollView
         style={[
           styles.container,
           {backgroundColor: backgroundStyle.backgroundColor},
         ]}
-        contentContainerStyle={styles.contentContainer}>
+        contentContainerStyle={styles.contentContainer}
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={20}
+        extraHeight={120}>
         <View style={styles.logoContainer}>
           <Image
             source={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
@@ -208,7 +213,7 @@ const LeaveScreen = ({navigation}: LeaveScreenProps) => {
             </Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };

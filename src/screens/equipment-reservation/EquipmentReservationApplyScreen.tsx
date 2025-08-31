@@ -484,7 +484,7 @@ const EquipmentReservationApplyScreen = ({
         enableOnAndroid={true}
         enableAutomaticScroll={true}
         extraScrollHeight={20}
-        extraHeight={120}>
+        extraHeight={association === 'dormunion' ? 120 : 200}>
         {/* 공지사항 섹션 */}
         <View
           style={[
@@ -823,6 +823,7 @@ const EquipmentReservationApplyScreen = ({
           <TouchableOpacity
             style={styles.reservationButton}
             onPress={handleReservation}>
+            {/* TODO: 장소 예약이랑 색깔 및 단어 통일 */}
             <Text style={styles.reservationButtonText}>예약 생성하기</Text>
           </TouchableOpacity>
         </View>

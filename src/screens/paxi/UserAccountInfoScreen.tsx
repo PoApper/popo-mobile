@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   useColorScheme,
   StatusBar,
-  ScrollView,
   Alert,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
@@ -147,7 +147,12 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
         <View style={styles.placeholderButton} />
       </View>
 
-      <ScrollView>
+      <KeyboardAwareScrollView
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={20}
+        extraHeight={120}>
         <View style={styles.container}>
           {existingData?.bankName && (
             <View style={styles.existingInfoContainer}>
@@ -251,7 +256,7 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
               : '계좌 정보 등록'}
           </Text>
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };

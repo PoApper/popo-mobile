@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   useColorScheme,
   StatusBar,
-  ScrollView,
   Alert,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp, useRoute} from '@react-navigation/native';
@@ -134,10 +134,15 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         </View>
       )}
 
-      <ScrollView
+      <KeyboardAwareScrollView
         style={{flex: 1, paddingHorizontal: 15}}
         contentContainerStyle={styles.container}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={20}
+        extraHeight={120}>
         {/* 내 계좌 정보 불러오기 버튼 */}
         <TouchableOpacity
           style={[
@@ -296,7 +301,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
             {isAlreadyRequested ? '정산 요청 수정' : '정산 요청하기'}
           </Text>
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
