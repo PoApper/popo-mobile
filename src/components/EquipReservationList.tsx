@@ -170,7 +170,7 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
 
   useEffect(() => {
     fetchReservations();
-  }, [refreshKey, fetchReservations]);
+  }, [refreshKey]);
 
   const formatDate = (dateStr: string): string => {
     if (!dateStr || dateStr.length !== 8) {
