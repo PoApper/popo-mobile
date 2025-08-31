@@ -174,7 +174,10 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       })
       .catch((error: any) => {
         console.error('방 입장 실패:', error);
-        Alert.alert('실패', '방 참여에 실패했습니다: ' + (error.message || '알 수 없는 오류'));
+        Alert.alert(
+          '실패',
+          '방 참여에 실패했습니다: ' + (error.message || '알 수 없는 오류'),
+        );
       });
   };
 
@@ -194,7 +197,10 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       })
       .catch((error: any) => {
         console.error('방 참여 실패:', error);
-        Alert.alert('실패', '방 참여에 실패했습니다: ' + (error.message || '알 수 없는 오류'));
+        Alert.alert(
+          '실패',
+          '방 참여에 실패했습니다: ' + (error.message || '알 수 없는 오류'),
+        );
       });
   };
 
@@ -240,11 +246,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                 styles.statusContainer,
                 {backgroundColor: statusStyle.backgroundColor},
               ]}>
-              <Text
-                style={[
-                  styles.statusText,
-                  {color: statusStyle.textColor},
-                ]}>
+              <Text style={[styles.statusText, {color: statusStyle.textColor}]}>
                 {statusStyle.statusText}
               </Text>
             </View>
