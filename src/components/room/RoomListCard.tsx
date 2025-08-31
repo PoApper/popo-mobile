@@ -58,19 +58,64 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
     return null;
   }
 
-  const isOwner = userUuid === roomData?.ownerUuid;
-  const isPossible = roomData.currentParticipant < roomData.maxParticipant;
-  const isKickedRoom =
-    roomData.room_users &&
-    roomData.room_users.some(
+  // 방 상태 계산
+  const getRoomStatus = (): RoomStatus => {
+    const isOwner = userUuid === roomData.ownerUuid;
+    const isKicked = roomData.room_users?.some(
       user => user.userUuid === userUuid && user.status === 'KICKED',
     );
-  const isJoinedRoom = roomData.room_users && roomData.room_users.some(
-    user => user.userUuid === userUuid && user.status !== 'KICKED',
-  );
+    const isJoined = roomData.room_users?.some(
+      user => user.userUuid === userUuid && user.status !== 'KICKED',
+    );
+    const isAvailable = roomData.currentParticipant < roomData.maxParticipant;
+
+    if (isOwner) return 'owner';
+    if (isKicked) return 'kicked';
+    if (isJoined) return 'joined';
+    if (isAvailable) return 'available';
+    return 'full';
+  };
+
+  // 방 상태별 스타일 정보 가져오기
+  const getStatusStyle = (status: RoomStatus): StatusStyle => {
+    const statusStyles: Record<RoomStatus, StatusStyle> = {
+      owner: {
+        backgroundColor: isDarkMode ? 'rgba(79,70,229,0.18)' : '#EEF2FF',
+        textColor: '#4F46E5',
+        statusText: '내가 방장',
+      },
+      kicked: {
+        backgroundColor: isDarkMode ? 'rgba(230,110,110,0.18)' : '#FFEEEE',
+        textColor: '#E55656',
+        statusText: '강퇴됨',
+      },
+      joined: {
+        backgroundColor: isDarkMode ? 'rgba(110, 230, 24, 0.18)' : '#f1ffee',
+        textColor: '#46e556',
+        statusText: '참여한 방',
+      },
+      available: {
+        backgroundColor: isDarkMode ? 'rgba(250,87,33,0.18)' : '#FFF4E6',
+        textColor: '#FA5721',
+        statusText: '참여 가능',
+      },
+      full: {
+        backgroundColor: isDarkMode ? 'rgba(217,217,217,0.12)' : '#F3F4F6',
+        textColor: '#909090',
+        statusText: '마감된 방',
+      },
+    };
+
+    return statusStyles[status];
+  };
+
+  const roomStatus = getRoomStatus();
+  const statusStyle = getStatusStyle(roomStatus);
 
   const askJoinRoom = () => {
-    if (isKickedRoom) {
+    const status = getRoomStatus();
+    
+    if (status === 'kicked') {
       Alert.alert(
         '강퇴됨',
         '강퇴된 방에는 참여할 수 없습니다. \n자세한 사유는 내 일정 탭에서 확인해주세요.',
@@ -78,12 +123,12 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       return;
     }
 
-    if (roomData.currentParticipant >= roomData.maxParticipant) {
+    if (status === 'full') {
       Alert.alert('마감', '방이 마감되었습니다.');
       return;
     }
 
-    if (isOwner || isJoinedRoom) {
+    if (status === 'owner' || status === 'joined') {
       paxi_api
         .post(`/room/join/${roomData.uuid}`)
         .then(() => {
@@ -149,52 +194,14 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
             <View
               style={[
                 styles.statusContainer,
-                {
-                  backgroundColor: isOwner
-                    ? isDarkMode
-                      ? 'rgba(79,70,229,0.18)'
-                      : '#EEF2FF'
-                    : isKickedRoom
-                    ? isDarkMode
-                      ? 'rgba(230,110,110,0.18)'
-                      : '#FFEEEE'
-                    : isJoinedRoom
-                    ? isDarkMode
-                      ? 'rgba(110, 230, 24, 0.18)'
-                      : '#f1ffee'
-                    : isPossible
-                    ? isDarkMode
-                      ? 'rgba(250,87,33,0.18)'
-                      : '#FFF4E6'
-                    : isDarkMode
-                    ? 'rgba(217,217,217,0.12)'
-                    : '#F3F4F6',
-                },
+                {backgroundColor: statusStyle.backgroundColor},
               ]}>
               <Text
                 style={[
                   styles.statusText,
-                  {
-                    color: isOwner
-                      ? '#4F46E5'
-                      : isKickedRoom
-                      ? '#E55656'
-                      : isJoinedRoom
-                      ? '#46e556'
-                      : isPossible
-                      ? '#FA5721'
-                      : '#909090',
-                  },
+                  {color: statusStyle.textColor},
                 ]}>
-                {isOwner
-                  ? '내가 방장'
-                  : isKickedRoom
-                  ? '강퇴됨'
-                  : isJoinedRoom
-                  ? '참여한 방'
-                  : isPossible
-                  ? '참여 가능'
-                  : '마감된 방'}
+                {statusStyle.statusText}
               </Text>
             </View>
             <View>
