@@ -22,16 +22,28 @@ interface RoomContainerProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
 }
 
+type RoomStatus = 'owner' | 'kicked' | 'joined' | 'available' | 'full';
+
+interface StatusStyle {
+  backgroundColor: string;
+  textColor: string;
+  statusText: string;
+}
+
 export const RoomListCard: React.FC<RoomContainerProps> = ({
   roomUuid,
   userUuid,
   navigation,
 }) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const textColor = isDarkMode ? '#EDEDED' : '#222222';
-  const backgroundColor = isDarkMode ? '#1A1A1A' : '#FFFFFF';
-  const subTextColor = isDarkMode ? '#A3A3A3' : '#666666';
   const [roomData, setRoomData] = useState<ChatRoomInfo | null>(null);
+
+  // 테마 색상 정의
+  const theme = {
+    text: isDarkMode ? '#EDEDED' : '#222222',
+    background: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+    subText: isDarkMode ? '#A3A3A3' : '#666666',
+  };
 
   useEffect(() => {
     paxi_api
@@ -124,7 +136,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       style={[
         styles.roomContainer,
         {
-          backgroundColor,
+          backgroundColor: theme.background,
           borderColor: 'transparent',
           borderWidth: 0,
           elevation: 8,
@@ -189,7 +201,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
               <Text
                 numberOfLines={1}
                 ellipsizeMode="tail"
-                style={[styles.title, {color: textColor, maxWidth: 180}]}>
+                style={[styles.title, {color: theme.text, maxWidth: 180}]}>
                 {roomData.title}
               </Text>
             </View>
@@ -222,7 +234,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
             </View>
           </View>
           <View style={styles.details}>
-            <Text style={[styles.detailsText, {color: textColor}]}>
+            <Text style={[styles.detailsText, {color: theme.text}]}>
               {roomData.departureLocation}
             </Text>
 
@@ -232,11 +244,11 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
               color={isDarkMode ? 'white' : 'black'}
             />
 
-            <Text style={[styles.detailsText, {color: textColor}]}>
+            <Text style={[styles.detailsText, {color: theme.text}]}>
               {roomData.destinationLocation}
             </Text>
           </View>
-          <Text style={[styles.departureTime, {color: subTextColor}]}>
+          <Text style={[styles.departureTime, {color: theme.subText}]}>
             {moment(roomData.departureTime).format(
               'YYYY년 MM월 DD일 HH시 mm분',
             )}{' '}
