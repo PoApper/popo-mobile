@@ -112,9 +112,11 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
   const roomStatus = getRoomStatus();
   const statusStyle = getStatusStyle(roomStatus);
 
-  const askJoinRoom = () => {
+  // 방 참여 처리
+  const handleJoinRoom = () => {
     const status = getRoomStatus();
-    
+
+    // 강퇴된 방 처리
     if (status === 'kicked') {
       Alert.alert(
         '강퇴됨',
@@ -123,57 +125,64 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       return;
     }
 
+    // 마감된 방 처리
     if (status === 'full') {
       Alert.alert('마감', '방이 마감되었습니다.');
       return;
     }
 
+    // 이미 참여한 방이거나 방장인 경우 바로 입장
     if (status === 'owner' || status === 'joined') {
-      paxi_api
-        .post(`/room/join/${roomData.uuid}`)
-        .then(() => {
-          navigation.navigate('NewChat', {
-            roomUuid: roomData.uuid,
-            from: 'roomList',
-          });
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
-        });
+      joinRoomDirectly();
       return;
     }
 
+    // 새로운 참여자인 경우 확인 후 입장
     Alert.alert('참여하기', '방에 참여하시겠습니까?', [
-      {
-        text: '취소',
-        style: 'cancel',
-      },
-      {
-        text: '확인',
-        onPress: () => {
-          paxi_api
-            .post(`/room/join/${roomData.uuid}`)
-            .then(response => {
-              console.log('response.data:', response.data);
-              console.log('response.status', response.status);
-              if (response.status === 201) {
-                Alert.alert('성공', '방에 참여했습니다.');
-                navigation.navigate('NewChat', {
-                  roomUuid: roomData.uuid,
-                  from: 'roomList',
-                });
-              } else {
-                Alert.alert('실패', '방 참여에 실패했습니다.');
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error);
-              Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
-            });
-        },
-      },
+      {text: '취소', style: 'cancel'},
+      {text: '확인', onPress: joinRoomWithConfirmation},
     ]);
+  };
+
+  // 방에 바로 입장 (이미 참여한 경우)
+  const joinRoomDirectly = () => {
+    paxi_api
+      .post(`/room/join/${roomData.uuid}`)
+      .then(() => {
+        navigateToChat();
+      })
+      .catch(error => {
+        console.error('방 입장 실패:', error);
+        Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
+      });
+  };
+
+  // 확인 후 방 참여
+  const joinRoomWithConfirmation = () => {
+    paxi_api
+      .post(`/room/join/${roomData.uuid}`)
+      .then(response => {
+        console.log('response.data:', response.data);
+        console.log('response.status', response.status);
+        if (response.status === 201) {
+          Alert.alert('성공', '방에 참여했습니다.');
+          navigateToChat();
+        } else {
+          Alert.alert('실패', '방 참여에 실패했습니다.');
+        }
+      })
+      .catch(error => {
+        console.error('방 참여 실패:', error);
+        Alert.alert('실패', '방 참여에 실패했습니다: ' + error.message);
+      });
+  };
+
+  // 채팅 화면으로 이동
+  const navigateToChat = () => {
+    navigation.navigate('NewChat', {
+      roomUuid: roomData.uuid,
+      from: 'roomList',
+    });
   };
 
   return (
@@ -187,7 +196,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
           elevation: 8,
         },
       ]}
-      onPress={() => askJoinRoom()}>
+      onPress={handleJoinRoom}>
       <View style={styles.cardContent}>
         <View style={styles.mainInfo}>
           <View style={styles.titleContainer}>
