@@ -47,6 +47,7 @@ export type PlaceReservationStackParamList = {
     buildingName: string;
     placeName: string;
     placeId: string;
+    selectedDate?: string;
   };
 };
 
