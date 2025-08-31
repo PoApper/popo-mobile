@@ -84,6 +84,24 @@ export interface PaxiUser {
   avatar?: string;
 }
 
+export interface MyRoomData {
+  hasNewMessage: boolean;
+  kickedReason: string;
+  userStatus: string;
+  uuid: string;
+  title: string;
+  ownerUuid: string;
+  departureLocation: string;
+  destinationLocation: string;
+  maxParticipant: number;
+  currentParticipant: number;
+  departureTime: string;
+  status: string;
+  description: string;
+  payerUuid: string;
+  payAmount: number;
+}
+
 export interface RoomDataType {
   uuid: string;
   title: string;
