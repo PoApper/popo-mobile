@@ -12,33 +12,15 @@ import {
   Dimensions,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {UserData} from '@interfaces/paxi';
+import {MyRoomData, UserData} from '@interfaces/paxi';
 import {backgroundColor, textColor} from '@styles/default';
 import {useEffect, useState} from 'react';
 import paxi_api from '@utils/paxi_api';
 
-interface RoomData {
-  hasNewMessage: string;
-  kickedReason: string;
-  userStatus: string;
-  uuid: string;
-  title: string;
-  ownerUuid: string;
-  departureLocation: string;
-  destinationLocation: string;
-  maxParticipant: number;
-  currentParticipant: number;
-  departureTime: string;
-  status: string;
-  description: string;
-  payerUuid: string;
-  payAmount: number;
-}
-
 interface BanReasonModalProps {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
-  roomData: RoomData;
+  roomData: MyRoomData;
   userData: UserData | undefined;
 }
 
