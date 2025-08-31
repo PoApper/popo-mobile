@@ -98,17 +98,17 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
     },
     {
       id: '3',
-      icon: 'account-balance',
-      title: '자치단체',
-      active: true,
-      onPress: () => navigation.navigate('Association'),
-    },
-    {
-      id: '4',
       icon: 'people',
       title: '동아리',
       active: true,
       onPress: () => navigation.navigate('Club'),
+    },
+    {
+      id: '4',
+      icon: 'account-balance',
+      title: '자치단체',
+      active: true,
+      onPress: () => navigation.navigate('Association'),
     },
     {
       id: '5',
@@ -126,37 +126,13 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
     },
     {
       id: '7',
-      icon: 'description',
-      title: '기록물',
-      active: true,
-      onPress: () =>
-        Alert.alert(
-          '외부 링크 이동',
-          '총학생회 구글 드라이브로 이동합니다. 계속하시겠습니까?',
-          [
-            {
-              text: '취소',
-              style: 'cancel',
-            },
-            {
-              text: '확인',
-              onPress: () =>
-                handleMoveSite(
-                  'https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD',
-                ),
-            },
-          ],
-        ),
-    },
-    {
-      id: '8',
       icon: 'dining',
       title: '배달업체',
       active: true,
       onPress: () => {
         Alert.alert(
           '외부 링크 이동',
-          '생활관자치회 배달업체 페이지로 이동합니다. 계속하시겠습니까?',
+          '생활관자치회 배달업체 페이지로 이동합니다.',
           [
             {
               text: '취소',
@@ -170,6 +146,26 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           ],
         );
       },
+    },
+    {
+      id: '8',
+      icon: 'description',
+      title: '기록물관리',
+      active: true,
+      onPress: () =>
+        Alert.alert('외부 링크 이동', '총학생회 구글 드라이브로 이동합니다.', [
+          {
+            text: '취소',
+            style: 'cancel',
+          },
+          {
+            text: '확인',
+            onPress: () =>
+              handleMoveSite(
+                'https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD',
+              ),
+          },
+        ]),
     },
   ];
 
