@@ -484,7 +484,7 @@ const EquipmentReservationApplyScreen = ({
         enableOnAndroid={true}
         enableAutomaticScroll={true}
         extraScrollHeight={20}
-        extraHeight={120}>
+        extraHeight={association === 'dormunion' ? 120 : 200}>
         {/* 공지사항 섹션 */}
         <View
           style={[
