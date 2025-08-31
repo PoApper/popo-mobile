@@ -114,9 +114,6 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
           console.error('FCM 토큰 발급 실패:', fcmError);
         });
 
-      // 로그인 성공
-      Alert.alert('로그인 성공', '환영합니다!');
-
       // 사용자 상세 정보 페이지로 이동
       navigation.navigate('Main', {
         userId: data.user?.id || 'unknown',
