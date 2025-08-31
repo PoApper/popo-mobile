@@ -22,8 +22,16 @@ interface RoomContainerProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
 }
 
-type RoomStatus = 'owner' | 'kicked' | 'joined' | 'available' | 'full';
+// 방 상태 enum 정의
+enum RoomStatus {
+  OWNER = 'OWNER',
+  KICKED = 'KICKED',
+  JOINED = 'JOINED',
+  AVAILABLE = 'AVAILABLE',
+  FULL = 'FULL',
+}
 
+// 방 상태별 스타일 정보
 interface StatusStyle {
   backgroundColor: string;
   textColor: string;
@@ -74,37 +82,45 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
     );
     const isAvailable = roomData.currentParticipant < roomData.maxParticipant;
 
-    if (isOwner) return 'owner';
-    if (isKicked) return 'kicked';
-    if (isJoined) return 'joined';
-    if (isAvailable) return 'available';
-    return 'full';
+    if (isOwner) {
+      return RoomStatus.OWNER;
+    }
+    if (isKicked) {
+      return RoomStatus.KICKED;
+    }
+    if (isJoined) {
+      return RoomStatus.JOINED;
+    }
+    if (isAvailable) {
+      return RoomStatus.AVAILABLE;
+    }
+    return RoomStatus.FULL;
   };
 
   // 방 상태별 스타일 정보 가져오기
   const getStatusStyle = (status: RoomStatus): StatusStyle => {
     const statusStyles: Record<RoomStatus, StatusStyle> = {
-      owner: {
+      [RoomStatus.OWNER]: {
         backgroundColor: isDarkMode ? 'rgba(79,70,229,0.18)' : '#EEF2FF',
         textColor: '#4F46E5',
         statusText: '내가 방장',
       },
-      kicked: {
+      [RoomStatus.KICKED]: {
         backgroundColor: isDarkMode ? 'rgba(230,110,110,0.18)' : '#FFEEEE',
         textColor: '#E55656',
         statusText: '강퇴됨',
       },
-      joined: {
+      [RoomStatus.JOINED]: {
         backgroundColor: isDarkMode ? 'rgba(110, 230, 24, 0.18)' : '#f1ffee',
         textColor: '#46e556',
         statusText: '참여한 방',
       },
-      available: {
+      [RoomStatus.AVAILABLE]: {
         backgroundColor: isDarkMode ? 'rgba(250,87,33,0.18)' : '#FFF4E6',
         textColor: '#FA5721',
         statusText: '참여 가능',
       },
-      full: {
+      [RoomStatus.FULL]: {
         backgroundColor: isDarkMode ? 'rgba(217,217,217,0.12)' : '#F3F4F6',
         textColor: '#909090',
         statusText: '마감된 방',
@@ -122,7 +138,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
     const status = getRoomStatus();
 
     // 강퇴된 방 처리
-    if (status === 'kicked') {
+    if (status === RoomStatus.KICKED) {
       Alert.alert(
         '강퇴됨',
         '강퇴된 방에는 참여할 수 없습니다. \n자세한 사유는 내 일정 탭에서 확인해주세요.',
@@ -131,13 +147,13 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
     }
 
     // 마감된 방 처리
-    if (status === 'full') {
+    if (status === RoomStatus.FULL) {
       Alert.alert('마감', '방이 마감되었습니다.');
       return;
     }
 
     // 이미 참여한 방이거나 방장인 경우 바로 입장
-    if (status === 'owner' || status === 'joined') {
+    if (status === RoomStatus.OWNER || status === RoomStatus.JOINED) {
       joinRoomDirectly();
       return;
     }
