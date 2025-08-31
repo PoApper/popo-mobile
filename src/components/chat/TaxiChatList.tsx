@@ -245,7 +245,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        {item.hasNewMessage && (
+        {item.hasNewMessage && item.userStatus !== 'KICKED' && (
           <View
             style={{
               position: 'absolute',
