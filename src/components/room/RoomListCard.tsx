@@ -185,6 +185,20 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
     });
   };
 
+  // 참여자 수 색상 가져오기
+  const getParticipantCountColor = (): string => {
+    return roomData.currentParticipant < roomData.maxParticipant
+      ? '#FA5721'
+      : '#4f4f4f';
+  };
+
+  // 로고 이미지 소스 가져오기
+  const getLogoImageSource = () => {
+    return roomData.currentParticipant < roomData.maxParticipant
+      ? require('../../../assets/baby_phonix.png')
+      : require('../../../assets/baby_phonix_disabled.png');
+  };
+
   return (
     <TouchableOpacity
       style={[
@@ -221,29 +235,16 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
                 {roomData.title}
               </Text>
             </View>
-            <View style={{flexDirection: 'row', gap: 5, marginLeft: 'auto'}}>
-              {roomData.currentParticipant < roomData.maxParticipant ? (
-                <Image
-                  source={require('../../../assets/baby_phonix.png')}
-                  style={styles.logoImage}
-                  resizeMode="contain"
-                />
-              ) : (
-                <Image
-                  source={require('../../../assets/baby_phonix_disabled.png')}
-                  style={styles.logoImage}
-                  resizeMode="contain"
-                />
-              )}
+            <View style={styles.participantInfo}>
+              <Image
+                source={getLogoImageSource()}
+                style={styles.logoImage}
+                resizeMode="contain"
+              />
               <Text
                 style={[
                   styles.participantNumText,
-                  {
-                    color:
-                      roomData.currentParticipant < roomData.maxParticipant
-                        ? '#FA5721'
-                        : '#4f4f4f',
-                  },
+                  {color: getParticipantCountColor()},
                 ]}>
                 {roomData.currentParticipant}/{roomData.maxParticipant}
               </Text>
@@ -303,6 +304,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  participantInfo: {
+    flexDirection: 'row',
+    gap: 5,
+    marginLeft: 'auto',
   },
   participantNumText: {
     fontSize: 16,
