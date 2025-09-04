@@ -122,7 +122,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
           // 내 일정 -> 카풀에서는 강퇴된 방 확인할 수 있음
           return res.data
             .filter(room => room.userStatus !== 'KICKED')
-            .filter(room => room.status !== 'COMPLETED')
+            .filter(room => room.status !== 'COMPLETED');
         })
         .catch(err => {
           console.error('택시 카풀 데이터 조회 오류:', err);
@@ -217,19 +217,24 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
           ...placeEvents,
           ...taxiEvents,
           ...equipmentEvents,
-        ].filter(event => {
-          const today = moment().format('YYYYMMDD');
-          const oneWeekLater = moment().add(7, 'day').format('YYYYMMDD');
-          const eventDate = moment(event.date, 'YYYYMMDD');
-          return eventDate.isSameOrAfter(today) && eventDate.isSameOrBefore(oneWeekLater);
-        }).sort((a, b) => {
-          // 날짜 및 시간까지 고려해서 정렬
-          const earlyDate = a.date + a.time;
-          const lateDate = b.date + b.time;
-          const earlyDateTime = moment(earlyDate, 'YYYYMMDDHHmmss');
-          const lateDateTime = moment(lateDate, 'YYYYMMDDHHmmss');
-          return earlyDateTime.diff(lateDateTime);
-        });
+        ]
+          .filter(event => {
+            const today = moment().format('YYYYMMDD');
+            const oneWeekLater = moment().add(7, 'day').format('YYYYMMDD');
+            const eventDate = moment(event.date, 'YYYYMMDD');
+            return (
+              eventDate.isSameOrAfter(today) &&
+              eventDate.isSameOrBefore(oneWeekLater)
+            );
+          })
+          .sort((a, b) => {
+            // 날짜 및 시간까지 고려해서 정렬
+            const earlyDate = a.date + a.time;
+            const lateDate = b.date + b.time;
+            const earlyDateTime = moment(earlyDate, 'YYYYMMDDHHmmss');
+            const lateDateTime = moment(lateDate, 'YYYYMMDDHHmmss');
+            return earlyDateTime.diff(lateDateTime);
+          });
 
         setCombinedEvents(allEvents);
       } catch (error) {
@@ -249,7 +254,10 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
     return `${year}-${month}-${day}`;
   };
 
-  const getStatusText = (type: 'place' | 'taxi' | 'equipment', status: string) => {
+  const getStatusText = (
+    type: 'place' | 'taxi' | 'equipment',
+    status: string,
+  ) => {
     switch (type) {
       case 'place':
         return status;
