@@ -211,12 +211,18 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
           }),
         );
 
-        // 모든 이벤트를 날짜 내림차순(가장 최근 일정이 먼저)으로 정렬
-        const allEvents = [
+        // 모든 이벤트를 날짜 오름차순(=다가오는 일정 순)으로 정렬
+        // 오늘부터 일주일 이내의 일정만 표시
+        const allEvents: CombinedEvent[] = [
           ...placeEvents,
           ...taxiEvents,
           ...equipmentEvents,
-        ].sort((a, b) => {
+        ].filter(event => {
+          const today = moment();
+          const oneWeekLater = moment().add(7, 'day');
+          const eventDate = moment(event.date, 'YYYYMMDD');
+          return eventDate.isSameOrAfter(today) && eventDate.isSameOrBefore(oneWeekLater);
+        }).sort((a, b) => {
           const dateA = moment(a.date, 'YYYYMMDD');
           const dateB = moment(b.date, 'YYYYMMDD');
           return dateA.diff(dateB); // 오름차순 정렬
