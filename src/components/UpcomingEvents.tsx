@@ -39,6 +39,7 @@ interface TaxiRoom {
   destinationLocation: string;
   departureTime: string;
   status: string;
+  userStatus: string;
 }
 
 interface Equipment {
@@ -117,7 +118,11 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
       return paxi_api
         .get<TaxiRoom[]>('/room/my')
         .then(res => {
-          return res.data.slice(0, 5);
+          // 다가오는 일정에서는 강퇴된 카풀(KICKED) 제외함
+          // 내 일정 -> 카풀에서는 강퇴된 방 확인할 수 있음
+          return res.data
+            .filter(room => room.userStatus !== 'KICKED')
+            .filter(room => room.status !== 'COMPLETED')
         })
         .catch(err => {
           console.error('택시 카풀 데이터 조회 오류:', err);
