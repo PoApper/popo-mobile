@@ -219,10 +219,10 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
         ].sort((a, b) => {
           const dateA = moment(a.date, 'YYYYMMDD');
           const dateB = moment(b.date, 'YYYYMMDD');
-          return dateB.diff(dateA); // 내림차순
+          return dateA.diff(dateB); // 오름차순 정렬
         });
 
-        setCombinedEvents(allEvents.slice(0, 5)); // 최대 5개만 표시
+        setCombinedEvents(allEvents);
       } catch (error) {
         console.error('일정 정보 조회 오류:', error);
       } finally {
