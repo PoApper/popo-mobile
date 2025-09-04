@@ -17,6 +17,7 @@ $ ./gradlew clean
 ```
 
 빌드가 꼬인다면 아래 명령어를 실행해보자.
+
 ```bash
 $ ./gradlew assembleDebug --no-daemon
 ```
