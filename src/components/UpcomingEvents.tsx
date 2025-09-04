@@ -249,6 +249,33 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
     return `${year}-${month}-${day}`;
   };
 
+  const getStatusText = (type: 'place' | 'taxi' | 'equipment', status: string) => {
+    switch (type) {
+      case 'place':
+        return status;
+      case 'equipment':
+        return status;
+      case 'taxi':
+        return getPaxiStatusText(status);
+      default:
+        return status;
+    }
+  };
+
+  const getPaxiStatusText = (status: string) => {
+    // TODO: 방 상태 한 곳에서 관리하도록 수정
+    switch (status) {
+      case 'IN_SETTLEMENT':
+        return '정산중';
+      case 'ACTIVE':
+        return '출발 전';
+      case 'COMPLETED':
+        return '완료';
+      default:
+        return status;
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case '통과':
@@ -257,6 +284,10 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
         return '#FF9800';
       case '거절':
         return '#F44336';
+      case 'IN_SETTLEMENT':
+        return '#FF9800';
+      case 'ACTIVE':
+        return '#4CAF50';
       default:
         return '#2196F3';
     }
@@ -348,14 +379,16 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
                   ? '택시 카풀'
                   : '장비 예약'}
               </Text>
-              {event.type === 'place' && (
+              {(event.type === 'place' || event.type === 'taxi') && (
                 <View style={styles.statusContainer}>
                   <View
                     style={[
                       styles.statusBadge,
                       {backgroundColor: getStatusColor(event.status)},
                     ]}>
-                    <Text style={styles.statusText}>{event.status}</Text>
+                    <Text style={styles.statusText}>
+                      {getStatusText(event.type, event.status)}
+                    </Text>
                   </View>
                 </View>
               )}
