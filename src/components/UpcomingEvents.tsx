@@ -218,13 +218,13 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
           ...taxiEvents,
           ...equipmentEvents,
         ].filter(event => {
-          const today = moment();
-          const oneWeekLater = moment().add(7, 'day');
+          const today = moment().format('YYYYMMDD');
+          const oneWeekLater = moment().add(7, 'day').format('YYYYMMDD');
           const eventDate = moment(event.date, 'YYYYMMDD');
           return eventDate.isSameOrAfter(today) && eventDate.isSameOrBefore(oneWeekLater);
         }).sort((a, b) => {
-          const dateA = moment(a.date, 'YYYYMMDD');
-          const dateB = moment(b.date, 'YYYYMMDD');
+          const dateA = moment(a.date, 'YYYYMMDD:HH:mm:ss');
+          const dateB = moment(b.date, 'YYYYMMDD:HH:mm:ss');
           return dateA.diff(dateB); // 오름차순 정렬
         });
 
