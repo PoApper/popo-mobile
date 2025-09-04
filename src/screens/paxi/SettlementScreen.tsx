@@ -9,7 +9,7 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp, useRoute} from '@react-navigation/native';
@@ -138,11 +138,8 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         style={{flex: 1, paddingHorizontal: 15}}
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
-        enableOnAndroid={true}
-        enableAutomaticScroll={true}
         keyboardShouldPersistTaps="handled"
-        extraScrollHeight={20}
-        extraHeight={120}>
+        bottomOffset={120}>
         {/* 내 계좌 정보 불러오기 버튼 */}
         <TouchableOpacity
           style={[

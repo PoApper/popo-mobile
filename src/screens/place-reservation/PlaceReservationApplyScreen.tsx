@@ -8,8 +8,9 @@ import {
   StatusBar,
   TextInput,
   Alert,
+  ScrollView,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
@@ -67,7 +68,7 @@ const PlaceReservationApplyScreen = ({
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
+  const scrollViewRef = useRef(null);
 
   // 30분 단위로 시간 올림
   const roundUpToNearest30Minutes = (date: Date) => {
@@ -215,7 +216,7 @@ const PlaceReservationApplyScreen = ({
     setShowStartPicker(false);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollToPosition(0, 600, true); // x, y, animated 순
+      scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
     }, 100);
   };
   const openStartPicker = () => {
@@ -223,7 +224,7 @@ const PlaceReservationApplyScreen = ({
     setShowStartPicker(true);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollToPosition(0, 600, true);
+      scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
     }, 100);
   };
   const openEndPicker = () => {
@@ -231,7 +232,7 @@ const PlaceReservationApplyScreen = ({
     setShowStartPicker(false);
     setShowEndPicker(true);
     setTimeout(() => {
-      scrollViewRef.current?.scrollToPosition(0, 600, true);
+      scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
     }, 100);
   };
 
@@ -254,11 +255,8 @@ const PlaceReservationApplyScreen = ({
       <KeyboardAwareScrollView
         ref={scrollViewRef}
         contentContainerStyle={{padding: 20}}
-        enableOnAndroid={true}
-        enableAutomaticScroll={true}
         keyboardShouldPersistTaps="handled"
-        extraScrollHeight={20}
-        extraHeight={120}>
+        bottomOffset={120}>
         <View style={styles.infoSection}>
           <Text style={[styles.placeName, {color: textColor}]}>
             {placeName}

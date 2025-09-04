@@ -10,7 +10,7 @@ import {
   Alert,
   StatusBar,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -118,11 +118,8 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
       />
       <KeyboardAwareScrollView
         contentContainerStyle={styles.scrollContainer}
-        enableOnAndroid={true}
-        enableAutomaticScroll={true}
         keyboardShouldPersistTaps="handled"
-        extraScrollHeight={20}
-        extraHeight={120}>
+        bottomOffset={120}>
         <View style={styles.container}>
           <TouchableOpacity
             style={styles.backButton}
