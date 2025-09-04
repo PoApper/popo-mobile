@@ -10,7 +10,7 @@
     "android:aab": "cd android && ./gradlew bundleRelease && cp app/build/outputs/bundle/release/app-release.aab ../app-release.aab",
     "ios": "react-native run-ios",
     "format": "prettier --write .",
-    "lint": "eslint . --fix",
+    "lint": "eslint . --fix --quiet",
     "start": "react-native start",
     "test": "jest"
   },
