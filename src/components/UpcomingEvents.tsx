@@ -280,7 +280,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
             styles.sectionTitle,
             {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
           ]}>
-          나의 최근 일정
+          다가오는 일정
         </Text>
         <View style={[styles.scheduleCard]} />
       </View>
@@ -295,14 +295,14 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
             styles.sectionTitle,
             {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
           ]}>
-          나의 최근 일정
+          다가오는 일정
         </Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.scheduleScroll}>
           <View style={[styles.scheduleCard, {backgroundColor: '#4D61DD'}]}>
-            <Text style={styles.scheduleTitle}>최근 일정이 없습니다</Text>
+            <Text style={styles.scheduleTitle}>다가오는 일정이 없습니다</Text>
           </View>
         </ScrollView>
       </View>
@@ -316,7 +316,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
           styles.sectionTitle,
           {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
         ]}>
-        나의 최근 일정
+        다가오는 일정
       </Text>
       <ScrollView
         horizontal
