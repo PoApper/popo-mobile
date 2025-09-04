@@ -223,9 +223,12 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
           const eventDate = moment(event.date, 'YYYYMMDD');
           return eventDate.isSameOrAfter(today) && eventDate.isSameOrBefore(oneWeekLater);
         }).sort((a, b) => {
-          const dateA = moment(a.date, 'YYYYMMDD:HH:mm:ss');
-          const dateB = moment(b.date, 'YYYYMMDD:HH:mm:ss');
-          return dateA.diff(dateB); // 오름차순 정렬
+          // 날짜 및 시간까지 고려해서 정렬
+          const earlyDate = a.date + a.time;
+          const lateDate = b.date + b.time;
+          const earlyDateTime = moment(earlyDate, 'YYYYMMDDHHmmss');
+          const lateDateTime = moment(lateDate, 'YYYYMMDDHHmmss');
+          return earlyDateTime.diff(lateDateTime);
         });
 
         setCombinedEvents(allEvents);
