@@ -28,14 +28,14 @@ target 'popoMobile' do
   # Flipper 완전히 비활성화 (Firebase compatibility)
   ENV['NO_FLIPPER'] = '1'
 
-  # New Architecture 완전히 비활성화
-  ENV['RCT_NEW_ARCH_ENABLED'] = '0'
+  # New Architecture 활성화 (Reanimated 4 요구사항)
+  ENV['RCT_NEW_ARCH_ENABLED'] = '1'
 
   use_react_native!(
     :path => config[:reactNativePath],
     :hermes_enabled => true,
-    # Fabric 비활성화 (Firebase compatibility)
-    :fabric_enabled => false,
+    # Fabric 활성화 (Reanimated 4 요구사항)
+    :fabric_enabled => true,
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
