@@ -55,7 +55,7 @@ const OwnerTransferModal = ({
   };
 
   const eligibleNextOwners: UserData[] =
-    roomData?.room_users?.filter(
+    roomData?.roomUsers?.filter(
       user => user.status === 'JOINED' && user.userUuid !== myUuid,
     ) || [];
 
