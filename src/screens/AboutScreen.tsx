@@ -62,6 +62,13 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
           </Text>
         </View>
 
+        <View style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
+          <Text style={[styles.sectionTitle, {color: textColor}]}>버전 정보</Text>
+          <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
+            TODO: 버전/빌드 정보는 추후 패키지에서 불러오거나 주입 예정입니다.
+          </Text>
+        </View>
+
         {/* 앱 */}
         <View style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
           <View style={styles.sectionHeaderRow}>
@@ -128,13 +135,6 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
               </TouchableOpacity>
             ))}
           </View>
-        </View>
-
-        <View style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
-          <Text style={[styles.sectionTitle, {color: textColor}]}>버전 정보</Text>
-          <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
-            버전/빌드 정보는 추후 패키지에서 불러오거나 주입 예정입니다.
-          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
