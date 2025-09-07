@@ -1,5 +1,6 @@
 import React from 'react';
-import {StyleSheet, Text, View, ScrollView, useColorScheme, StatusBar} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, useColorScheme, StatusBar, Linking, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
@@ -20,8 +21,30 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
   const cardBgColor = isDarkMode ? '#1E1E1E' : '#FFFFFF';
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';
 
-  // 추후 사용자 제공 데이터로 교체 예정
-  const creators: Array<{role: string; name: string; email?: string; link?: string}> = [];
+  const openLink = async (url?: string) => {
+    if (!url) return;
+    try {
+      await Linking.openURL(url);
+    } catch (e) {
+      // no-op
+    }
+  };
+
+  const appRepo = 'https://github.com/PoApper/popo-mobile';
+  const backendRepo1 = 'https://github.com/PoApper/paxi-popo-nest-api';
+  const backendRepo2 = 'https://github.com/PoApper/popo-nest-api';
+
+  const appContributors = ['@BlueHorn07', '@nyeoglya', '@jjungnii'];
+  const backendContributors: Array<{handle: string; isLead?: boolean}> = [
+    {handle: '@khkim6040', isLead: true},
+    {handle: '@hegelty'},
+  ];
+  const designContributors = ['@moonsoyul', '@kyuminism'];
+
+  const getGithubUrl = (handle: string) => {
+    const id = handle.replace(/^@/, '');
+    return `https://github.com/${id}`;
+  };
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -39,26 +62,72 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
           </Text>
         </View>
 
+        {/* 앱 */}
         <View style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
-          <Text style={[styles.sectionTitle, {color: textColor}]}>만든 사람들</Text>
-          {creators.length === 0 ? (
-            <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>추가 예정</Text>
-          ) : (
-            creators.map((c, idx) => (
-              <View key={idx} style={[styles.row, {borderBottomColor: borderColor}]}>
-                <Text style={[styles.role, {color: isDarkMode ? '#BBBBBB' : '#6B7280'}]}>{c.role}</Text>
-                <View style={{flex: 1}}>
-                  <Text style={[styles.name, {color: textColor}]}>{c.name}</Text>
-                  {c.email ? (
-                    <Text style={{color: isDarkMode ? '#AAAAAA' : '#6B7280'}}>{c.email}</Text>
-                  ) : null}
-                  {c.link ? (
-                    <Text style={{color: isDarkMode ? '#AAAAAA' : '#6B7280'}}>{c.link}</Text>
-                  ) : null}
-                </View>
-              </View>
-            ))
-          )}
+          <View style={styles.sectionHeaderRow}>
+            <Text style={[styles.sectionTitle, {color: textColor}]}>앱</Text>
+            <TouchableOpacity style={styles.iconButton} onPress={() => openLink(appRepo)}>
+              <Icon name="code" size={20} color={isDarkMode ? '#93C5FD' : '#2563EB'} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.chipsWrap}>
+            {appContributors.map(h => (
+              <TouchableOpacity
+                key={h}
+                style={[styles.chip, {backgroundColor: isDarkMode ? '#2A2A2A' : '#F3F4F6', borderColor}]}
+                onPress={() => openLink(getGithubUrl(h))}
+                accessibilityRole="link"
+                accessibilityLabel={`${h} GitHub`}>
+                <Text style={{color: textColor}}>{h}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* 백엔드 */}
+        <View style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={[styles.sectionTitle, {color: textColor}]}>백엔드</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TouchableOpacity style={styles.iconButton} onPress={() => openLink(backendRepo2)} accessibilityLabel="POPO 백엔드">
+                <Icon name="code" size={20} color={isDarkMode ? '#93C5FD' : '#2563EB'} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.iconButton} onPress={() => openLink(backendRepo1)} accessibilityLabel="Paxi 백엔드">
+                <Icon name="code" size={20} color={isDarkMode ? '#93C5FD' : '#2563EB'} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.chipsWrap}>
+            {backendContributors.map(c => (
+              <TouchableOpacity
+                key={c.handle}
+                style={[styles.chip, {backgroundColor: isDarkMode ? '#2A2A2A' : '#F3F4F6', borderColor}]}
+                onPress={() => openLink(getGithubUrl(c.handle))}
+                accessibilityRole="link"
+                accessibilityLabel={`${c.handle} GitHub`}>
+                <Text style={{color: textColor}}>
+                  {c.handle} {c.isLead ? '👑' : ''}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* 디자이너 */}
+        <View style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
+          <Text style={[styles.sectionTitle, {color: textColor}]}>디자이너</Text>
+          <View style={styles.chipsWrap}>
+            {designContributors.map(h => (
+              <TouchableOpacity
+                key={h}
+                style={[styles.chip, {backgroundColor: isDarkMode ? '#2A2A2A' : '#F3F4F6', borderColor}]}
+                onPress={() => openLink(getGithubUrl(h))}
+                accessibilityRole="link"
+                accessibilityLabel={`${h} GitHub`}>
+                <Text style={{color: textColor}}>{h}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
 
         <View style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
@@ -95,6 +164,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 12,
   },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -108,6 +183,28 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: '500',
+  },
+  link: {
+    fontSize: 14,
+    textDecorationLine: 'underline',
+  },
+  iconButton: {
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+    marginLeft: 8,
+  },
+  chipsWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  chip: {
+    borderRadius: 999,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    marginRight: 8,
+    marginBottom: 8,
   },
 });
 
