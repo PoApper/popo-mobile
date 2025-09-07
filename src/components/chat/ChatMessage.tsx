@@ -18,8 +18,7 @@ const ChatMessage = ({
   handleUserClick,
   handleMyMsgClick,
 }: ChatMessageProps) => {
-  const alignment =
-    message.senderUuid === userUuid ? 'flex-end' : 'flex-start';
+  const alignment = message.senderUuid === userUuid ? 'flex-end' : 'flex-start';
   const isSystemMsg = message.senderUuid == null;
 
   return (
