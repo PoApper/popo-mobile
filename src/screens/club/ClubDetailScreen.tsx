@@ -109,7 +109,11 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
           <>
             <View style={styles.imageContainer}>
               <Image
-                source={{uri: clubData.image_url}}
+                source={
+                  clubData.image_url
+                    ? {uri: clubData.image_url}
+                    : require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')
+                }
                 style={styles.clubImage}
                 resizeMode="contain"
               />
