@@ -1,5 +1,14 @@
 import React from 'react';
-import {StyleSheet, Text, View, ScrollView, useColorScheme, StatusBar, Linking, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  useColorScheme,
+  StatusBar,
+  Linking,
+  TouchableOpacity,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -22,7 +31,9 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';
 
   const openLink = async (url?: string) => {
-    if (!url) return;
+    if (!url) {
+      return;
+    }
     try {
       await Linking.openURL(url);
     } catch (e) {
@@ -54,34 +65,57 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
       />
       <CommonHeader navigation={navigation} title="앱 정보 · 만든 사람들" />
 
-      <ScrollView style={styles.container} contentContainerStyle={{padding: 16}}>
-        <View style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{padding: 16}}>
+        <View
+          style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
           <Text style={[styles.title, {color: textColor}]}>POPO</Text>
-          <Text style={[styles.subtitle, {color: isDarkMode ? '#AAAAAA' : '#6B7280'}]}>
+          <Text
+            style={[
+              styles.subtitle,
+              {color: isDarkMode ? '#AAAAAA' : '#6B7280'},
+            ]}>
             포스텍 구성원을 위한 서비스 허브
           </Text>
         </View>
 
-        <View style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
-          <Text style={[styles.sectionTitle, {color: textColor}]}>버전 정보</Text>
+        <View
+          style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
+          <Text style={[styles.sectionTitle, {color: textColor}]}>
+            버전 정보
+          </Text>
           <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
             TODO: 버전/빌드 정보는 추후 패키지에서 불러오거나 주입 예정입니다.
           </Text>
         </View>
 
         {/* 앱 */}
-        <View style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
+        <View
+          style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
           <View style={styles.sectionHeaderRow}>
             <Text style={[styles.sectionTitle, {color: textColor}]}>앱</Text>
-            <TouchableOpacity style={styles.iconButton} onPress={() => openLink(appRepo)}>
-              <Icon name="code" size={20} color={isDarkMode ? '#93C5FD' : '#2563EB'} />
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={() => openLink(appRepo)}>
+              <Icon
+                name="code"
+                size={20}
+                color={isDarkMode ? '#93C5FD' : '#2563EB'}
+              />
             </TouchableOpacity>
           </View>
           <View style={styles.chipsWrap}>
             {appContributors.map(h => (
               <TouchableOpacity
                 key={h}
-                style={[styles.chip, {backgroundColor: isDarkMode ? '#2A2A2A' : '#F3F4F6', borderColor}]}
+                style={[
+                  styles.chip,
+                  {
+                    backgroundColor: isDarkMode ? '#2A2A2A' : '#F3F4F6',
+                    borderColor,
+                  },
+                ]}
                 onPress={() => openLink(getGithubUrl(h))}
                 accessibilityRole="link"
                 accessibilityLabel={`${h} GitHub`}>
@@ -92,15 +126,32 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
         </View>
 
         {/* 백엔드 */}
-        <View style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
+        <View
+          style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
           <View style={styles.sectionHeaderRow}>
-            <Text style={[styles.sectionTitle, {color: textColor}]}>백엔드</Text>
+            <Text style={[styles.sectionTitle, {color: textColor}]}>
+              백엔드
+            </Text>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <TouchableOpacity style={styles.iconButton} onPress={() => openLink(backendRepo2)} accessibilityLabel="POPO 백엔드">
-                <Icon name="code" size={20} color={isDarkMode ? '#93C5FD' : '#2563EB'} />
+              <TouchableOpacity
+                style={styles.iconButton}
+                onPress={() => openLink(backendRepo2)}
+                accessibilityLabel="POPO 백엔드">
+                <Icon
+                  name="code"
+                  size={20}
+                  color={isDarkMode ? '#93C5FD' : '#2563EB'}
+                />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton} onPress={() => openLink(backendRepo1)} accessibilityLabel="Paxi 백엔드">
-                <Icon name="code" size={20} color={isDarkMode ? '#93C5FD' : '#2563EB'} />
+              <TouchableOpacity
+                style={styles.iconButton}
+                onPress={() => openLink(backendRepo1)}
+                accessibilityLabel="Paxi 백엔드">
+                <Icon
+                  name="code"
+                  size={20}
+                  color={isDarkMode ? '#93C5FD' : '#2563EB'}
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -108,7 +159,13 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
             {backendContributors.map(c => (
               <TouchableOpacity
                 key={c.handle}
-                style={[styles.chip, {backgroundColor: isDarkMode ? '#2A2A2A' : '#F3F4F6', borderColor}]}
+                style={[
+                  styles.chip,
+                  {
+                    backgroundColor: isDarkMode ? '#2A2A2A' : '#F3F4F6',
+                    borderColor,
+                  },
+                ]}
                 onPress={() => openLink(getGithubUrl(c.handle))}
                 accessibilityRole="link"
                 accessibilityLabel={`${c.handle} GitHub`}>
@@ -121,13 +178,22 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
         </View>
 
         {/* 디자이너 */}
-        <View style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
-          <Text style={[styles.sectionTitle, {color: textColor}]}>디자이너</Text>
+        <View
+          style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
+          <Text style={[styles.sectionTitle, {color: textColor}]}>
+            디자이너
+          </Text>
           <View style={styles.chipsWrap}>
             {designContributors.map(h => (
               <TouchableOpacity
                 key={h}
-                style={[styles.chip, {backgroundColor: isDarkMode ? '#2A2A2A' : '#F3F4F6', borderColor}]}
+                style={[
+                  styles.chip,
+                  {
+                    backgroundColor: isDarkMode ? '#2A2A2A' : '#F3F4F6',
+                    borderColor,
+                  },
+                ]}
                 onPress={() => openLink(getGithubUrl(h))}
                 accessibilityRole="link"
                 accessibilityLabel={`${h} GitHub`}>
@@ -209,5 +275,3 @@ const styles = StyleSheet.create({
 });
 
 export default AboutScreen;
-
-
