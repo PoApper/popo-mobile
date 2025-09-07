@@ -21,8 +21,8 @@ interface IEquipment {
   name: string;
   description: string;
   fee: number;
-  image_url?: string;
-  max_minutes: number;
+  imageUrl?: string;
+  maxMinutes: number;
 }
 
 type EquipmentReservationScreenProps = {
@@ -104,8 +104,8 @@ const EquipmentReservationScreen = ({
   const renderEquipmentItem = useCallback(
     ({item}: {item: IEquipment}) => (
       <View style={styles.equipmentItem}>
-        {item.image_url ? (
-          <Image source={{uri: item.image_url}} style={styles.equipmentImage} />
+        {item.imageUrl ? (
+          <Image source={{uri: item.imageUrl}} style={styles.equipmentImage} />
         ) : (
           <View style={[styles.equipmentImage, placeholderImageStyle]} />
         )}
@@ -128,7 +128,7 @@ const EquipmentReservationScreen = ({
               `이름: ${removeEmoji(item.name)}\n모델명/설명: ${
                 item.description || '-'
               }\n가격: ${item.fee.toLocaleString()}원\n최대 사용 시간: ${
-                item.max_minutes
+                item.maxMinutes
               }분`,
               [{text: '닫기', style: 'cancel'}],
             );

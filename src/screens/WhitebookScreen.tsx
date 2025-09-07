@@ -26,7 +26,7 @@ interface WhitebookItem {
   title: string;
   link: string;
   content: string;
-  click_count: number;
+  clickCount: number;
 }
 
 const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
@@ -61,14 +61,14 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
 
   if (sortType === '조회순') {
-    whiteBookItems.sort((a, b) => b.click_count - a.click_count);
+    whiteBookItems.sort((a, b) => b.clickCount - a.clickCount);
   } else if (sortType === '가나다순') {
     whiteBookItems.sort((a, b) => a.title.localeCompare(b.title));
   }
 
   const handleLinkPress = async (title: string, link: string) => {
     try {
-      const alert_title = link.includes('cdn.popo.poapper.club')
+      const alertTitle = link.includes('cdn.popo.poapper.club')
         ? 'POPO 사이트로 이동 합니다'
         : link.includes('postech.ac.kr')
         ? 'POSTECH 사이트로 이동 합니다.'
@@ -77,7 +77,7 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
         link.includes('cdn.popo.poapper.club') || link.includes('postech.ac.kr')
           ? `'${title}'로 이동 합니다.`
           : `'${link}'로 이동 합니다.`;
-      Alert.alert(alert_title, txt, [
+      Alert.alert(alertTitle, txt, [
         {
           text: '취소',
           style: 'cancel',
