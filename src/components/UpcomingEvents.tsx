@@ -255,6 +255,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
   };
 
   const getStatusText = (
+    // TODO: 하드코딩으로 말고 단순하게 하는 리팩토링 필요
     type: 'place' | 'taxi' | 'equipment',
     status: string,
   ) => {
@@ -387,6 +388,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
                   ? '택시 카풀'
                   : '장비 예약'}
               </Text>
+              {/* TODO: 장비 예약 상태도 표시 */}
               {(event.type === 'place' || event.type === 'taxi') && (
                 <View style={styles.statusContainer}>
                   <View
