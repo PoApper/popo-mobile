@@ -275,7 +275,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
     // TODO: 방 상태 한 곳에서 관리하도록 수정
     switch (status) {
       case 'IN_SETTLEMENT':
-        return '정산중';
+        return '정산 중';
       case 'ACTIVE':
         return '출발 전';
       case 'COMPLETED':
