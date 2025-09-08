@@ -17,6 +17,7 @@ import SignupScreen from '@screens/auth/SignupScreen';
 import LeaveScreen from '@screens/auth/LeaveScreen';
 import UserDetailScreen from '@screens/auth/UserDetailScreen';
 import DeveloperPage from '@screens/auth/DeveloperPage';
+import AboutScreen from '@screens/AboutScreen';
 
 // Paxi Screens
 // import PaxiRoomListScreen from '@screens/paxi/PaxiRoomListScreen';
@@ -147,6 +148,7 @@ const AppNavigator = () => {
             component={EquipmentReservationApplyScreen}
           />
           <Stack.Screen name="Reservation" component={ReservationScreen} />
+          <Stack.Screen name="About" component={AboutScreen} />
 
           {/* Main Navigators */}
           <Stack.Screen name="Auth" component={AuthNavigator} />
