@@ -102,4 +102,5 @@ export type OtherStackParamList = {
   Reservation: {
     selectedTab?: string;
   };
+  About: undefined;
 };
