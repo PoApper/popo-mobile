@@ -1,16 +1,34 @@
 import React from 'react';
-import {Image, ImageProps, StyleSheet} from 'react-native';
+import {Image, ImageProps, StyleSheet, ImageSourcePropType} from 'react-native';
 
 interface LazyImageProps extends Omit<ImageProps, 'source'> {
-  uri: string;
+  uri?: string;
+  fallbackSource?: ImageSourcePropType;
 }
 
-const LazyImage: React.FC<LazyImageProps> = ({uri, style, ...props}) => {
+const defaultFallback = require('../../assets/icon/POPO_typography_bg_removed_cropped.png');
+
+const LazyImage: React.FC<LazyImageProps> = ({
+  uri,
+  style,
+  fallbackSource,
+  resizeMode = 'cover',
+  onError,
+  ...props
+}) => {
+  const [failed, setFailed] = React.useState<boolean>(false);
+
+  const source = !failed && uri ? {uri} : fallbackSource || defaultFallback;
+
   return (
     <Image
-      source={{uri}}
+      source={source}
       style={[styles.image, style]}
-      resizeMode="cover"
+      resizeMode={resizeMode}
+      onError={e => {
+        setFailed(true);
+        onError?.(e);
+      }}
       {...props}
     />
   );
