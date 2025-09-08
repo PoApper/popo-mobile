@@ -308,6 +308,18 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
           </Text>
         </TouchableOpacity>
 
+        {/* 앱 정보 · 만든 사람들 */}
+        <TouchableOpacity
+          style={[
+            styles.buttonContainer,
+            {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+          ]}
+          onPress={() => navigation.navigate('About')}>
+          <Text style={[styles.leaveButtonText, {color: '#FFFFFF'}]}>
+            앱 정보 · 만든 사람들
+          </Text>
+        </TouchableOpacity>
+
         {/* 개발자 페이지 버튼 */}
         {!Environment.isProduction && (
           <View style={{marginBottom: 48, marginTop: 16}}>
