@@ -199,6 +199,10 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       setIsSettlement(false);
     });
 
+    newSocket.on('updatedIsPaid', data => {
+      setIsPaid(data.isPaid);
+    });
+
     socketRef.current = newSocket;
   };
 
