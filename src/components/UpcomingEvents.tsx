@@ -39,6 +39,7 @@ interface TaxiRoom {
   destinationLocation: string;
   departureTime: string;
   status: string;
+  userStatus: string;
 }
 
 interface Equipment {
@@ -117,7 +118,11 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
       return paxi_api
         .get<TaxiRoom[]>('/room/my')
         .then(res => {
-          return res.data.slice(0, 5);
+          // 다가오는 일정에서는 강퇴된 카풀(KICKED) 제외함
+          // 내 일정 -> 카풀에서는 강퇴된 방 확인할 수 있음
+          return res.data
+            .filter(room => room.userStatus !== 'KICKED')
+            .filter(room => room.status !== 'COMPLETED');
         })
         .catch(err => {
           console.error('택시 카풀 데이터 조회 오류:', err);
@@ -206,18 +211,32 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
           }),
         );
 
-        // 모든 이벤트를 날짜 내림차순(가장 최근 일정이 먼저)으로 정렬
-        const allEvents = [
+        // 모든 이벤트를 날짜 오름차순(=다가오는 일정 순)으로 정렬
+        // 오늘부터 일주일 이내의 일정만 표시
+        const allEvents: CombinedEvent[] = [
           ...placeEvents,
           ...taxiEvents,
           ...equipmentEvents,
-        ].sort((a, b) => {
-          const dateA = moment(a.date, 'YYYYMMDD');
-          const dateB = moment(b.date, 'YYYYMMDD');
-          return dateB.diff(dateA); // 내림차순
-        });
+        ]
+          .filter(event => {
+            const today = moment().format('YYYYMMDD');
+            const oneWeekLater = moment().add(7, 'day').format('YYYYMMDD');
+            const eventDate = moment(event.date, 'YYYYMMDD');
+            return (
+              eventDate.isSameOrAfter(today) &&
+              eventDate.isSameOrBefore(oneWeekLater)
+            );
+          })
+          .sort((a, b) => {
+            // 날짜 및 시간까지 고려해서 정렬
+            const earlyDate = a.date + a.time;
+            const lateDate = b.date + b.time;
+            const earlyDateTime = moment(earlyDate, 'YYYYMMDDHHmmss');
+            const lateDateTime = moment(lateDate, 'YYYYMMDDHHmmss');
+            return earlyDateTime.diff(lateDateTime);
+          });
 
-        setCombinedEvents(allEvents.slice(0, 5)); // 최대 5개만 표시
+        setCombinedEvents(allEvents);
       } catch (error) {
         console.error('일정 정보 조회 오류:', error);
       } finally {
@@ -235,6 +254,37 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
     return `${year}-${month}-${day}`;
   };
 
+  const getStatusText = (
+    // TODO: 하드코딩으로 말고 단순하게 하는 리팩토링 필요
+    type: 'place' | 'taxi' | 'equipment',
+    status: string,
+  ) => {
+    switch (type) {
+      case 'place':
+        return status;
+      case 'equipment':
+        return status;
+      case 'taxi':
+        return getPaxiStatusText(status);
+      default:
+        return status;
+    }
+  };
+
+  const getPaxiStatusText = (status: string) => {
+    // TODO: 방 상태 한 곳에서 관리하도록 수정
+    switch (status) {
+      case 'IN_SETTLEMENT':
+        return '정산 중';
+      case 'ACTIVE':
+        return '출발 전';
+      case 'COMPLETED':
+        return '완료';
+      default:
+        return status;
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case '통과':
@@ -243,6 +293,10 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
         return '#FF9800';
       case '거절':
         return '#F44336';
+      case 'IN_SETTLEMENT':
+        return '#FF9800';
+      case 'ACTIVE':
+        return '#4CAF50';
       default:
         return '#2196F3';
     }
@@ -269,7 +323,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
             styles.sectionTitle,
             {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
           ]}>
-          나의 최근 일정
+          다가오는 일정
         </Text>
         <View style={[styles.scheduleCard]} />
       </View>
@@ -284,14 +338,14 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
             styles.sectionTitle,
             {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
           ]}>
-          나의 최근 일정
+          다가오는 일정
         </Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.scheduleScroll}>
           <View style={[styles.scheduleCard, {backgroundColor: '#4D61DD'}]}>
-            <Text style={styles.scheduleTitle}>최근 일정이 없습니다</Text>
+            <Text style={styles.scheduleTitle}>다가오는 일정이 없습니다</Text>
           </View>
         </ScrollView>
       </View>
@@ -305,7 +359,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
           styles.sectionTitle,
           {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
         ]}>
-        나의 최근 일정
+        다가오는 일정
       </Text>
       <ScrollView
         horizontal
@@ -334,14 +388,17 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
                   ? '택시 카풀'
                   : '장비 예약'}
               </Text>
-              {event.type === 'place' && (
+              {/* TODO: 장비 예약 상태도 표시 */}
+              {(event.type === 'place' || event.type === 'taxi') && (
                 <View style={styles.statusContainer}>
                   <View
                     style={[
                       styles.statusBadge,
                       {backgroundColor: getStatusColor(event.status)},
                     ]}>
-                    <Text style={styles.statusText}>{event.status}</Text>
+                    <Text style={styles.statusText}>
+                      {getStatusText(event.type, event.status)}
+                    </Text>
                   </View>
                 </View>
               )}

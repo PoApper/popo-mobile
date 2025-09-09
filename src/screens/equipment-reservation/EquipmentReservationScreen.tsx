@@ -107,7 +107,10 @@ const EquipmentReservationScreen = ({
         {item.imageUrl ? (
           <Image source={{uri: item.imageUrl}} style={styles.equipmentImage} />
         ) : (
-          <View style={[styles.equipmentImage, placeholderImageStyle]} />
+          <Image
+            source={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
+            style={styles.equipmentImage}
+          />
         )}
         <View style={styles.equipmentInfo}>
           <Text style={[styles.equipmentName, {color: textColor}]}>

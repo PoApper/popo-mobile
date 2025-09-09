@@ -191,7 +191,11 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
                 styles.locationItem,
                 {backgroundColor: isDarkMode ? '#121212' : '#fff'},
               ]}>
-              <LazyImage uri={item.image.uri} style={styles.locationImage} />
+              <LazyImage
+                uri={item.image.uri}
+                style={styles.locationImage}
+                fallbackSource={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
+              />
               <View style={styles.locationInfo}>
                 <Text style={[styles.locationName, {color: textColor}]}>
                   {item.name}

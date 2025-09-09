@@ -206,7 +206,11 @@ const PlaceDetailReservationScreen = ({
                 {placeDetail.description}
               </Text>
             </View>
-            <LazyImage uri={placeDetail.imageUrl} style={styles.placeImage} />
+            <LazyImage
+              uri={placeDetail.imageUrl}
+              style={styles.placeImage}
+              fallbackSource={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
+            />
             <TouchableOpacity
               style={[styles.reserveButton]}
               onPress={() => {
