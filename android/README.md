@@ -16,10 +16,14 @@ Google Play에 접속 가능한 Emulator를 사용해야 합니다. Google Play 
 $ ./gradlew clean
 ```
 
-빌드가 꼬인다면 아래 명령어를 실행해보자.
-
+### 빌드가 꼬인다면 아래 명령어를 실행해보자.
+빌드 캐시를 정리하는 명령어들
 ```bash
 $ ./gradlew assembleDebug --no-daemon
+```
+
+```bash
+$ npx react-native start --reset-cache
 ```
 
 ### Build
