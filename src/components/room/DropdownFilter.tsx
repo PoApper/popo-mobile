@@ -116,7 +116,11 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
                   },
                 ]}>
                 <FlatList
-                  data={[{id: '', name: '전체보기'}, ...options, {id: '__other__', name: '그 외'}]}
+                  data={[
+                    {id: '', name: '전체보기'},
+                    ...options,
+                    {id: '__other__', name: '그 외'},
+                  ]}
                   keyExtractor={item => item.id || 'all'}
                   renderItem={({item}) => (
                     <TouchableOpacity

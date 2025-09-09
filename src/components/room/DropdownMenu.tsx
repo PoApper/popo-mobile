@@ -174,9 +174,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                   },
                 ]}>
                 <FlatList
-                  data={
-                      [...options, CUSTOM_INPUT_ITEM]
-                  }
+                  data={[...options, CUSTOM_INPUT_ITEM]}
                   keyExtractor={item => item.name}
                   renderItem={({item}) => (
                     <TouchableOpacity

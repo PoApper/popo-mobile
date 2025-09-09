@@ -90,7 +90,13 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       .filter(
         room => !hideFullRoom || room.currentParticipant < room.maxParticipant,
       );
-  }, [roomData, selectedDeparture, selectedArrival, selectedDate, hideFullRoom]);
+  }, [
+    roomData,
+    selectedDeparture,
+    selectedArrival,
+    selectedDate,
+    hideFullRoom,
+  ]);
 
   const onRefresh = async () => {
     setRefreshing(true);
