@@ -11,7 +11,7 @@ export type BenefitDiscountItem = {
   id: string;
   title: string;
   region: string;
-  open_hour: string;
+  openHour: string;
   phone: string;
   content: string;
   updatedAt: string;
@@ -56,7 +56,7 @@ const DiscountItem: React.FC<Props> = ({item}) => {
                 🕒 영업시간:
               </Text>
               <Text style={[styles.infoText, {color: textColor}]}>
-                {item.open_hour}
+                {item.openHour}
               </Text>
             </View>
             <View style={styles.infoContainer}>

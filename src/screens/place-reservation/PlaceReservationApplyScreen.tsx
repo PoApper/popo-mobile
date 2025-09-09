@@ -178,13 +178,13 @@ const PlaceReservationApplyScreen = ({
             // API call to create reservation
             api
               .post('/reservation-place', {
-                place_id: placeId,
+                placeId: placeId,
                 phone: phone,
                 title: title,
                 description: desc,
                 date: formattedDate,
-                start_time: formattedStartTime,
-                end_time: formattedEndTime,
+                startTime: formattedStartTime,
+                endTime: formattedEndTime,
               })
               .then(() => {
                 Alert.alert('알림', '예약을 생성 했습니다.', [

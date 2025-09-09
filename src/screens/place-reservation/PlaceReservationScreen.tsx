@@ -31,7 +31,7 @@ type Location = {
   name: string;
   description: string;
   image: any;
-  total_reservation_count: number;
+  totalReservationCount: number;
 };
 
 const buildingToRegion: {[key: string]: string} = {
@@ -69,8 +69,8 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
           id: place.uuid,
           name: place.name,
           description: place.location,
-          image: {uri: place.image_url},
-          total_reservation_count: place.total_reservation_count,
+          image: {uri: place.imageUrl},
+          totalReservationCount: place.totalReservationCount,
         }));
         setLocations(formattedLocations);
       } catch (error) {
@@ -87,7 +87,7 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
     if (sortType === '가나다순') {
       return a.name.localeCompare(b.name);
     } else {
-      return b.total_reservation_count - a.total_reservation_count;
+      return b.totalReservationCount - a.totalReservationCount;
     }
   });
 

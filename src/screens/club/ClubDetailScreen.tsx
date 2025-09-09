@@ -27,18 +27,18 @@ type ClubDetailScreenProps = {
 interface ClubItem {
   uuid: string;
   name: string;
-  short_desc: string;
+  shortDesc: string;
   content: string;
   location: string;
   representative: string;
   contact: string;
   clubType: ClubCategoryKey;
-  image_url: string;
+  imageUrl: string;
   views: number;
-  homepage_url: string;
-  facebook_url: string;
-  instagram_url: string;
-  youtube_url: string;
+  homepageUrl: string;
+  facebookUrl: string;
+  instagramUrl: string;
+  youtubeUrl: string;
 }
 
 const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
@@ -110,8 +110,8 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
             <View style={styles.imageContainer}>
               <Image
                 source={
-                  clubData.image_url
-                    ? {uri: clubData.image_url}
+                  clubData.imageUrl
+                    ? {uri: clubData.imageUrl}
                     : require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')
                 }
                 style={styles.clubImage}
@@ -127,7 +127,7 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
                   styles.description,
                   {color: isDarkMode ? '#888' : '#666'},
                 ]}>
-                {clubData.short_desc}
+                {clubData.shortDesc}
               </Text>
 
               <View style={[styles.infoSection, {borderColor}]}>
@@ -181,51 +181,51 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
 
               <View style={[styles.infoSection, {borderColor}]}>
                 <View style={styles.socialLinks}>
-                  {clubData.homepage_url != 'null' &&
-                    clubData.homepage_url != '' &&
-                    clubData.homepage_url && (
+                  {clubData.homepageUrl != 'null' &&
+                    clubData.homepageUrl != '' &&
+                    clubData.homepageUrl && (
                       <TouchableOpacity
                         style={[
                           styles.socialButton,
                           {backgroundColor: '#000000'},
                         ]}
-                        onPress={() => handleLinkPress(clubData.homepage_url)}>
+                        onPress={() => handleLinkPress(clubData.homepageUrl)}>
                         <Text style={styles.socialText}>홈페이지</Text>
                       </TouchableOpacity>
                     )}
-                  {clubData.facebook_url != 'null' &&
-                    clubData.facebook_url != '' &&
-                    clubData.facebook_url && (
+                  {clubData.facebookUrl != 'null' &&
+                    clubData.facebookUrl != '' &&
+                    clubData.facebookUrl && (
                       <TouchableOpacity
                         style={[
                           styles.socialButton,
                           {backgroundColor: '#1877F2'},
                         ]}
-                        onPress={() => handleLinkPress(clubData.facebook_url)}>
+                        onPress={() => handleLinkPress(clubData.facebookUrl)}>
                         <Text style={styles.socialText}>Facebook</Text>
                       </TouchableOpacity>
                     )}
-                  {clubData.instagram_url != 'null' &&
-                    clubData.instagram_url != '' &&
-                    clubData.instagram_url && (
+                  {clubData.instagramUrl != 'null' &&
+                    clubData.instagramUrl != '' &&
+                    clubData.instagramUrl && (
                       <TouchableOpacity
                         style={[
                           styles.socialButton,
                           {backgroundColor: '#E4405F'},
                         ]}
-                        onPress={() => handleLinkPress(clubData.instagram_url)}>
+                        onPress={() => handleLinkPress(clubData.instagramUrl)}>
                         <Text style={styles.socialText}>Instagram</Text>
                       </TouchableOpacity>
                     )}
-                  {clubData.youtube_url != 'null' &&
-                    clubData.youtube_url != '' &&
-                    clubData.youtube_url && (
+                  {clubData.youtubeUrl != 'null' &&
+                    clubData.youtubeUrl != '' &&
+                    clubData.youtubeUrl && (
                       <TouchableOpacity
                         style={[
                           styles.socialButton,
                           {backgroundColor: '#FF0000'},
                         ]}
-                        onPress={() => handleLinkPress(clubData.youtube_url)}>
+                        onPress={() => handleLinkPress(clubData.youtubeUrl)}>
                         <Text style={styles.socialText}>YouTube</Text>
                       </TouchableOpacity>
                     )}

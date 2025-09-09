@@ -32,23 +32,23 @@ interface Equipment {
   uuid: string;
   name: string;
   description: string;
-  equip_owner: string;
+  equipOwner: string;
   region: string;
-  staff_email: string;
-  image_url: string;
+  staffEmail: string;
+  imageUrl: string;
 }
 
 interface EquipmentReservation {
   uuid: string;
-  booker_id: string;
+  bookerId: string;
   phone: string;
   title: string;
   description: string;
   date: string;
-  start_time: string;
-  end_time: string;
+  startTime: string;
+  endTime: string;
   status: '심사중' | '통과' | '거절';
-  created_at: Date;
+  createdAt: Date;
   equipments: Equipment[];
 }
 
@@ -347,7 +347,7 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
               month: 'short',
               day: 'numeric',
             })}{' '}
-            {formatTime(item.start_time)}
+            {formatTime(item.startTime)}
           </Text>
         </View>
         <View
@@ -587,8 +587,8 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
                               styles.modalValue,
                               {color: modalValueColor},
                             ]}>
-                            {formatTime(selectedReservation.start_time)} -{' '}
-                            {formatTime(selectedReservation.end_time)}
+                            {formatTime(selectedReservation.startTime)} -{' '}
+                            {formatTime(selectedReservation.endTime)}
                           </Text>
                         </View>
 

@@ -74,10 +74,10 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
   // 방 상태 계산
   const getRoomStatus = (): RoomStatus => {
     const isOwner = userUuid === roomData.ownerUuid;
-    const isKicked = roomData.room_users?.some(
+    const isKicked = roomData.roomUsers?.some(
       user => user.userUuid === userUuid && user.status === 'KICKED',
     );
-    const isJoined = roomData.room_users?.some(
+    const isJoined = roomData.roomUsers?.some(
       user => user.userUuid === userUuid && user.status !== 'KICKED',
     );
     const isAvailable = roomData.currentParticipant < roomData.maxParticipant;
