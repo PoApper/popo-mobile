@@ -331,7 +331,7 @@ SidebarModalProps) => {
                 {/* 참여자 목록 */}
                 <View
                   style={{flex: 1, width: '100%', gap: 10, marginBottom: 10}}>
-                  {roomData?.room_users?.map(
+                  {roomData?.roomUsers?.map(
                     user =>
                       user.status === 'JOINED' && (
                         <ParticipantItem

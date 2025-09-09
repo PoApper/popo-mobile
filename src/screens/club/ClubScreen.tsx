@@ -31,18 +31,18 @@ const sortTypes = ['가나다순', '조회순'];
 interface ClubItem {
   uuid: string;
   name: string;
-  short_desc: string;
+  shortDesc: string;
   content: string;
   location: string;
   representative: string;
   contact: string;
-  club_type: ClubCategoryKey;
-  image_url: string;
+  clubType: ClubCategoryKey;
+  imageUrl: string;
   views: number;
-  homepage_url: string;
-  facebook_url: string;
-  instagram_url: string;
-  youtube_url: string;
+  homepageUrl: string;
+  facebookUrl: string;
+  instagramUrl: string;
+  youtubeUrl: string;
 }
 
 const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
@@ -86,7 +86,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
   };
 
   const filteredClubs = getSortedClubs(clubs).filter(
-    club => CLUB_CATEGORIES[club.club_type] === selectedCategory,
+    club => CLUB_CATEGORIES[club.clubType] === selectedCategory,
   );
 
   return (
@@ -208,8 +208,8 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
                 <View style={styles.imageContainer}>
                   <Image
                     source={
-                      club.image_url
-                        ? {uri: club.image_url}
+                      club.imageUrl
+                        ? {uri: club.imageUrl}
                         : require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')
                     }
                     style={styles.clubImage}
@@ -228,7 +228,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}
                     numberOfLines={2}>
-                    {club.short_desc}
+                    {club.shortDesc}
                   </Text>
                 </View>
               </View>

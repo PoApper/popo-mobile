@@ -212,11 +212,11 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   }, [reconnectAttempt]);
 
   useEffect(() => {
-    if (!myInfo?.uuid || !Array.isArray(roomInfo?.room_users)) {
+    if (!myInfo?.uuid || !Array.isArray(roomInfo?.roomUsers)) {
       return;
     }
 
-    const matchedUser = roomInfo.room_users.find(
+    const matchedUser = roomInfo.roomUsers.find(
       (user: UserData) => user.userUuid === myInfo.uuid,
     );
 
@@ -375,7 +375,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
           renderItem={({item}) => (
             <ChatMessage
               message={item}
-              user_uuid={myInfo.uuid}
+              userUuid={myInfo.uuid}
               handleUserClick={handleUserClick}
               handleMyMsgClick={handleMyMsgClick}
             />

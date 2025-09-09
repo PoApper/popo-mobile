@@ -13,22 +13,22 @@ interface Place {
   description: string;
   location: string;
   region: string;
-  staff_email: string;
-  image_url: string;
+  staffEmail: string;
+  imageUrl: string;
 }
 
 interface PlaceReservation {
   uuid: string;
-  place_id: string;
-  booker_id: string;
+  placeId: string;
+  bookerId: string;
   phone: string;
   title: string;
   description: string;
   date: string; // YYYYMMDD
-  start_time: string; // HHmm
-  end_time: string; // HHmm
+  startTime: string; // HHmm
+  endTime: string; // HHmm
   status: '심사중' | '통과' | '거절';
-  created_at: Date;
+  createdAt: Date;
   place: Place;
 }
 
@@ -46,23 +46,23 @@ interface Equipment {
   uuid: string;
   name: string;
   description: string;
-  equip_owner: string;
+  equipOwner: string;
   region: string;
-  staff_email: string;
-  image_url: string;
+  staffEmail: string;
+  imageUrl: string;
 }
 
 interface EquipmentReservation {
   uuid: string;
-  booker_id: string;
+  bookerId: string;
   phone: string;
   title: string;
   description: string;
   date: string; // YYYYMMDD
-  start_time: string; // HHmm
-  end_time: string; // HHmm
+  startTime: string; // HHmm
+  endTime: string; // HHmm
   status: '심사중' | '통과' | '거절';
-  created_at: Date;
+  createdAt: Date;
   equipments: Equipment[];
 }
 
@@ -173,8 +173,8 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
             title: reservation.title,
             date: reservation.date,
             time: `${formatReservationTime(
-              reservation.start_time,
-            )} - ${formatReservationTime(reservation.end_time)}`,
+              reservation.startTime,
+            )} - ${formatReservationTime(reservation.endTime)}`,
             location: reservation.place?.name || '장소 미정',
             status: reservation.status,
             data: reservation,
@@ -201,8 +201,8 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
             title: reservation.title,
             date: reservation.date,
             time: `${formatReservationTime(
-              reservation.start_time,
-            )} - ${formatReservationTime(reservation.end_time)}`,
+              reservation.startTime,
+            )} - ${formatReservationTime(reservation.endTime)}`,
             location:
               reservation.equipments?.map(e => e.name).join(', ') ||
               '장비 미정',
