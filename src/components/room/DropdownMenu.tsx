@@ -116,16 +116,18 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
               }
             }}
           />
-          {!!selected && (
-            <TouchableOpacity
-              onPress={() => {
-                setCustomMode(false);
-                onSelect('');
-              }}
-              style={{paddingHorizontal: 4}}>
-              <Icon name="close" size={20} color={ColorStyle.placeholder} />
-            </TouchableOpacity>
-          )}
+          <View style={styles.iconSlot}>
+            {!!selected && (
+              <TouchableOpacity
+                onPress={() => {
+                  setCustomMode(false);
+                  onSelect('');
+                }}
+                style={styles.iconTouch}>
+                <Icon name="close" size={22} color={ColorStyle.placeholder} />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       ) : (
         <TouchableOpacity
@@ -265,6 +267,13 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 15,
+  },
+  iconSlot: {
+    width: 22, // match arrow icon size width footprint
+    alignItems: 'flex-end',
+  },
+  iconTouch: {
+    paddingRight: 0,
   },
 });
 
