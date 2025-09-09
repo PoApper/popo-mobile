@@ -79,7 +79,6 @@ export type OtherStackParamList = {
   };
   NewChat: {
     roomUuid: string;
-    from: 'roomList' | 'myReservation';
   };
   Settlement: {
     roomUuid: string;

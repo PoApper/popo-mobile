@@ -91,10 +91,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
     } else if (clickedRoom.userStatus === 'KICKED') {
       setShowBanReasonModal(true);
     } else {
-      navigation.navigate('NewChat', {
-        roomUuid: roomUuid,
-        from: 'myReservation',
-      });
+      navigation.navigate('NewChat', {roomUuid: roomUuid});
     }
   };
 
