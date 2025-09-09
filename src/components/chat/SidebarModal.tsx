@@ -139,9 +139,7 @@ SidebarModalProps) => {
         .delete(`/room/${roomData.uuid}`)
         .then(() => {
           setModalVisible(false);
-          navigation.navigate('Main', {
-            tab: 'MyReservation',
-          });
+          navigation.navigate('Main', {tab: 'MyReservation', prevTab: 'NewChat'});
         })
         .catch(err => {
           console.error(
@@ -161,7 +159,7 @@ SidebarModalProps) => {
         .put(`/room/leave/${roomData.uuid}`)
         .then(() => {
           setModalVisible(false);
-          navigation.navigate('Main', {tab: 'MyReservation'});
+          navigation.navigate('Main', {tab: 'MyReservation', prevTab: 'NewChat'});
         })
         .catch(err => {
           console.error('채팅방 나가기 실패', err);
@@ -184,9 +182,7 @@ SidebarModalProps) => {
             text: '확인',
             onPress: () => {
               setModalVisible(false);
-              navigation.navigate('Main', {
-                tab: 'MyReservation',
-              });
+              navigation.navigate('Main', {tab: 'MyReservation', prevTab: 'NewChat'});
             },
           },
         ]);

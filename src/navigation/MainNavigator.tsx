@@ -1,15 +1,15 @@
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useColorScheme} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useColorScheme } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import {MainTabParamList} from '@navigation/types';
+import { MainTabParamList } from '@navigation/types';
 import HomeScreen from '@screens/HomeScreen';
 import UserDetailScreen from '@screens/auth/UserDetailScreen';
 import ReservationScreen from '@screens/ReservationScreen';
 import PaxiRoomListScreen from '@screens/paxi/PaxiRoomListScreen';
-import {useRoute} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -18,7 +18,7 @@ const MainNavigator = () => {
   const insets = useSafeAreaInsets();
 
   const route = useRoute();
-  const {tab} = (route.params as {tab: string}) || {};
+  const { tab, prevTab } = (route.params as { tab: string, prevTab: string }) || {};
 
   const validTabs = ['Home', 'Paxi', 'MyReservation', 'MyInfo'] as const;
   type TabName = (typeof validTabs)[number];
@@ -46,7 +46,7 @@ const MainNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: '홈',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <Icon name="home" size={size} color={color} />
           ),
         }}
@@ -57,7 +57,7 @@ const MainNavigator = () => {
         component={PaxiRoomListScreen}
         options={{
           tabBarLabel: 'Paxi',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <Icon name="local-taxi" size={size} color={color} />
           ),
         }}
@@ -65,9 +65,10 @@ const MainNavigator = () => {
       <Tab.Screen
         name="MyReservation"
         component={ReservationScreen}
+        initialParams={{ prevTab }}
         options={{
           tabBarLabel: '내 일정',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <Icon name="event" size={size} color={color} />
           ),
         }}
@@ -77,7 +78,7 @@ const MainNavigator = () => {
         component={UserDetailScreen}
         options={{
           tabBarLabel: '내 정보',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <Icon name="person" size={size} color={color} />
           ),
         }}

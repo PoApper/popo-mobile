@@ -23,8 +23,7 @@ import {MyRoomData, UserData} from '@interfaces/paxi';
 interface TaxiChatListProps {
   navigation: NativeStackNavigationProp<
     RootStackParamList,
-    'MyReservation' | 'Reservation'
-  >;
+    'MyReservation'>;
   refreshKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;
