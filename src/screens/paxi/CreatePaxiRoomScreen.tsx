@@ -255,7 +255,10 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               </View>
             </View>
 
-            {departureName && arrivalName ? (
+            {departureName &&
+            arrivalName &&
+            PAXI_LOCATIONS.some(loc => loc.id === departureName) &&
+            PAXI_LOCATIONS.some(loc => loc.id === arrivalName) ? (
               <View
                 style={[
                   styles.infoChip,

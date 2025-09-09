@@ -15,6 +15,7 @@ import {
   Animated,
   Dimensions,
   useColorScheme,
+  TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -27,22 +28,26 @@ interface Option {
 interface DropdownMenuProps {
   placeholderText: string;
   options: Option[];
-  selected: string | null;
+  selected: string;
   onSelect: (selectedOption: string) => void;
 }
+
+const CUSTOM_INPUT_ITEM = {name: '직접 입력'};
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
   placeholderText,
   options,
   selected,
   onSelect,
-}) => {
+}: DropdownMenuProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [visible, setVisible] = useState(false);
   const [dropdownPosition, setDropdownPosition] =
     useState<LayoutRectangle | null>(null);
   const buttonRef = useRef<View>(null);
   const rotateAnim = useRef(new Animated.Value(0)).current;
+  const [customMode, setCustomMode] = useState(false);
+  const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     Animated.timing(rotateAnim, {
@@ -58,6 +63,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   });
 
   const openDropdown = () => {
+    if (customMode) return; // 입력 모드에서는 드롭다운 비활성화
     if (buttonRef.current) {
       buttonRef.current.measure((x, y, width, height, pageX, pageY) => {
         const windowHeight = Dimensions.get('window').height;
@@ -81,32 +87,74 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 
   return (
     <View style={{flex: 1}}>
-      <TouchableOpacity
-        ref={buttonRef}
-        onPress={openDropdown}
-        style={[
-          styles.button,
-          {
-            borderColor: ColorStyle.border,
-          },
-        ]}>
-        <Text
+      {customMode ? (
+        <View
           style={[
-            styles.buttonText,
-            {color: selected ? ColorStyle.text : ColorStyle.placeholder},
+            styles.button,
+            {borderColor: ColorStyle.border, paddingVertical: 4},
           ]}>
-          {selected
-            ? options.find(cat => cat.name === selected)?.name
-            : placeholderText}
-        </Text>
-        <Animated.View style={{transform: [{rotate}]}}>
-          <Icon
-            name="keyboard-arrow-down"
-            size={22}
-            color={ColorStyle.placeholder}
+          <TextInput
+            ref={inputRef}
+            style={[styles.input, {color: ColorStyle.text}]}
+            placeholder={placeholderText}
+            placeholderTextColor={ColorStyle.placeholder}
+            value={selected}
+            onChangeText={txt => {
+              if (txt && txt.trim().length > 0) {
+                onSelect(txt);
+              } else {
+                // 입력 비워지면 입력 모드 종료 + 드롭다운 트리거 복귀
+                setCustomMode(false);
+                onSelect('');
+              }
+            }}
+            autoFocus
+            returnKeyType="done"
+            onSubmitEditing={() => {
+              if (!selected || selected.trim().length === 0) {
+                setCustomMode(false);
+              }
+            }}
           />
-        </Animated.View>
-      </TouchableOpacity>
+          {!!selected && (
+            <TouchableOpacity
+              onPress={() => {
+                setCustomMode(false);
+                onSelect('');
+              }}
+              style={{paddingHorizontal: 4}}>
+              <Icon name="close" size={20} color={ColorStyle.placeholder} />
+            </TouchableOpacity>
+          )}
+        </View>
+      ) : (
+        <TouchableOpacity
+          ref={buttonRef}
+          onPress={openDropdown}
+          style={[
+            styles.button,
+            {
+              borderColor: ColorStyle.border,
+            },
+          ]}>
+          <Text
+            style={[
+              styles.buttonText,
+              {color: selected ? ColorStyle.text : ColorStyle.placeholder},
+            ]}>
+            {selected
+              ? options.find(cat => cat.name === selected)?.name || selected
+              : placeholderText}
+          </Text>
+          <Animated.View style={{transform: [{rotate}]}}>
+            <Icon
+              name="keyboard-arrow-down"
+              size={22}
+              color={ColorStyle.placeholder}
+            />
+          </Animated.View>
+        </TouchableOpacity>
+      )}
 
       {visible && dropdownPosition && (
         <Modal transparent animationType="fade">
@@ -124,7 +172,9 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                   },
                 ]}>
                 <FlatList
-                  data={options}
+                  data={
+                      [...options, CUSTOM_INPUT_ITEM]
+                  }
                   keyExtractor={item => item.name}
                   renderItem={({item}) => (
                     <TouchableOpacity
@@ -136,8 +186,16 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                         },
                       ]}
                       onPress={() => {
-                        onSelect(item.name);
-                        setVisible(false);
+                        if (item.name === CUSTOM_INPUT_ITEM.name) {
+                          // clear previous text and switch to input mode
+                          onSelect('');
+                          setVisible(false);
+                          setCustomMode(true);
+                          setTimeout(() => inputRef.current?.focus(), 0);
+                        } else {
+                          onSelect(item.name);
+                          setVisible(false);
+                        }
                       }}>
                       <Text
                         style={[
@@ -179,6 +237,11 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlignVertical: 'center',
     fontSize: 13,
+  },
+  input: {
+    flex: 1,
+    fontSize: 13,
+    paddingVertical: 6,
   },
   overlay: {
     flex: 1,
