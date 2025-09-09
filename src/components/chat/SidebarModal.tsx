@@ -215,30 +215,29 @@ SidebarModalProps) => {
   };
 
   return (
-    <>
-      <Modal
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={handleClose}>
-        {initialRenderDone && isVisible && (
-          <Pressable style={styles.overlay} onPress={handleClose}>
-            <Animated.View
-              style={[
-                styles.modalContainer,
-                {
-                  transform: [{translateX: slideAnim}],
-                  opacity: opacityAnim,
-                  backgroundColor: backgroundColor(isDarkMode),
-                },
-              ]}>
-              <SafeAreaView style={styles.modalContent}>
-                <Pressable style={styles.innerContent} onPress={() => {}}>
-                  <RoomInfoBox
-                    roomData={roomData}
-                    navigation={navigation}
-                    myUuid={myUuid}
-                    setModalVisible={setModalVisible}
-                  />
+    <Modal
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={handleClose}>
+      {initialRenderDone && isVisible && (
+        <Pressable style={styles.overlay} onPress={handleClose}>
+          <Animated.View
+            style={[
+              styles.modalContainer,
+              {
+                transform: [{translateX: slideAnim}],
+                opacity: opacityAnim,
+                backgroundColor: backgroundColor(isDarkMode),
+              },
+            ]}>
+            <SafeAreaView style={styles.modalContent}>
+              <Pressable style={styles.innerContent} onPress={() => {}}>
+                <RoomInfoBox
+                  roomData={roomData}
+                  navigation={navigation}
+                  myUuid={myUuid}
+                  setModalVisible={setModalVisible}
+                />
 
                 <View
                   style={[
@@ -422,8 +421,7 @@ SidebarModalProps) => {
           </Animated.View>
         </Pressable>
       )}
-      </Modal>
-    </>
+    </Modal>
   );
 };
 
