@@ -74,7 +74,7 @@ const SettlementInfoBox = ({
     ]);
   };
 
-  if (isPaid === undefined) {
+  if (isPaid === undefined || !settlementData.payAmountPerPerson) {
     return null;
   }
 
