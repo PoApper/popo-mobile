@@ -17,7 +17,9 @@ $ ./gradlew clean
 ```
 
 ### 빌드가 꼬인다면 아래 명령어를 실행해보자.
+
 빌드 캐시를 정리하는 명령어들
+
 ```bash
 $ ./gradlew assembleDebug --no-daemon
 ```
