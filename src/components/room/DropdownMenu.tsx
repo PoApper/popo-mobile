@@ -242,6 +242,8 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 13,
     paddingVertical: 6,
+    paddingHorizontal: 0,
+    paddingLeft: 0,
   },
   overlay: {
     flex: 1,
