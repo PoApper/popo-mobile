@@ -9,7 +9,7 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
@@ -148,11 +148,8 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
       </View>
 
       <KeyboardAwareScrollView
-        enableOnAndroid={true}
-        enableAutomaticScroll={true}
         keyboardShouldPersistTaps="handled"
-        extraScrollHeight={20}
-        extraHeight={120}>
+        bottomOffset={120}>
         <View style={styles.container}>
           {existingData?.bankName && (
             <View style={styles.existingInfoContainer}>

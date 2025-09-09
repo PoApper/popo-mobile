@@ -12,7 +12,7 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
@@ -363,7 +363,7 @@ const EquipmentReservationApplyScreen = ({
     setShowStartPicker(false);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollToPosition(0, 600, true);
+      scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
     }, 100);
   };
   const openStartPicker = () => {
@@ -373,7 +373,7 @@ const EquipmentReservationApplyScreen = ({
     setShowStartPicker(true);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollToPosition(0, 600, true);
+      scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
     }, 100);
   };
   const openEndPicker = () => {
@@ -383,7 +383,7 @@ const EquipmentReservationApplyScreen = ({
     setShowStartPicker(false);
     setShowEndPicker(true);
     setTimeout(() => {
-      scrollViewRef.current?.scrollToPosition(0, 600, true);
+      scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
     }, 100);
   };
 
@@ -481,10 +481,7 @@ const EquipmentReservationApplyScreen = ({
         ref={scrollViewRef}
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
-        enableOnAndroid={true}
-        enableAutomaticScroll={true}
-        extraScrollHeight={20}
-        extraHeight={association === 'dormunion' ? 120 : 200}>
+        bottomOffset={association === 'dormunion' ? 120 : 200}>
         {/* 공지사항 섹션 */}
         <View
           style={[

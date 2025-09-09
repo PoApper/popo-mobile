@@ -8,6 +8,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import messaging from '@react-native-firebase/messaging';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import notifee, {EventType} from '@notifee/react-native';
+import {KeyboardProvider} from 'react-native-keyboard-controller';
 
 import AppNavigator from './src/navigation/AppNavigator';
 import {requestUserPermission} from './src/utils/firebase';
@@ -81,11 +82,13 @@ const App = () => {
   }, []);
 
   return (
-    <GestureHandlerRootView>
-      <SafeAreaProvider>
-        <AppNavigator />
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <KeyboardProvider>
+      <GestureHandlerRootView>
+        <SafeAreaProvider>
+          <AppNavigator />
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </KeyboardProvider>
   );
 };
 
