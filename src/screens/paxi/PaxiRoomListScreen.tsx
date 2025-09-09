@@ -63,15 +63,24 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   };
 
   const filteredRoomData = useMemo(() => {
+    const optionIds = PAXI_LOCATIONS.map(o => o.id);
+    const isOther = (v: string | null) => v === '__other__';
+
     return roomData
-      .filter(
-        room =>
-          !selectedDeparture || room.departureLocation === selectedDeparture,
-      )
-      .filter(
-        room =>
-          !selectedArrival || room.destinationLocation === selectedArrival,
-      )
+      .filter(room => {
+        if (!selectedDeparture) return true;
+        if (isOther(selectedDeparture)) {
+          return !optionIds.includes(room.departureLocation);
+        }
+        return room.departureLocation === selectedDeparture;
+      })
+      .filter(room => {
+        if (!selectedArrival) return true;
+        if (isOther(selectedArrival)) {
+          return !optionIds.includes(room.destinationLocation);
+        }
+        return room.destinationLocation === selectedArrival;
+      })
       .filter(
         room =>
           !selectedDate ||
@@ -81,13 +90,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       .filter(
         room => !hideFullRoom || room.currentParticipant < room.maxParticipant,
       );
-  }, [
-    roomData,
-    selectedDeparture,
-    selectedArrival,
-    selectedDate,
-    hideFullRoom,
-  ]);
+  }, [roomData, selectedDeparture, selectedArrival, selectedDate, hideFullRoom]);
 
   const onRefresh = async () => {
     setRefreshing(true);
