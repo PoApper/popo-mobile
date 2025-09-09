@@ -376,7 +376,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
           <SettlementInfoBox
             isPaid={isPaid}
             isPaidEnd={isPaidEnd}
-            settlementData={settlementData} />
+            settlementData={settlementData}
+          />
         </View>
       )}
 

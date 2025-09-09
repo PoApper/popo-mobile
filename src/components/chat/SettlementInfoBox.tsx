@@ -103,14 +103,20 @@ const SettlementInfoBox = ({
           )}
           {!isPaid && (
             <>
-              <Icon name={isPaidEnd ? 'info' : 'warning'} size={20} color={isPaidEnd ? '#e4c45b' : '#e45b63'} />
+              <Icon
+                name={isPaidEnd ? 'info' : 'warning'}
+                size={20}
+                color={isPaidEnd ? '#e4c45b' : '#e45b63'}
+              />
               <Text
                 style={{
                   fontSize: 15,
                   fontWeight: '600',
                   color: isPaidEnd ? '#e4c45b' : '#e45b63',
                 }}>
-                  {isPaidEnd ? '정산이 완료되지 않고 종료되었습니다.' : '정산이 아직 완료되지 않았습니다.'}
+                {isPaidEnd
+                  ? '정산이 완료되지 않고 종료되었습니다.'
+                  : '정산이 아직 완료되지 않았습니다.'}
               </Text>
             </>
           )}
