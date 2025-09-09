@@ -97,7 +97,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             {
               text: '확인',
               onPress: () => {
-                navigation.navigate('NewChat', {roomUuid: res.data.uuid as string});
+                navigation.navigate('NewChat', {
+                  roomUuid: res.data.uuid as string,
+                });
               },
             },
           ]);

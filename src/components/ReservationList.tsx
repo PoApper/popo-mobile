@@ -59,10 +59,7 @@ interface PaginatedResponse {
 }
 
 interface ReservationListProps {
-  navigation: NativeStackNavigationProp<
-    RootStackParamList,
-    'MyReservation'
-  >;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
   refreshKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;

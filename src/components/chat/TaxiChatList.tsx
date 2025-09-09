@@ -21,9 +21,7 @@ import BanReasonModal from './BanReasonModal';
 import {MyRoomData, UserData} from '@interfaces/paxi';
 
 interface TaxiChatListProps {
-  navigation: NativeStackNavigationProp<
-    RootStackParamList,
-    'MyReservation'>;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
   refreshKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;
