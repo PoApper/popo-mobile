@@ -15,12 +15,12 @@ export type AssociationItemType = {
   location: string;
   representative: string;
   contact: string;
-  image_url: string;
+  imageUrl: string;
   views: number;
-  homepage_url: string;
-  facebook_url: string;
-  instagram_url: string;
-  youtube_url: string;
+  homepageUrl: string;
+  facebookUrl: string;
+  instagramUrl: string;
+  youtubeUrl: string;
 };
 
 type Props = {
@@ -43,7 +43,7 @@ const AssociationItem: React.FC<Props> = ({item, onPress}) => {
       <View style={styles.cardContent}>
         <View style={styles.imageContainer}>
           <Image
-            source={{uri: item.image_url}}
+            source={{uri: item.imageUrl}}
             style={styles.associationImage}
             resizeMode="contain"
           />

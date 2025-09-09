@@ -5,7 +5,7 @@ import axios from 'axios';
 type CalendarEvent = {
   id: number;
   title: string;
-  event_date: string;
+  eventDate: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -68,7 +68,7 @@ const DdayInfoBox = () => {
     return null;
   }
 
-  const dday = calculateDday(latestEvent.event_date);
+  const dday = calculateDday(latestEvent.eventDate);
   const ddayText =
     dday > 0 ? `D-${dday}` : dday === 0 ? 'D-day' : `D+${Math.abs(dday)}`;
 

@@ -10,7 +10,7 @@ import {
 export type BenefitAffiliateItem = {
   id: string;
   title: string;
-  content_short: string;
+  contentShort: string;
   content: string;
   updatedAt: string;
 };
@@ -37,7 +37,7 @@ const AffiliateItem: React.FC<Props> = ({item}) => {
       <View style={styles.textContainer}>
         <Text style={[styles.itemTitle, {color: textColor}]}>{item.title}</Text>
         <Text style={[styles.itemDescription, {color: subTextColor}]}>
-          {expanded ? item.content : item.content_short}
+          {expanded ? item.content : item.contentShort}
         </Text>
         <Text style={[styles.expandIndicator, {color: subTextColor}]}>
           {expanded ? '접기 ▲' : '더보기 ▼'}

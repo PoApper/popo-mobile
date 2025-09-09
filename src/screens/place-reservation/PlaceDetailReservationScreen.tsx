@@ -34,7 +34,7 @@ type PlaceDetailReservationScreenProps = {
 type PlaceDetail = {
   name: string;
   description: string;
-  image_url: string;
+  imageUrl: string;
   location: string;
 };
 
@@ -42,8 +42,8 @@ type Reservation = {
   uuid: string;
   title: string;
   date: string;
-  start_time: string;
-  end_time: string;
+  startTime: string;
+  endTime: string;
   status: string;
   booker: {
     name: string;
@@ -103,7 +103,7 @@ const PlaceDetailReservationScreen = ({
         );
         const sortedReservations = response.data.sort(
           (a: Reservation, b: Reservation) =>
-            Number(a.start_time) - Number(b.start_time),
+            Number(a.startTime) - Number(b.startTime),
         );
         setReservations(sortedReservations);
       } catch (error) {
@@ -153,7 +153,7 @@ const PlaceDetailReservationScreen = ({
       style={[styles.reservationItem, {backgroundColor: cardBackgroundColor}]}>
       <View style={styles.reservationTimeContainer}>
         <Text style={[styles.reservationTime, {color: textColor}]}>
-          {convertTime(item.start_time)} - {convertTime(item.end_time)}
+          {convertTime(item.startTime)} - {convertTime(item.endTime)}
         </Text>
         <Text style={[styles.reservationStatus, {color: '#FB5353'}]}>
           {item.status}
@@ -207,7 +207,7 @@ const PlaceDetailReservationScreen = ({
               </Text>
             </View>
             <LazyImage
-              uri={placeDetail.image_url}
+              uri={placeDetail.imageUrl}
               style={styles.placeImage}
               fallbackSource={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
             />

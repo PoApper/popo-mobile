@@ -25,8 +25,8 @@ interface IEquipment {
   name: string;
   description: string;
   fee: number;
-  image_url?: string;
-  max_minutes: number;
+  imageUrl?: string;
+  maxMinutes: number;
 }
 
 interface IUser {
@@ -41,12 +41,12 @@ interface IEquipReservation {
   equipments: IEquipment[];
   date: string;
   description: string;
-  start_time: string;
-  end_time: string;
+  startTime: string;
+  endTime: string;
   phone: string;
   status: string;
   title: string;
-  created_at: Date;
+  createdAt: Date;
 }
 
 type EquipmentReservationApplyScreenProps = {
@@ -165,8 +165,8 @@ const EquipmentReservationApplyScreen = ({
           return false;
         }
         return (
-          reservation.start_time < endTimeStr &&
-          startTimeStr < reservation.end_time
+          reservation.startTime < endTimeStr &&
+          startTimeStr < reservation.endTime
         );
       });
 
@@ -322,8 +322,8 @@ const EquipmentReservationApplyScreen = ({
                 title: title,
                 description: desc,
                 date: dateStr,
-                start_time: startTimeStr,
-                end_time: endTimeStr,
+                startTime: startTimeStr,
+                endTime: endTimeStr,
               });
 
               Alert.alert('성공', '예약이 성공적으로 생성되었습니다.', [

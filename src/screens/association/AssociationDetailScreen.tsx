@@ -33,12 +33,12 @@ interface AssociationItem {
   location: string;
   representative: string;
   contact: string;
-  image_url: string;
+  imageUrl: string;
   views: number;
-  homepage_url: string;
-  facebook_url: string;
-  instagram_url: string;
-  youtube_url: string;
+  homepageUrl: string;
+  facebookUrl: string;
+  instagramUrl: string;
+  youtubeUrl: string;
 }
 
 const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({
@@ -112,7 +112,7 @@ const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({
           <>
             <View style={styles.imageContainer}>
               <Image
-                source={{uri: associationData.image_url}}
+                source={{uri: associationData.imageUrl}}
                 style={styles.associationImage}
                 resizeMode="contain"
               />
@@ -173,58 +173,58 @@ const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({
 
               <View style={[styles.infoSection, {borderColor}]}>
                 <View style={styles.socialLinks}>
-                  {associationData.homepage_url != 'null' &&
-                    associationData.homepage_url != '' &&
-                    associationData.homepage_url && (
+                  {associationData.homepageUrl != 'null' &&
+                    associationData.homepageUrl != '' &&
+                    associationData.homepageUrl && (
                       <TouchableOpacity
                         style={[
                           styles.socialButton,
                           {backgroundColor: '#000000'},
                         ]}
                         onPress={() =>
-                          handleLinkPress(associationData.homepage_url)
+                          handleLinkPress(associationData.homepageUrl)
                         }>
                         <Text style={styles.socialText}>홈페이지</Text>
                       </TouchableOpacity>
                     )}
-                  {associationData.facebook_url != 'null' &&
-                    associationData.facebook_url != '' &&
-                    associationData.facebook_url && (
+                  {associationData.facebookUrl != 'null' &&
+                    associationData.facebookUrl != '' &&
+                    associationData.facebookUrl && (
                       <TouchableOpacity
                         style={[
                           styles.socialButton,
                           {backgroundColor: '#1877F2'},
                         ]}
                         onPress={() =>
-                          handleLinkPress(associationData.facebook_url)
+                          handleLinkPress(associationData.facebookUrl)
                         }>
                         <Text style={styles.socialText}>Facebook</Text>
                       </TouchableOpacity>
                     )}
-                  {associationData.instagram_url != 'null' &&
-                    associationData.instagram_url != '' &&
-                    associationData.instagram_url && (
+                  {associationData.instagramUrl != 'null' &&
+                    associationData.instagramUrl != '' &&
+                    associationData.instagramUrl && (
                       <TouchableOpacity
                         style={[
                           styles.socialButton,
                           {backgroundColor: '#E4405F'},
                         ]}
                         onPress={() =>
-                          handleLinkPress(associationData.instagram_url)
+                          handleLinkPress(associationData.instagramUrl)
                         }>
                         <Text style={styles.socialText}>Instagram</Text>
                       </TouchableOpacity>
                     )}
-                  {associationData.youtube_url != 'null' &&
-                    associationData.youtube_url != '' &&
-                    associationData.youtube_url && (
+                  {associationData.youtubeUrl != 'null' &&
+                    associationData.youtubeUrl != '' &&
+                    associationData.youtubeUrl && (
                       <TouchableOpacity
                         style={[
                           styles.socialButton,
                           {backgroundColor: '#FF0000'},
                         ]}
                         onPress={() =>
-                          handleLinkPress(associationData.youtube_url)
+                          handleLinkPress(associationData.youtubeUrl)
                         }>
                         <Text style={styles.socialText}>YouTube</Text>
                       </TouchableOpacity>
