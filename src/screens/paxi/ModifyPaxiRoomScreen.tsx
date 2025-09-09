@@ -9,7 +9,7 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -209,10 +209,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        enableOnAndroid={true}
-        enableAutomaticScroll={true}
-        extraScrollHeight={20}
-        extraHeight={120}>
+        bottomOffset={120}>
         <View style={styles.formSection}>
           <View>
             <Text style={[styles.label, {color: textColor}]}>방 제목</Text>
