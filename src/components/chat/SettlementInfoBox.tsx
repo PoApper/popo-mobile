@@ -16,6 +16,7 @@ import {textColor} from '@styles/default';
 
 interface SettlementInfoBoxProps {
   isPaid: boolean | undefined;
+  isPaidEnd: boolean;
   settlementData: SettlementInfoData;
 }
 
@@ -33,6 +34,7 @@ async function completeSettlement(settlementData: SettlementInfoData) {
 
 const SettlementInfoBox = ({
   isPaid,
+  isPaidEnd,
   settlementData,
 }: SettlementInfoBoxProps) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -101,14 +103,14 @@ const SettlementInfoBox = ({
           )}
           {!isPaid && (
             <>
-              <Icon name={'warning'} size={20} color={'#e45b63'} />
+              <Icon name={isPaidEnd ? 'info' : 'warning'} size={20} color={isPaidEnd ? '#e4c45b' : '#e45b63'} />
               <Text
                 style={{
                   fontSize: 15,
                   fontWeight: '600',
-                  color: '#e45b63',
+                  color: isPaidEnd ? '#e4c45b' : '#e45b63',
                 }}>
-                정산이 아직 완료되지 않았습니다.
+                  {isPaidEnd ? '정산이 완료되지 않고 종료되었습니다.' : '정산이 아직 완료되지 않았습니다.'}
               </Text>
             </>
           )}
@@ -188,7 +190,7 @@ const SettlementInfoBox = ({
                 </TouchableOpacity>
               </View>
             </View>
-            {!isPaid && (
+            {!isPaid && !isPaidEnd && (
               <>
                 <Text style={styles.warnText}>
                   꼭! 송금 후 완료 버튼을 눌러 주세요!
@@ -201,6 +203,13 @@ const SettlementInfoBox = ({
                   onPress={settlementSendAlert}>
                   <Text style={styles.sendBtnText}>송금 완료</Text>
                 </TouchableOpacity>
+              </>
+            )}
+            {!isPaid && isPaidEnd && (
+              <>
+                <Text style={[styles.warnText, {color: '#e4c45b'}]}>
+                  정산이 종료되어 송금 완료 메시지를 전송할 수 없습니다.
+                </Text>
               </>
             )}
           </View>
