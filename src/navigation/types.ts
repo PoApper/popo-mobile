@@ -1,5 +1,5 @@
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RouteProp} from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
 
 export type RootStackParamList = AuthStackParamList &
   MainTabParamList &
@@ -19,7 +19,9 @@ export type AuthStackParamList = {
 export type MainTabParamList = {
   Home: undefined;
   Paxi: undefined;
-  MyReservation: undefined;
+  MyReservation: {
+    prevTab: string;
+  };
   MyInfo: {
     navigation: NativeStackNavigationProp<RootStackParamList>;
     route: RouteProp<MainTabParamList, 'MyInfo'>;
@@ -73,6 +75,7 @@ export type OtherStackParamList = {
     userId?: string;
     userData?: any;
     tab?: string;
+    prevTab: string;
   };
   Chat: {
     roomUuid: string;
@@ -97,9 +100,6 @@ export type OtherStackParamList = {
   EquipmentReservation: undefined;
   EquipmentReservationApply: {
     association: string;
-  };
-  Reservation: {
-    selectedTab?: string;
   };
   About: undefined;
 };
