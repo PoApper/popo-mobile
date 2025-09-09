@@ -41,6 +41,6 @@ module.exports = {
     ],
     // 끝에 둬야 함
     // 참고: https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/#react-native-community-cli
-    'react-native-reanimated/plugin',
+    'react-native-worklets/plugin',
   ],
 };
