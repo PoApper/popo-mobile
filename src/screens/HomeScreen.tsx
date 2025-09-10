@@ -9,6 +9,7 @@ import {
   StatusBar,
   Linking,
   Alert,
+  Image,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -233,6 +234,22 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           </View>
         </View>
       </ScrollView>
+      {/* Floating error report button */}
+      <TouchableOpacity
+        style={styles.floatingButton}
+        activeOpacity={0.85}
+        onPress={() =>
+          Linking.openURL(
+            'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true',
+          )
+        }>
+        <Image
+          source={require('../../assets/siren.png')}
+          style={styles.floatingIcon}
+          resizeMode="contain"
+        />
+        <Text style={styles.floatingText}>오류 신고</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -282,6 +299,32 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 8,
     textAlign: 'center',
+  },
+  floatingButton: {
+    position: 'absolute',
+    right: 16,
+    bottom: 24,
+    backgroundColor: '#111827',
+    borderRadius: 24,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 6,
+  },
+  floatingIcon: {
+    width: 30,
+    height: 30,
+    marginRight: 8,
+  },
+  floatingText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 
