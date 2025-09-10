@@ -236,7 +236,14 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       </ScrollView>
       {/* Floating error report button */}
       <TouchableOpacity
-        style={styles.floatingButton}
+        style={[
+          styles.floatingButton,
+          {
+            backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF',
+            borderColor: isDarkMode ? '#374151' : '#E5E7EB',
+            borderWidth: 1,
+          },
+        ]}
         activeOpacity={0.85}
         onPress={() =>
           Linking.openURL(
@@ -248,7 +255,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           style={styles.floatingIcon}
           resizeMode="contain"
         />
-        <Text style={styles.floatingText}>오류 신고</Text>
+        <Text style={[styles.floatingText, {color: isDarkMode ? '#E5E7EB' : '#111827'}]}>오류 신고</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -304,7 +311,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 16,
     bottom: 24,
-    backgroundColor: '#111827',
     borderRadius: 24,
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -322,7 +328,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   floatingText: {
-    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '600',
   },
