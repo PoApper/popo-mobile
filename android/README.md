@@ -43,7 +43,7 @@ $ ./gradlew assembleRelease
 
 # AAB 빌드 (구글 플레이 제출용)
 $ ./gradlew bundleRelease
-$ cd /app/build/outputs/bundle/release
+$ cd app/build/outputs/bundle/release
 $ open .
 ```
 
