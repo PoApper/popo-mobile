@@ -38,6 +38,7 @@ const UserInfoModal = ({
   };
 
   const handleReport = async () => {
+    // TODO: 바로 신고하지 말고 신고 사유를 받는 모달 하나 띄우기
     const res = await paxi_api.post('/report', {
       targetRoomUuid: roomUuid,
       targetUserUuid: msgData.senderUuid,
@@ -123,10 +124,11 @@ const UserInfoModal = ({
                     styles.msgText,
                     {
                       backgroundColor: isDarkMode ? '#222' : '#eee',
-                      color: textColor(isDarkMode),
+                      color: msgData.isDeleted ? '#9b9b9b' : textColor(isDarkMode),
+                      fontStyle: msgData.isDeleted ? 'italic' : 'normal',
                     },
                   ]}>
-                  {msgData.message}
+                  {msgData.isDeleted ? '삭제된 메세지입니다.' : msgData.message}
                 </Text>
 
                 <View
