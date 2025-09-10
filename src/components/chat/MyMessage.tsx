@@ -32,7 +32,8 @@ const MyMessage = ({message, handleMyMsgClick}: MyMessageProps) => {
         {moment(message.createdAt).format('HH:mm')}
       </Text>
       <TouchableOpacity
-        onLongPress={() => handleMyMsgClick(message)}
+        onLongPress={() => !message.isDeleted && handleMyMsgClick(message)}
+        disabled= {message.isDeleted}
         style={[
           styles.messageBubble,
           {

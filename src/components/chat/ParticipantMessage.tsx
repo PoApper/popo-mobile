@@ -25,7 +25,9 @@ const ParticipantMessage = ({
 
   return (
     <View style={styles.messageContainer}>
-      <TouchableOpacity onPress={() => handleUserClick(message)}>
+      <TouchableOpacity
+        onPress={() => !message.isDeleted && handleUserClick(message)}
+        disabled={message.isDeleted}>
         <Image
           source={require('../../../assets/baby_phonix.png')}
           style={[
