@@ -28,6 +28,16 @@ $ ./gradlew assembleDebug --no-daemon
 $ npx react-native start --reset-cache
 ```
 
+```bash
+# 의존성 재설치
+$ rm -rf node_modules && npm install
+```
+
+## 실행
+```bash
+$ npm run android
+```
+
 ### Build
 
 `android/app` 경로에 아래 두 파일이 있는지 확인합니다.
