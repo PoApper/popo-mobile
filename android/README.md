@@ -34,6 +34,7 @@ $ rm -rf node_modules && npm install
 ```
 
 ## 실행
+
 ```bash
 $ npm run android
 ```

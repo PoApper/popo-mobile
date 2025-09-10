@@ -8,6 +8,7 @@ $ pod install
 ```
 
 ## 실행
+
 ```bash
 $ npm run ios
 ```
