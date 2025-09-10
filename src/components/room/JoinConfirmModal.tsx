@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import moment from 'moment';
 
-import {ChatRoomInfo, UserData} from '@interfaces/paxi';
+import {ChatRoomInfo} from '@interfaces/paxi';
 
 type Props = {
   visible: boolean;
@@ -19,7 +19,12 @@ type Props = {
   onConfirm: () => void;
 };
 
-const JoinConfirmModal: React.FC<Props> = ({visible, room, onClose, onConfirm}) => {
+const JoinConfirmModal: React.FC<Props> = ({
+  visible,
+  room,
+  onClose,
+  onConfirm,
+}) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const C = {
@@ -31,19 +36,32 @@ const JoinConfirmModal: React.FC<Props> = ({visible, room, onClose, onConfirm}) 
     primary: '#111827',
   };
 
-  const participantPreview = (room.roomUsers || []).slice(0, 3);
-  const remain = Math.max((room.roomUsers || []).length - participantPreview.length, 0);
-
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={[styles.overlay, {backgroundColor: C.bg}]}> 
-        <View style={[styles.card, {backgroundColor: C.card, borderColor: C.border}]}> 
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}>
+      <View style={[styles.overlay, {backgroundColor: C.bg}]}>
+        <View
+          style={[
+            styles.card,
+            {backgroundColor: C.card, borderColor: C.border},
+          ]}>
           {/* Header: category + participant chip */}
           <View style={styles.headerRow}>
-            <Text style={[styles.category, {color: C.subText}]}> 
+            <Text style={[styles.category, {color: C.subText}]}>
               {`${room.title}`}
             </Text>
-            <View style={[styles.participantChip, {backgroundColor: isDarkMode ? 'rgba(250,87,33,0.18)' : '#FFF4E6'}]}> 
+            <View
+              style={[
+                styles.participantChip,
+                {
+                  backgroundColor: isDarkMode
+                    ? 'rgba(250,87,33,0.18)'
+                    : '#FFF4E6',
+                },
+              ]}>
               <Image
                 source={require('../../../assets/baby_phonix.png')}
                 style={{width: 16, height: 16, marginRight: 4}}
@@ -58,15 +76,21 @@ const JoinConfirmModal: React.FC<Props> = ({visible, room, onClose, onConfirm}) 
           {/* Route */}
           <View style={styles.routeLabelsRow}>
             <View style={styles.leftCol}>
-              <Text style={[styles.routeLabel, {color: C.subText}]}>출발지</Text>
+              <Text style={[styles.routeLabel, {color: C.subText}]}>
+                출발지
+              </Text>
             </View>
             <View style={styles.rightCol}>
-              <Text style={[styles.routeLabel, {color: C.subText}]}>도착지</Text>
+              <Text style={[styles.routeLabel, {color: C.subText}]}>
+                도착지
+              </Text>
             </View>
           </View>
           <View style={styles.routeRow}>
             <View style={styles.leftCol}>
-              <Text style={[styles.routeText, {color: C.text}]} numberOfLines={1}>
+              <Text
+                style={[styles.routeText, {color: C.text}]}
+                numberOfLines={1}>
                 {room.departureLocation}
               </Text>
             </View>
@@ -74,28 +98,36 @@ const JoinConfirmModal: React.FC<Props> = ({visible, room, onClose, onConfirm}) 
               <Text style={[styles.arrow, {color: C.subText}]}>›</Text>
             </View>
             <View style={styles.rightCol}>
-              <Text style={[styles.routeText, {color: C.text}]} numberOfLines={1}>
+              <Text
+                style={[styles.routeText, {color: C.text}]}
+                numberOfLines={1}>
                 {room.destinationLocation}
               </Text>
             </View>
           </View>
 
           {/* Date */}
-          <Text style={[styles.dateText, {color: C.subText}]}> 
+          <Text style={[styles.dateText, {color: C.subText}]}>
             {moment(room.departureTime).format('M월 D일 HH시 mm분 출발')}
           </Text>
 
           {/* Description */}
           {!!room.description && (
-            <Text style={[styles.desc, {color: C.text}]} numberOfLines={3}>{room.description}</Text>
+            <Text style={[styles.desc, {color: C.text}]} numberOfLines={3}>
+              {room.description}
+            </Text>
           )}
 
           {/* Actions */}
           <View style={styles.actions}>
-            <TouchableOpacity style={[styles.btn, {backgroundColor: C.border}]} onPress={onClose}>
+            <TouchableOpacity
+              style={[styles.btn, {backgroundColor: C.border}]}
+              onPress={onClose}>
               <Text style={{color: C.text}}>취소</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.btn, {backgroundColor: C.primary}]} onPress={onConfirm}>
+            <TouchableOpacity
+              style={[styles.btn, {backgroundColor: C.primary}]}
+              onPress={onConfirm}>
               <Text style={{color: '#FFFFFF'}}>입장하기</Text>
             </TouchableOpacity>
           </View>
@@ -167,5 +199,3 @@ const styles = StyleSheet.create({
 });
 
 export default JoinConfirmModal;
-
-
