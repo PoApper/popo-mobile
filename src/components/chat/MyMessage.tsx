@@ -33,7 +33,7 @@ const MyMessage = ({message, handleMyMsgClick}: MyMessageProps) => {
       </Text>
       <TouchableOpacity
         onLongPress={() => !message.isDeleted && handleMyMsgClick(message)}
-        disabled= {message.isDeleted}
+        disabled={message.isDeleted}
         style={[
           styles.messageBubble,
           {

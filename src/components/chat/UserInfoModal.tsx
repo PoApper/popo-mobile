@@ -124,7 +124,9 @@ const UserInfoModal = ({
                     styles.msgText,
                     {
                       backgroundColor: isDarkMode ? '#222' : '#eee',
-                      color: msgData.isDeleted ? '#9b9b9b' : textColor(isDarkMode),
+                      color: msgData.isDeleted
+                        ? '#9b9b9b'
+                        : textColor(isDarkMode),
                       fontStyle: msgData.isDeleted ? 'italic' : 'normal',
                     },
                   ]}>
