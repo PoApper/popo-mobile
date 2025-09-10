@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   useColorScheme,
+  Image,
 } from 'react-native';
 import moment from 'moment';
 
@@ -37,37 +38,59 @@ const JoinConfirmModal: React.FC<Props> = ({visible, room, onClose, onConfirm}) 
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <View style={[styles.overlay, {backgroundColor: C.bg}]}> 
         <View style={[styles.card, {backgroundColor: C.card, borderColor: C.border}]}> 
-          <Text style={[styles.title, {color: C.text}]} numberOfLines={1}>{room.title}</Text>
-
-          <View style={styles.routeRow}>
-            <Text style={[styles.routeText, {color: C.text}]} numberOfLines={1}>{room.departureLocation}</Text>
-            <Text style={[styles.arrow, {color: C.subText}]}>›</Text>
-            <Text style={[styles.routeText, {color: C.text}]} numberOfLines={1}>{room.destinationLocation}</Text>
+          {/* Header: category + participant chip */}
+          <View style={styles.headerRow}>
+            <Text style={[styles.category, {color: C.subText}]}> 
+              {`${room.title}`}
+            </Text>
+            <View style={[styles.participantChip, {backgroundColor: isDarkMode ? 'rgba(250,87,33,0.18)' : '#FFF4E6'}]}> 
+              <Image
+                source={require('../../../assets/baby_phonix.png')}
+                style={{width: 16, height: 16, marginRight: 4}}
+                resizeMode="contain"
+              />
+              <Text style={{color: '#FA5721', fontWeight: '700'}}>
+                {room.currentParticipant}/{room.maxParticipant}
+              </Text>
+            </View>
           </View>
 
+          {/* Route */}
+          <View style={styles.routeLabelsRow}>
+            <View style={styles.leftCol}>
+              <Text style={[styles.routeLabel, {color: C.subText}]}>출발지</Text>
+            </View>
+            <View style={styles.rightCol}>
+              <Text style={[styles.routeLabel, {color: C.subText}]}>도착지</Text>
+            </View>
+          </View>
+          <View style={styles.routeRow}>
+            <View style={styles.leftCol}>
+              <Text style={[styles.routeText, {color: C.text}]} numberOfLines={1}>
+                {room.departureLocation}
+              </Text>
+            </View>
+            <View style={styles.arrowOverlay}>
+              <Text style={[styles.arrow, {color: C.subText}]}>›</Text>
+            </View>
+            <View style={styles.rightCol}>
+              <Text style={[styles.routeText, {color: C.text}]} numberOfLines={1}>
+                {room.destinationLocation}
+              </Text>
+            </View>
+          </View>
+
+          {/* Date */}
           <Text style={[styles.dateText, {color: C.subText}]}> 
-            {moment(room.departureTime).format('YYYY년 MM월 DD일 HH시 mm분 출발')}
+            {moment(room.departureTime).format('M월 D일 HH시 mm분 출발')}
           </Text>
 
+          {/* Description */}
           {!!room.description && (
-            <Text style={[styles.desc, {color: C.subText}]} numberOfLines={3}>{room.description}</Text>
+            <Text style={[styles.desc, {color: C.text}]} numberOfLines={3}>{room.description}</Text>
           )}
 
-          <View style={[styles.infoRow, {borderColor: C.border}]}> 
-            <Text style={{color: C.text, fontWeight: '600'}}>인원</Text>
-            <Text style={{color: C.text}}>
-              {room.currentParticipant}/{room.maxParticipant}
-            </Text>
-          </View>
-
-          <View style={[styles.infoRow, {borderColor: C.border}]}> 
-            <Text style={{color: C.text, fontWeight: '600'}}>참여자</Text>
-            <Text style={{color: C.subText}} numberOfLines={1}>
-              {participantPreview.map((u: UserData) => u.nickname).join(', ')}
-              {remain > 0 ? ` 외 ${remain}명` : ''}
-            </Text>
-          </View>
-
+          {/* Actions */}
           <View style={styles.actions}>
             <TouchableOpacity style={[styles.btn, {backgroundColor: C.border}]} onPress={onClose}>
               <Text style={{color: C.text}}>취소</Text>
@@ -95,29 +118,41 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 18,
   },
-  title: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 8,
-  },
-  routeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    marginBottom: 8,
-  },
-  arrow: {fontSize: 18},
-  routeText: {fontSize: 16, fontWeight: '600'},
-  dateText: {fontSize: 13, marginBottom: 8},
-  desc: {fontSize: 13, marginBottom: 12},
-  infoRow: {
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderTopWidth: 1,
+    marginBottom: 12,
   },
+  category: {fontSize: 12, fontWeight: '600'},
+  participantChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  routeLabelsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  routeLabel: {fontSize: 11, fontWeight: '600'},
+  routeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 6,
+    position: 'relative',
+  },
+  arrow: {fontSize: 18},
+  arrowOverlay: {position: 'absolute', left: 0, right: 0, alignItems: 'center'},
+  leftCol: {flex: 1, alignItems: 'center'},
+  rightCol: {flex: 1, alignItems: 'center'},
+  routeText: {fontSize: 20, fontWeight: '800'},
+  dateText: {fontSize: 12, marginBottom: 10, textAlign: 'center'},
+  desc: {fontSize: 12, marginBottom: 14},
   actions: {
     flexDirection: 'row',
     gap: 10,
