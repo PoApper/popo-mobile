@@ -255,7 +255,13 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           style={styles.floatingIcon}
           resizeMode="contain"
         />
-        <Text style={[styles.floatingText, {color: isDarkMode ? '#E5E7EB' : '#111827'}]}>오류 신고</Text>
+        <Text
+          style={[
+            styles.floatingText,
+            {color: isDarkMode ? '#E5E7EB' : '#111827'},
+          ]}>
+          오류 신고
+        </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
