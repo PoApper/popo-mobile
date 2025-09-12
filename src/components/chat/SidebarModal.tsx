@@ -114,6 +114,7 @@ SidebarModalProps) => {
   };
 
   const handleSettlementDeletePress = () => {
+    // TODO: '정산 삭제' 보다는 '정산 취소' 가 더 나은 표현일 듯
     Alert.alert('정산 삭제', '정산 요청을 삭제하시겠습니까?', [
       {text: '취소', style: 'cancel'},
       {
