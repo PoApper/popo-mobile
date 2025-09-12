@@ -7,6 +7,7 @@ import {
   StyleSheet,
   useColorScheme,
   Image,
+  Pressable,
 } from 'react-native';
 import moment from 'moment';
 
@@ -42,12 +43,15 @@ const JoinConfirmModal: React.FC<Props> = ({
       transparent
       animationType="fade"
       onRequestClose={onClose}>
-      <View style={[styles.overlay, {backgroundColor: C.bg}]}>
+      <Pressable
+        style={[styles.overlay, {backgroundColor: C.bg}]}
+        onPress={onClose}>
         <View
           style={[
             styles.card,
             {backgroundColor: C.card, borderColor: C.border},
-          ]}>
+          ]}
+          onStartShouldSetResponder={() => true}>
           {/* Header: category + participant chip */}
           <View style={styles.headerRow}>
             <Text style={[styles.category, {color: C.subText}]}>
@@ -132,7 +136,7 @@ const JoinConfirmModal: React.FC<Props> = ({
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </Pressable>
     </Modal>
   );
 };
