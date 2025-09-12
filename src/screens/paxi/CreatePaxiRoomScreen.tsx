@@ -268,25 +268,26 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             </View>
 
             {departureName &&
-            arrivalName &&
-            !isDepartureCustom &&
-            !isArrivalCustom &&
-            isDepartureInPaxiLocations &&
-            isArrivalInPaxiLocations && (
-              <View
-                style={[
-                  styles.infoChip,
-                  {
-                    backgroundColor: isDarkMode ? '#1B1C1F' : '#F4F5F6',
-                    borderColor: C.border,
-                  },
-                ]}>
-                <Text style={{color: C.text, fontSize: 13, fontWeight: '600'}}>
-                  거리 {getPaxiDistanceInfo(departureName, arrivalName)} · 예상{' '}
-                  {getPaxiDurationInfo(departureName, arrivalName)}
-                </Text>
-              </View>
-            )}
+              arrivalName &&
+              !isDepartureCustom &&
+              !isArrivalCustom &&
+              isDepartureInPaxiLocations &&
+              isArrivalInPaxiLocations && (
+                <View
+                  style={[
+                    styles.infoChip,
+                    {
+                      backgroundColor: isDarkMode ? '#1B1C1F' : '#F4F5F6',
+                      borderColor: C.border,
+                    },
+                  ]}>
+                  <Text
+                    style={{color: C.text, fontSize: 13, fontWeight: '600'}}>
+                    거리 {getPaxiDistanceInfo(departureName, arrivalName)} ·
+                    예상 {getPaxiDurationInfo(departureName, arrivalName)}
+                  </Text>
+                </View>
+              )}
           </View>
 
           {/* 날짜/시간 */}
