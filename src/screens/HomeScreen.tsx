@@ -9,6 +9,7 @@ import {
   StatusBar,
   Linking,
   Alert,
+  Image,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -233,6 +234,35 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           </View>
         </View>
       </ScrollView>
+      {/* Floating error report button */}
+      <TouchableOpacity
+        style={[
+          styles.floatingButton,
+          {
+            backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF',
+            borderColor: isDarkMode ? '#374151' : '#E5E7EB',
+            borderWidth: 1,
+          },
+        ]}
+        activeOpacity={0.85}
+        onPress={() =>
+          Linking.openURL(
+            'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true',
+          )
+        }>
+        <Image
+          source={require('../../assets/siren.png')}
+          style={styles.floatingIcon}
+          resizeMode="contain"
+        />
+        <Text
+          style={[
+            styles.floatingText,
+            {color: isDarkMode ? '#E5E7EB' : '#111827'},
+          ]}>
+          오류 제보
+        </Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -282,6 +312,30 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 8,
     textAlign: 'center',
+  },
+  floatingButton: {
+    position: 'absolute',
+    right: 16,
+    bottom: 24,
+    borderRadius: 24,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 6,
+  },
+  floatingIcon: {
+    width: 30,
+    height: 30,
+    marginRight: 8,
+  },
+  floatingText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 
