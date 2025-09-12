@@ -30,6 +30,7 @@ interface DropdownMenuProps {
   options: Option[];
   selected: string;
   onSelect: (selectedOption: string) => void;
+  onCustomModeChange: (isCustom: boolean) => void;
 }
 
 const CUSTOM_INPUT_ITEM = {name: '직접 입력'};
@@ -39,6 +40,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   options,
   selected,
   onSelect,
+  onCustomModeChange,
 }: DropdownMenuProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [visible, setVisible] = useState(false);
@@ -105,6 +107,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
               } else {
                 // 입력 비워지면 입력 모드 종료 + 드롭다운 트리거 복귀
                 setCustomMode(false);
+                onCustomModeChange(false);
                 onSelect('');
               }
             }}
@@ -113,6 +116,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             onSubmitEditing={() => {
               if (!selected || selected.trim().length === 0) {
                 setCustomMode(false);
+                onCustomModeChange(false);
               }
             }}
           />
@@ -121,6 +125,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
               <TouchableOpacity
                 onPress={() => {
                   setCustomMode(false);
+                  onCustomModeChange(false);
                   onSelect('');
                 }}
                 style={styles.iconTouch}>
@@ -191,9 +196,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                           onSelect('');
                           setVisible(false);
                           setCustomMode(true);
+                          onCustomModeChange(true);
                           setTimeout(() => inputRef.current?.focus(), 0);
                         } else {
                           onSelect(item.name);
+                          onCustomModeChange(false);
                           setVisible(false);
                         }
                       }}>
