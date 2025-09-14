@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "lint": "eslint . --fix --quiet",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "pc": "pre-commit run --all-files"
   },
   "dependencies": {
     "@notifee/react-native": "^9.1.8",
