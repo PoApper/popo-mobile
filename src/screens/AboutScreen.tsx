@@ -84,11 +84,16 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
         </View>
 
         <View
-          style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}> 
-          <Text style={[styles.sectionTitle, {color: textColor}]}>버전 정보</Text>
-          <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>앱 버전: {appVersion}</Text>
-          <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>빌드 번호: {buildNumber}</Text>
-          
+          style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
+          <Text style={[styles.sectionTitle, {color: textColor}]}>
+            버전 정보
+          </Text>
+          <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
+            앱 버전: {appVersion}
+          </Text>
+          <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
+            빌드 번호: {buildNumber}
+          </Text>
         </View>
 
         {/* 앱 */}
