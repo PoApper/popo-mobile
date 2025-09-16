@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useCallback} from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,11 +12,11 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '@navigation/types';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
+import { RootStackParamList } from '@navigation/types';
 import PoPoAxios from '../../utils/api';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
@@ -288,16 +288,16 @@ const EquipmentReservationApplyScreen = ({
       `예약 장비: ${selectedEquipments
         .map(e => e.name)
         .join(', ')}\n예약 날짜: ${formatDate(
-        date,
-      )}\n예약 시간: ${startTime.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      })} - ${endTime.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      })}\n\n예약하시겠습니까?`,
+          date,
+        )}\n예약 시간: ${startTime.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        })} - ${endTime.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        })}\n\n예약하시겠습니까?`,
       [
-        {text: '취소', style: 'cancel'},
+        { text: '취소', style: 'cancel' },
         {
           text: '예약하기',
           onPress: async () => {
@@ -363,7 +363,7 @@ const EquipmentReservationApplyScreen = ({
     setShowStartPicker(false);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
+      scrollViewRef.current?.scrollTo({ x: 0, y: 600, animated: true });
     }, 100);
   };
   const openStartPicker = () => {
@@ -373,7 +373,7 @@ const EquipmentReservationApplyScreen = ({
     setShowStartPicker(true);
     setShowEndPicker(false);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
+      scrollViewRef.current?.scrollTo({ x: 0, y: 600, animated: true });
     }, 100);
   };
   const openEndPicker = () => {
@@ -383,7 +383,7 @@ const EquipmentReservationApplyScreen = ({
     setShowStartPicker(false);
     setShowEndPicker(true);
     setTimeout(() => {
-      scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
+      scrollViewRef.current?.scrollTo({ x: 0, y: 600, animated: true });
     }, 100);
   };
 
@@ -408,7 +408,7 @@ const EquipmentReservationApplyScreen = ({
 
   // 장비 아이템 렌더 함수 메모이제이션
   const renderEquipmentItem = useCallback(
-    ({item}: {item: IEquipment}) => {
+    ({ item }: { item: IEquipment }) => {
       const selected = !!selectedEquipments.find(e => e.uuid === item.uuid);
       const isReserved = reservedEquipments.includes(item.uuid);
 
@@ -419,7 +419,7 @@ const EquipmentReservationApplyScreen = ({
           disabled={isReserved}
           style={[
             styles.equipmentItem,
-            {borderColor: isDarkMode ? '#3a3a3a' : '#F3F4F6'},
+            { borderColor: isDarkMode ? '#3a3a3a' : '#F3F4F6' },
             isReserved && styles.disabledEquipmentItem,
             isReserved && {
               backgroundColor: isDarkMode ? '#2a2a2a' : '#F3F4F6',
@@ -431,15 +431,15 @@ const EquipmentReservationApplyScreen = ({
           <Text
             style={[
               styles.equipmentName,
-              {color: textColor},
+              { color: textColor },
               isReserved && styles.reservedEquipmentName,
-              isReserved && {color: subTextColor},
+              isReserved && { color: subTextColor },
             ]}>
             {removeEmoji(item.name)}
           </Text>
           {selected && <Text style={styles.checkIcon}>✔</Text>}
           {isReserved && !selected && (
-            <Text style={[styles.reservedText, {color: subTextColor}]}>
+            <Text style={[styles.reservedText, { color: subTextColor }]}>
               (예약됨)
             </Text>
           )}
@@ -464,13 +464,13 @@ const EquipmentReservationApplyScreen = ({
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
+      <View style={[styles.header, { borderBottomColor: borderColor }]}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>
+        <Text style={[styles.headerTitle, { color: textColor }]}>
           장비 예약:{' '}
           {association === 'dormunion' ? '생활관자치회' : '동아리연합회'}
         </Text>
@@ -491,63 +491,63 @@ const EquipmentReservationApplyScreen = ({
               backgroundColor: noticeBackgroundColor,
             },
           ]}>
-          <Text style={[styles.noticeTitle, {color: textColor}]}>
+          <Text style={[styles.noticeTitle, { color: textColor }]}>
             📢 예약 공지사항
           </Text>
           {association === 'dormunion' ? (
             <View style={styles.noticeContent}>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 예약한 장비는 생활관자치회 사무실(생활관 4동)에서 수령하실 수
                 있습니다. 🏢️
               </Text>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 장비가 분실되거나 예약 시간을 초과할 경우, 차후 예약에 제한을 둘
                 수 있습니다. 🚨
               </Text>
             </View>
           ) : (
             <View style={styles.noticeContent}>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 <Text style={styles.noticeBold}>물품 대여 순서 :</Text> POPO
                 신청&입금 - 카카오톡 채널 입장 - 승인 - 대여&반납
               </Text>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 <Text style={styles.noticeBold}>예약비 입금 계좌 :</Text>{' '}
                 부산은행 1122244813601 (안강현)
               </Text>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 *입금자명은 예약자명과 동일하게 해주세요.
               </Text>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 예약금 납부 후, 카카오톡 채널에 입장하여 대여자명 / 대여일 /
                 대여품목 / 송금 화면 발송
               </Text>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 <Text style={styles.noticeBold}>카카오톡 채널 링크 :</Text>{' '}
                 동아리연합회 2025
               </Text>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 <Text style={styles.noticeBold}>예시</Text>
                 {'\n'}
                 정종민{'\n'}
                 3월 10일 월요일{'\n'}
                 메인스피커1 / 오디오 인터페이스 / 유선 보컬 마이크 1~3
               </Text>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 <Text style={styles.noticeBold}>대여/반납 시간 :</Text> 월 ~ 금
                 / 12:30 ~ 13:30
               </Text>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 *그 외 시간에 대여와 반납은 어렵습니다.
               </Text>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 <Text style={styles.noticeBold}>수령 장소 :</Text> 동아리연합회
                 사무실(학생회관 301호)
               </Text>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 장비 분실 및 반납 시간을 어길 시 책임을 물을 수 있습니다.
               </Text>
-              <Text style={[styles.noticeText, {color: textColor}]}>
+              <Text style={[styles.noticeText, { color: textColor }]}>
                 <Text style={styles.noticeBold}>문의 :</Text> (운영관리부장
                 장현웅) 010-5917-8295
               </Text>
@@ -556,7 +556,7 @@ const EquipmentReservationApplyScreen = ({
         </View>
 
         <View style={styles.formSection}>
-          <Text style={[styles.label, {color: textColor}]}>
+          <Text style={[styles.label, { color: textColor }]}>
             사용자 <Text style={styles.requiredText}>*</Text>
           </Text>
           <View style={styles.userInfoContainer}>
@@ -579,7 +579,7 @@ const EquipmentReservationApplyScreen = ({
               />
             )}
           </View>
-          <Text style={[styles.label, {color: textColor}]}>
+          <Text style={[styles.label, { color: textColor }]}>
             전화번호 <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
@@ -597,7 +597,7 @@ const EquipmentReservationApplyScreen = ({
             keyboardType="phone-pad"
             maxLength={13}
           />
-          <Text style={[styles.label, {color: textColor}]}>
+          <Text style={[styles.label, { color: textColor }]}>
             예약 제목 <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
@@ -613,7 +613,7 @@ const EquipmentReservationApplyScreen = ({
             placeholder="예약 제목을 입력하세요"
             placeholderTextColor={subTextColor}
           />
-          <Text style={[styles.label, {color: textColor}]}>
+          <Text style={[styles.label, { color: textColor }]}>
             설명 <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
@@ -631,7 +631,7 @@ const EquipmentReservationApplyScreen = ({
             placeholderTextColor={subTextColor}
             multiline
           />
-          <Text style={[styles.label, {color: textColor}]}>
+          <Text style={[styles.label, { color: textColor }]}>
             장비 선택 <Text style={styles.requiredText}>*</Text>
           </Text>
           <TouchableOpacity
@@ -650,10 +650,10 @@ const EquipmentReservationApplyScreen = ({
                   key={equip.uuid}
                   style={[
                     styles.selectedEquipmentItem,
-                    {backgroundColor: isDarkMode ? '#3a3a3a' : '#E5E7EB'},
+                    { backgroundColor: isDarkMode ? '#3a3a3a' : '#E5E7EB' },
                   ]}>
                   <Text
-                    style={[styles.selectedEquipmentText, {color: textColor}]}>
+                    style={[styles.selectedEquipmentText, { color: textColor }]}>
                     {equip.name}
                   </Text>
                   <TouchableOpacity onPress={() => toggleEquipment(equip)}>
@@ -662,7 +662,7 @@ const EquipmentReservationApplyScreen = ({
                 </View>
               ))
             ) : (
-              <Text style={[styles.placeholderText, {color: subTextColor}]}>
+              <Text style={[styles.placeholderText, { color: subTextColor }]}>
                 예약할 장비들을 선택해주세요.
               </Text>
             )}
@@ -672,7 +672,7 @@ const EquipmentReservationApplyScreen = ({
           <View style={styles.dateTimePickerContainer}>
             <View style={styles.datePickerWrapper}>
               <Text
-                style={[styles.label, styles.pickerLabel, {color: textColor}]}>
+                style={[styles.label, styles.pickerLabel, { color: textColor }]}>
                 날짜 <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
@@ -684,14 +684,14 @@ const EquipmentReservationApplyScreen = ({
                     borderColor: showDatePicker ? '#FB5353' : borderColor,
                   },
                 ]}>
-                <Text style={[styles.datePickerText, {color: textColor}]}>
+                <Text style={[styles.datePickerText, { color: textColor }]}>
                   {formatDate(date)}
                 </Text>
               </TouchableOpacity>
             </View>
             <View style={styles.timePickerWrapper}>
               <Text
-                style={[styles.label, styles.pickerLabel, {color: textColor}]}>
+                style={[styles.label, styles.pickerLabel, { color: textColor }]}>
                 시작 시간 <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
@@ -703,7 +703,7 @@ const EquipmentReservationApplyScreen = ({
                     borderColor: showStartPicker ? '#FB5353' : borderColor,
                   },
                 ]}>
-                <Text style={[styles.datePickerText, {color: textColor}]}>
+                <Text style={[styles.datePickerText, { color: textColor }]}>
                   {startTime.toLocaleTimeString([], {
                     hour: '2-digit',
                     minute: '2-digit',
@@ -713,7 +713,7 @@ const EquipmentReservationApplyScreen = ({
             </View>
             <View style={styles.timePickerWrapper}>
               <Text
-                style={[styles.label, styles.pickerLabel, {color: textColor}]}>
+                style={[styles.label, styles.pickerLabel, { color: textColor }]}>
                 종료 시간 <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
@@ -725,7 +725,7 @@ const EquipmentReservationApplyScreen = ({
                     borderColor: showEndPicker ? '#FB5353' : borderColor,
                   },
                 ]}>
-                <Text style={[styles.datePickerText, {color: textColor}]}>
+                <Text style={[styles.datePickerText, { color: textColor }]}>
                   {endTime.toLocaleTimeString([], {
                     hour: '2-digit',
                     minute: '2-digit',
@@ -803,12 +803,12 @@ const EquipmentReservationApplyScreen = ({
         <View
           style={[
             styles.bottomButtonContainer,
-            {backgroundColor: backgroundStyle.backgroundColor},
+            { backgroundColor: backgroundStyle.backgroundColor },
           ]}>
           {selectedEquipments.length > 0 && (
             <View style={styles.totalPriceContainer}>
               <View style={styles.totalPriceWrapper}>
-                <Text style={[styles.totalPriceLabel, {color: textColor}]}>
+                <Text style={[styles.totalPriceLabel, { color: textColor }]}>
                   총 예약비
                 </Text>
                 <Text style={styles.totalPriceValue}>
@@ -837,12 +837,12 @@ const EquipmentReservationApplyScreen = ({
           <View
             style={[
               styles.popupContent,
-              {backgroundColor: backgroundStyle.backgroundColor},
+              { backgroundColor: backgroundStyle.backgroundColor },
             ]}>
             {/* 팝업 헤더 */}
             <View
-              style={[styles.popupHeader, {borderBottomColor: borderColor}]}>
-              <Text style={[styles.popupTitle, {color: textColor}]}>
+              style={[styles.popupHeader, { borderBottomColor: borderColor }]}>
+              <Text style={[styles.popupTitle, { color: textColor }]}>
                 장비 선택
               </Text>
               <TouchableOpacity
@@ -855,7 +855,7 @@ const EquipmentReservationApplyScreen = ({
             {/* 팝업 바디 */}
             <View style={styles.popupBody}>
               {/* 장비 개수 표시 */}
-              <Text style={[styles.popupInfoText, {color: textColor}]}>
+              <Text style={[styles.popupInfoText, { color: textColor }]}>
                 ⚒️ 선택 가능한 장비: {equipmentList.length}개
               </Text>
 
@@ -863,7 +863,7 @@ const EquipmentReservationApplyScreen = ({
               {loadingReservations && (
                 <View style={styles.loadingContainer}>
                   <ActivityIndicator size="small" color={subTextColor} />
-                  <Text style={[styles.loadingText, {color: subTextColor}]}>
+                  <Text style={[styles.loadingText, { color: subTextColor }]}>
                     예약 상태 확인 중...
                   </Text>
                 </View>
