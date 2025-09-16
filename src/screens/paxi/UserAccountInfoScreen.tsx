@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,20 +9,20 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useFocusEffect} from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useFocusEffect } from '@react-navigation/native';
 
-import {RootStackParamList} from '@navigation/types';
+import { RootStackParamList } from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import {PaxiUserMy} from '@interfaces/paxi';
+import { PaxiUserMy } from '@interfaces/paxi';
 
 type UserAccountInfoScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserAccountInfo'>;
 };
 
-const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
+const UserAccountInfoScreen = ({ navigation }: UserAccountInfoScreenProps) => {
   const [bankName, setBankName] = useState<string>('');
   const [accountNumber, setAccountNumber] = useState<string>('');
   const [accountHolderName, setAccountHolderName] = useState<string>('');
@@ -120,8 +120,7 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
       console.error('계좌 정보 저장 실패:', error);
       Alert.alert(
         '실패',
-        `계좌 정보 저장에 실패했습니다: ${
-          error.response?.data?.message || error.message
+        `계좌 정보 저장에 실패했습니다: ${error.response?.data?.message || error.message
         }`,
       );
     } finally {
@@ -135,13 +134,13 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
+      <View style={[styles.header, { borderBottomColor: borderColor }]}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>
+        <Text style={[styles.headerTitle, { color: textColor }]}>
           {existingData?.bankName ? '계좌 정보 수정' : '계좌 정보 등록'}
         </Text>
         <View style={styles.placeholderButton} />
@@ -160,8 +159,8 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
             </View>
           )}
 
-          <View style={{width: '100%', marginBottom: 8}}>
-            <Text style={[styles.titleText, {color: textColor}]}>은행명</Text>
+          <View style={{ width: '100%', marginBottom: 8 }}>
+            <Text style={[styles.titleText, { color: textColor }]}>은행명</Text>
             <TextInput
               style={[
                 styles.input,
@@ -179,8 +178,8 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
             />
           </View>
 
-          <View style={{width: '100%', marginBottom: 8}}>
-            <Text style={[styles.titleText, {color: textColor}]}>계좌번호</Text>
+          <View style={{ width: '100%', marginBottom: 8 }}>
+            <Text style={[styles.titleText, { color: textColor }]}>계좌번호</Text>
             <TextInput
               style={[
                 styles.input,
@@ -203,8 +202,8 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
             />
           </View>
 
-          <View style={{width: '100%', marginBottom: 8}}>
-            <Text style={[styles.titleText, {color: textColor}]}>계좌주명</Text>
+          <View style={{ width: '100%', marginBottom: 8 }}>
+            <Text style={[styles.titleText, { color: textColor }]}>계좌주명</Text>
             <TextInput
               style={[
                 styles.input,
@@ -226,7 +225,7 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
             <Text
               style={[
                 styles.infoText,
-                {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                { color: isDarkMode ? '#BBBBBB' : '#6B7280' },
               ]}>
               • 등록된 계좌 정보는 Paxi 정산 시 기본값으로 사용됩니다.{'\n'}•
               계좌 정보는 안전하게 암호화되어 저장됩니다.{'\n'}• 언제든지 이
@@ -239,7 +238,6 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
           style={[
             styles.saveButton,
             {
-              backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1',
               opacity: isLoading ? 0.6 : 1,
             },
           ]}
@@ -249,8 +247,8 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
             {isLoading
               ? '처리 중...'
               : isPaxiAccountInfoExist
-              ? '계좌 정보 수정'
-              : '계좌 정보 등록'}
+                ? '계좌 정보 수정'
+                : '계좌 정보 등록'}
           </Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
@@ -313,19 +311,20 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   saveButton: {
+    backgroundColor: '#222',
+    height: 48,
     borderRadius: 6,
     width: '90%',
-    marginLeft: '5%',
+    marginHorizontal: '5%',
     marginTop: 20,
-    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
   saveButtonText: {
-    fontSize: 13,
-    fontWeight: '500',
     fontFamily: 'Pretendard',
-    color: '#ffffff',
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
     textAlign: 'center',
   },
   existingInfoContainer: {
