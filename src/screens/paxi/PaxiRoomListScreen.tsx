@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,26 +11,26 @@ import {
   Alert,
   RefreshControl,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { RootStackParamList } from '@navigation/types';
+import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import api from '@utils/api';
-import { PAXI_LOCATIONS } from '@utils/locations';
-import { RoomDataType } from '@interfaces/paxi';
+import {PAXI_LOCATIONS} from '@utils/locations';
+import {RoomDataType} from '@interfaces/paxi';
 import DropdownFilter from '@components/room/DropdownFilter';
-import { RefreshButton } from '@components/room/RefreshButton';
+import {RefreshButton} from '@components/room/RefreshButton';
 import RoomFilterDatePicker from '@components/room/RoomFilterDatePicker';
-import { RoomListCard } from '@components/room/RoomListCard';
+import {RoomListCard} from '@components/room/RoomListCard';
 import moment from 'moment';
 
 type PaxiRoomListScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
-const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
+const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const [hideFullRoom, setHideFullRoom] = useState(true);
@@ -76,7 +76,7 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
         room =>
           !selectedDate ||
           moment(room.departureTime).format('YYYY-MM-DD') ===
-          moment(selectedDate).format('YYYY-MM-DD'),
+            moment(selectedDate).format('YYYY-MM-DD'),
       )
       .filter(
         room => !hideFullRoom || room.currentParticipant < room.maxParticipant,
@@ -174,7 +174,7 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
         <View
           style={[
             styles.checkbox,
-            { borderColor: isDarkMode ? '#555' : '#D0D0D0' },
+            {borderColor: isDarkMode ? '#555' : '#D0D0D0'},
             hideFullRoom && {
               backgroundColor: isDarkMode ? '#4F46E5' : 'black', // 다크모드에서 파란색 등으로
               borderColor: isDarkMode ? '#4F46E5' : 'black',
@@ -189,23 +189,23 @@ const PaxiRoomListScreen = ({ navigation }: PaxiRoomListScreenProps) => {
             />
           )}
         </View>
-        <Text style={{ fontSize: 15, color: textColor }}>마감된 방 숨기기</Text>
+        <Text style={{fontSize: 15, color: textColor}}>마감된 방 숨기기</Text>
       </TouchableOpacity>
 
       <FlatList
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         data={filteredRoomData}
         keyExtractor={item => item.uuid}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <RoomListCard
             roomUuid={item.uuid}
             userUuid={userUuid}
             navigation={navigation as any}
           />
         )}
-        contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
+        contentContainerStyle={{padding: 16, paddingBottom: 100}}
         ListEmptyComponent={() => (
-          <Text style={{ fontSize: 16, textAlign: 'center', color: textColor }}>
+          <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>
             현재 등록된 카풀이 없습니다.
           </Text>
         )}

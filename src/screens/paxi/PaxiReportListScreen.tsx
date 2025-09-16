@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   FlatList,
@@ -7,12 +7,12 @@ import {
   Alert,
   RefreshControl,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-import { OtherStackParamList } from '@navigation/types';
+import {OtherStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
-import ReportDataCard, { ReportData } from '@components/ReportDataCard';
+import ReportDataCard, {ReportData} from '@components/ReportDataCard';
 import CommonHeader from '@components/CommonHeader';
 import ReportProgressModal from '@components/ReportProgressModal';
 
@@ -20,7 +20,7 @@ type PaxiReportListScreenProps = {
   navigation: NativeStackNavigationProp<OtherStackParamList>;
 };
 
-const PaxiReportListScreen = ({ navigation }: PaxiReportListScreenProps) => {
+const PaxiReportListScreen = ({navigation}: PaxiReportListScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const [reportList, setReportList] = useState<ReportData[]>([]);
@@ -86,19 +86,19 @@ const PaxiReportListScreen = ({ navigation }: PaxiReportListScreenProps) => {
       />
 
       <FlatList
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         data={reportList}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <ReportDataCard
             reportData={item}
             isDarkMode={isDarkMode}
             setReport={setReport}
           />
         )}
-        contentContainerStyle={{ padding: 15 }}
+        contentContainerStyle={{padding: 15}}
         ListEmptyComponent={() => (
-          <Text style={{ fontSize: 16, textAlign: 'center', color: textColor }}>
+          <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>
             신고 내역이 없습니다.
           </Text>
         )}
