@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useMemo, useCallback} from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import {
   View,
   Text,
@@ -11,11 +11,11 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../navigation/types';
-import {RouteProp} from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigation/types';
+import { RouteProp } from '@react-navigation/native';
 import api from '../../utils/api';
 import CalendarKoreanLocales from '../../utils/calendar-locales';
 import LazyImage from '../../components/LazyImage';
@@ -55,7 +55,7 @@ const PlaceDetailReservationScreen = ({
   route,
 }: PlaceDetailReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const {placeId} = route.params;
+  const { placeId } = route.params;
   const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<string>('');
@@ -67,8 +67,8 @@ const PlaceDetailReservationScreen = ({
     () => ({
       [selectedDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')]: {
         selected: true,
-        selectedColor: '#FB5353',
-        selectedTextColor: 'white',
+        selectedColor: isDarkMode ? '#ddd' : 'black',
+        selectedTextColor: isDarkMode ? 'black' : 'white',
       },
     }),
     [selectedDate],
@@ -148,22 +148,22 @@ const PlaceDetailReservationScreen = ({
   const subTextColor = isDarkMode ? '#888888' : '#6B7280';
   const cardBackgroundColor = isDarkMode ? '#1A1A1A' : '#F3F3F3';
 
-  const renderReservationItem = ({item}: {item: Reservation}) => (
+  const renderReservationItem = ({ item }: { item: Reservation }) => (
     <View
-      style={[styles.reservationItem, {backgroundColor: cardBackgroundColor}]}>
+      style={[styles.reservationItem, { backgroundColor: cardBackgroundColor }]}>
       <View style={styles.reservationTimeContainer}>
-        <Text style={[styles.reservationTime, {color: textColor}]}>
+        <Text style={[styles.reservationTime, { color: textColor }]}>
           {convertTime(item.startTime)} - {convertTime(item.endTime)}
         </Text>
-        <Text style={[styles.reservationStatus, {color: '#FB5353'}]}>
+        <Text style={[styles.reservationStatus, { color: '#FB5353' }]}>
           {item.status}
         </Text>
       </View>
       <View style={styles.reservationDetailContainer}>
-        <Text style={[styles.reservationTitle, {color: textColor}]}>
+        <Text style={[styles.reservationTitle, { color: textColor }]}>
           {item.title}
         </Text>
-        <Text style={[styles.reservationUser, {color: subTextColor}]}>
+        <Text style={[styles.reservationUser, { color: subTextColor }]}>
           예약자: {item.booker.name}
         </Text>
       </View>
@@ -176,13 +176,13 @@ const PlaceDetailReservationScreen = ({
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View style={[styles.header, {borderBottomColor: borderColor}]}>
+      <View style={[styles.header, { borderBottomColor: borderColor }]}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+          <Text style={[styles.backButtonText, { color: textColor }]}>뒤로</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>장소 예약</Text>
+        <Text style={[styles.headerTitle, { color: textColor }]}>장소 예약</Text>
         <View style={styles.placeholderButton} />
       </View>
 
@@ -196,13 +196,13 @@ const PlaceDetailReservationScreen = ({
         ) : placeDetail ? (
           <>
             <View style={styles.infoSection}>
-              <Text style={[styles.placeName, {color: textColor}]}>
+              <Text style={[styles.placeName, { color: textColor }]}>
                 {placeDetail.name}
               </Text>
-              <Text style={[styles.placeLocation, {color: subTextColor}]}>
+              <Text style={[styles.placeLocation, { color: subTextColor }]}>
                 {placeDetail.location}
               </Text>
-              <Text style={[styles.placeDescription, {color: textColor}]}>
+              <Text style={[styles.placeDescription, { color: textColor }]}>
                 {placeDetail.description}
               </Text>
             </View>
@@ -212,7 +212,7 @@ const PlaceDetailReservationScreen = ({
               fallbackSource={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
             />
             <TouchableOpacity
-              style={[styles.reserveButton]}
+              style={styles.reserveButton}
               onPress={() => {
                 // 선택된 날짜가 과거인지 검증
                 const today = new Date();
@@ -273,9 +273,8 @@ const PlaceDetailReservationScreen = ({
                   backgroundColor: isDarkMode ? '#121212' : '#ffffff',
                   calendarBackground: isDarkMode ? '#121212' : '#ffffff',
                   textSectionTitleColor: textColor,
-                  selectedDayBackgroundColor: '#FB5353',
                   selectedDayTextColor: '#ffffff',
-                  todayTextColor: '#FB5353',
+                  todayTextColor: '#ff6868',
                   dayTextColor: textColor,
                   textDisabledColor: isDarkMode ? '#444444' : '#d9e1e8',
                   monthTextColor: textColor,
@@ -283,11 +282,12 @@ const PlaceDetailReservationScreen = ({
                   textDayFontSize: 16,
                   textMonthFontSize: 16,
                   textDayHeaderFontSize: 14,
+                  arrowColor: isDarkMode ? 'white' : 'black',
                 }}
               />
             </View>
             <View style={styles.reservationsContainer}>
-              <Text style={[styles.reservationsTitle, {color: textColor}]}>
+              <Text style={[styles.reservationsTitle, { color: textColor }]}>
                 예약 현황
               </Text>
               {isLoadingReservations ? (
@@ -303,7 +303,7 @@ const PlaceDetailReservationScreen = ({
                   scrollEnabled={false}
                 />
               ) : (
-                <Text style={[styles.noReservations, {color: subTextColor}]}>
+                <Text style={[styles.noReservations, { color: subTextColor }]}>
                   예약된 내역이 없습니다.
                 </Text>
               )}
@@ -373,11 +373,11 @@ const styles = StyleSheet.create({
   },
   reserveButton: {
     width: '100%',
+    backgroundColor: '#2a2a2a',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 24,
-    backgroundColor: '#FB5353',
   },
   reserveButtonText: {
     color: '#FFFFFF',
