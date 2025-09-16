@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,24 +10,24 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useFocusEffect } from '@react-navigation/native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useFocusEffect} from '@react-navigation/native';
 import axios from 'axios';
 
-import { RootStackParamList } from '@navigation/types';
+import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import Environment from '@utils/environment';
-import { reset_auth } from '@utils/reset';
+import {reset_auth} from '@utils/reset';
 import paxi_api from '@utils/paxi_api';
-import { PaxiUserMy } from '@interfaces/paxi';
+import {PaxiUserMy} from '@interfaces/paxi';
 
 type UserDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserDetail'>;
   // route: RouteProp<RootStackParamList, 'UserDetail'>;
 };
 
-const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
+const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(false);
   const [userDataState, setUserData] = useState<any>(null);
@@ -56,7 +56,7 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
       console.error('프로필 정보 조회 오류:', err);
       if (axios.isAxiosError(err) && err.response?.status === 401) {
         Alert.alert('인증 만료', '다시 로그인해주세요.', [
-          { text: '확인', onPress: () => navigation.navigate('Login') },
+          {text: '확인', onPress: () => navigation.navigate('Login')},
         ]);
       }
     }
@@ -113,23 +113,23 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
       />
       <ScrollView
         style={styles.container}
-        contentContainerStyle={{ flexGrow: 1 }}>
+        contentContainerStyle={{flexGrow: 1}}>
         <View
           style={[
             styles.profileCard,
-            { backgroundColor: cardBgColor, borderColor },
+            {backgroundColor: cardBgColor, borderColor},
           ]}>
           <View style={styles.profileHeader}>
             {userDataState?.profileImage ? (
               <Image
-                source={{ uri: userDataState?.profileImage }}
+                source={{uri: userDataState?.profileImage}}
                 style={styles.profileImage}
               />
             ) : (
               <View
                 style={[
                   styles.profileImagePlaceholder,
-                  { backgroundColor: '#4F46E5' },
+                  {backgroundColor: '#4F46E5'},
                 ]}>
                 <Text style={styles.profileImagePlaceholderText}>
                   {userDataState?.name?.substring(0, 1) ||
@@ -139,13 +139,13 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
               </View>
             )}
             <View style={styles.profileInfo}>
-              <Text style={[styles.userName, { color: textColor }]}>
+              <Text style={[styles.userName, {color: textColor}]}>
                 {userDataState?.name || '사용자'}
               </Text>
               <Text
                 style={[
                   styles.userEmail,
-                  { color: isDarkMode ? '#AAAAAA' : '#6B7280' },
+                  {color: isDarkMode ? '#AAAAAA' : '#6B7280'},
                 ]}>
                 {userDataState?.email || '이메일 없음'}
               </Text>
@@ -153,92 +153,92 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
           </View>
 
           <View style={styles.detailSection}>
-            <Text style={[styles.sectionTitle, { color: textColor }]}>
+            <Text style={[styles.sectionTitle, {color: textColor}]}>
               POPO 계정 정보
             </Text>
-            <View style={[styles.detailItem, { borderBottomColor: borderColor }]}>
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
               <Text
                 style={[
                   styles.detailLabel,
-                  { color: isDarkMode ? '#BBBBBB' : '#6B7280' },
+                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                 ]}>
                 회원 유형
               </Text>
-              <Text style={[styles.detailValue, { color: textColor }]}>
+              <Text style={[styles.detailValue, {color: textColor}]}>
                 {userDataState?.userType || '정보 없음'}
               </Text>
             </View>
 
-            <View style={[styles.detailItem, { borderBottomColor: borderColor }]}>
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
               <Text
                 style={[
                   styles.detailLabel,
-                  { color: isDarkMode ? '#BBBBBB' : '#6B7280' },
+                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                 ]}>
                 계정 상태
               </Text>
-              <Text style={[styles.detailValue, { color: textColor }]}>
+              <Text style={[styles.detailValue, {color: textColor}]}>
                 {userDataState?.userStatus || '정보 없음'}
               </Text>
             </View>
 
             <View
-              style={[styles.detailItem, { borderBottomColor: 'transparent' }]}>
+              style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
               <Text
                 style={[
                   styles.detailLabel,
-                  { color: isDarkMode ? '#BBBBBB' : '#6B7280' },
+                  {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                 ]}>
                 가입일
               </Text>
-              <Text style={[styles.detailValue, { color: textColor }]}>
+              <Text style={[styles.detailValue, {color: textColor}]}>
                 {userDataState?.createdAt
                   ? new Date(userDataState?.createdAt).toLocaleDateString(
-                    'ko-KR',
-                    {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    },
-                  )
+                      'ko-KR',
+                      {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      },
+                    )
                   : '정보 없음'}
               </Text>
             </View>
           </View>
 
           {isPaxiUser ? (
-            <View style={[styles.detailSection, { borderColor: 'transparent' }]}>
-              <Text style={[styles.sectionTitle, { color: textColor }]}>
+            <View style={[styles.detailSection, {borderColor: 'transparent'}]}>
+              <Text style={[styles.sectionTitle, {color: textColor}]}>
                 Paxi 정보
               </Text>
               <View
-                style={[styles.detailItem, { borderBottomColor: borderColor }]}>
+                style={[styles.detailItem, {borderBottomColor: borderColor}]}>
                 <Text
                   style={[
                     styles.detailLabel,
-                    { color: isDarkMode ? '#BBBBBB' : '#6B7280' },
+                    {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                   ]}>
                   닉네임
                 </Text>
-                <Text style={[styles.detailValue, { color: textColor }]}>
+                <Text style={[styles.detailValue, {color: textColor}]}>
                   {paxiUserData?.nickname || '정보 없음'}
                 </Text>
               </View>
 
               <View
-                style={[styles.detailItem, { borderBottomColor: borderColor }]}>
+                style={[styles.detailItem, {borderBottomColor: borderColor}]}>
                 <View style={styles.detailHeader}>
                   <Text
                     style={[
                       styles.detailLabel,
-                      { color: isDarkMode ? '#BBBBBB' : '#6B7280' },
+                      {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                     ]}>
                     등록 계좌
                   </Text>
                   <TouchableOpacity
                     style={[
                       styles.editButton,
-                      { backgroundColor: isDarkMode ? '#ddd' : 'black' },
+                      {backgroundColor: isDarkMode ? '#ddd' : 'black'},
                     ]}
                     onPress={() => {
                       navigation.navigate('UserAccountInfo');
@@ -248,7 +248,7 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <Text style={[styles.detailValue, { color: textColor }]}>
+                <Text style={[styles.detailValue, {color: textColor}]}>
                   {isPaxiAccountInfoExist
                     ? `${paxiUserData?.bankName} ${paxiUserData?.accountNumber} (${paxiUserData?.accountHolderName})`
                     : '정보 없음'}
@@ -256,24 +256,30 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
               </View>
 
               <View
-                style={[styles.detailItem, { borderBottomColor: 'transparent' }]}>
+                style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
                 <View style={styles.detailHeader}>
                   <Text
                     style={[
                       styles.detailLabel,
-                      { color: isDarkMode ? '#BBBBBB' : '#6B7280' },
+                      {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                     ]}>
                     신고 관리
                   </Text>
                   <TouchableOpacity
                     style={[
                       styles.editButton,
-                      { backgroundColor: isDarkMode ? '#ddd' : 'black' },
+                      {backgroundColor: isDarkMode ? '#ddd' : 'black'},
                     ]}
                     onPress={() => {
                       navigation.navigate('PaxiReportList');
                     }}>
-                    <Text style={[styles.editButtonText, { color: isDarkMode ? 'black' : 'white' }]}>내역 조회</Text>
+                    <Text
+                      style={[
+                        styles.editButtonText,
+                        {color: isDarkMode ? 'black' : 'white'},
+                      ]}>
+                      내역 조회
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -284,14 +290,14 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
         <TouchableOpacity
           style={[
             styles.buttonContainer,
-            { backgroundColor: isDarkMode ? '#444444' : '#DBDBDB' },
+            {backgroundColor: isDarkMode ? '#444444' : '#DBDBDB'},
           ]}
           onPress={handleLogout}
           disabled={isLoading}>
           <Text
             style={[
               styles.logoutButtonText,
-              { color: isDarkMode ? '#FFFFFF' : '#333333' },
+              {color: isDarkMode ? '#FFFFFF' : '#333333'},
             ]}>
             {isLoading ? '처리 중...' : '로그아웃'}
           </Text>
@@ -300,10 +306,10 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
         <TouchableOpacity
           style={[
             styles.buttonContainer,
-            { backgroundColor: isDarkMode ? '#DC2626' : '#EF4444' },
+            {backgroundColor: isDarkMode ? '#DC2626' : '#EF4444'},
           ]}
           onPress={() => navigation.navigate('Leave')}>
-          <Text style={[styles.leaveButtonText, { color: '#FFFFFF' }]}>
+          <Text style={[styles.leaveButtonText, {color: '#FFFFFF'}]}>
             회원 탈퇴
           </Text>
         </TouchableOpacity>
@@ -312,23 +318,23 @@ const UserDetailScreen = ({ navigation }: UserDetailScreenProps) => {
         <TouchableOpacity
           style={[
             styles.buttonContainer,
-            { backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1' },
+            {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
           ]}
           onPress={() => navigation.navigate('About')}>
-          <Text style={[styles.leaveButtonText, { color: '#FFFFFF' }]}>
+          <Text style={[styles.leaveButtonText, {color: '#FFFFFF'}]}>
             앱 정보 · 만든 사람들
           </Text>
         </TouchableOpacity>
 
         {/* 개발자 페이지 버튼 */}
         {!Environment.isProduction && (
-          <View style={{ marginBottom: 48, marginTop: 16 }}>
+          <View style={{marginBottom: 48, marginTop: 16}}>
             <TouchableOpacity
-              style={[styles.buttonContainer, { backgroundColor: '#4F46E5' }]}
+              style={[styles.buttonContainer, {backgroundColor: '#4F46E5'}]}
               onPress={() => navigation.navigate('Developer')}>
               <Text style={styles.developerButtonText}>개발자 페이지</Text>
             </TouchableOpacity>
-            <Text style={{ fontSize: 12, color: '#6B7280' }}>
+            <Text style={{fontSize: 12, color: '#6B7280'}}>
               개발자 페이지는 에뮬레이터와 Test Flight에서만 접근 가능합니다.
             </Text>
           </View>
@@ -349,7 +355,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 1,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 6,
