@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,14 +11,14 @@ import {
   Alert,
   RefreshControl,
 } from 'react-native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../navigation/types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigation/types';
 import axios from 'axios';
 import paxi_api from '../../utils/paxi_api';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import BanReasonModal from './BanReasonModal';
-import {MyRoomData, UserData} from '@interfaces/paxi';
+import { MyRoomData, UserData } from '@interfaces/paxi';
 
 interface TaxiChatListProps {
   navigation: NativeStackNavigationProp<
@@ -69,7 +69,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
       if (axios.isAxiosError(err)) {
         if (err.response?.status === 401) {
           Alert.alert('인증 만료', '다시 로그인해주세요.', [
-            {text: '확인', onPress: () => navigation.navigate('Login')},
+            { text: '확인', onPress: () => navigation.navigate('Login') },
           ]);
         } else {
           setError('예약 정보를 불러오는데 실패했습니다.');
@@ -104,7 +104,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   };
 
   const scrollToTop = () => {
-    listRef.current?.scrollToOffset({offset: 0, animated: true});
+    listRef.current?.scrollToOffset({ offset: 0, animated: true });
   };
 
   useEffect(() => {
@@ -166,7 +166,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
     return statusMap.get(status) || null;
   };
 
-  const renderReservationItem = ({item}: {item: MyRoomData}) => (
+  const renderReservationItem = ({ item }: { item: MyRoomData }) => (
     <TouchableOpacity
       style={{
         paddingVertical: 12,
@@ -177,20 +177,20 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         borderBottomColor: borderColor,
       }}
       onPress={() => handleRoomClick(item)}>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Text
-          style={[styles.reservationTitle, {color: textColor}]}
+          style={[styles.reservationTitle, { color: textColor }]}
           numberOfLines={1}
           ellipsizeMode="tail">
           {item.title}
         </Text>
         <Text
-          style={[styles.fromToText, {color: textColor}]}
+          style={[styles.fromToText, { color: textColor }]}
           numberOfLines={1}
           ellipsizeMode="tail">
           {`${item.departureLocation} → ${item.destinationLocation}`}
         </Text>
-        <Text style={[styles.detailValue, {color: textColor}]}>
+        <Text style={[styles.detailValue, { color: textColor }]}>
           {moment(item.departureTime).format('YYYY-MM-DD HH:mm')} 출발
         </Text>
       </View>
@@ -205,9 +205,9 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
             <View
               style={[
                 styles.statusIconContainer,
-                {backgroundColor: colors.backgroundColor},
+                { backgroundColor: colors.backgroundColor },
               ]}>
-              <Text style={[styles.statusTextStyle, {color: colors.textColor}]}>
+              <Text style={[styles.statusTextStyle, { color: colors.textColor }]}>
                 {userStatusConfig.text}
               </Text>
             </View>
@@ -227,9 +227,9 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           <View
             style={[
               styles.statusIconContainer,
-              {backgroundColor: colors.backgroundColor},
+              { backgroundColor: colors.backgroundColor },
             ]}>
-            <Text style={[styles.statusTextStyle, {color: colors.textColor}]}>
+            <Text style={[styles.statusTextStyle, { color: colors.textColor }]}>
               {statusConfig.text}
             </Text>
           </View>
@@ -278,7 +278,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4F46E5" />
-        <Text style={[styles.loadingText, {color: textColor}]}>
+        <Text style={[styles.loadingText, { color: textColor }]}>
           예약 정보를 불러오는 중...
         </Text>
       </View>
@@ -288,7 +288,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   if (error) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={[styles.errorText, {color: textColor}]}>{error}</Text>
+        <Text style={[styles.errorText, { color: textColor }]}>{error}</Text>
         <TouchableOpacity
           style={styles.retryButton}
           onPress={fetchReservations}>
@@ -306,7 +306,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           style={styles.emptyImage}
           resizeMode="contain"
         />
-        <Text style={[styles.emptyText, {color: textColor}]}>
+        <Text style={[styles.emptyText, { color: textColor }]}>
           택시 카풀 내역이 없습니다.
         </Text>
       </View>
@@ -314,7 +314,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   }
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <FlatList
         ref={listRef}
         data={chatRooms}
@@ -329,11 +329,11 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           <RefreshControl
             refreshing={refreshing || false}
             onRefresh={onRefresh}
-            colors={['#4F46E5']}
-            tintColor="#4F46E5"
+            colors={['#000000']}
+            tintColor={isDarkMode ? '#FFFFFF' : '#000000'}
           />
         }
-        style={{flex: 1}}
+        style={{ flex: 1 }}
       />
 
       <BanReasonModal
@@ -353,7 +353,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
             },
           ]}
           onPress={scrollToTop}>
-          <Text style={[styles.scrollTopText, {color: textColor}]}>↑</Text>
+          <Text style={[styles.scrollTopText, { color: textColor }]}>↑</Text>
         </TouchableOpacity>
       )}
     </View>
