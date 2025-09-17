@@ -75,6 +75,7 @@ const UserInfoModal = ({
       transparent={true}
       visible={modalVisible}
       onRequestClose={handleClose}>
+      {/* TODO: nested pressable onStartShouldSetResponder 옵션 사용으로 변경 */}
       <Pressable style={styles.overlay} onPress={handleClose}>
         <View
           style={[
