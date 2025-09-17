@@ -58,6 +58,8 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   );
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [isTimePickerVisible, setTimePickerVisible] = useState(false);
+  const [isDepartureCustom, setIsDepartureCustom] = useState(false);
+  const [isArrivalCustom, setIsArrivalCustom] = useState(false);
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -191,6 +193,14 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const disabledCreate =
     !roomName || !departureName || !arrivalName || !selectedDateTime;
 
+  // 입력이 프리셋에 포함되어 있는지 여부(커스텀 입력이면 false)
+  const isDepartureInPaxiLocations = PAXI_LOCATIONS.some(
+    loc => loc.name === departureName,
+  );
+  const isArrivalInPaxiLocations = PAXI_LOCATIONS.some(
+    loc => loc.name === arrivalName,
+  );
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: C.bg}}>
       <StatusBar
@@ -237,6 +247,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                   )}
                   onSelect={selected => setDepartureName(selected ?? '출발지')}
                   selected={departureName}
+                  onCustomModeChange={setIsDepartureCustom}
                 />
               </View>
 
@@ -251,25 +262,32 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                   )}
                   onSelect={selected => setArrivalName(selected ?? '도착지')}
                   selected={arrivalName}
+                  onCustomModeChange={setIsArrivalCustom}
                 />
               </View>
             </View>
 
-            {departureName && arrivalName ? (
-              <View
-                style={[
-                  styles.infoChip,
-                  {
-                    backgroundColor: isDarkMode ? '#1B1C1F' : '#F4F5F6',
-                    borderColor: C.border,
-                  },
-                ]}>
-                <Text style={{color: C.text, fontSize: 13, fontWeight: '600'}}>
-                  거리 {getPaxiDistanceInfo(departureName, arrivalName)} · 예상{' '}
-                  {getPaxiDurationInfo(departureName, arrivalName)}
-                </Text>
-              </View>
-            ) : null}
+            {departureName &&
+              arrivalName &&
+              !isDepartureCustom &&
+              !isArrivalCustom &&
+              isDepartureInPaxiLocations &&
+              isArrivalInPaxiLocations && (
+                <View
+                  style={[
+                    styles.infoChip,
+                    {
+                      backgroundColor: isDarkMode ? '#1B1C1F' : '#F4F5F6',
+                      borderColor: C.border,
+                    },
+                  ]}>
+                  <Text
+                    style={{color: C.text, fontSize: 13, fontWeight: '600'}}>
+                    거리 {getPaxiDistanceInfo(departureName, arrivalName)} ·
+                    예상 {getPaxiDurationInfo(departureName, arrivalName)}
+                  </Text>
+                </View>
+              )}
           </View>
 
           {/* 날짜/시간 */}
