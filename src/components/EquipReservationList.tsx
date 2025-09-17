@@ -23,6 +23,7 @@ import axios from 'axios';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
+import {getAxiosErrorInfo} from '@utils/axios-error';
 
 interface Equipment {
   uuid: string;
@@ -216,9 +217,21 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
               Alert.alert('완료', '예약이 취소되었습니다.');
               closeModal();
               fetchReservations();
-            } catch (err) {
+          } catch (err) {
+            const {isAxios, status, detail} = getAxiosErrorInfo(err);
+            if (
+              isAxios &&
+              status === 400 &&
+              detail === 'Cannot delete past reservation'
+            ) {
+              Alert.alert('오류', '과거 예약은 취소할 수 없습니다.');
+            } else {
               console.error('예약 취소 오류:', err);
-              Alert.alert('오류', '예약 취소 중 문제가 발생했습니다.');
+              Alert.alert(
+                '오류',
+                detail ? String(detail) : '예약 취소 중 문제가 발생했습니다.',
+              );
+            }
             } finally {
               setIsLoading(false);
             }
