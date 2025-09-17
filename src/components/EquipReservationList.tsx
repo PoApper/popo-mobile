@@ -838,6 +838,7 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     paddingTop: 12,
+    paddingBottom: 8,
   },
   dragHandle: {
     width: 40,
