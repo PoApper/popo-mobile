@@ -16,11 +16,7 @@ import {
   Dimensions,
   Pressable,
 } from 'react-native';
-import {
-  GestureHandlerRootView,
-  Gesture,
-  GestureDetector,
-} from 'react-native-gesture-handler';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
@@ -286,25 +282,7 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
     });
   };
 
-  const panGesture = Gesture.Pan()
-    .onChange(event => {
-      // Only allow downward movement (positive translationY)
-      if (event.translationY >= 0) {
-        translateY.setValue(event.translationY);
-      }
-    })
-    .onFinalize(event => {
-      // Close modal if dragged down significantly or with high velocity
-      if (event.translationY > 100 || event.velocityY > 500) {
-        closeModal();
-      } else {
-        // Snap back to original position
-        Animated.spring(translateY, {
-          toValue: 0,
-          useNativeDriver: true,
-        }).start();
-      }
-    });
+  // drag-to-close 제거하고 오버레이 탭/버튼으로만 닫기
 
   const handleLongPress = (item: EquipmentReservation) => {
     if (item.status !== '거절') {
@@ -456,15 +434,15 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
             />
           </Pressable>
 
-          <GestureDetector gesture={panGesture}>
-            <Animated.View
+          <Animated.View
               style={[
                 styles.modalContent,
                 {
                   backgroundColor: cardBgColor,
                   transform: [{translateY}],
                 },
-              ]}>
+              ]}
+              onStartShouldSetResponder={() => true}>
               <View style={styles.modalHeader}>
                 {/* Drag handle indicator */}
                 <View style={styles.dragHandle} />
@@ -650,7 +628,6 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
                   })()}
               </ScrollView>
             </Animated.View>
-          </GestureDetector>
         </GestureHandlerRootView>
       </Modal>
     </>
