@@ -444,8 +444,6 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
               ]}
               onStartShouldSetResponder={() => true}>
               <View style={styles.modalHeader}>
-                {/* Drag handle indicator */}
-                <View style={styles.dragHandle} />
                 <View style={styles.modalHeaderContent}>
                   <Text style={[styles.modalTitle, {color: textColor}]}>
                     예약 상세정보
