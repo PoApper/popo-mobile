@@ -449,8 +449,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                   backgroundColor: cardBgColor,
                   transform: [{translateY}],
                 },
-              ]}
-              onStartShouldSetResponder={() => true}>
+              ]}>
               <View style={styles.modalHeader}>
                 <View style={styles.modalHeaderContent}>
                   <Text style={[styles.modalTitle, {color: textColor}]}>
@@ -459,7 +458,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                 </View>
               </View>
 
-              <ScrollView style={styles.modalBody}>
+              <ScrollView style={styles.modalBody} contentContainerStyle={{paddingBottom: 24}}>
                 {selectedReservation &&
                   (() => {
                     const modalLabelColor = isDarkMode ? '#BBBBBB' : '#6B7280';
