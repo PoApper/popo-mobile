@@ -87,6 +87,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const SELECTED_COLOR = '#ccc';
   const SELECTED_BG_COLOR = isDarkMode ? '#232323' : '#f8f8f8';
 
+  const listData = [...options, CUSTOM_INPUT_ITEM];
+
   return (
     <View style={{flex: 1}}>
       {customMode ? (
@@ -179,13 +181,16 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                   },
                 ]}>
                 <FlatList
-                  data={[...options, CUSTOM_INPUT_ITEM]}
+                  data={listData}
                   keyExtractor={item => item.name}
-                  renderItem={({item}) => (
+                  renderItem={({item, index}) => (
                     <TouchableOpacity
                       style={[
                         styles.item,
-                        {borderBottomColor: ColorStyle.border},
+                        {
+                          borderBottomColor: ColorStyle.border,
+                          borderBottomWidth: index < listData.length - 1 ? 1 : 0,
+                        },
                         selected === item.name && {
                           backgroundColor: SELECTED_BG_COLOR,
                         },
@@ -260,6 +265,8 @@ const styles = StyleSheet.create({
     maxHeight: 300,
     minWidth: 100,
     borderRadius: 10,
+    overflow: 'hidden',
+    borderWidth: 1,
     shadowOpacity: 0.08,
     shadowRadius: 2,
     elevation: 1,
@@ -270,7 +277,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0,
   },
   itemText: {
     fontSize: 15,
