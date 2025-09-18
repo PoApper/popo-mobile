@@ -189,7 +189,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                         styles.item,
                         {
                           borderBottomColor: ColorStyle.border,
-                          borderBottomWidth: index < listData.length - 1 ? 1 : 0,
+                          borderBottomWidth:
+                            index < listData.length - 1 ? 1 : 0,
                         },
                         selected === item.name && {
                           backgroundColor: SELECTED_BG_COLOR,
