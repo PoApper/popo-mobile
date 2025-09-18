@@ -279,7 +279,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={textColor} />
         <Text style={[styles.loadingText, {color: textColor}]}>
-          예약 정보를 불러오는 중...
+          카풀 정보를 불러오는 중...
         </Text>
       </View>
     );
