@@ -364,7 +364,7 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
     }
     return (
       <View style={styles.loadingFooter}>
-        <ActivityIndicator size="small" color="#4F46E5" />
+        <ActivityIndicator size="small" color={textColor} />
       </View>
     );
   };
@@ -372,7 +372,7 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#4F46E5" />
+        <ActivityIndicator size="large" color={textColor} />
         <Text style={[styles.loadingText, {color: textColor}]}>
           예약 정보를 불러오는 중...
         </Text>
