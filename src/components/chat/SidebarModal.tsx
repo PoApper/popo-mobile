@@ -24,6 +24,7 @@ import paxi_api from '@utils/paxi_api';
 import BanModal from '@components/chat/BanModal';
 import {backgroundColor, textColor} from '@styles/default';
 import OwnerTransferModal from './OwnerTransferModal';
+import SettlementCompleteConfirmModal from '@components/chat/SettlementCompleteConfirmModal';
 
 interface SidebarModalProps {
   modalVisible: boolean;
@@ -53,6 +54,8 @@ SidebarModalProps) => {
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const [isVisible, setIsVisible] = useState(false);
   const [transferModalVisible, setTransferModalVisible] =
+    useState<boolean>(false);
+  const [settlementConfirmVisible, setSettlementConfirmVisible] =
     useState<boolean>(false);
 
   const isIamOwner = myUuid === roomData.ownerUuid;
@@ -111,6 +114,7 @@ SidebarModalProps) => {
   };
 
   const handleSettlementDeletePress = () => {
+    // TODO: '정산 삭제' 보다는 '정산 취소' 가 더 나은 표현일 듯
     Alert.alert('정산 삭제', '정산 요청을 삭제하시겠습니까?', [
       {text: '취소', style: 'cancel'},
       {
@@ -402,7 +406,7 @@ SidebarModalProps) => {
                         styles.completeSettlementButton,
                         {backgroundColor: isDarkMode ? '#333' : '#000'},
                       ]}
-                      onPress={onSettlementEnd}>
+                      onPress={() => setSettlementConfirmVisible(true)}>
                       <Text style={styles.completeSettlementButtonText}>
                         정산 완료
                       </Text>
@@ -416,6 +420,14 @@ SidebarModalProps) => {
                   roomData={roomData}
                   myUuid={myUuid}
                   navigation={navigation}
+                />
+                <SettlementCompleteConfirmModal
+                  visible={settlementConfirmVisible}
+                  onClose={() => setSettlementConfirmVisible(false)}
+                  onConfirm={() => {
+                    setSettlementConfirmVisible(false);
+                    onSettlementEnd();
+                  }}
                 />
               </Pressable>
             </SafeAreaView>
