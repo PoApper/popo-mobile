@@ -168,13 +168,17 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         </View>
 
         <View style={styles.formContainer}>
-          <TextInput
+          {/* Email/ID input with visual domain suffix */}
+          <View style={styles.inputWrapper}>
+            <TextInput
             style={[
               styles.input,
               {
                 backgroundColor: inputBackgroundColor,
                 borderColor: inputBorderColor,
                 color: textColor,
+                // Ensure the text does not overlap with the suffix label
+                paddingRight: 150,
               },
             ]}
             placeholder="POSTECH ID 또는 이메일"
@@ -189,6 +193,17 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             importantForAutofill="yes" // android
             accessibilityLabel="popo.poapper.club username"
           />
+            {email && !email.includes('@') && (
+              <Text style={[
+                styles.inputSuffix,
+                {color: placeholderColor},
+              ]}
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants">
+                @postech.ac.kr
+              </Text>
+            )}
+          </View>
           <Text style={[styles.emailHintText, {color: placeholderColor}]}>
             POSTECH ID를 입력하면, 자동으로 @postech.ac.kr이 붙습니다
           </Text>
@@ -305,6 +320,10 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10,
   },
+  inputWrapper: {
+    position: 'relative',
+    width: '100%',
+  },
   input: {
     backgroundColor: '#FFFFFF',
     height: 42,
@@ -313,6 +332,16 @@ const styles = StyleSheet.create({
     borderColor: '#D0D0D0',
     paddingHorizontal: 16,
     fontSize: 16,
+  },
+  inputSuffix: {
+    position: 'absolute',
+    right: 12,
+    top: 0,
+    bottom: 0,
+    textAlignVertical: 'center',
+    includeFontPadding: false,
+    fontSize: 16,
+    lineHeight: 42,
   },
   loginButton: {
     borderRadius: 6,
