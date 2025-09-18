@@ -14,7 +14,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 import {requestUserPermission} from './src/utils/firebase';
 import paxi_api from './src/utils/paxi_api';
 import {displayNotification} from './src/utils/notifee';
-import {navigate, navigationRef} from './src/navigation/RootNavigation';
+import {navigationRef} from './src/navigation/RootNavigation';
 
 const App = () => {
   useEffect(() => {
