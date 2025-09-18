@@ -14,10 +14,13 @@ export function getAxiosErrorInfo(err: unknown): AxiosErrorInfo {
     const detail =
       typeof data === 'string'
         ? data
-        : data?.detail || data?.message || (data ? JSON.stringify(data) : undefined);
+        : data?.detail ||
+          data?.message ||
+          (data ? JSON.stringify(data) : undefined);
     return {isAxios: true, status, detail, data};
   }
-  return {isAxios: false, detail: err instanceof Error ? err.message : String(err)};
+  return {
+    isAxios: false,
+    detail: err instanceof Error ? err.message : String(err),
+  };
 }
-
-
