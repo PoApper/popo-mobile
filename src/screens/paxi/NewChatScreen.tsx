@@ -185,7 +185,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
     newSocket.on('deletedMessage', data => {
       console.debug('삭제될 메시지:', data);
-      deleteChatData(data);
+      markChatAsDeleted(data);
     });
 
     newSocket.on('newSettlement', data => {
@@ -243,8 +243,12 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     );
   };
 
-  const deleteChatData = (data: MessageData) => {
-    setChatList(prev => prev.filter(chat => chat.uuid !== data.uuid));
+  const markChatAsDeleted = (data: MessageData) => {
+    setChatList(prev =>
+      prev.map(chat =>
+        chat.uuid === data.uuid ? {...chat, isDeleted: true} : chat,
+      ),
+    );
   };
 
   const sendChat = async () => {
