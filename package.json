@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "lint": "eslint . --fix --quiet",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "pc": "pre-commit run --all-files"
   },
   "dependencies": {
     "@notifee/react-native": "^9.1.8",
@@ -37,6 +38,7 @@
     "react-native-reanimated": "^4.1.0",
     "react-native-safe-area-context": "^5.3.0",
     "react-native-screens": "^4.9.2",
+    "react-native-device-info": "^14.0.0",
     "react-native-svg": "^15.12.0",
     "react-native-vector-icons": "^10.2.0",
     "react-native-worklets": "^0.5.0",

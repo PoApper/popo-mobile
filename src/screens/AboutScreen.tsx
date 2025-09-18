@@ -14,6 +14,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import CommonHeader from '@components/CommonHeader';
+import DeviceInfo from 'react-native-device-info';
 
 type AboutScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'About'>;
@@ -29,6 +30,8 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const cardBgColor = isDarkMode ? '#1E1E1E' : '#FFFFFF';
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';
+  const appVersion: string = DeviceInfo.getVersion();
+  const buildNumber: string = DeviceInfo.getBuildNumber();
 
   const openLink = async (url?: string) => {
     if (!url) {
@@ -86,7 +89,10 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
             버전 정보
           </Text>
           <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
-            TODO: 버전/빌드 정보는 추후 패키지에서 불러오거나 주입 예정입니다.
+            앱 버전: {appVersion}
+          </Text>
+          <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
+            빌드 번호: {buildNumber}
           </Text>
         </View>
 
