@@ -325,8 +325,6 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
     });
   };
 
-  // drag-to-close 제거하고 오버레이 탭/버튼으로만 닫기
-
   const handleLongPress = (item: EquipmentReservation) => {
     if (item.status !== '거절') {
       handleCancelReservation(item.uuid);
