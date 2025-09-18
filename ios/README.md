@@ -7,6 +7,12 @@ $ cd ios
 $ pod install
 ```
 
+## 실행
+
+```bash
+$ npm run ios
+```
+
 ## 앱 배포 버전 변경
 
 `project.pbxproj` 파일에서 `MARKETING_VERSION` 값을 변경 해준다.

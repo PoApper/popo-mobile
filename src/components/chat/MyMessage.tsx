@@ -32,13 +32,26 @@ const MyMessage = ({message, handleMyMsgClick}: MyMessageProps) => {
         {moment(message.createdAt).format('HH:mm')}
       </Text>
       <TouchableOpacity
-        onLongPress={() => handleMyMsgClick(message)}
+        onLongPress={() => !message.isDeleted && handleMyMsgClick(message)}
+        disabled={message.isDeleted}
         style={[
           styles.messageBubble,
-          {backgroundColor: isDarkMode ? '#23262B' : '#f2f3f5'},
+          {
+            backgroundColor: message.isDeleted
+              ? isDarkMode
+                ? '#2a2d31'
+                : '#e9eaec'
+              : isDarkMode
+              ? '#23262B'
+              : '#f2f3f5',
+          },
         ]}>
-        <Text style={[styles.messageText, {color: textColor(isDarkMode)}]}>
-          {message.message}
+        <Text
+          style={[
+            styles.messageText,
+            {color: message.isDeleted ? '#9b9b9b' : textColor(isDarkMode)},
+          ]}>
+          {message.isDeleted ? '삭제됨' : message.message}
         </Text>
       </TouchableOpacity>
     </View>

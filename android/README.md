@@ -28,6 +28,17 @@ $ ./gradlew assembleDebug --no-daemon
 $ npx react-native start --reset-cache
 ```
 
+```bash
+# 의존성 재설치
+$ rm -rf node_modules && npm install
+```
+
+## 실행
+
+```bash
+$ npm run android
+```
+
 ### Build
 
 `android/app` 경로에 아래 두 파일이 있는지 확인합니다.
@@ -43,7 +54,7 @@ $ ./gradlew assembleRelease
 
 # AAB 빌드 (구글 플레이 제출용)
 $ ./gradlew bundleRelease
-$ cd /app/build/outputs/bundle/release
+$ cd app/build/outputs/bundle/release
 $ open .
 ```
 
