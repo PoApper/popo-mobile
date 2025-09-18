@@ -15,6 +15,7 @@ import DottedArrow from './DottedArrow';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import {ChatRoomInfo} from '~/src/interfaces/paxi';
+import JoinConfirmModal from '@components/room/JoinConfirmModal';
 
 interface RoomContainerProps {
   roomUuid: string;
@@ -45,6 +46,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
 }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [roomData, setRoomData] = useState<ChatRoomInfo | null>(null);
+  const [joinModalVisible, setJoinModalVisible] = useState(false);
 
   // 테마 색상 정의
   const theme = {
@@ -158,11 +160,8 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       return;
     }
 
-    // 새로운 참여자인 경우 확인 후 입장
-    Alert.alert('참여하기', '방에 참여하시겠습니까?', [
-      {text: '취소', style: 'cancel'},
-      {text: '확인', onPress: joinRoomWithConfirmation},
-    ]);
+    // 새로운 참여자인 경우 커스텀 모달 표시
+    setJoinModalVisible(true);
   };
 
   // 방에 바로 입장 (이미 참여한 경우)
@@ -296,6 +295,17 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
           </Text>
         </View>
       </View>
+      {roomData && (
+        <JoinConfirmModal
+          visible={joinModalVisible}
+          room={roomData}
+          onClose={() => setJoinModalVisible(false)}
+          onConfirm={() => {
+            setJoinModalVisible(false);
+            joinRoomWithConfirmation();
+          }}
+        />
+      )}
     </TouchableOpacity>
   );
 };
