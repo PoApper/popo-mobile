@@ -757,18 +757,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 24,
   },
-  newReservationButton: {
-    backgroundColor: '#4F46E5',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    width: '80%',
-  },
-  newReservationButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
   loadingFooter: {
     paddingVertical: 20,
     alignItems: 'center',
