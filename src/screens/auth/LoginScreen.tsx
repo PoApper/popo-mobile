@@ -181,7 +181,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                 paddingRight: 150,
               },
             ]}
-            placeholder="POSTECH ID 또는 이메일"
+            placeholder="POSTECH 이메일"
             placeholderTextColor={placeholderColor}
             keyboardType="email-address"
             autoCapitalize="none"
@@ -229,6 +229,9 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             importantForAutofill="yes"
             accessibilityLabel="popo.poapper.club password"
           />
+          <Text style={[styles.emailHintText, {color: placeholderColor}]}>
+            POPO 가입 시 사용한 비밀번호를 입력해주세요
+          </Text>
 
           <TouchableOpacity
             style={[
