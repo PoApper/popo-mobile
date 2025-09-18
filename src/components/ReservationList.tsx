@@ -359,7 +359,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
     }
     return (
       <View style={styles.loadingFooter}>
-        <ActivityIndicator size="small" color="#4F46E5" />
+        <ActivityIndicator size="small" color={textColor} />
       </View>
     );
   };
