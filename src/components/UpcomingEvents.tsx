@@ -194,6 +194,13 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
           }),
         );
 
+        const formatEquipments = (equipments: Equipment[] | undefined) => {
+          if (!equipments || equipments.length === 0) return '장비 미정';
+          const first = equipments[0]?.name || '장비';
+          const extra = equipments.length - 1;
+          return extra > 0 ? `${first} 외 ${extra}개` : first;
+        };
+
         const equipmentEvents: CombinedEvent[] = equipmentResponse.map(
           (reservation: EquipmentReservation) => ({
             id: `equipment_${reservation.uuid}`,
@@ -203,9 +210,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
             time: `${formatReservationTime(
               reservation.startTime,
             )} - ${formatReservationTime(reservation.endTime)}`,
-            location:
-              reservation.equipments?.map(e => e.name).join(', ') ||
-              '장비 미정',
+            location: formatEquipments(reservation.equipments),
             status: reservation.status,
             data: reservation,
           }),
