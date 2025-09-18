@@ -219,18 +219,46 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
               fetchReservations();
           } catch (err) {
             const {isAxios, status, detail} = getAxiosErrorInfo(err);
+            const itemToReopen = selectedReservation;
+            // Close details modal first so Android Alert is not obscured
+            closeModal();
             if (
               isAxios &&
               status === 400 &&
               detail === 'Cannot delete past reservation'
             ) {
-              Alert.alert('오류', '과거 예약은 취소할 수 없습니다.');
+              setTimeout(() => {
+                Alert.alert('오류', '과거 예약은 취소할 수 없습니다.', [
+                  {
+                    text: '확인',
+                    onPress: () => {
+                      if (itemToReopen) {
+                        openModal(itemToReopen);
+                      }
+                    },
+                  },
+                ]);
+              }, 300);
             } else {
               console.error('예약 취소 오류:', err);
-              Alert.alert(
-                '오류',
-                detail ? String(detail) : '예약 취소 중 문제가 발생했습니다.',
-              );
+              setTimeout(() => {
+                Alert.alert(
+                  '오류',
+                  detail
+                    ? String(detail)
+                    : '예약 취소 중 문제가 발생했습니다.',
+                  [
+                    {
+                      text: '확인',
+                      onPress: () => {
+                        if (itemToReopen) {
+                          openModal(itemToReopen);
+                        }
+                      },
+                    },
+                  ],
+                );
+              }, 300);
             }
             } finally {
               setIsLoading(false);
