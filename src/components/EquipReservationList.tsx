@@ -290,8 +290,10 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
         useNativeDriver: true,
       }),
     ]).start(() => {
-      setModalVisible(false);
-      setSelectedReservation(null);
+      setTimeout(() => {
+        setModalVisible(false);
+        setSelectedReservation(null);
+      }, 0);
     });
   };
 

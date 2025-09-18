@@ -291,8 +291,11 @@ const ReservationList: React.FC<ReservationListProps> = ({
         useNativeDriver: true,
       }),
     ]).start(() => {
-      setModalVisible(false);
-      setSelectedReservation(null);
+      // Defer state updates to avoid scheduling during insertion effect
+      setTimeout(() => {
+        setModalVisible(false);
+        setSelectedReservation(null);
+      }, 0);
     });
   };
 
