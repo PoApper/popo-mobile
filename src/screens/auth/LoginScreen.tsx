@@ -171,33 +171,31 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
           {/* Email/ID input with visual domain suffix */}
           <View style={styles.inputWrapper}>
             <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: inputBackgroundColor,
-                borderColor: inputBorderColor,
-                color: textColor,
-                // Ensure the text does not overlap with the suffix label
-                paddingRight: 150,
-              },
-            ]}
-            placeholder="POSTECH 이메일"
-            placeholderTextColor={placeholderColor}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
-            autoComplete="username" // ios
-            textContentType="username" // ios
-            autoCorrect={false}
-            importantForAutofill="yes" // android
-            accessibilityLabel="popo.poapper.club username"
-          />
-            {email && !email.includes('@') && (
-              <Text style={[
-                styles.inputSuffix,
-                {color: placeholderColor},
+              style={[
+                styles.input,
+                {
+                  backgroundColor: inputBackgroundColor,
+                  borderColor: inputBorderColor,
+                  color: textColor,
+                  // Ensure the text does not overlap with the suffix label
+                  paddingRight: 150,
+                },
               ]}
+              placeholder="POSTECH 이메일"
+              placeholderTextColor={placeholderColor}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={email}
+              onChangeText={setEmail}
+              autoComplete="username" // ios
+              textContentType="username" // ios
+              autoCorrect={false}
+              importantForAutofill="yes" // android
+              accessibilityLabel="popo.poapper.club username"
+            />
+            {email && !email.includes('@') && (
+              <Text
+                style={[styles.inputSuffix, {color: placeholderColor}]}
                 accessibilityElementsHidden
                 importantForAccessibility="no-hide-descendants">
                 @postech.ac.kr
