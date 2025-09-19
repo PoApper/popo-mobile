@@ -31,7 +31,7 @@ $ npm i
 ```
 
 ```bash
-# Android 네이티브 문제 
+# Android 네이티브 문제
 $ ./gradlew assembleDebug --no-daemon
 ```
 
@@ -39,7 +39,6 @@ $ ./gradlew assembleDebug --no-daemon
 # 의존성 꼬임
 $ rm -rf node_modules && npm install
 ```
-
 
 ## 실행
 

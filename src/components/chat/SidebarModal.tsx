@@ -213,7 +213,7 @@ SidebarModalProps) => {
       Alert.alert(
         '정산이 종료됨',
         '정보 보존을 위해 정산이 완료된 방은 나갈 수 없습니다.',
-        [{text: '확인', style: 'default'}]
+        [{text: '확인', style: 'default'}],
       );
       return;
     }
@@ -349,7 +349,9 @@ SidebarModalProps) => {
                               {backgroundColor: isDarkMode ? '#333' : '#000'},
                             ]}>
                             <Text style={[styles.buttonText]}>
-                              {isPaidEnd ? '정산이 완료되었습니다' : '정산을 진행 중입니다'}
+                              {isPaidEnd
+                                ? '정산이 완료되었습니다'
+                                : '정산을 진행 중입니다'}
                             </Text>
                           </View>
                         </View>
@@ -405,7 +407,10 @@ SidebarModalProps) => {
                   <TouchableOpacity
                     style={[
                       styles.leaveRoomButton,
-                      {opacity: isSettlementRequestExist || isPaidEnd ? 0.5 : 1},
+                      {
+                        opacity:
+                          isSettlementRequestExist || isPaidEnd ? 0.5 : 1,
+                      },
                     ]}
                     onPress={() => handleLeavePress()}>
                     <Icon
