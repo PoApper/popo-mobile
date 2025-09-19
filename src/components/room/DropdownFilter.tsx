@@ -80,7 +80,9 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
               selected ? {fontWeight: 'bold'} : null,
             ]}>
             {selected
-              ? options.find(cat => cat.id === selected)?.name
+              ? selected === '__other__'
+                ? '그 외'
+                : options.find(cat => cat.id === selected)?.name || selected
               : placeholderText}
           </Text>
           {selected && (
@@ -114,7 +116,11 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
                   },
                 ]}>
                 <FlatList
-                  data={[{id: '', name: '전체보기'}, ...options]}
+                  data={[
+                    {id: '', name: '전체보기'},
+                    ...options,
+                    {id: '__other__', name: '그 외'},
+                  ]}
                   keyExtractor={item => item.id || 'all'}
                   renderItem={({item}) => (
                     <TouchableOpacity

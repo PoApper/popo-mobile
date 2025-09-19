@@ -43,7 +43,7 @@ const OwnerTransferModal = ({
       .put(`/room/leave/${roomData.uuid}`)
       .then(() => {
         setModalVisible(false);
-        navigation.navigate('Main', {tab: 'MyReservation'});
+        navigation.navigate('Main', {tab: 'MyReservation', prevTab: 'NewChat'});
       })
       .catch(err => {
         console.error('채팅방 나가기 실패', err);
@@ -93,6 +93,7 @@ const OwnerTransferModal = ({
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => setModalVisible(false)}>
+      {/* TODO: nested pressable onStartShouldSetResponder 옵션 사용으로 변경 */}
       <Pressable style={styles.overlay} onPress={() => setModalVisible(false)}>
         <Pressable
           style={[
