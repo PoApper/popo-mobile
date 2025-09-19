@@ -118,6 +118,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       navigation.navigate('Main', {
         userId: data.user?.id || 'unknown',
         userData: data.user || {},
+        prevTab: 'Login',
       });
     } catch (err: unknown) {
       // axios 오류 처리

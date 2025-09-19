@@ -24,6 +24,7 @@ import paxi_api from '@utils/paxi_api';
 import BanModal from '@components/chat/BanModal';
 import {backgroundColor, textColor} from '@styles/default';
 import OwnerTransferModal from './OwnerTransferModal';
+import SettlementCompleteConfirmModal from '@components/chat/SettlementCompleteConfirmModal';
 
 interface SidebarModalProps {
   modalVisible: boolean;
@@ -31,6 +32,7 @@ interface SidebarModalProps {
   roomData: ChatRoomInfo;
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
   myUuid: string;
+  isPaidEnd?: boolean;
   // leaveRoom?: () => void;
 }
 
@@ -40,6 +42,7 @@ const SidebarModal = ({
   roomData,
   navigation,
   myUuid,
+  isPaidEnd = false,
 }: // leaveRoom,
 SidebarModalProps) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -53,6 +56,8 @@ SidebarModalProps) => {
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const [isVisible, setIsVisible] = useState(false);
   const [transferModalVisible, setTransferModalVisible] =
+    useState<boolean>(false);
+  const [settlementConfirmVisible, setSettlementConfirmVisible] =
     useState<boolean>(false);
 
   const isIamOwner = myUuid === roomData.ownerUuid;
@@ -111,6 +116,7 @@ SidebarModalProps) => {
   };
 
   const handleSettlementDeletePress = () => {
+    // TODO: '정산 삭제' 보다는 '정산 취소' 가 더 나은 표현일 듯
     Alert.alert('정산 삭제', '정산 요청을 삭제하시겠습니까?', [
       {text: '취소', style: 'cancel'},
       {
@@ -137,6 +143,7 @@ SidebarModalProps) => {
           setModalVisible(false);
           navigation.navigate('Main', {
             tab: 'MyReservation',
+            prevTab: 'NewChat',
           });
         })
         .catch(err => {
@@ -157,7 +164,10 @@ SidebarModalProps) => {
         .put(`/room/leave/${roomData.uuid}`)
         .then(() => {
           setModalVisible(false);
-          navigation.navigate('Main', {tab: 'MyReservation'});
+          navigation.navigate('Main', {
+            tab: 'MyReservation',
+            prevTab: 'NewChat',
+          });
         })
         .catch(err => {
           console.error('채팅방 나가기 실패', err);
@@ -182,6 +192,7 @@ SidebarModalProps) => {
               setModalVisible(false);
               navigation.navigate('Main', {
                 tab: 'MyReservation',
+                prevTab: 'NewChat',
               });
             },
           },
@@ -197,6 +208,24 @@ SidebarModalProps) => {
   };
 
   const handleLeavePress = () => {
+    // If settlement is completed, show different message
+    if (isPaidEnd) {
+      Alert.alert(
+        '정산이 종료됨',
+        '정보 보존을 위해 정산이 완료된 방은 나갈 수 없습니다.',
+        [{text: '확인', style: 'default'}],
+      );
+      return;
+    }
+
+    if (isSettlementRequestExist) {
+      Alert.alert(
+        '생성된 정산 요청이 있습니다.',
+        '정산 요청이 있는 채팅방은 나갈 수 없습니다.\n정산이 완료된 후, 정산자가 채팅방을 직접 마감해주세요.',
+      );
+      return;
+    }
+
     // If owner and there are other participants, open transfer modal first
     if (isIamOwner && roomPeopleCnt > 1) {
       setTransferModalVisible(true);
@@ -280,7 +309,7 @@ SidebarModalProps) => {
                   )}
                   {(roomData.payerUuid?.length ?? 0) > 0 && (
                     <>
-                      {roomData.payerUuid === myUuid && (
+                      {roomData.payerUuid === myUuid && !isPaidEnd && (
                         <View
                           style={{
                             flexDirection: 'row',
@@ -320,7 +349,9 @@ SidebarModalProps) => {
                               {backgroundColor: isDarkMode ? '#333' : '#000'},
                             ]}>
                             <Text style={[styles.buttonText]}>
-                              정산을 진행 중입니다
+                              {isPaidEnd
+                                ? '정산이 완료되었습니다'
+                                : '정산을 진행 중입니다'}
                             </Text>
                           </View>
                         </View>
@@ -376,18 +407,12 @@ SidebarModalProps) => {
                   <TouchableOpacity
                     style={[
                       styles.leaveRoomButton,
-                      {opacity: isSettlementRequestExist ? 0.5 : 1},
+                      {
+                        opacity:
+                          isSettlementRequestExist || isPaidEnd ? 0.5 : 1,
+                      },
                     ]}
-                    onPress={() => {
-                      if (isSettlementRequestExist) {
-                        Alert.alert(
-                          '생성된 정산 요청이 있습니다.',
-                          '정산 요청이 있는 채팅방은 나갈 수 없습니다.\n정산이 완료된 후, 정산자가 채팅방을 직접 마감해주세요.',
-                        );
-                      } else {
-                        handleLeavePress();
-                      }
-                    }}>
+                    onPress={() => handleLeavePress()}>
                     <Icon
                       name="logout"
                       size={30}
@@ -396,13 +421,13 @@ SidebarModalProps) => {
                   </TouchableOpacity>
 
                   {/* 정산 완료 버튼 */}
-                  {isIamPayer && (
+                  {isIamPayer && !isPaidEnd && (
                     <TouchableOpacity
                       style={[
                         styles.completeSettlementButton,
                         {backgroundColor: isDarkMode ? '#333' : '#000'},
                       ]}
-                      onPress={onSettlementEnd}>
+                      onPress={() => setSettlementConfirmVisible(true)}>
                       <Text style={styles.completeSettlementButtonText}>
                         정산 완료
                       </Text>
@@ -416,6 +441,14 @@ SidebarModalProps) => {
                   roomData={roomData}
                   myUuid={myUuid}
                   navigation={navigation}
+                />
+                <SettlementCompleteConfirmModal
+                  visible={settlementConfirmVisible}
+                  onClose={() => setSettlementConfirmVisible(false)}
+                  onConfirm={() => {
+                    setSettlementConfirmVisible(false);
+                    onSettlementEnd();
+                  }}
                 />
               </Pressable>
             </SafeAreaView>

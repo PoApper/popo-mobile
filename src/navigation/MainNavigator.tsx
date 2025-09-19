@@ -18,7 +18,7 @@ const MainNavigator = () => {
   const insets = useSafeAreaInsets();
 
   const route = useRoute();
-  const {tab} = (route.params as {tab: string}) || {};
+  const {tab, prevTab} = (route.params as {tab: string; prevTab: string}) || {};
 
   const validTabs = ['Home', 'Paxi', 'MyReservation', 'MyInfo'] as const;
   type TabName = (typeof validTabs)[number];
@@ -65,6 +65,7 @@ const MainNavigator = () => {
       <Tab.Screen
         name="MyReservation"
         component={ReservationScreen}
+        initialParams={{prevTab}}
         options={{
           tabBarLabel: '내 일정',
           tabBarIcon: ({color, size}) => (
