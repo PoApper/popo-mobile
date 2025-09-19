@@ -75,6 +75,13 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
       return;
     }
 
+    // 포스텍 이메일 검증 강화
+    const fullEmail = email.includes('@') ? email : `${email}@postech.ac.kr`;
+    if (!fullEmail.endsWith('@postech.ac.kr')) {
+      setError('포스텍 이메일(@postech.ac.kr)로만 회원가입이 가능합니다.');
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError('비밀번호가 일치하지 않습니다.');
       return;
@@ -88,7 +95,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
 
     api
       .post('/auth/signin', {
-        email: email.includes('@') ? email : `${email}@postech.ac.kr`,
+        email: fullEmail,
         password,
         name,
         userType,
@@ -96,7 +103,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
       .then(() => {
         Alert.alert(
           '회원가입 성공',
-          '회원가입에 성공했습니다! 😁\n계정 활성화 메일을 확인해주세요! 📧\n(1분 정도 지연 될 수 있습니다.)',
+          '회원가입에 성공했습니다! 😁\n계정 활성화 메일을 확인해주세요! \n발송 이메일: ' + fullEmail + '\n(1분 정도 지연 될 수 있습니다.)',
           [
             {
               text: '확인',
@@ -179,22 +186,37 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
               ]}>
               Email*
             </Text>
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
-                  color: isDarkMode ? '#FFFFFF' : '#000000',
-                  borderColor: isDarkMode ? '#555555' : '#E5E7EB',
-                },
-              ]}
-              placeholder="Email 또는 POVIS ID를 입력해주세요"
-              placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              value={email}
-              onChangeText={setEmail}
-            />
+            <View style={[
+              styles.emailInputContainer,
+              {
+                backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
+                borderColor: isDarkMode ? '#555555' : '#E5E7EB',
+              }
+            ]}>
+              <TextInput
+                style={[
+                  styles.emailInput,
+                  {
+                    color: isDarkMode ? '#FFFFFF' : '#000000',
+                  },
+                ]}
+                placeholder="POVIS ID"
+                placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={email}
+                onChangeText={(text) => {
+                  setEmail(text);
+                }}
+              />
+              <Text
+                style={[
+                  styles.emailSuffix,
+                  {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                ]}>
+                @postech.ac.kr
+              </Text>
+            </View>
             {/*
             테스트 기간 동안은 다른 이메일도 허용
             <Text
@@ -465,6 +487,27 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 16,
     fontSize: 16,
+  },
+  emailInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingVertical: 1,
+  },
+  emailInput: {
+    flex: 1,
+    height: 48,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    borderWidth: 0,
+  },
+  emailSuffix: {
+    fontSize: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    lineHeight: 20,
   },
   userTypeContainer: {
     flexDirection: 'row',
