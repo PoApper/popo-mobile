@@ -112,7 +112,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
                     position: 'absolute',
                     top: dropdownPosition.y,
                     left: dropdownPosition.x,
-                    width: 130, // dropdownPosition.width * 1.5
+                    width: 150,
                   },
                 ]}>
                 <FlatList
