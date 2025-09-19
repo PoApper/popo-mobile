@@ -43,16 +43,13 @@ const App = () => {
 
     const handlePendingNavigation = async () => {
       const roomUuidData = await EncryptedStorage.getItem('roomUuid');
-      let roomUuid: string | undefined,
-        from: 'roomList' | 'myReservation' = 'roomList';
+      let roomUuid: string | undefined;
       if (roomUuidData) {
         try {
           const parsed = JSON.parse(roomUuidData);
           roomUuid = parsed.roomUuid;
-          from = parsed.from;
         } catch {
           roomUuid = roomUuidData;
-          from = 'roomList';
         }
       }
 

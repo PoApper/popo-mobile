@@ -19,7 +19,9 @@ export type AuthStackParamList = {
 export type MainTabParamList = {
   Home: undefined;
   Paxi: undefined;
-  MyReservation: undefined;
+  MyReservation: {
+    prevTab: string;
+  };
   MyInfo: {
     navigation: NativeStackNavigationProp<RootStackParamList>;
     route: RouteProp<MainTabParamList, 'MyInfo'>;
@@ -73,13 +75,13 @@ export type OtherStackParamList = {
     userId?: string;
     userData?: any;
     tab?: string;
+    prevTab: string;
   };
   Chat: {
     roomUuid: string;
   };
   NewChat: {
     roomUuid: string;
-    from: 'roomList' | 'myReservation';
   };
   Settlement: {
     roomUuid: string;
@@ -98,9 +100,6 @@ export type OtherStackParamList = {
   EquipmentReservation: undefined;
   EquipmentReservationApply: {
     association: string;
-  };
-  Reservation: {
-    selectedTab?: string;
   };
   About: undefined;
 };
