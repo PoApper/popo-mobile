@@ -448,9 +448,14 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
 
         {/* 생성 버튼 */}
         <TouchableOpacity
-          style={[styles.createButton, {backgroundColor: C.accent}]}
+          style={[
+            styles.createButton,
+            {backgroundColor: disabledCreate ? C.disabled : C.accent},
+          ]}
           onPress={checkInputValid}
-          activeOpacity={0.85}>
+          disabled={disabledCreate}
+          accessibilityState={{disabled: disabledCreate}}
+          activeOpacity={disabledCreate ? 1 : 0.85}>
           <Text style={styles.createButtonText}>방 생성하기</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>

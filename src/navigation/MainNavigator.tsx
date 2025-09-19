@@ -37,7 +37,7 @@ const MainNavigator = () => {
           paddingBottom: insets.bottom,
           height: 60 + insets.bottom,
         },
-        tabBarActiveTintColor: '#4F46E5',
+        tabBarActiveTintColor: isDarkMode ? 'white' : 'black',
         tabBarInactiveTintColor: isDarkMode ? '#888888' : '#6B7280',
       }}
       initialRouteName={tabParam}>

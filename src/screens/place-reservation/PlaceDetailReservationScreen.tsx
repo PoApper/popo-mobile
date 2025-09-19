@@ -148,6 +148,17 @@ const PlaceDetailReservationScreen = ({
   const subTextColor = isDarkMode ? '#888888' : '#6B7280';
   const cardBackgroundColor = isDarkMode ? '#1A1A1A' : '#F3F3F3';
 
+  // 예약 가능 범위: 미래는 오늘 ~ 30일 후까지. 과거 날짜는 조회만 가능
+  const {maxDateStr} = useMemo(() => {
+    const toStr = (d: Date) =>
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
+        d.getDate(),
+      ).padStart(2, '0')}`;
+    const max = new Date();
+    max.setDate(max.getDate() + 30);
+    return {maxDateStr: toStr(max)};
+  }, []);
+
   const renderReservationItem = ({item}: {item: Reservation}) => (
     <View
       style={[styles.reservationItem, {backgroundColor: cardBackgroundColor}]}>
@@ -168,6 +179,52 @@ const PlaceDetailReservationScreen = ({
         </Text>
       </View>
     </View>
+  );
+
+  // 주말 컬러: 토/일 모두 빨강. 선택/비활성 상태는 기존 규칙 유지
+  const renderDay = useCallback(
+    ({date, state, marking, onPress}: any) => {
+      const dayOfWeek = new Date(date.dateString).getDay(); // 0: Sun .. 6: Sat
+      const isSunday = dayOfWeek === 0;
+      const isSaturday = dayOfWeek === 6;
+      const isSelected = Boolean(marking?.selected);
+
+      const selectedBg = isDarkMode ? '#ddd' : 'black';
+      const selectedFg = isDarkMode ? 'black' : 'white';
+      const disabledColor = isDarkMode ? '#444444' : '#d9e1e8';
+
+      const weekendColor = isSunday || isSaturday ? '#FB5353' : textColor;
+      const textColorResolved =
+        state === 'disabled'
+          ? disabledColor
+          : isSelected
+          ? selectedFg
+          : weekendColor;
+
+      const isAfterMax = date.dateString > maxDateStr;
+
+      return (
+        <TouchableOpacity
+          disabled={isAfterMax}
+          onPress={() => onPress?.(date)}
+          accessibilityRole="button"
+          style={{
+            alignSelf: 'center',
+            width: 32,
+            height: 32,
+            borderRadius: 16,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: isSelected ? selectedBg : 'transparent',
+            marginVertical: 6,
+          }}>
+          <Text style={{color: textColorResolved, fontSize: 16}}>
+            {date.day}
+          </Text>
+        </TouchableOpacity>
+      );
+    },
+    [isDarkMode, textColor],
   );
 
   return (
@@ -252,8 +309,16 @@ const PlaceDetailReservationScreen = ({
                   /(\d{4})(\d{2})(\d{2})/,
                   '$1-$2-$3',
                 )}
+                firstDay={1}
+                hideExtraDays={false}
+                disableMonthChange={false}
+                enableSwipeMonths
+                disableAllTouchEventsForDisabledDays={false}
+                disableAllTouchEventsForInactiveDays={false}
+                maxDate={maxDateStr}
                 onDayPress={onDayPress}
                 markedDates={marked}
+                dayComponent={renderDay}
                 renderHeader={date => {
                   const year = date.getFullYear();
                   const month = (date.getMonth() + 1)

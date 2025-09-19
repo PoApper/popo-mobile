@@ -67,7 +67,7 @@ const PlaceReservationApplyScreen = ({
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  const scrollViewRef = useRef(null);
+  const scrollViewRef = useRef<any>(null);
 
   // 30분 단위로 시간 올림
   const roundUpToNearest30Minutes = (date: Date) => {
@@ -146,6 +146,23 @@ const PlaceReservationApplyScreen = ({
       return;
     }
 
+    // 과거 날짜는 예약 금지 (조회만 허용)
+    const today = new Date();
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const selectedStart = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    );
+    if (selectedStart < todayStart) {
+      Alert.alert('알림', '과거 날짜는 예약할 수 없습니다.');
+      return;
+    }
+
     // 예약 정보 확인 팝업
     Alert.alert(
       '',
@@ -212,6 +229,25 @@ const PlaceReservationApplyScreen = ({
       ],
     );
   };
+
+  // 버튼 비활성화 조건: 필수값 누락 또는 과거 날짜 선택
+  const isPastSelectedDate = (() => {
+    const today = new Date();
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const selectedStart = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    );
+    return selectedStart < todayStart;
+  })();
+
+  const disabledCreate =
+    !phone.trim() || !title.trim() || !desc.trim() || isPastSelectedDate;
 
   // Picker 상태 관리 함수 추가
   const openDatePicker = () => {
@@ -426,7 +462,6 @@ const PlaceReservationApplyScreen = ({
                 setDate(date);
               }}
               onCancel={() => setShowDatePicker(false)}
-              minimumDate={new Date()}
               maximumDate={
                 new Date(new Date().setDate(new Date().getDate() + 30))
               }
@@ -480,8 +515,20 @@ const PlaceReservationApplyScreen = ({
         </View>
 
         <TouchableOpacity
-          style={styles.reservationButton}
-          onPress={handleReservation}>
+          style={[
+            styles.reservationButton,
+            {
+              backgroundColor: disabledCreate
+                ? isDarkMode
+                  ? '#2C2C2C'
+                  : '#E5E7EB'
+                : '#2a2a2a',
+            },
+          ]}
+          onPress={handleReservation}
+          disabled={disabledCreate}
+          accessibilityState={{disabled: disabledCreate}}
+          activeOpacity={disabledCreate ? 1 : 0.85}>
           <Text style={styles.reservationButtonText}>예약하기</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>

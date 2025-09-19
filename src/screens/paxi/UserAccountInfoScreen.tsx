@@ -239,7 +239,6 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
           style={[
             styles.saveButton,
             {
-              backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1',
               opacity: isLoading ? 0.6 : 1,
             },
           ]}
@@ -313,19 +312,20 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   saveButton: {
+    backgroundColor: '#222',
+    height: 48,
     borderRadius: 6,
     width: '90%',
-    marginLeft: '5%',
+    marginHorizontal: '5%',
     marginTop: 20,
-    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
   saveButtonText: {
-    fontSize: 13,
-    fontWeight: '500',
     fontFamily: 'Pretendard',
-    color: '#ffffff',
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
     textAlign: 'center',
   },
   existingInfoContainer: {

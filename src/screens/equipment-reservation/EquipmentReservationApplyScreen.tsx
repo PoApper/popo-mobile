@@ -252,6 +252,23 @@ const EquipmentReservationApplyScreen = ({
 
   // 예약 생성
   const handleReservation = () => {
+    // 과거 날짜는 예약 금지
+    const today = new Date();
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const selectedStart = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    );
+    if (selectedStart < todayStart) {
+      Alert.alert('알림', '과거 날짜는 예약할 수 없습니다.');
+      return;
+    }
+
     if (!phone.trim()) {
       Alert.alert('알림', '전화번호를 입력해주세요.');
       return;
@@ -344,6 +361,29 @@ const EquipmentReservationApplyScreen = ({
       ],
     );
   };
+
+  // 버튼 비활성화 조건: 필수값/장비 누락 또는 과거 날짜
+  const isPastSelectedDate = (() => {
+    const today = new Date();
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const selectedStart = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    );
+    return selectedStart < todayStart;
+  })();
+
+  const disabledCreate =
+    !phone.trim() ||
+    !title.trim() ||
+    !desc.trim() ||
+    selectedEquipments.length === 0 ||
+    isPastSelectedDate;
 
   const openEquipListPicker = () => {
     Keyboard.dismiss();
@@ -746,7 +786,6 @@ const EquipmentReservationApplyScreen = ({
             }}
             onCancel={() => setShowDatePicker(false)}
             date={date}
-            minimumDate={new Date()}
             maximumDate={
               new Date(new Date().setDate(new Date().getDate() + 30))
             }
@@ -818,8 +857,18 @@ const EquipmentReservationApplyScreen = ({
             </View>
           )}
           <TouchableOpacity
-            style={styles.reservationButton}
-            onPress={handleReservation}>
+            style={[
+              styles.reservationButton,
+              {
+                backgroundColor: disabledCreate
+                  ? '#666' // 다크/라이트 섞여도 무난한 중립색
+                  : '#222',
+              },
+            ]}
+            onPress={handleReservation}
+            disabled={disabledCreate}
+            accessibilityState={{disabled: disabledCreate}}
+            activeOpacity={disabledCreate ? 1 : 0.85}>
             {/* TODO: 장소 예약이랑 색깔 및 단어 통일 */}
             <Text style={styles.reservationButtonText}>예약 생성하기</Text>
           </TouchableOpacity>

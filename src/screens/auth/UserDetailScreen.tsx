@@ -238,12 +238,16 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   <TouchableOpacity
                     style={[
                       styles.editButton,
-                      {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+                      {backgroundColor: isDarkMode ? '#ddd' : 'black'},
                     ]}
                     onPress={() => {
                       navigation.navigate('UserAccountInfo');
                     }}>
-                    <Text style={styles.editButtonText}>
+                    <Text
+                      style={[
+                        styles.editButtonText,
+                        {color: isDarkMode ? 'black' : 'white'},
+                      ]}>
                       {isPaxiAccountInfoExist ? '수정' : '등록'}
                     </Text>
                   </TouchableOpacity>
@@ -268,12 +272,18 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   <TouchableOpacity
                     style={[
                       styles.editButton,
-                      {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+                      {backgroundColor: isDarkMode ? '#ddd' : 'black'},
                     ]}
                     onPress={() => {
                       navigation.navigate('PaxiReportList');
                     }}>
-                    <Text style={styles.editButtonText}>내역 조회</Text>
+                    <Text
+                      style={[
+                        styles.editButtonText,
+                        {color: isDarkMode ? 'black' : 'white'},
+                      ]}>
+                      내역 조회
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -514,7 +524,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   editButtonText: {
-    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '600',
   },
