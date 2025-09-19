@@ -16,17 +16,14 @@ import {
   Dimensions,
   Pressable,
 } from 'react-native';
-import {
-  GestureHandlerRootView,
-  Gesture,
-  GestureDetector,
-} from 'react-native-gesture-handler';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
+import {getAxiosErrorInfo} from '@utils/axios-error';
 
 interface Equipment {
   uuid: string;
@@ -218,8 +215,48 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
               closeModal();
               fetchReservations();
             } catch (err) {
-              console.error('예약 취소 오류:', err);
-              Alert.alert('오류', '예약 취소 중 문제가 발생했습니다.');
+              const {isAxios, status, detail} = getAxiosErrorInfo(err);
+              const itemToReopen = selectedReservation;
+              // Close details modal first so Android Alert is not obscured
+              closeModal();
+              if (
+                isAxios &&
+                status === 400 &&
+                detail === 'Cannot delete past reservation'
+              ) {
+                setTimeout(() => {
+                  Alert.alert('오류', '과거 예약은 취소할 수 없습니다.', [
+                    {
+                      text: '확인',
+                      onPress: () => {
+                        if (itemToReopen) {
+                          openModal(itemToReopen);
+                        }
+                      },
+                    },
+                  ]);
+                }, 300);
+              } else {
+                console.error('예약 취소 오류:', err);
+                setTimeout(() => {
+                  Alert.alert(
+                    '오류',
+                    detail
+                      ? String(detail)
+                      : '예약 취소 중 문제가 발생했습니다.',
+                    [
+                      {
+                        text: '확인',
+                        onPress: () => {
+                          if (itemToReopen) {
+                            openModal(itemToReopen);
+                          }
+                        },
+                      },
+                    ],
+                  );
+                }, 300);
+              }
             } finally {
               setIsLoading(false);
             }
@@ -278,30 +315,12 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
         useNativeDriver: true,
       }),
     ]).start(() => {
-      setModalVisible(false);
-      setSelectedReservation(null);
+      setTimeout(() => {
+        setModalVisible(false);
+        setSelectedReservation(null);
+      }, 0);
     });
   };
-
-  const panGesture = Gesture.Pan()
-    .onChange(event => {
-      // Only allow downward movement (positive translationY)
-      if (event.translationY >= 0) {
-        translateY.setValue(event.translationY);
-      }
-    })
-    .onFinalize(event => {
-      // Close modal if dragged down significantly or with high velocity
-      if (event.translationY > 100 || event.velocityY > 500) {
-        closeModal();
-      } else {
-        // Snap back to original position
-        Animated.spring(translateY, {
-          toValue: 0,
-          useNativeDriver: true,
-        }).start();
-      }
-    });
 
   const handleLongPress = (item: EquipmentReservation) => {
     if (item.status !== '거절') {
@@ -453,201 +472,173 @@ const EquipReservationList: React.FC<ReservationListProps> = ({
             />
           </Pressable>
 
-          <GestureDetector gesture={panGesture}>
-            <Animated.View
-              style={[
-                styles.modalContent,
-                {
-                  backgroundColor: cardBgColor,
-                  transform: [{translateY}],
-                },
-              ]}>
-              <View style={styles.modalHeader}>
-                {/* Drag handle indicator */}
-                <View style={styles.dragHandle} />
-                <View style={styles.modalHeaderContent}>
-                  <Text style={[styles.modalTitle, {color: textColor}]}>
-                    예약 상세정보
-                  </Text>
-                </View>
+          <Animated.View
+            style={[
+              styles.modalContent,
+              {
+                backgroundColor: cardBgColor,
+                transform: [{translateY}],
+              },
+            ]}>
+            <View style={styles.modalHeader}>
+              <View style={styles.modalHeaderContent}>
+                <Text style={[styles.modalTitle, {color: textColor}]}>
+                  예약 상세정보
+                </Text>
               </View>
+            </View>
 
-              <ScrollView style={styles.modalBody}>
-                {selectedReservation &&
-                  (() => {
-                    const modalLabelColor = isDarkMode ? '#BBBBBB' : '#6B7280';
-                    const modalValueColor = textColor;
-                    const statusIcon = getStatusIcon(
-                      selectedReservation.status,
-                    );
+            <ScrollView
+              style={styles.modalBody}
+              contentContainerStyle={{paddingBottom: 24}}>
+              {selectedReservation &&
+                (() => {
+                  const modalLabelColor = isDarkMode ? '#BBBBBB' : '#6B7280';
+                  const modalValueColor = textColor;
+                  const statusIcon = getStatusIcon(selectedReservation.status);
 
-                    return (
-                      <>
+                  return (
+                    <>
+                      <View style={styles.modalDetailSection}>
+                        <Text
+                          style={[styles.modalLabel, {color: modalLabelColor}]}>
+                          제목
+                        </Text>
+                        <Text
+                          style={[styles.modalValue, {color: modalValueColor}]}>
+                          {selectedReservation.title || '제목 없음'}
+                        </Text>
+                      </View>
+
+                      <View style={styles.modalDetailSection}>
+                        <Text
+                          style={[styles.modalLabel, {color: modalLabelColor}]}>
+                          상태
+                        </Text>
+                        <View style={styles.statusContainer}>
+                          <Icon
+                            name={statusIcon.name}
+                            size={20}
+                            color={statusIcon.color}
+                          />
+                          <Text
+                            style={[
+                              styles.modalValue,
+                              styles.statusTextWithMargin,
+                              {color: modalValueColor},
+                            ]}>
+                            {getStatusText(selectedReservation.status)}
+                          </Text>
+                        </View>
+                      </View>
+
+                      <View style={styles.modalDetailSection}>
+                        <Text
+                          style={[styles.modalLabel, {color: modalLabelColor}]}>
+                          장비 목록 ({selectedReservation.equipments.length})
+                        </Text>
+                        {selectedReservation.equipments.map(
+                          (equipment: Equipment) => (
+                            <Text
+                              key={equipment.uuid}
+                              style={[
+                                styles.modalValue,
+                                styles.equipmentName,
+                                {color: modalValueColor},
+                              ]}>
+                              - {equipment.name}
+                            </Text>
+                          ),
+                        )}
+                      </View>
+
+                      <View style={styles.modalDetailSection}>
+                        <Text
+                          style={[styles.modalLabel, {color: modalLabelColor}]}>
+                          날짜
+                        </Text>
+                        <Text
+                          style={[styles.modalValue, {color: modalValueColor}]}>
+                          {new Date(
+                            formatDate(selectedReservation.date),
+                          ).toLocaleDateString('ko-KR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}
+                        </Text>
+                      </View>
+
+                      <View style={styles.modalDetailSection}>
+                        <Text
+                          style={[styles.modalLabel, {color: modalLabelColor}]}>
+                          시간
+                        </Text>
+                        <Text
+                          style={[styles.modalValue, {color: modalValueColor}]}>
+                          {formatTime(selectedReservation.startTime)} -{' '}
+                          {formatTime(selectedReservation.endTime)}
+                        </Text>
+                      </View>
+
+                      {selectedReservation.description && (
                         <View style={styles.modalDetailSection}>
                           <Text
                             style={[
                               styles.modalLabel,
                               {color: modalLabelColor},
                             ]}>
-                            제목
+                            설명
                           </Text>
                           <Text
                             style={[
                               styles.modalValue,
                               {color: modalValueColor},
                             ]}>
-                            {selectedReservation.title || '제목 없음'}
+                            {selectedReservation.description}
                           </Text>
                         </View>
+                      )}
 
+                      {selectedReservation.phone && (
                         <View style={styles.modalDetailSection}>
                           <Text
                             style={[
                               styles.modalLabel,
                               {color: modalLabelColor},
                             ]}>
-                            상태
-                          </Text>
-                          <View style={styles.statusContainer}>
-                            <Icon
-                              name={statusIcon.name}
-                              size={20}
-                              color={statusIcon.color}
-                            />
-                            <Text
-                              style={[
-                                styles.modalValue,
-                                styles.statusTextWithMargin,
-                                {color: modalValueColor},
-                              ]}>
-                              {getStatusText(selectedReservation.status)}
-                            </Text>
-                          </View>
-                        </View>
-
-                        <View style={styles.modalDetailSection}>
-                          <Text
-                            style={[
-                              styles.modalLabel,
-                              {color: modalLabelColor},
-                            ]}>
-                            장비 목록 ({selectedReservation.equipments.length})
-                          </Text>
-                          {selectedReservation.equipments.map(
-                            (equipment: Equipment) => (
-                              <Text
-                                key={equipment.uuid}
-                                style={[
-                                  styles.modalValue,
-                                  styles.equipmentName,
-                                  {color: modalValueColor},
-                                ]}>
-                                - {equipment.name}
-                              </Text>
-                            ),
-                          )}
-                        </View>
-
-                        <View style={styles.modalDetailSection}>
-                          <Text
-                            style={[
-                              styles.modalLabel,
-                              {color: modalLabelColor},
-                            ]}>
-                            날짜
+                            연락처
                           </Text>
                           <Text
                             style={[
                               styles.modalValue,
                               {color: modalValueColor},
                             ]}>
-                            {new Date(
-                              formatDate(selectedReservation.date),
-                            ).toLocaleDateString('ko-KR', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                            })}
+                            {selectedReservation.phone}
                           </Text>
                         </View>
+                      )}
 
-                        <View style={styles.modalDetailSection}>
-                          <Text
-                            style={[
-                              styles.modalLabel,
-                              {color: modalLabelColor},
-                            ]}>
-                            시간
+                      {selectedReservation.status !== '거절' && (
+                        <TouchableOpacity
+                          style={[
+                            styles.modalCancelButton,
+                            styles.cancelButtonBg,
+                          ]}
+                          onPress={() =>
+                            handleCancelReservation(selectedReservation.uuid)
+                          }>
+                          <Icon name="cancel" size={20} color="#FFFFFF" />
+                          <Text style={styles.modalCancelButtonText}>
+                            예약 취소
                           </Text>
-                          <Text
-                            style={[
-                              styles.modalValue,
-                              {color: modalValueColor},
-                            ]}>
-                            {formatTime(selectedReservation.startTime)} -{' '}
-                            {formatTime(selectedReservation.endTime)}
-                          </Text>
-                        </View>
-
-                        {selectedReservation.description && (
-                          <View style={styles.modalDetailSection}>
-                            <Text
-                              style={[
-                                styles.modalLabel,
-                                {color: modalLabelColor},
-                              ]}>
-                              설명
-                            </Text>
-                            <Text
-                              style={[
-                                styles.modalValue,
-                                {color: modalValueColor},
-                              ]}>
-                              {selectedReservation.description}
-                            </Text>
-                          </View>
-                        )}
-
-                        {selectedReservation.phone && (
-                          <View style={styles.modalDetailSection}>
-                            <Text
-                              style={[
-                                styles.modalLabel,
-                                {color: modalLabelColor},
-                              ]}>
-                              연락처
-                            </Text>
-                            <Text
-                              style={[
-                                styles.modalValue,
-                                {color: modalValueColor},
-                              ]}>
-                              {selectedReservation.phone}
-                            </Text>
-                          </View>
-                        )}
-
-                        {selectedReservation.status !== '거절' && (
-                          <TouchableOpacity
-                            style={[
-                              styles.modalCancelButton,
-                              styles.cancelButtonBg,
-                            ]}
-                            onPress={() =>
-                              handleCancelReservation(selectedReservation.uuid)
-                            }>
-                            <Icon name="cancel" size={20} color="#FFFFFF" />
-                            <Text style={styles.modalCancelButtonText}>
-                              예약 취소
-                            </Text>
-                          </TouchableOpacity>
-                        )}
-                      </>
-                    );
-                  })()}
-              </ScrollView>
-            </Animated.View>
-          </GestureDetector>
+                        </TouchableOpacity>
+                      )}
+                    </>
+                  );
+                })()}
+            </ScrollView>
+          </Animated.View>
         </GestureHandlerRootView>
       </Modal>
     </>
@@ -836,6 +827,7 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     paddingTop: 12,
+    paddingBottom: 8,
   },
   dragHandle: {
     width: 40,
