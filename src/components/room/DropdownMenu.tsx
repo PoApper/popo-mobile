@@ -103,6 +103,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             placeholder={placeholderText}
             placeholderTextColor={ColorStyle.placeholder}
             value={selected}
+            maxLength={10}
             onChangeText={txt => {
               if (txt && txt.trim().length > 0) {
                 onSelect(txt);
