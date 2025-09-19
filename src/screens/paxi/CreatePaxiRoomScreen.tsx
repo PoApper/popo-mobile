@@ -393,7 +393,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             <TextInput
               style={[inputBase, {height: 112}]}
               multiline
-              placeholder="세부사항을 입력해주세요"
+              placeholder="캐리어 큰 거 하나 있습니다!"
               placeholderTextColor={C.placeholder}
               value={roomDetails}
               onChangeText={setRoomDetails}
