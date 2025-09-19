@@ -18,20 +18,28 @@ $ ./gradlew clean
 
 ### 빌드가 꼬인다면 아래 명령어를 실행해보자.
 
-빌드 캐시를 정리하는 명령어들
-
 ```bash
-$ ./gradlew assembleDebug --no-daemon
-```
-
-```bash
+# JS 코드 캐시 문제
 $ npx react-native start --reset-cache
 ```
 
 ```bash
-# 의존성 재설치
+# RN 네이티브 빌드 아티팩트 꼬임
+$ npx react-native clean
+a 로 모든 옵션 선택
+$ npm i
+```
+
+```bash
+# Android 네이티브 문제 
+$ ./gradlew assembleDebug --no-daemon
+```
+
+```bash
+# 의존성 꼬임
 $ rm -rf node_modules && npm install
 ```
+
 
 ## 실행
 
