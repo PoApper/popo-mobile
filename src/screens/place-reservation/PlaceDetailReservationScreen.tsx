@@ -172,7 +172,7 @@ const PlaceDetailReservationScreen = ({
 
   // 주말 컬러: 토/일 모두 빨강. 선택/비활성 상태는 기존 규칙 유지
   const renderDay = useCallback(
-    ({date, state, marking}: any) => {
+    ({date, state, marking, onPress}: any) => {
       const dayOfWeek = new Date(date.dateString).getDay(); // 0: Sun .. 6: Sat
       const isSunday = dayOfWeek === 0;
       const isSaturday = dayOfWeek === 6;
@@ -188,7 +188,7 @@ const PlaceDetailReservationScreen = ({
 
       return (
         <TouchableOpacity
-          onPress={() => onDayPress(date)}
+          onPress={() => onPress?.(date)}
           accessibilityRole="button"
           style={{
             alignSelf: 'center',
@@ -204,7 +204,7 @@ const PlaceDetailReservationScreen = ({
         </TouchableOpacity>
       );
     },
-    [isDarkMode, onDayPress, textColor],
+    [isDarkMode, textColor],
   );
 
   return (
@@ -290,6 +290,9 @@ const PlaceDetailReservationScreen = ({
                   '$1-$2-$3',
                 )}
                 firstDay={1}
+                hideExtraDays={false}
+                disableMonthChange={false}
+                enableSwipeMonths
                 onDayPress={onDayPress}
                 markedDates={marked}
                 dayComponent={renderDay}
