@@ -230,6 +230,25 @@ const PlaceReservationApplyScreen = ({
     );
   };
 
+  // 버튼 비활성화 조건: 필수값 누락 또는 과거 날짜 선택
+  const isPastSelectedDate = (() => {
+    const today = new Date();
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const selectedStart = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    );
+    return selectedStart < todayStart;
+  })();
+
+  const disabledCreate =
+    !phone.trim() || !title.trim() || !desc.trim() || isPastSelectedDate;
+
   // Picker 상태 관리 함수 추가
   const openDatePicker = () => {
     setShowDatePicker(true);
@@ -496,8 +515,20 @@ const PlaceReservationApplyScreen = ({
         </View>
 
         <TouchableOpacity
-          style={styles.reservationButton}
-          onPress={handleReservation}>
+          style={[
+            styles.reservationButton,
+            {
+              backgroundColor: disabledCreate
+                ? isDarkMode
+                  ? '#2C2C2C'
+                  : '#E5E7EB'
+                : '#2a2a2a',
+            },
+          ]}
+          onPress={handleReservation}
+          disabled={disabledCreate}
+          accessibilityState={{disabled: disabledCreate}}
+          activeOpacity={disabledCreate ? 1 : 0.85}>
           <Text style={styles.reservationButtonText}>예약하기</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
