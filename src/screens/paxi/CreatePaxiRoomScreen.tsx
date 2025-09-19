@@ -66,14 +66,14 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   // ---- Palette & tokens ----
   const C = {
     bg: isDarkMode ? '#0E0F10' : '#FFFFFF',
-    card: isDarkMode ? '#161718' : '#F7F7F8',
+    card: isDarkMode ? '#0E0F10' : 'white',
     text: isDarkMode ? '#EDEDED' : '#101113',
     textSub: isDarkMode ? '#A7A7AD' : '#6B6F76',
-    border: isDarkMode ? '#2A2C2F' : '#E5E7EB',
+    border: isDarkMode ? '#2C2C2C' : '#E5E7EB',
     borderStrong: isDarkMode ? '#3A3D41' : '#D1D5DB',
-    inputText: isDarkMode ? '#D0D0D3' : '#1F2328',
+    inputText: isDarkMode ? '#FFFFFF' : '#000000',
     placeholder: isDarkMode ? '#5B6066' : '#B7BBC2',
-    accent: '#FB5353',
+    accent: '#2a2a2a',
     dotRed: '#FF5757',
     dotBlack: isDarkMode ? '#FFFFFF' : '#111111',
     press: isDarkMode ? '#1C1E22' : '#EFEFF1',
@@ -182,11 +182,13 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const inputBase = {
     borderWidth: 1,
     borderRadius: 8,
-    paddingHorizontal: 14,
+    padding: 12,
     fontSize: 16,
+    height: 80,
+    textAlignVertical: 'top',
     color: C.inputText,
     borderColor: C.border,
-    backgroundColor: isDarkMode ? '#121315' : '#FFFFFF',
+    backgroundColor: C.bg,
   } as const;
 
   const disabledCreate =
@@ -199,7 +201,6 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const isArrivalInPaxiLocations = PAXI_LOCATIONS.some(
     loc => loc.name === arrivalName,
   );
-
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: C.bg}}>
       <StatusBar
@@ -216,7 +217,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
         <View style={styles.formSection}>
           {/* 방 제목 */}
           <View>
-            <Text style={[styles.label, {color: C.text}]}>방 제목</Text>
+            <Text style={[styles.label, {color: C.text}]}>
+              방 제목 <Text style={styles.requiredText}>*</Text>
+            </Text>
             <TextInput
               style={[inputBase, {height: 45}]}
               placeholder="제목을 입력해주세요"
@@ -230,7 +233,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
 
           {/* 위치 */}
           <View>
-            <Text style={[styles.label, {color: C.text}]}>위치</Text>
+            <Text style={[styles.label, {color: C.text}]}>
+              위치 <Text style={styles.requiredText}>*</Text>
+            </Text>
 
             <View
               style={[
@@ -292,13 +297,15 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
           {/* 날짜/시간 */}
           <View style={{flexDirection: 'row', gap: 12}}>
             <View style={{flex: 1}}>
-              <Text style={[styles.label, {color: C.text}]}>날짜</Text>
+              <Text style={[styles.label, {color: C.text}]}>
+                날짜 <Text style={styles.requiredText}>*</Text>
+              </Text>
               <TouchableOpacity
                 style={[
                   styles.selector,
                   {
                     borderColor: isDatePickerVisible ? C.accent : C.border,
-                    backgroundColor: isDarkMode ? '#121315' : '#FFFFFF',
+                    backgroundColor: C.bg,
                   },
                 ]}
                 onPress={() => setDatePickerVisible(true)}
@@ -310,7 +317,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             </View>
 
             <View style={{flex: 1}}>
-              <Text style={[styles.label, {color: C.text}]}>출발 시각</Text>
+              <Text style={[styles.label, {color: C.text}]}>
+                출발 시각 <Text style={styles.requiredText}>*</Text>
+              </Text>
               <TouchableOpacity
                 style={[
                   styles.selector,
@@ -393,7 +402,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
 
           {/* 최대 인원 */}
           <View>
-            <Text style={[styles.label, {color: C.text}]}>최대 인원</Text>
+            <Text style={[styles.label, {color: C.text}]}>
+              최대 인원 <Text style={styles.requiredText}>*</Text>
+            </Text>
             <View
               style={[
                 styles.counter,
@@ -437,15 +448,8 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
 
         {/* 생성 버튼 */}
         <TouchableOpacity
-          style={[
-            styles.createButton,
-            {
-              backgroundColor: disabledCreate ? C.disabled : C.accent,
-              opacity: disabledCreate ? 0.7 : 1,
-            },
-          ]}
+          style={[styles.createButton, {backgroundColor: C.accent}]}
           onPress={checkInputValid}
-          disabled={disabledCreate}
           activeOpacity={0.85}>
           <Text style={styles.createButtonText}>방 생성하기</Text>
         </TouchableOpacity>
@@ -467,10 +471,11 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   label: {
-    fontSize: 14,
-    fontWeight: '700',
-    letterSpacing: -0.2,
+    fontSize: 15,
+    fontWeight: '500',
+    marginHorizontal: 5,
     marginBottom: 8,
+    marginTop: 2,
   },
   card: {
     borderWidth: 1,
@@ -509,6 +514,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     justifyContent: 'center',
     minHeight: 40,
+  },
+  requiredText: {
+    color: '#FB5353',
   },
   createButton: {
     borderRadius: 12,
