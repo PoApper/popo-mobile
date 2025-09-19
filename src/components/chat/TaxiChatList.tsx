@@ -21,10 +21,7 @@ import BanReasonModal from './BanReasonModal';
 import {MyRoomData, UserData} from '@interfaces/paxi';
 
 interface TaxiChatListProps {
-  navigation: NativeStackNavigationProp<
-    RootStackParamList,
-    'MyReservation' | 'Reservation'
-  >;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
   refreshKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;
@@ -91,10 +88,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
     } else if (clickedRoom.userStatus === 'KICKED') {
       setShowBanReasonModal(true);
     } else {
-      navigation.navigate('NewChat', {
-        roomUuid: roomUuid,
-        from: 'myReservation',
-      });
+      navigation.navigate('NewChat', {roomUuid: roomUuid});
     }
   };
 
