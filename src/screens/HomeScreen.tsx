@@ -260,7 +260,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
             styles.floatingText,
             {color: isDarkMode ? '#E5E7EB' : '#111827'},
           ]}>
-          오류 제보
+          오류 및 개선점 제보
         </Text>
       </TouchableOpacity>
     </SafeAreaView>
