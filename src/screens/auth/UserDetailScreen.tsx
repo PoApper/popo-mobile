@@ -17,7 +17,7 @@ import axios from 'axios';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
-import Environment from '@utils/environment';
+import {Platform, NativeModules} from 'react-native';
 import {reset_auth} from '@utils/reset';
 import paxi_api from '@utils/paxi_api';
 import {PaxiUserMy} from '@interfaces/paxi';
@@ -331,7 +331,17 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
         </TouchableOpacity>
 
         {/* 개발자 페이지 버튼 */}
-        {!Environment.isProduction && (
+        {(() => {
+          const getApiEnv = () => {
+            if (Platform.OS === 'ios') {
+              return NativeModules.SourceCode?.constantsToExport?.API_ENV || 'development';
+            } else {
+              return NativeModules.BuildConfig?.API_ENV || 'development';
+            }
+          };
+          const isProduction = getApiEnv() === 'production';
+          return !isProduction;
+        })() && (
           <View style={{marginBottom: 48, marginTop: 16}}>
             <TouchableOpacity
               style={[styles.buttonContainer, {backgroundColor: '#4F46E5'}]}
