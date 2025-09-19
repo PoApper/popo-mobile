@@ -205,10 +205,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
 
   // 채팅 화면으로 이동
   const navigateToChat = () => {
-    navigation.navigate('NewChat', {
-      roomUuid: roomData.uuid,
-      from: 'roomList',
-    });
+    navigation.navigate('NewChat', {roomUuid: roomData.uuid});
   };
 
   // 참여자 수 색상 가져오기

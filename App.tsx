@@ -21,16 +21,13 @@ const App = () => {
 
     const handlePendingNavigation = async () => {
       const roomUuidData = await EncryptedStorage.getItem('roomUuid');
-      let roomUuid: string | undefined,
-        from: 'roomList' | 'myReservation' = 'roomList';
+      let roomUuid: string | undefined;
       if (roomUuidData) {
         try {
           const parsed = JSON.parse(roomUuidData);
           roomUuid = parsed.roomUuid;
-          from = parsed.from;
         } catch {
           roomUuid = roomUuidData;
-          from = 'roomList';
         }
       }
 
@@ -38,7 +35,7 @@ const App = () => {
       if (roomUuid) {
         const navigateToChat = () => {
           if (navigationRef.isReady()) {
-            navigationRef.current?.navigate('NewChat', {roomUuid, from});
+            navigationRef.current?.navigate('NewChat', {roomUuid});
             // 사용 후 저장된 값 삭제
             EncryptedStorage.removeItem('roomUuid');
             EncryptedStorage.removeItem('pendingNavigation');
