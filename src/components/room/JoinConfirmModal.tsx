@@ -93,8 +93,8 @@ const JoinConfirmModal: React.FC<Props> = ({
           <View style={styles.routeRow}>
             <View style={styles.leftCol}>
               <Text
-                style={[styles.routeText, {color: C.text}]}
-                numberOfLines={1}>
+                style={[styles.routeText, {color: C.text, textAlign: 'center'}]}
+                numberOfLines={2}>
                 {room.departureLocation}
               </Text>
             </View>
@@ -103,8 +103,8 @@ const JoinConfirmModal: React.FC<Props> = ({
             </View>
             <View style={styles.rightCol}>
               <Text
-                style={[styles.routeText, {color: C.text}]}
-                numberOfLines={1}>
+                style={[styles.routeText, {color: C.text, textAlign: 'center'}]}
+                numberOfLines={2}>
                 {room.destinationLocation}
               </Text>
             </View>
@@ -177,13 +177,14 @@ const styles = StyleSheet.create({
   routeLabel: {fontSize: 11, fontWeight: '600'},
   routeRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     marginBottom: 6,
     position: 'relative',
+    minHeight: 60, // 2줄 텍스트를 위한 최소 높이
   },
   arrow: {fontSize: 18},
-  arrowOverlay: {position: 'absolute', left: 0, right: 0, alignItems: 'center'},
+  arrowOverlay: {position: 'absolute', left: 0, right: 0, alignItems: 'center', justifyContent: 'center', height: 60},
   leftCol: {flex: 1, alignItems: 'center'},
   rightCol: {flex: 1, alignItems: 'center'},
   routeText: {fontSize: 20, fontWeight: '800'},
