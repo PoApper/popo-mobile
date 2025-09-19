@@ -195,7 +195,11 @@ const PlaceDetailReservationScreen = ({
 
       const weekendColor = isSunday || isSaturday ? '#FB5353' : textColor;
       const textColorResolved =
-        state === 'disabled' ? disabledColor : isSelected ? selectedFg : weekendColor;
+        state === 'disabled'
+          ? disabledColor
+          : isSelected
+          ? selectedFg
+          : weekendColor;
 
       const isAfterMax = date.dateString > maxDateStr;
 
@@ -214,7 +218,9 @@ const PlaceDetailReservationScreen = ({
             backgroundColor: isSelected ? selectedBg : 'transparent',
             marginVertical: 6,
           }}>
-          <Text style={{color: textColorResolved, fontSize: 16}}>{date.day}</Text>
+          <Text style={{color: textColorResolved, fontSize: 16}}>
+            {date.day}
+          </Text>
         </TouchableOpacity>
       );
     },
