@@ -197,9 +197,11 @@ const PlaceDetailReservationScreen = ({
       const textColorResolved =
         state === 'disabled' ? disabledColor : isSelected ? selectedFg : weekendColor;
 
+      const isAfterMax = date.dateString > maxDateStr;
+
       return (
         <TouchableOpacity
-          disabled={state === 'disabled'}
+          disabled={isAfterMax}
           onPress={() => onPress?.(date)}
           accessibilityRole="button"
           style={{
@@ -305,6 +307,8 @@ const PlaceDetailReservationScreen = ({
                 hideExtraDays={false}
                 disableMonthChange={false}
                 enableSwipeMonths
+                disableAllTouchEventsForDisabledDays={false}
+                disableAllTouchEventsForInactiveDays={false}
                 maxDate={maxDateStr}
                 onDayPress={onDayPress}
                 markedDates={marked}
