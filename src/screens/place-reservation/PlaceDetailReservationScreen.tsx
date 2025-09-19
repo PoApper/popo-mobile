@@ -170,6 +170,43 @@ const PlaceDetailReservationScreen = ({
     </View>
   );
 
+  // 주말 컬러: 토/일 모두 빨강. 선택/비활성 상태는 기존 규칙 유지
+  const renderDay = useCallback(
+    ({date, state, marking}: any) => {
+      const dayOfWeek = new Date(date.dateString).getDay(); // 0: Sun .. 6: Sat
+      const isSunday = dayOfWeek === 0;
+      const isSaturday = dayOfWeek === 6;
+      const isSelected = Boolean(marking?.selected);
+
+      const selectedBg = isDarkMode ? '#ddd' : 'black';
+      const selectedFg = isDarkMode ? 'black' : 'white';
+      const disabledColor = isDarkMode ? '#444444' : '#d9e1e8';
+
+      const weekendColor = isSunday || isSaturday ? '#FB5353' : textColor;
+      const textColorResolved =
+        state === 'disabled' ? disabledColor : isSelected ? selectedFg : weekendColor;
+
+      return (
+        <TouchableOpacity
+          onPress={() => onDayPress(date)}
+          accessibilityRole="button"
+          style={{
+            alignSelf: 'center',
+            width: 32,
+            height: 32,
+            borderRadius: 16,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: isSelected ? selectedBg : 'transparent',
+            marginVertical: 6,
+          }}>
+          <Text style={{color: textColorResolved, fontSize: 16}}>{date.day}</Text>
+        </TouchableOpacity>
+      );
+    },
+    [isDarkMode, onDayPress, textColor],
+  );
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -254,6 +291,7 @@ const PlaceDetailReservationScreen = ({
                 )}
                 onDayPress={onDayPress}
                 markedDates={marked}
+                dayComponent={renderDay}
                 renderHeader={date => {
                   const year = date.getFullYear();
                   const month = (date.getMonth() + 1)
