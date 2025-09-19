@@ -16,11 +16,12 @@ const getEnvironment = () => {
         isDevelopment: true,
       };
     }
-    const {ENV_CONFIG, API_URL} = NativeModules.SourceCode.constantsToExport;
+    const {ENV_CONFIG} = NativeModules.SourceCode.constantsToExport;
+    const isProduction = ENV_CONFIG === 'Production';
     return {
       environmentName: ENV_CONFIG || 'Development',
-      apiUrl: API_URL || 'https://api.popo-dev.poapper.club',
-      isProduction: ENV_CONFIG === 'Production',
+      apiUrl: isProduction ? 'https://api.popo.poapper.club' : 'https://api.popo-dev.poapper.club',
+      isProduction: isProduction,
       isTestFlight: ENV_CONFIG === 'TestFlight',
       isDevelopment: ENV_CONFIG === 'Debug' || !ENV_CONFIG,
     };
