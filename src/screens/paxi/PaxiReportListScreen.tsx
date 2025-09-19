@@ -107,7 +107,7 @@ const PaxiReportListScreen = ({navigation}: PaxiReportListScreenProps) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={isDarkMode ? ['#000000'] : ['#ffffff']}
+            colors={['#000000']}
             tintColor={isDarkMode ? '#FFFFFF' : '#000000'}
           />
         }

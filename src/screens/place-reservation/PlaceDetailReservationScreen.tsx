@@ -67,8 +67,8 @@ const PlaceDetailReservationScreen = ({
     () => ({
       [selectedDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')]: {
         selected: true,
-        selectedColor: '#FB5353',
-        selectedTextColor: 'white',
+        selectedColor: isDarkMode ? '#ddd' : 'black',
+        selectedTextColor: isDarkMode ? 'black' : 'white',
       },
     }),
     [selectedDate],
@@ -212,7 +212,7 @@ const PlaceDetailReservationScreen = ({
               fallbackSource={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
             />
             <TouchableOpacity
-              style={[styles.reserveButton]}
+              style={styles.reserveButton}
               onPress={() => {
                 // 선택된 날짜가 과거인지 검증
                 const today = new Date();
@@ -273,9 +273,8 @@ const PlaceDetailReservationScreen = ({
                   backgroundColor: isDarkMode ? '#121212' : '#ffffff',
                   calendarBackground: isDarkMode ? '#121212' : '#ffffff',
                   textSectionTitleColor: textColor,
-                  selectedDayBackgroundColor: '#FB5353',
                   selectedDayTextColor: '#ffffff',
-                  todayTextColor: '#FB5353',
+                  todayTextColor: '#ff6868',
                   dayTextColor: textColor,
                   textDisabledColor: isDarkMode ? '#444444' : '#d9e1e8',
                   monthTextColor: textColor,
@@ -283,6 +282,7 @@ const PlaceDetailReservationScreen = ({
                   textDayFontSize: 16,
                   textMonthFontSize: 16,
                   textDayHeaderFontSize: 14,
+                  arrowColor: isDarkMode ? 'white' : 'black',
                 }}
               />
             </View>
@@ -373,11 +373,11 @@ const styles = StyleSheet.create({
   },
   reserveButton: {
     width: '100%',
+    backgroundColor: '#2a2a2a',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 24,
-    backgroundColor: '#FB5353',
   },
   reserveButtonText: {
     color: '#FFFFFF',

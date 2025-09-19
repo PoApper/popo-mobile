@@ -19,15 +19,17 @@ import TaxiChatList from '@components/chat/TaxiChatList';
 import paxi_api from '@utils/paxi_api';
 
 type ReservationScreenProps = {
-  navigation?: NativeStackNavigationProp<RootStackParamList, 'Reservation'>;
-  route?: RouteProp<RootStackParamList, 'Reservation'>;
+  navigation?: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
+  route?: RouteProp<RootStackParamList, 'MyReservation'>;
 };
 
 type TabType = 'place' | 'equipment' | 'taxi';
 
 const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const route = useRoute<RouteProp<RootStackParamList, 'Reservation'>>();
+  const route = useRoute<RouteProp<RootStackParamList, 'MyReservation'>>();
+
+  const prevTab = route.params.prevTab;
 
   const [isPaxiUser, setIsPaxiUser] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('place');
@@ -35,7 +37,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
 
-  // 라우트 파라미터에서 selectedTab을 받아서 초기 탭 설정
+  // 라우트 파라미터에서 prevTab을 받아서 초기 탭 설정
   useEffect(() => {
     const checkPaxiUser = async () => {
       paxi_api
@@ -48,13 +50,13 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
         });
     };
     checkPaxiUser();
-    if (route.params?.selectedTab) {
-      const validTabs: TabType[] = ['place', 'equipment', 'taxi'];
-      if (validTabs.includes(route.params.selectedTab as TabType)) {
-        setActiveTab(route.params.selectedTab as TabType);
+    if (prevTab) {
+      const validTabs: string[] = ['NewChat'];
+      if (validTabs.includes(prevTab)) {
+        setActiveTab('taxi');
       }
     }
-  }, [route.params?.selectedTab]);
+  }, [prevTab]);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',

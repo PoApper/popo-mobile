@@ -12,44 +12,52 @@ import {KeyboardProvider} from 'react-native-keyboard-controller';
 
 import AppNavigator from './src/navigation/AppNavigator';
 import {requestUserPermission} from './src/utils/firebase';
+import paxi_api from './src/utils/paxi_api';
 import {displayNotification} from './src/utils/notifee';
-import {navigate, navigationRef} from './src/navigation/RootNavigation';
+import {navigationRef} from './src/navigation/RootNavigation';
 
 const App = () => {
   useEffect(() => {
     requestUserPermission();
 
+    const joinAndNavigate = async (
+      roomUuid?: string,
+      from: 'roomList' | 'myReservation' = 'roomList',
+    ) => {
+      if (!roomUuid) return;
+      try {
+        await paxi_api.post(`/room/join/${roomUuid}`);
+      } catch (e) {
+        // 실패해도 방으로 이동은 시도
+      }
+
+      const go = () => {
+        if (navigationRef.isReady()) {
+          navigationRef.current?.navigate('NewChat', {roomUuid, from});
+        } else {
+          setTimeout(go, 100);
+        }
+      };
+      go();
+    };
+
     const handlePendingNavigation = async () => {
       const roomUuidData = await EncryptedStorage.getItem('roomUuid');
-      let roomUuid: string | undefined,
-        from: 'roomList' | 'myReservation' = 'roomList';
+      let roomUuid: string | undefined;
       if (roomUuidData) {
         try {
           const parsed = JSON.parse(roomUuidData);
           roomUuid = parsed.roomUuid;
-          from = parsed.from;
         } catch {
           roomUuid = roomUuidData;
-          from = 'roomList';
         }
       }
 
       // roomUuid가 있으면 NewChat 스크린으로 이동
       if (roomUuid) {
-        const navigateToChat = () => {
-          if (navigationRef.isReady()) {
-            navigationRef.current?.navigate('NewChat', {roomUuid, from});
-            // 사용 후 저장된 값 삭제
-            EncryptedStorage.removeItem('roomUuid');
-            EncryptedStorage.removeItem('pendingNavigation');
-          } else {
-            // 네비게이션이 아직 준비되지 않았으면 다시 시도
-            setTimeout(navigateToChat, 100);
-          }
-        };
-
-        // 네비게이션 시도 시작
-        navigateToChat();
+        await joinAndNavigate(roomUuid, from);
+        EncryptedStorage.removeItem('roomUuid');
+        EncryptedStorage.removeItem('pendingNavigation');
       }
     };
 
@@ -70,15 +78,36 @@ const App = () => {
       if (type === EventType.PRESS) {
         const {notification} = detail;
         if (notification?.data?.roomUuid) {
-          navigate('NewChat', {
-            roomUuid: notification.data.roomUuid,
-            from: 'roomList',
-          });
+          joinAndNavigate(notification.data.roomUuid, 'roomList');
         }
       }
     });
 
-    return () => unsubscribe();
+    // 백그라운드 알림 클릭(앱이 백그라운드에서 열릴 때)
+    const unsubscribeOpened = messaging().onNotificationOpenedApp(
+      remoteMessage => {
+        const roomUuid = remoteMessage?.data?.roomUuid as string | undefined;
+        if (roomUuid) {
+          joinAndNavigate(roomUuid, 'roomList');
+        }
+      },
+    );
+
+    // 종료 상태에서 알림 클릭으로 실행된 경우 처리
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        const roomUuid = remoteMessage?.data?.roomUuid as string | undefined;
+        if (roomUuid) {
+          joinAndNavigate(roomUuid, 'roomList');
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      unsubscribe();
+      unsubscribeOpened();
+    };
   }, []);
 
   return (
