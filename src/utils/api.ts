@@ -15,7 +15,9 @@ declare global {
 // 환경에 따른 API URL 설정
 const getApiEnv = () => {
   if (Platform.OS === 'ios') {
-    return NativeModules.SourceCode?.constantsToExport?.API_ENV || 'development';
+    return (
+      NativeModules.SourceCode?.constantsToExport?.API_ENV || 'development'
+    );
   } else {
     // Android는 build.gradle에서 설정
     return NativeModules.BuildConfig?.API_ENV || 'development';
@@ -25,7 +27,7 @@ const getApiEnv = () => {
 const API_ENV = getApiEnv();
 const isProduction = API_ENV === 'production';
 
-export const POPO_API_URL = isProduction 
+export const POPO_API_URL = isProduction
   ? 'https://api.popo.poapper.club'
   : 'https://api.popo-dev.poapper.club';
 

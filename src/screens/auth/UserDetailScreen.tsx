@@ -334,7 +334,10 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
         {(() => {
           const getApiEnv = () => {
             if (Platform.OS === 'ios') {
-              return NativeModules.SourceCode?.constantsToExport?.API_ENV || 'development';
+              return (
+                NativeModules.SourceCode?.constantsToExport?.API_ENV ||
+                'development'
+              );
             } else {
               return NativeModules.BuildConfig?.API_ENV || 'development';
             }
