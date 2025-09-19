@@ -192,8 +192,13 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   } as const;
 
   const disabledCreate =
-    !roomName || !departureName || !arrivalName || !selectedDateTime ||
-    roomName.length > 20 || departureName.length > 10 || arrivalName.length > 10;
+    !roomName ||
+    !departureName ||
+    !arrivalName ||
+    !selectedDateTime ||
+    roomName.length > 20 ||
+    departureName.length > 10 ||
+    arrivalName.length > 10;
 
   // 입력이 프리셋에 포함되어 있는지 여부(커스텀 입력이면 false)
   const isDepartureInPaxiLocations = PAXI_LOCATIONS.some(

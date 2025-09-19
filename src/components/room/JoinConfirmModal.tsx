@@ -184,7 +184,14 @@ const styles = StyleSheet.create({
     minHeight: 60, // 2줄 텍스트를 위한 최소 높이
   },
   arrow: {fontSize: 18},
-  arrowOverlay: {position: 'absolute', left: 0, right: 0, alignItems: 'center', justifyContent: 'center', height: 60},
+  arrowOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 60,
+  },
   leftCol: {flex: 1, alignItems: 'center'},
   rightCol: {flex: 1, alignItems: 'center'},
   routeText: {fontSize: 20, fontWeight: '800'},
