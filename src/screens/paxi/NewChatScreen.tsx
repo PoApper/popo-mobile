@@ -8,11 +8,11 @@ import {
   useColorScheme,
   StatusBar,
   FlatList,
-  KeyboardAvoidingView,
   Platform,
   Alert,
   Keyboard,
 } from 'react-native';
+import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp, useRoute, useFocusEffect} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -67,28 +67,6 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     {} as MessageData,
   );
   const [showUserInfo, setShowUserInfo] = useState<boolean>(false);
-  const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
-
-  // 키보드 이벤트 리스너 추가
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      e => {
-        setKeyboardHeight(e.endCoordinates.height);
-      },
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        setKeyboardHeight(0);
-      },
-    );
-
-    return () => {
-      keyboardDidShowListener?.remove();
-      keyboardDidHideListener?.remove();
-    };
-  }, []);
 
   const getRoomInfo = async () => {
     paxi_api
@@ -383,9 +361,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       )}
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.container}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
+        behavior="padding"
+        style={styles.container}>
         <FlatList
           data={chatList}
           renderItem={({item}) => (
@@ -403,7 +380,6 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="interactive"
-          automaticallyAdjustKeyboardInsets={true}
         />
 
         <View
@@ -411,8 +387,6 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
             styles.inputContainer,
             {
               backgroundColor: backgroundColor(isDarkMode),
-              paddingBottom:
-                Platform.OS === 'android' ? keyboardHeight + 10 : 10,
             },
           ]}>
           <TextInput
@@ -466,6 +440,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingTop: 10,
     paddingHorizontal: 10,
+    paddingBottom: 10,
     alignItems: 'flex-end',
     backgroundColor: 'white',
   },
