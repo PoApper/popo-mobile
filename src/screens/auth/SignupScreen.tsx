@@ -103,7 +103,9 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
       .then(() => {
         Alert.alert(
           '회원가입 성공',
-          '회원가입에 성공했습니다! 😁\n계정 활성화 메일을 확인해주세요! \n발송 이메일: ' + fullEmail + '\n(1분 정도 지연 될 수 있습니다.)',
+          '회원가입에 성공했습니다! 😁\n계정 활성화 메일을 확인해주세요! \n발송 이메일: ' +
+            fullEmail +
+            '\n(1분 정도 지연 될 수 있습니다.)',
           [
             {
               text: '확인',
@@ -186,13 +188,14 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
               ]}>
               Email*
             </Text>
-            <View style={[
-              styles.emailInputContainer,
-              {
-                backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
-                borderColor: isDarkMode ? '#555555' : '#E5E7EB',
-              }
-            ]}>
+            <View
+              style={[
+                styles.emailInputContainer,
+                {
+                  backgroundColor: isDarkMode ? '#333333' : '#FFFFFF',
+                  borderColor: isDarkMode ? '#555555' : '#E5E7EB',
+                },
+              ]}>
               <TextInput
                 style={[
                   styles.emailInput,
@@ -205,7 +208,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 keyboardType="email-address"
                 autoCapitalize="none"
                 value={email}
-                onChangeText={(text) => {
+                onChangeText={text => {
                   setEmail(text);
                 }}
               />
