@@ -208,6 +208,24 @@ SidebarModalProps) => {
   };
 
   const handleLeavePress = () => {
+    // If settlement is completed, show different message
+    if (isPaidEnd) {
+      Alert.alert(
+        '정산이 종료됨',
+        '정보 보존을 위해 정산이 완료된 방은 나갈 수 없습니다.',
+        [{text: '확인', style: 'default'}]
+      );
+      return;
+    }
+
+    if (isSettlementRequestExist) {
+      Alert.alert(
+        '생성된 정산 요청이 있습니다.',
+        '정산 요청이 있는 채팅방은 나갈 수 없습니다.\n정산이 완료된 후, 정산자가 채팅방을 직접 마감해주세요.',
+      );
+      return;
+    }
+
     // If owner and there are other participants, open transfer modal first
     if (isIamOwner && roomPeopleCnt > 1) {
       setTransferModalVisible(true);
@@ -387,18 +405,9 @@ SidebarModalProps) => {
                   <TouchableOpacity
                     style={[
                       styles.leaveRoomButton,
-                      {opacity: isSettlementRequestExist ? 0.5 : 1},
+                      {opacity: isSettlementRequestExist || isPaidEnd ? 0.5 : 1},
                     ]}
-                    onPress={() => {
-                      if (isSettlementRequestExist) {
-                        Alert.alert(
-                          '생성된 정산 요청이 있습니다.',
-                          '정산 요청이 있는 채팅방은 나갈 수 없습니다.\n정산이 완료된 후, 정산자가 채팅방을 직접 마감해주세요.',
-                        );
-                      } else {
-                        handleLeavePress();
-                      }
-                    }}>
+                    onPress={() => handleLeavePress()}>
                     <Icon
                       name="logout"
                       size={30}
