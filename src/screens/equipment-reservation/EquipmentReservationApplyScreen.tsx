@@ -252,6 +252,23 @@ const EquipmentReservationApplyScreen = ({
 
   // 예약 생성
   const handleReservation = () => {
+    // 과거 날짜는 예약 금지
+    const today = new Date();
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const selectedStart = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    );
+    if (selectedStart < todayStart) {
+      Alert.alert('알림', '과거 날짜는 예약할 수 없습니다.');
+      return;
+    }
+
     if (!phone.trim()) {
       Alert.alert('알림', '전화번호를 입력해주세요.');
       return;
@@ -746,7 +763,6 @@ const EquipmentReservationApplyScreen = ({
             }}
             onCancel={() => setShowDatePicker(false)}
             date={date}
-            minimumDate={new Date()}
             maximumDate={
               new Date(new Date().setDate(new Date().getDate() + 30))
             }

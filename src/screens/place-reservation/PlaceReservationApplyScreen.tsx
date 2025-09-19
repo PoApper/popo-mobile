@@ -146,6 +146,23 @@ const PlaceReservationApplyScreen = ({
       return;
     }
 
+    // 과거 날짜는 예약 금지 (조회만 허용)
+    const today = new Date();
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const selectedStart = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    );
+    if (selectedStart < todayStart) {
+      Alert.alert('알림', '과거 날짜는 예약할 수 없습니다.');
+      return;
+    }
+
     // 예약 정보 확인 팝업
     Alert.alert(
       '',
@@ -426,7 +443,6 @@ const PlaceReservationApplyScreen = ({
                 setDate(date);
               }}
               onCancel={() => setShowDatePicker(false)}
-              minimumDate={new Date()}
               maximumDate={
                 new Date(new Date().setDate(new Date().getDate() + 30))
               }
