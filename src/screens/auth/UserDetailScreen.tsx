@@ -243,7 +243,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                     onPress={() => {
                       navigation.navigate('UserAccountInfo');
                     }}>
-                    <Text style={styles.editButtonText}>
+                    <Text style={[styles.editButtonText, {color: isDarkMode ? 'black' : 'white'}]}>
                       {isPaxiAccountInfoExist ? '수정' : '등록'}
                     </Text>
                   </TouchableOpacity>
