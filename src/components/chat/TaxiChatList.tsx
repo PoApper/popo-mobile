@@ -263,7 +263,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
     }
     return (
       <View style={styles.loadingFooter}>
-        <ActivityIndicator size="small" color="#4F46E5" />
+        <ActivityIndicator size="small" color={textColor} />
       </View>
     );
   };
@@ -271,9 +271,9 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#4F46E5" />
+        <ActivityIndicator size="large" color={textColor} />
         <Text style={[styles.loadingText, {color: textColor}]}>
-          예약 정보를 불러오는 중...
+          카풀 정보를 불러오는 중...
         </Text>
       </View>
     );
@@ -323,8 +323,8 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           <RefreshControl
             refreshing={refreshing || false}
             onRefresh={onRefresh}
-            colors={['#4F46E5']}
-            tintColor="#4F46E5"
+            colors={['#000000']}
+            tintColor={isDarkMode ? '#FFFFFF' : '#000000'}
           />
         }
         style={{flex: 1}}
@@ -453,18 +453,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     marginBottom: 24,
-  },
-  newReservationButton: {
-    backgroundColor: '#4F46E5',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    width: '80%',
-  },
-  newReservationButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
   },
   loadingFooter: {
     paddingVertical: 20,
