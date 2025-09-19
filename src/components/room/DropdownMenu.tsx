@@ -31,6 +31,7 @@ interface DropdownMenuProps {
   selected: string;
   onSelect: (selectedOption: string) => void;
   onCustomModeChange: (isCustom: boolean) => void;
+  maxLength?: number;
 }
 
 const CUSTOM_INPUT_ITEM = {name: '직접 입력'};
@@ -41,6 +42,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   selected,
   onSelect,
   onCustomModeChange,
+  maxLength = 10,
 }: DropdownMenuProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [visible, setVisible] = useState(false);
@@ -103,6 +105,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             placeholder={placeholderText}
             placeholderTextColor={ColorStyle.placeholder}
             value={selected}
+            maxLength={maxLength}
             onChangeText={txt => {
               if (txt && txt.trim().length > 0) {
                 onSelect(txt);

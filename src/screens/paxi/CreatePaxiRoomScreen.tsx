@@ -192,7 +192,13 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   } as const;
 
   const disabledCreate =
-    !roomName || !departureName || !arrivalName || !selectedDateTime;
+    !roomName ||
+    !departureName ||
+    !arrivalName ||
+    !selectedDateTime ||
+    roomName.length > 20 ||
+    departureName.length > 10 ||
+    arrivalName.length > 10;
 
   // 입력이 프리셋에 포함되어 있는지 여부(커스텀 입력이면 false)
   const isDepartureInPaxiLocations = PAXI_LOCATIONS.some(
@@ -222,10 +228,11 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             </Text>
             <TextInput
               style={[inputBase, {height: 45}]}
-              placeholder="제목을 입력해주세요"
+              placeholder="제목을 입력해주세요 (최대 20자)"
               placeholderTextColor={C.placeholder}
               value={roomName}
               onChangeText={setRoomName}
+              maxLength={20}
               accessibilityLabel="방 제목 입력"
               returnKeyType="done"
             />
@@ -245,13 +252,14 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               <View style={styles.row}>
                 <View style={[styles.dot, {backgroundColor: C.dotBlack}]} />
                 <DropdownMenu
-                  placeholderText={'어디서 출발하시나요?'}
+                  placeholderText={'어디서 출발하시나요? (최대 10자)'}
                   options={PAXI_LOCATIONS.filter(
                     item => item.id !== arrivalName,
                   )}
                   onSelect={selected => setDepartureName(selected ?? '출발지')}
                   selected={departureName}
                   onCustomModeChange={setIsDepartureCustom}
+                  maxLength={10}
                 />
               </View>
 
@@ -260,13 +268,14 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               <View style={styles.row}>
                 <View style={[styles.dot, {backgroundColor: C.dotRed}]} />
                 <DropdownMenu
-                  placeholderText={'어디로 떠나시나요?'}
+                  placeholderText={'어디로 떠나시나요? (최대 10자)'}
                   options={PAXI_LOCATIONS.filter(
                     item => item.id !== departureName,
                   )}
                   onSelect={selected => setArrivalName(selected ?? '도착지')}
                   selected={arrivalName}
                   onCustomModeChange={setIsArrivalCustom}
+                  maxLength={10}
                 />
               </View>
             </View>
@@ -389,11 +398,12 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             <TextInput
               style={[inputBase, {height: 112}]}
               multiline
-              placeholder="세부사항을 입력해주세요"
+              placeholder="캐리어 큰 거 하나 있습니다!"
               placeholderTextColor={C.placeholder}
               value={roomDetails}
               onChangeText={setRoomDetails}
               textAlignVertical="top"
+              maxLength={100}
             />
             <Text style={{color: C.textSub, fontSize: 12, marginTop: 6}}>
               최대 100자

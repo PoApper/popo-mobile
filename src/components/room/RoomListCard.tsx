@@ -11,7 +11,6 @@ import {
 import moment from 'moment';
 
 import paxi_api from '@utils/paxi_api';
-import DottedArrow from './DottedArrow';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import {ChatRoomInfo} from '~/src/interfaces/paxi';
@@ -274,11 +273,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
               {roomData.departureLocation}
             </Text>
 
-            <DottedArrow
-              width={100}
-              height={25}
-              color={isDarkMode ? 'white' : 'black'}
-            />
+            <Text style={[styles.arrowText, {color: theme.text}]}>→</Text>
 
             <Text style={[styles.detailsText, {color: theme.text}]}>
               {roomData.destinationLocation}
@@ -366,6 +361,10 @@ const styles = StyleSheet.create({
   },
   detailsText: {
     fontSize: 18,
+  },
+  arrowText: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   arrow: {
     fontSize: 20,
