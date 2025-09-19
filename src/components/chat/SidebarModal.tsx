@@ -190,10 +190,6 @@ SidebarModalProps) => {
             text: '확인',
             onPress: () => {
               setModalVisible(false);
-              navigation.navigate('Main', {
-                tab: 'MyReservation',
-                prevTab: 'NewChat',
-              });
             },
           },
         ]);
