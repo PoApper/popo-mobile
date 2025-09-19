@@ -148,6 +148,18 @@ const PlaceDetailReservationScreen = ({
   const subTextColor = isDarkMode ? '#888888' : '#6B7280';
   const cardBackgroundColor = isDarkMode ? '#1A1A1A' : '#F3F3F3';
 
+  // 예약 가능 범위: 오늘 ~ 30일 후
+  const {minDateStr, maxDateStr} = useMemo(() => {
+    const toStr = (d: Date) =>
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
+        d.getDate(),
+      ).padStart(2, '0')}`;
+    const today = new Date();
+    const max = new Date();
+    max.setDate(max.getDate() + 30);
+    return {minDateStr: toStr(today), maxDateStr: toStr(max)};
+  }, []);
+
   const renderReservationItem = ({item}: {item: Reservation}) => (
     <View
       style={[styles.reservationItem, {backgroundColor: cardBackgroundColor}]}>
@@ -188,6 +200,7 @@ const PlaceDetailReservationScreen = ({
 
       return (
         <TouchableOpacity
+          disabled={state === 'disabled'}
           onPress={() => onPress?.(date)}
           accessibilityRole="button"
           style={{
@@ -293,6 +306,8 @@ const PlaceDetailReservationScreen = ({
                 hideExtraDays={false}
                 disableMonthChange={false}
                 enableSwipeMonths
+                minDate={minDateStr}
+                maxDate={maxDateStr}
                 onDayPress={onDayPress}
                 markedDates={marked}
                 dayComponent={renderDay}
