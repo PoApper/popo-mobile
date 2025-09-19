@@ -223,7 +223,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={isDarkMode ? ['#FFFFFF'] : ['#000000']}
+            colors={['#000000']}
             tintColor={isDarkMode ? '#FFFFFF' : '#000000'}
           />
         }

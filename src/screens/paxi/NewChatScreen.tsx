@@ -45,7 +45,7 @@ type ChatScreenRouteProp = RouteProp<RootStackParamList, 'NewChat'>;
 const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const route = useRoute<ChatScreenRouteProp>();
-  const {roomUuid, from} = route.params;
+  const {roomUuid} = route.params;
 
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [roomInfo, setRoomInfo] = useState<ChatRoomInfo>({} as ChatRoomInfo);
@@ -61,6 +61,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   );
   const [isSettlement, setIsSettlement] = useState<boolean>(false);
   const [isPaid, setIsPaid] = useState<boolean | undefined>(undefined);
+  const [isPaidEnd, setIsPaidEnd] = useState<boolean>(false);
   const [showMyChatOptions, setShowMyChatOptions] = useState<boolean>(false);
   const [selectedMsgData, setSelectedMsgData] = useState<MessageData>(
     {} as MessageData,
@@ -199,6 +200,10 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       setIsSettlement(false);
     });
 
+    newSocket.on('updatedIsPaid', data => {
+      setIsPaid(data.isPaid);
+    });
+
     socketRef.current = newSocket;
   };
 
@@ -221,6 +226,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     );
 
     setIsPaid(matchedUser?.isPaid);
+    setIsPaidEnd(roomInfo.status === 'COMPLETED');
   }, [roomInfo, myInfo]);
 
   useFocusEffect(
@@ -299,9 +305,10 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         <TouchableOpacity
           style={common.backButton}
           onPress={() =>
-            from === 'roomList'
-              ? navigation.navigate('Main', {tab: 'Paxi'})
-              : navigation.navigate('Main', {tab: 'MyReservation'})
+            navigation.navigate('Main', {
+              tab: 'MyReservation',
+              prevTab: 'NewChat',
+            })
           }>
           <Text style={[common.backButtonText, {color: textColor(isDarkMode)}]}>
             뒤로
@@ -342,6 +349,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         roomData={roomInfo}
         myUuid={myInfo.uuid}
         navigation={navigation}
+        isPaidEnd={isPaidEnd}
       />
 
       <MsgModifyModal
@@ -366,7 +374,11 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
             paddingHorizontal: 10,
             zIndex: 999,
           }}>
-          <SettlementInfoBox isPaid={isPaid} settlementData={settlementData} />
+          <SettlementInfoBox
+            isPaid={isPaid}
+            isPaidEnd={isPaidEnd}
+            settlementData={settlementData}
+          />
         </View>
       )}
 

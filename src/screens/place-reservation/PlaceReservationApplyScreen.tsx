@@ -137,7 +137,11 @@ const PlaceReservationApplyScreen = ({
       Alert.alert('알림', '설명을 입력해주세요.');
       return;
     }
-    if (title.length === 1 || desc.length === 1) {
+    if (title.length === 1) {
+      Alert.alert('알림', '예약 제목이 너무 짧습니다.');
+      return;
+    }
+    if (desc.length === 1) {
       Alert.alert('알림', '예약 설명이 너무 짧습니다.');
       return;
     }
@@ -266,7 +270,9 @@ const PlaceReservationApplyScreen = ({
         </View>
         {/* 예약 폼 */}
         <View style={styles.formSection}>
-          <Text style={[styles.label, {color: textColor}]}>사용자</Text>
+          <Text style={[styles.label, {color: textColor}]}>
+            사용자 <Text style={styles.requiredText}>*</Text>
+          </Text>
           <TextInput
             style={[
               styles.input,
@@ -282,7 +288,9 @@ const PlaceReservationApplyScreen = ({
             placeholder="이름"
             placeholderTextColor={subTextColor}
           />
-          <Text style={[styles.label, {color: textColor}]}>전화번호</Text>
+          <Text style={[styles.label, {color: textColor}]}>
+            전화번호 <Text style={styles.requiredText}>*</Text>
+          </Text>
           <TextInput
             style={[
               styles.input,
@@ -299,7 +307,9 @@ const PlaceReservationApplyScreen = ({
             keyboardType="phone-pad"
             maxLength={13}
           />
-          <Text style={[styles.label, {color: textColor}]}>예약 제목</Text>
+          <Text style={[styles.label, {color: textColor}]}>
+            예약 제목 <Text style={styles.requiredText}>*</Text>
+          </Text>
           <TextInput
             style={[
               styles.input,
@@ -314,7 +324,9 @@ const PlaceReservationApplyScreen = ({
             placeholder="예약 제목을 입력하세요"
             placeholderTextColor={subTextColor}
           />
-          <Text style={[styles.label, {color: textColor}]}>설명</Text>
+          <Text style={[styles.label, {color: textColor}]}>
+            설명 <Text style={styles.requiredText}>*</Text>
+          </Text>
           <TextInput
             style={[
               styles.input,
@@ -341,8 +353,8 @@ const PlaceReservationApplyScreen = ({
             {/* 날짜 */}
             <View style={{flex: 1.5}}>
               <Text
-                style={[styles.label, {color: textColor, marginBottom: 13}]}>
-                날짜
+                style={[styles.label, {color: textColor, marginBottom: 10}]}>
+                날짜 <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 onPress={openDatePicker}
@@ -362,7 +374,7 @@ const PlaceReservationApplyScreen = ({
             <View style={{flex: 1}}>
               <Text
                 style={[styles.label, {color: textColor, marginBottom: 10}]}>
-                시작 시각
+                시작 시각 <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 onPress={openStartPicker}
@@ -385,7 +397,7 @@ const PlaceReservationApplyScreen = ({
             <View style={{flex: 1}}>
               <Text
                 style={[styles.label, {color: textColor, marginBottom: 10}]}>
-                종료 시각
+                종료 시각 <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 onPress={openEndPicker}
@@ -466,22 +478,13 @@ const PlaceReservationApplyScreen = ({
             />
           )}
         </View>
-      </KeyboardAwareScrollView>
 
-      <View
-        style={[
-          styles.bottomButtonContainer,
-          {
-            borderTopColor: borderColor,
-            backgroundColor: isDarkMode ? '#121212' : '#fff',
-          },
-        ]}>
         <TouchableOpacity
           style={styles.reservationButton}
           onPress={handleReservation}>
           <Text style={styles.reservationButtonText}>예약하기</Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
@@ -541,6 +544,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   disabledInput: {},
+  requiredText: {
+    color: '#FB5353',
+  },
   modalBackground: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.3)',
@@ -593,10 +599,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   reservationButton: {
-    backgroundColor: '#FB5353',
+    marginTop: 20,
     borderRadius: 8,
     paddingVertical: 16,
     alignItems: 'center',
+    backgroundColor: '#2a2a2a',
   },
   reservationButtonText: {
     color: '#fff',
