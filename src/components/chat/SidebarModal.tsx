@@ -349,7 +349,7 @@ SidebarModalProps) => {
                               {backgroundColor: isDarkMode ? '#333' : '#000'},
                             ]}>
                             <Text style={[styles.buttonText]}>
-                              정산을 진행 중입니다
+                              {isPaidEnd ? '정산이 완료되었습니다' : '정산을 진행 중입니다'}
                             </Text>
                           </View>
                         </View>
