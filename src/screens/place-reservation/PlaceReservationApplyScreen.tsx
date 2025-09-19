@@ -67,7 +67,7 @@ const PlaceReservationApplyScreen = ({
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  const scrollViewRef = useRef(null);
+  const scrollViewRef = useRef<any>(null);
 
   // 30분 단위로 시간 올림
   const roundUpToNearest30Minutes = (date: Date) => {
