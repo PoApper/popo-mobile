@@ -349,6 +349,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         roomData={roomInfo}
         myUuid={myInfo.uuid}
         navigation={navigation}
+        isPaidEnd={isPaidEnd}
       />
 
       <MsgModifyModal

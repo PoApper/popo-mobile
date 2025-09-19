@@ -32,6 +32,7 @@ interface SidebarModalProps {
   roomData: ChatRoomInfo;
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
   myUuid: string;
+  isPaidEnd?: boolean;
   // leaveRoom?: () => void;
 }
 
@@ -41,6 +42,7 @@ const SidebarModal = ({
   roomData,
   navigation,
   myUuid,
+  isPaidEnd = false,
 }: // leaveRoom,
 SidebarModalProps) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -289,7 +291,7 @@ SidebarModalProps) => {
                   )}
                   {(roomData.payerUuid?.length ?? 0) > 0 && (
                     <>
-                      {roomData.payerUuid === myUuid && (
+                      {roomData.payerUuid === myUuid && !isPaidEnd && (
                         <View
                           style={{
                             flexDirection: 'row',
@@ -405,7 +407,7 @@ SidebarModalProps) => {
                   </TouchableOpacity>
 
                   {/* 정산 완료 버튼 */}
-                  {isIamPayer && (
+                  {isIamPayer && !isPaidEnd && (
                     <TouchableOpacity
                       style={[
                         styles.completeSettlementButton,
