@@ -1,2 +1,3 @@
 // TestFlight 환경 설정
 ENV_CONFIG = TestFlight
+API_ENV = development
