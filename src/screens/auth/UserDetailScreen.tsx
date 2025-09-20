@@ -339,7 +339,17 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                 'development'
               );
             } else {
-              return NativeModules.BuildConfig?.API_ENV || 'development';
+              const buildConfig = NativeModules.BuildConfig;
+              let apiEnv = 'development';
+              
+              if (buildConfig && buildConfig.API_ENV) {
+                apiEnv = buildConfig.API_ENV;
+              } else {
+                // 대안: __DEV__ 플래그 사용
+                apiEnv = __DEV__ ? 'development' : 'production';
+              }
+              
+              return apiEnv;
             }
           };
           const isProduction = getApiEnv() === 'production';

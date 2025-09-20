@@ -15,12 +15,28 @@ declare global {
 // 환경에 따른 API URL 설정
 const getApiEnv = () => {
   if (Platform.OS === 'ios') {
-    return (
-      NativeModules.SourceCode?.constantsToExport?.API_ENV || 'development'
-    );
+    const apiEnv = NativeModules.SourceCode?.constantsToExport?.API_ENV || 'development';
+    console.log('iOS API_ENV:', apiEnv);
+    return apiEnv;
   } else {
     // Android는 build.gradle에서 설정
-    return NativeModules.BuildConfig?.API_ENV || 'development';
+    console.log('Android NativeModules.BuildConfig:', NativeModules.BuildConfig);
+    console.log('Android API_ENV:', NativeModules.BuildConfig?.API_ENV);
+    
+    // BuildConfig에서 직접 접근 시도
+    const buildConfig = NativeModules.BuildConfig;
+    let apiEnv = 'development';
+    
+    if (buildConfig && buildConfig.API_ENV) {
+      apiEnv = buildConfig.API_ENV;
+    } else {
+      // 대안: __DEV__ 플래그 사용
+      apiEnv = __DEV__ ? 'development' : 'production';
+      console.log('BuildConfig API_ENV not found, using __DEV__:', apiEnv);
+    }
+    
+    console.log('Android 최종 API_ENV:', apiEnv);
+    return apiEnv;
   }
 };
 
