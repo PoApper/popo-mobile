@@ -38,6 +38,30 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
     paxiUserData?.accountNumber &&
     paxiUserData?.accountHolderName;
 
+  // 환경 감지 함수
+  const getApiEnv = () => {
+    if (Platform.OS === 'ios') {
+      return (
+        NativeModules.SourceCode?.constantsToExport?.API_ENV ||
+        'development'
+      );
+    } else {
+      const buildConfig = NativeModules.BuildConfig;
+      let apiEnv = 'development';
+      
+      if (buildConfig && buildConfig.API_ENV) {
+        apiEnv = buildConfig.API_ENV;
+      } else {
+        // 대안: __DEV__ 플래그 사용
+        apiEnv = __DEV__ ? 'development' : 'production';
+      }
+      
+      return apiEnv;
+    }
+  };
+
+  const isProduction = getApiEnv() === 'production';
+
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
     flex: 1,
@@ -323,6 +347,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
           style={[
             styles.buttonContainer,
             {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
+            // 개발자 페이지가 숨겨질 때 하단 여백 추가
+            isProduction ? {marginBottom: 48} : {},
           ]}
           onPress={() => navigation.navigate('About')}>
           <Text style={[styles.leaveButtonText, {color: '#FFFFFF'}]}>
@@ -331,30 +357,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
         </TouchableOpacity>
 
         {/* 개발자 페이지 버튼 */}
-        {(() => {
-          const getApiEnv = () => {
-            if (Platform.OS === 'ios') {
-              return (
-                NativeModules.SourceCode?.constantsToExport?.API_ENV ||
-                'development'
-              );
-            } else {
-              const buildConfig = NativeModules.BuildConfig;
-              let apiEnv = 'development';
-              
-              if (buildConfig && buildConfig.API_ENV) {
-                apiEnv = buildConfig.API_ENV;
-              } else {
-                // 대안: __DEV__ 플래그 사용
-                apiEnv = __DEV__ ? 'development' : 'production';
-              }
-              
-              return apiEnv;
-            }
-          };
-          const isProduction = getApiEnv() === 'production';
-          return !isProduction;
-        })() && (
+        {!isProduction && (
           <View style={{marginBottom: 48, marginTop: 16}}>
             <TouchableOpacity
               style={[styles.buttonContainer, {backgroundColor: '#4F46E5'}]}
