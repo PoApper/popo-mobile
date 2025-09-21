@@ -41,7 +41,8 @@ const getApiEnv = () => {
 };
 
 const API_ENV = getApiEnv();
-const isProduction = API_ENV === 'production';
+// TODO: 동적으로 감지하도록 수정해야 함
+const isProduction = true;
 
 export const POPO_API_URL = isProduction
   ? 'https://api.popo.poapper.club'

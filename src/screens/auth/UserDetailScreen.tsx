@@ -60,7 +60,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
     }
   };
 
-  const isProduction = getApiEnv() === 'production';
+  // TODO: 동적으로 감지하도록 수정해야 함
+  const isProduction = true;
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
