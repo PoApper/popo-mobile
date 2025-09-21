@@ -6,6 +6,7 @@ import api from '@utils/api';
 import paxi_api from '@utils/paxi_api';
 import moment from 'moment';
 import {formatReservationTime} from '../utils/popo-datetime';
+import { POPO_API_URL } from '@utils/api';
 
 interface Place {
   uuid: string;
@@ -88,6 +89,7 @@ interface UpcomingEventsProps {
   refreshKey?: number;
 }
 
+
 const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [combinedEvents, setCombinedEvents] = useState<CombinedEvent[]>([]);
@@ -97,7 +99,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
     const fetchPlaceEvents = () => {
       return api
         .get<PaginatedResponse<PlaceReservation>>(
-          'https://api.popo-dev.poapper.club/reservation-place/user',
+          `${POPO_API_URL}/reservation-place/user`,
           {
             params: {
               skip: 0,
@@ -133,7 +135,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
     const fetchEquipmentEvents = () => {
       return api
         .get<PaginatedResponse<EquipmentReservation>>(
-          'https://api.popo-dev.poapper.club/reservation-equip/user',
+          `${POPO_API_URL}/reservation-equip/user`,
           {
             params: {
               skip: 0,
