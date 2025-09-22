@@ -38,27 +38,26 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
     paxiUserData?.accountNumber &&
     paxiUserData?.accountHolderName;
 
-  // 환경 감지 함수
-  const getApiEnv = () => {
-    if (Platform.OS === 'ios') {
-      return (
-        NativeModules.SourceCode?.constantsToExport?.API_ENV ||
-        'development'
-      );
-    } else {
-      const buildConfig = NativeModules.BuildConfig;
-      let apiEnv = 'development';
-      
-      if (buildConfig && buildConfig.API_ENV) {
-        apiEnv = buildConfig.API_ENV;
-      } else {
-        // 대안: __DEV__ 플래그 사용
-        apiEnv = __DEV__ ? 'development' : 'production';
-      }
-      
-      return apiEnv;
-    }
-  };
+  // // 환경 감지 함수
+  // const getApiEnv = () => {
+  //   if (Platform.OS === 'ios') {
+  //     return (
+  //       NativeModules.SourceCode?.constantsToExport?.API_ENV || 'development'
+  //     );
+  //   } else {
+  //     const buildConfig = NativeModules.BuildConfig;
+  //     let apiEnv = 'development';
+
+  //     if (buildConfig && buildConfig.API_ENV) {
+  //       apiEnv = buildConfig.API_ENV;
+  //     } else {
+  //       // 대안: __DEV__ 플래그 사용
+  //       apiEnv = __DEV__ ? 'development' : 'production';
+  //     }
+
+  //     return apiEnv;
+  //   }
+  // };
 
   // TODO: 동적으로 감지하도록 수정해야 함
   const isProduction = true;

@@ -22,14 +22,14 @@ const getApiEnv = () => {
     // Android는 build.gradle에서 설정
     const buildConfig = NativeModules.BuildConfig;
     let apiEnv = 'development';
-    
+
     if (buildConfig && buildConfig.API_ENV) {
       apiEnv = buildConfig.API_ENV;
     } else {
       // 대안: __DEV__ 플래그 사용
       apiEnv = __DEV__ ? 'development' : 'production';
     }
-    
+
     return apiEnv;
   }
 };

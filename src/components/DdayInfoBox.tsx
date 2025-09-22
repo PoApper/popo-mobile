@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, useColorScheme} from 'react-native';
 import axios from 'axios';
-import { POPO_API_URL } from '@utils/api';
+import {POPO_API_URL} from '@utils/api';
 
 type CalendarEvent = {
   id: number;

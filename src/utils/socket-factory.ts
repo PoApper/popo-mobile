@@ -1,7 +1,7 @@
 import {io} from 'socket.io-client';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {Socket} from 'socket.io-client';
-import { PAXI_API_URL } from './paxi_api';
+import {PAXI_API_URL} from './paxi_api';
 
 const SOCKET_URL = PAXI_API_URL;
 

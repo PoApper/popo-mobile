@@ -6,7 +6,7 @@ import api from '@utils/api';
 import paxi_api from '@utils/paxi_api';
 import moment from 'moment';
 import {formatReservationTime} from '../utils/popo-datetime';
-import { POPO_API_URL } from '@utils/api';
+import {POPO_API_URL} from '@utils/api';
 
 interface Place {
   uuid: string;
@@ -88,7 +88,6 @@ type PaginatedResponse<T> = {
 interface UpcomingEventsProps {
   refreshKey?: number;
 }
-
 
 const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
   const isDarkMode = useColorScheme() === 'dark';
