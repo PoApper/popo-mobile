@@ -17,7 +17,6 @@ import axios from 'axios';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
-import {Platform, NativeModules} from 'react-native';
 import {reset_auth} from '@utils/reset';
 import paxi_api from '@utils/paxi_api';
 import {PaxiUserMy} from '@interfaces/paxi';
