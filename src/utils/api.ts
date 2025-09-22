@@ -1,6 +1,7 @@
 import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import {Platform, NativeModules} from 'react-native';
 
 // EventEmitter 타입 선언
 declare global {
@@ -11,10 +12,47 @@ declare global {
     | undefined;
 }
 
-// API 기본 URL
-export const POPO_API_URL = 'https://api.popo-dev.poapper.club';
+// 환경에 따른 API URL 설정
+const getApiEnv = () => {
+  if (Platform.OS === 'ios') {
+    const apiEnv =
+      NativeModules.SourceCode?.constantsToExport?.API_ENV || 'development';
+    console.log('iOS API_ENV:', apiEnv);
+    return apiEnv;
+  } else {
+    // Android는 build.gradle에서 설정
+    console.log(
+      'Android NativeModules.BuildConfig:',
+      NativeModules.BuildConfig,
+    );
+    console.log('Android API_ENV:', NativeModules.BuildConfig?.API_ENV);
 
-console.log('현재 API URL:', POPO_API_URL);
+    // BuildConfig에서 직접 접근 시도
+    const buildConfig = NativeModules.BuildConfig;
+    let apiEnv = 'development';
+
+    if (buildConfig && buildConfig.API_ENV) {
+      apiEnv = buildConfig.API_ENV;
+    } else {
+      // 대안: __DEV__ 플래그 사용
+      apiEnv = __DEV__ ? 'development' : 'production';
+      console.log('BuildConfig API_ENV not found, using __DEV__:', apiEnv);
+    }
+
+    console.log('Android 최종 API_ENV:', apiEnv);
+    return apiEnv;
+  }
+};
+
+const API_ENV = getApiEnv();
+// TODO: 동적으로 감지하도록 수정해야 함
+const isProduction = true;
+
+export const POPO_API_URL = isProduction
+  ? 'https://api.popo.poapper.club'
+  : 'https://api.popo-dev.poapper.club';
+
+console.log('현재 API 환경:', API_ENV, 'URL:', POPO_API_URL);
 
 // axios 인스턴스 생성
 const api = axios.create({
