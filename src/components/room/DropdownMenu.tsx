@@ -170,7 +170,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       )}
 
       {visible && dropdownPosition && (
-        <Modal transparent animationType="fade" statusBarTranslucent={Platform.OS === 'android'} hardwareAccelerated>
+        <Modal
+          transparent
+          animationType="fade"
+          statusBarTranslucent={Platform.OS === 'android'}
+          hardwareAccelerated>
           <TouchableWithoutFeedback onPress={() => setVisible(false)}>
             <View style={styles.overlay}>
               <View

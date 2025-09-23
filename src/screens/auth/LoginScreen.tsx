@@ -296,22 +296,22 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity 
-            style={styles.needHelp} 
+          <TouchableOpacity
+            style={styles.needHelp}
             onPress={async () => {
               try {
-                const url = 'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true';
+                const url =
+                  'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true';
                 const supported = await Linking.canOpenURL(url);
-                
+
                 if (supported) {
                   await Linking.openURL(url);
                 } else {
                   Alert.alert(
                     '링크 열기 실패',
-                    '브라우저를 열 수 없습니다. 수동으로 다음 링크를 복사하여 브라우저에서 열어주세요:\n\n' + url,
-                    [
-                      {text: '확인', style: 'default'}
-                    ]
+                    '브라우저를 열 수 없습니다. 수동으로 다음 링크를 복사하여 브라우저에서 열어주세요:\n\n' +
+                      url,
+                    [{text: '확인', style: 'default'}],
                   );
                 }
               } catch (error) {
@@ -319,9 +319,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                 Alert.alert(
                   '오류',
                   '링크를 열 수 없습니다. 네트워크 연결을 확인해주세요.',
-                  [
-                    {text: '확인', style: 'default'}
-                  ]
+                  [{text: '확인', style: 'default'}],
                 );
               }
             }}>

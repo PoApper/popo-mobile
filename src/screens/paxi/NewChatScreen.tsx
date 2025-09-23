@@ -178,29 +178,29 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
     newSocket.on('updatedIsPaid', data => {
       console.debug('개별 정산 완료 업데이트:', data);
-      
+
       // 내 정산 상태 업데이트
       if (data.userUuid === myInfo.uuid) {
         setIsPaid(data.isPaid);
       }
-      
+
       // 방 정보의 해당 유저 정산 상태 업데이트
       setRoomInfo(prevRoomInfo => {
         if (!prevRoomInfo.roomUsers) return prevRoomInfo;
-        
+
         const updatedRoomUsers = prevRoomInfo.roomUsers.map((user: any) => {
           if (user.userUuid === data.userUuid) {
             return {
               ...user,
-              isPaid: data.isPaid
+              isPaid: data.isPaid,
             };
           }
           return user;
         });
-        
+
         return {
           ...prevRoomInfo,
-          roomUsers: updatedRoomUsers
+          roomUsers: updatedRoomUsers,
         };
       });
     });

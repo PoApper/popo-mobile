@@ -82,29 +82,35 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
     useCallback(() => {
       const onBackPress = () => {
         backPressCount.current += 1;
-        
+
         if (backPressCount.current === 1) {
           // 첫 번째 누름: 토스트 메시지 표시
           if (Platform.OS === 'android') {
-            ToastAndroid.show('한 번 더 누르면 앱이 종료됩니다', ToastAndroid.SHORT);
+            ToastAndroid.show(
+              '한 번 더 누르면 앱이 종료됩니다',
+              ToastAndroid.SHORT,
+            );
           }
-          
+
           // 2초 후 카운터 리셋
           setTimeout(() => {
             backPressCount.current = 0;
           }, 2000);
-          
+
           return true; // 기본 뒤로가기 동작 방지
         } else if (backPressCount.current === 2) {
           // 두 번째 누름: 앱 종료
           BackHandler.exitApp();
           return true;
         }
-        
+
         return true;
       };
 
-      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress,
+      );
       return () => subscription.remove();
     }, []),
   );
@@ -283,18 +289,18 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
         activeOpacity={0.85}
         onPress={async () => {
           try {
-            const url = 'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true';
+            const url =
+              'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true';
             const supported = await Linking.canOpenURL(url);
-            
+
             if (supported) {
               await Linking.openURL(url);
             } else {
               Alert.alert(
                 '링크 열기 실패',
-                '브라우저를 열 수 없습니다. 수동으로 다음 링크를 복사하여 브라우저에서 열어주세요:\n\n' + url,
-                [
-                  {text: '확인', style: 'default'}
-                ]
+                '브라우저를 열 수 없습니다. 수동으로 다음 링크를 복사하여 브라우저에서 열어주세요:\n\n' +
+                  url,
+                [{text: '확인', style: 'default'}],
               );
             }
           } catch (error) {
@@ -302,9 +308,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
             Alert.alert(
               '오류',
               '링크를 열 수 없습니다. 네트워크 연결을 확인해주세요.',
-              [
-                {text: '확인', style: 'default'}
-              ]
+              [{text: '확인', style: 'default'}],
             );
           }
         }}>

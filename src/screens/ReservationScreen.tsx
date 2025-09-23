@@ -8,7 +8,6 @@ import {
   StatusBar,
   ScrollView,
   BackHandler,
-  Alert,
   ToastAndroid,
   Platform,
 } from 'react-native';
@@ -88,29 +87,35 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
     useCallback(() => {
       const onBackPress = () => {
         backPressCount.current += 1;
-        
+
         if (backPressCount.current === 1) {
           // 첫 번째 누름: 토스트 메시지 표시
           if (Platform.OS === 'android') {
-            ToastAndroid.show('한 번 더 누르면 앱이 종료됩니다', ToastAndroid.SHORT);
+            ToastAndroid.show(
+              '한 번 더 누르면 앱이 종료됩니다',
+              ToastAndroid.SHORT,
+            );
           }
-          
+
           // 2초 후 카운터 리셋
           setTimeout(() => {
             backPressCount.current = 0;
           }, 2000);
-          
+
           return true; // 기본 뒤로가기 동작 방지
         } else if (backPressCount.current === 2) {
           // 두 번째 누름: 앱 종료
           BackHandler.exitApp();
           return true;
         }
-        
+
         return true;
       };
 
-      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress,
+      );
       return () => subscription.remove();
     }, []),
   );

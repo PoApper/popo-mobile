@@ -68,7 +68,9 @@ const PlaceDetailReservationScreen = ({
     if (!selectedDate) return false;
     const today = new Date();
     // 월은 0부터 시작함
-    const todayStr = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
+    const todayStr = `${today.getFullYear()}${String(
+      today.getMonth() + 1,
+    ).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
     return selectedDate < todayStr;
   }, [selectedDate]);
 
@@ -172,13 +174,13 @@ const PlaceDetailReservationScreen = ({
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case '통과':
-        return '#4CAF50'; 
+        return '#4CAF50';
       case '심사중':
-        return '#9E9E9E'; 
+        return '#9E9E9E';
       case '거절':
-        return '#F44336'; 
+        return '#F44336';
       default:
-        return '#9E9E9E'; 
+        return '#9E9E9E';
     }
   };
 
@@ -189,7 +191,12 @@ const PlaceDetailReservationScreen = ({
         <Text style={[styles.reservationTime, {color: textColor}]}>
           {convertTime(item.startTime)} - {convertTime(item.endTime)}
         </Text>
-        <View style={[styles.statusIndicator, {backgroundColor: getStatusColor(item.status)}]} />
+        <View
+          style={[
+            styles.statusIndicator,
+            {backgroundColor: getStatusColor(item.status)},
+          ]}
+        />
       </View>
       <View style={styles.reservationDetailContainer}>
         <Text style={[styles.reservationTitle, {color: textColor}]}>
@@ -367,12 +374,15 @@ const PlaceDetailReservationScreen = ({
         <TouchableOpacity
           style={[
             styles.reserveButton,
-            (!selectedDate || isPastDate) && {opacity: 0.5}
+            (!selectedDate || isPastDate) && {opacity: 0.5},
           ]}
           disabled={!selectedDate || isPastDate}
           onPress={() => {
             if (isPastDate) {
-              Alert.alert('알림', '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.');
+              Alert.alert(
+                '알림',
+                '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.',
+              );
               return;
             }
 
@@ -384,12 +394,11 @@ const PlaceDetailReservationScreen = ({
             });
           }}>
           <Text style={styles.reserveButtonText}>
-            {!selectedDate 
-              ? '날짜를 선택해주세요' 
-              : isPastDate 
-                ? '과거 날짜는 예약 불가' 
-                : '예약 신청하기'
-            }
+            {!selectedDate
+              ? '날짜를 선택해주세요'
+              : isPastDate
+              ? '과거 날짜는 예약 불가'
+              : '예약 신청하기'}
           </Text>
         </TouchableOpacity>
       </View>

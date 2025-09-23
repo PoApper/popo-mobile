@@ -93,7 +93,6 @@ const EquipmentReservationScreen = ({
   const subTextColor = isDarkMode ? '#888888' : '#6B7280';
   const cardBackgroundColor = isDarkMode ? '#1A1A1A' : '#F3F3F3';
 
-
   // 달력 마킹을 위한 marked 객체
   const marked = useMemo(
     () => ({
@@ -175,10 +174,7 @@ const EquipmentReservationScreen = ({
           </Text>
         </View>
         <TouchableOpacity
-          style={[
-            styles.detailButton,
-            {backgroundColor: cardBackgroundColor},
-          ]}
+          style={[styles.detailButton, {backgroundColor: cardBackgroundColor}]}
           onPress={() => {
             Alert.alert(
               '장비 상세정보',
@@ -213,7 +209,9 @@ const EquipmentReservationScreen = ({
     if (!selectedDate) return false;
     const today = new Date();
     // 월은 0부터 시작함
-    const todayStr = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
+    const todayStr = `${today.getFullYear()}${String(
+      today.getMonth() + 1,
+    ).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
     return selectedDate < todayStr;
   }, [selectedDate]);
 
@@ -277,25 +275,34 @@ const EquipmentReservationScreen = ({
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case '통과':
-        return '#4CAF50'; 
+        return '#4CAF50';
       case '심사중':
-        return '#9E9E9E'; 
+        return '#9E9E9E';
       case '거절':
-        return '#F44336'; 
+        return '#F44336';
       default:
-        return '#9E9E9E'; 
+        return '#9E9E9E';
     }
   };
 
   // 예약 현황 아이템 렌더링
   const renderReservationItem = useCallback(
     ({item}: {item: IEquipReservation}) => (
-      <View style={[styles.reservationItem, {backgroundColor: cardBackgroundColor}]}>
+      <View
+        style={[
+          styles.reservationItem,
+          {backgroundColor: cardBackgroundColor},
+        ]}>
         <View style={styles.reservationTimeContainer}>
           <Text style={[styles.reservationTime, {color: textColor}]}>
             {convertTime(item.startTime)} - {convertTime(item.endTime)}
           </Text>
-          <View style={[styles.statusIndicator, {backgroundColor: getStatusColor(item.status)}]} />
+          <View
+            style={[
+              styles.statusIndicator,
+              {backgroundColor: getStatusColor(item.status)},
+            ]}
+          />
         </View>
         <View style={styles.reservationDetailContainer}>
           <Text style={[styles.reservationTitle, {color: textColor}]}>
@@ -306,7 +313,12 @@ const EquipmentReservationScreen = ({
           </Text>
           <View style={styles.equipmentTags}>
             {item.equipments.map(e => (
-              <View key={e.uuid} style={[styles.equipmentTag, {backgroundColor: isDarkMode ? '#555' : '#E0E0E0'}]}>
+              <View
+                key={e.uuid}
+                style={[
+                  styles.equipmentTag,
+                  {backgroundColor: isDarkMode ? '#555' : '#E0E0E0'},
+                ]}>
                 <Text style={[styles.equipmentTagText, {color: textColor}]}>
                   {e.name}
                 </Text>
@@ -349,12 +361,12 @@ const EquipmentReservationScreen = ({
               ]}
               onPress={() => setSelectedTab(tab.value)}>
               <Text
-                 style={[
-                   styles.tabText,
-                   {color: subTextColor},
-                   selectedTab === tab.value && styles.selectedTabText,
-                   selectedTab === tab.value && {color: textColor},
-                 ]}>
+                style={[
+                  styles.tabText,
+                  {color: subTextColor},
+                  selectedTab === tab.value && styles.selectedTabText,
+                  selectedTab === tab.value && {color: textColor},
+                ]}>
                 {tab.label}
               </Text>
               {selectedTab === tab.value && (
@@ -369,7 +381,10 @@ const EquipmentReservationScreen = ({
         {/* 장비 보기 버튼 */}
         <View style={styles.equipmentViewButtonContainer}>
           <TouchableOpacity
-            style={[styles.equipmentViewButton, {backgroundColor: cardBackgroundColor}]}
+            style={[
+              styles.equipmentViewButton,
+              {backgroundColor: cardBackgroundColor},
+            ]}
             onPress={() => setShowEquipmentModal(true)}>
             <Text style={[styles.equipmentViewButtonText, {color: textColor}]}>
               장비 보기
@@ -377,8 +392,8 @@ const EquipmentReservationScreen = ({
           </TouchableOpacity>
         </View>
 
-         {/* 달력 섹션 */}
-         <View style={styles.calendarContainer}>
+        {/* 달력 섹션 */}
+        <View style={styles.calendarContainer}>
           <Calendar
             current={selectedDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')}
             firstDay={1}
@@ -392,9 +407,7 @@ const EquipmentReservationScreen = ({
             dayComponent={renderDay}
             renderHeader={date => {
               const year = date.getFullYear();
-              const month = (date.getMonth() + 1)
-                .toString()
-                .padStart(2, '0');
+              const month = (date.getMonth() + 1).toString().padStart(2, '0');
               return (
                 <Text
                   style={{
@@ -436,16 +449,16 @@ const EquipmentReservationScreen = ({
               />
             ) : reservations.length > 0 ? (
               <View>
-                {reservations.sort((a, b) => Number(a.startTime) - Number(b.startTime)).map((item) => (
-                  <View key={item.uuid}>
-                    {renderReservationItem({item})}
-                  </View>
-                ))}
+                {reservations
+                  .sort((a, b) => Number(a.startTime) - Number(b.startTime))
+                  .map(item => (
+                    <View key={item.uuid}>{renderReservationItem({item})}</View>
+                  ))}
               </View>
             ) : (
-               <Text style={[styles.noReservations, {color: subTextColor}]}>
-                 예약된 내역이 없습니다.
-               </Text>
+              <Text style={[styles.noReservations, {color: subTextColor}]}>
+                예약된 내역이 없습니다.
+              </Text>
             )}
           </View>
         )}
@@ -456,8 +469,7 @@ const EquipmentReservationScreen = ({
         visible={showEquipmentModal}
         transparent
         animationType="fade"
-        onRequestClose={() => setShowEquipmentModal(false)}
-      >
+        onRequestClose={() => setShowEquipmentModal(false)}>
         <View style={styles.modalOverlay}>
           {/* iOS에서 스크롤 제스처와 충돌 방지를 위해 자식(콘텐츠) 위로 올라오지 않게 "먼저" 배치 */}
           <TouchableOpacity
@@ -467,11 +479,21 @@ const EquipmentReservationScreen = ({
           />
 
           {/* 모달 콘텐츠 */}
-          <View style={[styles.modalContent, { backgroundColor: backgroundStyle.backgroundColor }]}>
+          <View
+            style={[
+              styles.modalContent,
+              {backgroundColor: backgroundStyle.backgroundColor},
+            ]}>
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: textColor }]}>장비 목록</Text>
-              <TouchableOpacity style={styles.closeButton} onPress={() => setShowEquipmentModal(false)}>
-                <Text style={[styles.closeButtonText, { color: textColor }]}>✕</Text>
+              <Text style={[styles.modalTitle, {color: textColor}]}>
+                장비 목록
+              </Text>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setShowEquipmentModal(false)}>
+                <Text style={[styles.closeButtonText, {color: textColor}]}>
+                  ✕
+                </Text>
               </TouchableOpacity>
             </View>
 
@@ -508,12 +530,15 @@ const EquipmentReservationScreen = ({
         <TouchableOpacity
           style={[
             styles.reserveButton,
-            (!selectedDate || isPastDate) && {opacity: 0.5}
+            (!selectedDate || isPastDate) && {opacity: 0.5},
           ]}
           disabled={!selectedDate || isPastDate}
           onPress={() => {
             if (isPastDate) {
-              Alert.alert('알림', '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.');
+              Alert.alert(
+                '알림',
+                '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.',
+              );
               return;
             }
             navigation.navigate('EquipmentReservationApply', {
@@ -522,12 +547,11 @@ const EquipmentReservationScreen = ({
             });
           }}>
           <Text style={styles.reserveButtonText}>
-            {!selectedDate 
-              ? '날짜를 선택해주세요' 
-              : isPastDate 
-                ? '과거 날짜는 예약 불가' 
-                : '예약 신청하기'
-            }
+            {!selectedDate
+              ? '날짜를 선택해주세요'
+              : isPastDate
+              ? '과거 날짜는 예약 불가'
+              : '예약 신청하기'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -750,7 +774,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
       },

@@ -101,7 +101,11 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
       </TouchableOpacity>
 
       {visible && dropdownPosition && (
-        <Modal transparent animationType="none" statusBarTranslucent={Platform.OS === 'android'} hardwareAccelerated>
+        <Modal
+          transparent
+          animationType="none"
+          statusBarTranslucent={Platform.OS === 'android'}
+          hardwareAccelerated>
           <TouchableWithoutFeedback onPress={() => setVisible(false)}>
             <View style={styles.overlay}>
               <View

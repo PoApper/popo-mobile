@@ -226,7 +226,11 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
               onChangeText={setRoomName}
               maxLength={20}
             />
-            <Text style={[styles.charCount, {color: isDarkMode ? '#555' : '#d0d0d0'}]}>
+            <Text
+              style={[
+                styles.charCount,
+                {color: isDarkMode ? '#555' : '#d0d0d0'},
+              ]}>
               {roomName.length}/20
             </Text>
           </View>
@@ -272,9 +276,10 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
                 />
               </View>
             </View>
-            {departureName && arrivalName && 
-             !isCustomLocation(departureName) && 
-             !isCustomLocation(arrivalName) ? (
+            {departureName &&
+            arrivalName &&
+            !isCustomLocation(departureName) &&
+            !isCustomLocation(arrivalName) ? (
               <View
                 style={{
                   backgroundColor: isDarkMode ? '#232323' : '#F0F0F0',
@@ -423,7 +428,11 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
             onChangeText={setRoomDetails}
             maxLength={100}
           />
-          <Text style={[styles.charCount, {color: isDarkMode ? '#555' : '#d0d0d0'}]}>
+          <Text
+            style={[
+              styles.charCount,
+              {color: isDarkMode ? '#555' : '#d0d0d0'},
+            ]}>
             {roomDetails.length}/100
           </Text>
         </View>

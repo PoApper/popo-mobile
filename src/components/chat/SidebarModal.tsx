@@ -232,8 +232,8 @@ SidebarModalProps) => {
     // If owner and alone, show deletion warning
     if (isIamOwner && roomPeopleCnt === 1) {
       Alert.alert(
-        '채팅방 나가기', 
-        '혼자 남은 상태에서 나가시면 방이 삭제됩니다.\n정말 나가시겠습니까?', 
+        '채팅방 나가기',
+        '혼자 남은 상태에서 나가시면 방이 삭제됩니다.\n정말 나가시겠습니까?',
         [
           {text: '취소', style: 'cancel'},
           {
@@ -243,7 +243,7 @@ SidebarModalProps) => {
               performLeave();
             },
           },
-        ]
+        ],
       );
       return;
     }

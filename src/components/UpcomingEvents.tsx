@@ -352,7 +352,9 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
           style={styles.scheduleScroll}>
           <View style={[styles.scheduleCard, {backgroundColor: '#4D61DD'}]}>
             <Text style={styles.scheduleTitle}>다가오는 일정이 없습니다</Text>
-            <Text style={styles.emptyDescription}>일주일 내의 일정들을 보여드려요</Text>
+            <Text style={styles.emptyDescription}>
+              일주일 내의 일정들을 보여드려요
+            </Text>
           </View>
         </ScrollView>
       </View>

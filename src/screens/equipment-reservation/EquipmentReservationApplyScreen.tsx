@@ -82,7 +82,7 @@ const EquipmentReservationApplyScreen = ({
     [],
   );
   const [equipmentList, setEquipmentList] = useState<IEquipment[]>([]);
-  
+
   // 선택된 날짜가 있으면 해당 날짜로, 없으면 현재 날짜로 초기화
   const getInitialDate = () => {
     if (selectedDate) {
@@ -94,7 +94,7 @@ const EquipmentReservationApplyScreen = ({
     }
     return new Date();
   };
-  
+
   const [date, setDate] = useState(getInitialDate());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [startTime, setStartTime] = useState(new Date());
@@ -279,7 +279,10 @@ const EquipmentReservationApplyScreen = ({
       date.getDate(),
     );
     if (selectedStart < todayStart) {
-      Alert.alert('알림', '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.');
+      Alert.alert(
+        '알림',
+        '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.',
+      );
       return;
     }
 
@@ -808,7 +811,7 @@ const EquipmentReservationApplyScreen = ({
             }}
             onCancel={() => setShowDatePicker(false)}
             date={date}
-            minimumDate={new Date(new Date().setHours(0, 0, 0, 0))} 
+            minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
             maximumDate={
               new Date(new Date().setDate(new Date().getDate() + 30))
             }
