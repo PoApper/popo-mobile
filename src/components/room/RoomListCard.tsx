@@ -187,7 +187,6 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
         console.log('response.data:', response.data);
         console.log('response.status', response.status);
         if (response.status === 201) {
-          Alert.alert('성공', '방에 참여했습니다.');
           navigateToChat();
         } else {
           Alert.alert('실패', '방 참여에 실패했습니다.');
