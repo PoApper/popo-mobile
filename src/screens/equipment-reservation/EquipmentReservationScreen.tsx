@@ -267,17 +267,14 @@ const EquipmentReservationScreen = ({
   // 상태 색상 변환 함수
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'approved':
-      case '승인':
-        return '#4CAF50'; // 초록색
-      case 'pending':
-      case '대기':
-        return '#FF9800'; // 주황색
-      case 'rejected':
-      case '거부':
-        return '#F44336'; // 빨간색
+      case '통과':
+        return '#4CAF50'; 
+      case '심사중':
+        return '#9E9E9E'; 
+      case '거절':
+        return '#F44336'; 
       default:
-        return '#9E9E9E'; // 회색
+        return '#9E9E9E'; 
     }
   };
 

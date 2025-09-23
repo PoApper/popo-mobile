@@ -159,6 +159,20 @@ const PlaceDetailReservationScreen = ({
     return {maxDateStr: toStr(max)};
   }, []);
 
+  // 상태 색상 변환 함수
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case '통과':
+        return '#4CAF50'; 
+      case '심사중':
+        return '#9E9E9E'; 
+      case '거절':
+        return '#F44336'; 
+      default:
+        return '#9E9E9E'; 
+    }
+  };
+
   const renderReservationItem = ({item}: {item: Reservation}) => (
     <View
       style={[styles.reservationItem, {backgroundColor: cardBackgroundColor}]}>
@@ -166,9 +180,7 @@ const PlaceDetailReservationScreen = ({
         <Text style={[styles.reservationTime, {color: textColor}]}>
           {convertTime(item.startTime)} - {convertTime(item.endTime)}
         </Text>
-        <Text style={[styles.reservationStatus, {color: '#FB5353'}]}>
-          {item.status}
-        </Text>
+        <View style={[styles.statusIndicator, {backgroundColor: getStatusColor(item.status)}]} />
       </View>
       <View style={styles.reservationDetailContainer}>
         <Text style={[styles.reservationTitle, {color: textColor}]}>
@@ -485,9 +497,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  reservationStatus: {
-    fontSize: 14,
-    fontWeight: '500',
+  statusIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
   },
   reservationUser: {
     fontSize: 14,
