@@ -67,9 +67,10 @@ const PlaceDetailReservationScreen = ({
   const todayStr = useMemo(() => {
     const today = new Date();
     // 월은 0부터 시작함
-    return `${today.getFullYear()}${String(
-      today.getMonth() + 1,
-    ).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
+    return `${today.getFullYear()}${String(today.getMonth() + 1).padStart(
+      2,
+      '0',
+    )}${String(today.getDate()).padStart(2, '0')}`;
   }, []);
 
   // 선택된 날짜가 과거인지 확인
