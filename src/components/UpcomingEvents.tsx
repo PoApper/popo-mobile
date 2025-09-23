@@ -439,8 +439,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
                   ? '택시 카풀'
                   : '장비 예약'}
               </Text>
-              {/* TODO: 장비 예약 상태도 표시 */}
-              {(event.type === 'place' || event.type === 'taxi') && (
+              {
                 <View style={styles.statusContainer}>
                   <View
                     style={[
@@ -452,7 +451,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
                     </Text>
                   </View>
                 </View>
-              )}
+              }
             </View>
             <Text style={styles.scheduleTitle}>{event.title}</Text>
             <View style={styles.scheduleInfo}>
