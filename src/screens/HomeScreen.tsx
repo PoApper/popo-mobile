@@ -234,7 +234,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
         </View>
 
         {/* 다가오는 일정 */}
-        <UpcomingEvents refreshKey={refreshKey} />
+        <UpcomingEvents refreshKey={refreshKey} navigation={navigation} />
 
         {/* 서비스 그리드 */}
         <View style={styles.servicesSection}>
