@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
   },
   createButton: {
     borderRadius: 6,
-    backgroundColor: '#FB5353',
+    backgroundColor: '#2a2a2a',
     width: '100%',
     marginTop: 20,
     height: 40,
