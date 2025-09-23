@@ -164,6 +164,11 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
   const isToday = (date: Date) =>
     new Date().toDateString() === date.toDateString();
 
+  // 커스텀 입력인지 확인하는 함수
+  const isCustomLocation = (location: string) => {
+    return !PAXI_LOCATIONS.some(loc => loc.id === location);
+  };
+
   const checkInputValid = () => {
     if (!roomName || !departureName || !arrivalName) {
       Alert.alert('오류', '모든 필수 필드를 입력해주세요.');
@@ -263,7 +268,9 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
                 />
               </View>
             </View>
-            {departureName && arrivalName ? (
+            {departureName && arrivalName && 
+             !isCustomLocation(departureName) && 
+             !isCustomLocation(arrivalName) ? (
               <View
                 style={{
                   backgroundColor: isDarkMode ? '#232323' : '#F0F0F0',
