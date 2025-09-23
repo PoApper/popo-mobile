@@ -312,7 +312,6 @@ const PlaceDetailReservationScreen = ({
                 firstDay={1}
                 hideExtraDays={false}
                 disableMonthChange={false}
-                enableSwipeMonths
                 disableAllTouchEventsForDisabledDays={false}
                 disableAllTouchEventsForInactiveDays={false}
                 maxDate={maxDateStr}
