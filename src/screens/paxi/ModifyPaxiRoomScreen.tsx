@@ -240,6 +240,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
                   )}
                   onSelect={selected => setDepartureName(selected ?? '출발지')}
                   selected={departureName}
+                  onCustomModeChange={() => {}}
                 />
               </View>
               <View
@@ -258,6 +259,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
                   )}
                   onSelect={selected => setArrivalName(selected ?? '도착지')}
                   selected={arrivalName}
+                  onCustomModeChange={() => {}}
                 />
               </View>
             </View>
