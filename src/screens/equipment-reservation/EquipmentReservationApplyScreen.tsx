@@ -62,7 +62,8 @@ const EquipmentReservationApplyScreen = ({
   route,
 }: EquipmentReservationApplyScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const association = route?.params?.association ?? 'dongyeon';
+  const association = route?.params?.association;
+  const selectedDate = route?.params?.selectedDate;
 
   // 사용자 정보
   const [userName, setUserName] = useState('');
@@ -81,7 +82,20 @@ const EquipmentReservationApplyScreen = ({
     [],
   );
   const [equipmentList, setEquipmentList] = useState<IEquipment[]>([]);
-  const [date, setDate] = useState(new Date());
+  
+  // 선택된 날짜가 있으면 해당 날짜로, 없으면 현재 날짜로 초기화
+  const getInitialDate = () => {
+    if (selectedDate) {
+      // YYYYMMDD 형식을 Date 객체로 변환
+      const year = parseInt(selectedDate.substring(0, 4));
+      const month = parseInt(selectedDate.substring(4, 6)) - 1; // 월은 0부터 시작
+      const day = parseInt(selectedDate.substring(6, 8));
+      return new Date(year, month, day);
+    }
+    return new Date();
+  };
+  
+  const [date, setDate] = useState(getInitialDate());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [startTime, setStartTime] = useState(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);

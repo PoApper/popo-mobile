@@ -492,6 +492,7 @@ const EquipmentReservationScreen = ({
           onPress={() =>
             navigation.navigate('EquipmentReservationApply', {
               association: selectedTab,
+              selectedDate: selectedDate,
             })
           }>
           <Text style={styles.reserveButtonText}>예약 신청하기</Text>
