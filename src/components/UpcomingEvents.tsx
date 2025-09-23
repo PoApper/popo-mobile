@@ -1,5 +1,15 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {StyleSheet, Text, View, ScrollView, useColorScheme, TouchableOpacity, Modal, Alert, Animated, TouchableWithoutFeedback} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  useColorScheme,
+  TouchableOpacity,
+  Modal,
+  Animated,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
@@ -97,7 +107,9 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [combinedEvents, setCombinedEvents] = useState<CombinedEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedEvent, setSelectedEvent] = useState<CombinedEvent | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<CombinedEvent | null>(
+    null,
+  );
   const [showDetailModal, setShowDetailModal] = useState(false);
   const slideAnim = useRef(new Animated.Value(0)).current;
 
@@ -489,77 +501,126 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
         <TouchableWithoutFeedback onPress={closeDetailModal}>
           <View style={styles.modalOverlay}>
             <TouchableWithoutFeedback onPress={() => {}}>
-              <Animated.View 
+              <Animated.View
                 style={[
-                  styles.modalContent, 
+                  styles.modalContent,
                   {
                     backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
-                    transform: [{
-                      translateY: slideAnim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [400, 0], // 화면 아래에서 시작해서 원래 위치로
-                      }),
-                    }],
-                  }
+                    transform: [
+                      {
+                        translateY: slideAnim.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [400, 0], // 화면 아래에서 시작해서 원래 위치로
+                        }),
+                      },
+                    ],
+                  },
                 ]}>
-            {selectedEvent && (
-              <>
-                <View style={styles.modalHeader}>
-                  <Text style={[styles.modalTitle, {color: isDarkMode ? '#FFFFFF' : '#000000'}]}>
-                    {selectedEvent.type === 'place' ? '장소 예약' : '장비 예약'} 상세
-                  </Text>
-                </View>
-                
-                <View style={styles.modalBody}>
-                  <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, {color: isDarkMode ? '#AAAAAA' : '#666666'}]}>
-                      제목
-                    </Text>
-                    <Text style={[styles.detailValue, {color: isDarkMode ? '#FFFFFF' : '#000000'}]}>
-                      {selectedEvent.title}
-                    </Text>
-                  </View>
-                  
-                  <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, {color: isDarkMode ? '#AAAAAA' : '#666666'}]}>
-                      {selectedEvent.type === 'place' ? '장소' : '장비'}
-                    </Text>
-                    <Text style={[styles.detailValue, {color: isDarkMode ? '#FFFFFF' : '#000000'}]}>
-                      {selectedEvent.location}
-                    </Text>
-                  </View>
-                  
-                  <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, {color: isDarkMode ? '#AAAAAA' : '#666666'}]}>
-                      날짜
-                    </Text>
-                    <Text style={[styles.detailValue, {color: isDarkMode ? '#FFFFFF' : '#000000'}]}>
-                      {formatDate(selectedEvent.date)}
-                    </Text>
-                  </View>
-                  
-                  <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, {color: isDarkMode ? '#AAAAAA' : '#666666'}]}>
-                      시간
-                    </Text>
-                    <Text style={[styles.detailValue, {color: isDarkMode ? '#FFFFFF' : '#000000'}]}>
-                      {selectedEvent.time}
-                    </Text>
-                  </View>
-                  
-                  {selectedEvent.description && (
-                    <View style={styles.detailRow}>
-                      <Text style={[styles.detailLabel, {color: isDarkMode ? '#AAAAAA' : '#666666'}]}>
-                        설명
-                      </Text>
-                      <Text style={[styles.detailValue, {color: isDarkMode ? '#FFFFFF' : '#000000'}]}>
-                        {selectedEvent.description}
+                {selectedEvent && (
+                  <>
+                    <View style={styles.modalHeader}>
+                      <Text
+                        style={[
+                          styles.modalTitle,
+                          {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                        ]}>
+                        {selectedEvent.type === 'place'
+                          ? '장소 예약'
+                          : '장비 예약'}{' '}
+                        상세
                       </Text>
                     </View>
-                  )}
-                </View>
-              </>
-            )}
+
+                    <View style={styles.modalBody}>
+                      <View style={styles.detailRow}>
+                        <Text
+                          style={[
+                            styles.detailLabel,
+                            {color: isDarkMode ? '#AAAAAA' : '#666666'},
+                          ]}>
+                          제목
+                        </Text>
+                        <Text
+                          style={[
+                            styles.detailValue,
+                            {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                          ]}>
+                          {selectedEvent.title}
+                        </Text>
+                      </View>
+
+                      <View style={styles.detailRow}>
+                        <Text
+                          style={[
+                            styles.detailLabel,
+                            {color: isDarkMode ? '#AAAAAA' : '#666666'},
+                          ]}>
+                          {selectedEvent.type === 'place' ? '장소' : '장비'}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.detailValue,
+                            {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                          ]}>
+                          {selectedEvent.location}
+                        </Text>
+                      </View>
+
+                      <View style={styles.detailRow}>
+                        <Text
+                          style={[
+                            styles.detailLabel,
+                            {color: isDarkMode ? '#AAAAAA' : '#666666'},
+                          ]}>
+                          날짜
+                        </Text>
+                        <Text
+                          style={[
+                            styles.detailValue,
+                            {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                          ]}>
+                          {formatDate(selectedEvent.date)}
+                        </Text>
+                      </View>
+
+                      <View style={styles.detailRow}>
+                        <Text
+                          style={[
+                            styles.detailLabel,
+                            {color: isDarkMode ? '#AAAAAA' : '#666666'},
+                          ]}>
+                          시간
+                        </Text>
+                        <Text
+                          style={[
+                            styles.detailValue,
+                            {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                          ]}>
+                          {selectedEvent.time}
+                        </Text>
+                      </View>
+
+                      {selectedEvent.description && (
+                        <View style={styles.detailRow}>
+                          <Text
+                            style={[
+                              styles.detailLabel,
+                              {color: isDarkMode ? '#AAAAAA' : '#666666'},
+                            ]}>
+                            설명
+                          </Text>
+                          <Text
+                            style={[
+                              styles.detailValue,
+                              {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                            ]}>
+                            {selectedEvent.description}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  </>
+                )}
               </Animated.View>
             </TouchableWithoutFeedback>
           </View>
