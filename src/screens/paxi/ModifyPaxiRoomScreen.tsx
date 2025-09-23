@@ -214,7 +214,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        bottomOffset={120}>
+        bottomOffset={180}>
         <View style={styles.formSection}>
           <View>
             <Text style={[styles.label, {color: textColor}]}>방 제목</Text>
@@ -224,7 +224,11 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={roomName}
               onChangeText={setRoomName}
+              maxLength={20}
             />
+            <Text style={[styles.charCount, {color: isDarkMode ? '#555' : '#d0d0d0'}]}>
+              {roomName.length}/20
+            </Text>
           </View>
 
           <View style={{marginBottom: 8}}>
@@ -417,7 +421,11 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
             placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
             value={roomDetails}
             onChangeText={setRoomDetails}
+            maxLength={100}
           />
+          <Text style={[styles.charCount, {color: isDarkMode ? '#555' : '#d0d0d0'}]}>
+            {roomDetails.length}/100
+          </Text>
         </View>
         <TouchableOpacity
           style={[styles.createButton]}
@@ -522,5 +530,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     marginLeft: 5,
     marginRight: 10,
+  },
+  charCount: {
+    fontSize: 12,
+    textAlign: 'right',
+    marginTop: 4,
   },
 });

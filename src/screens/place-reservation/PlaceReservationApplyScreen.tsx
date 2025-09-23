@@ -295,7 +295,7 @@ const PlaceReservationApplyScreen = ({
         ref={scrollViewRef}
         contentContainerStyle={{padding: 20}}
         keyboardShouldPersistTaps="handled"
-        bottomOffset={120}>
+        bottomOffset={180}>
         <View style={styles.infoSection}>
           <Text style={[styles.placeName, {color: textColor}]}>
             {placeName}
@@ -359,7 +359,11 @@ const PlaceReservationApplyScreen = ({
             onChangeText={setTitle}
             placeholder="예약 제목을 입력하세요"
             placeholderTextColor={subTextColor}
+            maxLength={50}
           />
+          <Text style={[styles.charCount, {color: subTextColor}]}>
+            {title.length}/50
+          </Text>
           <Text style={[styles.label, {color: textColor}]}>
             설명 <Text style={styles.requiredText}>*</Text>
           </Text>
@@ -379,7 +383,11 @@ const PlaceReservationApplyScreen = ({
             placeholder="예약에 대한 설명과 사용 인원을 꼭 작성해 주세요"
             placeholderTextColor={subTextColor}
             multiline
+            maxLength={200}
           />
+          <Text style={[styles.charCount, {color: subTextColor}]}>
+            {desc.length}/200
+          </Text>
           <View
             style={{
               flexDirection: 'row',
@@ -660,6 +668,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  charCount: {
+    fontSize: 12,
+    textAlign: 'right',
+    marginTop: 4,
   },
 });
 

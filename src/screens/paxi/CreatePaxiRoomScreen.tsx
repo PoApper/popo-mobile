@@ -219,7 +219,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
         contentContainerStyle={[styles.container, {paddingHorizontal: 16}]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        bottomOffset={120}>
+        bottomOffset={180}>
         <View style={styles.formSection}>
           {/* 방 제목 */}
           <View>
@@ -236,6 +236,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               accessibilityLabel="방 제목 입력"
               returnKeyType="done"
             />
+            <Text style={[styles.charCount, {color: C.placeholder}]}>
+              {roomName.length}/20
+            </Text>
           </View>
 
           {/* 위치 */}
@@ -405,8 +408,8 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               textAlignVertical="top"
               maxLength={100}
             />
-            <Text style={{color: C.textSub, fontSize: 12, marginTop: 6}}>
-              최대 100자
+            <Text style={[styles.charCount, {color: C.placeholder}]}>
+              {roomDetails.length}/100
             </Text>
           </View>
 
@@ -572,5 +575,10 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     minWidth: 40,
     textAlign: 'center',
+  },
+  charCount: {
+    fontSize: 12,
+    textAlign: 'right',
+    marginTop: 4,
   },
 });

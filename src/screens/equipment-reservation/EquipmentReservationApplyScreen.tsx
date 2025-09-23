@@ -535,7 +535,7 @@ const EquipmentReservationApplyScreen = ({
         ref={scrollViewRef}
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
-        bottomOffset={association === 'dormunion' ? 120 : 200}>
+        bottomOffset={association === 'dormunion' ? 180 : 200}>
         {/* 공지사항 섹션 */}
         <View
           style={[
@@ -666,7 +666,11 @@ const EquipmentReservationApplyScreen = ({
             onChangeText={setTitle}
             placeholder="예약 제목을 입력하세요"
             placeholderTextColor={subTextColor}
+            maxLength={50}
           />
+          <Text style={[styles.charCount, {color: subTextColor}]}>
+            {title.length}/50
+          </Text>
           <Text style={[styles.label, {color: textColor}]}>
             설명 <Text style={styles.requiredText}>*</Text>
           </Text>
@@ -684,7 +688,11 @@ const EquipmentReservationApplyScreen = ({
             placeholder="사용처를 반드시 작성 해주세요."
             placeholderTextColor={subTextColor}
             multiline
+            maxLength={200}
           />
+          <Text style={[styles.charCount, {color: subTextColor}]}>
+            {desc.length}/200
+          </Text>
           <Text style={[styles.label, {color: textColor}]}>
             장비 선택 <Text style={styles.requiredText}>*</Text>
           </Text>
@@ -1262,6 +1270,11 @@ const styles = StyleSheet.create({
   debugText: {
     fontSize: 12,
     marginBottom: 4,
+  },
+  charCount: {
+    fontSize: 12,
+    textAlign: 'right',
+    marginTop: 4,
   },
 });
 
