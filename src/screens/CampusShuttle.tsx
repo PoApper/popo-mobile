@@ -10,6 +10,7 @@ import {
   StatusBar,
   Modal,
   Dimensions,
+  Platform,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -140,7 +141,9 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({navigation}) => {
       <Modal
         visible={selectedImage !== null}
         transparent={true}
-        onRequestClose={() => setSelectedImage(null)}>
+        onRequestClose={() => setSelectedImage(null)}
+        statusBarTranslucent={Platform.OS === 'android'}
+        hardwareAccelerated>
         <TouchableOpacity
           style={styles.modalBackground}
           activeOpacity={1}

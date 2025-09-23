@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
   useColorScheme,
+  Platform,
 } from 'react-native';
 import {backgroundColor, textColor} from '@styles/default';
 
@@ -28,7 +29,8 @@ const SettlementCompleteConfirmModal: React.FC<Props> = ({
       transparent
       visible={visible}
       onRequestClose={onClose}
-      animationType="fade">
+      statusBarTranslucent={Platform.OS === 'android'}
+      hardwareAccelerated>
       <Pressable style={styles.overlay} onPress={onClose}>
         <View
           style={[styles.card, {backgroundColor: backgroundColor(isDarkMode)}]}

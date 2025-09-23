@@ -10,6 +10,7 @@ import {
   Dimensions,
   Alert,
   useColorScheme,
+  Platform,
 } from 'react-native';
 import {useState, useEffect, useRef} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -243,7 +244,9 @@ SidebarModalProps) => {
     <Modal
       transparent={true}
       visible={modalVisible}
-      onRequestClose={handleClose}>
+      onRequestClose={handleClose}
+      statusBarTranslucent={Platform.OS === 'android'}
+      hardwareAccelerated>
       {/* TODO: nested pressable onStartShouldSetResponder 옵션 사용으로 변경 */}
       {initialRenderDone && isVisible && (
         <Pressable style={styles.overlay} onPress={handleClose}>

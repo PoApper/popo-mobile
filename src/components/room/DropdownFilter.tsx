@@ -11,6 +11,7 @@ import {
   findNodeHandle,
   LayoutRectangle,
   useColorScheme,
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -100,7 +101,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
       </TouchableOpacity>
 
       {visible && dropdownPosition && (
-        <Modal transparent animationType="none">
+        <Modal transparent animationType="none" statusBarTranslucent={Platform.OS === 'android'} hardwareAccelerated>
           <TouchableWithoutFeedback onPress={() => setVisible(false)}>
             <View style={styles.overlay}>
               <View

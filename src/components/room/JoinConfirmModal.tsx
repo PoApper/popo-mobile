@@ -8,6 +8,7 @@ import {
   useColorScheme,
   Image,
   Pressable,
+  Platform,
 } from 'react-native';
 import moment from 'moment';
 
@@ -42,7 +43,9 @@ const JoinConfirmModal: React.FC<Props> = ({
       visible={visible}
       transparent
       animationType="fade"
-      onRequestClose={onClose}>
+      onRequestClose={onClose}
+      statusBarTranslucent={Platform.OS === 'android'}
+      hardwareAccelerated>
       <Pressable
         style={[styles.overlay, {backgroundColor: C.bg}]}
         onPress={onClose}>

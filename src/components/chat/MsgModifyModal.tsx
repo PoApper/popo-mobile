@@ -9,6 +9,7 @@ import {
   Text,
   TextInput,
   Alert,
+  Platform,
 } from 'react-native';
 
 import {MessageData} from '@interfaces/paxi';
@@ -64,7 +65,10 @@ const MsgModifyModal = ({
     <Modal
       transparent={true}
       visible={modalVisible}
-      onRequestClose={handleClose}>
+      onRequestClose={handleClose}
+      // TODO: 안드로이드에서 메세지 수정 후 같은 메세지 수정 시 모달 깨지는 버그 수정해야 함
+      statusBarTranslucent={Platform.OS === 'android'}
+      hardwareAccelerated>
       {/* TODO: nested pressable onStartShouldSetResponder 옵션 사용으로 변경 */}
       <Pressable style={styles.overlay} onPress={handleClose}>
         <View
