@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useMemo} from 'react';
 import {
   View,
   Text,
@@ -66,6 +66,14 @@ const PlaceReservationApplyScreen = ({
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
+
+  // 날짜 범위 계산 (컴포넌트 마운트 시 1회)
+  const {minimumDate, maximumDate} = useMemo(() => {
+    const today = new Date();
+    const minDate = new Date(today.setHours(0, 0, 0, 0));
+    const maxDate = new Date(today.setDate(today.getDate() + 30));
+    return {minimumDate: minDate, maximumDate: maxDate};
+  }, []);
 
   const scrollViewRef = useRef<any>(null);
 
@@ -470,10 +478,8 @@ const PlaceReservationApplyScreen = ({
                 setDate(date);
               }}
               onCancel={() => setShowDatePicker(false)}
-              minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
-              maximumDate={
-                new Date(new Date().setDate(new Date().getDate() + 30))
-              }
+              minimumDate={minimumDate}
+              maximumDate={maximumDate}
               locale="ko-KR"
               confirmTextIOS="확인"
               cancelTextIOS="취소"
@@ -501,7 +507,7 @@ const PlaceReservationApplyScreen = ({
               onCancel={() => setShowStartPicker(false)}
               minuteInterval={30}
               date={startTime}
-              minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
+              minimumDate={minimumDate}
               is24Hour
               confirmTextIOS="확인"
               cancelTextIOS="취소"

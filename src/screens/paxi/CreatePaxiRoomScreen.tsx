@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import {
   StyleSheet,
   Text,
@@ -60,6 +60,14 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
   const [isTimePickerVisible, setTimePickerVisible] = useState(false);
   const [isDepartureCustom, setIsDepartureCustom] = useState(false);
   const [isArrivalCustom, setIsArrivalCustom] = useState(false);
+
+  // 날짜 범위 계산 (컴포넌트 마운트 시 1회)
+  const {minimumDate, maximumDate} = useMemo(() => {
+    const today = new Date();
+    const minDate = new Date(today.setHours(0, 0, 0, 0));
+    const maxDate = new Date(today.setDate(today.getDate() + 30));
+    return {minimumDate: minDate, maximumDate: maxDate};
+  }, []);
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -358,10 +366,8 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             date={selectedDateTime}
             onConfirm={handleDateConfirm}
             onCancel={() => setDatePickerVisible(false)}
-            minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
-            maximumDate={
-              new Date(new Date().setDate(new Date().getDate() + 30))
-            }
+            minimumDate={minimumDate}
+            maximumDate={maximumDate}
             locale="ko-KR"
             confirmTextIOS="확인"
             cancelTextIOS="취소"
