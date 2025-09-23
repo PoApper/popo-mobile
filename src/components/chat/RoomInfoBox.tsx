@@ -35,7 +35,7 @@ const RoomInfoBox = ({
         styles.infoBox,
         {backgroundColor: isDarkMode ? '#333' : '#f2f3f5'},
       ]}>
-      {isOwner && (
+      {isOwner && roomData.status === 'ACTIVE' && (
         <TouchableOpacity
           style={styles.editButton}
           onPress={() => {

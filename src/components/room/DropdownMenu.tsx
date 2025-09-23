@@ -16,6 +16,7 @@ import {
   Dimensions,
   useColorScheme,
   TextInput,
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -169,7 +170,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       )}
 
       {visible && dropdownPosition && (
-        <Modal transparent animationType="fade">
+        <Modal
+          transparent
+          animationType="fade"
+          statusBarTranslucent={Platform.OS === 'android'}
+          hardwareAccelerated>
           <TouchableWithoutFeedback onPress={() => setVisible(false)}>
             <View style={styles.overlay}>
               <View

@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Alert,
   useColorScheme,
+  Platform,
 } from 'react-native';
 
 import {ChatRoomInfo, UserData} from '@interfaces/paxi';
@@ -92,7 +93,9 @@ const OwnerTransferModal = ({
     <Modal
       transparent={true}
       visible={modalVisible}
-      onRequestClose={() => setModalVisible(false)}>
+      onRequestClose={() => setModalVisible(false)}
+      statusBarTranslucent={Platform.OS === 'android'}
+      hardwareAccelerated>
       {/* TODO: nested pressable onStartShouldSetResponder 옵션 사용으로 변경 */}
       <Pressable style={styles.overlay} onPress={() => setModalVisible(false)}>
         <Pressable

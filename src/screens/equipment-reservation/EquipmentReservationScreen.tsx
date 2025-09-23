@@ -9,11 +9,20 @@ import {
   Image,
   Alert,
   FlatList,
+  ActivityIndicator,
+  Modal,
+  Platform,
+  ScrollView,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import PoPoAxios from '../../utils/api'; // 실제 axios 인스턴스 경로에 맞게 수정 필요
+import {Calendar, LocaleConfig} from 'react-native-calendars';
+import CalendarKoreanLocales from '../../utils/calendar-locales';
+
+LocaleConfig.locales.kr = CalendarKoreanLocales;
+LocaleConfig.defaultLocale = 'kr';
 
 // API 타입에 맞게 수정
 interface IEquipment {
@@ -23,6 +32,22 @@ interface IEquipment {
   fee: number;
   imageUrl?: string;
   maxMinutes: number;
+}
+
+interface IEquipReservation {
+  uuid: string;
+  booker: {
+    name: string;
+  };
+  equipments: IEquipment[];
+  date: string;
+  description: string;
+  startTime: string;
+  endTime: string;
+  phone: string;
+  status: string;
+  title: string;
+  createdAt: Date;
 }
 
 type EquipmentReservationScreenProps = {
@@ -53,33 +78,39 @@ const EquipmentReservationScreen = ({
   const [selectedTab, setSelectedTab] = useState('dongyeon');
   const [equipmentList, setEquipmentList] = useState<IEquipment[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [reservations, setReservations] = useState<IEquipReservation[]>([]);
+  const [isLoadingReservations, setIsLoadingReservations] = useState(false);
+  const [showEquipmentModal, setShowEquipmentModal] = useState(false);
 
-  // 메모이제이션으로 불필요한 재계산 방지
-  const styles_memo = useMemo(
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? '#121212' : '#fff',
+    flex: 1,
+  };
+
+  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
+  const subTextColor = isDarkMode ? '#888888' : '#6B7280';
+  const cardBackgroundColor = isDarkMode ? '#1A1A1A' : '#F3F3F3';
+
+  // 달력 마킹을 위한 marked 객체
+  const marked = useMemo(
     () => ({
-      backgroundStyle: {
-        backgroundColor: isDarkMode ? '#1a1a1a' : '#fff',
-        flex: 1,
-      },
-      textColor: isDarkMode ? '#ffffff' : '#000000',
-      borderColor: isDarkMode ? '#2C2C2C' : '#E5E7EB',
-      secondaryTextColor: isDarkMode ? '#a0a0a0' : '#888888',
-      buttonBackgroundColor: isDarkMode ? '#3a3a3a' : '#F6F7F9',
-      placeholderImageStyle: {
-        backgroundColor: isDarkMode ? '#3a3a3a' : '#eee',
+      [selectedDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')]: {
+        selected: true,
+        selectedColor: isDarkMode ? '#ddd' : 'black',
+        selectedTextColor: isDarkMode ? 'black' : 'white',
       },
     }),
-    [isDarkMode],
+    [selectedDate, isDarkMode],
   );
 
-  const {
-    backgroundStyle,
-    textColor,
-    borderColor,
-    secondaryTextColor,
-    buttonBackgroundColor,
-    placeholderImageStyle,
-  } = styles_memo;
+  // 최대 날짜 (30일 후)
+  const maxDateStr = useMemo(() => {
+    const maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 30);
+    return maxDate.toISOString().split('T')[0];
+  }, []);
 
   useEffect(() => {
     const fetchEquipment = async () => {
@@ -100,6 +131,28 @@ const EquipmentReservationScreen = ({
     fetchEquipment();
   }, [selectedTab]);
 
+  // 선택된 날짜의 예약 현황 불러오기
+  useEffect(() => {
+    if (!selectedDate) return;
+
+    const fetchReservations = async () => {
+      setIsLoadingReservations(true);
+      try {
+        const res = await PoPoAxios.get<IEquipReservation[]>(
+          `/reservation-equip?owner=${selectedTab}&date=${selectedDate}`,
+        );
+        setReservations(res.data);
+      } catch (error) {
+        console.error('예약 현황을 불러오는데 실패했습니다:', error);
+        setReservations([]);
+      } finally {
+        setIsLoadingReservations(false);
+      }
+    };
+
+    fetchReservations();
+  }, [selectedDate, selectedTab]);
+
   // 렌더 함수 메모이제이션
   const renderEquipmentItem = useCallback(
     ({item}: {item: IEquipment}) => (
@@ -116,15 +169,12 @@ const EquipmentReservationScreen = ({
           <Text style={[styles.equipmentName, {color: textColor}]}>
             {removeEmoji(item.name)}
           </Text>
-          <Text style={[styles.equipmentPrice, {color: secondaryTextColor}]}>
+          <Text style={[styles.equipmentPrice, {color: subTextColor}]}>
             {item.fee.toLocaleString()}원
           </Text>
         </View>
         <TouchableOpacity
-          style={[
-            styles.detailButton,
-            {backgroundColor: buttonBackgroundColor},
-          ]}
+          style={[styles.detailButton, {backgroundColor: cardBackgroundColor}]}
           onPress={() => {
             Alert.alert(
               '장비 상세정보',
@@ -142,16 +192,149 @@ const EquipmentReservationScreen = ({
         </TouchableOpacity>
       </View>
     ),
-    [
-      textColor,
-      secondaryTextColor,
-      buttonBackgroundColor,
-      placeholderImageStyle,
-    ],
+    [textColor, subTextColor, cardBackgroundColor],
   );
 
   // FlatList keyExtractor 메모이제이션
   const keyExtractor = useCallback((item: IEquipment) => item.uuid, []);
+
+  // 달력 날짜 선택 핸들러
+  const onDayPress = useCallback((day: any) => {
+    const dateStr = day.dateString.replace(/-/g, '');
+    setSelectedDate(dateStr);
+  }, []);
+
+  // 오늘 날짜를 YYYYMMDD 형식의 문자열로 계산 (컴포넌트 마운트 시 1회)
+  const todayStr = useMemo(() => {
+    const today = new Date();
+    // 월은 0부터 시작함
+    return `${today.getFullYear()}${String(today.getMonth() + 1).padStart(
+      2,
+      '0',
+    )}${String(today.getDate()).padStart(2, '0')}`;
+  }, []);
+
+  // 선택된 날짜가 과거인지 확인
+  const isPastDate = useMemo(() => {
+    if (!selectedDate) return false;
+    return selectedDate < todayStr;
+  }, [selectedDate, todayStr]);
+
+  // 주말 컬러: 토/일 모두 빨강. 선택/비활성 상태는 기존 규칙 유지
+  const renderDay = useCallback(
+    ({date, state, marking, onPress}: any) => {
+      const dayOfWeek = new Date(date.dateString).getDay(); // 0: Sun .. 6: Sat
+      const isSunday = dayOfWeek === 0;
+      const isSaturday = dayOfWeek === 6;
+      const isSelected = Boolean(marking?.selected);
+
+      const selectedBg = isDarkMode ? '#ddd' : 'black';
+      const selectedFg = isDarkMode ? 'black' : 'white';
+      const disabledColor = isDarkMode ? '#444444' : '#d9e1e8';
+
+      const weekendColor = isSunday || isSaturday ? '#FB5353' : textColor;
+      const textColorResolved =
+        state === 'disabled'
+          ? disabledColor
+          : isSelected
+          ? selectedFg
+          : weekendColor;
+
+      const isAfterMax = date.dateString > maxDateStr;
+
+      return (
+        <TouchableOpacity
+          disabled={isAfterMax}
+          onPress={() => onPress?.(date)}
+          accessibilityRole="button"
+          style={{
+            alignSelf: 'center',
+            width: 32,
+            height: 32,
+            borderRadius: 16,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: isSelected ? selectedBg : 'transparent',
+            marginVertical: 6,
+          }}>
+          <Text style={{color: textColorResolved, fontSize: 16}}>
+            {date.day}
+          </Text>
+        </TouchableOpacity>
+      );
+    },
+    [isDarkMode, textColor, maxDateStr],
+  );
+
+  // 시간 포맷팅 함수
+  const convertTime = (timeStr: string) => {
+    if (timeStr.length === 4) {
+      const hours = timeStr.substring(0, 2);
+      const minutes = timeStr.substring(2, 4);
+      return `${hours}:${minutes}`;
+    }
+    return timeStr;
+  };
+
+  // 상태 색상 변환 함수
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case '통과':
+        return '#4CAF50';
+      case '심사중':
+        return '#9E9E9E';
+      case '거절':
+        return '#F44336';
+      default:
+        return '#9E9E9E';
+    }
+  };
+
+  // 예약 현황 아이템 렌더링
+  const renderReservationItem = useCallback(
+    ({item}: {item: IEquipReservation}) => (
+      <View
+        style={[
+          styles.reservationItem,
+          {backgroundColor: cardBackgroundColor},
+        ]}>
+        <View style={styles.reservationTimeContainer}>
+          <Text style={[styles.reservationTime, {color: textColor}]}>
+            {convertTime(item.startTime)} - {convertTime(item.endTime)}
+          </Text>
+          <View
+            style={[
+              styles.statusIndicator,
+              {backgroundColor: getStatusColor(item.status)},
+            ]}
+          />
+        </View>
+        <View style={styles.reservationDetailContainer}>
+          <Text style={[styles.reservationTitle, {color: textColor}]}>
+            {item.title}
+          </Text>
+          <Text style={[styles.reservationUser, {color: subTextColor}]}>
+            예약자: {item.booker.name}
+          </Text>
+          <View style={styles.equipmentTags}>
+            {item.equipments.map(e => (
+              <View
+                key={e.uuid}
+                style={[
+                  styles.equipmentTag,
+                  {backgroundColor: isDarkMode ? '#555' : '#E0E0E0'},
+                ]}>
+                <Text style={[styles.equipmentTagText, {color: textColor}]}>
+                  {e.name}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      </View>
+    ),
+    [textColor, subTextColor, cardBackgroundColor, isDarkMode],
+  );
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -169,69 +352,212 @@ const EquipmentReservationScreen = ({
         <View style={styles.placeholderButton} />
       </View>
 
-      {/* 상단 탭 */}
-      <View style={styles.tabContainer}>
-        {tabs.map(tab => (
-          <TouchableOpacity
-            key={tab.value}
-            style={[
-              styles.tab,
-              selectedTab === tab.value && styles.selectedTab,
-            ]}
-            onPress={() => setSelectedTab(tab.value)}>
-            <Text
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}>
+        {/* 상단 탭 */}
+        <View style={styles.tabContainer}>
+          {tabs.map(tab => (
+            <TouchableOpacity
+              key={tab.value}
               style={[
-                styles.tabText,
-                {color: secondaryTextColor},
-                selectedTab === tab.value && styles.selectedTabText,
-                selectedTab === tab.value && {color: textColor},
-              ]}>
-              {tab.label}
+                styles.tab,
+                selectedTab === tab.value && styles.selectedTab,
+              ]}
+              onPress={() => setSelectedTab(tab.value)}>
+              <Text
+                style={[
+                  styles.tabText,
+                  {color: subTextColor},
+                  selectedTab === tab.value && styles.selectedTabText,
+                  selectedTab === tab.value && {color: textColor},
+                ]}>
+                {tab.label}
+              </Text>
+              {selectedTab === tab.value && (
+                <View
+                  style={[styles.tabUnderline, {backgroundColor: textColor}]}
+                />
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* 장비 보기 버튼 */}
+        <View style={styles.equipmentViewButtonContainer}>
+          <TouchableOpacity
+            style={[
+              styles.equipmentViewButton,
+              {backgroundColor: cardBackgroundColor},
+            ]}
+            onPress={() => setShowEquipmentModal(true)}>
+            <Text style={[styles.equipmentViewButtonText, {color: textColor}]}>
+              장비 보기
             </Text>
-            {selectedTab === tab.value && (
-              <View
-                style={[styles.tabUnderline, {backgroundColor: textColor}]}
+          </TouchableOpacity>
+        </View>
+
+        {/* 달력 섹션 */}
+        <View style={styles.calendarContainer}>
+          <Calendar
+            current={selectedDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')}
+            firstDay={1}
+            hideExtraDays={false}
+            disableMonthChange={false}
+            disableAllTouchEventsForDisabledDays={false}
+            disableAllTouchEventsForInactiveDays={false}
+            maxDate={maxDateStr}
+            onDayPress={onDayPress}
+            markedDates={marked}
+            dayComponent={renderDay}
+            renderHeader={date => {
+              const year = date.getFullYear();
+              const month = (date.getMonth() + 1).toString().padStart(2, '0');
+              return (
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    margin: 10,
+                    color: textColor,
+                  }}>{`${year}년 ${month}월`}</Text>
+              );
+            }}
+            theme={{
+              backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+              calendarBackground: isDarkMode ? '#121212' : '#ffffff',
+              textSectionTitleColor: textColor,
+              selectedDayTextColor: '#ffffff',
+              todayTextColor: '#ff6868',
+              dayTextColor: textColor,
+              textDisabledColor: isDarkMode ? '#444444' : '#d9e1e8',
+              monthTextColor: textColor,
+              textMonthFontWeight: 'bold',
+              textDayFontSize: 16,
+              textMonthFontSize: 16,
+              textDayHeaderFontSize: 14,
+              arrowColor: isDarkMode ? 'white' : 'black',
+            }}
+          />
+        </View>
+
+        {/* 선택된 날짜의 예약 현황 */}
+        {selectedDate && (
+          <View style={styles.reservationsContainer}>
+            <Text style={[styles.reservationsTitle, {color: textColor}]}>
+              예약 현황
+            </Text>
+            {isLoadingReservations ? (
+              <ActivityIndicator
+                style={styles.reservationsLoading}
+                color={textColor}
+              />
+            ) : reservations.length > 0 ? (
+              <View>
+                {reservations
+                  .sort((a, b) => Number(a.startTime) - Number(b.startTime))
+                  .map(item => (
+                    <View key={item.uuid}>{renderReservationItem({item})}</View>
+                  ))}
+              </View>
+            ) : (
+              <Text style={[styles.noReservations, {color: subTextColor}]}>
+                예약된 내역이 없습니다.
+              </Text>
+            )}
+          </View>
+        )}
+      </ScrollView>
+
+      {/* 장비 리스트 모달 */}
+      <Modal
+        visible={showEquipmentModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowEquipmentModal(false)}>
+        <View style={styles.modalOverlay}>
+          {/* iOS에서 스크롤 제스처와 충돌 방지를 위해 자식(콘텐츠) 위로 올라오지 않게 "먼저" 배치 */}
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => setShowEquipmentModal(false)}
+            style={StyleSheet.absoluteFill}
+          />
+
+          {/* 모달 콘텐츠 */}
+          <View
+            style={[
+              styles.modalContent,
+              {backgroundColor: backgroundStyle.backgroundColor},
+            ]}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, {color: textColor}]}>
+                장비 목록
+              </Text>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setShowEquipmentModal(false)}>
+                <Text style={[styles.closeButtonText, {color: textColor}]}>
+                  ✕
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {loading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={textColor} />
+                <Text style={[styles.loadingText, {color: textColor}]}>
+                  장비 목록을 불러오는 중...
+                </Text>
+              </View>
+            ) : (
+              <FlatList
+                data={equipmentList}
+                renderItem={renderEquipmentItem}
+                keyExtractor={keyExtractor}
+                showsVerticalScrollIndicator
+                style={{flex: 1}}
+                contentContainerStyle={[
+                  styles.equipmentList,
+                  Platform.OS === 'ios' && {paddingBottom: 20},
+                ]}
+                removeClippedSubviews={false}
+                initialNumToRender={10}
+                maxToRenderPerBatch={5}
+                windowSize={10}
+                bounces={Platform.OS === 'ios'}
               />
             )}
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* 장비 리스트 */}
-      <View style={styles.equipmentListContainer}>
-        <FlatList
-          data={equipmentList}
-          renderItem={renderEquipmentItem}
-          keyExtractor={keyExtractor}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.equipmentList}
-          removeClippedSubviews={true}
-          initialNumToRender={10}
-          maxToRenderPerBatch={5}
-          windowSize={10}
-          getItemLayout={(data, index) => ({
-            length: 79, // approximate height of each item (paddingVertical: 15 * 2 + content height ~49)
-            offset: 79 * index,
-            index,
-          })}
-          ListEmptyComponent={
-            <Text style={[styles.emptyListText, {color: secondaryTextColor}]}>
-              {loading ? '불러오는 중...' : '장비가 없습니다.'}
-            </Text>
-          }
-        />
-      </View>
-
+          </View>
+        </View>
+      </Modal>
       {/* 예약 신청하기 버튼 - 하단 고정 */}
       <View style={styles.reserveButtonWrapper}>
         <TouchableOpacity
-          style={styles.reserveButton}
-          onPress={() =>
+          style={[
+            styles.reserveButton,
+            (!selectedDate || isPastDate) && {opacity: 0.5},
+          ]}
+          disabled={!selectedDate || isPastDate}
+          onPress={() => {
+            if (isPastDate) {
+              Alert.alert(
+                '알림',
+                '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.',
+              );
+              return;
+            }
             navigation.navigate('EquipmentReservationApply', {
               association: selectedTab,
-            })
-          }>
-          <Text style={styles.reserveButtonText}>예약 신청하기</Text>
+              selectedDate: selectedDate,
+            });
+          }}>
+          <Text style={styles.reserveButtonText}>
+            {!selectedDate
+              ? '날짜를 선택해주세요'
+              : isPastDate
+              ? '과거 날짜는 예약 불가'
+              : '예약 신청하기'}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -239,6 +565,12 @@ const EquipmentReservationScreen = ({
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  contentContainer: {
+    paddingBottom: 0,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -285,9 +617,19 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 1,
   },
-  equipmentListContainer: {
-    flex: 1,
-    marginBottom: 20,
+  equipmentViewButtonContainer: {
+    marginHorizontal: 20,
+    marginBottom: 16,
+  },
+  equipmentViewButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  equipmentViewButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   equipmentList: {
     paddingHorizontal: 20,
@@ -311,10 +653,6 @@ const styles = StyleSheet.create({
   equipmentName: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 2,
-  },
-  equipmentDesc: {
-    fontSize: 13,
     marginBottom: 2,
   },
   equipmentPrice: {
@@ -353,6 +691,129 @@ const styles = StyleSheet.create({
   emptyListText: {
     textAlign: 'center',
     marginTop: 40,
+  },
+  calendarContainer: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+    borderRadius: 8,
+    padding: 8,
+  },
+  reservationsContainer: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+  },
+  reservationsTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  reservationsLoading: {
+    marginTop: 10,
+  },
+  noReservations: {
+    textAlign: 'center',
+    marginTop: 10,
+    fontSize: 14,
+  },
+  reservationItem: {
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  reservationTimeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  reservationTime: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  statusIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  reservationDetailContainer: {
+    marginTop: 4,
+  },
+  reservationTitle: {
+    fontSize: 12,
+    fontWeight: '500',
+    marginBottom: 2,
+  },
+  reservationUser: {
+    fontSize: 12,
+    marginBottom: 4,
+  },
+  equipmentTags: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 4,
+  },
+  equipmentTag: {
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 8,
+    marginRight: 3,
+    marginBottom: 1,
+  },
+  equipmentTagText: {
+    fontSize: 9,
+    fontWeight: '500',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '90%',
+    maxHeight: '80%',
+    flex: 1,
+    borderRadius: 12,
+    padding: 20,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  closeButton: {
+    padding: 8,
+  },
+  closeButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    textAlign: 'center',
   },
 });
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,9 @@ import {
   useColorScheme,
   StatusBar,
   Alert,
+  BackHandler,
+  ToastAndroid,
+  Platform,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -28,6 +31,7 @@ type UserDetailScreenProps = {
 
 const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+  const backPressCount = useRef(0);
   const [isLoading, setIsLoading] = useState(false);
   const [userDataState, setUserData] = useState<any>(null);
   const [isPaxiUser, setIsPaxiUser] = useState<boolean>(false);
@@ -125,6 +129,44 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
       Promise.all([fetchUserProfile(), fetchPaxiInfo()]).finally(() => {
         setIsLoading(false);
       });
+    }, []),
+  );
+
+  // 뒤로가기 버튼 처리
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        backPressCount.current += 1;
+
+        if (backPressCount.current === 1) {
+          // 첫 번째 누름: 토스트 메시지 표시
+          if (Platform.OS === 'android') {
+            ToastAndroid.show(
+              '한 번 더 누르면 앱이 종료됩니다',
+              ToastAndroid.SHORT,
+            );
+          }
+
+          // 2초 후 카운터 리셋
+          setTimeout(() => {
+            backPressCount.current = 0;
+          }, 2000);
+
+          return true; // 기본 뒤로가기 동작 방지
+        } else if (backPressCount.current === 2) {
+          // 두 번째 누름: 앱 종료
+          BackHandler.exitApp();
+          return true;
+        }
+
+        return true;
+      };
+
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress,
+      );
+      return () => subscription.remove();
     }, []),
   );
 

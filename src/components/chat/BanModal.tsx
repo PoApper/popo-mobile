@@ -11,6 +11,7 @@ import {
   Dimensions,
   Alert,
   useColorScheme,
+  Platform,
 } from 'react-native';
 
 import {UserData} from '@interfaces/paxi';
@@ -75,7 +76,9 @@ const BanModal = ({
     <Modal
       transparent={true}
       visible={modalVisible}
-      onRequestClose={handleClose}>
+      onRequestClose={handleClose}
+      statusBarTranslucent={Platform.OS === 'android'}
+      hardwareAccelerated>
       {/* TODO: nested pressable onStartShouldSetResponder 옵션 사용으로 변경 */}
       <Pressable style={styles.overlay} onPress={handleClose}>
         <KeyboardAvoidingView

@@ -7,6 +7,7 @@ import {
   ScrollView,
   useColorScheme,
   Modal,
+  Platform,
 } from 'react-native';
 
 type PrivacyPolicyProps = {
@@ -23,6 +24,8 @@ const PaxiPrivacyPolicy = ({visible, onClose, onAgree}: PrivacyPolicyProps) => {
       visible={visible}
       animationType="slide"
       transparent={true}
+      statusBarTranslucent={Platform.OS === 'android'}
+      hardwareAccelerated
       onRequestClose={onClose}>
       <View style={styles.modalContainer}>
         <View

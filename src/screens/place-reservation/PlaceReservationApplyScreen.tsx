@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useMemo} from 'react';
 import {
   View,
   Text,
@@ -66,6 +66,14 @@ const PlaceReservationApplyScreen = ({
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
+
+  // 날짜 범위 계산 (컴포넌트 마운트 시 1회)
+  const {minimumDate, maximumDate} = useMemo(() => {
+    const today = new Date();
+    const minDate = new Date(today.setHours(0, 0, 0, 0));
+    const maxDate = new Date(today.setDate(today.getDate() + 30));
+    return {minimumDate: minDate, maximumDate: maxDate};
+  }, []);
 
   const scrollViewRef = useRef<any>(null);
 
@@ -295,7 +303,7 @@ const PlaceReservationApplyScreen = ({
         ref={scrollViewRef}
         contentContainerStyle={{padding: 20}}
         keyboardShouldPersistTaps="handled"
-        bottomOffset={120}>
+        bottomOffset={180}>
         <View style={styles.infoSection}>
           <Text style={[styles.placeName, {color: textColor}]}>
             {placeName}
@@ -359,7 +367,11 @@ const PlaceReservationApplyScreen = ({
             onChangeText={setTitle}
             placeholder="예약 제목을 입력하세요"
             placeholderTextColor={subTextColor}
+            maxLength={50}
           />
+          <Text style={[styles.charCount, {color: subTextColor}]}>
+            {title.length}/50
+          </Text>
           <Text style={[styles.label, {color: textColor}]}>
             설명 <Text style={styles.requiredText}>*</Text>
           </Text>
@@ -379,7 +391,11 @@ const PlaceReservationApplyScreen = ({
             placeholder="예약에 대한 설명과 사용 인원을 꼭 작성해 주세요"
             placeholderTextColor={subTextColor}
             multiline
+            maxLength={200}
           />
+          <Text style={[styles.charCount, {color: subTextColor}]}>
+            {desc.length}/200
+          </Text>
           <View
             style={{
               flexDirection: 'row',
@@ -462,9 +478,8 @@ const PlaceReservationApplyScreen = ({
                 setDate(date);
               }}
               onCancel={() => setShowDatePicker(false)}
-              maximumDate={
-                new Date(new Date().setDate(new Date().getDate() + 30))
-              }
+              minimumDate={minimumDate}
+              maximumDate={maximumDate}
               locale="ko-KR"
               confirmTextIOS="확인"
               cancelTextIOS="취소"
@@ -491,6 +506,8 @@ const PlaceReservationApplyScreen = ({
               }}
               onCancel={() => setShowStartPicker(false)}
               minuteInterval={30}
+              date={startTime}
+              minimumDate={minimumDate}
               is24Hour
               confirmTextIOS="확인"
               cancelTextIOS="취소"
@@ -506,6 +523,7 @@ const PlaceReservationApplyScreen = ({
               }}
               onCancel={() => setShowEndPicker(false)}
               minuteInterval={30}
+              date={endTime}
               is24Hour
               minimumDate={startTime}
               confirmTextIOS="확인"
@@ -656,6 +674,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  charCount: {
+    fontSize: 12,
+    textAlign: 'right',
+    marginTop: 4,
   },
 });
 

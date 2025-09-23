@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,6 +10,9 @@ import {
   Linking,
   Alert,
   Image,
+  BackHandler,
+  ToastAndroid,
+  Platform,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -36,6 +39,7 @@ type ServiceItem = {
 const HomeScreen = ({navigation}: HomeScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [userName, setUserName] = useState<string>('');
+  const backPressCount = useRef(0);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -70,6 +74,44 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
     useCallback(() => {
       console.log('HomeScreen focused - refreshing data');
       setRefreshKey(prev => prev + 1);
+    }, []),
+  );
+
+  // 뒤로가기 버튼 처리
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        backPressCount.current += 1;
+
+        if (backPressCount.current === 1) {
+          // 첫 번째 누름: 토스트 메시지 표시
+          if (Platform.OS === 'android') {
+            ToastAndroid.show(
+              '한 번 더 누르면 앱이 종료됩니다',
+              ToastAndroid.SHORT,
+            );
+          }
+
+          // 2초 후 카운터 리셋
+          setTimeout(() => {
+            backPressCount.current = 0;
+          }, 2000);
+
+          return true; // 기본 뒤로가기 동작 방지
+        } else if (backPressCount.current === 2) {
+          // 두 번째 누름: 앱 종료
+          BackHandler.exitApp();
+          return true;
+        }
+
+        return true;
+      };
+
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress,
+      );
+      return () => subscription.remove();
     }, []),
   );
 
@@ -192,7 +234,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
         </View>
 
         {/* 다가오는 일정 */}
-        <UpcomingEvents refreshKey={refreshKey} />
+        <UpcomingEvents refreshKey={refreshKey} navigation={navigation} />
 
         {/* 서비스 그리드 */}
         <View style={styles.servicesSection}>
@@ -245,11 +287,31 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           },
         ]}
         activeOpacity={0.85}
-        onPress={() =>
-          Linking.openURL(
-            'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true',
-          )
-        }>
+        onPress={async () => {
+          try {
+            const url =
+              'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true';
+            const supported = await Linking.canOpenURL(url);
+
+            if (supported) {
+              await Linking.openURL(url);
+            } else {
+              Alert.alert(
+                '링크 열기 실패',
+                '브라우저를 열 수 없습니다. 수동으로 다음 링크를 복사하여 브라우저에서 열어주세요:\n\n' +
+                  url,
+                [{text: '확인', style: 'default'}],
+              );
+            }
+          } catch (error) {
+            console.error('링크 열기 오류:', error);
+            Alert.alert(
+              '오류',
+              '링크를 열 수 없습니다. 네트워크 연결을 확인해주세요.',
+              [{text: '확인', style: 'default'}],
+            );
+          }
+        }}>
         <Image
           source={require('../../assets/siren.png')}
           style={styles.floatingIcon}

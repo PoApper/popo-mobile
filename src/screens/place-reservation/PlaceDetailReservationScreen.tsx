@@ -63,6 +63,22 @@ const PlaceDetailReservationScreen = ({
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isLoadingReservations, setIsLoadingReservations] = useState(false);
 
+  // 오늘 날짜를 YYYYMMDD 형식의 문자열로 계산 (컴포넌트 마운트 시 1회)
+  const todayStr = useMemo(() => {
+    const today = new Date();
+    // 월은 0부터 시작함
+    return `${today.getFullYear()}${String(today.getMonth() + 1).padStart(
+      2,
+      '0',
+    )}${String(today.getDate()).padStart(2, '0')}`;
+  }, []);
+
+  // 선택된 날짜가 과거인지 확인
+  const isPastDate = useMemo(() => {
+    if (!selectedDate) return false;
+    return selectedDate < todayStr;
+  }, [selectedDate, todayStr]);
+
   const marked = useMemo(
     () => ({
       [selectedDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')]: {
@@ -159,6 +175,20 @@ const PlaceDetailReservationScreen = ({
     return {maxDateStr: toStr(max)};
   }, []);
 
+  // 상태 색상 변환 함수
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case '통과':
+        return '#4CAF50';
+      case '심사중':
+        return '#9E9E9E';
+      case '거절':
+        return '#F44336';
+      default:
+        return '#9E9E9E';
+    }
+  };
+
   const renderReservationItem = ({item}: {item: Reservation}) => (
     <View
       style={[styles.reservationItem, {backgroundColor: cardBackgroundColor}]}>
@@ -166,9 +196,12 @@ const PlaceDetailReservationScreen = ({
         <Text style={[styles.reservationTime, {color: textColor}]}>
           {convertTime(item.startTime)} - {convertTime(item.endTime)}
         </Text>
-        <Text style={[styles.reservationStatus, {color: '#FB5353'}]}>
-          {item.status}
-        </Text>
+        <View
+          style={[
+            styles.statusIndicator,
+            {backgroundColor: getStatusColor(item.status)},
+          ]}
+        />
       </View>
       <View style={styles.reservationDetailContainer}>
         <Text style={[styles.reservationTitle, {color: textColor}]}>
@@ -268,41 +301,6 @@ const PlaceDetailReservationScreen = ({
               style={styles.placeImage}
               fallbackSource={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
             />
-            <TouchableOpacity
-              style={styles.reserveButton}
-              onPress={() => {
-                // 선택된 날짜가 과거인지 검증
-                const today = new Date();
-                const selectedDateObj = new Date(
-                  parseInt(selectedDate.substring(0, 4)),
-                  parseInt(selectedDate.substring(4, 6)) - 1,
-                  parseInt(selectedDate.substring(6, 8)),
-                );
-
-                // 오늘 날짜의 시작 시간(00:00:00)과 비교
-                const todayStart = new Date(
-                  today.getFullYear(),
-                  today.getMonth(),
-                  today.getDate(),
-                );
-
-                if (selectedDateObj < todayStart) {
-                  Alert.alert(
-                    '알림',
-                    '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.',
-                  );
-                  return;
-                }
-
-                navigation.navigate('PlaceReservationApply', {
-                  buildingName: placeDetail?.location || '',
-                  placeName: placeDetail?.name || '',
-                  placeId: placeId,
-                  selectedDate: selectedDate,
-                });
-              }}>
-              <Text style={styles.reserveButtonText}>예약 신청하기</Text>
-            </TouchableOpacity>
             <View style={styles.calendarContainer}>
               <Calendar
                 current={selectedDate.replace(
@@ -312,7 +310,6 @@ const PlaceDetailReservationScreen = ({
                 firstDay={1}
                 hideExtraDays={false}
                 disableMonthChange={false}
-                enableSwipeMonths
                 disableAllTouchEventsForDisabledDays={false}
                 disableAllTouchEventsForInactiveDays={false}
                 maxDate={maxDateStr}
@@ -376,6 +373,40 @@ const PlaceDetailReservationScreen = ({
           </>
         ) : null}
       </ScrollView>
+
+      {/* 예약 신청하기 버튼 - 하단 고정 */}
+      <View style={styles.reserveButtonWrapper}>
+        <TouchableOpacity
+          style={[
+            styles.reserveButton,
+            (!selectedDate || isPastDate) && {opacity: 0.5},
+          ]}
+          disabled={!selectedDate || isPastDate}
+          onPress={() => {
+            if (isPastDate) {
+              Alert.alert(
+                '알림',
+                '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.',
+              );
+              return;
+            }
+
+            navigation.navigate('PlaceReservationApply', {
+              buildingName: placeDetail?.location || '',
+              placeName: placeDetail?.name || '',
+              placeId: placeId,
+              selectedDate: selectedDate,
+            });
+          }}>
+          <Text style={styles.reserveButtonText}>
+            {!selectedDate
+              ? '날짜를 선택해주세요'
+              : isPastDate
+              ? '과거 날짜는 예약 불가'
+              : '예약 신청하기'}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -407,6 +438,13 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 20,
+    paddingBottom: 30,
+  },
+  reserveButtonWrapper: {
+    width: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   loadingContainer: {
     flex: 1,
@@ -437,17 +475,17 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   reserveButton: {
-    width: '100%',
-    backgroundColor: '#2a2a2a',
-    padding: 16,
+    backgroundColor: '#222',
     borderRadius: 8,
+    width: '100%',
     alignItems: 'center',
-    marginBottom: 24,
+    justifyContent: 'center',
+    height: 48,
   },
   reserveButtonText: {
-    color: '#FFFFFF',
+    color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
   calendarContainer: {
     marginTop: 8,
@@ -486,9 +524,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  reservationStatus: {
-    fontSize: 14,
-    fontWeight: '500',
+  statusIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
   },
   reservationUser: {
     fontSize: 14,

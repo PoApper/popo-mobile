@@ -15,6 +15,7 @@ import {
   Animated,
   Dimensions,
   Pressable,
+  Platform,
 } from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -462,7 +463,9 @@ const ReservationList: React.FC<ReservationListProps> = ({
         animationType="none"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={closeModal}>
+        onRequestClose={closeModal}
+        statusBarTranslucent={Platform.OS === 'android'}
+        hardwareAccelerated>
         <GestureHandlerRootView style={styles.gestureContainer}>
           <Pressable style={styles.modalOverlay} onPress={closeModal}>
             <Animated.View

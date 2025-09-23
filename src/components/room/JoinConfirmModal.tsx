@@ -8,6 +8,7 @@ import {
   useColorScheme,
   Image,
   Pressable,
+  Platform,
 } from 'react-native';
 import moment from 'moment';
 
@@ -42,7 +43,9 @@ const JoinConfirmModal: React.FC<Props> = ({
       visible={visible}
       transparent
       animationType="fade"
-      onRequestClose={onClose}>
+      onRequestClose={onClose}
+      statusBarTranslucent={Platform.OS === 'android'}
+      hardwareAccelerated>
       <Pressable
         style={[styles.overlay, {backgroundColor: C.bg}]}
         onPress={onClose}>
@@ -97,9 +100,6 @@ const JoinConfirmModal: React.FC<Props> = ({
                 numberOfLines={2}>
                 {room.departureLocation}
               </Text>
-            </View>
-            <View style={styles.arrowOverlay}>
-              <Text style={[styles.arrow, {color: C.subText}]}>›</Text>
             </View>
             <View style={styles.rightCol}>
               <Text
@@ -182,15 +182,6 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     position: 'relative',
     minHeight: 60, // 2줄 텍스트를 위한 최소 높이
-  },
-  arrow: {fontSize: 18},
-  arrowOverlay: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 60,
   },
   leftCol: {flex: 1, alignItems: 'center'},
   rightCol: {flex: 1, alignItems: 'center'},

@@ -100,6 +100,7 @@ export type OtherStackParamList = {
   EquipmentReservation: undefined;
   EquipmentReservationApply: {
     association: string;
+    selectedDate: string;
   };
   About: undefined;
 };

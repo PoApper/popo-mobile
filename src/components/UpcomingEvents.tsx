@@ -1,6 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, ScrollView, useColorScheme} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  useColorScheme,
+  TouchableOpacity,
+  Modal,
+  Animated,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '@navigation/types';
 
 import api from '@utils/api';
 import paxi_api from '@utils/paxi_api';
@@ -75,6 +87,7 @@ interface CombinedEvent {
   time: string;
   location: string;
   status: string;
+  description?: string;
   data: PlaceReservation | TaxiRoom | EquipmentReservation;
 }
 
@@ -87,12 +100,18 @@ type PaginatedResponse<T> = {
 
 interface UpcomingEventsProps {
   refreshKey?: number;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
 }
 
-const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
+const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [combinedEvents, setCombinedEvents] = useState<CombinedEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedEvent, setSelectedEvent] = useState<CombinedEvent | null>(
+    null,
+  );
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const slideAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const fetchPlaceEvents = () => {
@@ -178,6 +197,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
             )} - ${formatReservationTime(reservation.endTime)}`,
             location: reservation.place?.name || '장소 미정',
             status: reservation.status,
+            description: reservation.description,
             data: reservation,
           }),
         );
@@ -191,6 +211,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
             time: moment(room.departureTime).format('HH:mm'),
             location: `${room.departureLocation} → ${room.destinationLocation}`,
             status: room.status,
+            description: undefined,
             data: room,
           }),
         );
@@ -213,6 +234,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
             )} - ${formatReservationTime(reservation.endTime)}`,
             location: formatEquipments(reservation.equipments),
             status: reservation.status,
+            description: reservation.description,
             data: reservation,
           }),
         );
@@ -292,19 +314,21 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case '통과':
         return '#4CAF50';
       case '심사중':
-        return '#FF9800';
+        return '#9E9E9E';
       case '거절':
         return '#F44336';
       case 'IN_SETTLEMENT':
-        return '#FF9800';
+        return '#9E9E9E';
       case 'ACTIVE':
         return '#4CAF50';
+      case 'COMPLETED':
+        return '#4CAF50';
       default:
-        return '#2196F3';
+        return '#9E9E9E';
     }
   };
 
@@ -319,6 +343,36 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
       default:
         return 'event';
     }
+  };
+
+  const handleEventPress = (event: CombinedEvent) => {
+    if (event.type === 'taxi') {
+      // 카풀: 해당 채팅방으로 입장
+      const taxiData = event.data as TaxiRoom;
+      navigation.navigate('NewChat', {roomUuid: taxiData.uuid});
+    } else {
+      // 장소/장비 예약: 상세 모달 표시
+      setSelectedEvent(event);
+      setShowDetailModal(true);
+      // 모달 콘텐츠 슬라이드업 애니메이션
+      Animated.timing(slideAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  };
+
+  const closeDetailModal = () => {
+    // 모달 콘텐츠 슬라이드다운 애니메이션
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start(() => {
+      setShowDetailModal(false);
+      setSelectedEvent(null);
+    });
   };
 
   if (isLoading) {
@@ -352,6 +406,9 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
           style={styles.scheduleScroll}>
           <View style={[styles.scheduleCard, {backgroundColor: '#4D61DD'}]}>
             <Text style={styles.scheduleTitle}>다가오는 일정이 없습니다</Text>
+            <Text style={styles.emptyDescription}>
+              일주일 내의 일정들을 보여드려요
+            </Text>
           </View>
         </ScrollView>
       </View>
@@ -372,14 +429,16 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
         showsHorizontalScrollIndicator={false}
         style={styles.scheduleScroll}>
         {combinedEvents.map((event, index) => (
-          <View
+          <TouchableOpacity
             key={event.id}
             style={[
               styles.scheduleCard,
               {
                 backgroundColor: index % 2 === 0 ? '#FF616B' : '#FF7BA5',
               },
-            ]}>
+            ]}
+            onPress={() => handleEventPress(event)}
+            activeOpacity={0.8}>
             <View style={styles.eventHeader}>
               <Icon
                 name={getEventIcon(event.type)}
@@ -394,8 +453,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
                   ? '택시 카풀'
                   : '장비 예약'}
               </Text>
-              {/* TODO: 장비 예약 상태도 표시 */}
-              {(event.type === 'place' || event.type === 'taxi') && (
+              {
                 <View style={styles.statusContainer}>
                   <View
                     style={[
@@ -407,7 +465,7 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
                     </Text>
                   </View>
                 </View>
-              )}
+              }
             </View>
             <Text style={styles.scheduleTitle}>{event.title}</Text>
             <View style={styles.scheduleInfo}>
@@ -430,9 +488,144 @@ const UpcomingEvents = ({refreshKey}: UpcomingEventsProps) => {
                 {formatDate(event.date)} {event.time}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
+
+      {/* 상세 모달 */}
+      <Modal
+        visible={showDetailModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={closeDetailModal}>
+        <TouchableWithoutFeedback onPress={closeDetailModal}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback onPress={() => {}}>
+              <Animated.View
+                style={[
+                  styles.modalContent,
+                  {
+                    backgroundColor: isDarkMode ? '#1A1A1A' : '#FFFFFF',
+                    transform: [
+                      {
+                        translateY: slideAnim.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [400, 0], // 화면 아래에서 시작해서 원래 위치로
+                        }),
+                      },
+                    ],
+                  },
+                ]}>
+                {selectedEvent && (
+                  <>
+                    <View style={styles.modalHeader}>
+                      <Text
+                        style={[
+                          styles.modalTitle,
+                          {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                        ]}>
+                        {selectedEvent.type === 'place'
+                          ? '장소 예약'
+                          : '장비 예약'}{' '}
+                        상세
+                      </Text>
+                    </View>
+
+                    <View style={styles.modalBody}>
+                      <View style={styles.detailRow}>
+                        <Text
+                          style={[
+                            styles.detailLabel,
+                            {color: isDarkMode ? '#AAAAAA' : '#666666'},
+                          ]}>
+                          제목
+                        </Text>
+                        <Text
+                          style={[
+                            styles.detailValue,
+                            {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                          ]}>
+                          {selectedEvent.title}
+                        </Text>
+                      </View>
+
+                      <View style={styles.detailRow}>
+                        <Text
+                          style={[
+                            styles.detailLabel,
+                            {color: isDarkMode ? '#AAAAAA' : '#666666'},
+                          ]}>
+                          {selectedEvent.type === 'place' ? '장소' : '장비'}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.detailValue,
+                            {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                          ]}>
+                          {selectedEvent.location}
+                        </Text>
+                      </View>
+
+                      <View style={styles.detailRow}>
+                        <Text
+                          style={[
+                            styles.detailLabel,
+                            {color: isDarkMode ? '#AAAAAA' : '#666666'},
+                          ]}>
+                          날짜
+                        </Text>
+                        <Text
+                          style={[
+                            styles.detailValue,
+                            {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                          ]}>
+                          {formatDate(selectedEvent.date)}
+                        </Text>
+                      </View>
+
+                      <View style={styles.detailRow}>
+                        <Text
+                          style={[
+                            styles.detailLabel,
+                            {color: isDarkMode ? '#AAAAAA' : '#666666'},
+                          ]}>
+                          시간
+                        </Text>
+                        <Text
+                          style={[
+                            styles.detailValue,
+                            {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                          ]}>
+                          {selectedEvent.time}
+                        </Text>
+                      </View>
+
+                      {selectedEvent.description && (
+                        <View style={styles.detailRow}>
+                          <Text
+                            style={[
+                              styles.detailLabel,
+                              {color: isDarkMode ? '#AAAAAA' : '#666666'},
+                            ]}>
+                            설명
+                          </Text>
+                          <Text
+                            style={[
+                              styles.detailValue,
+                              {color: isDarkMode ? '#FFFFFF' : '#000000'},
+                            ]}>
+                            {selectedEvent.description}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  </>
+                )}
+              </Animated.View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 };
@@ -476,6 +669,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 16,
   },
+  emptyDescription: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    opacity: 0.8,
+    marginBottom: 75,
+  },
   scheduleInfo: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -505,6 +704,52 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '500',
+  },
+  // 모달 스타일
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingTop: 20,
+    paddingBottom: 40,
+    paddingHorizontal: 24,
+    maxHeight: '80%',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  modalBody: {
+    gap: 16,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingVertical: 8,
+  },
+  detailLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    flex: 1,
+  },
+  detailValue: {
+    fontSize: 14,
+    flex: 2,
+    textAlign: 'right',
   },
 });
 

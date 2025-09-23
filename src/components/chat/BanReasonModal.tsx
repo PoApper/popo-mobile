@@ -10,6 +10,7 @@ import {
   Text,
   TextInput,
   Dimensions,
+  Platform,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {MyRoomData, UserData} from '@interfaces/paxi';
@@ -77,7 +78,9 @@ const BanReasonModal = ({
     <Modal
       transparent={true}
       visible={modalVisible}
-      onRequestClose={handleClose}>
+      onRequestClose={handleClose}
+      statusBarTranslucent={Platform.OS === 'android'}
+      hardwareAccelerated>
       {/* TODO: nested pressable onStartShouldSetResponder 옵션 사용으로 변경 */}
       <Pressable style={styles.overlay} onPress={handleClose}>
         <KeyboardAvoidingView

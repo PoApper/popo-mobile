@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import {
   StyleSheet,
   Text,
@@ -64,6 +64,14 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
   );
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [isTimePickerVisible, setTimePickerVisible] = useState(false);
+
+  // 날짜 범위 계산 (컴포넌트 마운트 시 1회)
+  const {minimumDate, maximumDate} = useMemo(() => {
+    const today = new Date();
+    const minDate = new Date(today.setHours(0, 0, 0, 0));
+    const maxDate = new Date(today.setDate(today.getDate() + 30));
+    return {minimumDate: minDate, maximumDate: maxDate};
+  }, []);
 
   useEffect(() => {
     paxi_api
@@ -164,6 +172,11 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
   const isToday = (date: Date) =>
     new Date().toDateString() === date.toDateString();
 
+  // 커스텀 입력인지 확인하는 함수
+  const isCustomLocation = (location: string) => {
+    return !PAXI_LOCATIONS.some(loc => loc.id === location);
+  };
+
   const checkInputValid = () => {
     if (!roomName || !departureName || !arrivalName) {
       Alert.alert('오류', '모든 필수 필드를 입력해주세요.');
@@ -209,7 +222,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        bottomOffset={120}>
+        bottomOffset={180}>
         <View style={styles.formSection}>
           <View>
             <Text style={[styles.label, {color: textColor}]}>방 제목</Text>
@@ -219,7 +232,15 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={roomName}
               onChangeText={setRoomName}
+              maxLength={20}
             />
+            <Text
+              style={[
+                styles.charCount,
+                {color: isDarkMode ? '#555' : '#d0d0d0'},
+              ]}>
+              {roomName.length}/20
+            </Text>
           </View>
 
           <View style={{marginBottom: 8}}>
@@ -240,6 +261,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
                   )}
                   onSelect={selected => setDepartureName(selected ?? '출발지')}
                   selected={departureName}
+                  onCustomModeChange={() => {}}
                 />
               </View>
               <View
@@ -258,10 +280,14 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
                   )}
                   onSelect={selected => setArrivalName(selected ?? '도착지')}
                   selected={arrivalName}
+                  onCustomModeChange={() => {}}
                 />
               </View>
             </View>
-            {departureName && arrivalName ? (
+            {departureName &&
+            arrivalName &&
+            !isCustomLocation(departureName) &&
+            !isCustomLocation(arrivalName) ? (
               <View
                 style={{
                   backgroundColor: isDarkMode ? '#232323' : '#F0F0F0',
@@ -348,10 +374,8 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
             date={selectedDateTime}
             onConfirm={handleDateConfirm}
             onCancel={() => setDatePickerVisible(false)}
-            minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
-            maximumDate={
-              new Date(new Date().setDate(new Date().getDate() + 30))
-            }
+            minimumDate={minimumDate}
+            maximumDate={maximumDate}
             locale="ko-KR"
             confirmTextIOS="확인"
             cancelTextIOS="취소"
@@ -408,7 +432,15 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
             placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
             value={roomDetails}
             onChangeText={setRoomDetails}
+            maxLength={100}
           />
+          <Text
+            style={[
+              styles.charCount,
+              {color: isDarkMode ? '#555' : '#d0d0d0'},
+            ]}>
+            {roomDetails.length}/100
+          </Text>
         </View>
         <TouchableOpacity
           style={[styles.createButton]}
@@ -449,7 +481,7 @@ const styles = StyleSheet.create({
   },
   createButton: {
     borderRadius: 6,
-    backgroundColor: '#FB5353',
+    backgroundColor: '#2a2a2a',
     width: '100%',
     marginTop: 20,
     height: 40,
@@ -513,5 +545,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     marginLeft: 5,
     marginRight: 10,
+  },
+  charCount: {
+    fontSize: 12,
+    textAlign: 'right',
+    marginTop: 4,
   },
 });

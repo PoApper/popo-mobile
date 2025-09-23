@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useMemo} from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -22,6 +22,12 @@ const RoomFilterDatePicker = ({
   const isDarkMode = useColorScheme() === 'dark';
 
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
+
+  // 날짜 범위 계산 (컴포넌트 마운트 시 1회)
+  const minimumDate = useMemo(() => {
+    const today = new Date();
+    return new Date(today.setHours(0, 0, 0, 0));
+  }, []);
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const dropdownStyle = [
@@ -78,7 +84,7 @@ const RoomFilterDatePicker = ({
           setDatePickerVisible(false);
         }}
         onCancel={() => setDatePickerVisible(false)}
-        minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
+        minimumDate={minimumDate}
         maximumDate={new Date(new Date().setDate(new Date().getDate() + 30))}
         locale="ko-KR"
         confirmTextIOS="확인"

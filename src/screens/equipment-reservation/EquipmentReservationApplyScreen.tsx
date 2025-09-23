@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useCallback} from 'react';
+import React, {useEffect, useState, useRef, useCallback, useMemo} from 'react';
 import {
   StyleSheet,
   Text,
@@ -62,7 +62,8 @@ const EquipmentReservationApplyScreen = ({
   route,
 }: EquipmentReservationApplyScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const association = route?.params?.association ?? 'dongyeon';
+  const association = route?.params?.association;
+  const selectedDate = route?.params?.selectedDate;
 
   // 사용자 정보
   const [userName, setUserName] = useState('');
@@ -81,8 +82,29 @@ const EquipmentReservationApplyScreen = ({
     [],
   );
   const [equipmentList, setEquipmentList] = useState<IEquipment[]>([]);
-  const [date, setDate] = useState(new Date());
+
+  // 선택된 날짜가 있으면 해당 날짜로, 없으면 현재 날짜로 초기화
+  const getInitialDate = () => {
+    if (selectedDate) {
+      // YYYYMMDD 형식을 Date 객체로 변환
+      const year = parseInt(selectedDate.substring(0, 4));
+      const month = parseInt(selectedDate.substring(4, 6)) - 1; // 월은 0부터 시작
+      const day = parseInt(selectedDate.substring(6, 8));
+      return new Date(year, month, day);
+    }
+    return new Date();
+  };
+
+  const [date, setDate] = useState(getInitialDate());
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  // 날짜 범위 계산 (컴포넌트 마운트 시 1회)
+  const {minimumDate, maximumDate} = useMemo(() => {
+    const today = new Date();
+    const minDate = new Date(today.setHours(0, 0, 0, 0));
+    const maxDate = new Date(today.setDate(today.getDate() + 30));
+    return {minimumDate: minDate, maximumDate: maxDate};
+  }, []);
   const [startTime, setStartTime] = useState(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [endTime, setEndTime] = useState(new Date());
@@ -265,7 +287,10 @@ const EquipmentReservationApplyScreen = ({
       date.getDate(),
     );
     if (selectedStart < todayStart) {
-      Alert.alert('알림', '과거 날짜는 예약할 수 없습니다.');
+      Alert.alert(
+        '알림',
+        '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.',
+      );
       return;
     }
 
@@ -521,7 +546,7 @@ const EquipmentReservationApplyScreen = ({
         ref={scrollViewRef}
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
-        bottomOffset={association === 'dormunion' ? 120 : 200}>
+        bottomOffset={association === 'dormunion' ? 180 : 200}>
         {/* 공지사항 섹션 */}
         <View
           style={[
@@ -652,7 +677,11 @@ const EquipmentReservationApplyScreen = ({
             onChangeText={setTitle}
             placeholder="예약 제목을 입력하세요"
             placeholderTextColor={subTextColor}
+            maxLength={50}
           />
+          <Text style={[styles.charCount, {color: subTextColor}]}>
+            {title.length}/50
+          </Text>
           <Text style={[styles.label, {color: textColor}]}>
             설명 <Text style={styles.requiredText}>*</Text>
           </Text>
@@ -670,7 +699,11 @@ const EquipmentReservationApplyScreen = ({
             placeholder="사용처를 반드시 작성 해주세요."
             placeholderTextColor={subTextColor}
             multiline
+            maxLength={200}
           />
+          <Text style={[styles.charCount, {color: subTextColor}]}>
+            {desc.length}/200
+          </Text>
           <Text style={[styles.label, {color: textColor}]}>
             장비 선택 <Text style={styles.requiredText}>*</Text>
           </Text>
@@ -786,9 +819,8 @@ const EquipmentReservationApplyScreen = ({
             }}
             onCancel={() => setShowDatePicker(false)}
             date={date}
-            maximumDate={
-              new Date(new Date().setDate(new Date().getDate() + 30))
-            }
+            minimumDate={minimumDate}
+            maximumDate={maximumDate}
             locale="ko-KR"
             confirmTextIOS="확인"
             cancelTextIOS="취소"
@@ -817,6 +849,7 @@ const EquipmentReservationApplyScreen = ({
             is24Hour
             minuteInterval={30}
             date={startTime}
+            minimumDate={minimumDate}
             confirmTextIOS="확인"
             cancelTextIOS="취소"
           />
@@ -1246,6 +1279,11 @@ const styles = StyleSheet.create({
   debugText: {
     fontSize: 12,
     marginBottom: 4,
+  },
+  charCount: {
+    fontSize: 12,
+    textAlign: 'right',
+    marginTop: 4,
   },
 });
 
