@@ -208,6 +208,15 @@ const EquipmentReservationScreen = ({
     setSelectedDate(dateStr);
   }, []);
 
+  // 선택된 날짜가 과거인지 확인
+  const isPastDate = useMemo(() => {
+    if (!selectedDate) return false;
+    const today = new Date();
+    // 월은 0부터 시작함
+    const todayStr = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
+    return selectedDate < todayStr;
+  }, [selectedDate]);
+
   // 주말 컬러: 토/일 모두 빨강. 선택/비활성 상태는 기존 규칙 유지
   const renderDay = useCallback(
     ({date, state, marking, onPress}: any) => {
@@ -488,14 +497,29 @@ const EquipmentReservationScreen = ({
       {/* 예약 신청하기 버튼 - 하단 고정 */}
       <View style={styles.reserveButtonWrapper}>
         <TouchableOpacity
-          style={styles.reserveButton}
-          onPress={() =>
+          style={[
+            styles.reserveButton,
+            (!selectedDate || isPastDate) && {opacity: 0.5}
+          ]}
+          disabled={!selectedDate || isPastDate}
+          onPress={() => {
+            if (isPastDate) {
+              Alert.alert('알림', '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.');
+              return;
+            }
             navigation.navigate('EquipmentReservationApply', {
               association: selectedTab,
               selectedDate: selectedDate,
-            })
-          }>
-          <Text style={styles.reserveButtonText}>예약 신청하기</Text>
+            });
+          }}>
+          <Text style={styles.reserveButtonText}>
+            {!selectedDate 
+              ? '날짜를 선택해주세요' 
+              : isPastDate 
+                ? '과거 날짜는 예약 불가' 
+                : '예약 신청하기'
+            }
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -63,6 +63,15 @@ const PlaceDetailReservationScreen = ({
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isLoadingReservations, setIsLoadingReservations] = useState(false);
 
+  // 선택된 날짜가 과거인지 확인
+  const isPastDate = useMemo(() => {
+    if (!selectedDate) return false;
+    const today = new Date();
+    // 월은 0부터 시작함
+    const todayStr = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
+    return selectedDate < todayStr;
+  }, [selectedDate]);
+
   const marked = useMemo(
     () => ({
       [selectedDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')]: {
@@ -281,28 +290,14 @@ const PlaceDetailReservationScreen = ({
               fallbackSource={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
             />
             <TouchableOpacity
-              style={styles.reserveButton}
+              style={[
+                styles.reserveButton,
+                (!selectedDate || isPastDate) && {opacity: 0.5}
+              ]}
+              disabled={!selectedDate || isPastDate}
               onPress={() => {
-                // 선택된 날짜가 과거인지 검증
-                const today = new Date();
-                const selectedDateObj = new Date(
-                  parseInt(selectedDate.substring(0, 4)),
-                  parseInt(selectedDate.substring(4, 6)) - 1,
-                  parseInt(selectedDate.substring(6, 8)),
-                );
-
-                // 오늘 날짜의 시작 시간(00:00:00)과 비교
-                const todayStart = new Date(
-                  today.getFullYear(),
-                  today.getMonth(),
-                  today.getDate(),
-                );
-
-                if (selectedDateObj < todayStart) {
-                  Alert.alert(
-                    '알림',
-                    '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.',
-                  );
+                if (isPastDate) {
+                  Alert.alert('알림', '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.');
                   return;
                 }
 
@@ -313,7 +308,14 @@ const PlaceDetailReservationScreen = ({
                   selectedDate: selectedDate,
                 });
               }}>
-              <Text style={styles.reserveButtonText}>예약 신청하기</Text>
+              <Text style={styles.reserveButtonText}>
+                {!selectedDate 
+                  ? '날짜를 선택해주세요' 
+                  : isPastDate 
+                    ? '과거 날짜는 예약 불가' 
+                    : '예약 신청하기'
+                }
+              </Text>
             </TouchableOpacity>
             <View style={styles.calendarContainer}>
               <Calendar

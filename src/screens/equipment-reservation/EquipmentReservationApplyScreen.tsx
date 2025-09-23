@@ -279,7 +279,7 @@ const EquipmentReservationApplyScreen = ({
       date.getDate(),
     );
     if (selectedStart < todayStart) {
-      Alert.alert('알림', '과거 날짜는 예약할 수 없습니다.');
+      Alert.alert('알림', '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.');
       return;
     }
 
