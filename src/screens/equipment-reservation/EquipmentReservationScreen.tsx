@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   Modal,
   Platform,
+  ScrollView,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -328,116 +329,121 @@ const EquipmentReservationScreen = ({
         <View style={styles.placeholderButton} />
       </View>
 
-      {/* 상단 탭 */}
-      <View style={styles.tabContainer}>
-        {tabs.map(tab => (
-          <TouchableOpacity
-            key={tab.value}
-            style={[
-              styles.tab,
-              selectedTab === tab.value && styles.selectedTab,
-            ]}
-            onPress={() => setSelectedTab(tab.value)}>
-            <Text
-               style={[
-                 styles.tabText,
-                 {color: subTextColor},
-                 selectedTab === tab.value && styles.selectedTabText,
-                 selectedTab === tab.value && {color: textColor},
-               ]}>
-              {tab.label}
-            </Text>
-            {selectedTab === tab.value && (
-              <View
-                style={[styles.tabUnderline, {backgroundColor: textColor}]}
-              />
-            )}
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* 장비 보기 버튼 */}
-      <View style={styles.equipmentViewButtonContainer}>
-        <TouchableOpacity
-          style={[styles.equipmentViewButton, {backgroundColor: cardBackgroundColor}]}
-          onPress={() => setShowEquipmentModal(true)}>
-          <Text style={[styles.equipmentViewButtonText, {color: textColor}]}>
-            장비 보기
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-       {/* 달력 섹션 */}
-       <View style={styles.calendarContainer}>
-        <Calendar
-          current={selectedDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')}
-          firstDay={1}
-          hideExtraDays={false}
-          disableMonthChange={false}
-          disableAllTouchEventsForDisabledDays={false}
-          disableAllTouchEventsForInactiveDays={false}
-          maxDate={maxDateStr}
-          onDayPress={onDayPress}
-          markedDates={marked}
-          dayComponent={renderDay}
-          renderHeader={date => {
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1)
-              .toString()
-              .padStart(2, '0');
-            return (
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}>
+        {/* 상단 탭 */}
+        <View style={styles.tabContainer}>
+          {tabs.map(tab => (
+            <TouchableOpacity
+              key={tab.value}
+              style={[
+                styles.tab,
+                selectedTab === tab.value && styles.selectedTab,
+              ]}
+              onPress={() => setSelectedTab(tab.value)}>
               <Text
-                style={{
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                  margin: 10,
-                  color: textColor,
-                }}>{`${year}년 ${month}월`}</Text>
-            );
-          }}
-          theme={{
-            backgroundColor: isDarkMode ? '#121212' : '#ffffff',
-            calendarBackground: isDarkMode ? '#121212' : '#ffffff',
-            textSectionTitleColor: textColor,
-            selectedDayTextColor: '#ffffff',
-            todayTextColor: '#ff6868',
-            dayTextColor: textColor,
-            textDisabledColor: isDarkMode ? '#444444' : '#d9e1e8',
-            monthTextColor: textColor,
-            textMonthFontWeight: 'bold',
-            textDayFontSize: 16,
-            textMonthFontSize: 16,
-            textDayHeaderFontSize: 14,
-            arrowColor: isDarkMode ? 'white' : 'black',
-          }}
-        />
-      </View>
-
-      {/* 선택된 날짜의 예약 현황 */}
-      {selectedDate && (
-        <View style={styles.reservationsContainer}>
-          <Text style={[styles.reservationsTitle, {color: textColor}]}>
-            예약 현황
-          </Text>
-          {isLoadingReservations ? (
-            <ActivityIndicator
-              style={styles.reservationsLoading}
-              color={textColor}
-            />
-          ) : reservations.length > 0 ? (
-            <FlatList
-              data={reservations.sort((a, b) => Number(a.startTime) - Number(b.startTime))}
-              renderItem={renderReservationItem}
-              keyExtractor={(item) => item.uuid}
-              scrollEnabled={false}
-            />
-          ) : (
-             <Text style={[styles.noReservations, {color: subTextColor}]}>
-               예약된 내역이 없습니다.
-             </Text>
-          )}
+                 style={[
+                   styles.tabText,
+                   {color: subTextColor},
+                   selectedTab === tab.value && styles.selectedTabText,
+                   selectedTab === tab.value && {color: textColor},
+                 ]}>
+                {tab.label}
+              </Text>
+              {selectedTab === tab.value && (
+                <View
+                  style={[styles.tabUnderline, {backgroundColor: textColor}]}
+                />
+              )}
+            </TouchableOpacity>
+          ))}
         </View>
-      )}
+
+        {/* 장비 보기 버튼 */}
+        <View style={styles.equipmentViewButtonContainer}>
+          <TouchableOpacity
+            style={[styles.equipmentViewButton, {backgroundColor: cardBackgroundColor}]}
+            onPress={() => setShowEquipmentModal(true)}>
+            <Text style={[styles.equipmentViewButtonText, {color: textColor}]}>
+              장비 보기
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+         {/* 달력 섹션 */}
+         <View style={styles.calendarContainer}>
+          <Calendar
+            current={selectedDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')}
+            firstDay={1}
+            hideExtraDays={false}
+            disableMonthChange={false}
+            disableAllTouchEventsForDisabledDays={false}
+            disableAllTouchEventsForInactiveDays={false}
+            maxDate={maxDateStr}
+            onDayPress={onDayPress}
+            markedDates={marked}
+            dayComponent={renderDay}
+            renderHeader={date => {
+              const year = date.getFullYear();
+              const month = (date.getMonth() + 1)
+                .toString()
+                .padStart(2, '0');
+              return (
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    margin: 10,
+                    color: textColor,
+                  }}>{`${year}년 ${month}월`}</Text>
+              );
+            }}
+            theme={{
+              backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+              calendarBackground: isDarkMode ? '#121212' : '#ffffff',
+              textSectionTitleColor: textColor,
+              selectedDayTextColor: '#ffffff',
+              todayTextColor: '#ff6868',
+              dayTextColor: textColor,
+              textDisabledColor: isDarkMode ? '#444444' : '#d9e1e8',
+              monthTextColor: textColor,
+              textMonthFontWeight: 'bold',
+              textDayFontSize: 16,
+              textMonthFontSize: 16,
+              textDayHeaderFontSize: 14,
+              arrowColor: isDarkMode ? 'white' : 'black',
+            }}
+          />
+        </View>
+
+        {/* 선택된 날짜의 예약 현황 */}
+        {selectedDate && (
+          <View style={styles.reservationsContainer}>
+            <Text style={[styles.reservationsTitle, {color: textColor}]}>
+              예약 현황
+            </Text>
+            {isLoadingReservations ? (
+              <ActivityIndicator
+                style={styles.reservationsLoading}
+                color={textColor}
+              />
+            ) : reservations.length > 0 ? (
+              <View>
+                {reservations.sort((a, b) => Number(a.startTime) - Number(b.startTime)).map((item) => (
+                  <View key={item.uuid}>
+                    {renderReservationItem({item})}
+                  </View>
+                ))}
+              </View>
+            ) : (
+               <Text style={[styles.noReservations, {color: subTextColor}]}>
+                 예약된 내역이 없습니다.
+               </Text>
+            )}
+          </View>
+        )}
+      </ScrollView>
 
       {/* 장비 리스트 모달 */}
       <Modal
@@ -499,6 +505,12 @@ const EquipmentReservationScreen = ({
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  contentContainer: {
+    paddingBottom: 0,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
