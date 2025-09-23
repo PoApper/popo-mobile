@@ -766,9 +766,8 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '90%',
-    // height: '80%', // 이 부분을 maxHeigh로 변경하거나, flex와 함께 사용
-    maxHeight: '80%', // 높이가 80%를 넘지 않도록 제한
-    flex: 1, // ✨ 이 속성을 추가하세요!
+    maxHeight: '80%',
+    flex: 1,
     borderRadius: 12,
     padding: 20,
     ...Platform.select({
