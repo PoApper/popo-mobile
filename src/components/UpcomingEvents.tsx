@@ -302,19 +302,21 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case '통과':
         return '#4CAF50';
       case '심사중':
-        return '#FF9800';
+        return '#9E9E9E';
       case '거절':
         return '#F44336';
       case 'IN_SETTLEMENT':
-        return '#FF9800';
+        return '#9E9E9E';
       case 'ACTIVE':
         return '#4CAF50';
+      case 'COMPLETED':
+        return '#4CAF50';
       default:
-        return '#2196F3';
+        return '#9E9E9E';
     }
   };
 
