@@ -786,6 +786,7 @@ const EquipmentReservationApplyScreen = ({
             }}
             onCancel={() => setShowDatePicker(false)}
             date={date}
+            minimumDate={new Date(new Date().setHours(0, 0, 0, 0))} 
             maximumDate={
               new Date(new Date().setDate(new Date().getDate() + 30))
             }
@@ -817,6 +818,7 @@ const EquipmentReservationApplyScreen = ({
             is24Hour
             minuteInterval={30}
             date={startTime}
+            minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
             confirmTextIOS="확인"
             cancelTextIOS="취소"
           />

@@ -462,6 +462,7 @@ const PlaceReservationApplyScreen = ({
                 setDate(date);
               }}
               onCancel={() => setShowDatePicker(false)}
+              minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
               maximumDate={
                 new Date(new Date().setDate(new Date().getDate() + 30))
               }
@@ -491,6 +492,8 @@ const PlaceReservationApplyScreen = ({
               }}
               onCancel={() => setShowStartPicker(false)}
               minuteInterval={30}
+              date={startTime}
+              minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
               is24Hour
               confirmTextIOS="확인"
               cancelTextIOS="취소"
@@ -506,6 +509,7 @@ const PlaceReservationApplyScreen = ({
               }}
               onCancel={() => setShowEndPicker(false)}
               minuteInterval={30}
+              date={endTime}
               is24Hour
               minimumDate={startTime}
               confirmTextIOS="확인"
