@@ -79,32 +79,16 @@ const EquipmentReservationScreen = ({
   const [reservations, setReservations] = useState<IEquipReservation[]>([]);
   const [isLoadingReservations, setIsLoadingReservations] = useState(false);
 
-  // 메모이제이션으로 불필요한 재계산 방지
-  const styles_memo = useMemo(
-    () => ({
-      backgroundStyle: {
-        backgroundColor: isDarkMode ? '#1a1a1a' : '#fff',
-        flex: 1,
-      },
-      textColor: isDarkMode ? '#ffffff' : '#000000',
-      borderColor: isDarkMode ? '#2C2C2C' : '#E5E7EB',
-      secondaryTextColor: isDarkMode ? '#a0a0a0' : '#888888',
-      buttonBackgroundColor: isDarkMode ? '#3a3a3a' : '#F6F7F9',
-      placeholderImageStyle: {
-        backgroundColor: isDarkMode ? '#3a3a3a' : '#eee',
-      },
-    }),
-    [isDarkMode],
-  );
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? '#121212' : '#fff',
+    flex: 1,
+  };
 
-  const {
-    backgroundStyle,
-    textColor,
-    borderColor,
-    secondaryTextColor,
-    buttonBackgroundColor,
-    placeholderImageStyle,
-  } = styles_memo;
+  const textColor = isDarkMode ? '#FFFFFF' : '#000000';
+  const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
+  const subTextColor = isDarkMode ? '#888888' : '#6B7280';
+  const cardBackgroundColor = isDarkMode ? '#1A1A1A' : '#F3F3F3';
+
 
   // 달력 마킹을 위한 marked 객체
   const marked = useMemo(
@@ -182,14 +166,14 @@ const EquipmentReservationScreen = ({
           <Text style={[styles.equipmentName, {color: textColor}]}>
             {removeEmoji(item.name)}
           </Text>
-          <Text style={[styles.equipmentPrice, {color: secondaryTextColor}]}>
+          <Text style={[styles.equipmentPrice, {color: subTextColor}]}>
             {item.fee.toLocaleString()}원
           </Text>
         </View>
         <TouchableOpacity
           style={[
             styles.detailButton,
-            {backgroundColor: buttonBackgroundColor},
+            {backgroundColor: cardBackgroundColor},
           ]}
           onPress={() => {
             Alert.alert(
@@ -208,12 +192,7 @@ const EquipmentReservationScreen = ({
         </TouchableOpacity>
       </View>
     ),
-    [
-      textColor,
-      secondaryTextColor,
-      buttonBackgroundColor,
-      placeholderImageStyle,
-    ],
+    [textColor, subTextColor, cardBackgroundColor],
   );
 
   // FlatList keyExtractor 메모이제이션
@@ -301,18 +280,18 @@ const EquipmentReservationScreen = ({
   // 예약 현황 아이템 렌더링
   const renderReservationItem = useCallback(
     ({item}: {item: IEquipReservation}) => (
-      <View style={[styles.reservationItem, {backgroundColor: buttonBackgroundColor}]}>
-        <View style={styles.reservationInfo}>
-          <View style={styles.reservationHeader}>
-            <Text style={[styles.reservationTitle, {color: textColor}]}>
-              {item.title}
-            </Text>
-            <View style={[styles.statusIndicator, {backgroundColor: getStatusColor(item.status)}]} />
-          </View>
-          <Text style={[styles.reservationTime, {color: secondaryTextColor}]}>
+      <View style={[styles.reservationItem, {backgroundColor: cardBackgroundColor}]}>
+        <View style={styles.reservationTimeContainer}>
+          <Text style={[styles.reservationTime, {color: textColor}]}>
             {convertTime(item.startTime)} - {convertTime(item.endTime)}
           </Text>
-          <Text style={[styles.reservationBooker, {color: secondaryTextColor}]}>
+          <View style={[styles.statusIndicator, {backgroundColor: getStatusColor(item.status)}]} />
+        </View>
+        <View style={styles.reservationDetailContainer}>
+          <Text style={[styles.reservationTitle, {color: textColor}]}>
+            {item.title}
+          </Text>
+          <Text style={[styles.reservationUser, {color: subTextColor}]}>
             예약자: {item.booker.name}
           </Text>
           <View style={styles.equipmentTags}>
@@ -327,7 +306,7 @@ const EquipmentReservationScreen = ({
         </View>
       </View>
     ),
-    [textColor, secondaryTextColor, buttonBackgroundColor, isDarkMode],
+    [textColor, subTextColor, cardBackgroundColor, isDarkMode],
   );
 
   return (
@@ -357,12 +336,12 @@ const EquipmentReservationScreen = ({
             ]}
             onPress={() => setSelectedTab(tab.value)}>
             <Text
-              style={[
-                styles.tabText,
-                {color: secondaryTextColor},
-                selectedTab === tab.value && styles.selectedTabText,
-                selectedTab === tab.value && {color: textColor},
-              ]}>
+               style={[
+                 styles.tabText,
+                 {color: subTextColor},
+                 selectedTab === tab.value && styles.selectedTabText,
+                 selectedTab === tab.value && {color: textColor},
+               ]}>
               {tab.label}
             </Text>
             {selectedTab === tab.value && (
@@ -374,8 +353,8 @@ const EquipmentReservationScreen = ({
         ))}
       </View>
 
-      {/* 달력 섹션 */}
-      <View style={[styles.calendarContainer, {backgroundColor: backgroundStyle.backgroundColor}]}>
+       {/* 달력 섹션 */}
+       <View style={styles.calendarContainer}>
         <Calendar
           current={selectedDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')}
           firstDay={1}
@@ -427,19 +406,21 @@ const EquipmentReservationScreen = ({
             예약 현황
           </Text>
           {isLoadingReservations ? (
-            <ActivityIndicator size="small" color={textColor} />
+            <ActivityIndicator
+              style={styles.reservationsLoading}
+              color={textColor}
+            />
           ) : reservations.length > 0 ? (
             <FlatList
               data={reservations.sort((a, b) => Number(a.startTime) - Number(b.startTime))}
               renderItem={renderReservationItem}
               keyExtractor={(item) => item.uuid}
-              showsVerticalScrollIndicator={false}
-              style={styles.reservationsList}
+              scrollEnabled={false}
             />
           ) : (
-            <Text style={[styles.noReservationsText, {color: secondaryTextColor}]}>
-              예약된 내역이 없습니다.
-            </Text>
+             <Text style={[styles.noReservations, {color: subTextColor}]}>
+               예약된 내역이 없습니다.
+             </Text>
           )}
         </View>
       )}
@@ -462,9 +443,9 @@ const EquipmentReservationScreen = ({
             index,
           })}
           ListEmptyComponent={
-            <Text style={[styles.emptyListText, {color: secondaryTextColor}]}>
-              {loading ? '불러오는 중...' : '장비가 없습니다.'}
-            </Text>
+             <Text style={[styles.emptyListText, {color: subTextColor}]}>
+               {loading ? '불러오는 중...' : '장비가 없습니다.'}
+             </Text>
           }
         />
       </View>
@@ -616,39 +597,43 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 8,
   },
-  reservationsList: {
-    maxHeight: 200,
+  reservationsLoading: {
+    marginTop: 10,
+  },
+  noReservations: {
+    textAlign: 'center',
+    marginTop: 10,
+    fontSize: 14,
   },
   reservationItem: {
     padding: 12,
     borderRadius: 8,
     marginBottom: 8,
   },
-  reservationInfo: {
-    flex: 1,
-  },
-  reservationHeader: {
+  reservationTimeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 4,
   },
-  reservationTitle: {
+  reservationTime: {
     fontSize: 14,
     fontWeight: '600',
-    flex: 1,
   },
   statusIndicator: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    marginLeft: 8,
   },
-  reservationTime: {
+  reservationDetailContainer: {
+    marginTop: 4,
+  },
+  reservationTitle: {
     fontSize: 12,
+    fontWeight: '500',
     marginBottom: 2,
   },
-  reservationBooker: {
+  reservationUser: {
     fontSize: 12,
     marginBottom: 4,
   },
@@ -658,20 +643,15 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   equipmentTag: {
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 12,
-    marginRight: 4,
-    marginBottom: 2,
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 8,
+    marginRight: 3,
+    marginBottom: 1,
   },
   equipmentTagText: {
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: '500',
-  },
-  noReservationsText: {
-    fontSize: 14,
-    textAlign: 'center',
-    paddingVertical: 20,
   },
 });
 
