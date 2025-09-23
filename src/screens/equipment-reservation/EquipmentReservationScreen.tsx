@@ -10,6 +10,8 @@ import {
   Alert,
   FlatList,
   ActivityIndicator,
+  Modal,
+  Platform,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -78,6 +80,7 @@ const EquipmentReservationScreen = ({
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [reservations, setReservations] = useState<IEquipReservation[]>([]);
   const [isLoadingReservations, setIsLoadingReservations] = useState(false);
+  const [showEquipmentModal, setShowEquipmentModal] = useState(false);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -353,6 +356,17 @@ const EquipmentReservationScreen = ({
         ))}
       </View>
 
+      {/* 장비 보기 버튼 */}
+      <View style={styles.equipmentViewButtonContainer}>
+        <TouchableOpacity
+          style={[styles.equipmentViewButton, {backgroundColor: cardBackgroundColor}]}
+          onPress={() => setShowEquipmentModal(true)}>
+          <Text style={[styles.equipmentViewButtonText, {color: textColor}]}>
+            장비 보기
+          </Text>
+        </TouchableOpacity>
+      </View>
+
        {/* 달력 섹션 */}
        <View style={styles.calendarContainer}>
         <Calendar
@@ -425,31 +439,49 @@ const EquipmentReservationScreen = ({
         </View>
       )}
 
-      {/* 장비 리스트 */}
-      <View style={styles.equipmentListContainer}>
-        <FlatList
-          data={equipmentList}
-          renderItem={renderEquipmentItem}
-          keyExtractor={keyExtractor}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.equipmentList}
-          removeClippedSubviews={true}
-          initialNumToRender={10}
-          maxToRenderPerBatch={5}
-          windowSize={10}
-          getItemLayout={(data, index) => ({
-            length: 79, // approximate height of each item (paddingVertical: 15 * 2 + content height ~49)
-            offset: 79 * index,
-            index,
-          })}
-          ListEmptyComponent={
-             <Text style={[styles.emptyListText, {color: subTextColor}]}>
-               {loading ? '불러오는 중...' : '장비가 없습니다.'}
-             </Text>
-          }
-        />
-      </View>
+      {/* 장비 리스트 모달 */}
+      <Modal
+        visible={showEquipmentModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowEquipmentModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          {/* iOS에서 스크롤 제스처와 충돌 방지를 위해 자식(콘텐츠) 위로 올라오지 않게 "먼저" 배치 */}
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => setShowEquipmentModal(false)}
+            style={StyleSheet.absoluteFill}
+          />
 
+          {/* 모달 콘텐츠 */}
+          <View style={[styles.modalContent, { backgroundColor: backgroundStyle.backgroundColor }]}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: textColor }]}>장비 목록</Text>
+              <TouchableOpacity style={styles.closeButton} onPress={() => setShowEquipmentModal(false)}>
+                <Text style={[styles.closeButtonText, { color: textColor }]}>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            <FlatList
+              data={equipmentList}
+              renderItem={renderEquipmentItem}
+              keyExtractor={keyExtractor}
+              showsVerticalScrollIndicator
+              style={{ flex: 1 }}
+              contentContainerStyle={[
+                styles.equipmentList,
+                Platform.OS === 'ios' && { paddingBottom: 20 },
+              ]}
+              removeClippedSubviews={false}
+              initialNumToRender={10}
+              maxToRenderPerBatch={5}
+              windowSize={10}
+              bounces={Platform.OS === 'ios'}
+            />
+          </View>
+        </View>
+      </Modal>
       {/* 예약 신청하기 버튼 - 하단 고정 */}
       <View style={styles.reserveButtonWrapper}>
         <TouchableOpacity
@@ -513,9 +545,19 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 1,
   },
-  equipmentListContainer: {
-    flex: 1,
-    marginBottom: 20,
+  equipmentViewButtonContainer: {
+    marginHorizontal: 20,
+    marginBottom: 16,
+  },
+  equipmentViewButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  equipmentViewButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   equipmentList: {
     paddingHorizontal: 20,
@@ -539,10 +581,6 @@ const styles = StyleSheet.create({
   equipmentName: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 2,
-  },
-  equipmentDesc: {
-    fontSize: 13,
     marginBottom: 2,
   },
   equipmentPrice: {
@@ -652,6 +690,48 @@ const styles = StyleSheet.create({
   equipmentTagText: {
     fontSize: 9,
     fontWeight: '500',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '90%',
+    // height: '80%', // 이 부분을 maxHeigh로 변경하거나, flex와 함께 사용
+    maxHeight: '80%', // 높이가 80%를 넘지 않도록 제한
+    flex: 1, // ✨ 이 속성을 추가하세요!
+    borderRadius: 12,
+    padding: 20,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  closeButton: {
+    padding: 8,
+  },
+  closeButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 
