@@ -475,22 +475,31 @@ const EquipmentReservationScreen = ({
               </TouchableOpacity>
             </View>
 
-            <FlatList
-              data={equipmentList}
-              renderItem={renderEquipmentItem}
-              keyExtractor={keyExtractor}
-              showsVerticalScrollIndicator
-              style={{ flex: 1 }}
-              contentContainerStyle={[
-                styles.equipmentList,
-                Platform.OS === 'ios' && { paddingBottom: 20 },
-              ]}
-              removeClippedSubviews={false}
-              initialNumToRender={10}
-              maxToRenderPerBatch={5}
-              windowSize={10}
-              bounces={Platform.OS === 'ios'}
-            />
+            {loading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={textColor} />
+                <Text style={[styles.loadingText, {color: textColor}]}>
+                  장비 목록을 불러오는 중...
+                </Text>
+              </View>
+            ) : (
+              <FlatList
+                data={equipmentList}
+                renderItem={renderEquipmentItem}
+                keyExtractor={keyExtractor}
+                showsVerticalScrollIndicator
+                style={{flex: 1}}
+                contentContainerStyle={[
+                  styles.equipmentList,
+                  Platform.OS === 'ios' && {paddingBottom: 20},
+                ]}
+                removeClippedSubviews={false}
+                initialNumToRender={10}
+                maxToRenderPerBatch={5}
+                windowSize={10}
+                bounces={Platform.OS === 'ios'}
+              />
+            )}
           </View>
         </View>
       </Modal>
@@ -766,6 +775,17 @@ const styles = StyleSheet.create({
   closeButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    textAlign: 'center',
   },
 });
 
