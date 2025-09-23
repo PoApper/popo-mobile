@@ -289,34 +289,6 @@ const PlaceDetailReservationScreen = ({
               style={styles.placeImage}
               fallbackSource={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
             />
-            <TouchableOpacity
-              style={[
-                styles.reserveButton,
-                (!selectedDate || isPastDate) && {opacity: 0.5}
-              ]}
-              disabled={!selectedDate || isPastDate}
-              onPress={() => {
-                if (isPastDate) {
-                  Alert.alert('알림', '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.');
-                  return;
-                }
-
-                navigation.navigate('PlaceReservationApply', {
-                  buildingName: placeDetail?.location || '',
-                  placeName: placeDetail?.name || '',
-                  placeId: placeId,
-                  selectedDate: selectedDate,
-                });
-              }}>
-              <Text style={styles.reserveButtonText}>
-                {!selectedDate 
-                  ? '날짜를 선택해주세요' 
-                  : isPastDate 
-                    ? '과거 날짜는 예약 불가' 
-                    : '예약 신청하기'
-                }
-              </Text>
-            </TouchableOpacity>
             <View style={styles.calendarContainer}>
               <Calendar
                 current={selectedDate.replace(
@@ -389,6 +361,38 @@ const PlaceDetailReservationScreen = ({
           </>
         ) : null}
       </ScrollView>
+
+      {/* 예약 신청하기 버튼 - 하단 고정 */}
+      <View style={styles.reserveButtonWrapper}>
+        <TouchableOpacity
+          style={[
+            styles.reserveButton,
+            (!selectedDate || isPastDate) && {opacity: 0.5}
+          ]}
+          disabled={!selectedDate || isPastDate}
+          onPress={() => {
+            if (isPastDate) {
+              Alert.alert('알림', '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.');
+              return;
+            }
+
+            navigation.navigate('PlaceReservationApply', {
+              buildingName: placeDetail?.location || '',
+              placeName: placeDetail?.name || '',
+              placeId: placeId,
+              selectedDate: selectedDate,
+            });
+          }}>
+          <Text style={styles.reserveButtonText}>
+            {!selectedDate 
+              ? '날짜를 선택해주세요' 
+              : isPastDate 
+                ? '과거 날짜는 예약 불가' 
+                : '예약 신청하기'
+            }
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -420,6 +424,13 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 20,
+    paddingBottom: 30,
+  },
+  reserveButtonWrapper: {
+    width: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   loadingContainer: {
     flex: 1,
@@ -450,17 +461,17 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   reserveButton: {
-    width: '100%',
-    backgroundColor: '#2a2a2a',
-    padding: 16,
+    backgroundColor: '#222',
     borderRadius: 8,
+    width: '100%',
     alignItems: 'center',
-    marginBottom: 24,
+    justifyContent: 'center',
+    height: 48,
   },
   reserveButtonText: {
-    color: '#FFFFFF',
+    color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
   calendarContainer: {
     marginTop: 8,
