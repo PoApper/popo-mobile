@@ -63,16 +63,20 @@ const PlaceDetailReservationScreen = ({
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isLoadingReservations, setIsLoadingReservations] = useState(false);
 
+  // 오늘 날짜를 YYYYMMDD 형식의 문자열로 계산 (컴포넌트 마운트 시 1회)
+  const todayStr = useMemo(() => {
+    const today = new Date();
+    // 월은 0부터 시작함
+    return `${today.getFullYear()}${String(
+      today.getMonth() + 1,
+    ).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
+  }, []);
+
   // 선택된 날짜가 과거인지 확인
   const isPastDate = useMemo(() => {
     if (!selectedDate) return false;
-    const today = new Date();
-    // 월은 0부터 시작함
-    const todayStr = `${today.getFullYear()}${String(
-      today.getMonth() + 1,
-    ).padStart(2, '0')}${String(today.getDate()).padStart(2, '0')}`;
     return selectedDate < todayStr;
-  }, [selectedDate]);
+  }, [selectedDate, todayStr]);
 
   const marked = useMemo(
     () => ({
