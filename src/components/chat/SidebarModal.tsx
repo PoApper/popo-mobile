@@ -1,5 +1,4 @@
 import {
-  Modal,
   Pressable,
   TouchableOpacity,
   View,
@@ -10,7 +9,6 @@ import {
   Dimensions,
   Alert,
   useColorScheme,
-  Platform,
 } from 'react-native';
 import {useState, useEffect, useRef} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -260,15 +258,11 @@ SidebarModalProps) => {
   };
 
   return (
-    <Modal
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={handleClose}
-      statusBarTranslucent={Platform.OS === 'android'}
-      hardwareAccelerated>
+    <>
       {/* TODO: nested pressable onStartShouldSetResponder 옵션 사용으로 변경 */}
-      {initialRenderDone && isVisible && (
-        <Pressable style={styles.overlay} onPress={handleClose}>
+      {modalVisible && initialRenderDone && isVisible && (
+        <View style={styles.overlay}>
+          <Pressable style={StyleSheet.absoluteFill} onPress={handleClose} />
           <Animated.View
             style={[
               styles.modalContainer,
@@ -471,9 +465,9 @@ SidebarModalProps) => {
               </Pressable>
             </SafeAreaView>
           </Animated.View>
-        </Pressable>
+        </View>
       )}
-    </Modal>
+    </>
   );
 };
 
@@ -489,10 +483,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   overlay: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 9999,
     justifyContent: 'center',
     alignItems: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   modalContainer: {
     width: '80%',

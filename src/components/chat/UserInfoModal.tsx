@@ -1,5 +1,4 @@
 import {
-  Modal,
   Pressable,
   View,
   StyleSheet,
@@ -9,7 +8,6 @@ import {
   Text,
   Image,
   Alert,
-  Platform,
 } from 'react-native';
 
 import {MessageData} from '@interfaces/paxi';
@@ -71,24 +69,20 @@ const UserInfoModal = ({
     }
   };
 
+  if (!modalVisible) return null;
+
   return (
-    <Modal
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={handleClose}
-      statusBarTranslucent={Platform.OS === 'android'}
-      hardwareAccelerated>
-      {/* TODO: nested pressable onStartShouldSetResponder 옵션 사용으로 변경 */}
-      <Pressable style={styles.overlay} onPress={handleClose}>
-        <View
-          style={[
-            styles.modalContainer,
-            {
-              backgroundColor: backgroundColor(isDarkMode),
-            },
-          ]}>
-          <SafeAreaView style={styles.modalContent}>
-            <Pressable style={styles.innerContent} onPress={() => {}}>
+    <View style={styles.overlay}>
+      <Pressable style={StyleSheet.absoluteFill} onPress={handleClose} />
+      <View
+        style={[
+          styles.modalContainer,
+          {
+            backgroundColor: backgroundColor(isDarkMode),
+          },
+        ]}>
+        <SafeAreaView style={styles.modalContent}>
+          <Pressable style={styles.innerContent} onPress={() => {}}>
               <View
                 style={{
                   display: 'flex',
@@ -168,11 +162,10 @@ const UserInfoModal = ({
                   )}
                 </View>
               </View>
-            </Pressable>
-          </SafeAreaView>
-        </View>
-      </Pressable>
-    </Modal>
+          </Pressable>
+        </SafeAreaView>
+      </View>
+    </View>
   );
 };
 
@@ -182,10 +175,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   overlay: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 9999,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   modalContainer: {
     width: '80%',

@@ -6,8 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   useColorScheme,
-  Modal,
-  Platform,
+  Pressable,
 } from 'react-native';
 
 type PrivacyPolicyProps = {
@@ -19,22 +18,18 @@ type PrivacyPolicyProps = {
 const PrivacyPolicy = ({visible, onClose, onAgree}: PrivacyPolicyProps) => {
   const isDarkMode = useColorScheme() === 'dark';
 
+  if (!visible) return null;
+
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      transparent={true}
-      statusBarTranslucent={Platform.OS === 'android'}
-      hardwareAccelerated
-      onRequestClose={onClose}>
-      <View style={styles.modalContainer}>
-        <View
-          style={[
-            styles.modalContent,
-            {
-              backgroundColor: isDarkMode ? '#1E1E1E' : '#FFFFFF',
-            },
-          ]}>
+    <View style={styles.overlay}>
+      <Pressable style={StyleSheet.absoluteFill} onPress={onClose} />
+      <View
+        style={[
+          styles.modalContent,
+          {
+            backgroundColor: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+          },
+        ]}>
           <View style={styles.titleContainer}>
             <Text
               style={[
@@ -260,17 +255,21 @@ const PrivacyPolicy = ({visible, onClose, onAgree}: PrivacyPolicyProps) => {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
-    </Modal>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 9999,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   modalContent: {
     flex: 1,
