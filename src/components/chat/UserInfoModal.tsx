@@ -1,5 +1,4 @@
 import {
-  Modal,
   Pressable,
   View,
   StyleSheet,
@@ -9,7 +8,6 @@ import {
   Text,
   Image,
   Alert,
-  Platform,
 } from 'react-native';
 
 import {MessageData} from '@interfaces/paxi';
@@ -71,108 +69,103 @@ const UserInfoModal = ({
     }
   };
 
+  if (!modalVisible) return null;
+
   return (
-    <Modal
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={handleClose}
-      statusBarTranslucent={Platform.OS === 'android'}
-      hardwareAccelerated>
-      {/* TODO: nested pressable onStartShouldSetResponder 옵션 사용으로 변경 */}
-      <Pressable style={styles.overlay} onPress={handleClose}>
-        <View
-          style={[
-            styles.modalContainer,
-            {
-              backgroundColor: backgroundColor(isDarkMode),
-            },
-          ]}>
-          <SafeAreaView style={styles.modalContent}>
-            <Pressable style={styles.innerContent} onPress={() => {}}>
+    <View style={styles.overlay}>
+      <Pressable style={StyleSheet.absoluteFill} onPress={handleClose} />
+      <View
+        style={[
+          styles.modalContainer,
+          {
+            backgroundColor: backgroundColor(isDarkMode),
+          },
+        ]}>
+        <SafeAreaView style={styles.modalContent}>
+          <Pressable style={styles.innerContent} onPress={() => {}}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                width: '100%',
+              }}>
+              <Image
+                source={require('../../../assets/baby_phonix.png')}
+                style={[
+                  styles.profileImg,
+                  {backgroundColor: getColor(msgData.senderNickname ?? '')},
+                ]}
+                resizeMode="contain"
+              />
+
+              <Text
+                style={[styles.userNameText, {color: textColor(isDarkMode)}]}>
+                {msgData.senderNickname}
+              </Text>
+              <Text
+                style={{
+                  color: textColor(isDarkMode),
+                  textAlign: 'left',
+                  width: '100%',
+                  paddingHorizontal: 5,
+                  fontSize: 15,
+                  marginBottom: 5,
+                  fontWeight: '400',
+                }}>
+                선택된 메시지
+              </Text>
+              <Text
+                numberOfLines={3}
+                ellipsizeMode={'tail'}
+                style={[
+                  styles.msgText,
+                  {
+                    backgroundColor: isDarkMode ? '#222' : '#eee',
+                    color: msgData.isDeleted
+                      ? '#9b9b9b'
+                      : textColor(isDarkMode),
+                    fontStyle: msgData.isDeleted ? 'italic' : 'normal',
+                  },
+                ]}>
+                {msgData.isDeleted ? '삭제된 메세지입니다.' : msgData.message}
+              </Text>
+
               <View
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
                   width: '100%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: 5,
                 }}>
-                <Image
-                  source={require('../../../assets/baby_phonix.png')}
+                <TouchableOpacity
+                  onPress={handleReport}
                   style={[
-                    styles.profileImg,
-                    {backgroundColor: getColor(msgData.senderNickname ?? '')},
-                  ]}
-                  resizeMode="contain"
-                />
-
-                <Text
-                  style={[styles.userNameText, {color: textColor(isDarkMode)}]}>
-                  {msgData.senderNickname}
-                </Text>
-                <Text
-                  style={{
-                    color: textColor(isDarkMode),
-                    textAlign: 'left',
-                    width: '100%',
-                    paddingHorizontal: 5,
-                    fontSize: 15,
-                    marginBottom: 5,
-                    fontWeight: '400',
-                  }}>
-                  선택된 메시지
-                </Text>
-                <Text
-                  numberOfLines={3}
-                  ellipsizeMode={'tail'}
-                  style={[
-                    styles.msgText,
+                    styles.button,
                     {
-                      backgroundColor: isDarkMode ? '#222' : '#eee',
-                      color: msgData.isDeleted
-                        ? '#9b9b9b'
-                        : textColor(isDarkMode),
-                      fontStyle: msgData.isDeleted ? 'italic' : 'normal',
+                      backgroundColor: isDarkMode ? '#333' : 'black',
                     },
                   ]}>
-                  {msgData.isDeleted ? '삭제된 메세지입니다.' : msgData.message}
-                </Text>
-
-                <View
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 5,
-                  }}>
+                  <Text style={styles.buttonText}>신고하기</Text>
+                </TouchableOpacity>
+                {isOwner && (
                   <TouchableOpacity
-                    onPress={handleReport}
+                    onPress={handleBan}
                     style={[
                       styles.button,
                       {
                         backgroundColor: isDarkMode ? '#333' : 'black',
                       },
                     ]}>
-                    <Text style={styles.buttonText}>신고하기</Text>
+                    <Text style={styles.buttonText}>추방하기</Text>
                   </TouchableOpacity>
-                  {isOwner && (
-                    <TouchableOpacity
-                      onPress={handleBan}
-                      style={[
-                        styles.button,
-                        {
-                          backgroundColor: isDarkMode ? '#333' : 'black',
-                        },
-                      ]}>
-                      <Text style={styles.buttonText}>추방하기</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
+                )}
               </View>
-            </Pressable>
-          </SafeAreaView>
-        </View>
-      </Pressable>
-    </Modal>
+            </View>
+          </Pressable>
+        </SafeAreaView>
+      </View>
+    </View>
   );
 };
 
@@ -182,10 +175,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   overlay: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 9999,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   modalContainer: {
     width: '80%',

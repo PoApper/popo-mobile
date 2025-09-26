@@ -9,6 +9,7 @@ import {
   useColorScheme,
   Alert,
   StatusBar,
+  Keyboard,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -128,7 +129,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
       <KeyboardAwareScrollView
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
-        bottomOffset={120}>
+        bottomOffset={160}>
         <View style={styles.container}>
           <TouchableOpacity
             style={styles.backButton}
@@ -389,7 +390,10 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
 
             <TouchableOpacity
               style={styles.privacyPolicyContainer}
-              onPress={() => setIsPrivacyPolicyVisible(true)}>
+              onPress={() => {
+                Keyboard.dismiss();
+                setTimeout(() => setIsPrivacyPolicyVisible(true), 80);
+              }}>
               <View style={styles.privacyPolicyCheckbox}>
                 {isPrivacyPolicyAgreed && (
                   <Icon name="check" size={16} color="#4F46E5" />

@@ -1,5 +1,4 @@
 import {
-  Modal,
   Pressable,
   View,
   StyleSheet,
@@ -9,7 +8,6 @@ import {
   Text,
   TextInput,
   Alert,
-  Platform,
 } from 'react-native';
 
 import {MessageData} from '@interfaces/paxi';
@@ -61,91 +59,85 @@ const MsgModifyModal = ({
     setCurrentMsg(msgData.message);
   }, [msgData]);
 
+  if (!modalVisible) return null;
+
   return (
-    <Modal
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={handleClose}
-      // TODO: 안드로이드에서 메세지 수정 후 같은 메세지 수정 시 모달 깨지는 버그 수정해야 함
-      statusBarTranslucent={Platform.OS === 'android'}
-      hardwareAccelerated>
-      {/* TODO: nested pressable onStartShouldSetResponder 옵션 사용으로 변경 */}
-      <Pressable style={styles.overlay} onPress={handleClose}>
-        <View
-          style={[
-            styles.modalContainer,
-            {
-              backgroundColor: backgroundColor(isDarkMode),
-            },
-          ]}>
-          <SafeAreaView style={styles.modalContent}>
-            <Pressable style={styles.innerContent} onPress={() => {}}>
+    <View style={styles.overlay}>
+      <Pressable style={StyleSheet.absoluteFill} onPress={handleClose} />
+      <View
+        style={[
+          styles.modalContainer,
+          {
+            backgroundColor: backgroundColor(isDarkMode),
+          },
+        ]}>
+        <SafeAreaView style={styles.modalContent}>
+          <Pressable style={styles.innerContent} onPress={() => {}}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                width: '100%',
+              }}>
+              <Text
+                style={[
+                  styles.modalTitle,
+                  {
+                    color: textColor(isDarkMode),
+                  },
+                ]}>
+                메시지 수정하기
+              </Text>
+
+              <TextInput
+                style={[
+                  styles.input,
+                  {
+                    borderColor: textColor(isDarkMode),
+                    color: textColor(isDarkMode),
+                  },
+                ]}
+                value={currentMsg}
+                onChangeText={setCurrentMsg}
+                placeholder="텍스트를 입력해주세요."
+                multiline={true}
+                placeholderTextColor="#999"
+                scrollEnabled={true}
+              />
+
               <View
                 style={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  width: '100%',
+                  flexDirection: 'row',
+                  gap: 5,
                 }}>
-                <Text
+                <TouchableOpacity
                   style={[
-                    styles.modalTitle,
+                    styles.button,
                     {
-                      color: textColor(isDarkMode),
-                    },
-                  ]}>
-                  메시지 수정하기
-                </Text>
-
-                <TextInput
-                  style={[
-                    styles.input,
-                    {
-                      borderColor: textColor(isDarkMode),
-                      color: textColor(isDarkMode),
+                      backgroundColor: isDarkMode ? '#333' : 'black',
                     },
                   ]}
-                  value={currentMsg}
-                  onChangeText={setCurrentMsg}
-                  placeholder="텍스트를 입력해주세요."
-                  multiline={true}
-                  placeholderTextColor="#999"
-                  scrollEnabled={true}
-                />
-
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 5,
-                  }}>
-                  <TouchableOpacity
-                    style={[
-                      styles.button,
-                      {
-                        backgroundColor: isDarkMode ? '#333' : 'black',
-                      },
-                    ]}
-                    onPress={handleModifyMsg}>
-                    <Text style={styles.buttonText}>수정하기</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      styles.button,
-                      {
-                        backgroundColor: isDarkMode ? '#333' : 'black',
-                      },
-                    ]}
-                    onPress={handleDeleteMsg}>
-                    <Text style={styles.buttonText}>삭제하기</Text>
-                  </TouchableOpacity>
-                </View>
+                  onPress={handleModifyMsg}>
+                  <Text style={styles.buttonText}>수정하기</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    {
+                      backgroundColor: isDarkMode ? '#333' : 'black',
+                    },
+                  ]}
+                  onPress={handleDeleteMsg}>
+                  <Text style={styles.buttonText}>삭제하기</Text>
+                </TouchableOpacity>
               </View>
-            </Pressable>
-          </SafeAreaView>
-        </View>
-      </Pressable>
-    </Modal>
+            </View>
+          </Pressable>
+        </SafeAreaView>
+      </View>
+    </View>
   );
 };
 
@@ -155,10 +147,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   overlay: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 9999,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   modalContainer: {
     width: '80%',
