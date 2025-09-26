@@ -73,67 +73,67 @@ const MsgModifyModal = ({
         ]}>
         <SafeAreaView style={styles.modalContent}>
           <Pressable style={styles.innerContent} onPress={() => {}}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                width: '100%',
+              }}>
+              <Text
+                style={[
+                  styles.modalTitle,
+                  {
+                    color: textColor(isDarkMode),
+                  },
+                ]}>
+                메시지 수정하기
+              </Text>
+
+              <TextInput
+                style={[
+                  styles.input,
+                  {
+                    borderColor: textColor(isDarkMode),
+                    color: textColor(isDarkMode),
+                  },
+                ]}
+                value={currentMsg}
+                onChangeText={setCurrentMsg}
+                placeholder="텍스트를 입력해주세요."
+                multiline={true}
+                placeholderTextColor="#999"
+                scrollEnabled={true}
+              />
+
               <View
                 style={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  width: '100%',
+                  flexDirection: 'row',
+                  gap: 5,
                 }}>
-                <Text
+                <TouchableOpacity
                   style={[
-                    styles.modalTitle,
+                    styles.button,
                     {
-                      color: textColor(isDarkMode),
-                    },
-                  ]}>
-                  메시지 수정하기
-                </Text>
-
-                <TextInput
-                  style={[
-                    styles.input,
-                    {
-                      borderColor: textColor(isDarkMode),
-                      color: textColor(isDarkMode),
+                      backgroundColor: isDarkMode ? '#333' : 'black',
                     },
                   ]}
-                  value={currentMsg}
-                  onChangeText={setCurrentMsg}
-                  placeholder="텍스트를 입력해주세요."
-                  multiline={true}
-                  placeholderTextColor="#999"
-                  scrollEnabled={true}
-                />
-
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 5,
-                  }}>
-                  <TouchableOpacity
-                    style={[
-                      styles.button,
-                      {
-                        backgroundColor: isDarkMode ? '#333' : 'black',
-                      },
-                    ]}
-                    onPress={handleModifyMsg}>
-                    <Text style={styles.buttonText}>수정하기</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      styles.button,
-                      {
-                        backgroundColor: isDarkMode ? '#333' : 'black',
-                      },
-                    ]}
-                    onPress={handleDeleteMsg}>
-                    <Text style={styles.buttonText}>삭제하기</Text>
-                  </TouchableOpacity>
-                </View>
+                  onPress={handleModifyMsg}>
+                  <Text style={styles.buttonText}>수정하기</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    {
+                      backgroundColor: isDarkMode ? '#333' : 'black',
+                    },
+                  ]}
+                  onPress={handleDeleteMsg}>
+                  <Text style={styles.buttonText}>삭제하기</Text>
+                </TouchableOpacity>
               </View>
+            </View>
           </Pressable>
         </SafeAreaView>
       </View>
