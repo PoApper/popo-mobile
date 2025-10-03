@@ -25,6 +25,9 @@ class MainActivity : ReactActivity() {
   // 관련 이슈: https://github.com/software-mansion/react-native-screens/issues/1481
   // 공식문서: https://www.npmjs.com/package/react-native-screens#Installation 의 Kotlin 부분 코드 참고
   override fun onCreate(savedInstanceState: Bundle?) {
+    // react-native-screens 버전 4.16 이상으로 올린다면 아래 Fabric 반영한 코드 추가해 줘야 함
+    // import com.swmansion.rnscreens.fragment.restoration.RNScreensFragmentFactory;
+    // getSupportFragmentManager().setFragmentFactory(new RNScreensFragmentFactory());
     super.onCreate(null)
   }
 }
