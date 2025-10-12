@@ -288,7 +288,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = ACA356614527A4D739B45F74 /* Pods-popoMobile.debug.xcconfig */;
 			buildSettings = {
-				API_ENV = development;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = popoMobile/popoMobile.entitlements;
@@ -330,7 +329,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 95C187E926097692507A6D15 /* Pods-popoMobile.release.xcconfig */;
 			buildSettings = {
-				API_ENV = production;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = popoMobile/popoMobile.entitlements;
@@ -370,8 +368,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				API_ENV = "";
-				"API_ENV[arch=*]" = development;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -462,8 +458,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				API_ENV = "";
-				"API_ENV[arch=*]" = production;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";

@@ -147,7 +147,6 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
             {backgroundColor: isDarkMode ? '#4F46E5' : '#6366F1'},
           ]}
           onPress={() => {
-            // TODO: 내 계좌 정보 불러오기 로직
             paxi_api.get('/user/my').then(res => {
               const userData = res.data as PaxiUserMy;
               if (

@@ -1,3 +1,2 @@
 // 디버그 환경 설정
 ENV_CONFIG = Debug
-API_ENV = development

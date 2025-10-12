@@ -120,7 +120,6 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "API_ENV", '"development"'
         }
         // release {
         //     // Caution! In production, you need to generate your own keystore file.
@@ -133,7 +132,6 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            buildConfigField "String", "API_ENV", '"production"'
         }
     }
     // .env.dev, .env.prod 파일을 사용하여 환경에 따라 빌드 설정
