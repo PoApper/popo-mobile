@@ -10,6 +10,7 @@ import {
   StatusBar,
   useColorScheme,
   Linking,
+  Modal,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -32,6 +33,8 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#ffffff',
@@ -150,6 +153,30 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
     }
   };
 
+  const handlePasswordReset = async () => {
+    try {
+      const targetEmail = (resetEmail || email).trim();
+      if (!targetEmail) {
+        Alert.alert('입력 필요', '이메일을 입력해주세요.');
+        return;
+      }
+
+      const normalizedEmail = targetEmail.includes('@')
+        ? targetEmail
+        : `${targetEmail}@postech.ac.kr`;
+
+      await api.post('/auth/password/reset', {email: normalizedEmail});
+      setShowResetModal(false);
+      Alert.alert(
+        '비밀번호 초기화 완료',
+        '비밀번호가 초기화 되었습니다. 이메일을 통해 신규 비밀번호를 확인해주세요.',
+      );
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || '요청 처리 중 오류가 발생했습니다.';
+      Alert.alert('초기화 실패', msg);
+    }
+  };
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -232,6 +259,25 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
           <Text style={[styles.emailHintText, {color: placeholderColor}]}>
             POPO 가입 시 사용한 비밀번호를 입력해주세요
           </Text>
+
+          {/* Forgot Password */}
+          <View style={{alignItems: 'center', marginTop: 6}}>
+            <Text
+              style={[
+                styles.emailHintText,
+                {textAlign: 'center', color: placeholderColor, marginLeft: 0},
+              ]}>
+              비밀번호를 잊으셨나요?{' '}
+              <Text
+                style={{color: helpTextColor, fontWeight: '600'}}
+                onPress={() => {
+                  setResetEmail(email);
+                  setShowResetModal(true);
+                }}>
+                비밀번호 찾기
+              </Text>
+            </Text>
+          </View>
 
           <TouchableOpacity
             style={[
@@ -329,6 +375,54 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Password Reset Modal */}
+      <Modal
+        visible={showResetModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowResetModal(false)}>
+        <View style={styles.modalOverlay}>
+          <View
+            style={[
+              styles.modalCard,
+              {backgroundColor: isDarkMode ? '#1E1E1E' : '#FFFFFF'},
+            ]}>
+            <Text style={[styles.modalTitle, {color: textColor}]}>비밀번호 초기화</Text>
+            <Text
+              style={[styles.modalDesc, {color: placeholderColor}]}>POPO 가입 때 사용한 email을 입력해주세요.</Text>
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  marginTop: 12,
+                  backgroundColor: inputBackgroundColor,
+                  borderColor: inputBorderColor,
+                  color: textColor,
+                },
+              ]}
+              placeholder="이메일"
+              placeholderTextColor={placeholderColor}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={resetEmail}
+              onChangeText={setResetEmail}
+            />
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                style={[styles.modalBtn, {backgroundColor: secondaryButtonBg}]}
+                onPress={() => setShowResetModal(false)}>
+                <Text style={[styles.modalBtnText, {color: secondaryTextColor}]}>취소</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalPrimaryBtn}
+                onPress={handlePasswordReset}>
+                <Text style={styles.modalPrimaryBtnText}>비밀번호 초기화</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -452,6 +546,60 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
     marginLeft: 4,
+    fontFamily: 'Pretendard',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  modalCard: {
+    width: '100%',
+    borderRadius: 10,
+    padding: 18,
+  },
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 6,
+    fontFamily: 'Pretendard',
+  },
+  modalDesc: {
+    fontSize: 12,
+    fontFamily: 'Pretendard',
+  },
+  modalActions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 14,
+    gap: 10,
+  },
+  modalBtn: {
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalBtnText: {
+    fontSize: 13,
+    fontWeight: '500',
+    fontFamily: 'Pretendard',
+  },
+  modalPrimaryBtn: {
+    borderRadius: 6,
+    backgroundColor: '#0B0B0B',
+    paddingHorizontal: 12,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalPrimaryBtnText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#FFFFFF',
     fontFamily: 'Pretendard',
   },
 });
