@@ -2,6 +2,7 @@ import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {Platform, NativeModules} from 'react-native';
+import Config from 'react-native-config';
 
 // EventEmitter 타입 선언
 declare global {
@@ -46,7 +47,7 @@ const getApiEnv = () => {
 
 const API_ENV = getApiEnv();
 // TODO: 동적으로 감지하도록 수정해야 함
-const isProduction = true;
+const isProduction = Config.ENV === 'prod';
 
 export const POPO_API_URL = isProduction
   ? 'https://api.popo.poapper.club'

@@ -13,6 +13,7 @@ import {
   ToastAndroid,
   Platform,
 } from 'react-native';
+import Config from 'react-native-config';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
@@ -63,7 +64,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   // };
 
   // TODO: 동적으로 감지하도록 수정해야 함
-  const isProduction = true;
+  const isProduction = Config.ENV === 'prod';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
