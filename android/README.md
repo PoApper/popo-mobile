@@ -42,13 +42,14 @@ $ rm -rf node_modules && npm install
 
 ## 실행
 
-
 ### dev 서버와 연결
+
 ```bash
 $ npm run android
 ```
 
 ### prod 서버와 연결
+
 ```bash
 $ npm run android:prod
 ```

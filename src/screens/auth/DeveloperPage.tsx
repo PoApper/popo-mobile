@@ -7,10 +7,7 @@ import {
   TouchableOpacity,
   useColorScheme,
   StatusBar,
-  Platform,
   Clipboard,
-  ToastAndroid,
-  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -19,7 +16,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {RootStackParamList} from '@navigation/types';
 import {getAuthToken} from '@utils/auth-token';
 import api from '@utils/api';
-import paxi_api, { PAXI_API_URL } from '@utils/paxi_api';
+import paxi_api, {PAXI_API_URL} from '@utils/paxi_api';
 import CommonHeader from '@components/CommonHeader';
 import {POPO_API_URL} from '@utils/api';
 
@@ -88,11 +85,6 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
   // 텍스트 복사 기능
   const copyToClipboard = (text: string) => {
     Clipboard.setString(text);
-    // if (Platform.OS === 'android') {
-    //   ToastAndroid.show('복사되었습니다', ToastAndroid.SHORT);
-    // } else {
-    //   Alert.alert('복사 완료', '클립보드에 복사되었습니다.');
-    // }
   };
 
   return (
