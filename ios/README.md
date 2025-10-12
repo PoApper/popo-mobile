@@ -9,8 +9,14 @@ $ pod install
 
 ## 실행
 
+### dev 서버와 연결
 ```bash
 $ npm run ios
+```
+
+### prod 서버와 연결
+```bash
+$ npm run ios:prod
 ```
 
 ## 앱 배포 버전 변경
