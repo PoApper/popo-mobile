@@ -12,6 +12,8 @@ import {
   BackHandler,
   ToastAndroid,
   Platform,
+  Modal,
+  TextInput,
 } from 'react-native';
 import Config from 'react-native-config';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -37,6 +39,12 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const [userDataState, setUserData] = useState<any>(null);
   const [isPaxiUser, setIsPaxiUser] = useState<boolean>(false);
   const [paxiUserData, setPaxiUserData] = useState<PaxiUserMy | null>(null);
+  
+  // 비밀번호 수정 모달 상태
+  const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
+  const [password, setPassword] = useState<string>('');
+  const [passwordAgain, setPasswordAgain] = useState<string>('');
+  const [isPasswordLoading, setIsPasswordLoading] = useState(false);
   const isPaxiAccountInfoExist =
     paxiUserData?.bankName &&
     paxiUserData?.accountNumber &&
@@ -52,6 +60,12 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const cardBgColor = isDarkMode ? '#1E1E1E' : '#FFFFFF';
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';
+
+  // 비밀번호 유효성 검사
+  const isValidPassword: boolean =
+    password.length > 0 && !RegExp(/^(\w{8,16})$/).test(password);
+  const isValidPasswordAgain: boolean =
+    passwordAgain.length > 0 && password !== passwordAgain;
 
   // 사용자 프로필 정보 가져오기
   const fetchUserProfile = async () => {
@@ -79,6 +93,40 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
         console.error(err);
         setIsPaxiUser(false);
       });
+  };
+
+  // 비밀번호 업데이트 함수
+  const handlePasswordUpdate = async () => {
+    if (isValidPassword || isValidPasswordAgain) {
+      Alert.alert('오류', '비밀번호를 올바르게 입력해주세요.');
+      return;
+    }
+
+    if (password.length === 0 || passwordAgain.length === 0) {
+      Alert.alert('오류', '비밀번호를 입력해주세요.');
+      return;
+    }
+
+    setIsPasswordLoading(true);
+    try {
+      await api.post('/auth/password/update', {
+        password: password,
+      });
+      Alert.alert('성공', '비밀번호 변경에 성공했습니다!');
+      setIsPasswordModalVisible(false);
+      setPassword('');
+      setPasswordAgain('');
+    } catch (err: any) {
+      const response = err.response;
+      Alert.alert(
+        '오류',
+        `비밀번호 업데이트에 실패했습니다. 😢\n"${
+          response?.data?.message || '오류가 발생했습니다.'
+        }"`,
+      );
+    } finally {
+      setIsPasswordLoading(false);
+    }
   };
 
   // 로그아웃 처리 함수
@@ -226,8 +274,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
               </Text>
             </View>
 
-            <View
-              style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
               <Text
                 style={[
                   styles.detailLabel,
@@ -247,6 +294,33 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                     )
                   : '정보 없음'}
               </Text>
+            </View>
+
+            <View
+              style={[styles.detailItem, {borderBottomColor: 'transparent'}]}>
+              <View style={styles.detailHeader}>
+                <Text
+                  style={[
+                    styles.detailLabel,
+                    {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                  ]}>
+                  비밀번호 변경
+                </Text>
+                <TouchableOpacity
+                  style={[
+                    styles.editButton,
+                    {backgroundColor: isDarkMode ? '#ddd' : 'black'},
+                  ]}
+                  onPress={() => setIsPasswordModalVisible(true)}>
+                  <Text
+                    style={[
+                      styles.editButtonText,
+                      {color: isDarkMode ? 'black' : 'white'},
+                    ]}>
+                    변경
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
 
@@ -334,6 +408,92 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
             </View>
           ) : null}
         </View>
+
+        {/* 비밀번호 수정 모달 */}
+        <Modal
+          visible={isPasswordModalVisible}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setIsPasswordModalVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <View style={[styles.modalCard, {backgroundColor: cardBgColor}]}>
+              <Text style={[styles.modalTitle, {color: textColor}]}>
+                비밀번호 변경
+              </Text>
+              <Text
+                style={[
+                  styles.modalSubtitle,
+                  {color: isDarkMode ? '#AAAAAA' : '#6B7280'},
+                ]}>
+                새로운 비밀번호를 입력해주세요.
+              </Text>
+
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={[
+                    styles.passwordInput,
+                    {
+                      borderColor: isValidPassword ? '#EF4444' : borderColor,
+                      backgroundColor: isDarkMode ? '#2C2C2C' : '#FFFFFF',
+                      color: textColor,
+                    },
+                  ]}
+                  placeholder="새 비밀번호 (8-16자)"
+                  placeholderTextColor={isDarkMode ? '#888888' : '#999999'}
+                  secureTextEntry={true}
+                  value={password}
+                  onChangeText={setPassword}
+                />
+                {isValidPassword && (
+                  <Text style={styles.errorText}>
+                    비밀번호는 8자리 이상 16자리 이하여야 합니다.
+                  </Text>
+                )}
+
+                <TextInput
+                  style={[
+                    styles.passwordInput,
+                    {
+                      borderColor: isValidPasswordAgain ? '#EF4444' : borderColor,
+                      backgroundColor: isDarkMode ? '#2C2C2C' : '#FFFFFF',
+                      color: textColor,
+                    },
+                  ]}
+                  placeholder="비밀번호 확인"
+                  placeholderTextColor={isDarkMode ? '#888888' : '#999999'}
+                  secureTextEntry={true}
+                  value={passwordAgain}
+                  onChangeText={setPasswordAgain}
+                />
+                {isValidPasswordAgain && (
+                  <Text style={styles.errorText}>
+                    비밀번호가 일치하지 않습니다.
+                  </Text>
+                )}
+              </View>
+
+              <View style={styles.modalActions}>
+                <TouchableOpacity
+                  style={[styles.modalBtn, styles.cancelBtn]}
+                  onPress={() => {
+                    setIsPasswordModalVisible(false);
+                    setPassword('');
+                    setPasswordAgain('');
+                  }}>
+                  <Text style={styles.cancelBtnText}>취소</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.modalBtn, styles.submitBtn]}
+                  onPress={handlePasswordUpdate}
+                  disabled={isPasswordLoading}>
+                  <Text style={styles.submitBtnText}>
+                    {isPasswordLoading ? '처리 중...' : '비밀번호 변경'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
 
         <TouchableOpacity
           style={[
@@ -572,6 +732,80 @@ const styles = StyleSheet.create({
   editButtonText: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  // 비밀번호 수정 모달 스타일
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  modalCard: {
+    width: '85%',
+    borderRadius: 10,
+    padding: 18,
+  },
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 6,
+    fontFamily: 'Pretendard',
+  },
+  modalSubtitle: {
+    fontSize: 12,
+    marginBottom: 16,
+    fontFamily: 'Pretendard',
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  passwordInput: {
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 8,
+    fontSize: 14,
+    fontFamily: 'Pretendard',
+  },
+  errorText: {
+    color: '#EF4444',
+    fontSize: 12,
+    marginBottom: 8,
+    fontFamily: 'Pretendard',
+  },
+  modalActions: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 14,
+    gap: 10,
+  },
+  modalBtn: {
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  cancelBtn: {
+    backgroundColor: '#F3F4F6',
+  },
+  submitBtn: {
+    backgroundColor: '#0B0B0B',
+  },
+  cancelBtnText: {
+    fontSize: 13,
+    fontWeight: '500',
+    fontFamily: 'Pretendard',
+    color: '#374151',
+  },
+  submitBtnText: {
+    fontSize: 13,
+    fontWeight: '500',
+    fontFamily: 'Pretendard',
+    color: '#FFFFFF',
   },
 });
 
