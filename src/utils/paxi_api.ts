@@ -1,7 +1,6 @@
 import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import {Platform, NativeModules} from 'react-native';
 import Config from 'react-native-config';
 
 // EventEmitter 타입 선언
@@ -13,37 +12,13 @@ declare global {
     | undefined;
 }
 
-// 환경에 따른 API URL 설정
-const getApiEnv = () => {
-  if (Platform.OS === 'ios') {
-    return (
-      NativeModules.SourceCode?.constantsToExport?.API_ENV || 'development'
-    );
-  } else {
-    // Android는 build.gradle에서 설정
-    const buildConfig = NativeModules.BuildConfig;
-    let apiEnv = 'development';
-
-    if (buildConfig && buildConfig.API_ENV) {
-      apiEnv = buildConfig.API_ENV;
-    } else {
-      // 대안: __DEV__ 플래그 사용
-      apiEnv = __DEV__ ? 'development' : 'production';
-    }
-
-    return apiEnv;
-  }
-};
-
-const API_ENV = getApiEnv();
-// TODO: 동적으로 감지하도록 수정해야 함
 const isProduction = Config.ENV === 'prod';
 
 export const PAXI_API_URL = isProduction
   ? 'https://api.paxi.popo.poapper.club'
   : 'https://api.paxi.popo-dev.poapper.club';
 
-console.log('현재 Paxi API 환경:', API_ENV, 'URL:', PAXI_API_URL);
+console.log('현재 Paxi ENV:', Config.ENV, 'URL:', PAXI_API_URL);
 
 // axios 인스턴스 생성
 const paxi_api = axios.create({
