@@ -172,7 +172,8 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         '비밀번호가 초기화 되었습니다. 이메일을 통해 신규 비밀번호를 확인해주세요.',
       );
     } catch (err: any) {
-      const msg = err?.response?.data?.message || '요청 처리 중 오류가 발생했습니다.';
+      const msg =
+        err?.response?.data?.message || '요청 처리 중 오류가 발생했습니다.';
       Alert.alert('초기화 실패', msg);
     }
   };
@@ -388,9 +389,12 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
               styles.modalCard,
               {backgroundColor: isDarkMode ? '#1E1E1E' : '#FFFFFF'},
             ]}>
-            <Text style={[styles.modalTitle, {color: textColor}]}>비밀번호 초기화</Text>
-            <Text
-              style={[styles.modalDesc, {color: placeholderColor}]}>POPO 가입 때 사용한 email을 입력해주세요.</Text>
+            <Text style={[styles.modalTitle, {color: textColor}]}>
+              비밀번호 초기화
+            </Text>
+            <Text style={[styles.modalDesc, {color: placeholderColor}]}>
+              POPO 가입 때 사용한 email을 입력해주세요.
+            </Text>
             <TextInput
               style={[
                 styles.input,
@@ -412,7 +416,10 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
               <TouchableOpacity
                 style={[styles.modalBtn, {backgroundColor: secondaryButtonBg}]}
                 onPress={() => setShowResetModal(false)}>
-                <Text style={[styles.modalBtnText, {color: secondaryTextColor}]}>취소</Text>
+                <Text
+                  style={[styles.modalBtnText, {color: secondaryTextColor}]}>
+                  취소
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.modalPrimaryBtn}

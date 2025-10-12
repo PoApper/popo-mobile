@@ -39,7 +39,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const [userDataState, setUserData] = useState<any>(null);
   const [isPaxiUser, setIsPaxiUser] = useState<boolean>(false);
   const [paxiUserData, setPaxiUserData] = useState<PaxiUserMy | null>(null);
-  
+
   // 비밀번호 수정 모달 상태
   const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
   const [password, setPassword] = useState<string>('');
@@ -454,7 +454,9 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   style={[
                     styles.passwordInput,
                     {
-                      borderColor: isValidPasswordAgain ? '#EF4444' : borderColor,
+                      borderColor: isValidPasswordAgain
+                        ? '#EF4444'
+                        : borderColor,
                       backgroundColor: isDarkMode ? '#2C2C2C' : '#FFFFFF',
                       color: textColor,
                     },
