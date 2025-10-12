@@ -60,6 +60,7 @@ $ npm run android
 $ ./gradlew assembleRelease
 
 # AAB 빌드 (구글 플레이 제출용)
+# TODO: 수정
 $ ./gradlew bundleRelease
 $ cd app/build/outputs/bundle/release
 $ open .
