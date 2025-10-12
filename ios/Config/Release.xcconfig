@@ -1,3 +1,2 @@
 // 릴리즈 환경 설정
 ENV_CONFIG = Production
-API_ENV = production

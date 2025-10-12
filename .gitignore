@@ -86,7 +86,7 @@ ios/*/build/
 
 .env
 .env*
-!.env.example
+!.env.*.example
 
 # Firebase
 google-services.json

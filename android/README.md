@@ -42,8 +42,16 @@ $ rm -rf node_modules && npm install
 
 ## 실행
 
+### dev 서버와 연결
+
 ```bash
 $ npm run android
+```
+
+### prod 서버와 연결
+
+```bash
+$ npm run android:prod
 ```
 
 ### Build
@@ -61,7 +69,7 @@ $ ./gradlew assembleRelease
 
 # AAB 빌드 (구글 플레이 제출용)
 $ ./gradlew bundleRelease
-$ cd app/build/outputs/bundle/release
+$ cd android/app/build/outputs/bundle/prodRelease
 $ open .
 ```
 

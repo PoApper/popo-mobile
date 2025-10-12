@@ -2,6 +2,7 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 apply plugin: "com.google.gms.google-services" // Firebase
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 
 // START: Vector Icons
@@ -81,6 +82,19 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
+// .env 파일 설정 - android 블록 전에 정의되어야 함
+project.ext.envConfigFiles = [
+    devDebug: ".env.dev",
+    devRelease: ".env.dev",
+    prodDebug: ".env.prod",
+    prodRelease: ".env.prod",
+]
+
+// 환경 변수 헬퍼 함수: .env 파일 -> 시스템 환경 변수 -> 기본값 순으로 조회
+def getEnvOrDefault(String key, String defaultValue = "") {
+    return (project.ext.has("env") ? project.env.get(key) : System.getenv(key)) ?: defaultValue
+}
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -91,8 +105,8 @@ android {
         applicationId "com.popomobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode Integer.parseInt(System.getenv("ANDROID_VERSION_CODE"))
-        versionName System.getenv("ANDROID_VERSION_NAME")
+        versionCode Integer.parseInt(getEnvOrDefault("ANDROID_VERSION_CODE", "1"))
+        versionName getEnvOrDefault("ANDROID_VERSION_NAME", "1.0.0")
     }
     signingConfigs {
         debug {
@@ -103,15 +117,14 @@ android {
         }
         release {
             storeFile file(POPO_UPLOAD_STORE_FILE)
-            storePassword System.getenv("POPO_KEYSTORE_PASSWORD")
+            storePassword getEnvOrDefault("POPO_KEYSTORE_PASSWORD")
             keyAlias POPO_UPLOAD_KEY_ALIAS
-            keyPassword System.getenv("POPO_KEYSTORE_PASSWORD")
+            keyPassword getEnvOrDefault("POPO_KEYSTORE_PASSWORD")
         }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "API_ENV", '"development"'
         }
         // release {
         //     // Caution! In production, you need to generate your own keystore file.
@@ -124,7 +137,24 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            buildConfigField "String", "API_ENV", '"production"'
+        }
+    }
+    // .env.dev, .env.prod 파일을 사용하여 환경에 따라 빌드 설정
+    flavorDimensions "env"
+
+    productFlavors {
+        dev {
+            dimension "env"
+            // dev 버전 앱은 다른 아이디를 갖게 하여 prod 버전과 동시에 설치 가능하게 함
+            applicationIdSuffix ".dev"
+            // dev 버전 앱 이름 변경
+            resValue "string", "app_name", "POPO (Dev)"
+            resValue "string", "package_name", "com.popomobile.dev"
+        }
+        prod {
+            dimension "env"
+            resValue "string", "app_name", "POPO"
+            resValue "string", "package_name", "com.popomobile"
         }
     }
 }

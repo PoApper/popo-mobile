@@ -7,10 +7,7 @@ import {
   TouchableOpacity,
   useColorScheme,
   StatusBar,
-  Platform,
   Clipboard,
-  ToastAndroid,
-  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -19,7 +16,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {RootStackParamList} from '@navigation/types';
 import {getAuthToken} from '@utils/auth-token';
 import api from '@utils/api';
-import paxi_api from '@utils/paxi_api';
+import paxi_api, {PAXI_API_URL} from '@utils/paxi_api';
 import CommonHeader from '@components/CommonHeader';
 import {POPO_API_URL} from '@utils/api';
 
@@ -88,11 +85,6 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
   // 텍스트 복사 기능
   const copyToClipboard = (text: string) => {
     Clipboard.setString(text);
-    if (Platform.OS === 'android') {
-      ToastAndroid.show('복사되었습니다', ToastAndroid.SHORT);
-    } else {
-      Alert.alert('복사 완료', '클립보드에 복사되었습니다.');
-    }
   };
 
   return (
@@ -118,14 +110,14 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
                       styles.detailLabel,
                       {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                     ]}>
-                    API URL
+                    POPO API URL
                   </Text>
                 </View>
                 <View style={styles.iconContainer}>
-                  {userDataState?.uuid && (
+                  {POPO_API_URL && (
                     <TouchableOpacity
                       style={styles.copyIconButton}
-                      onPress={() => copyToClipboard(userDataState.uuid)}>
+                      onPress={() => copyToClipboard(POPO_API_URL)}>
                       <Icon
                         name="content-copy"
                         size={16}
@@ -140,6 +132,40 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
                   style={[styles.tokenValue, {color: textColor}]}
                   selectable={true}>
                   {POPO_API_URL || '정보 없음'}
+                </Text>
+              </View>
+            </View>
+
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+              <View style={styles.sectionTitleRow}>
+                <View style={styles.titleContainer}>
+                  <Text
+                    style={[
+                      styles.detailLabel,
+                      {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                    ]}>
+                    Paxi API URL
+                  </Text>
+                </View>
+                <View style={styles.iconContainer}>
+                  {PAXI_API_URL && (
+                    <TouchableOpacity
+                      style={styles.copyIconButton}
+                      onPress={() => copyToClipboard(PAXI_API_URL)}>
+                      <Icon
+                        name="content-copy"
+                        size={16}
+                        color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+              <View style={styles.tokenContainer}>
+                <Text
+                  style={[styles.tokenValue, {color: textColor}]}
+                  selectable={true}>
+                  {PAXI_API_URL || '정보 없음'}
                 </Text>
               </View>
             </View>
