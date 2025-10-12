@@ -90,6 +90,11 @@ project.ext.envConfigFiles = [
     prodRelease: ".env.prod",
 ]
 
+// 환경 변수 헬퍼 함수: .env 파일 -> 시스템 환경 변수 -> 기본값 순으로 조회
+def getEnvOrDefault(String key, String defaultValue = "") {
+    return (project.ext.has("env") ? project.env.get(key) : System.getenv(key)) ?: defaultValue
+}
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -100,8 +105,8 @@ android {
         applicationId "com.popomobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode Integer.parseInt((project.ext.has("env") ? project.env.get("ANDROID_VERSION_CODE") : System.getenv("ANDROID_VERSION_CODE")) ?: "1")
-        versionName ((project.ext.has("env") ? project.env.get("ANDROID_VERSION_NAME") : System.getenv("ANDROID_VERSION_NAME")) ?: "1.0.0")
+        versionCode Integer.parseInt(getEnvOrDefault("ANDROID_VERSION_CODE", "1"))
+        versionName getEnvOrDefault("ANDROID_VERSION_NAME", "1.0.0")
     }
     signingConfigs {
         debug {
@@ -112,9 +117,9 @@ android {
         }
         release {
             storeFile file(POPO_UPLOAD_STORE_FILE)
-            storePassword (project.ext.has("env") ? project.env.get("POPO_KEYSTORE_PASSWORD") : System.getenv("POPO_KEYSTORE_PASSWORD"))
+            storePassword getEnvOrDefault("POPO_KEYSTORE_PASSWORD")
             keyAlias POPO_UPLOAD_KEY_ALIAS
-            keyPassword (project.ext.has("env") ? project.env.get("POPO_KEYSTORE_PASSWORD") : System.getenv("POPO_KEYSTORE_PASSWORD"))
+            keyPassword getEnvOrDefault("POPO_KEYSTORE_PASSWORD")
         }
     }
     buildTypes {
