@@ -62,10 +62,10 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';
 
   // 비밀번호 유효성 검사
-  const isValidPassword: boolean =
+  const isPasswordInvalid: boolean =
     password.length > 0 && !RegExp(/^.{8,64}$/).test(password);
 
-  const isValidPasswordAgain: boolean =
+  const isPasswordAgainInvalid: boolean =
     passwordAgain.length > 0 && password !== passwordAgain;
 
   // 사용자 프로필 정보 가져오기
@@ -98,7 +98,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
 
   // 비밀번호 업데이트 함수
   const handlePasswordUpdate = async () => {
-    if (isValidPassword || isValidPasswordAgain) {
+    if (isPasswordInvalid || isPasswordAgainInvalid) {
       Alert.alert('오류', '비밀번호를 올바르게 입력해주세요.');
       return;
     }
@@ -434,7 +434,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   style={[
                     styles.passwordInput,
                     {
-                      borderColor: isValidPassword ? '#EF4444' : borderColor,
+                      borderColor: isPasswordInvalid ? '#EF4444' : borderColor,
                       backgroundColor: isDarkMode ? '#2C2C2C' : '#FFFFFF',
                       color: textColor,
                     },
@@ -445,7 +445,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   value={password}
                   onChangeText={setPassword}
                 />
-                {isValidPassword && (
+                {isPasswordInvalid && (
                   <Text style={styles.errorText}>
                     비밀번호는 8자리 이상 64자리 이하여야 합니다.
                   </Text>
@@ -455,7 +455,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   style={[
                     styles.passwordInput,
                     {
-                      borderColor: isValidPasswordAgain
+                      borderColor: isPasswordAgainInvalid
                         ? '#EF4444'
                         : borderColor,
                       backgroundColor: isDarkMode ? '#2C2C2C' : '#FFFFFF',
@@ -468,7 +468,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   value={passwordAgain}
                   onChangeText={setPasswordAgain}
                 />
-                {isValidPasswordAgain && (
+                {isPasswordAgainInvalid && (
                   <Text style={styles.errorText}>
                     비밀번호가 일치하지 않습니다.
                   </Text>
