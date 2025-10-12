@@ -63,7 +63,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
 
   // 비밀번호 유효성 검사
   const isValidPassword: boolean =
-    password.length > 0 && !RegExp(/^(\w{8,16})$/).test(password);
+    password.length > 0 && !RegExp(/^.{8,64}$/).test(password);
+
   const isValidPasswordAgain: boolean =
     passwordAgain.length > 0 && password !== passwordAgain;
 
@@ -438,7 +439,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                       color: textColor,
                     },
                   ]}
-                  placeholder="새 비밀번호 (8-16자)"
+                  placeholder="새 비밀번호 (8자리 이상)"
                   placeholderTextColor={isDarkMode ? '#888888' : '#999999'}
                   secureTextEntry={true}
                   value={password}
@@ -446,7 +447,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                 />
                 {isValidPassword && (
                   <Text style={styles.errorText}>
-                    비밀번호는 8자리 이상 16자리 이하여야 합니다.
+                    비밀번호는 8자리 이상 64자리 이하여야 합니다.
                   </Text>
                 )}
 
