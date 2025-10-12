@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   modalCard: {
-    width: '100%',
+    width: '85%',
     borderRadius: 10,
     padding: 18,
   },
@@ -572,7 +572,7 @@ const styles = StyleSheet.create({
   },
   modalActions: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     marginTop: 14,
     gap: 10,
   },
