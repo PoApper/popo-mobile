@@ -396,6 +396,7 @@ const PlaceDetailReservationScreen = ({
               placeName: placeDetail?.name || '',
               placeId: placeId,
               selectedDate: selectedDate,
+              isCinemaRoom: Boolean(placeDetail?.name?.includes('시네마 룸')),
             });
           }}>
           <Text style={styles.reserveButtonText}>

@@ -35,7 +35,8 @@ const PlaceReservationApplyScreen = ({
   route,
 }: PlaceReservationApplyScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const {buildingName, placeName, placeId, selectedDate} = route.params;
+  const {buildingName, placeName, placeId, selectedDate, isCinemaRoom} =
+    route.params;
 
   // 사용자 정보
   const [userName, setUserName] = useState('');
@@ -67,6 +68,8 @@ const PlaceReservationApplyScreen = ({
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
 
+  // isCinemaRoom은 상위 화면에서 전달받은 값을 사용
+
   // 날짜 범위 계산 (컴포넌트 마운트 시 1회)
   const {minimumDate, maximumDate} = useMemo(() => {
     const today = new Date();
@@ -86,16 +89,67 @@ const PlaceReservationApplyScreen = ({
     return newDate;
   };
 
+  // 시네마룸 3개 타임 계산 유틸
+  const getCinemaSlotsForDate = (baseDate: Date) => {
+    const make = (h: number, m: number, addDay = 0) => {
+      const d = new Date(baseDate);
+      d.setDate(d.getDate() + addDay);
+      d.setHours(h, m, 0, 0);
+      return d;
+    };
+    // 00:00~03:00, 18:00~21:00, 21:00~24:00
+    const slotA = {start: make(0, 0), end: make(3, 0)};
+    const slotB = {start: make(18, 0), end: make(21, 0)};
+    const slotC = {start: make(21, 0), end: make(0, 0, 1)}; // 다음날 00:00
+    return [slotB, slotC, slotA];
+  };
+
+  const pickCinemaSlotByTime = (baseDate: Date, candidate: Date) => {
+    const slots = getCinemaSlotsForDate(baseDate);
+    // 후보 시간이 포함된 슬롯을 선택, 없으면 null
+    const chosen = slots.find(
+      s => candidate >= s.start && candidate < s.end,
+    );
+    return chosen || null;
+  };
+
+  const normalizeToDate = (baseDate: Date, timeLike: Date) => {
+    const d = new Date(baseDate);
+    d.setHours(timeLike.getHours(), timeLike.getMinutes(), 0, 0);
+    return d;
+  };
+
   // 현재 시간을 30분 단위로 올림하여 초기 시간 설정
   useEffect(() => {
     const now = new Date();
-    const roundedTime = roundUpToNearest30Minutes(now);
-    setStartTime(roundedTime);
-    // 종료 시간을 시작 시간 + 30분으로 설정
-    const endTime = new Date(roundedTime);
-    endTime.setMinutes(endTime.getMinutes() + 30);
-    setEndTime(endTime);
-  }, []);
+    if (isCinemaRoom) {
+      // 오늘 기준 다음 가능한 슬롯으로 초기화
+      const slots = getCinemaSlotsForDate(now);
+      const upcoming = slots.find(s => s.start > now) || null;
+      if (upcoming) {
+        setStartTime(upcoming.start);
+        setEndTime(upcoming.end);
+      } else {
+        // 오늘 남은 슬롯이 없다면, 선택 날짜(또는 내일) 기준 첫 슬롯으로 설정
+        const base = selectedDate
+          ? new Date(
+              parseInt(selectedDate.substring(0, 4)),
+              parseInt(selectedDate.substring(4, 6)) - 1,
+              parseInt(selectedDate.substring(6, 8)),
+            )
+          : new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+        const [slotB] = getCinemaSlotsForDate(base); // 18:00~21:00 기본
+        setStartTime(slotB.start);
+        setEndTime(slotB.end);
+      }
+    } else {
+      const roundedTime = roundUpToNearest30Minutes(now);
+      setStartTime(roundedTime);
+      const end = new Date(roundedTime);
+      end.setMinutes(end.getMinutes() + 30);
+      setEndTime(end);
+    }
+  }, [isCinemaRoom]);
 
   // 선택된 날짜와 시간이 현재보다 이후인지 확인
   const isTimeAfterNow = (selectedDate: Date, selectedTime: Date) => {
@@ -169,6 +223,18 @@ const PlaceReservationApplyScreen = ({
     if (selectedStart < todayStart) {
       Alert.alert('알림', '과거 날짜는 예약할 수 없습니다.');
       return;
+    }
+
+    // RC 시네마룸 슬롯 검증
+    if (isCinemaRoom) {
+      const chosen = pickCinemaSlotByTime(date, startTime);
+      if (!chosen || chosen.start.getTime() !== startTime.getTime() || chosen.end.getTime() !== endTime.getTime()) {
+        Alert.alert(
+          '알림',
+          'RC 시네마 룸은 18:00~21:00 / 21:00~24:00 / 00:00~03:00 3가지 시간대만 예약할 수 있습니다.',
+        );
+        return;
+      }
     }
 
     // 예약 정보 확인 팝업
@@ -314,6 +380,26 @@ const PlaceReservationApplyScreen = ({
         </View>
         {/* 예약 폼 */}
         <View style={styles.formSection}>
+          {isCinemaRoom && (
+            <View style={{
+              padding: 12,
+              borderRadius: 8,
+              backgroundColor: isDarkMode ? '#2A1D1D' : '#FFF5F5',
+              borderWidth: 1,
+              borderColor: isDarkMode ? '#5C2B2B' : '#FFE5E5',
+              marginBottom: 4,
+            }}>
+              <Text style={{
+                color: isDarkMode ? '#FFB4B4' : '#B91C1C',
+                fontSize: 13,
+                lineHeight: 18,
+              }}>
+                RC 시네마 룸의 예약은{"\n"}
+                18:00 ~ 21:00 / 21:00 ~ 24:00 / 00:00 ~ 03:00{"\n"}
+                3가지 시간대만 가능 합니다.
+              </Text>
+            </View>
+          )}
           <Text style={[styles.label, {color: textColor}]}>
             사용자 <Text style={styles.requiredText}>*</Text>
           </Text>
@@ -476,6 +562,12 @@ const PlaceReservationApplyScreen = ({
               onConfirm={date => {
                 setShowDatePicker(false);
                 setDate(date);
+                if (isCinemaRoom) {
+                  // 선택 날짜의 기본 슬롯 설정: 18:00~21:00
+                  const [slotB] = getCinemaSlotsForDate(date);
+                  setStartTime(slotB.start);
+                  setEndTime(slotB.end);
+                }
               }}
               onCancel={() => setShowDatePicker(false)}
               minimumDate={minimumDate}
@@ -492,16 +584,42 @@ const PlaceReservationApplyScreen = ({
               onConfirm={time => {
                 setShowStartPicker(false);
                 const roundedTime = roundUpToNearest30Minutes(time);
-                if (isTimeAfterNow(date, roundedTime)) {
-                  setStartTime(roundedTime);
-                  const newEndTime = new Date(roundedTime);
-                  newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                  setEndTime(newEndTime);
+                if (isCinemaRoom) {
+                  const chosen = pickCinemaSlotByTime(date, roundedTime);
+                  if (!chosen) {
+                    Alert.alert(
+                      '알림',
+                      'RC 시네마 룸은 18:00~21:00 / 21:00~24:00 / 00:00~03:00 3가지 시간대만 선택할 수 있습니다.',
+                    );
+                    return;
+                  }
+                  const now = new Date();
+                  if (
+                    new Date(
+                      date.getFullYear(),
+                      date.getMonth(),
+                      date.getDate(),
+                      chosen.start.getHours(),
+                      chosen.start.getMinutes(),
+                    ) <= now
+                  ) {
+                    Alert.alert('알림', '현재 이후의 시간대를 선택해주세요.');
+                    return;
+                  }
+                  setStartTime(chosen.start);
+                  setEndTime(chosen.end);
                 } else {
-                  Alert.alert(
-                    '알림',
-                    '현재 시간보다 이후의 시간을 선택해주세요.',
-                  );
+                  if (isTimeAfterNow(date, roundedTime)) {
+                    setStartTime(roundedTime);
+                    const newEndTime = new Date(roundedTime);
+                    newEndTime.setMinutes(newEndTime.getMinutes() + 30);
+                    setEndTime(newEndTime);
+                  } else {
+                    Alert.alert(
+                      '알림',
+                      '현재 시간보다 이후의 시간을 선택해주세요.',
+                    );
+                  }
                 }
               }}
               onCancel={() => setShowStartPicker(false)}
@@ -513,7 +631,7 @@ const PlaceReservationApplyScreen = ({
               cancelTextIOS="취소"
             />
           )}
-          {showEndPicker && (
+          {showEndPicker && !isCinemaRoom && (
             <DateTimePickerModal
               isVisible={showEndPicker}
               mode="time"
@@ -530,6 +648,7 @@ const PlaceReservationApplyScreen = ({
               cancelTextIOS="취소"
             />
           )}
+          {/* 시네마룸은 종료 시각 픽커를 숨기고 고정 슬롯을 사용 */}
         </View>
 
         <TouchableOpacity
