@@ -2,7 +2,7 @@
 // 필요 시 여기에 계속 추가
 
 // 장소
-export const RC_CINEMA_ROOM = '시네마 룸';
+export const RC_CINEMA_ROOM = '시네마 룸(Cinema Room)';
 
 // 예시 추가
 // export const MAIN_AUDITORIUM = '대강당';
