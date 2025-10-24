@@ -21,6 +21,10 @@ import CalendarKoreanLocales from '../../utils/calendar-locales';
 import TimeSlotPickerModal, {
   TimeSlot,
 } from '../../components/TimeSlotPickerModal';
+import {
+  findRestrictedPolicy,
+  toConcreteSlots,
+} from '../../config/restricted-time-slots';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';
@@ -125,9 +129,12 @@ const PlaceReservationApplyScreen = ({
   // 현재 시간을 30분 단위로 올림하여 초기 시간 설정
   useEffect(() => {
     const now = new Date();
-    if (isCinemaRoom) {
+    const policy = findRestrictedPolicy(placeName);
+    if (isCinemaRoom || policy) {
       // 오늘 기준 다음 가능한 슬롯으로 초기화
-      const slots = getCinemaSlotsForDate(now);
+      const slots = policy
+        ? toConcreteSlots(now, policy).map(s => ({start: s.start, end: s.end}))
+        : getCinemaSlotsForDate(now);
       const upcoming = slots.find(s => s.start > now) || null;
       if (upcoming) {
         setStartTime(upcoming.start);
@@ -141,9 +148,11 @@ const PlaceReservationApplyScreen = ({
               parseInt(selectedDate.substring(6, 8)),
             )
           : new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-        const [slotB] = getCinemaSlotsForDate(base); // 18:00~21:00 기본
-        setStartTime(slotB.start);
-        setEndTime(slotB.end);
+        const first = policy
+          ? toConcreteSlots(base, policy)[0]
+          : getCinemaSlotsForDate(base)[0];
+        setStartTime(first.start);
+        setEndTime(first.end);
       }
     } else {
       const roundedTime = roundUpToNearest30Minutes(now);
@@ -152,7 +161,7 @@ const PlaceReservationApplyScreen = ({
       end.setMinutes(end.getMinutes() + 30);
       setEndTime(end);
     }
-  }, [isCinemaRoom]);
+  }, [isCinemaRoom, placeName]);
 
   // 선택된 날짜와 시간이 현재보다 이후인지 확인
   const isTimeAfterNow = (selectedDate: Date, selectedTime: Date) => {
@@ -364,18 +373,23 @@ const PlaceReservationApplyScreen = ({
   const [cinemaPickerVisible, setCinemaPickerVisible] = useState(false);
 
   const cinemaSlotsForUI: TimeSlot[] = useMemo(() => {
-    const slots = getCinemaSlotsForDate(date);
-    const fmt = (d: Date) =>
-      `${String(d.getHours()).padStart(2, '0')}:${String(
-        d.getMinutes(),
-      ).padStart(2, '0')}`;
+    const policy = findRestrictedPolicy(placeName);
+    const concrete = policy ? toConcreteSlots(date, policy) : getCinemaSlotsForDate(date);
     const now = new Date();
-    return [
-      {label: `${fmt(slots[0].start)} ~ ${fmt(slots[0].end)}`, ...slots[0]},
-      {label: `${fmt(slots[1].start)} ~ ${fmt(slots[1].end)}`, ...slots[1]},
-      {label: `${fmt(slots[2].start)} ~ ${fmt(slots[2].end)}`, ...slots[2]},
-    ].map(s => ({...s, disabled: new Date(date.getFullYear(), date.getMonth(), date.getDate(), s.start.getHours(), s.start.getMinutes()) <= now}));
-  }, [date]);
+    const fmt = (d: Date) => `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    return concrete.map(s => ({
+      label: `${fmt(s.start)} ~ ${fmt(s.end)}`,
+      start: s.start,
+      end: s.end,
+      disabled: new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        s.start.getHours(),
+        s.start.getMinutes(),
+      ) <= now,
+    } as any));
+  }, [date, placeName]);
 
   const handleSelectCinemaSlot = (slot: TimeSlot) => {
     setStartTime(slot.start);
@@ -414,7 +428,7 @@ const PlaceReservationApplyScreen = ({
         </View>
         {/* 예약 폼 */}
         <View style={styles.formSection}>
-          {isCinemaRoom && (
+          {(isCinemaRoom || findRestrictedPolicy(placeName)) && (
             <View style={{
               padding: 12,
               borderRadius: 8,
@@ -618,8 +632,14 @@ const PlaceReservationApplyScreen = ({
               onConfirm={time => {
                 setShowStartPicker(false);
                 const roundedTime = roundUpToNearest30Minutes(time);
-                if (isCinemaRoom) {
-                  const chosen = pickCinemaSlotByTime(date, roundedTime);
+                const policy = findRestrictedPolicy(placeName);
+                if (isCinemaRoom || policy) {
+                  const slots = policy
+                    ? toConcreteSlots(date, policy)
+                    : getCinemaSlotsForDate(date);
+                  const chosen = Array.isArray(slots)
+                    ? slots.find(s => roundedTime >= s.start && roundedTime < s.end)
+                    : undefined;
                   if (!chosen) {
                     Alert.alert(
                       '알림',
@@ -665,7 +685,7 @@ const PlaceReservationApplyScreen = ({
               cancelTextIOS="취소"
             />
           )}
-          {showEndPicker && !isCinemaRoom && (
+          {showEndPicker && !findRestrictedPolicy(placeName) && !isCinemaRoom && (
             <DateTimePickerModal
               isVisible={showEndPicker}
               mode="time"
@@ -684,7 +704,7 @@ const PlaceReservationApplyScreen = ({
           )}
 
           {/* Cinema custom picker */}
-          {isCinemaRoom && (
+          {(isCinemaRoom || findRestrictedPolicy(placeName)) && (
             <TimeSlotPickerModal
               visible={cinemaPickerVisible}
               onClose={() => setCinemaPickerVisible(false)}
