@@ -349,20 +349,21 @@ const PlaceReservationApplyScreen = ({
         {/* 예약 폼 */}
         <View style={styles.formSection}>
           {restrictedPolicy && (
-            <View style={{
-              padding: 12,
-              borderRadius: 8,
-              backgroundColor: isDarkMode ? '#2A1D1D' : '#FFF5F5',
-              borderWidth: 1,
-              borderColor: isDarkMode ? '#5C2B2B' : '#FFE5E5',
-              marginBottom: 4,
-            }}>
-              <Text style={{
-                // TODO: 빨강 말고 다른 색으로 변경
-                color: isDarkMode ? '#FFB4B4' : '#B91C1C',
-                fontSize: 13,
-                lineHeight: 18,
+            <View
+              style={{
+                padding: 12,
+                borderRadius: 10,
+                backgroundColor: isDarkMode ? '#1E1E1E' : '#F3F4F6',
+                borderWidth: 1,
+                borderColor: isDarkMode ? '#333333' : '#E5E7EB',
+                marginBottom: 8,
               }}>
+              <Text
+                style={{
+                  color: isDarkMode ? '#E5E7EB' : '#000000',
+                  fontSize: 13,
+                  lineHeight: 18,
+                }}>
                 {restrictedPolicy.notice}
               </Text>
             </View>
