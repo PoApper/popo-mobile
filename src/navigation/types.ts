@@ -50,7 +50,6 @@ export type PlaceReservationStackParamList = {
     placeName: string;
     placeId: string;
     selectedDate?: string;
-    isCinemaRoom?: boolean;
   };
 };
 

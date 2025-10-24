@@ -25,18 +25,15 @@ export const RESTRICTED_TIME_SLOT_POLICIES: TimeSlotPolicy[] = [
   },
 ];
 
-export function hasRestrictedPolicy(placeOrEquipName: string): boolean {
-  return RESTRICTED_TIME_SLOT_POLICIES.some(p =>
-    placeOrEquipName.includes(p.name),
-  );
+export function hasRestrictedTimeSlotPolicy(name: string): boolean {
+  return RESTRICTED_TIME_SLOT_POLICIES.some(p => p.name === name);
 }
 
-export function findRestrictedPolicy(
-  placeOrEquipName: string,
-): TimeSlotPolicy | undefined {
-  return RESTRICTED_TIME_SLOT_POLICIES.find(p =>
-    placeOrEquipName.includes(p.name),
-  );
+export function getRestrictedTimeSlotPolicy(name: string): TimeSlotPolicy {
+  if (!hasRestrictedTimeSlotPolicy(name)) {
+    throw new Error(`Restricted time slot policy not found for name: ${name}`);
+  }
+  return RESTRICTED_TIME_SLOT_POLICIES.find(p => p.name === name) as TimeSlotPolicy;
 }
 
 // 선택: 모달 표시용 Date 변환 헬퍼
