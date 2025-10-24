@@ -531,7 +531,6 @@ const PlaceReservationApplyScreen = ({
                 setShowDatePicker(false);
                 setDate(date);
                 if (restrictedPolicy) {
-                  // TODO: 오늘 가장 근접한 날짜 가져오는 로직 추출해서 사용하기
                   const first = toConcreteSlots(date, restrictedPolicy)[0];
                   if (first) {
                     setStartTime(first.start);
