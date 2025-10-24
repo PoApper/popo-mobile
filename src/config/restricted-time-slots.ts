@@ -1,4 +1,5 @@
 import {RC_CINEMA_ROOM} from './names';
+import { ConcreteTimeSlot } from '../components/TimeSlotPickerModal';
 
 export type TimeSlot = {
   start: number; // 분 단위(0~1439)
@@ -40,7 +41,7 @@ export function getRestrictedTimeSlotPolicy(name: string): TimeSlotPolicy {
 export function toConcreteSlots(
   baseDate: Date,
   policy: TimeSlotPolicy,
-): {start: Date; end: Date; label: string}[] {
+): ConcreteTimeSlot[] {
   const toDate = (d: Date, minutes: number, dayOffset = 0) => {
     const res = new Date(d);
     res.setDate(res.getDate() + dayOffset);
@@ -53,10 +54,13 @@ export function toConcreteSlots(
       '0',
     )}`;
 
+  const now = new Date();
+
   return policy.slots.map(s => {
     const start = toDate(baseDate, s.start, 0);
     const end = toDate(baseDate, s.end, s.endDayOffset ?? 0);
-    return {start, end, label: `${fmt(start)} ~ ${fmt(end)}`};
+    // 종료 시각을 지났다면 선택 불가. 시작 시각을 넘기더라도 예약할 수 있음
+    return {start, end, label: `${fmt(start)} ~ ${fmt(end)}`, disabled: end <= now};
   });
 }
 

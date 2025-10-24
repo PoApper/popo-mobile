@@ -8,18 +8,18 @@ import {
   useColorScheme,
 } from 'react-native';
 
-export type TimeSlot = {
+export type ConcreteTimeSlot = {
   label: string;
   start: Date;
   end: Date;
-  disabled?: boolean;
+  disabled: boolean;
 };
 
 type Props = {
   visible: boolean;
   onClose: () => void;
-  slots: TimeSlot[];
-  onSelectSlot: (slot: TimeSlot) => void;
+  slots: ConcreteTimeSlot[];
+  onSelectSlot: (slot: ConcreteTimeSlot) => void;
 };
 
 const TimeSlotPickerModal: React.FC<Props> = ({visible, onClose, slots, onSelectSlot}) => {
@@ -35,30 +35,33 @@ const TimeSlotPickerModal: React.FC<Props> = ({visible, onClose, slots, onSelect
         <View style={[styles.card, {backgroundColor: cardBg, borderColor}]}>
           <Text style={[styles.title, {color: textColor}]}>시간대 선택</Text>
           <View style={styles.slotList}>
-            {slots.map((slot, idx) => (
-              <TouchableOpacity
-                key={`${slot.label}-${idx}`}
-                style={[
-                  styles.slotItem,
-                  {
-                    borderColor,
-                    backgroundColor: slot.disabled
-                      ? isDarkMode
-                        ? '#2A2A2A'
-                        : '#F3F4F6'
-                      : isDarkMode
-                      ? '#262626'
-                      : '#F9FAFB',
-                    opacity: slot.disabled ? 0.5 : 1,
-                  },
-                ]}
-                disabled={slot.disabled}
-                onPress={() => onSelectSlot(slot)}>
-                <Text style={[styles.slotLabel, {color: textColor}]}>
-                  {slot.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
+            {slots.map((slot, idx) => {
+              const isDisabled = slot.disabled;
+              return (
+                <TouchableOpacity
+                  key={`${slot.label}-${idx}`}
+                  style={[
+                    styles.slotItem,
+                    {
+                      borderColor,
+                      backgroundColor: isDisabled
+                        ? isDarkMode
+                          ? '#2A2A2A'
+                          : '#F3F4F6'
+                        : isDarkMode
+                        ? '#262626'
+                        : '#F9FAFB',
+                      opacity: isDisabled ? 0.5 : 1,
+                    },
+                  ]}
+                  disabled={isDisabled}
+                  onPress={() => onSelectSlot(slot)}>
+                  <Text style={[styles.slotLabel, {color: textColor}]}>
+                    {slot.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
           <View style={styles.actions}>
             <TouchableOpacity style={[styles.actionBtn, {borderColor}]}
