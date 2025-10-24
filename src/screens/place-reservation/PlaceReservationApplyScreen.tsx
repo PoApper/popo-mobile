@@ -527,6 +527,7 @@ const PlaceReservationApplyScreen = ({
             <DateTimePickerModal
               isVisible={showDatePicker}
               mode="date"
+              date={date}
               onConfirm={date => {
                 setShowDatePicker(false);
                 setDate(date);
