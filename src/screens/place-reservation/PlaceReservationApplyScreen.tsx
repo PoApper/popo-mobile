@@ -18,6 +18,9 @@ import api from '../../utils/api';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {LocaleConfig} from 'react-native-calendars';
 import CalendarKoreanLocales from '../../utils/calendar-locales';
+import TimeSlotPickerModal, {
+  TimeSlot,
+} from '../../components/TimeSlotPickerModal';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';
@@ -334,19 +337,50 @@ const PlaceReservationApplyScreen = ({
   };
   const openStartPicker = () => {
     setShowDatePicker(false);
-    setShowStartPicker(true);
-    setShowEndPicker(false);
+    if (isCinemaRoom) {
+      setCinemaPickerVisible(true);
+    } else {
+      setShowStartPicker(true);
+      setShowEndPicker(false);
+    }
     setTimeout(() => {
       scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
     }, 100);
   };
   const openEndPicker = () => {
     setShowDatePicker(false);
-    setShowStartPicker(false);
-    setShowEndPicker(true);
+    if (isCinemaRoom) {
+      setCinemaPickerVisible(true);
+    } else {
+      setShowStartPicker(false);
+      setShowEndPicker(true);
+    }
     setTimeout(() => {
       scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
     }, 100);
+  };
+
+  // 커스텀 타임슬롯 모달 상태
+  const [cinemaPickerVisible, setCinemaPickerVisible] = useState(false);
+
+  const cinemaSlotsForUI: TimeSlot[] = useMemo(() => {
+    const slots = getCinemaSlotsForDate(date);
+    const fmt = (d: Date) =>
+      `${String(d.getHours()).padStart(2, '0')}:${String(
+        d.getMinutes(),
+      ).padStart(2, '0')}`;
+    const now = new Date();
+    return [
+      {label: `${fmt(slots[0].start)} ~ ${fmt(slots[0].end)}`, ...slots[0]},
+      {label: `${fmt(slots[1].start)} ~ ${fmt(slots[1].end)}`, ...slots[1]},
+      {label: `${fmt(slots[2].start)} ~ ${fmt(slots[2].end)}`, ...slots[2]},
+    ].map(s => ({...s, disabled: new Date(date.getFullYear(), date.getMonth(), date.getDate(), s.start.getHours(), s.start.getMinutes()) <= now}));
+  }, [date]);
+
+  const handleSelectCinemaSlot = (slot: TimeSlot) => {
+    setStartTime(slot.start);
+    setEndTime(slot.end);
+    setCinemaPickerVisible(false);
   };
 
   return (
@@ -646,6 +680,16 @@ const PlaceReservationApplyScreen = ({
               minimumDate={startTime}
               confirmTextIOS="확인"
               cancelTextIOS="취소"
+            />
+          )}
+
+          {/* Cinema custom picker */}
+          {isCinemaRoom && (
+            <TimeSlotPickerModal
+              visible={cinemaPickerVisible}
+              onClose={() => setCinemaPickerVisible(false)}
+              slots={cinemaSlotsForUI}
+              onSelectSlot={handleSelectCinemaSlot}
             />
           )}
           {/* 시네마룸은 종료 시각 픽커를 숨기고 고정 슬롯을 사용 */}
