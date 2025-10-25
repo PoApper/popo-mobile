@@ -21,8 +21,8 @@ import CalendarKoreanLocales from '../../utils/calendar-locales';
 import TimeSlotPickerModal from '../../components/TimeSlotPickerModal';
 import {
   toConcreteSlots,
-  hasRestrictedTimeSlotPolicy,
   getRestrictedTimeSlotPolicy,
+  getNearestPossibleSlot,
 } from '../../config/restricted-time-slots';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
@@ -99,16 +99,18 @@ const PlaceReservationApplyScreen = ({
     return newDate;
   };
 
-  // 현재 시간을 30분 단위로 올림하여 초기 시간 설정
   useEffect(() => {
-    const now = new Date();
     // 제한된 시간대 정책이 있는 경우
     if (restrictedPolicy) {
       // 오늘 기준 다음 가능한 슬롯으로 초기화
-      const first = toConcreteSlots(now, restrictedPolicy)[0];
-      setStartTime(first.start);
-      setEndTime(first.end);
+      const first = getNearestPossibleSlot(date, restrictedPolicy);
+      if (first) {
+        setStartTime(first.start);
+        setEndTime(first.end);
+      }
     } else {
+      const now = new Date();
+      // 현재 시간을 30분 단위로 올림하여 초기 시간 설정
       const roundedTime = roundUpToNearest30Minutes(now);
       setStartTime(roundedTime);
       const end = new Date(roundedTime);
@@ -525,13 +527,6 @@ const PlaceReservationApplyScreen = ({
               onConfirm={date => {
                 setShowDatePicker(false);
                 setDate(date);
-                if (restrictedPolicy) {
-                  const first = toConcreteSlots(date, restrictedPolicy)[0];
-                  if (first) {
-                    setStartTime(first.start);
-                    setEndTime(first.end);
-                  }
-                }
               }}
               onCancel={() => setShowDatePicker(false)}
               minimumDate={minimumDate}
@@ -541,38 +536,13 @@ const PlaceReservationApplyScreen = ({
               cancelTextIOS="취소"
             />
           )}
-          {showStartPicker && (
+          {showStartPicker && !restrictedPolicy && (
             <DateTimePickerModal
               isVisible={showStartPicker}
               mode="time"
               onConfirm={time => {
                 setShowStartPicker(false);
                 const roundedTime = roundUpToNearest30Minutes(time);
-                if (restrictedPolicy) {
-                  const slots = toConcreteSlots(date, restrictedPolicy);
-                  const chosen = slots.find(
-                    s => roundedTime >= s.start && roundedTime < s.end,
-                  );
-                  if (!chosen) {
-                    Alert.alert('알림', restrictedPolicy.notice);
-                    return;
-                  }
-                  const now = new Date();
-                  if (
-                    new Date(
-                      date.getFullYear(),
-                      date.getMonth(),
-                      date.getDate(),
-                      chosen.start.getHours(),
-                      chosen.start.getMinutes(),
-                    ) <= now
-                  ) {
-                    Alert.alert('알림', '현재 이후의 시간대를 선택해주세요.');
-                    return;
-                  }
-                  setStartTime(chosen.start);
-                  setEndTime(chosen.end);
-                } else {
                   if (isTimeAfterNow(date, roundedTime)) {
                     setStartTime(roundedTime);
                     const newEndTime = new Date(roundedTime);
@@ -584,7 +554,6 @@ const PlaceReservationApplyScreen = ({
                       '현재 시간보다 이후의 시간을 선택해주세요.',
                     );
                   }
-                }
               }}
               onCancel={() => setShowStartPicker(false)}
               minuteInterval={30}

@@ -37,7 +37,7 @@ export function getRestrictedTimeSlotPolicy(name: string): TimeSlotPolicy | unde
   return RESTRICTED_TIME_SLOT_POLICIES.find(p => p.name === name) as TimeSlotPolicy;
 }
 
-// 선택: 모달 표시용 Date 변환 헬퍼
+// 모달 표시용 슬롯 변환 헬퍼
 export function toConcreteSlots(
   baseDate: Date,
   policy: TimeSlotPolicy,
@@ -64,4 +64,11 @@ export function toConcreteSlots(
   });
 }
 
+export function getNearestPossibleSlot(baseDate: Date, policy: TimeSlotPolicy): ConcreteTimeSlot | undefined {
+  const slots = toConcreteSlots(baseDate, policy);
+  const now = new Date();
+  console.log('slots', slots);
+  console.log('now', now);
+  return slots.find(s => s.start >= now && !s.disabled) as ConcreteTimeSlot | undefined;
+}
 
