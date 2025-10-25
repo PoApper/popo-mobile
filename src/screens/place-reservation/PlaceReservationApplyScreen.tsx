@@ -99,6 +99,13 @@ const PlaceReservationApplyScreen = ({
     return newDate;
   };
 
+  // 주어진 시간의 시/분을 유지하고 날짜(Y/M/D)만 baseDate로 재설정
+  const rebaseTimeToDate = (baseDate: Date, time: Date) => {
+    const d = new Date(baseDate);
+    d.setHours(time.getHours(), time.getMinutes(), 0, 0);
+    return d;
+  };
+
   useEffect(() => {
     // 제한된 시간대 정책이 있는 경우
     if (restrictedPolicy) {
@@ -118,6 +125,20 @@ const PlaceReservationApplyScreen = ({
       setEndTime(end);
     }
   }, [restrictedPolicy]);
+
+  // 날짜 변경 시 startTime/endTime를 새 날짜로 동기화
+  useEffect(() => {
+    if (restrictedPolicy) {
+      const first = getNearestPossibleSlot(date, restrictedPolicy);
+      if (first) {
+        setStartTime(first.start);
+        setEndTime(first.end);
+      }
+    } else {
+      setStartTime(prev => rebaseTimeToDate(date, prev));
+      setEndTime(prev => rebaseTimeToDate(date, prev));
+    }
+  }, [date, restrictedPolicy]);
 
   // 선택된 날짜와 시간이 현재보다 이후인지 확인
   const isTimeAfterNow = (selectedDate: Date, selectedTime: Date) => {
@@ -192,6 +213,14 @@ const PlaceReservationApplyScreen = ({
       Alert.alert('알림', '과거 날짜는 예약할 수 없습니다.');
       return;
     }
+
+    // 과거 시간대 예약 금지
+    // 시간대 제한의 경우에는 종료 시각만 확인하므로, 이 기준을 따라감
+    if (endTime < new Date()) {
+      Alert.alert('알림', '과거 시간대는 예약할 수 없습니다.');
+      return;
+    }
+
 
     // 예약 정보 확인 팝업
     Alert.alert(
