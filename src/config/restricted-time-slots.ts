@@ -1,15 +1,15 @@
 import {RC_CINEMA_ROOM} from './names';
-import { ConcreteTimeSlot } from '../components/TimeSlotPickerModal';
+import {ConcreteTimeSlot} from '../components/TimeSlotPickerModal';
 
 export type TimeSlot = {
   start: number; // 분 단위(0~1439)
-  end: number;   // 분 단위(0~1439), 24:00은 0으로 표현 + endDayOffset=1
+  end: number; // 분 단위(0~1439), 24:00은 0으로 표현 + endDayOffset=1
   endDayOffset?: number; // 자정 넘김시 다음날 처리(기본 0)
 };
 
 export type TimeSlotPolicy = {
-  name: string;     // 포함 매칭에 사용할 하드코딩 이름 상수
-  notice: string;   // 안내 문구
+  name: string; // 포함 매칭에 사용할 하드코딩 이름 상수
+  notice: string; // 안내 문구
   slots: TimeSlot[];
 };
 
@@ -30,11 +30,15 @@ export function hasRestrictedTimeSlotPolicy(name: string): boolean {
   return RESTRICTED_TIME_SLOT_POLICIES.some(p => p.name === name);
 }
 
-export function getRestrictedTimeSlotPolicy(name: string): TimeSlotPolicy | undefined {
+export function getRestrictedTimeSlotPolicy(
+  name: string,
+): TimeSlotPolicy | undefined {
   if (!hasRestrictedTimeSlotPolicy(name)) {
     return undefined;
   }
-  return RESTRICTED_TIME_SLOT_POLICIES.find(p => p.name === name) as TimeSlotPolicy;
+  return RESTRICTED_TIME_SLOT_POLICIES.find(
+    p => p.name === name,
+  ) as TimeSlotPolicy;
 }
 
 // 모달 표시용 슬롯 변환 헬퍼
@@ -60,15 +64,24 @@ export function toConcreteSlots(
     const start = toDate(baseDate, s.start, 0);
     const end = toDate(baseDate, s.end, s.endDayOffset ?? 0);
     // 종료 시각을 지났다면 선택 불가. 시작 시각을 넘기더라도 예약할 수 있음
-    return {start, end, label: `${fmt(start)} ~ ${fmt(end)}`, disabled: end <= now};
+    return {
+      start,
+      end,
+      label: `${fmt(start)} ~ ${fmt(end)}`,
+      disabled: end <= now,
+    };
   });
 }
 
-export function getNearestPossibleSlot(baseDate: Date, policy: TimeSlotPolicy): ConcreteTimeSlot | undefined {
+export function getNearestPossibleSlot(
+  baseDate: Date,
+  policy: TimeSlotPolicy,
+): ConcreteTimeSlot | undefined {
   const slots = toConcreteSlots(baseDate, policy);
   const now = new Date();
   console.log('slots', slots);
   console.log('now', now);
-  return slots.find(s => s.start >= now && !s.disabled) as ConcreteTimeSlot | undefined;
+  return slots.find(s => s.start >= now && !s.disabled) as
+    | ConcreteTimeSlot
+    | undefined;
 }
-

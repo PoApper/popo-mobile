@@ -22,7 +22,12 @@ type Props = {
   onSelectSlot: (slot: ConcreteTimeSlot) => void;
 };
 
-const TimeSlotPickerModal: React.FC<Props> = ({visible, onClose, slots, onSelectSlot}) => {
+const TimeSlotPickerModal: React.FC<Props> = ({
+  visible,
+  onClose,
+  slots,
+  onSelectSlot,
+}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const bg = isDarkMode ? 'rgba(0,0,0,0.6)' : 'rgba(0,0,0,0.35)';
   const cardBg = isDarkMode ? '#1E1E1E' : '#FFFFFF';
@@ -30,7 +35,11 @@ const TimeSlotPickerModal: React.FC<Props> = ({visible, onClose, slots, onSelect
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}>
       <View style={[styles.overlay, {backgroundColor: bg}]}>
         <View style={[styles.card, {backgroundColor: cardBg, borderColor}]}>
           <Text style={[styles.title, {color: textColor}]}>시간대 선택</Text>
@@ -64,7 +73,8 @@ const TimeSlotPickerModal: React.FC<Props> = ({visible, onClose, slots, onSelect
             })}
           </View>
           <View style={styles.actions}>
-            <TouchableOpacity style={[styles.actionBtn, {borderColor}]}
+            <TouchableOpacity
+              style={[styles.actionBtn, {borderColor}]}
               onPress={onClose}>
               <Text style={[styles.actionText, {color: textColor}]}>닫기</Text>
             </TouchableOpacity>
@@ -126,5 +136,3 @@ const styles = StyleSheet.create({
 });
 
 export default TimeSlotPickerModal;
-
-

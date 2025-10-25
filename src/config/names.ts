@@ -11,5 +11,3 @@ export const RC_CINEMA_ROOM = '시네마 룸(Cinema Room)';
 // 장비
 // export const DSLR_CAMERA = 'DSLR 카메라';
 // export const PROJECTOR = '프로젝터';
-
-

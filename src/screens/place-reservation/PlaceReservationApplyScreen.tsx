@@ -43,7 +43,6 @@ const PlaceReservationApplyScreen = ({
   const isDarkMode = useColorScheme() === 'dark';
   const {buildingName, placeName, placeId, selectedDate} = route.params;
 
-
   // 사용자 정보
   const [userName, setUserName] = useState('');
   useEffect(() => {
@@ -220,7 +219,6 @@ const PlaceReservationApplyScreen = ({
       Alert.alert('알림', '과거 시간대는 예약할 수 없습니다.');
       return;
     }
-
 
     // 예약 정보 확인 팝업
     Alert.alert(
@@ -572,17 +570,17 @@ const PlaceReservationApplyScreen = ({
               onConfirm={time => {
                 setShowStartPicker(false);
                 const roundedTime = roundUpToNearest30Minutes(time);
-                  if (isTimeAfterNow(date, roundedTime)) {
-                    setStartTime(roundedTime);
-                    const newEndTime = new Date(roundedTime);
-                    newEndTime.setMinutes(newEndTime.getMinutes() + 30);
-                    setEndTime(newEndTime);
-                  } else {
-                    Alert.alert(
-                      '알림',
-                      '현재 시간보다 이후의 시간을 선택해주세요.',
-                    );
-                  }
+                if (isTimeAfterNow(date, roundedTime)) {
+                  setStartTime(roundedTime);
+                  const newEndTime = new Date(roundedTime);
+                  newEndTime.setMinutes(newEndTime.getMinutes() + 30);
+                  setEndTime(newEndTime);
+                } else {
+                  Alert.alert(
+                    '알림',
+                    '현재 시간보다 이후의 시간을 선택해주세요.',
+                  );
+                }
               }}
               onCancel={() => setShowStartPicker(false)}
               minuteInterval={30}
