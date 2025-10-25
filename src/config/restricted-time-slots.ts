@@ -30,9 +30,9 @@ export function hasRestrictedTimeSlotPolicy(name: string): boolean {
   return RESTRICTED_TIME_SLOT_POLICIES.some(p => p.name === name);
 }
 
-export function getRestrictedTimeSlotPolicy(name: string): TimeSlotPolicy {
+export function getRestrictedTimeSlotPolicy(name: string): TimeSlotPolicy | undefined {
   if (!hasRestrictedTimeSlotPolicy(name)) {
-    throw new Error(`Restricted time slot policy not found for name: ${name}`);
+    return undefined;
   }
   return RESTRICTED_TIME_SLOT_POLICIES.find(p => p.name === name) as TimeSlotPolicy;
 }

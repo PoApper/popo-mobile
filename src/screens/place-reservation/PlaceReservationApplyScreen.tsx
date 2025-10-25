@@ -75,14 +75,9 @@ const PlaceReservationApplyScreen = ({
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [timeSlotPickerVisible, setTimeSlotPickerVisible] = useState(false);
 
-  const hasRestrictedTimeSlot = useMemo(
-    () => hasRestrictedTimeSlotPolicy(placeName),
-    [placeName],
-  );
-
   const restrictedPolicy = useMemo(
-    () => (hasRestrictedTimeSlot ? getRestrictedTimeSlotPolicy(placeName) : undefined),
-    [hasRestrictedTimeSlot, placeName],
+    () => getRestrictedTimeSlotPolicy(placeName),
+    [placeName],
   );
 
   // 날짜 범위 계산 (컴포넌트 마운트 시 1회)
@@ -108,10 +103,9 @@ const PlaceReservationApplyScreen = ({
   useEffect(() => {
     const now = new Date();
     // 제한된 시간대 정책이 있는 경우
-    if (hasRestrictedTimeSlot) {
-      const policy = getRestrictedTimeSlotPolicy(placeName);
+    if (restrictedPolicy) {
       // 오늘 기준 다음 가능한 슬롯으로 초기화
-      const first = toConcreteSlots(now, policy)[0];
+      const first = toConcreteSlots(now, restrictedPolicy)[0];
       setStartTime(first.start);
       setEndTime(first.end);
     } else {
@@ -121,7 +115,7 @@ const PlaceReservationApplyScreen = ({
       end.setMinutes(end.getMinutes() + 30);
       setEndTime(end);
     }
-  }, [hasRestrictedTimeSlot]);
+  }, [restrictedPolicy]);
 
   // 선택된 날짜와 시간이 현재보다 이후인지 확인
   const isTimeAfterNow = (selectedDate: Date, selectedTime: Date) => {
@@ -294,7 +288,7 @@ const PlaceReservationApplyScreen = ({
   };
   const openStartPicker = () => {
     setShowDatePicker(false);
-    if (hasRestrictedTimeSlot) {
+    if (restrictedPolicy) {
       setTimeSlotPickerVisible(true);
     } else {
       setShowStartPicker(true);
@@ -306,7 +300,7 @@ const PlaceReservationApplyScreen = ({
   };
   const openEndPicker = () => {
     setShowDatePicker(false);
-    if (hasRestrictedTimeSlot) {
+    if (restrictedPolicy) {
       setTimeSlotPickerVisible(true);
     } else {
       setShowStartPicker(false);
@@ -554,14 +548,13 @@ const PlaceReservationApplyScreen = ({
               onConfirm={time => {
                 setShowStartPicker(false);
                 const roundedTime = roundUpToNearest30Minutes(time);
-                const policy = restrictedPolicy;
-                if (policy) {
-                  const slots = toConcreteSlots(date, policy);
+                if (restrictedPolicy) {
+                  const slots = toConcreteSlots(date, restrictedPolicy);
                   const chosen = slots.find(
                     s => roundedTime >= s.start && roundedTime < s.end,
                   );
                   if (!chosen) {
-                    Alert.alert('알림', policy.notice);
+                    Alert.alert('알림', restrictedPolicy.notice);
                     return;
                   }
                   const now = new Date();
