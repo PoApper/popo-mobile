@@ -18,6 +18,12 @@ import api from '../../utils/api';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {LocaleConfig} from 'react-native-calendars';
 import CalendarKoreanLocales from '../../utils/calendar-locales';
+import TimeSlotPickerModal from '../../components/TimeSlotPickerModal';
+import {
+  toConcreteSlots,
+  getRestrictedTimeSlotPolicy,
+  getNearestPossibleSlot,
+} from '../../config/restricted-time-slots';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';
@@ -66,6 +72,12 @@ const PlaceReservationApplyScreen = ({
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [endTime, setEndTime] = useState(new Date());
   const [showEndPicker, setShowEndPicker] = useState(false);
+  const [timeSlotPickerVisible, setTimeSlotPickerVisible] = useState(false);
+
+  const restrictedPolicy = useMemo(
+    () => getRestrictedTimeSlotPolicy(placeName),
+    [placeName],
+  );
 
   // 날짜 범위 계산 (컴포넌트 마운트 시 1회)
   const {minimumDate, maximumDate} = useMemo(() => {
@@ -86,16 +98,46 @@ const PlaceReservationApplyScreen = ({
     return newDate;
   };
 
-  // 현재 시간을 30분 단위로 올림하여 초기 시간 설정
+  // 주어진 시간의 시/분을 유지하고 날짜(Y/M/D)만 baseDate로 재설정
+  const rebaseTimeToDate = (baseDate: Date, time: Date) => {
+    const d = new Date(baseDate);
+    d.setHours(time.getHours(), time.getMinutes(), 0, 0);
+    return d;
+  };
+
   useEffect(() => {
-    const now = new Date();
-    const roundedTime = roundUpToNearest30Minutes(now);
-    setStartTime(roundedTime);
-    // 종료 시간을 시작 시간 + 30분으로 설정
-    const endTime = new Date(roundedTime);
-    endTime.setMinutes(endTime.getMinutes() + 30);
-    setEndTime(endTime);
-  }, []);
+    // 제한된 시간대 정책이 있는 경우
+    if (restrictedPolicy) {
+      // 오늘 기준 다음 가능한 슬롯으로 초기화
+      const first = getNearestPossibleSlot(date, restrictedPolicy);
+      if (first) {
+        setStartTime(first.start);
+        setEndTime(first.end);
+      }
+    } else {
+      const now = new Date();
+      // 현재 시간을 30분 단위로 올림하여 초기 시간 설정
+      const roundedTime = roundUpToNearest30Minutes(now);
+      setStartTime(roundedTime);
+      const end = new Date(roundedTime);
+      end.setMinutes(end.getMinutes() + 30);
+      setEndTime(end);
+    }
+  }, [restrictedPolicy]);
+
+  // 날짜 변경 시 startTime/endTime를 새 날짜로 동기화
+  useEffect(() => {
+    if (restrictedPolicy) {
+      const first = getNearestPossibleSlot(date, restrictedPolicy);
+      if (first) {
+        setStartTime(first.start);
+        setEndTime(first.end);
+      }
+    } else {
+      setStartTime(prev => rebaseTimeToDate(date, prev));
+      setEndTime(prev => rebaseTimeToDate(date, prev));
+    }
+  }, [date, restrictedPolicy]);
 
   // 선택된 날짜와 시간이 현재보다 이후인지 확인
   const isTimeAfterNow = (selectedDate: Date, selectedTime: Date) => {
@@ -168,6 +210,13 @@ const PlaceReservationApplyScreen = ({
     );
     if (selectedStart < todayStart) {
       Alert.alert('알림', '과거 날짜는 예약할 수 없습니다.');
+      return;
+    }
+
+    // 과거 시간대 예약 금지
+    // 시간대 제한의 경우에는 종료 시각만 확인하므로, 이 기준을 따라감
+    if (endTime < new Date()) {
+      Alert.alert('알림', '과거 시간대는 예약할 수 없습니다.');
       return;
     }
 
@@ -268,16 +317,24 @@ const PlaceReservationApplyScreen = ({
   };
   const openStartPicker = () => {
     setShowDatePicker(false);
-    setShowStartPicker(true);
-    setShowEndPicker(false);
+    if (restrictedPolicy) {
+      setTimeSlotPickerVisible(true);
+    } else {
+      setShowStartPicker(true);
+      setShowEndPicker(false);
+    }
     setTimeout(() => {
       scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
     }, 100);
   };
   const openEndPicker = () => {
     setShowDatePicker(false);
-    setShowStartPicker(false);
-    setShowEndPicker(true);
+    if (restrictedPolicy) {
+      setTimeSlotPickerVisible(true);
+    } else {
+      setShowStartPicker(false);
+      setShowEndPicker(true);
+    }
     setTimeout(() => {
       scrollViewRef.current?.scrollTo({x: 0, y: 600, animated: true});
     }, 100);
@@ -314,6 +371,26 @@ const PlaceReservationApplyScreen = ({
         </View>
         {/* 예약 폼 */}
         <View style={styles.formSection}>
+          {restrictedPolicy && (
+            <View
+              style={{
+                padding: 12,
+                borderRadius: 10,
+                backgroundColor: isDarkMode ? '#1E1E1E' : '#F3F4F6',
+                borderWidth: 1,
+                borderColor: isDarkMode ? '#333333' : '#E5E7EB',
+                marginBottom: 8,
+              }}>
+              <Text
+                style={{
+                  color: isDarkMode ? '#E5E7EB' : '#000000',
+                  fontSize: 13,
+                  lineHeight: 18,
+                }}>
+                {restrictedPolicy.notice}
+              </Text>
+            </View>
+          )}
           <Text style={[styles.label, {color: textColor}]}>
             사용자 <Text style={styles.requiredText}>*</Text>
           </Text>
@@ -473,6 +550,7 @@ const PlaceReservationApplyScreen = ({
             <DateTimePickerModal
               isVisible={showDatePicker}
               mode="date"
+              date={date}
               onConfirm={date => {
                 setShowDatePicker(false);
                 setDate(date);
@@ -485,7 +563,7 @@ const PlaceReservationApplyScreen = ({
               cancelTextIOS="취소"
             />
           )}
-          {showStartPicker && (
+          {showStartPicker && !restrictedPolicy && (
             <DateTimePickerModal
               isVisible={showStartPicker}
               mode="time"
@@ -513,7 +591,7 @@ const PlaceReservationApplyScreen = ({
               cancelTextIOS="취소"
             />
           )}
-          {showEndPicker && (
+          {showEndPicker && !restrictedPolicy && (
             <DateTimePickerModal
               isVisible={showEndPicker}
               mode="time"
@@ -528,6 +606,20 @@ const PlaceReservationApplyScreen = ({
               minimumDate={startTime}
               confirmTextIOS="확인"
               cancelTextIOS="취소"
+            />
+          )}
+
+          {/* 제한 타임슬롯 커스텀 피커 */}
+          {restrictedPolicy && (
+            <TimeSlotPickerModal
+              visible={timeSlotPickerVisible}
+              onClose={() => setTimeSlotPickerVisible(false)}
+              slots={toConcreteSlots(date, restrictedPolicy)}
+              onSelectSlot={slot => {
+                setStartTime(slot.start);
+                setEndTime(slot.end);
+                setTimeSlotPickerVisible(false);
+              }}
             />
           )}
         </View>
