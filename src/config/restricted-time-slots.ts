@@ -79,5 +79,5 @@ export function getNearestPossibleSlot(
 ): ConcreteTimeSlot | undefined {
   const slots = toConcreteSlots(baseDate, policy);
   const now = new Date();
-  return slots.find(s => s.start >= now && !s.disabled);
+  return slots.find(s => s.end > now && !s.disabled);
 }
