@@ -5,6 +5,9 @@ export async function reset_auth() {
   if (await EncryptedStorage.getItem('auth_token')) {
     await EncryptedStorage.removeItem('auth_token');
   }
+  if (await EncryptedStorage.getItem('refresh_token')) {
+    await EncryptedStorage.removeItem('refresh_token');
+  }
   if (await EncryptedStorage.getItem('isAuthenticated')) {
     await EncryptedStorage.removeItem('isAuthenticated');
   }

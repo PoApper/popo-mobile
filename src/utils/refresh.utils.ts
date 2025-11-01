@@ -2,6 +2,7 @@ import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import api, {POPO_API_URL} from './api';
 import {navigationRef} from '../navigation/RootNavigation';
+import { reset_auth } from './reset';
 
 let isRefreshing = false;
 
@@ -86,16 +87,7 @@ export const refreshAccessToken = async () => {
   } catch (error) {
     // 인증 정보 초기화 및 로그인 화면으로 이동
     try {
-      if (await EncryptedStorage.getItem('auth_token')) {
-        await EncryptedStorage.removeItem('auth_token');
-      }
-      if (await EncryptedStorage.getItem('isAuthenticated')) {
-        await EncryptedStorage.removeItem('isAuthenticated');
-      }
-      if (await EncryptedStorage.getItem('user_info')) {
-        await EncryptedStorage.removeItem('user_info');
-      }
-      await CookieManager.clearAll();
+      await reset_auth();
     } catch {}
 
     if (navigationRef.isReady()) {
