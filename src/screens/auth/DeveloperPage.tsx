@@ -19,6 +19,8 @@ import api from '@utils/api';
 import paxi_api, {PAXI_API_URL} from '@utils/paxi_api';
 import CommonHeader from '@components/CommonHeader';
 import {POPO_API_URL} from '@utils/api';
+import CookieManager from '@react-native-cookies/cookies';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 type DeveloperPageProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Developer'>;
@@ -28,6 +30,8 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [userDataState, setUserData] = useState<any>(null);
   const [authTokenData, setAuthTokenData] = useState<any>(null);
+  const [refreshCookie, setRefreshCookie] = useState<string | null>(null);
+  const [refreshEncrypted, setRefreshEncrypted] = useState<string | null>(null);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -65,6 +69,26 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
     };
 
     fetchUserProfile();
+  }, []);
+
+  // Refresh Token 정보 가져오기
+  useEffect(() => {
+    (async () => {
+      try {
+        const cookies = await CookieManager.get(POPO_API_URL);
+        const refresh = cookies.Refresh?.value ?? null;
+        setRefreshCookie(refresh);
+      } catch (e) {
+        setRefreshCookie(null);
+      }
+
+      try {
+        const refreshEnc = await EncryptedStorage.getItem('refresh_token');
+        setRefreshEncrypted(refreshEnc);
+      } catch (e) {
+        setRefreshEncrypted(null);
+      }
+    })();
   }, []);
 
   const testFCM = async () => {
@@ -273,6 +297,76 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
                   style={[styles.tokenValue, {color: textColor}]}
                   selectable={true}>
                   {authTokenData?.encrypted_storage || '정보 없음'}
+                </Text>
+              </View>
+            </View>
+
+            {/* Refresh Token (Cookie) 정보 */}
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+              <View style={styles.sectionTitleRow}>
+                <View style={styles.titleContainer}>
+                  <Text
+                    style={[
+                      styles.detailLabel,
+                      {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                    ]}>
+                    Refresh Token (Cookie)
+                  </Text>
+                </View>
+                <View style={styles.iconContainer}>
+                  {refreshCookie && (
+                    <TouchableOpacity
+                      style={styles.copyIconButton}
+                      onPress={() => copyToClipboard(refreshCookie)}>
+                      <Icon
+                        name="content-copy"
+                        size={16}
+                        color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+              <View style={styles.tokenContainer}>
+                <Text
+                  style={[styles.tokenValue, {color: textColor}]}
+                  selectable={true}>
+                  {refreshCookie || '정보 없음'}
+                </Text>
+              </View>
+            </View>
+
+            {/* Refresh Token (Encrypted Storage) 정보 */}
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+              <View style={styles.sectionTitleRow}>
+                <View style={styles.titleContainer}>
+                  <Text
+                    style={[
+                      styles.detailLabel,
+                      {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                    ]}>
+                    Refresh Token (Encrypted Storage)
+                  </Text>
+                </View>
+                <View style={styles.iconContainer}>
+                  {refreshEncrypted && (
+                    <TouchableOpacity
+                      style={styles.copyIconButton}
+                      onPress={() => copyToClipboard(refreshEncrypted)}>
+                      <Icon
+                        name="content-copy"
+                        size={16}
+                        color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+              <View style={styles.tokenContainer}>
+                <Text
+                  style={[styles.tokenValue, {color: textColor}]}
+                  selectable={true}>
+                  {refreshEncrypted || '정보 없음'}
                 </Text>
               </View>
             </View>
