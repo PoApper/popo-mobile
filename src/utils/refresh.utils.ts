@@ -1,6 +1,7 @@
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import api, {POPO_API_URL} from './api';
+import type {AxiosInstance} from 'axios';
 import {navigationRef} from '../navigation/RootNavigation';
 import {reset_auth} from './reset';
 
@@ -10,6 +11,7 @@ type FailedItem = {
   resolve: (value?: any) => void;
   reject: (error: any) => void;
   originalRequest: any;
+  requester: AxiosInstance;
 };
 
 let failedQueue: FailedItem[] = [];
@@ -23,16 +25,17 @@ export const addToFailedQueue = (
   resolve: (value?: any) => void,
   reject: (error: any) => void,
   originalRequest: any,
+  requester: AxiosInstance,
 ) => {
-  failedQueue.push({resolve, reject, originalRequest});
+  failedQueue.push({resolve, reject, originalRequest, requester});
 };
 
 export const processQueue = (error: any) => {
-  failedQueue.forEach(({resolve, reject, originalRequest}) => {
+  failedQueue.forEach(({resolve, reject, originalRequest, requester}) => {
     if (error) {
       reject(error);
     } else {
-      resolve(api(originalRequest));
+      resolve(requester(originalRequest));
     }
   });
   failedQueue = [];

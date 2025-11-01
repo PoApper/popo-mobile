@@ -146,7 +146,7 @@ paxi_api.interceptors.response.use(
     ) {
       if (getIsRefreshing()) {
         return new Promise((resolve, reject) => {
-          addToFailedQueue(resolve, reject, originalRequest);
+          addToFailedQueue(resolve, reject, originalRequest, paxi_api);
         });
       }
 

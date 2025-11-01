@@ -140,7 +140,7 @@ api.interceptors.response.use(
     ) {
       if (getIsRefreshing()) {
         return new Promise((resolve, reject) => {
-          addToFailedQueue(resolve, reject, originalRequest);
+          addToFailedQueue(resolve, reject, originalRequest, api);
         });
       }
 
