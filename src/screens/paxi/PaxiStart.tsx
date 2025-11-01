@@ -11,6 +11,8 @@ import {
   Animated,
   Easing,
   Image,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -114,91 +116,95 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <CommonHeader navigation={navigation} title="닉네임 설정하기" />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <SafeAreaView style={backgroundStyle}>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={backgroundStyle.backgroundColor}
+        />
+        <CommonHeader navigation={navigation} title="닉네임 설정하기" />
 
-      <View style={styles.keyboardAvoidingView}>
-        <View style={styles.container}>
-          <View style={styles.titleContainer}>
-            <Text style={[styles.titleText, {color: colors.text}]}>
-              PAXI에 오신 것을 환영합니다! 👋
-            </Text>
-          </View>
-          <View style={styles.subTitleContainer}>
-            <Text style={[styles.subTitleText, {color: colors.text}]}>
-              사용할 닉네임을 등록해주세요.
-            </Text>
-          </View>
+        <View style={styles.keyboardAvoidingView}>
+          <View style={styles.container}>
+            <View style={styles.titleContainer}>
+              <Text style={[styles.titleText, {color: colors.text}]}>
+                PAXI에 오신 것을 환영합니다! 👋
+              </Text>
+            </View>
+            <View style={styles.subTitleContainer}>
+              <Text style={[styles.subTitleText, {color: colors.text}]}>
+                사용할 닉네임을 등록해주세요.
+              </Text>
+            </View>
 
-          <View style={{width: '100%', marginBottom: 8}}>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={[
-                  styles.roomInput,
-                  {
-                    borderColor: colors.inputBorder,
-                    backgroundColor: colors.inputBackground,
-                    color: colors.text,
-                  },
-                ]}
-                placeholder="닉네임을 입력해주세요."
-                placeholderTextColor={colors.inputPlaceholder}
-                value={nickname}
-                onChangeText={setNickname}
+            <View style={{width: '100%', marginBottom: 8}}>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={[
+                    styles.roomInput,
+                    {
+                      borderColor: colors.inputBorder,
+                      backgroundColor: colors.inputBackground,
+                      color: colors.text,
+                    },
+                  ]}
+                  placeholder="닉네임을 입력해주세요."
+                  placeholderTextColor={colors.inputPlaceholder}
+                  value={nickname}
+                  onChangeText={setNickname}
+                  returnKeyType="done"
+                  onSubmitEditing={Keyboard.dismiss}
+                />
+                <TouchableOpacity
+                  style={[
+                    styles.diceButton,
+                    {
+                      backgroundColor: colors.diceButtonBackground,
+                    },
+                  ]}
+                  onPress={() => {
+                    animateDice();
+                    getUserInfo();
+                  }}>
+                  <Animated.View style={{transform: [{rotate: spin}]}}>
+                    <Icon name="casino" size={24} color={colors.text} />
+                  </Animated.View>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.taxiImageContainer}>
+              <Image
+                source={require('../../../assets/paxi_taxi.png')}
+                style={styles.taxiImage}
               />
-              <TouchableOpacity
-                style={[
-                  styles.diceButton,
-                  {
-                    backgroundColor: colors.diceButtonBackground,
-                  },
-                ]}
-                onPress={() => {
-                  animateDice();
-                  getUserInfo();
-                }}>
-                <Animated.View style={{transform: [{rotate: spin}]}}>
-                  <Icon name="casino" size={24} color={colors.text} />
-                </Animated.View>
-              </TouchableOpacity>
             </View>
           </View>
 
-          <View style={styles.taxiImageContainer}>
-            <Image
-              source={require('../../../assets/paxi_taxi.png')}
-              style={styles.taxiImage}
-            />
+          <View
+            style={[
+              styles.bottomContainer,
+              {backgroundColor: colors.bottomContainerBackground},
+            ]}>
+            <TouchableOpacity
+              style={[
+                styles.nextButton,
+                {backgroundColor: colors.buttonBackground},
+              ]}
+              onPress={() => {
+                if (!nickname) {
+                  Alert.alert('오류', '닉네임을 입력해주세요.');
+                } else {
+                  setNickName();
+                }
+              }}
+              disabled={!nickname}>
+              <Text style={styles.nextButtonText}>Paxi 시작하기</Text>
+            </TouchableOpacity>
           </View>
         </View>
-
-        <View
-          style={[
-            styles.bottomContainer,
-            {backgroundColor: colors.bottomContainerBackground},
-          ]}>
-          <TouchableOpacity
-            style={[
-              styles.nextButton,
-              {backgroundColor: colors.buttonBackground},
-            ]}
-            onPress={() => {
-              if (!nickname) {
-                Alert.alert('오류', '닉네임을 입력해주세요.');
-              } else {
-                setNickName();
-              }
-            }}
-            disabled={!nickname}>
-            <Text style={styles.nextButtonText}>Paxi 시작하기</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
