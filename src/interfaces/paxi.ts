@@ -40,6 +40,7 @@ export interface MessageData {
   updatedAt: any;
   avatar: any;
   isDeleted: boolean;
+  isEdited: boolean;
 }
 
 export interface SettlementData {

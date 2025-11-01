@@ -31,29 +31,44 @@ const MyMessage = ({message, handleMyMsgClick}: MyMessageProps) => {
       <Text style={styles.timeText}>
         {moment(message.createdAt).format('HH:mm')}
       </Text>
-      <TouchableOpacity
-        onLongPress={() => !message.isDeleted && handleMyMsgClick(message)}
-        disabled={message.isDeleted}
-        style={[
-          styles.messageBubble,
-          {
-            backgroundColor: message.isDeleted
-              ? isDarkMode
-                ? '#2a2d31'
-                : '#e9eaec'
-              : isDarkMode
-              ? '#23262B'
-              : '#f2f3f5',
-          },
-        ]}>
-        <Text
+        <TouchableOpacity
+          onLongPress={() => !message.isDeleted && handleMyMsgClick(message)}
+          disabled={message.isDeleted}
           style={[
-            styles.messageText,
-            {color: message.isDeleted ? '#9b9b9b' : textColor(isDarkMode)},
+            styles.messageBubble,
+            {
+              backgroundColor: message.isDeleted
+                ? isDarkMode
+                  ? '#2a2d31'
+                  : '#e9eaec'
+                : isDarkMode
+                ? '#23262B'
+                : '#f2f3f5',
+            },
           ]}>
-          {message.isDeleted ? '삭제됨' : message.message}
-        </Text>
-      </TouchableOpacity>
+          {message.isDeleted ? (
+            <Text
+              style={[
+                styles.messageText,
+                {color: '#9b9b9b'},
+              ]}>
+              삭제됨
+            </Text>
+          ) : (
+            <>
+              <Text
+                style={[
+                  styles.messageText,
+                  {color: textColor(isDarkMode)},
+                ]}>
+                {message.message}
+              </Text>
+              {message.isEdited && (
+                <Text style={styles.editedText}>수정됨</Text>
+              )}
+            </>
+          )}
+        </TouchableOpacity>
     </View>
   );
 };
@@ -83,5 +98,12 @@ const styles = StyleSheet.create({
     letterSpacing: -0.4,
     flexWrap: 'wrap',
     lineHeight: 18,
+  },
+  editedText: {
+    color: '#9b9b9b',
+    fontSize: 12,
+    letterSpacing: -0.3,
+    marginTop: 2,
+    alignSelf: 'flex-end',
   },
 });
