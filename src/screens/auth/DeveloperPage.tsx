@@ -14,13 +14,11 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {RootStackParamList} from '@navigation/types';
-import {getAuthToken} from '@utils/auth-token';
+import {getAuthToken, getRefreshToken} from '@utils/auth-tokens';
 import api from '@utils/api';
 import paxi_api, {PAXI_API_URL} from '@utils/paxi_api';
 import CommonHeader from '@components/CommonHeader';
 import {POPO_API_URL} from '@utils/api';
-import CookieManager from '@react-native-cookies/cookies';
-import EncryptedStorage from 'react-native-encrypted-storage';
 
 type DeveloperPageProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Developer'>;
@@ -30,8 +28,7 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [userDataState, setUserData] = useState<any>(null);
   const [authTokenData, setAuthTokenData] = useState<any>(null);
-  const [refreshCookie, setRefreshCookie] = useState<string | null>(null);
-  const [refreshEncrypted, setRefreshEncrypted] = useState<string | null>(null);
+  const [refreshTokenData, setRefreshTokenData] = useState<any>(null);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -74,20 +71,8 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
   // Refresh Token 정보 가져오기
   useEffect(() => {
     (async () => {
-      try {
-        const cookies = await CookieManager.get(POPO_API_URL);
-        const refresh = cookies.Refresh?.value ?? null;
-        setRefreshCookie(refresh);
-      } catch (e) {
-        setRefreshCookie(null);
-      }
-
-      try {
-        const refreshEnc = await EncryptedStorage.getItem('refresh_token');
-        setRefreshEncrypted(refreshEnc);
-      } catch (e) {
-        setRefreshEncrypted(null);
-      }
+      const refresh = await getRefreshToken();
+      setRefreshTokenData(refresh);
     })();
   }, []);
 
@@ -314,10 +299,10 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
                   </Text>
                 </View>
                 <View style={styles.iconContainer}>
-                  {refreshCookie && (
+                  {refreshTokenData?.cookie && (
                     <TouchableOpacity
                       style={styles.copyIconButton}
-                      onPress={() => copyToClipboard(refreshCookie)}>
+                      onPress={() => copyToClipboard(refreshTokenData.cookie)}>
                       <Icon
                         name="content-copy"
                         size={16}
@@ -331,7 +316,7 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
                 <Text
                   style={[styles.tokenValue, {color: textColor}]}
                   selectable={true}>
-                  {refreshCookie || '정보 없음'}
+                  {refreshTokenData?.cookie || '정보 없음'}
                 </Text>
               </View>
             </View>
@@ -349,10 +334,10 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
                   </Text>
                 </View>
                 <View style={styles.iconContainer}>
-                  {refreshEncrypted && (
+                  {refreshTokenData?.encrypted_storage && (
                     <TouchableOpacity
                       style={styles.copyIconButton}
-                      onPress={() => copyToClipboard(refreshEncrypted)}>
+                      onPress={() => copyToClipboard(refreshTokenData.encrypted_storage)}>
                       <Icon
                         name="content-copy"
                         size={16}
@@ -366,7 +351,7 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
                 <Text
                   style={[styles.tokenValue, {color: textColor}]}
                   selectable={true}>
-                  {refreshEncrypted || '정보 없음'}
+                  {refreshTokenData?.encrypted_storage || '정보 없음'}
                 </Text>
               </View>
             </View>
