@@ -2,6 +2,14 @@ import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import Config from 'react-native-config';
+import { ACCESS_TOKEN_EXPIRED_ERROR_MESSAGE } from './api';
+import {
+  refreshAccessToken,
+  getIsRefreshing,
+  setIsRefreshing,
+  addToFailedQueue,
+  processQueue,
+} from './refresh.utils';
 
 // EventEmitter 타입 선언
 declare global {
@@ -121,5 +129,40 @@ paxi_api.interceptors.request.use(
 //     return Promise.reject(error);
 //   },
 // );
+
+
+// 응답 인터셉터: 401 AccessTokenExpired 처리 (paxi API → popo API refresh)
+paxi_api.interceptors.response.use(
+  response => response,
+  async error => {
+    const originalRequest = error.config || {};
+
+    const status = error?.response?.status as number | undefined;
+    const errorMessage = error?.response?.data?.error as string | undefined;
+
+    if (status === 401 && errorMessage === ACCESS_TOKEN_EXPIRED_ERROR_MESSAGE && !originalRequest._retry) {
+      if (getIsRefreshing()) {
+        return new Promise((resolve, reject) => {
+          addToFailedQueue(resolve, reject, originalRequest);
+        });
+      }
+
+      originalRequest._retry = true;
+      setIsRefreshing(true);
+      try {
+        await refreshAccessToken();
+        processQueue(null);
+        return paxi_api(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError);
+        return Promise.reject(refreshError);
+      } finally {
+        setIsRefreshing(false);
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export default paxi_api;
