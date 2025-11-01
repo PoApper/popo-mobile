@@ -26,7 +26,7 @@ export const getAuthTokenFromCookie = async () => {
 };
 
 export const getAuthTokenFromEncryptedStorage = async () => {
-  const encryptedAuthToken = await EncryptedStorage.getItem('authToken');
+  const encryptedAuthToken = await EncryptedStorage.getItem('auth_token');
   return encryptedAuthToken;
 };
 
