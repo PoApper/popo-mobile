@@ -87,7 +87,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             secure: true,
             httpOnly: true,
           });
-          
+
           // Refresh 쿠키 저장
           await CookieManager.set(POPO_API_URL, {
             name: 'Refresh',

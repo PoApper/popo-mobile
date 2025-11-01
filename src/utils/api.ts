@@ -125,8 +125,6 @@ api.interceptors.request.use(
 //   },
 // );
 
-
-
 // 응답 인터셉터: 401 AccessTokenExpired 처리 (popo API 자체)
 api.interceptors.response.use(
   response => response,
@@ -135,7 +133,11 @@ api.interceptors.response.use(
     const status = error?.response?.status as number | undefined;
     const errorMessage = error?.response?.data?.error as string | undefined;
 
-    if (status === 401 && errorMessage === ACCESS_TOKEN_EXPIRED_ERROR_MESSAGE && !originalRequest._retry) {
+    if (
+      status === 401 &&
+      errorMessage === ACCESS_TOKEN_EXPIRED_ERROR_MESSAGE &&
+      !originalRequest._retry
+    ) {
       if (getIsRefreshing()) {
         return new Promise((resolve, reject) => {
           addToFailedQueue(resolve, reject, originalRequest);

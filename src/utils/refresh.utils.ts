@@ -2,7 +2,7 @@ import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import api, {POPO_API_URL} from './api';
 import {navigationRef} from '../navigation/RootNavigation';
-import { reset_auth } from './reset';
+import {reset_auth} from './reset';
 
 let isRefreshing = false;
 
@@ -48,9 +48,7 @@ export const refreshAccessToken = async () => {
         cookie.includes('Authentication='),
       );
       if (authCookie) {
-        const tokenValue = authCookie
-          .split('Authentication=')[1]
-          .split(';')[0];
+        const tokenValue = authCookie.split('Authentication=')[1].split(';')[0];
         await EncryptedStorage.setItem('auth_token', tokenValue);
         await CookieManager.set(POPO_API_URL, {
           name: 'Authentication',
@@ -64,9 +62,7 @@ export const refreshAccessToken = async () => {
         cookie.includes('Refresh='),
       );
       if (refreshCookie) {
-        const tokenValue = refreshCookie
-          .split('Refresh=')[1]
-          .split(';')[0];
+        const tokenValue = refreshCookie.split('Refresh=')[1].split(';')[0];
         await EncryptedStorage.setItem('refresh_token', tokenValue);
         await CookieManager.set(POPO_API_URL, {
           name: 'Refresh',
@@ -96,5 +92,3 @@ export const refreshAccessToken = async () => {
     throw error;
   }
 };
-
-
