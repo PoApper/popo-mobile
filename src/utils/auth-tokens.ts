@@ -44,7 +44,7 @@ export const getRefreshToken = async () => {
 export const getRefreshTokenFromCookie = async () => {
   const cookies = await CookieManager.get(POPO_API_URL);
   const refreshToken = cookies.Refresh?.value;
-  return refreshToken ?? null;
+  return refreshToken;
 };
 
 export const getRefreshTokenFromEncryptedStorage = async () => {
