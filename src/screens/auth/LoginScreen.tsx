@@ -87,9 +87,19 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             secure: true,
             httpOnly: true,
           });
+          
+          // Refresh 쿠키 저장
+          await CookieManager.set(POPO_API_URL, {
+            name: 'Refresh',
+            value: tokenValue,
+            path: '/',
+            secure: true,
+            httpOnly: true,
+          });
 
           // 2. 안전한 저장소에 토큰 저장 (앱 재시작 시 사용)
           await EncryptedStorage.setItem('auth_token', tokenValue);
+          await EncryptedStorage.setItem('refresh_token', tokenValue);
         } else {
           Alert.alert('오류', '인증 토큰을 찾을 수 없습니다.');
         }

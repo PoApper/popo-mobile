@@ -40,17 +40,45 @@ export const processQueue = (error: any) => {
 export const refreshAccessToken = async () => {
   try {
     const response = await api.post('/auth/refresh', {});
-    const ok = response.status === 200 || response.status === 201;
-
-    // 최신 쿠키를 EncryptedStorage에도 반영 (앱 재시작 대비)
-    try {
-      const cookies = await CookieManager.get(POPO_API_URL);
-      const token = cookies.Authentication?.value;
-      if (token) {
-        await EncryptedStorage.setItem('auth_token', token);
+    // Authentication, Refresh 쿠키 파싱 및 저장
+    const setCookie = response.headers['set-cookie'];
+    if (setCookie) {
+      const authCookie = setCookie.find(cookie =>
+        cookie.includes('Authentication='),
+      );
+      if (authCookie) {
+        const tokenValue = authCookie
+          .split('Authentication=')[1]
+          .split(';')[0];
+        await EncryptedStorage.setItem('auth_token', tokenValue);
+        await CookieManager.set(POPO_API_URL, {
+          name: 'Authentication',
+          value: tokenValue,
+          path: '/',
+          secure: true,
+          httpOnly: true,
+        });
       }
-    } catch {}
-
+      const refreshCookie = setCookie.find(cookie =>
+        cookie.includes('Refresh='),
+      );
+      if (refreshCookie) {
+        const tokenValue = refreshCookie
+          .split('Refresh=')[1]
+          .split(';')[0];
+        await EncryptedStorage.setItem('refresh_token', tokenValue);
+        await CookieManager.set(POPO_API_URL, {
+          name: 'Refresh',
+          value: tokenValue,
+          path: '/',
+          secure: true,
+          httpOnly: true,
+        });
+      }
+    } else {
+      throw new Error('Authentication or Refresh token not found');
+    }
+    const ok = response.status === 200 || response.status === 201;
     if (!ok) {
       throw new Error('Refresh token failed');
     }
