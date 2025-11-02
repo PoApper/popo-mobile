@@ -69,52 +69,51 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
 
       // 서버에서 받은 쿠키 확인 및 저장
       const setCookie = response.headers['set-cookie'];
-      if (setCookie) {
-        // 쿠키 파싱 (예: Authentication=value;)
-        const authCookie = setCookie.find(cookie =>
-          cookie.includes('Authentication='),
-        );
-
-        if (authCookie) {
-          const authToken = authCookie
-            .split('Authentication=')[1]
-            .split(';')[0];
-
-          await CookieManager.set(POPO_API_URL, {
-            name: 'Authentication',
-            value: authToken,
-            path: '/',
-            secure: true,
-            httpOnly: true,
-          });
-
-          await EncryptedStorage.setItem('auth_token', authToken);
-        } else {
-          Alert.alert('오류', 'Authentication 토큰을 찾을 수 없습니다.');
-        }
-
-        // Refresh 토큰 처리
-        const refreshCookie = setCookie.find(cookie =>
-          cookie.includes('Refresh='),
-        );
-        if (refreshCookie) {
-          const refreshToken = refreshCookie.split('Refresh=')[1].split(';')[0];
-
-          await CookieManager.set(POPO_API_URL, {
-            name: 'Refresh',
-            value: refreshToken,
-            path: '/',
-            secure: true,
-            httpOnly: true,
-          });
-
-          await EncryptedStorage.setItem('refresh_token', refreshToken);
-        } else {
-          Alert.alert('오류', 'Refresh 토큰을 찾을 수 없습니다.');
-        }
-      } else {
-        Alert.alert('오류', '쿠키를 찾을 수 없습니다.');
+      if (!setCookie) {
+        Alert.alert('오류', 'Set-Cookie를 찾을 수 없습니다.');
+        return;
       }
+
+      // 쿠키 파싱 (예: Authentication=value;)
+      const authCookie = setCookie.find(cookie =>
+        cookie.includes('Authentication='),
+      );
+
+      if (!authCookie) {
+        Alert.alert('오류', 'Authentication 토큰을 찾을 수 없습니다.');
+        return;
+      }
+      const authToken = authCookie.split('Authentication=')[1].split(';')[0];
+
+      await CookieManager.set(POPO_API_URL, {
+        name: 'Authentication',
+        value: authToken,
+        path: '/',
+        secure: true,
+        httpOnly: true,
+      });
+
+      await EncryptedStorage.setItem('auth_token', authToken);
+
+      // Refresh 토큰 처리
+      const refreshCookie = setCookie.find(cookie =>
+        cookie.includes('Refresh='),
+      );
+      if (!refreshCookie) {
+        Alert.alert('오류', 'Refresh 토큰을 찾을 수 없습니다.');
+        return;
+      }
+      const refreshToken = refreshCookie.split('Refresh=')[1].split(';')[0];
+
+      await CookieManager.set(POPO_API_URL, {
+        name: 'Refresh',
+        value: refreshToken,
+        path: '/',
+        secure: true,
+        httpOnly: true,
+      });
+
+      await EncryptedStorage.setItem('refresh_token', refreshToken);
 
       // 사용자 정보 저장 (필요시)
       if (data.user) {
