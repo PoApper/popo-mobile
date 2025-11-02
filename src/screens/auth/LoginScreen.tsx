@@ -20,6 +20,13 @@ import axios from 'axios';
 
 import {RootStackParamList} from '@navigation/types';
 import api, {POPO_API_URL} from '@utils/api';
+import {extractTokenFromCookie} from '@utils/cookie';
+import {
+  AUTH_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  USER_INFO_KEY,
+  IS_AUTHENTICATED_KEY,
+} from '@utils/storage-keys';
 import {getFCMToken} from '@utils/firebase';
 import paxi_api from '@utils/paxi_api';
 
@@ -69,41 +76,53 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
 
       // 서버에서 받은 쿠키 확인 및 저장
       const setCookie = response.headers['set-cookie'];
-      if (setCookie) {
-        // 쿠키 파싱 (예: Authentication=value;)
-        const authCookie = setCookie.find(cookie =>
-          cookie.includes('Authentication='),
-        );
-        if (authCookie) {
-          const tokenValue = authCookie
-            .split('Authentication=')[1]
-            .split(';')[0];
-
-          // 1. 쿠키를 RN 쿠키 저장소에 저장
-          await CookieManager.set(POPO_API_URL, {
-            name: 'Authentication',
-            value: tokenValue,
-            path: '/',
-            secure: true,
-            httpOnly: true,
-          });
-
-          // 2. 안전한 저장소에 토큰 저장 (앱 재시작 시 사용)
-          await EncryptedStorage.setItem('auth_token', tokenValue);
-        } else {
-          Alert.alert('오류', '인증 토큰을 찾을 수 없습니다.');
-        }
-      } else {
-        Alert.alert('오류', '쿠키를 찾을 수 없습니다.');
+      if (!setCookie) {
+        Alert.alert('오류', '로그인 정보를 받지 못했습니다.');
+        return;
       }
+
+      const authToken = extractTokenFromCookie(setCookie, true);
+      if (!authToken) {
+        Alert.alert('오류', '로그인 정보를 받지 못했습니다(Authentication).');
+        return;
+      }
+
+      await CookieManager.set(POPO_API_URL, {
+        name: 'Authentication',
+        value: authToken,
+        path: '/',
+        secure: true,
+        httpOnly: true,
+      });
+
+      await EncryptedStorage.setItem(AUTH_TOKEN_KEY, authToken);
+
+      const refreshToken = extractTokenFromCookie(setCookie, false);
+      if (!refreshToken) {
+        Alert.alert('오류', '로그인 정보를 받지 못했습니다(Refresh).');
+        return;
+      }
+
+      await CookieManager.set(POPO_API_URL, {
+        name: 'Refresh',
+        value: refreshToken,
+        path: '/',
+        secure: true,
+        httpOnly: true,
+      });
+
+      await EncryptedStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
 
       // 사용자 정보 저장 (필요시)
       if (data.user) {
-        await EncryptedStorage.setItem('user_info', JSON.stringify(data.user));
+        await EncryptedStorage.setItem(
+          USER_INFO_KEY,
+          JSON.stringify(data.user),
+        );
       }
 
       // 로그인 상태 저장
-      await EncryptedStorage.setItem('isAuthenticated', 'true');
+      await EncryptedStorage.setItem(IS_AUTHENTICATED_KEY, 'true');
 
       // FCM 토큰 가져오기 및 저장
       getFCMToken()

@@ -14,7 +14,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {RootStackParamList} from '@navigation/types';
-import {getAuthToken} from '@utils/auth-token';
+import {getAuthToken, getRefreshToken} from '@utils/auth-tokens';
 import api from '@utils/api';
 import paxi_api, {PAXI_API_URL} from '@utils/paxi_api';
 import CommonHeader from '@components/CommonHeader';
@@ -28,6 +28,7 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [userDataState, setUserData] = useState<any>(null);
   const [authTokenData, setAuthTokenData] = useState<any>(null);
+  const [refreshTokenData, setRefreshTokenData] = useState<any>(null);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -65,6 +66,14 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
     };
 
     fetchUserProfile();
+  }, []);
+
+  // Refresh Token 정보 가져오기
+  useEffect(() => {
+    (async () => {
+      const refresh = await getRefreshToken();
+      setRefreshTokenData(refresh);
+    })();
   }, []);
 
   const testFCM = async () => {
@@ -273,6 +282,78 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
                   style={[styles.tokenValue, {color: textColor}]}
                   selectable={true}>
                   {authTokenData?.encrypted_storage || '정보 없음'}
+                </Text>
+              </View>
+            </View>
+
+            {/* Refresh Token (Cookie) 정보 */}
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+              <View style={styles.sectionTitleRow}>
+                <View style={styles.titleContainer}>
+                  <Text
+                    style={[
+                      styles.detailLabel,
+                      {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                    ]}>
+                    Refresh Token (Cookie)
+                  </Text>
+                </View>
+                <View style={styles.iconContainer}>
+                  {refreshTokenData?.cookie && (
+                    <TouchableOpacity
+                      style={styles.copyIconButton}
+                      onPress={() => copyToClipboard(refreshTokenData.cookie)}>
+                      <Icon
+                        name="content-copy"
+                        size={16}
+                        color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+              <View style={styles.tokenContainer}>
+                <Text
+                  style={[styles.tokenValue, {color: textColor}]}
+                  selectable={true}>
+                  {refreshTokenData?.cookie || '정보 없음'}
+                </Text>
+              </View>
+            </View>
+
+            {/* Refresh Token (Encrypted Storage) 정보 */}
+            <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
+              <View style={styles.sectionTitleRow}>
+                <View style={styles.titleContainer}>
+                  <Text
+                    style={[
+                      styles.detailLabel,
+                      {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
+                    ]}>
+                    Refresh Token (Encrypted Storage)
+                  </Text>
+                </View>
+                <View style={styles.iconContainer}>
+                  {refreshTokenData?.encrypted_storage && (
+                    <TouchableOpacity
+                      style={styles.copyIconButton}
+                      onPress={() =>
+                        copyToClipboard(refreshTokenData.encrypted_storage)
+                      }>
+                      <Icon
+                        name="content-copy"
+                        size={16}
+                        color={isDarkMode ? '#AAAAAA' : '#4F46E5'}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+              <View style={styles.tokenContainer}>
+                <Text
+                  style={[styles.tokenValue, {color: textColor}]}
+                  selectable={true}>
+                  {refreshTokenData?.encrypted_storage || '정보 없음'}
                 </Text>
               </View>
             </View>
