@@ -21,6 +21,7 @@ import axios from 'axios';
 import {RootStackParamList} from '@navigation/types';
 import api, {POPO_API_URL} from '@utils/api';
 import {extractTokenFromCookie} from '@utils/cookie';
+import {AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY, USER_INFO_KEY, IS_AUTHENTICATED_KEY} from '@utils/storage-keys';
 import {getFCMToken} from '@utils/firebase';
 import paxi_api from '@utils/paxi_api';
 
@@ -89,7 +90,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         httpOnly: true,
       });
 
-      await EncryptedStorage.setItem('auth_token', authToken);
+      await EncryptedStorage.setItem(AUTH_TOKEN_KEY, authToken);
 
       const refreshToken = extractTokenFromCookie(setCookie, false);
       if (!refreshToken) {
@@ -105,15 +106,15 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         httpOnly: true,
       });
 
-      await EncryptedStorage.setItem('refresh_token', refreshToken);
+      await EncryptedStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
 
       // 사용자 정보 저장 (필요시)
       if (data.user) {
-        await EncryptedStorage.setItem('user_info', JSON.stringify(data.user));
+        await EncryptedStorage.setItem(USER_INFO_KEY, JSON.stringify(data.user));
       }
 
       // 로그인 상태 저장
-      await EncryptedStorage.setItem('isAuthenticated', 'true');
+      await EncryptedStorage.setItem(IS_AUTHENTICATED_KEY, 'true');
 
       // FCM 토큰 가져오기 및 저장
       getFCMToken()

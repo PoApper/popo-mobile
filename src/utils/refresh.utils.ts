@@ -5,6 +5,7 @@ import {extractTokenFromCookie} from './cookie';
 import type {AxiosInstance} from 'axios';
 import {navigationRef} from '../navigation/RootNavigation';
 import {reset_auth} from './reset';
+import {AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY, IS_AUTHENTICATED_KEY, USER_INFO_KEY} from './storage-keys';
 
 let isRefreshing = false;
 
@@ -58,7 +59,7 @@ export const refreshAccessToken = async () => {
 
     const authToken = extractTokenFromCookie(setCookie, true);
     if (authToken) {
-      await EncryptedStorage.setItem('auth_token', authToken);
+      await EncryptedStorage.setItem(AUTH_TOKEN_KEY, authToken);
       await CookieManager.set(POPO_API_URL, {
         name: 'Authentication',
         value: authToken,
@@ -69,7 +70,7 @@ export const refreshAccessToken = async () => {
     }
     const refreshToken = extractTokenFromCookie(setCookie, false);
     if (refreshToken) {
-      await EncryptedStorage.setItem('refresh_token', refreshToken);
+      await EncryptedStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
       await CookieManager.set(POPO_API_URL, {
         name: 'Refresh',
         value: refreshToken,

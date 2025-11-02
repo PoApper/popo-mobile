@@ -10,6 +10,7 @@ import {
   addToFailedQueue,
   processQueue,
 } from './refresh.utils';
+import {AUTH_TOKEN_KEY} from './storage-keys';
 
 // EventEmitter 타입 선언
 declare global {
@@ -47,7 +48,7 @@ paxi_api.interceptors.request.use(
       // 쿠키가 없으면 EncryptedStorage에서 가져오기
       if (!authToken) {
         console.log('저장된 쿠키에 authToken 없음');
-        const storedToken = await EncryptedStorage.getItem('auth_token');
+        const storedToken = await EncryptedStorage.getItem(AUTH_TOKEN_KEY);
 
         // 저장된 토큰이 있으면 쿠키 저장소에도 다시 설정
         if (storedToken) {

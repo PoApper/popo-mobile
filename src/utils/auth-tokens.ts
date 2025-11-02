@@ -3,6 +3,7 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 import CookieManager from '@react-native-cookies/cookies';
 import {POPO_API_URL} from './api';
+import {AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY} from './storage-keys';
 import {getFCMToken} from './firebase';
 
 export const getAuthToken = async () => {
@@ -26,7 +27,7 @@ export const getAuthTokenFromCookie = async () => {
 };
 
 export const getAuthTokenFromEncryptedStorage = async () => {
-  const encryptedAuthToken = await EncryptedStorage.getItem('auth_token');
+  const encryptedAuthToken = await EncryptedStorage.getItem(AUTH_TOKEN_KEY);
   return encryptedAuthToken;
 };
 
@@ -49,6 +50,6 @@ export const getRefreshTokenFromCookie = async () => {
 };
 
 export const getRefreshTokenFromEncryptedStorage = async () => {
-  const encryptedRefreshToken = await EncryptedStorage.getItem('refresh_token');
+  const encryptedRefreshToken = await EncryptedStorage.getItem(REFRESH_TOKEN_KEY);
   return encryptedRefreshToken;
 };
