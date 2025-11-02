@@ -33,7 +33,8 @@ export const getAuthTokenFromEncryptedStorage = async () => {
 // get my refresh token from cookie or encrypted storage
 export const getRefreshToken = async () => {
   const refreshFromCookie = await getRefreshTokenFromCookie();
-  const refreshFromEncryptedStorage = await getRefreshTokenFromEncryptedStorage();
+  const refreshFromEncryptedStorage =
+    await getRefreshTokenFromEncryptedStorage();
 
   return {
     cookie: refreshFromCookie,

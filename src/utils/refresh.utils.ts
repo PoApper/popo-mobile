@@ -69,9 +69,7 @@ export const refreshAccessToken = async () => {
         httpOnly: true,
       });
     }
-    const refreshCookie = setCookie.find(cookie =>
-      cookie.includes('Refresh='),
-    );
+    const refreshCookie = setCookie.find(cookie => cookie.includes('Refresh='));
     if (refreshCookie) {
       const tokenValue = refreshCookie.split('Refresh=')[1].split(';')[0];
       await EncryptedStorage.setItem('refresh_token', tokenValue);

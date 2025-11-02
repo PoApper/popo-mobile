@@ -337,7 +337,9 @@ const DeveloperPage = ({navigation}: DeveloperPageProps) => {
                   {refreshTokenData?.encrypted_storage && (
                     <TouchableOpacity
                       style={styles.copyIconButton}
-                      onPress={() => copyToClipboard(refreshTokenData.encrypted_storage)}>
+                      onPress={() =>
+                        copyToClipboard(refreshTokenData.encrypted_storage)
+                      }>
                       <Icon
                         name="content-copy"
                         size={16}
