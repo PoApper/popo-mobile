@@ -5,7 +5,7 @@ import {extractTokenFromCookie} from './cookie';
 import type {AxiosInstance} from 'axios';
 import {navigationRef} from '../navigation/RootNavigation';
 import {reset_auth} from './reset';
-import {AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY, IS_AUTHENTICATED_KEY, USER_INFO_KEY} from './storage-keys';
+import {AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY} from './storage-keys';
 
 let isRefreshing = false;
 

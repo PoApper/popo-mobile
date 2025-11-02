@@ -50,6 +50,8 @@ export const getRefreshTokenFromCookie = async () => {
 };
 
 export const getRefreshTokenFromEncryptedStorage = async () => {
-  const encryptedRefreshToken = await EncryptedStorage.getItem(REFRESH_TOKEN_KEY);
+  const encryptedRefreshToken = await EncryptedStorage.getItem(
+    REFRESH_TOKEN_KEY,
+  );
   return encryptedRefreshToken;
 };

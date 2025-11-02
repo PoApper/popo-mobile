@@ -21,7 +21,12 @@ import axios from 'axios';
 import {RootStackParamList} from '@navigation/types';
 import api, {POPO_API_URL} from '@utils/api';
 import {extractTokenFromCookie} from '@utils/cookie';
-import {AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY, USER_INFO_KEY, IS_AUTHENTICATED_KEY} from '@utils/storage-keys';
+import {
+  AUTH_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  USER_INFO_KEY,
+  IS_AUTHENTICATED_KEY,
+} from '@utils/storage-keys';
 import {getFCMToken} from '@utils/firebase';
 import paxi_api from '@utils/paxi_api';
 
@@ -110,7 +115,10 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
 
       // 사용자 정보 저장 (필요시)
       if (data.user) {
-        await EncryptedStorage.setItem(USER_INFO_KEY, JSON.stringify(data.user));
+        await EncryptedStorage.setItem(
+          USER_INFO_KEY,
+          JSON.stringify(data.user),
+        );
       }
 
       // 로그인 상태 저장

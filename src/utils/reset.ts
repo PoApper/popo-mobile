@@ -1,6 +1,11 @@
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import {AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY, IS_AUTHENTICATED_KEY, USER_INFO_KEY} from './storage-keys';
+import {
+  AUTH_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  IS_AUTHENTICATED_KEY,
+  USER_INFO_KEY,
+} from './storage-keys';
 
 export async function reset_auth() {
   try {
