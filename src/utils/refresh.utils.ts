@@ -44,44 +44,46 @@ export const processQueue = (error: any) => {
 export const refreshAccessToken = async () => {
   try {
     const response = await api.post('/auth/refresh', {});
-    // Authentication, Refresh 쿠키 파싱 및 저장
-    const setCookie = response.headers['set-cookie'];
-    if (setCookie) {
-      const authCookie = setCookie.find(cookie =>
-        cookie.includes('Authentication='),
-      );
-      if (authCookie) {
-        const tokenValue = authCookie.split('Authentication=')[1].split(';')[0];
-        await EncryptedStorage.setItem('auth_token', tokenValue);
-        await CookieManager.set(POPO_API_URL, {
-          name: 'Authentication',
-          value: tokenValue,
-          path: '/',
-          secure: true,
-          httpOnly: true,
-        });
-      }
-      const refreshCookie = setCookie.find(cookie =>
-        cookie.includes('Refresh='),
-      );
-      if (refreshCookie) {
-        const tokenValue = refreshCookie.split('Refresh=')[1].split(';')[0];
-        await EncryptedStorage.setItem('refresh_token', tokenValue);
-        await CookieManager.set(POPO_API_URL, {
-          name: 'Refresh',
-          value: tokenValue,
-          path: '/',
-          secure: true,
-          httpOnly: true,
-        });
-      }
-    } else {
-      throw new Error('Authentication or Refresh token not found');
-    }
+
     const ok = response.status === 200 || response.status === 201;
     if (!ok) {
       throw new Error('Refresh token failed');
     }
+    // Authentication, Refresh 쿠키 파싱 및 저장
+    const setCookie = response.headers['set-cookie'];
+    if (!setCookie) {
+      throw new Error('Set-Cookie not found');
+    }
+
+    const authCookie = setCookie.find(cookie =>
+      cookie.includes('Authentication='),
+    );
+    if (authCookie) {
+      const tokenValue = authCookie.split('Authentication=')[1].split(';')[0];
+      await EncryptedStorage.setItem('auth_token', tokenValue);
+      await CookieManager.set(POPO_API_URL, {
+        name: 'Authentication',
+        value: tokenValue,
+        path: '/',
+        secure: true,
+        httpOnly: true,
+      });
+    }
+    const refreshCookie = setCookie.find(cookie =>
+      cookie.includes('Refresh='),
+    );
+    if (refreshCookie) {
+      const tokenValue = refreshCookie.split('Refresh=')[1].split(';')[0];
+      await EncryptedStorage.setItem('refresh_token', tokenValue);
+      await CookieManager.set(POPO_API_URL, {
+        name: 'Refresh',
+        value: tokenValue,
+        path: '/',
+        secure: true,
+        httpOnly: true,
+      });
+    }
+
     return true;
   } catch (error) {
     // 인증 정보 초기화 및 로그인 화면으로 이동
