@@ -20,6 +20,7 @@ import axios from 'axios';
 
 import {RootStackParamList} from '@navigation/types';
 import api, {POPO_API_URL} from '@utils/api';
+import {extractTokenFromCookie} from '@utils/cookie';
 import {getFCMToken} from '@utils/firebase';
 import paxi_api from '@utils/paxi_api';
 
@@ -74,16 +75,11 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         return;
       }
 
-      // 쿠키 파싱 (예: Authentication=value;)
-      const authCookie = setCookie.find(cookie =>
-        cookie.includes('Authentication='),
-      );
-
-      if (!authCookie) {
+      const authToken = extractTokenFromCookie(setCookie, true);
+      if (!authToken) {
         Alert.alert('오류', '로그인 정보를 받지 못했습니다(Authentication).');
         return;
       }
-      const authToken = authCookie.split('Authentication=')[1].split(';')[0];
 
       await CookieManager.set(POPO_API_URL, {
         name: 'Authentication',
@@ -95,15 +91,11 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
 
       await EncryptedStorage.setItem('auth_token', authToken);
 
-      // Refresh 토큰 처리
-      const refreshCookie = setCookie.find(cookie =>
-        cookie.includes('Refresh='),
-      );
-      if (!refreshCookie) {
+      const refreshToken = extractTokenFromCookie(setCookie, false);
+      if (!refreshToken) {
         Alert.alert('오류', '로그인 정보를 받지 못했습니다(Refresh).');
         return;
       }
-      const refreshToken = refreshCookie.split('Refresh=')[1].split(';')[0];
 
       await CookieManager.set(POPO_API_URL, {
         name: 'Refresh',

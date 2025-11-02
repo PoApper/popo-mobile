@@ -1,6 +1,7 @@
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import api, {POPO_API_URL} from './api';
+import {extractTokenFromCookie} from './cookie';
 import type {AxiosInstance} from 'axios';
 import {navigationRef} from '../navigation/RootNavigation';
 import {reset_auth} from './reset';
@@ -55,27 +56,23 @@ export const refreshAccessToken = async () => {
       throw new Error('Set-Cookie not found');
     }
 
-    const authCookie = setCookie.find(cookie =>
-      cookie.includes('Authentication='),
-    );
-    if (authCookie) {
-      const tokenValue = authCookie.split('Authentication=')[1].split(';')[0];
-      await EncryptedStorage.setItem('auth_token', tokenValue);
+    const authToken = extractTokenFromCookie(setCookie, true);
+    if (authToken) {
+      await EncryptedStorage.setItem('auth_token', authToken);
       await CookieManager.set(POPO_API_URL, {
         name: 'Authentication',
-        value: tokenValue,
+        value: authToken,
         path: '/',
         secure: true,
         httpOnly: true,
       });
     }
-    const refreshCookie = setCookie.find(cookie => cookie.includes('Refresh='));
-    if (refreshCookie) {
-      const tokenValue = refreshCookie.split('Refresh=')[1].split(';')[0];
-      await EncryptedStorage.setItem('refresh_token', tokenValue);
+    const refreshToken = extractTokenFromCookie(setCookie, false);
+    if (refreshToken) {
+      await EncryptedStorage.setItem('refresh_token', refreshToken);
       await CookieManager.set(POPO_API_URL, {
         name: 'Refresh',
-        value: tokenValue,
+        value: refreshToken,
         path: '/',
         secure: true,
         httpOnly: true,
