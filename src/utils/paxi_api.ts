@@ -2,6 +2,15 @@ import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import Config from 'react-native-config';
+import {ACCESS_TOKEN_EXPIRED_ERROR_MESSAGE} from './api';
+import {
+  refreshAccessToken,
+  getIsRefreshing,
+  setIsRefreshing,
+  addToFailedQueue,
+  processQueue,
+} from './refresh.utils';
+import {AUTH_TOKEN_KEY} from './storage-keys';
 
 // EventEmitter 타입 선언
 declare global {
@@ -39,7 +48,7 @@ paxi_api.interceptors.request.use(
       // 쿠키가 없으면 EncryptedStorage에서 가져오기
       if (!authToken) {
         console.log('저장된 쿠키에 authToken 없음');
-        const storedToken = await EncryptedStorage.getItem('auth_token');
+        const storedToken = await EncryptedStorage.getItem(AUTH_TOKEN_KEY);
 
         // 저장된 토큰이 있으면 쿠키 저장소에도 다시 설정
         if (storedToken) {
@@ -121,5 +130,43 @@ paxi_api.interceptors.request.use(
 //     return Promise.reject(error);
 //   },
 // );
+
+// 응답 인터셉터: 401 AccessTokenExpired 처리 (paxi API → popo API refresh)
+paxi_api.interceptors.response.use(
+  response => response,
+  async error => {
+    const originalRequest = error.config || {};
+
+    const status = error?.response?.status as number | undefined;
+    const errorMessage = error?.response?.data?.error as string | undefined;
+
+    if (
+      status === 401 &&
+      errorMessage === ACCESS_TOKEN_EXPIRED_ERROR_MESSAGE &&
+      !originalRequest._retry
+    ) {
+      if (getIsRefreshing()) {
+        return new Promise((resolve, reject) => {
+          addToFailedQueue(resolve, reject, originalRequest, paxi_api);
+        });
+      }
+
+      originalRequest._retry = true;
+      setIsRefreshing(true);
+      try {
+        await refreshAccessToken();
+        processQueue(null);
+        return paxi_api(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError);
+        return Promise.reject(refreshError);
+      } finally {
+        setIsRefreshing(false);
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export default paxi_api;
