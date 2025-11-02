@@ -31,44 +31,32 @@ const MyMessage = ({message, handleMyMsgClick}: MyMessageProps) => {
       <Text style={styles.timeText}>
         {moment(message.createdAt).format('HH:mm')}
       </Text>
-        <TouchableOpacity
-          onLongPress={() => !message.isDeleted && handleMyMsgClick(message)}
-          disabled={message.isDeleted}
-          style={[
-            styles.messageBubble,
-            {
-              backgroundColor: message.isDeleted
-                ? isDarkMode
-                  ? '#2a2d31'
-                  : '#e9eaec'
-                : isDarkMode
-                ? '#23262B'
-                : '#f2f3f5',
-            },
-          ]}>
-          {message.isDeleted ? (
-            <Text
-              style={[
-                styles.messageText,
-                {color: '#9b9b9b'},
-              ]}>
-              삭제됨
+      <TouchableOpacity
+        onLongPress={() => !message.isDeleted && handleMyMsgClick(message)}
+        disabled={message.isDeleted}
+        style={[
+          styles.messageBubble,
+          {
+            backgroundColor: message.isDeleted
+              ? isDarkMode
+                ? '#2a2d31'
+                : '#e9eaec'
+              : isDarkMode
+              ? '#23262B'
+              : '#f2f3f5',
+          },
+        ]}>
+        {message.isDeleted ? (
+          <Text style={[styles.messageText, {color: '#9b9b9b'}]}>삭제됨</Text>
+        ) : (
+          <>
+            <Text style={[styles.messageText, {color: textColor(isDarkMode)}]}>
+              {message.message}
             </Text>
-          ) : (
-            <>
-              <Text
-                style={[
-                  styles.messageText,
-                  {color: textColor(isDarkMode)},
-                ]}>
-                {message.message}
-              </Text>
-              {message.isEdited && (
-                <Text style={styles.editedText}>수정됨</Text>
-              )}
-            </>
-          )}
-        </TouchableOpacity>
+            {message.isEdited && <Text style={styles.editedText}>수정됨</Text>}
+          </>
+        )}
+      </TouchableOpacity>
     </View>
   );
 };
