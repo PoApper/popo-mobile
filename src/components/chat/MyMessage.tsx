@@ -46,13 +46,16 @@ const MyMessage = ({message, handleMyMsgClick}: MyMessageProps) => {
               : '#f2f3f5',
           },
         ]}>
-        <Text
-          style={[
-            styles.messageText,
-            {color: message.isDeleted ? '#9b9b9b' : textColor(isDarkMode)},
-          ]}>
-          {message.isDeleted ? '삭제됨' : message.message}
-        </Text>
+        {message.isDeleted ? (
+          <Text style={[styles.messageText, {color: '#9b9b9b'}]}>삭제됨</Text>
+        ) : (
+          <>
+            <Text style={[styles.messageText, {color: textColor(isDarkMode)}]}>
+              {message.message}
+            </Text>
+            {message.isEdited && <Text style={styles.editedText}>수정됨</Text>}
+          </>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -83,5 +86,12 @@ const styles = StyleSheet.create({
     letterSpacing: -0.4,
     flexWrap: 'wrap',
     lineHeight: 18,
+  },
+  editedText: {
+    color: '#9b9b9b',
+    fontSize: 12,
+    letterSpacing: -0.3,
+    marginTop: 2,
+    alignSelf: 'flex-end',
   },
 });
