@@ -70,7 +70,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       // 서버에서 받은 쿠키 확인 및 저장
       const setCookie = response.headers['set-cookie'];
       if (!setCookie) {
-        Alert.alert('오류', 'Set-Cookie를 찾을 수 없습니다.');
+        Alert.alert('오류', '로그인 정보를 받지 못했습니다.');
         return;
       }
 
@@ -80,7 +80,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       );
 
       if (!authCookie) {
-        Alert.alert('오류', 'Authentication 토큰을 찾을 수 없습니다.');
+        Alert.alert('오류', '로그인 정보를 받지 못했습니다(Authentication).');
         return;
       }
       const authToken = authCookie.split('Authentication=')[1].split(';')[0];
@@ -100,7 +100,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         cookie.includes('Refresh='),
       );
       if (!refreshCookie) {
-        Alert.alert('오류', 'Refresh 토큰을 찾을 수 없습니다.');
+        Alert.alert('오류', '로그인 정보를 받지 못했습니다(Refresh).');
         return;
       }
       const refreshToken = refreshCookie.split('Refresh=')[1].split(';')[0];
