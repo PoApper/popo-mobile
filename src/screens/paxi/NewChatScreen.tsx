@@ -33,6 +33,7 @@ import SidebarModal from '@components/chat/SidebarModal';
 import SettlementInfoBox from '@components/chat/SettlementInfoBox';
 import MsgModifyModal from '@components/chat/MsgModifyModal';
 import UserInfoModal from '@components/chat/UserInfoModal';
+import { ChatEvent } from '@utils/socket-events';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
@@ -147,7 +148,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       onSocketDisconnected,
     );
 
-    newSocket.on('newMessage', data => {
+    newSocket.on(ChatEvent.NEW_MESSAGE, data => {
       console.debug('메시지 수신:', data);
       appendChat(data);
       if (data.senderUuid == null) {
@@ -155,28 +156,28 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       }
     });
 
-    newSocket.on('updatedMessage', data => {
+    newSocket.on(ChatEvent.UPDATED_MESSAGE, data => {
       console.debug('갱신될 메시지:', data);
       updateChatData(data);
     });
 
-    newSocket.on('deletedMessage', data => {
+    newSocket.on(ChatEvent.DELETED_MESSAGE, data => {
       console.debug('삭제될 메시지:', data);
       markChatAsDeleted(data);
     });
 
-    newSocket.on('newSettlement', data => {
+    newSocket.on(ChatEvent.NEW_SETTLEMENT, data => {
       console.debug('새 정산 요청:', data);
       setIsSettlement(true);
       setSettlementData(data);
     });
 
-    newSocket.on('deletedSettlement', data => {
+    newSocket.on(ChatEvent.DELETED_SETTLEMENT, data => {
       console.debug('정산 요청 삭제:', data);
       setIsSettlement(false);
     });
 
-    newSocket.on('updatedIsPaid', data => {
+    newSocket.on(ChatEvent.UPDATED_IS_PAID, data => {
       console.debug('개별 정산 완료 업데이트:', data);
 
       // 내 정산 상태 업데이트
