@@ -2,6 +2,7 @@ import {io} from 'socket.io-client';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {Socket} from 'socket.io-client';
 import {PAXI_API_URL} from './paxi_api';
+import {ChatEvent} from '../constants/socket-events';
 
 const SOCKET_URL = PAXI_API_URL;
 
@@ -28,14 +29,13 @@ export const socketFactory = async (
     onSocketConnected();
   });
 
-  socket.on('connect_error', error => {
-    console.error('연결 에러 발생:', error.message);
-    console.error(error.stack);
-    onSocketDisconnected();
+  socket.on(ChatEvent.ACCESS_TOKEN_EXPIRED, () => {
+    console.error('액세스 토큰 만료');
+    // TODO: 리프레시 토큰 이용해 갱신 후 웹소켓 재연결
   });
 
-  socket.on('error', error => {
-    console.error('일반 에러 발생:', error.message);
+  socket.on(ChatEvent.ERROR, error => {
+    console.error('웹소켓 에러 발생:', error.message);
     console.error(error.stack);
     onSocketDisconnected();
   });

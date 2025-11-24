@@ -68,7 +68,7 @@ $ npm run android:prod
 $ ./gradlew assembleRelease
 
 # AAB 빌드 (구글 플레이 제출용)
-$ ./gradlew bundleRelease
+$ npm run android:aab:prod
 $ cd android/app/build/outputs/bundle/prodRelease
 $ open .
 ```
