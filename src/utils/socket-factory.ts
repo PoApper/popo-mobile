@@ -30,7 +30,7 @@ export const socketFactory = async (
   });
 
   socket.on(ChatEvent.ACCESS_TOKEN_EXPIRED, () => {
-    console.error('엑세스 토큰 만료');
+    console.error('액세스 토큰 만료');
     // TODO: 리프레시 토큰 이용해 갱신 후 웹소켓 재연결
   });
 
