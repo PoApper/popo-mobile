@@ -1,4 +1,4 @@
-import {RC_CINEMA_ROOM} from './names';
+import {PLACE_NAMES} from '../constants/placeNames';
 import {ConcreteTimeSlot} from '../components/TimeSlotPickerModal';
 
 export type TimeSlot = {
@@ -15,7 +15,7 @@ export type TimeSlotPolicy = {
 
 export const RESTRICTED_TIME_SLOT_POLICIES: TimeSlotPolicy[] = [
   {
-    name: RC_CINEMA_ROOM,
+    name: PLACE_NAMES.CINEMA_ROOM,
     notice:
       'RC 시네마 룸의 예약은\n18:00 ~ 21:00 / 21:00 ~ 24:00 / 00:00 ~ 03:00\n3가지 시간대만 가능 합니다.',
     slots: [

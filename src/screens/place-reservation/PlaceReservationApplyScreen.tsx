@@ -24,6 +24,7 @@ import {
   getRestrictedTimeSlotPolicy,
   getNearestPossibleSlot,
 } from '../../config/restricted-time-slots';
+import {isGroupStudyRoom} from '../../constants/placeNames';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';
@@ -391,6 +392,32 @@ const PlaceReservationApplyScreen = ({
               </Text>
             </View>
           )}
+          {isGroupStudyRoom(placeName) && (
+            <View
+              style={[
+                styles.groupStudyNotice,
+                {
+                  backgroundColor: isDarkMode ? '#1E1E1E' : '#FFF5F5',
+                  borderColor: isDarkMode ? '#333333' : '#FECACA',
+                },
+              ]}>
+              <Text
+                style={[
+                  styles.groupStudyNoticeHeader,
+                  {color: isDarkMode ? '#F87171' : '#DC2626'},
+                ]}>
+                ⚠️ 그룹스터디룸 이용 안내
+              </Text>
+              <Text
+                style={[
+                  styles.groupStudyNoticeBody,
+                  {color: isDarkMode ? '#E5E7EB' : '#4B5563'},
+                ]}>
+                그룹스터디룸은 과외 목적으로 예약이 불가능합니다. 학습 및 스터디
+                목적으로만 사용해주시기 바랍니다.
+              </Text>
+            </View>
+          )}
           <Text style={[styles.label, {color: textColor}]}>
             사용자 <Text style={styles.requiredText}>*</Text>
           </Text>
@@ -687,6 +714,21 @@ const styles = StyleSheet.create({
   formSection: {
     marginTop: 0,
     gap: 12,
+  },
+  groupStudyNotice: {
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginBottom: 8,
+    gap: 6,
+  },
+  groupStudyNoticeHeader: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  groupStudyNoticeBody: {
+    fontSize: 13,
+    lineHeight: 18,
   },
   label: {
     fontSize: 15,
