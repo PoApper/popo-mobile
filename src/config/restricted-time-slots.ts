@@ -1,4 +1,4 @@
-import { PLACE_NAMES } from '../constants/placeNames';
+import {PLACE_NAMES} from '../constants/placeNames';
 import {ConcreteTimeSlot} from '../components/TimeSlotPickerModal';
 
 export type TimeSlot = {

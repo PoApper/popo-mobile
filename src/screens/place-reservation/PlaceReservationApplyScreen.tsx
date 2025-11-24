@@ -413,8 +413,8 @@ const PlaceReservationApplyScreen = ({
                   styles.groupStudyNoticeBody,
                   {color: isDarkMode ? '#E5E7EB' : '#4B5563'},
                 ]}>
-                그룹스터디룸은 과외 목적으로 예약이 불가능합니다.
-                학습 및 스터디 목적으로만 사용해주시기 바랍니다.
+                그룹스터디룸은 과외 목적으로 예약이 불가능합니다. 학습 및 스터디
+                목적으로만 사용해주시기 바랍니다.
               </Text>
             </View>
           )}

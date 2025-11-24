@@ -41,4 +41,3 @@ export const GROUP_STUDY_ROOM_NAMES = [
 export const isGroupStudyRoom = (placeName?: string): boolean =>
   !!placeName &&
   (GROUP_STUDY_ROOM_NAMES as readonly string[]).includes(placeName);
-
