@@ -24,6 +24,7 @@ import {
   getRestrictedTimeSlotPolicy,
   getNearestPossibleSlot,
 } from '../../config/restricted-time-slots';
+import {isGroupStudyRoom} from '../../constants/placeNames';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';
@@ -391,7 +392,7 @@ const PlaceReservationApplyScreen = ({
               </Text>
             </View>
           )}
-          {placeName.includes('그룹스터디룸') && (
+          {isGroupStudyRoom(placeName) && (
             <View
               style={[
                 styles.groupStudyNotice,
