@@ -33,7 +33,7 @@ import SidebarModal from '@components/chat/SidebarModal';
 import SettlementInfoBox from '@components/chat/SettlementInfoBox';
 import MsgModifyModal from '@components/chat/MsgModifyModal';
 import UserInfoModal from '@components/chat/UserInfoModal';
-import { ChatEvent } from '@utils/socket-events';
+import {ChatEvent} from '../../constants/socket-events';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
