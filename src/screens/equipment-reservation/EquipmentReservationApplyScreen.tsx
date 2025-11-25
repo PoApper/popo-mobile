@@ -11,6 +11,7 @@ import {
   Keyboard,
   ActivityIndicator,
   FlatList,
+  Linking,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -56,6 +57,8 @@ type EquipmentReservationApplyScreenProps = {
   >;
   route: RouteProp<RootStackParamList, 'EquipmentReservationApply'>;
 };
+
+const KAKAO_CHANNEL_URL = 'http://pf.kakao.com/_qASbn/chat';
 
 const EquipmentReservationApplyScreen = ({
   navigation,
@@ -113,6 +116,11 @@ const EquipmentReservationApplyScreen = ({
   const [showEquipmentModal, setShowEquipmentModal] = useState(false);
   const [reservedEquipments, setReservedEquipments] = useState<string[]>([]);
   const [loadingReservations, setLoadingReservations] = useState(false);
+  const openClubUnionChannel = useCallback(() => {
+    Linking.openURL(KAKAO_CHANNEL_URL).catch(error =>
+      console.error('카카오 채널 열기 실패:', error),
+    );
+  }, []);
 
   // 장비 리스트 불러오기
   useEffect(() => {
@@ -589,7 +597,9 @@ const EquipmentReservationApplyScreen = ({
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
                 <Text style={styles.noticeBold}>카카오톡 채널 링크 :</Text>{' '}
-                동아리연합회 2025
+                <Text style={styles.noticeLink} onPress={openClubUnionChannel}>
+                  동아리연합회 2025
+                </Text>
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
                 <Text style={styles.noticeBold}>예시</Text>
@@ -1163,6 +1173,10 @@ const styles = StyleSheet.create({
   },
   noticeBold: {
     fontWeight: 'bold',
+  },
+  noticeLink: {
+    color: '#2563EB',
+    textDecorationLine: 'underline',
   },
   // 모달 스타일
   modalOverlay: {
