@@ -50,6 +50,12 @@ interface IEquipReservation {
   createdAt: Date;
 }
 
+interface ISettingResponse {
+  dongyeonBank?: string;
+  dongyeonServiceTime?: string;
+  dongyeonContact?: string;
+}
+
 type EquipmentReservationApplyScreenProps = {
   navigation: NativeStackNavigationProp<
     RootStackParamList,
@@ -59,6 +65,7 @@ type EquipmentReservationApplyScreenProps = {
 };
 
 const KAKAO_CHANNEL_URL = 'http://pf.kakao.com/_qASbn/chat';
+const SETTING_FALLBACK_TEXT = '정보를 불러오는 중입니다.';
 
 const EquipmentReservationApplyScreen = ({
   navigation,
@@ -85,6 +92,9 @@ const EquipmentReservationApplyScreen = ({
     [],
   );
   const [equipmentList, setEquipmentList] = useState<IEquipment[]>([]);
+  const [dongyeonBank, setDongyeonBank] = useState('');
+  const [dongyeonServiceTime, setDongyeonServiceTime] = useState('');
+  const [dongyeonContact, setDongyeonContact] = useState('');
 
   // 선택된 날짜가 있으면 해당 날짜로, 없으면 현재 날짜로 초기화
   const getInitialDate = () => {
@@ -116,6 +126,35 @@ const EquipmentReservationApplyScreen = ({
   const [showEquipmentModal, setShowEquipmentModal] = useState(false);
   const [reservedEquipments, setReservedEquipments] = useState<string[]>([]);
   const [loadingReservations, setLoadingReservations] = useState(false);
+  useEffect(() => {
+    if (association !== 'dongyeon') {
+      return;
+    }
+    let isMounted = true;
+    PoPoAxios.get<ISettingResponse>('/setting')
+      .then(res => {
+        if (!isMounted) {
+          return;
+        }
+        const data = res.data ?? {};
+        setDongyeonBank(data.dongyeonBank ?? '');
+        setDongyeonServiceTime(data.dongyeonServiceTime ?? '');
+        setDongyeonContact(data.dongyeonContact ?? '');
+      })
+      .catch(error => {
+        console.error('설정 정보 불러오기 실패:', error);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [association]);
+
+  const getSettingValue = useCallback(
+    (value: string, fallback: string) => (value?.trim() ? value : fallback),
+    [],
+  );
+
   const openClubUnionChannel = useCallback(() => {
     Linking.openURL(KAKAO_CHANNEL_URL).catch(error =>
       console.error('카카오 채널 열기 실패:', error),
@@ -586,7 +625,7 @@ const EquipmentReservationApplyScreen = ({
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
                 <Text style={styles.noticeBold}>예약비 입금 계좌 :</Text>{' '}
-                부산은행 1122244813601 (안강현)
+                {getSettingValue(dongyeonBank, SETTING_FALLBACK_TEXT)}
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
                 *입금자명은 예약자명과 동일하게 해주세요.
@@ -609,8 +648,8 @@ const EquipmentReservationApplyScreen = ({
                 메인스피커1 / 오디오 인터페이스 / 유선 보컬 마이크 1~3
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                <Text style={styles.noticeBold}>대여/반납 시간 :</Text> 월 ~ 금
-                / 12:30 ~ 13:30
+                <Text style={styles.noticeBold}>대여/반납 시간 :</Text>{' '}
+                {getSettingValue(dongyeonServiceTime, SETTING_FALLBACK_TEXT)}
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
                 *그 외 시간에 대여와 반납은 어렵습니다.
@@ -623,8 +662,8 @@ const EquipmentReservationApplyScreen = ({
                 장비 분실 및 반납 시간을 어길 시 책임을 물을 수 있습니다.
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                <Text style={styles.noticeBold}>문의 :</Text> (운영관리부장
-                장현웅) 010-5917-8295
+                <Text style={styles.noticeBold}>문의 :</Text>{' '}
+                {getSettingValue(dongyeonContact, SETTING_FALLBACK_TEXT)}
               </Text>
             </View>
           )}
