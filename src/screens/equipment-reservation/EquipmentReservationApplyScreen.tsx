@@ -64,7 +64,7 @@ type EquipmentReservationApplyScreenProps = {
   route: RouteProp<RootStackParamList, 'EquipmentReservationApply'>;
 };
 
-const KAKAO_CHANNEL_URL = 'http://pf.kakao.com/_qASbn/chat';
+const KAKAO_CHANNEL_URL = 'https://pf.kakao.com/_qASbn/chat';
 const SETTING_FALLBACK_TEXT = '정보를 불러오는 중입니다.';
 
 const EquipmentReservationApplyScreen = ({
