@@ -290,8 +290,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
         activeOpacity={0.85}
         onPress={async () => {
           try {
-            const url =
-              'https://forms.gle/y8Nwnmefqb3xLtJf6';
+            const url = 'https://forms.gle/y8Nwnmefqb3xLtJf6';
             const supported = await Linking.canOpenURL(url);
 
             if (supported) {
@@ -307,9 +306,15 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
                     onPress: () => {
                       Clipboard.setString(url);
                       if (Platform.OS === 'android') {
-                        ToastAndroid.show('링크가 복사되었습니다', ToastAndroid.SHORT);
+                        ToastAndroid.show(
+                          '링크가 복사되었습니다',
+                          ToastAndroid.SHORT,
+                        );
                       } else {
-                        Alert.alert('복사됨', '링크가 클립보드에 복사되었습니다.');
+                        Alert.alert(
+                          '복사됨',
+                          '링크가 클립보드에 복사되었습니다.',
+                        );
                       }
                     },
                   },
@@ -364,9 +369,15 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
                     onPress: () => {
                       Clipboard.setString(url);
                       if (Platform.OS === 'android') {
-                        ToastAndroid.show('링크가 복사되었습니다', ToastAndroid.SHORT);
+                        ToastAndroid.show(
+                          '링크가 복사되었습니다',
+                          ToastAndroid.SHORT,
+                        );
                       } else {
-                        Alert.alert('복사됨', '링크가 클립보드에 복사되었습니다.');
+                        Alert.alert(
+                          '복사됨',
+                          '링크가 클립보드에 복사되었습니다.',
+                        );
                       }
                     },
                   },

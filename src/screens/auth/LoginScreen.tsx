@@ -386,9 +386,15 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                         onPress: () => {
                           Clipboard.setString(url);
                           if (Platform.OS === 'android') {
-                            ToastAndroid.show('링크가 복사되었습니다', ToastAndroid.SHORT);
+                            ToastAndroid.show(
+                              '링크가 복사되었습니다',
+                              ToastAndroid.SHORT,
+                            );
                           } else {
-                            Alert.alert('복사됨', '링크가 클립보드에 복사되었습니다.');
+                            Alert.alert(
+                              '복사됨',
+                              '링크가 클립보드에 복사되었습니다.',
+                            );
                           }
                         },
                       },
