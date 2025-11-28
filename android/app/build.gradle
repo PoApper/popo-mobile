@@ -157,6 +157,16 @@ android {
             resValue "string", "package_name", "com.popomobile"
         }
     }
+
+    // react-native-worklets와 react-native-reanimated가 내부적으로 갖고 있는 같은 라이브러리가 두 개 있어서 생긴 중복 오류를 해결하기 위해 추가
+    // Q. react-native-reanimated가 react-native-worklets를 포함한다면 react-native-worklets를 설치하지 않아도 되지 않나?
+    // A. https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/#dependencies 에 따르면 명시적으로 react-native-worklets를 설치해야 한다고 함.
+    packaging {
+        pickFirst 'lib/arm64-v8a/libworklets.so'
+        pickFirst 'lib/armeabi-v7a/libworklets.so'
+        pickFirst 'lib/x86/libworklets.so'
+        pickFirst 'lib/x86_64/libworklets.so'
+    }
 }
 
 dependencies {
