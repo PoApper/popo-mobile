@@ -11,12 +11,15 @@ import {
   useColorScheme,
   Linking,
   Modal,
+  Platform,
+  ToastAndroid,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import axios from 'axios';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import {RootStackParamList} from '@navigation/types';
 import api, {POPO_API_URL} from '@utils/api';
@@ -375,9 +378,22 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                 } else {
                   Alert.alert(
                     '링크 열기 실패',
-                    '브라우저를 열 수 없습니다. 수동으로 다음 링크를 복사하여 브라우저에서 열어주세요:\n\n' +
+                    '브라우저를 열 수 없습니다. 아래 링크를 복사하여 브라우저에서 열어주세요:\n\n' +
                       url,
-                    [{text: '확인', style: 'default'}],
+                    [
+                      {
+                        text: '복사',
+                        onPress: () => {
+                          Clipboard.setString(url);
+                          if (Platform.OS === 'android') {
+                            ToastAndroid.show('링크가 복사되었습니다', ToastAndroid.SHORT);
+                          } else {
+                            Alert.alert('복사됨', '링크가 클립보드에 복사되었습니다.');
+                          }
+                        },
+                      },
+                      {text: '확인', style: 'default'},
+                    ],
                   );
                 }
               } catch (error) {
