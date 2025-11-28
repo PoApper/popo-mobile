@@ -12,6 +12,8 @@ import {
   ActivityIndicator,
   FlatList,
   Linking,
+  ToastAndroid,
+  Platform,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -20,6 +22,7 @@ import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '@navigation/types';
 import PoPoAxios from '../../utils/api';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 interface IEquipment {
   uuid: string;
@@ -155,10 +158,38 @@ const EquipmentReservationApplyScreen = ({
     [],
   );
 
-  const openClubUnionChannel = useCallback(() => {
-    Linking.openURL(KAKAO_CHANNEL_URL).catch(error =>
-      console.error('카카오 채널 열기 실패:', error),
-    );
+  const openClubUnionChannel = useCallback(async () => {
+    const supported = await Linking.canOpenURL(KAKAO_CHANNEL_URL);
+    if (supported) {
+      try {
+        await Linking.openURL(KAKAO_CHANNEL_URL);
+      } catch (error) {
+        console.error('채널 열기 실패:', error);
+      }
+    } else {
+      Alert.alert(
+        '채널 열기 실패',
+        '브라우저를 열 수 없습니다. 아래 링크를 복사하여 브라우저에서 열어주세요:\n\n' +
+          KAKAO_CHANNEL_URL,
+        [
+          {
+            text: '복사',
+            onPress: () => {
+              Clipboard.setString(KAKAO_CHANNEL_URL);
+              if (Platform.OS === 'android') {
+                ToastAndroid.show(
+                  '채널 링크가 복사되었습니다',
+                  ToastAndroid.SHORT,
+                );
+              } else {
+                Alert.alert('복사됨', '채널 링크가 클립보드에 복사되었습니다.');
+              }
+            },
+          },
+          {text: '확인', style: 'default'},
+        ],
+      );
+    }
   }, []);
 
   // 장비 리스트 불러오기
