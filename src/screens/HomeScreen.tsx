@@ -18,6 +18,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
@@ -276,6 +277,68 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           </View>
         </View>
       </ScrollView>
+      {/* Floating carpool event button */}
+      <TouchableOpacity
+        style={[
+          styles.floatingButtonSmall,
+          {
+            backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF',
+            borderColor: isDarkMode ? '#374151' : '#E5E7EB',
+            borderWidth: 1,
+          },
+        ]}
+        activeOpacity={0.85}
+        onPress={async () => {
+          try {
+            const url = 'https://forms.gle/y8Nwnmefqb3xLtJf6';
+            const supported = await Linking.canOpenURL(url);
+
+            if (supported) {
+              await Linking.openURL(url);
+            } else {
+              Alert.alert(
+                '링크 열기 실패',
+                '브라우저를 열 수 없습니다. 아래 링크를 복사하여 브라우저에서 열어주세요:\n\n' +
+                  url,
+                [
+                  {
+                    text: '복사',
+                    onPress: () => {
+                      Clipboard.setString(url);
+                      if (Platform.OS === 'android') {
+                        ToastAndroid.show(
+                          '링크가 복사되었습니다',
+                          ToastAndroid.SHORT,
+                        );
+                      } else {
+                        Alert.alert(
+                          '복사됨',
+                          '링크가 클립보드에 복사되었습니다.',
+                        );
+                      }
+                    },
+                  },
+                  {text: '확인', style: 'default'},
+                ],
+              );
+            }
+          } catch (error) {
+            console.error('링크 열기 오류:', error);
+            Alert.alert(
+              '오류',
+              '링크를 열 수 없습니다. 네트워크 연결을 확인해주세요.',
+              [{text: '확인', style: 'default'}],
+            );
+          }
+        }}>
+        <Text
+          style={[
+            styles.floatingTextSmall,
+            {color: isDarkMode ? '#E5E7EB' : '#111827'},
+          ]}>
+          카풀 참여 이벤트 진행 중!
+        </Text>
+      </TouchableOpacity>
       {/* Floating error report button */}
       <TouchableOpacity
         style={[
@@ -298,9 +361,28 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
             } else {
               Alert.alert(
                 '링크 열기 실패',
-                '브라우저를 열 수 없습니다. 수동으로 다음 링크를 복사하여 브라우저에서 열어주세요:\n\n' +
+                '브라우저를 열 수 없습니다. 아래 링크를 복사하여 브라우저에서 열어주세요:\n\n' +
                   url,
-                [{text: '확인', style: 'default'}],
+                [
+                  {
+                    text: '복사',
+                    onPress: () => {
+                      Clipboard.setString(url);
+                      if (Platform.OS === 'android') {
+                        ToastAndroid.show(
+                          '링크가 복사되었습니다',
+                          ToastAndroid.SHORT,
+                        );
+                      } else {
+                        Alert.alert(
+                          '복사됨',
+                          '링크가 클립보드에 복사되었습니다.',
+                        );
+                      }
+                    },
+                  },
+                  {text: '확인', style: 'default'},
+                ],
               );
             }
           } catch (error) {
@@ -397,6 +479,25 @@ const styles = StyleSheet.create({
   },
   floatingText: {
     fontSize: 14,
+    fontWeight: '600',
+  },
+  floatingButtonSmall: {
+    position: 'absolute',
+    right: 16,
+    bottom: 80,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 6,
+  },
+  floatingTextSmall: {
+    fontSize: 12,
     fontWeight: '600',
   },
 });
