@@ -20,6 +20,7 @@ import {RootStackParamList} from '@navigation/types';
 import PoPoAxios from '../../utils/api';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {openURLWithFallback} from '../../utils/linking';
+import {DONGYEON_KAKAO_CHANNEL_URL} from '../../constants/urls';
 
 interface IEquipment {
   uuid: string;
@@ -64,7 +65,6 @@ type EquipmentReservationApplyScreenProps = {
   route: RouteProp<RootStackParamList, 'EquipmentReservationApply'>;
 };
 
-const KAKAO_CHANNEL_URL = 'https://pf.kakao.com/_qASbn/chat';
 const SETTING_FALLBACK_TEXT = '정보를 불러오는 중입니다.';
 
 const EquipmentReservationApplyScreen = ({
@@ -156,7 +156,7 @@ const EquipmentReservationApplyScreen = ({
   );
 
   const openClubUnionChannel = useCallback(async () => {
-    await openURLWithFallback(KAKAO_CHANNEL_URL);
+    await openURLWithFallback(DONGYEON_KAKAO_CHANNEL_URL);
   }, []);
 
   // 장비 리스트 불러오기

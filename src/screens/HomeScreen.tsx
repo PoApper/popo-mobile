@@ -23,6 +23,12 @@ import api from '@utils/api';
 import DdayInfoBox from '@components/DdayInfoBox';
 import UpcomingEvents from '@components/UpcomingEvents';
 import {openURLWithFallback} from '@utils/linking';
+import {
+  POSTECH_DORM_DELIVERY_URL,
+  RECORDS_ARCHIVE_URL,
+  CARPOOL_EVENT_FORM_URL,
+  ERROR_REPORT_FORM_URL,
+} from '../constants/urls';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -175,8 +181,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
             },
             {
               text: '확인',
-              onPress: () =>
-                openURLWithFallback('https://delivery.popo.poapper.club'),
+              onPress: () => openURLWithFallback(POSTECH_DORM_DELIVERY_URL),
             },
           ],
         );
@@ -195,10 +200,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           },
           {
             text: '확인',
-            onPress: () =>
-              openURLWithFallback(
-                'https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD',
-              ),
+              onPress: () => openURLWithFallback(RECORDS_ARCHIVE_URL),
           },
         ]),
     },
@@ -280,7 +282,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
         ]}
         activeOpacity={0.85}
         onPress={() => {
-          openURLWithFallback('https://forms.gle/y8Nwnmefqb3xLtJf6');
+          openURLWithFallback(CARPOOL_EVENT_FORM_URL);
         }}>
         <Text
           style={[
@@ -302,9 +304,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
         ]}
         activeOpacity={0.85}
         onPress={() => {
-          openURLWithFallback(
-            'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true',
-          );
+          openURLWithFallback(ERROR_REPORT_FORM_URL);
         }}>
         <Image
           source={require('../../assets/siren.png')}

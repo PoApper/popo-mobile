@@ -21,6 +21,7 @@ import {RootStackParamList} from '@navigation/types';
 import api, {POPO_API_URL} from '@utils/api';
 import {extractTokenFromCookie} from '@utils/cookie';
 import {openURLWithFallback} from '@utils/linking';
+import {ERROR_REPORT_FORM_URL} from '../../constants/urls';
 import {
   AUTH_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
@@ -365,9 +366,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
           <TouchableOpacity
             style={styles.needHelp}
             onPress={() => {
-              openURLWithFallback(
-                'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true',
-              );
+              openURLWithFallback(ERROR_REPORT_FORM_URL);
             }}>
             <Text style={[styles.needHelpText, {color: helpTextColor}]}>
               도움이 필요하세요?
