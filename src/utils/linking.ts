@@ -45,24 +45,20 @@ function showCopyAlert(
   message: string,
   copySuccessMessage: string,
 ): void {
-  Alert.alert(
-    title,
-    message + '\n\n' + url,
-    [
-      {
-        text: '복사',
-        onPress: () => {
-          Clipboard.setString(url);
-          if (Platform.OS === 'android') {
-            ToastAndroid.show(copySuccessMessage, ToastAndroid.SHORT);
-          } else {
-            Alert.alert('복사됨', '링크가 클립보드에 복사되었습니다.');
-          }
-        },
+  Alert.alert(title, message + '\n\n' + url, [
+    {
+      text: '복사',
+      onPress: () => {
+        Clipboard.setString(url);
+        if (Platform.OS === 'android') {
+          ToastAndroid.show(copySuccessMessage, ToastAndroid.SHORT);
+        } else {
+          Alert.alert('복사됨', '링크가 클립보드에 복사되었습니다.');
+        }
       },
-      {text: '확인', style: 'default'},
-    ],
-  );
+    },
+    {text: '확인', style: 'default'},
+  ]);
 }
 
 /**
@@ -95,4 +91,3 @@ export async function openURL(
     }
   }
 }
-

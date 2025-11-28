@@ -121,7 +121,6 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
     }, []),
   );
 
-
   const services: ServiceItem[] = [
     {
       id: '1',
@@ -200,7 +199,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           },
           {
             text: '확인',
-              onPress: () => openURLWithFallback(RECORDS_ARCHIVE_URL),
+            onPress: () => openURLWithFallback(RECORDS_ARCHIVE_URL),
           },
         ]),
     },
