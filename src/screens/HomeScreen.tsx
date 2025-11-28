@@ -7,7 +7,6 @@ import {
   ScrollView,
   useColorScheme,
   StatusBar,
-  Linking,
   Alert,
   Image,
   BackHandler,
@@ -18,12 +17,12 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Clipboard from '@react-native-clipboard/clipboard';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import DdayInfoBox from '@components/DdayInfoBox';
 import UpcomingEvents from '@components/UpcomingEvents';
+import {openURLWithFallback} from '@utils/linking';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -116,14 +115,6 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
     }, []),
   );
 
-  const handleMoveSite = async (url: string) => {
-    try {
-      await Linking.openURL(url);
-    } catch (error) {
-      Alert.alert('오류', '링크를 열 수 없습니다.');
-      console.error('링크 열기 오류:', error);
-    }
-  };
 
   const services: ServiceItem[] = [
     {
@@ -185,7 +176,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
             {
               text: '확인',
               onPress: () =>
-                handleMoveSite('https://www.postechdorm.com/delivery'),
+                openURLWithFallback('https://delivery.popo.poapper.club'),
             },
           ],
         );
@@ -205,7 +196,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           {
             text: '확인',
             onPress: () =>
-              handleMoveSite(
+              openURLWithFallback(
                 'https://drive.google.com/drive/u/0/folders/1vHexwLSdD92maoKNlvw9zQ0q0J59k5FD',
               ),
           },
@@ -288,48 +279,8 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           },
         ]}
         activeOpacity={0.85}
-        onPress={async () => {
-          try {
-            const url = 'https://forms.gle/y8Nwnmefqb3xLtJf6';
-            const supported = await Linking.canOpenURL(url);
-
-            if (supported) {
-              await Linking.openURL(url);
-            } else {
-              Alert.alert(
-                '링크 열기 실패',
-                '브라우저를 열 수 없습니다. 아래 링크를 복사하여 브라우저에서 열어주세요:\n\n' +
-                  url,
-                [
-                  {
-                    text: '복사',
-                    onPress: () => {
-                      Clipboard.setString(url);
-                      if (Platform.OS === 'android') {
-                        ToastAndroid.show(
-                          '링크가 복사되었습니다',
-                          ToastAndroid.SHORT,
-                        );
-                      } else {
-                        Alert.alert(
-                          '복사됨',
-                          '링크가 클립보드에 복사되었습니다.',
-                        );
-                      }
-                    },
-                  },
-                  {text: '확인', style: 'default'},
-                ],
-              );
-            }
-          } catch (error) {
-            console.error('링크 열기 오류:', error);
-            Alert.alert(
-              '오류',
-              '링크를 열 수 없습니다. 네트워크 연결을 확인해주세요.',
-              [{text: '확인', style: 'default'}],
-            );
-          }
+        onPress={() => {
+          openURLWithFallback('https://forms.gle/y8Nwnmefqb3xLtJf6');
         }}>
         <Text
           style={[
@@ -350,49 +301,10 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           },
         ]}
         activeOpacity={0.85}
-        onPress={async () => {
-          try {
-            const url =
-              'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true';
-            const supported = await Linking.canOpenURL(url);
-
-            if (supported) {
-              await Linking.openURL(url);
-            } else {
-              Alert.alert(
-                '링크 열기 실패',
-                '브라우저를 열 수 없습니다. 아래 링크를 복사하여 브라우저에서 열어주세요:\n\n' +
-                  url,
-                [
-                  {
-                    text: '복사',
-                    onPress: () => {
-                      Clipboard.setString(url);
-                      if (Platform.OS === 'android') {
-                        ToastAndroid.show(
-                          '링크가 복사되었습니다',
-                          ToastAndroid.SHORT,
-                        );
-                      } else {
-                        Alert.alert(
-                          '복사됨',
-                          '링크가 클립보드에 복사되었습니다.',
-                        );
-                      }
-                    },
-                  },
-                  {text: '확인', style: 'default'},
-                ],
-              );
-            }
-          } catch (error) {
-            console.error('링크 열기 오류:', error);
-            Alert.alert(
-              '오류',
-              '링크를 열 수 없습니다. 네트워크 연결을 확인해주세요.',
-              [{text: '확인', style: 'default'}],
-            );
-          }
+        onPress={() => {
+          openURLWithFallback(
+            'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true',
+          );
         }}>
         <Image
           source={require('../../assets/siren.png')}
