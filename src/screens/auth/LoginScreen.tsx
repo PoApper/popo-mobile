@@ -9,21 +9,19 @@ import {
   Alert,
   StatusBar,
   useColorScheme,
-  Linking,
   Modal,
-  Platform,
-  ToastAndroid,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import axios from 'axios';
-import Clipboard from '@react-native-clipboard/clipboard';
 
 import {RootStackParamList} from '@navigation/types';
 import api, {POPO_API_URL} from '@utils/api';
 import {extractTokenFromCookie} from '@utils/cookie';
+import {openURLWithFallback} from '@utils/linking';
+import {ERROR_REPORT_FORM_URL} from '../../constants/urls';
 import {
   AUTH_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
@@ -367,49 +365,8 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
 
           <TouchableOpacity
             style={styles.needHelp}
-            onPress={async () => {
-              try {
-                const url =
-                  'https://docs.google.com/forms/d/1J23um5RDRTdKC9bscZnixPhEeon6qz4DQRTJYMtFJTU/viewform?edit_requested=true';
-                const supported = await Linking.canOpenURL(url);
-
-                if (supported) {
-                  await Linking.openURL(url);
-                } else {
-                  Alert.alert(
-                    '링크 열기 실패',
-                    '브라우저를 열 수 없습니다. 아래 링크를 복사하여 브라우저에서 열어주세요:\n\n' +
-                      url,
-                    [
-                      {
-                        text: '복사',
-                        onPress: () => {
-                          Clipboard.setString(url);
-                          if (Platform.OS === 'android') {
-                            ToastAndroid.show(
-                              '링크가 복사되었습니다',
-                              ToastAndroid.SHORT,
-                            );
-                          } else {
-                            Alert.alert(
-                              '복사됨',
-                              '링크가 클립보드에 복사되었습니다.',
-                            );
-                          }
-                        },
-                      },
-                      {text: '확인', style: 'default'},
-                    ],
-                  );
-                }
-              } catch (error) {
-                console.error('링크 열기 오류:', error);
-                Alert.alert(
-                  '오류',
-                  '링크를 열 수 없습니다. 네트워크 연결을 확인해주세요.',
-                  [{text: '확인', style: 'default'}],
-                );
-              }
+            onPress={() => {
+              openURLWithFallback(ERROR_REPORT_FORM_URL);
             }}>
             <Text style={[styles.needHelpText, {color: helpTextColor}]}>
               도움이 필요하세요?
