@@ -2,6 +2,15 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 apply plugin: "com.google.gms.google-services" // Firebase
+
+// .env 파일 설정 - dotenv.gradle 적용 전에 정의되어야 함
+project.ext.envConfigFiles = [
+    devDebug: ".env.dev",
+    devRelease: ".env.dev",
+    prodDebug: ".env.prod",
+    prodRelease: ".env.prod",
+]
+
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 
@@ -81,14 +90,6 @@ def enableProguardInReleaseBuilds = false
  * this variant is about 6MiB larger per architecture than default.
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
-
-// .env 파일 설정 - android 블록 전에 정의되어야 함
-project.ext.envConfigFiles = [
-    devDebug: ".env.dev",
-    devRelease: ".env.dev",
-    prodDebug: ".env.prod",
-    prodRelease: ".env.prod",
-]
 
 // 환경 변수 헬퍼 함수: .env 파일 -> 시스템 환경 변수 -> 기본값 순으로 조회
 def getEnvOrDefault(String key, String defaultValue = "") {
