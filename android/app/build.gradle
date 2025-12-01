@@ -13,6 +13,20 @@ project.ext.envConfigFiles = [
 
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
+// env 확인용 프린트
+if (project.ext.has("env")) {
+    println "📋 로드된 환경변수:"
+    project.env.each { key, value ->
+        def displayValue = (key.toLowerCase().contains("password") ||
+                           key.toLowerCase().contains("secret") ||
+                           key.toLowerCase().contains("key") ||
+                           key.toLowerCase().contains("token"))
+            ? "***"
+            : value
+        println "  ${key} = ${displayValue}"
+    }
+    println ""
+}
 
 // START: Vector Icons
 project.ext.vectoricons = [
