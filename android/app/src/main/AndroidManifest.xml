@@ -26,6 +26,24 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+
+        <!-- Deep Link intent-filter for room sharing -->
+        <intent-filter android:autoVerify="true">
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <!-- HTTPS URLs -->
+            <data
+                android:scheme="https"
+                android:host="popo.poapper.club"
+                android:pathPrefix="/room" />
+
+            <!-- Custom scheme for fallback -->
+            <data
+                android:scheme="popo"
+                android:host="room" />
+        </intent-filter>
       </activity>
       <service
         android:name="com.google.firebase.messaging.FirebaseMessagingService"
