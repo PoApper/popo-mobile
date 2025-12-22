@@ -1,0 +1,144 @@
+import React, {useEffect, useState} from 'react';
+import {View, ActivityIndicator, Alert, StyleSheet} from 'react-native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RouteProp} from '@react-navigation/native';
+import EncryptedStorage from 'react-native-encrypted-storage';
+
+import paxi_api from '@utils/paxi_api';
+import {ChatRoomInfo} from '@interfaces/paxi';
+import JoinConfirmModal from '@components/room/JoinConfirmModal';
+import {getAxiosErrorInfo} from '@utils/axios-error';
+import {reset_auth} from '@utils/reset';
+import {RootStackParamList} from '@navigation/types';
+import {AUTH_TOKEN_KEY, IS_AUTHENTICATED_KEY} from '@utils/storage-keys';
+
+type Props = {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'DeepLinkRoom'>;
+  route: RouteProp<RootStackParamList, 'DeepLinkRoom'>;
+};
+
+const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
+  const {roomUuid} = route.params;
+  const [loading, setLoading] = useState(true);
+  const [roomData, setRoomData] = useState<ChatRoomInfo | null>(null);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    handleDeepLink();
+  }, [roomUuid]);
+
+  const handleDeepLink = async () => {
+    // 1. Check authentication
+    try {
+      const authToken = await EncryptedStorage.getItem(AUTH_TOKEN_KEY);
+      const isAuth = await EncryptedStorage.getItem(IS_AUTHENTICATED_KEY);
+
+      if (!authToken || isAuth !== 'true') {
+        Alert.alert('로그인 필요', '방에 참여하려면 로그인이 필요합니다.', [
+          {text: '확인', onPress: () => navigation.navigate('Login')},
+        ]);
+        return;
+      }
+    } catch (error) {
+      console.error('인증 상태 확인 오류:', error);
+      Alert.alert('오류', '인증 상태를 확인할 수 없습니다.', [
+        {text: '확인', onPress: () => navigation.navigate('Login')},
+      ]);
+      return;
+    }
+
+    // 2. Fetch room data
+    try {
+      const response = await paxi_api.get(`/room/${roomUuid}`);
+      setRoomData(response.data);
+      setShowModal(true);
+      setLoading(false);
+    } catch (error) {
+      handleFetchError(error);
+    }
+  };
+
+  const handleFetchError = async (error: unknown) => {
+    const {status, detail} = getAxiosErrorInfo(error);
+
+    if (status === 401) {
+      // Unauthorized - clear auth and redirect to login
+      await reset_auth();
+      Alert.alert('로그인 필요', '다시 로그인해주세요.', [
+        {text: '확인', onPress: () => navigation.navigate('Login')},
+      ]);
+    } else if (status === 400 && detail?.includes('닉네임이 존재하지 않습니다')) {
+      // No nickname - redirect to PaxiIntro
+      Alert.alert('닉네임 설정 필요', '택시팟 이용을 위해 닉네임을 설정해주세요.', [
+        {text: '확인', onPress: () => navigation.navigate('PaxiIntro')},
+      ]);
+    } else if (status === 404) {
+      Alert.alert('오류', '방을 찾을 수 없습니다.', [
+        {text: '확인', onPress: () => navigation.goBack()},
+      ]);
+    } else {
+      Alert.alert('오류', `방 정보를 불러올 수 없습니다.\n${detail || ''}`, [
+        {text: '확인', onPress: () => navigation.goBack()},
+      ]);
+    }
+  };
+
+  const handleJoinRoom = async () => {
+    if (!roomUuid) return;
+
+    try {
+      await paxi_api.post(`/room/join/${roomUuid}`);
+      setShowModal(false);
+      navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+    } catch (error) {
+      const {status, detail} = getAxiosErrorInfo(error);
+
+      if (status === 403) {
+        Alert.alert('참여 불가', '강퇴된 방에는 참여할 수 없습니다.');
+      } else if (status === 409) {
+        Alert.alert('마감', '방이 마감되었습니다.');
+      } else {
+        Alert.alert('참여 실패', `방 참여에 실패했습니다.\n${detail || ''}`);
+      }
+      setShowModal(false);
+      navigation.goBack();
+    }
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+    navigation.goBack();
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#FA5721" />
+      </View>
+    );
+  }
+
+  return (
+    <>
+      {roomData && (
+        <JoinConfirmModal
+          visible={showModal}
+          room={roomData}
+          onClose={handleClose}
+          onConfirm={handleJoinRoom}
+        />
+      )}
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+});
+
+export default DeepLinkRoomHandler;

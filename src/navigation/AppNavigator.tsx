@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {ActivityIndicator} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -23,6 +24,7 @@ import AboutScreen from '@screens/AboutScreen';
 // import PaxiRoomListScreen from '@screens/paxi/PaxiRoomListScreen';
 import PaxiCreateRoomScreen from '@screens/paxi/CreatePaxiRoomScreen';
 import NewChatScreen from '@screens/paxi/NewChatScreen';
+import DeepLinkRoomHandler from '@screens/paxi/DeepLinkRoomHandler';
 import PaxiIntroScreen from '@screens/paxi/PaxiIntro';
 import PaxiStartScreen from '@screens/paxi/PaxiStart';
 import SettlementScreen from '@screens/paxi/SettlementScreen';
@@ -51,6 +53,25 @@ import PaxiReportListScreen from '../screens/paxi/PaxiReportListScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+// Deep linking configuration
+const linking = {
+  prefixes: ['https://popo.poapper.club', 'popo://'],
+  config: {
+    screens: {
+      DeepLinkRoom: {
+        path: 'room/:roomUuid',
+        parse: {
+          roomUuid: (roomUuid: string) => roomUuid,
+        },
+      },
+      NewChat: 'chat/:roomUuid',
+      Login: 'login',
+      PaxiIntro: 'paxi/intro',
+      Main: '',
+    },
+  },
+};
+
 const AppNavigator = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
@@ -75,7 +96,10 @@ const AppNavigator = () => {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer ref={navigationRef}>
+      <NavigationContainer
+        ref={navigationRef}
+        linking={linking}
+        fallback={<ActivityIndicator size="large" color="#FA5721" />}>
         <Stack.Navigator
           initialRouteName={isAuthenticated ? 'Main' : 'Landing'}
           screenOptions={{
@@ -106,6 +130,11 @@ const AppNavigator = () => {
             component={PaxiCreateRoomScreen}
           />
           <Stack.Screen name="NewChat" component={NewChatScreen} />
+          <Stack.Screen
+            name="DeepLinkRoom"
+            component={DeepLinkRoomHandler}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name="ModifyPaxiRoom"
             component={ModifyPaxiRoomScreen}

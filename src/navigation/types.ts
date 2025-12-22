@@ -82,6 +82,10 @@ export type OtherStackParamList = {
   };
   NewChat: {
     roomUuid: string;
+    from?: string;
+  };
+  DeepLinkRoom: {
+    roomUuid: string;
   };
   Settlement: {
     roomUuid: string;
@@ -102,5 +106,6 @@ export type OtherStackParamList = {
     association: string;
     selectedDate: string;
   };
+  Reservation: undefined;
   About: undefined;
 };
