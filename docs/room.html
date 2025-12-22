@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paxi - 택시팟 참여하기</title>
+
+  <!-- iOS Smart App Banner -->
+  <meta name="apple-itunes-app" content="app-id=<YOUR_APP_ID>" />
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #FA5721 0%, #FF8A5B 100%);
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 15px;
+      opacity: 0.9;
+      margin: 6px 0;
+    }
+
+    .spinner {
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .button {
+      display: inline-block;
+      background: white;
+      color: #FA5721;
+      padding: 12px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      margin: 8px 4px;
+    }
+
+    .button:hover {
+      background: #f3f3f3;
+    }
+
+    #status {
+      margin-top: 16px;
+      font-size: 14px;
+    }
+  </style>
+
+  <script>
+    (function () {
+      const path = window.location.pathname;
+      const roomUuid = path.startsWith('/room/')
+        ? path.replace('/room/', '')
+        : null;
+
+      const ua = navigator.userAgent;
+      const isIOS = /iPhone|iPad|iPod/i.test(ua);
+      const isAndroid = /Android/i.test(ua);
+
+      const iosStoreUrl = 'https://apps.apple.com/us/app/popo-%ED%8F%AC%EC%8A%A4%ED%85%8C%ED%82%A4%EC%95%88%EC%9D%98-%ED%95%84%EC%88%98-%EC%95%B1/id6743666761';
+      const androidStoreUrl =
+        'https://play.google.com/store/apps/details?id=com.popomobile';
+
+      if (!roomUuid) return;
+
+      // 1️⃣ 앱 열기 시도 (플랫폼별 1회)
+      if (isIOS) {
+        window.location.href = `popo://room/${roomUuid}`;
+      } else if (isAndroid) {
+        window.location.href =
+          `intent://room/${roomUuid}` +
+          `#Intent;scheme=popo;package=com.popomobile;end`;
+      }
+
+      // 2️⃣ fallback: 일정 시간 후 스토어 이동
+      const fallbackDelay = isIOS ? 2000 : 1500;
+
+      setTimeout(() => {
+        const statusEl = document.getElementById('status');
+        if (statusEl) {
+          statusEl.textContent =
+            '앱을 열 수 없습니다. 앱 스토어로 이동합니다...';
+        }
+
+        if (isIOS) {
+          window.location.href = iosStoreUrl;
+        } else if (isAndroid) {
+          window.location.href = androidStoreUrl;
+        } else {
+          // 데스크톱
+          if (statusEl) {
+            statusEl.textContent =
+              '이 링크는 모바일 기기에서 열어주세요.';
+          }
+          const spinner = document.querySelector('.spinner');
+          if (spinner) spinner.style.display = 'none';
+        }
+      }, fallbackDelay);
+    })();
+  </script>
+</head>
+
+<body>
+  <div class="spinner"></div>
+  <h1>POPO 택시팟 참여하기</h1>
+  <p id="status">앱에서 열기를 시도 중입니다...</p>
+
+  <div style="margin-top: 28px;">
+    <p style="font-size: 13px;">수동으로 열기</p>
+    <a
+      href="https://apps.apple.com/us/app/popo-%ED%8F%AC%EC%8A%A4%ED%85%8C%ED%82%A4%EC%95%88%EC%9D%98-%ED%95%84%EC%88%98-%EC%95%B1/id6743666761"
+      class="button"
+    >
+      iOS 앱 다운로드
+    </a>
+    <a
+      href="https://play.google.com/store/apps/details?id=com.popomobile"
+      class="button"
+    >
+      Android 앱 다운로드
+    </a>
+  </div>
+
+  <p style="font-size: 12px; margin-top: 26px; opacity: 0.7;">
+    앱이 설치되어 있다면 자동으로 열립니다.<br />
+    열리지 않는 경우 위 버튼을 눌러주세요.
+  </p>
+</body>
+</html>
