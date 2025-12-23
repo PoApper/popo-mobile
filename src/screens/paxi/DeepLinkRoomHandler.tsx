@@ -113,22 +113,36 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       );
 
       if (isAlreadyJoined) {
-        // User is already in the room - show toast/alert and navigate directly
-        if (Platform.OS === 'android') {
-          ToastAndroid.show('이미 참가중인 방입니다. \n방으로 입장합니다.', ToastAndroid.SHORT);
-        } else {
-          Alert.alert('이미 참가중인 방입니다. \n방으로 입장합니다.', '', [
-            {
-              text: '확인',
-              onPress: () => {
-                navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+        // User is already in the room - call joinRoom and navigate directly
+        try {
+          await paxi_api.post(`/room/join/${roomUuid}`);
+          
+          // Show toast/alert and navigate
+          if (Platform.OS === 'android') {
+            ToastAndroid.show('이미 참가중인 방입니다. \n방으로 입장합니다.', ToastAndroid.SHORT);
+            navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+          } else {
+            Alert.alert('이미 참가중인 방입니다. \n방으로 입장합니다.', '', [
+              {
+                text: '확인',
+                onPress: () => {
+                  navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+                },
               },
-            },
-          ]);
-        }
-        // Navigate immediately after showing toast (Android) or wait for alert confirmation (iOS)
-        if (Platform.OS === 'android') {
-          navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+            ]);
+          }
+        } catch (error) {
+          const {status, detail} = getAxiosErrorInfo(error);
+          
+          if (status === 401) {
+            await handleUnauthorizedError(navigation, detail);
+          } else if (status === 403) {
+            Alert.alert('참여 불가', '강퇴된 방에는 참여할 수 없습니다.');
+          } else if (status === 409) {
+            Alert.alert('마감', '방이 마감되었습니다.');
+          } else {
+            Alert.alert('오류', `방 입장에 실패했습니다.\n${detail || ''}`);
+          }
         }
         setLoading(false);
         return;
