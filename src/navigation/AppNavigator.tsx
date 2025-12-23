@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import Config from 'react-native-config';
 import {navigationRef} from './RootNavigation';
 
 // Navigation
@@ -54,8 +55,14 @@ import PaxiReportListScreen from '../screens/paxi/PaxiReportListScreen';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 // Deep linking configuration
+const isProduction = Config.ENV === 'prod';
+const webDomain = isProduction
+  ? 'https://popo.poapper.club'
+  : 'https://popo-dev.poapper.club';
+const customScheme = isProduction ? 'popo://' : 'popo-dev://';
+
 const linking = {
-  prefixes: ['https://popo.poapper.club', 'popo://'],
+  prefixes: [webDomain, customScheme],
   config: {
     screens: {
       DeepLinkRoom: {
