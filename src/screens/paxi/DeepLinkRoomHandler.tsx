@@ -20,6 +20,16 @@ import {reset_auth} from '@utils/reset';
 import {RootStackParamList} from '@navigation/types';
 import {AUTH_TOKEN_KEY, IS_AUTHENTICATED_KEY} from '@utils/storage-keys';
 
+/**
+ * UUID 형식 검증 (RFC 4122)
+ * 예: 550e8400-e29b-41d4-a716-446655440000
+ */
+const isValidUUID = (uuid: string): boolean => {
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(uuid);
+};
+
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'DeepLinkRoom'>;
   route: RouteProp<RootStackParamList, 'DeepLinkRoom'>;
@@ -70,6 +80,15 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
   }, [roomUuid]);
 
   const handleDeepLink = async () => {
+    // 0. Validate roomUuid format
+    if (!roomUuid || !isValidUUID(roomUuid)) {
+      setLoading(false);
+      Alert.alert('오류', '유효하지 않은 방 링크입니다.', [
+        {text: '확인', onPress: () => navigation.goBack()},
+      ]);
+      return;
+    }
+
     // 1. Check authentication
     try {
       const authToken = await EncryptedStorage.getItem(AUTH_TOKEN_KEY);

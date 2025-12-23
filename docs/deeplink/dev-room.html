@@ -76,11 +76,27 @@
     </style>
 
     <script>
-      (function () {
+      // DOM이 로드된 후 실행
+      document.addEventListener('DOMContentLoaded', function () {
+        /**
+         * UUID 형식 검증 (RFC 4122)
+         */
+        const isValidUUID = (uuid) => {
+          const uuidRegex =
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+          return uuidRegex.test(uuid);
+        };
+
         const path = window.location.pathname;
-        const roomUuid = path.startsWith('/room/')
-          ? path.replace('/room/', '')
-          : null;
+        let roomUuid = null;
+
+        // /room/ 경로에서 UUID 추출 및 검증
+        if (path.startsWith('/room/')) {
+          const extracted = path.replace('/room/', '').split('/')[0]; // path traversal 방지
+          if (isValidUUID(extracted)) {
+            roomUuid = extracted;
+          }
+        }
 
         const ua = navigator.userAgent;
         const isIOS = /iPhone|iPad|iPod/i.test(ua);
@@ -91,7 +107,17 @@
         const androidStoreUrl =
           'https://play.google.com/store/apps/details?id=com.popomobile';
 
-        if (!roomUuid) return;
+        // UUID가 유효하지 않은 경우 에러 메시지 표시
+        if (!roomUuid) {
+          const statusEl = document.getElementById('status');
+          const spinner = document.querySelector('.spinner');
+          if (spinner) spinner.style.display = 'none';
+          if (statusEl) {
+            statusEl.textContent = '유효하지 않은 방 링크입니다.';
+            statusEl.style.color = '#ffebee';
+          }
+          return;
+        }
 
         // 1️⃣ 앱 열기 시도 (플랫폼별 1회)
         if (isIOS) {
@@ -125,7 +151,7 @@
             if (spinner) spinner.style.display = 'none';
           }
         }, fallbackDelay);
-      })();
+      });
     </script>
   </head>
 
