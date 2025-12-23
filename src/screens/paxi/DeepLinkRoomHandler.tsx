@@ -239,7 +239,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <>
-      {roomData && (
+      {roomData && showModal && (
         <JoinConfirmModal
           visible={showModal}
           room={roomData}
