@@ -64,8 +64,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>popo</string>
-				<string>popo-dev</string>
+				<string>$(APP_URL_SCHEME)</string>
 			</array>
 			<key>CFBundleURLName</key>
 			<string>com.popomobile</string>
