@@ -70,10 +70,6 @@ const linking = {
           roomUuid: (roomUuid: string) => roomUuid,
         },
       },
-      NewChat: 'chat/:roomUuid',
-      Login: 'login',
-      PaxiIntro: 'paxi/intro',
-      Main: '',
     },
   },
 };
