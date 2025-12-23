@@ -82,6 +82,10 @@ export type OtherStackParamList = {
   };
   NewChat: {
     roomUuid: string;
+    from?: string;
+  };
+  DeepLinkRoom: {
+    roomUuid: string;
   };
   Settlement: {
     roomUuid: string;

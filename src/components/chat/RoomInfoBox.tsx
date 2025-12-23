@@ -4,12 +4,17 @@ import {
   Text,
   StyleSheet,
   useColorScheme,
+  Platform,
+  ToastAndroid,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import Svg, {Line} from 'react-native-svg';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
+import Clipboard from '@react-native-clipboard/clipboard';
+import Config from 'react-native-config';
 
 import {ChatRoomInfo} from '@interfaces/paxi';
 import {textColor} from '@styles/default';
@@ -29,25 +34,47 @@ const RoomInfoBox = ({
 }: RoomInfoBoxProps) => {
   const isOwner = myUuid === roomData.ownerUuid;
   const isDarkMode = useColorScheme() === 'dark';
+
+  const handleShare = () => {
+    const isProduction = Config.ENV === 'prod';
+    const domain = isProduction ? 'popo.poapper.club' : 'popo-dev.poapper.club';
+    const shareUrl = `https://${domain}/room/${roomData.uuid}`;
+
+    Clipboard.setString(shareUrl);
+
+    if (Platform.OS === 'android') {
+      ToastAndroid.show('방 공유 링크가 복사되었습니다', ToastAndroid.SHORT);
+    } else {
+      Alert.alert('공유', '방 공유 링크가 복사되었습니다.');
+    }
+  };
+
   return (
     <View
       style={[
         styles.infoBox,
         {backgroundColor: isDarkMode ? '#333' : '#f2f3f5'},
       ]}>
-      {isOwner && roomData.status === 'ACTIVE' && (
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={() => {
-            setModalVisible(false);
-            navigation.navigate('ModifyPaxiRoom', {
-              roomUuid: roomData.uuid,
-            });
-          }}>
-          <Icon name="edit" size={14} color="#999" />
-          <Text style={styles.editText}>수정하기</Text>
+      {/* Action buttons row */}
+      <View style={styles.actionsRow}>
+        {isOwner && roomData.status === 'ACTIVE' && (
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => {
+              setModalVisible(false);
+              navigation.navigate('ModifyPaxiRoom', {
+                roomUuid: roomData.uuid,
+              });
+            }}>
+            <Icon name="edit" size={14} color="#999" />
+            <Text style={styles.actionText}>수정하기</Text>
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity style={styles.actionButton} onPress={handleShare}>
+          <Icon name="share" size={14} color="#999" />
+          <Text style={styles.actionText}>공유하기</Text>
         </TouchableOpacity>
-      )}
+      </View>
 
       <View style={styles.labelRow}>
         <Text style={styles.labelText}>출발지</Text>
@@ -107,13 +134,18 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     width: '100%',
   },
-  editButton: {
+  actionsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
     marginBottom: 12,
+    gap: 12,
   },
-  editText: {
+  actionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  actionText: {
     color: '#999',
     fontSize: 12,
   },

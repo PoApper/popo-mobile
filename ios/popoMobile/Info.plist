@@ -59,5 +59,16 @@
 	<array>
 		<string>MaterialIcons.ttf</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>$(APP_URL_SCHEME)</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.popomobile</string>
+		</dict>
+	</array>
 </dict>
 </plist>

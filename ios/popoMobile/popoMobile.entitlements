@@ -7,6 +7,9 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>webcredentials:popo.poapper.club</string>
+		<string>applinks:popo.poapper.club</string>
+		<string>webcredentials:popo-dev.poapper.club</string>
+		<string>applinks:popo-dev.poapper.club</string>
 	</array>
 </dict>
 </plist>

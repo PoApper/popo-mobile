@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name="com.popomobile.MainActivity">
+
+            <!-- Deep Link: HTTPS URLs (App Links with autoVerify) - PRODUCTION ONLY -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Production HTTPS URLs -->
+                <data
+                    android:scheme="https"
+                    android:host="popo.poapper.club"
+                    android:pathPrefix="/room" />
+            </intent-filter>
+
+            <!-- Deep Link: Custom Schemes (fallback, no autoVerify) - PRODUCTION -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Production custom scheme -->
+                <data
+                    android:scheme="popo"
+                    android:host="room" />
+            </intent-filter>
+
+        </activity>
+    </application>
+
+</manifest>

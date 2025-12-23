@@ -1,2 +1,3 @@
 // 릴리즈 환경 설정
 ENV_CONFIG = Production
+APP_URL_SCHEME = popo

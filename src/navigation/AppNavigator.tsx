@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
+import {ActivityIndicator} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import Config from 'react-native-config';
 import {navigationRef} from './RootNavigation';
 
 // Navigation
@@ -23,6 +25,7 @@ import AboutScreen from '@screens/AboutScreen';
 // import PaxiRoomListScreen from '@screens/paxi/PaxiRoomListScreen';
 import PaxiCreateRoomScreen from '@screens/paxi/CreatePaxiRoomScreen';
 import NewChatScreen from '@screens/paxi/NewChatScreen';
+import DeepLinkRoomHandler from '@screens/paxi/DeepLinkRoomHandler';
 import PaxiIntroScreen from '@screens/paxi/PaxiIntro';
 import PaxiStartScreen from '@screens/paxi/PaxiStart';
 import SettlementScreen from '@screens/paxi/SettlementScreen';
@@ -39,7 +42,6 @@ import AssociationScreen from '@screens/association/AssociationScreen';
 import AssociationDetailScreen from '@screens/association/AssociationDetailScreen';
 
 // Other Screens
-import ReservationScreen from '@screens/ReservationScreen';
 import WhitebookScreen from '@screens/WhitebookScreen';
 import BenefitsScreen from '@screens/BenefitsScreen';
 import CampusShuttleScreen from '@screens/CampusShuttle';
@@ -50,6 +52,27 @@ import UserAccountInfoScreen from '../screens/paxi/UserAccountInfoScreen';
 import PaxiReportListScreen from '../screens/paxi/PaxiReportListScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+// Deep linking configuration
+const isProduction = Config.ENV === 'prod';
+const webDomain = isProduction
+  ? 'https://popo.poapper.club'
+  : 'https://popo-dev.poapper.club';
+const customScheme = isProduction ? 'popo://' : 'popo-dev://';
+
+const linking = {
+  prefixes: [webDomain, customScheme],
+  config: {
+    screens: {
+      DeepLinkRoom: {
+        path: 'room/:roomUuid',
+        parse: {
+          roomUuid: (roomUuid: string) => roomUuid,
+        },
+      },
+    },
+  },
+};
 
 const AppNavigator = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -75,7 +98,10 @@ const AppNavigator = () => {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer ref={navigationRef}>
+      <NavigationContainer
+        ref={navigationRef}
+        linking={linking}
+        fallback={<ActivityIndicator size="large" color="#FA5721" />}>
         <Stack.Navigator
           initialRouteName={isAuthenticated ? 'Main' : 'Landing'}
           screenOptions={{
@@ -106,6 +132,11 @@ const AppNavigator = () => {
             component={PaxiCreateRoomScreen}
           />
           <Stack.Screen name="NewChat" component={NewChatScreen} />
+          <Stack.Screen
+            name="DeepLinkRoom"
+            component={DeepLinkRoomHandler}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name="ModifyPaxiRoom"
             component={ModifyPaxiRoomScreen}
@@ -147,7 +178,6 @@ const AppNavigator = () => {
             name="EquipmentReservationApply"
             component={EquipmentReservationApplyScreen}
           />
-          <Stack.Screen name="Reservation" component={ReservationScreen} />
           <Stack.Screen name="About" component={AboutScreen} />
 
           {/* Main Navigators */}

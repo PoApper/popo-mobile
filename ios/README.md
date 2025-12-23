@@ -42,3 +42,17 @@ $ rm -rf ~/Library/Developer/Xcode/DerivedData/*
 # CocoaPods의 캐시 삭제
 $ pod install --repo-update
 ```
+
+## Deep Linking
+
+### 테스트 (개발 환경)
+
+```bash
+# Universal Links
+npx uri-scheme open "https://popo-dev.poapper.club/room/{roomUuid}" --ios
+
+# 커스텀 스킴
+npx uri-scheme open "popo-dev://room/{roomUuid}" --ios
+```
+
+또는 기본 브라우저(Safari)에서 직접 URL을 입력하여 테스트할 수 있습니다.
