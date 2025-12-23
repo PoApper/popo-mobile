@@ -151,7 +151,10 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
           } else if (status === 403) {
             Alert.alert('참여 불가', '강퇴된 방에는 참여할 수 없습니다.');
           } else {
-            Alert.alert('오류', `방 입장에 실패했습니다.\n${detail || ''}`);
+            Alert.alert(
+              '오류',
+              detail ? `방 입장에 실패했습니다.\n${detail}` : '방 입장에 실패했습니다.',
+            );
           }
         }
         setLoading(false);
@@ -176,9 +179,13 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
         {text: '확인', onPress: () => navigation.goBack()},
       ]);
     } else {
-      Alert.alert('오류', `방 정보를 불러올 수 없습니다.\n${detail || ''}`, [
-        {text: '확인', onPress: () => navigation.goBack()},
-      ]);
+      Alert.alert(
+        '오류',
+        detail
+          ? `방 정보를 불러올 수 없습니다.\n${detail}`
+          : '방 정보를 불러올 수 없습니다.',
+        [{text: '확인', onPress: () => navigation.goBack()}],
+      );
     }
     setLoading(false);
   };
@@ -201,7 +208,10 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
         setShowModal(false);
         navigation.goBack();
       } else {
-        Alert.alert('참여 실패', `방 참여에 실패했습니다.\n${detail || ''}`);
+        Alert.alert(
+          '참여 실패',
+          detail ? `방 참여에 실패했습니다.\n${detail}` : '방 참여에 실패했습니다.',
+        );
         setShowModal(false);
         navigation.goBack();
       }
