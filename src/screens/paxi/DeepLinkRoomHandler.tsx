@@ -153,7 +153,9 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
           } else {
             Alert.alert(
               '오류',
-              detail ? `방 입장에 실패했습니다.\n${detail}` : '방 입장에 실패했습니다.',
+              detail
+                ? `방 입장에 실패했습니다.\n${detail}`
+                : '방 입장에 실패했습니다.',
             );
           }
         }
@@ -210,7 +212,9 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       } else {
         Alert.alert(
           '참여 실패',
-          detail ? `방 참여에 실패했습니다.\n${detail}` : '방 참여에 실패했습니다.',
+          detail
+            ? `방 참여에 실패했습니다.\n${detail}`
+            : '방 참여에 실패했습니다.',
         );
         setShowModal(false);
         navigation.goBack();
