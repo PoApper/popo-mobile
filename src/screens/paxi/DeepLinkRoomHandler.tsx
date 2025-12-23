@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, ActivityIndicator, Alert, StyleSheet} from 'react-native';
+import {View, ActivityIndicator, Alert, StyleSheet, Platform, ToastAndroid} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -77,15 +77,23 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       );
 
       if (isAlreadyJoined) {
-        // User is already in the room - show alert and navigate directly
-        Alert.alert('이미 참가중인 방입니다. \n방으로 입장합니다.', '', [
-          {
-            text: '확인',
-            onPress: () => {
-              navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+        // User is already in the room - show toast/alert and navigate directly
+        if (Platform.OS === 'android') {
+          ToastAndroid.show('이미 참가중인 방입니다. \n방으로 입장합니다.', ToastAndroid.SHORT);
+        } else {
+          Alert.alert('이미 참가중인 방입니다. \n방으로 입장합니다.', '', [
+            {
+              text: '확인',
+              onPress: () => {
+                navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+              },
             },
-          },
-        ]);
+          ]);
+        }
+        // Navigate immediately after showing toast (Android) or wait for alert confirmation (iOS)
+        if (Platform.OS === 'android') {
+          navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+        }
         setLoading(false);
         return;
       }
