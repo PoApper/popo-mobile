@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, ActivityIndicator, Alert, StyleSheet, Platform, ToastAndroid} from 'react-native';
+import {
+  View,
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  Platform,
+  ToastAndroid,
+} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -23,7 +30,9 @@ type Props = {
  */
 const isNicknameError = (detail?: string): boolean => {
   return (
-    detail?.includes('닉네임') || detail?.includes('닉네임을 먼저 생성') || false
+    detail?.includes('닉네임') ||
+    detail?.includes('닉네임을 먼저 생성') ||
+    false
   );
 };
 
@@ -36,9 +45,11 @@ const handleUnauthorizedError = async (
 ) => {
   if (isNicknameError(detail)) {
     // No nickname - redirect to PaxiIntro
-    Alert.alert('닉네임 설정 필요', '카풀 서비스 이용을 위해 닉네임을 설정해주세요.', [
-      {text: '확인', onPress: () => navigation.navigate('PaxiIntro')},
-    ]);
+    Alert.alert(
+      '닉네임 설정 필요',
+      '카풀 서비스 이용을 위해 닉네임을 설정해주세요.',
+      [{text: '확인', onPress: () => navigation.navigate('PaxiIntro')}],
+    );
   } else {
     // Unauthorized - clear auth and redirect to login
     await reset_auth();
@@ -53,7 +64,6 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
   const [loading, setLoading] = useState(true);
   const [roomData, setRoomData] = useState<ChatRoomInfo | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [userUuid, setUserUuid] = useState<string | null>(null);
 
   useEffect(() => {
     handleDeepLink();
@@ -88,7 +98,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
     } catch (error) {
       console.error('사용자 정보 가져오기 오류:', error);
       const {status, detail} = getAxiosErrorInfo(error);
-      
+
       if (status === 401) {
         await handleUnauthorizedError(navigation, detail);
       } else {
@@ -116,10 +126,13 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
         // User is already in the room - call joinRoom and navigate directly
         try {
           await paxi_api.post(`/room/join/${roomUuid}`);
-          
+
           // Show toast/alert and navigate
           if (Platform.OS === 'android') {
-            ToastAndroid.show('이미 참가중인 방입니다. \n방으로 입장합니다.', ToastAndroid.SHORT);
+            ToastAndroid.show(
+              '이미 참가중인 방입니다. \n방으로 입장합니다.',
+              ToastAndroid.SHORT,
+            );
             navigation.replace('NewChat', {roomUuid, from: 'roomList'});
           } else {
             Alert.alert('이미 참가중인 방입니다. \n방으로 입장합니다.', '', [
@@ -133,7 +146,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
           }
         } catch (error) {
           const {status, detail} = getAxiosErrorInfo(error);
-          
+
           if (status === 401) {
             await handleUnauthorizedError(navigation, detail);
           } else if (status === 403) {
