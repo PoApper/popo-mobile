@@ -5,6 +5,7 @@ import {RouteProp} from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
 import paxi_api from '@utils/paxi_api';
+import api from '@utils/api';
 import {ChatRoomInfo} from '@interfaces/paxi';
 import JoinConfirmModal from '@components/room/JoinConfirmModal';
 import {getAxiosErrorInfo} from '@utils/axios-error';
@@ -22,6 +23,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
   const [loading, setLoading] = useState(true);
   const [roomData, setRoomData] = useState<ChatRoomInfo | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [userUuid, setUserUuid] = useState<string | null>(null);
 
   useEffect(() => {
     handleDeepLink();
@@ -47,10 +49,48 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       return;
     }
 
-    // 2. Fetch room data
+    // 2. Get current user UUID
+    let currentUserUuid: string;
+    try {
+      const userInfoResponse = await api.get('/auth/myInfo');
+      currentUserUuid = userInfoResponse.data.uuid;
+      setUserUuid(currentUserUuid);
+    } catch (error) {
+      console.error('사용자 정보 가져오기 오류:', error);
+      Alert.alert('오류', '사용자 정보를 불러올 수 없습니다.', [
+        {text: '확인', onPress: () => navigation.goBack()},
+      ]);
+      setLoading(false);
+      return;
+    }
+
+    // 3. Fetch room data
     try {
       const response = await paxi_api.get(`/room/${roomUuid}`);
-      setRoomData(response.data);
+      const fetchedRoomData = response.data;
+      setRoomData(fetchedRoomData);
+
+      // 4. Check if user is already in the room
+      const isAlreadyJoined = fetchedRoomData.roomUsers?.some(
+        (user: {userUuid: string; status: string}) =>
+          user.userUuid === currentUserUuid && user.status !== 'KICKED',
+      );
+
+      if (isAlreadyJoined) {
+        // User is already in the room - show alert and navigate directly
+        Alert.alert('이미 참가중인 방입니다. \n방으로 입장합니다.', '', [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+            },
+          },
+        ]);
+        setLoading(false);
+        return;
+      }
+
+      // User is not in the room - show join confirmation modal
       setShowModal(true);
       setLoading(false);
     } catch (error) {
