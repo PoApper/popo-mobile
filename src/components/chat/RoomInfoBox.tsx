@@ -14,6 +14,7 @@ import Svg, {Line} from 'react-native-svg';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import Clipboard from '@react-native-clipboard/clipboard';
+import Config from 'react-native-config';
 
 import {ChatRoomInfo} from '@interfaces/paxi';
 import {textColor} from '@styles/default';
@@ -35,7 +36,10 @@ const RoomInfoBox = ({
   const isDarkMode = useColorScheme() === 'dark';
 
   const handleShare = () => {
-    const shareUrl = `https://popo.poapper.club/room/${roomData.uuid}`;
+    const isProduction = Config.ENV === 'prod';
+    const domain = isProduction ? 'popo.poapper.club' : 'popo-dev.poapper.club';
+    const shareUrl = `https://${domain}/room/${roomData.uuid}`;
+
     Clipboard.setString(shareUrl);
 
     if (Platform.OS === 'android') {
