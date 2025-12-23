@@ -76,6 +76,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       const isAuth = await EncryptedStorage.getItem(IS_AUTHENTICATED_KEY);
 
       if (!authToken || isAuth !== 'true') {
+        setLoading(false);
         Alert.alert('로그인 필요', '방에 참여하려면 로그인이 필요합니다.', [
           {text: '확인', onPress: () => navigation.navigate('Login')},
         ]);
@@ -83,6 +84,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       }
     } catch (error) {
       console.error('인증 상태 확인 오류:', error);
+      setLoading(false);
       Alert.alert('오류', '인증 상태를 확인할 수 없습니다.', [
         {text: '확인', onPress: () => navigation.navigate('Login')},
       ]);
