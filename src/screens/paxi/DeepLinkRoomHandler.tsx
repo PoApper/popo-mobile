@@ -18,6 +18,36 @@ type Props = {
   route: RouteProp<RootStackParamList, 'DeepLinkRoom'>;
 };
 
+/**
+ * Check if error is related to missing nickname
+ */
+const isNicknameError = (detail?: string): boolean => {
+  return (
+    detail?.includes('닉네임') || detail?.includes('닉네임을 먼저 생성') || false
+  );
+};
+
+/**
+ * Handle 401 unauthorized errors - check for nickname error first, then redirect accordingly
+ */
+const handleUnauthorizedError = async (
+  navigation: NativeStackNavigationProp<RootStackParamList, 'DeepLinkRoom'>,
+  detail?: string,
+) => {
+  if (isNicknameError(detail)) {
+    // No nickname - redirect to PaxiIntro
+    Alert.alert('닉네임 설정 필요', '카풀 서비스 이용을 위해 닉네임을 설정해주세요.', [
+      {text: '확인', onPress: () => navigation.navigate('PaxiIntro')},
+    ]);
+  } else {
+    // Unauthorized - clear auth and redirect to login
+    await reset_auth();
+    Alert.alert('로그인 필요', '다시 로그인해주세요.', [
+      {text: '확인', onPress: () => navigation.navigate('Login')},
+    ]);
+  }
+};
+
 const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
   const {roomUuid} = route.params;
   const [loading, setLoading] = useState(true);
@@ -60,18 +90,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       const {status, detail} = getAxiosErrorInfo(error);
       
       if (status === 401) {
-        // Check if it's a nickname error
-        if (detail?.includes('닉네임') || detail?.includes('닉네임을 먼저 생성')) {
-          Alert.alert('닉네임 설정 필요', '카풀 서비스 이용을 위해 닉네임을 설정해주세요.', [
-            {text: '확인', onPress: () => navigation.navigate('PaxiIntro')},
-          ]);
-        } else {
-          // Unauthorized - clear auth and redirect to login
-          await reset_auth();
-          Alert.alert('로그인 필요', '다시 로그인해주세요.', [
-            {text: '확인', onPress: () => navigation.navigate('Login')},
-          ]);
-        }
+        await handleUnauthorizedError(navigation, detail);
       } else {
         Alert.alert('오류', '사용자 정보를 불러올 수 없습니다.', [
           {text: '확인', onPress: () => navigation.goBack()},
@@ -127,19 +146,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
     const {status, detail} = getAxiosErrorInfo(error);
 
     if (status === 401) {
-      // Check if it's a nickname error first
-      if (detail?.includes('닉네임') || detail?.includes('닉네임을 먼저 생성')) {
-        // No nickname - redirect to PaxiIntro
-        Alert.alert('닉네임 설정 필요', '카풀 서비스 이용을 위해 닉네임을 설정해주세요.', [
-          {text: '확인', onPress: () => navigation.navigate('PaxiIntro')},
-        ]);
-      } else {
-        // Unauthorized - clear auth and redirect to login
-        await reset_auth();
-        Alert.alert('로그인 필요', '다시 로그인해주세요.', [
-          {text: '확인', onPress: () => navigation.navigate('Login')},
-        ]);
-      }
+      await handleUnauthorizedError(navigation, detail);
     } else if (status === 404) {
       Alert.alert('오류', '방을 찾을 수 없습니다.', [
         {text: '확인', onPress: () => navigation.goBack()},
@@ -163,20 +170,8 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       const {status, detail} = getAxiosErrorInfo(error);
 
       if (status === 401) {
-        // Check if it's a nickname error
-        if (detail?.includes('닉네임') || detail?.includes('닉네임을 먼저 생성')) {
-          setShowModal(false);
-          Alert.alert('닉네임 설정 필요', '카풀 서비스 이용을 위해 닉네임을 설정해주세요.', [
-            {text: '확인', onPress: () => navigation.navigate('PaxiIntro')},
-          ]);
-        } else {
-          // Unauthorized - clear auth and redirect to login
-          setShowModal(false);
-          await reset_auth();
-          Alert.alert('로그인 필요', '다시 로그인해주세요.', [
-            {text: '확인', onPress: () => navigation.navigate('Login')},
-          ]);
-        }
+        setShowModal(false);
+        await handleUnauthorizedError(navigation, detail);
       } else if (status === 403) {
         Alert.alert('참여 불가', '강퇴된 방에는 참여할 수 없습니다.');
         setShowModal(false);
