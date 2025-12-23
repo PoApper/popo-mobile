@@ -65,6 +65,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>popo</string>
+				<string>popo-dev</string>
 			</array>
 			<key>CFBundleURLName</key>
 			<string>com.popomobile</string>
