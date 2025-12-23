@@ -42,7 +42,6 @@ import AssociationScreen from '@screens/association/AssociationScreen';
 import AssociationDetailScreen from '@screens/association/AssociationDetailScreen';
 
 // Other Screens
-import ReservationScreen from '@screens/ReservationScreen';
 import WhitebookScreen from '@screens/WhitebookScreen';
 import BenefitsScreen from '@screens/BenefitsScreen';
 import CampusShuttleScreen from '@screens/CampusShuttle';
@@ -183,7 +182,6 @@ const AppNavigator = () => {
             name="EquipmentReservationApply"
             component={EquipmentReservationApplyScreen}
           />
-          <Stack.Screen name="Reservation" component={ReservationScreen} />
           <Stack.Screen name="About" component={AboutScreen} />
 
           {/* Main Navigators */}

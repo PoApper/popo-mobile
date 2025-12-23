@@ -106,6 +106,5 @@ export type OtherStackParamList = {
     association: string;
     selectedDate: string;
   };
-  Reservation: undefined;
   About: undefined;
 };

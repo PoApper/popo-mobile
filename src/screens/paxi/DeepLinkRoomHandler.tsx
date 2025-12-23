@@ -94,7 +94,6 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
     try {
       const userInfoResponse = await api.get('/auth/myInfo');
       currentUserUuid = userInfoResponse.data.uuid;
-      setUserUuid(currentUserUuid);
     } catch (error) {
       console.error('사용자 정보 가져오기 오류:', error);
       const {status, detail} = getAxiosErrorInfo(error);
