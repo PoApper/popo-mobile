@@ -114,28 +114,11 @@ cd android
 ### 테스트 (개발 환경)
 
 ```bash
-# Custom Scheme
-adb shell am start -W -a android.intent.action.VIEW -d "popo-dev://room/{roomUuid}"
+# Universal Links
+npx uri-scheme open "https://popo-dev.poapper.club/room/{roomUuid}" --android
 
-# HTTPS URL (App Links)
-adb shell am start -W -a android.intent.action.VIEW -d "https://popo-dev.poapper.club/room/{roomUuid}"
+# 커스텀 스킴
+npx uri-scheme open "popo-dev://room/{roomUuid}" --android
 ```
 
-### App Links 검증 상태 확인
-
-```bash
-# 검증 상태 확인
-adb shell pm get-app-links com.popomobile.dev
-
-# 검증 재실행
-adb shell pm verify-app-links --re-verify com.popomobile.dev
-
-# 수동 승인 (개발 중 에뮬레이터에서 검증 실패 시)
-adb shell pm set-app-links --package com.popomobile.dev 2 popo-dev.poapper.club
-```
-
-**상태 코드**:
-
-- `1`: verified (자동 검증 성공)
-- `2`: approved (수동 승인)
-- `1024`: legacy_failure (검증 실패)
+(25.12.23) 기본 브라우저인 Chrome에서 링크를 입력해봤지만 iOS와는 다르게 안드로이드 애뮬레이터에서는 앱이 열리지 않고 플레이스토어로 이동되는 문제가 있음. 위에 작성한 `uri-scheme`을 이용하면 정상 작동함.
