@@ -1,3 +1,4 @@
+import React, {useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -15,9 +16,11 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import Clipboard from '@react-native-clipboard/clipboard';
 import Config from 'react-native-config';
+import Share from 'react-native-share';
 
 import {ChatRoomInfo} from '@interfaces/paxi';
 import {textColor} from '@styles/default';
+import ShareOptionsModal from '@components/room/ShareOptionsModal';
 
 interface RoomInfoBoxProps {
   roomData: ChatRoomInfo;
@@ -34,12 +37,38 @@ const RoomInfoBox = ({
 }: RoomInfoBoxProps) => {
   const isOwner = myUuid === roomData.ownerUuid;
   const isDarkMode = useColorScheme() === 'dark';
+  const [shareModalVisible, setShareModalVisible] = useState(false);
+
+  const isProduction = Config.ENV === 'prod';
+  const domain = isProduction ? 'popo.poapper.club' : 'popo-dev.poapper.club';
+  const shareUrl = `https://${domain}/room/${roomData.uuid}`;
 
   const handleShare = () => {
-    const isProduction = Config.ENV === 'prod';
-    const domain = isProduction ? 'popo.poapper.club' : 'popo-dev.poapper.club';
-    const shareUrl = `https://${domain}/room/${roomData.uuid}`;
+    setShareModalVisible(true);
+  };
 
+  const handleKakaoShare = async () => {
+    try {
+      const shareMessage = `${roomData.departureLocation} → ${
+        roomData.destinationLocation
+      }\n${moment(roomData.departureTime).format(
+        'M월 D일 HH시 mm분 출발',
+      )}\n\n참여하기: ${shareUrl}`;
+
+      await Share.open({
+        title: 'Paxi 택시팟 공유',
+        message: shareMessage,
+        url: shareUrl,
+      });
+    } catch (error: any) {
+      // 사용자가 공유를 취소한 경우 에러를 무시
+      if (error.message !== 'User did not share') {
+        console.error('공유 오류:', error);
+      }
+    }
+  };
+
+  const handleLinkCopy = () => {
     Clipboard.setString(shareUrl);
 
     if (Platform.OS === 'android') {
@@ -121,6 +150,14 @@ const RoomInfoBox = ({
         style={[styles.extraInfo, {color: isDarkMode ? '#999' : '#4F4F4F'}]}>
         {roomData?.description}
       </Text>
+
+      <ShareOptionsModal
+        visible={shareModalVisible}
+        room={roomData}
+        onClose={() => setShareModalVisible(false)}
+        onKakaoShare={handleKakaoShare}
+        onLinkCopy={handleLinkCopy}
+      />
     </View>
   );
 };
