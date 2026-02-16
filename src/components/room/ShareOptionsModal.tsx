@@ -108,8 +108,8 @@ const ShareOptionsModal: React.FC<Props> = ({
                 {backgroundColor: C.card, borderColor: C.border},
               ]}
               onPress={() => {
-                onAppShare();
                 onClose();
+                setTimeout(onAppShare, 300);
               }}>
               <Icon name="share" size={24} color={C.text} />
               <Text style={[styles.shareButtonText, {color: C.text}]}>
