@@ -25,6 +25,12 @@ $ npm run ios:prod
 
 `project.pbxproj` 파일에서 `MARKETING_VERSION` 값을 변경 해준다.
 
+## 앱 빌드
+
+Xcode 에서 진행합니다.
+
+POPO 드라이브 [iOS 빌드 및 배포](https://docs.google.com/document/d/1C1s7IaPpp15jBgNyjjILGEaj8Z3KVOKeSJ1uovLf53A/edit?tab=t.0#heading=h.ik2jb56m4d8c) 참고
+
 ## 캐시 제거
 
 ```bash
