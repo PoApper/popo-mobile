@@ -90,7 +90,7 @@
 
     <script>
       // DOM이 로드되기 전에 메타 태그 업데이트 (카카오톡 크롤러 대응)
-      (function() {
+      (function () {
         const path = window.location.pathname;
         let roomUuid = null;
 
@@ -113,7 +113,7 @@
               // 출발지, 도착지, 출발 시각 포맷팅
               const departure = data.departureLocation || '출발지';
               const destination = data.destinationLocation || '도착지';
-              
+
               // 출발 시각 포맷팅 (예: "12월 25일 14시 30분")
               let departureTime = '';
               if (data.departureTime) {
@@ -122,17 +122,24 @@
                 const day = date.getDate();
                 const hours = date.getHours();
                 const minutes = date.getMinutes();
-                departureTime = `${month}월 ${day}일 ${hours}시 ${minutes.toString().padStart(2, '0')}분 출발`;
+                departureTime = `${month}월 ${day}일 ${hours}시 ${minutes
+                  .toString()
+                  .padStart(2, '0')}분 출발`;
               }
 
-              const description = `${departure} → ${destination}${departureTime ? ` | ${departureTime}` : ''}`;
+              const description = `${departure} → ${destination}${
+                departureTime ? ` | ${departureTime}` : ''
+              }`;
               const currentUrl = window.location.href;
 
               // 메타 태그 업데이트
               updateMetaTag('og:title', `Paxi - ${departure} → ${destination}`);
               updateMetaTag('og:description', description);
               updateMetaTag('og:url', currentUrl);
-              updateMetaTag('twitter:title', `Paxi - ${departure} → ${destination}`);
+              updateMetaTag(
+                'twitter:title',
+                `Paxi - ${departure} → ${destination}`,
+              );
               updateMetaTag('twitter:description', description);
               updateMetaTag('title', `Paxi - ${departure} → ${destination}`);
             })
@@ -245,7 +252,8 @@
 
           if (isIOS || isAndroid) {
             if (statusEl) {
-              statusEl.textContent = '자동으로 열리지 않았다면 아래 버튼을 눌러주세요.';
+              statusEl.textContent =
+                '자동으로 열리지 않았다면 아래 버튼을 눌러주세요.';
             }
             if (openAppBtn) {
               openAppBtn.style.display = 'inline-block';
@@ -271,11 +279,20 @@
     <h1>Paxi 택시팟 참여하기</h1>
     <p id="status">앱에서 열기를 시도 중입니다...</p>
 
-    <a id="open-app-btn" href="#" class="button" style="display: none; font-size: 17px; padding: 14px 36px; margin-top: 16px;">
+    <a
+      id="open-app-btn"
+      href="#"
+      class="button"
+      style="
+        display: none;
+        font-size: 17px;
+        padding: 14px 36px;
+        margin-top: 16px;
+      ">
       앱에서 열기
     </a>
 
-    <div id="store-section" style="margin-top: 28px; display: none;">
+    <div id="store-section" style="margin-top: 28px; display: none">
       <p style="font-size: 13px">앱이 설치되어 있지 않다면</p>
       <a
         href="https://apps.apple.com/us/app/popo-%ED%8F%AC%EC%8A%A4%ED%85%8C%ED%82%A4%EC%95%88%EC%9D%98-%ED%95%84%EC%88%98-%EC%95%B1/id6743666761"
