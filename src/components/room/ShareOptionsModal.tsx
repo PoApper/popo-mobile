@@ -18,7 +18,7 @@ type Props = {
   visible: boolean;
   room: ChatRoomInfo;
   onClose: () => void;
-  onKakaoShare: () => void;
+  onAppShare: () => void;
   onLinkCopy: () => void;
 };
 
@@ -26,7 +26,7 @@ const ShareOptionsModal: React.FC<Props> = ({
   visible,
   room,
   onClose,
-  onKakaoShare,
+  onAppShare,
   onLinkCopy,
 }) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -37,8 +37,6 @@ const ShareOptionsModal: React.FC<Props> = ({
     text: isDarkMode ? '#EDEDED' : '#101113',
     subText: isDarkMode ? '#A7A7AD' : '#6B6F76',
     border: isDarkMode ? '#2A2C2F' : '#E5E7EB',
-    kakaoYellow: '#FEE500',
-    kakaoText: '#000000',
   };
 
   return (
@@ -107,15 +105,15 @@ const ShareOptionsModal: React.FC<Props> = ({
             <TouchableOpacity
               style={[
                 styles.shareButton,
-                {backgroundColor: C.kakaoYellow, borderColor: C.kakaoYellow},
+                {backgroundColor: C.card, borderColor: C.border},
               ]}
               onPress={() => {
-                onKakaoShare();
+                onAppShare();
                 onClose();
               }}>
-              <Icon name="chat-bubble" size={24} color={C.kakaoText} />
-              <Text style={[styles.shareButtonText, {color: C.kakaoText}]}>
-                카카오톡 공유
+              <Icon name="share" size={24} color={C.text} />
+              <Text style={[styles.shareButtonText, {color: C.text}]}>
+                다른 앱으로 공유
               </Text>
             </TouchableOpacity>
 

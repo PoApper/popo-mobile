@@ -46,7 +46,7 @@ const RoomInfoBox = ({
     setShareModalVisible(true);
   };
 
-  const handleKakaoShare = async () => {
+  const handleAppShare = async () => {
     try {
       const shareMessage = `${roomData.departureLocation} → ${
         roomData.destinationLocation
@@ -154,7 +154,7 @@ const RoomInfoBox = ({
         visible={shareModalVisible}
         room={roomData}
         onClose={() => setShareModalVisible(false)}
-        onKakaoShare={handleKakaoShare}
+        onAppShare={handleAppShare}
         onLinkCopy={handleLinkCopy}
       />
     </View>
