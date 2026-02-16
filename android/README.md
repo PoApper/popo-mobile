@@ -92,6 +92,16 @@ cd android
 rm -rf node_modules && npm install
 ```
 
+#### 6. 에뮬레이터 저장 공간 부족
+
+`INSTALL_FAILED_INSUFFICIENT_STORAGE: Failed to override installation location`
+라는 에러는 컴퓨터가 아닌 에뮬레이터의 저장 공간이 부족한 것입니다. 에뮬레이터 안에 안드로이드 앱을 삭제하고 재설치하면 해결됩니다.
+
+```bash
+adb uninstall com.popomobile.dev
+npm run android
+```
+
 #### 6. 위에 것들 안먹히면 시도
 
 ```bash
