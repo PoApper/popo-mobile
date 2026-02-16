@@ -8,6 +8,7 @@ import {
   Platform,
   ToastAndroid,
   Alert,
+  Share,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
@@ -16,8 +17,6 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import Clipboard from '@react-native-clipboard/clipboard';
 import Config from 'react-native-config';
-import Share from 'react-native-share';
-
 import {ChatRoomInfo} from '@interfaces/paxi';
 import {textColor} from '@styles/default';
 import ShareOptionsModal from '@components/room/ShareOptionsModal';
@@ -55,10 +54,10 @@ const RoomInfoBox = ({
         'M월 D일 HH시 mm분 출발',
       )}\n\n참여하기: ${shareUrl}`;
 
-      await Share.open({
+      await Share.share({
         title: 'Paxi 택시팟 공유',
-        message: shareMessage,
-        url: shareUrl,
+        message: Platform.OS === 'android' ? `${shareMessage}\n${shareUrl}` : shareMessage,
+        url: Platform.OS === 'ios' ? shareUrl : undefined,
       });
     } catch (error: any) {
       // 사용자가 공유를 취소한 경우 에러를 무시
