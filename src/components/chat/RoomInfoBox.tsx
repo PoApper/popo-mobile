@@ -39,7 +39,9 @@ const RoomInfoBox = ({
   const [shareModalVisible, setShareModalVisible] = useState(false);
 
   const isProduction = Config.ENV === 'prod';
-  const domain = isProduction ? 'paxi.popo.poapper.club' : 'paxi.popo-dev.poapper.club';
+  const domain = isProduction
+    ? 'paxi.popo.poapper.club'
+    : 'paxi.popo-dev.poapper.club';
   const shareUrl = `https://api.${domain}/room/preview/${roomData.uuid}`;
 
   const handleShare = () => {
@@ -56,7 +58,10 @@ const RoomInfoBox = ({
 
       await Share.share({
         title: 'Paxi 택시팟 공유',
-        message: Platform.OS === 'android' ? `${shareMessage}\n${shareUrl}` : shareMessage,
+        message:
+          Platform.OS === 'android'
+            ? `${shareMessage}\n${shareUrl}`
+            : shareMessage,
         url: Platform.OS === 'ios' ? shareUrl : undefined,
       });
     } catch (error: any) {
