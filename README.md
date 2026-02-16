@@ -1,5 +1,9 @@
 # POPO Mobile
 
+## 가이드
+
+[모바일 온보딩 가이드](https://docs.google.com/document/d/1C1s7IaPpp15jBgNyjjILGEaj8Z3KVOKeSJ1uovLf53A/edit?tab=t.0)를 읽어주세요
+
 ## 환경설정
 
 `.env.example`을 따라 `.env`를 만들어 필요한 값들을 채워넣습니다. 해당 파일은 안드로이드 빌드 시 사용됩니다.
