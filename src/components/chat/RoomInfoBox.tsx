@@ -124,7 +124,6 @@ const RoomInfoBox = ({
         style={[styles.extraInfo, {color: isDarkMode ? '#999' : '#4F4F4F'}]}>
         {roomData?.description}
       </Text>
-
     </View>
   );
 };
