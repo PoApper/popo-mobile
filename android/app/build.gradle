@@ -159,11 +159,9 @@ android {
     productFlavors {
         dev {
             dimension "env"
-            // dev 버전 앱은 다른 아이디를 갖게 하여 prod 버전과 동시에 설치 가능하게 함
-            applicationIdSuffix ".dev"
             // dev 버전 앱 이름 변경
             resValue "string", "app_name", "POPO (Dev)"
-            resValue "string", "package_name", "com.popomobile.dev"
+            resValue "string", "package_name", "com.popomobile"
             // ENV를 빌드 flavor에서 자동 결정 (.env 파일에서 제거됨)
             buildConfigField "String", "ENV", '"dev"'
         }
