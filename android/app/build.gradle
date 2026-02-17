@@ -3,14 +3,6 @@ apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 apply plugin: "com.google.gms.google-services" // Firebase
 
-// .env 파일 설정 - dotenv.gradle 적용 전에 정의되어야 함
-project.ext.envConfigFiles = [
-    devDebug: ".env.dev",
-    devRelease: ".env.dev",
-    prodDebug: ".env.prod",
-    prodRelease: ".env.prod",
-]
-
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 // env 확인용 프린트
