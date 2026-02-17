@@ -10,7 +10,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# Build Configuration&#xc5d0; &#xb530;&#xb77c; .env &#xd30c;&#xc77c;&#xc5d0; ENV &#xc124;&#xc815;&#10;sed -i '' '/^ENV=/d' &quot;${SRCROOT}/../.env&quot;&#10;if [ &quot;${CONFIGURATION}&quot; == &quot;Debug&quot; ]; then&#10;  echo &quot;ENV=dev&quot; &gt;&gt; &quot;${SRCROOT}/../.env&quot;&#10;else&#10;  echo &quot;ENV=prod&quot; &gt;&gt; &quot;${SRCROOT}/../.env&quot;&#10;fi&#10;">
+               scriptText = "# Build Configuration&#xc5d0; &#xb530;&#xb77c; .env &#xd30c;&#xc77c;&#xc5d0; ENV &#xc124;&#xc815;&#10;sed -i &apos;&apos; &apos;/^ENV=/d&apos; &quot;${SRCROOT}/../.env&quot;&#10;# &#xd30c;&#xc77c; &#xb05d;&#xc5d0; newline &#xbcf4;&#xc7a5;&#10;[ -n &quot;$(tail -c1 &quot;${SRCROOT}/../.env&quot;)&quot; ] &amp;&amp; echo &quot;&quot; &gt;&gt; &quot;${SRCROOT}/../.env&quot;&#10;if [ &quot;${CONFIGURATION}&quot; == &quot;Debug&quot; ]; then&#10;  echo &quot;ENV=dev&quot; &gt;&gt; &quot;${SRCROOT}/../.env&quot;&#10;else&#10;  echo &quot;ENV=prod&quot; &gt;&gt; &quot;${SRCROOT}/../.env&quot;&#10;fi&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
