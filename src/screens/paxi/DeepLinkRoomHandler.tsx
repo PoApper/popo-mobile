@@ -84,7 +84,13 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
     if (!roomUuid || !isValidUUID(roomUuid)) {
       setLoading(false);
       Alert.alert('오류', '유효하지 않은 방 링크입니다.', [
-        {text: '확인', onPress: () => navigation.goBack()},
+        {
+          text: '확인',
+          onPress: () =>
+            navigation.canGoBack()
+              ? navigation.goBack()
+              : navigation.replace('Main', {prevTab: 'DeepLinkRoom'}),
+        },
       ]);
       return;
     }
@@ -123,7 +129,13 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
         await handleUnauthorizedError(navigation, detail);
       } else {
         Alert.alert('오류', '사용자 정보를 불러올 수 없습니다.', [
-          {text: '확인', onPress: () => navigation.goBack()},
+          {
+            text: '확인',
+            onPress: () =>
+              navigation.canGoBack()
+                ? navigation.goBack()
+                : navigation.replace('Main', {prevTab: 'DeepLinkRoom'}),
+          },
         ]);
       }
       setLoading(false);
@@ -199,7 +211,13 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       await handleUnauthorizedError(navigation, detail);
     } else if (status === 404) {
       Alert.alert('오류', '방을 찾을 수 없습니다.', [
-        {text: '확인', onPress: () => navigation.goBack()},
+        {
+          text: '확인',
+          onPress: () =>
+            navigation.canGoBack()
+              ? navigation.goBack()
+              : navigation.replace('Main', {prevTab: 'DeepLinkRoom'}),
+        },
       ]);
     } else {
       Alert.alert(
@@ -207,7 +225,15 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
         detail
           ? `방 정보를 불러올 수 없습니다.\n${detail}`
           : '방 정보를 불러올 수 없습니다.',
-        [{text: '확인', onPress: () => navigation.goBack()}],
+        [
+          {
+            text: '확인',
+            onPress: () =>
+              navigation.canGoBack()
+                ? navigation.goBack()
+                : navigation.replace('Main', {prevTab: 'DeepLinkRoom'}),
+          },
+        ],
       );
     }
     setLoading(false);
@@ -229,7 +255,11 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       } else if (status === 403) {
         Alert.alert('참여 불가', '강퇴된 방에는 참여할 수 없습니다.');
         setShowModal(false);
-        navigation.goBack();
+        if (navigation.canGoBack()) {
+          navigation.goBack();
+        } else {
+          navigation.replace('Main', {prevTab: 'DeepLinkRoom'});
+        }
       } else {
         Alert.alert(
           '참여 실패',
@@ -238,14 +268,22 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
             : '방 참여에 실패했습니다.',
         );
         setShowModal(false);
-        navigation.goBack();
+        if (navigation.canGoBack()) {
+          navigation.goBack();
+        } else {
+          navigation.replace('Main', {prevTab: 'DeepLinkRoom'});
+        }
       }
     }
   };
 
   const handleClose = () => {
     setShowModal(false);
-    navigation.goBack();
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      navigation.replace('Main', {prevTab: 'DeepLinkRoom'});
+    }
   };
 
   if (loading) {
