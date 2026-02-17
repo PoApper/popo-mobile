@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   TouchableOpacity,
@@ -6,8 +6,6 @@ import {
   StyleSheet,
   useColorScheme,
   Platform,
-  ToastAndroid,
-  Alert,
   Share,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -15,11 +13,9 @@ import moment from 'moment';
 import Svg, {Line} from 'react-native-svg';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
-import Clipboard from '@react-native-clipboard/clipboard';
 import Config from 'react-native-config';
 import {ChatRoomInfo} from '@interfaces/paxi';
 import {textColor} from '@styles/default';
-import ShareOptionsModal from '@components/room/ShareOptionsModal';
 
 interface RoomInfoBoxProps {
   roomData: ChatRoomInfo;
@@ -36,17 +32,12 @@ const RoomInfoBox = ({
 }: RoomInfoBoxProps) => {
   const isOwner = myUuid === roomData.ownerUuid;
   const isDarkMode = useColorScheme() === 'dark';
-  const [shareModalVisible, setShareModalVisible] = useState(false);
 
   const isProduction = Config.ENV === 'prod';
   const domain = isProduction ? 'popo.poapper.club' : 'popo-dev.poapper.club';
   const shareUrl = `https://${domain}/room/${roomData.uuid}`;
 
-  const handleShare = () => {
-    setShareModalVisible(true);
-  };
-
-  const handleAppShare = async () => {
+  const handleShare = async () => {
     try {
       await Share.share(
         Platform.OS === 'ios'
@@ -58,16 +49,6 @@ const RoomInfoBox = ({
       if (error.message !== 'User did not share') {
         console.error('공유 오류:', error);
       }
-    }
-  };
-
-  const handleLinkCopy = () => {
-    Clipboard.setString(shareUrl);
-
-    if (Platform.OS === 'android') {
-      ToastAndroid.show('방 공유 링크가 복사되었습니다', ToastAndroid.SHORT);
-    } else {
-      Alert.alert('공유', '방 공유 링크가 복사되었습니다.');
     }
   };
 
@@ -144,13 +125,6 @@ const RoomInfoBox = ({
         {roomData?.description}
       </Text>
 
-      <ShareOptionsModal
-        visible={shareModalVisible}
-        room={roomData}
-        onClose={() => setShareModalVisible(false)}
-        onAppShare={handleAppShare}
-        onLinkCopy={handleLinkCopy}
-      />
     </View>
   );
 };
