@@ -172,11 +172,15 @@ android {
             // dev 버전 앱 이름 변경
             resValue "string", "app_name", "POPO (Dev)"
             resValue "string", "package_name", "com.popomobile.dev"
+            // ENV를 빌드 flavor에서 자동 결정 (.env 파일에서 제거됨)
+            buildConfigField "String", "ENV", '"dev"'
         }
         prod {
             dimension "env"
             resValue "string", "app_name", "POPO"
             resValue "string", "package_name", "com.popomobile"
+            // ENV를 빌드 flavor에서 자동 결정 (.env 파일에서 제거됨)
+            buildConfigField "String", "ENV", '"prod"'
         }
     }
 
