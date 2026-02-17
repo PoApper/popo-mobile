@@ -39,6 +39,12 @@ cd android
 ./gradlew assembleRelease
 
 # AAB 빌드 (Google Play 제출용)
+# dev 환경으로 빌드(내부 테스트 시 사용)
+npm run android:aab:dev
+cd android/app/build/outputs/bundle/devRelease
+open .
+
+# prod 환경으로 빌드(실제 사용자 배포)
 npm run android:aab:prod
 cd android/app/build/outputs/bundle/prodRelease
 open .
