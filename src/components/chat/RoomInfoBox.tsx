@@ -40,9 +40,9 @@ const RoomInfoBox = ({
 
   const isProduction = Config.ENV === 'prod';
   const domain = isProduction
-    ? 'paxi.popo.poapper.club'
-    : 'paxi.popo-dev.poapper.club';
-  const shareUrl = `https://api.${domain}/room/preview/${roomData.uuid}`;
+    ? 'popo.poapper.club'
+    : 'popo-dev.poapper.club';
+  const shareUrl = `https://${domain}/room/${roomData.uuid}`;
 
   const handleShare = () => {
     setShareModalVisible(true);
