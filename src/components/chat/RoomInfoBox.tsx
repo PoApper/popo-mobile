@@ -48,20 +48,11 @@ const RoomInfoBox = ({
 
   const handleAppShare = async () => {
     try {
-      const shareMessage = `${roomData.departureLocation} → ${
-        roomData.destinationLocation
-      }\n${moment(roomData.departureTime).format(
-        'M월 D일 HH시 mm분 출발',
-      )}\n\n참여하기: ${shareUrl}`;
-
-      await Share.share({
-        title: 'Paxi 택시팟 공유',
-        message:
-          Platform.OS === 'android'
-            ? `${shareMessage}\n${shareUrl}`
-            : shareMessage,
-        url: Platform.OS === 'ios' ? shareUrl : undefined,
-      });
+      await Share.share(
+        Platform.OS === 'ios'
+          ? {title: 'Paxi 택시팟 공유', url: shareUrl}
+          : {title: 'Paxi 택시팟 공유', message: shareUrl},
+      );
     } catch (error: any) {
       // 사용자가 공유를 취소한 경우 에러를 무시
       if (error.message !== 'User did not share') {
