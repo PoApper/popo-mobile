@@ -26,7 +26,6 @@ import {openURLWithFallback} from '@utils/linking';
 import {
   POSTECH_DORM_DELIVERY_URL,
   RECORDS_ARCHIVE_URL,
-  CARPOOL_EVENT_FORM_URL,
   ERROR_REPORT_FORM_URL,
 } from '../constants/urls';
 
@@ -269,28 +268,6 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           </View>
         </View>
       </ScrollView>
-      {/* Floating carpool event button */}
-      <TouchableOpacity
-        style={[
-          styles.floatingButtonSmall,
-          {
-            backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF',
-            borderColor: isDarkMode ? '#374151' : '#E5E7EB',
-            borderWidth: 1,
-          },
-        ]}
-        activeOpacity={0.85}
-        onPress={() => {
-          openURLWithFallback(CARPOOL_EVENT_FORM_URL);
-        }}>
-        <Text
-          style={[
-            styles.floatingTextSmall,
-            {color: isDarkMode ? '#E5E7EB' : '#111827'},
-          ]}>
-          카풀 참여 이벤트 진행 중!
-        </Text>
-      </TouchableOpacity>
       {/* Floating error report button */}
       <TouchableOpacity
         style={[
@@ -390,25 +367,6 @@ const styles = StyleSheet.create({
   },
   floatingText: {
     fontSize: 14,
-    fontWeight: '600',
-  },
-  floatingButtonSmall: {
-    position: 'absolute',
-    right: 16,
-    bottom: 80,
-    borderRadius: 20,
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-    flexDirection: 'row',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 6,
-  },
-  floatingTextSmall: {
-    fontSize: 12,
     fontWeight: '600',
   },
 });

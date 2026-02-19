@@ -15,6 +15,3 @@ export const ERROR_REPORT_FORM_URL =
 
 /** 동연 카카오 채널 */
 export const DONGYEON_KAKAO_CHANNEL_URL = 'https://pf.kakao.com/_qASbn/chat';
-
-/** 카풀 참여 이벤트 폼 */
-export const CARPOOL_EVENT_FORM_URL = 'https://forms.gle/y8Nwnmefqb3xLtJf6';
