@@ -1,3 +1,4 @@
+<!-- **/popo/room.html -->
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -7,6 +8,19 @@
 
     <!-- iOS Smart App Banner -->
     <meta name="apple-itunes-app" content="app-id=6743666761" />
+
+    <!-- Open Graph / 카카오톡 프리뷰 메타 태그 -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Paxi" />
+    <meta property="og:title" content="Paxi - 택시팟 참여하기" />
+    <meta property="og:description" content="택시팟에 참여하세요" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+
+    <!-- 카카오톡 전용 메타 태그 -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content="Paxi - 택시팟 참여하기" />
+    <meta property="twitter:description" content="택시팟에 참여하세요" />
 
     <style>
       body {
@@ -76,6 +90,80 @@
     </style>
 
     <script>
+      // DOM이 로드되기 전에 메타 태그 업데이트 (카카오톡 크롤러 대응)
+      (function () {
+        const path = window.location.pathname;
+        let roomUuid = null;
+
+        // /room/ 경로에서 UUID 추출
+        if (path.startsWith('/room/')) {
+          const extracted = path.replace('/room/', '').split('/')[0];
+          const uuidRegex =
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+          if (uuidRegex.test(extracted)) {
+            roomUuid = extracted;
+          }
+        }
+
+        if (roomUuid) {
+          // API 호출하여 방 정보 가져오기
+          const apiUrl = 'https://api.paxi.popo.poapper.club';
+          fetch(`${apiUrl}/room/${roomUuid}`)
+            .then(response => response.json())
+            .then(data => {
+              // 출발지, 도착지, 출발 시각 포맷팅
+              const departure = data.departureLocation || '출발지';
+              const destination = data.destinationLocation || '도착지';
+
+              // 출발 시각 포맷팅 (예: "12월 25일 14시 30분")
+              let departureTime = '';
+              if (data.departureTime) {
+                const date = new Date(data.departureTime);
+                const month = date.getMonth() + 1;
+                const day = date.getDate();
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+                departureTime = `${month}월 ${day}일 ${hours}시 ${minutes
+                  .toString()
+                  .padStart(2, '0')}분 출발`;
+              }
+
+              const description = `${departure} → ${destination}${
+                departureTime ? ` | ${departureTime}` : ''
+              }`;
+              const currentUrl = window.location.href;
+
+              // 메타 태그 업데이트
+              updateMetaTag('og:title', `Paxi - ${departure} → ${destination}`);
+              updateMetaTag('og:description', description);
+              updateMetaTag('og:url', currentUrl);
+              updateMetaTag(
+                'twitter:title',
+                `Paxi - ${departure} → ${destination}`,
+              );
+              updateMetaTag('twitter:description', description);
+              updateMetaTag('title', `Paxi - ${departure} → ${destination}`);
+            })
+            .catch(error => {
+              console.error('방 정보 가져오기 실패:', error);
+            });
+        }
+
+        function updateMetaTag(property, content) {
+          let meta = document.querySelector(`meta[property="${property}"]`);
+          if (!meta) {
+            meta = document.querySelector(`meta[name="${property}"]`);
+          }
+          if (!meta && property === 'title') {
+            document.title = content;
+            return;
+          }
+          if (meta) {
+            meta.setAttribute('content', content);
+          }
+        }
+      })();
+
       // DOM이 로드된 후 실행
       document.addEventListener('DOMContentLoaded', function () {
         /**
@@ -101,6 +189,7 @@
         const ua = navigator.userAgent;
         const isIOS = /iPhone|iPad|iPod/i.test(ua);
         const isAndroid = /Android/i.test(ua);
+        const isKakao = /KAKAOTALK/i.test(ua);
 
         const iosStoreUrl =
           'https://apps.apple.com/us/app/popo-%ED%8F%AC%EC%8A%A4%ED%85%8C%ED%82%A4%EC%95%88%EC%9D%98-%ED%95%84%EC%88%98-%EC%95%B1/id6743666761';
@@ -119,36 +208,67 @@
           return;
         }
 
-        // 1️⃣ 앱 열기 시도 (플랫폼별 1회)
-        if (isIOS) {
-          window.location.href = `popo://room/${roomUuid}`;
-        } else if (isAndroid) {
-          window.location.href =
-            `intent://room/${roomUuid}` +
-            `#Intent;scheme=popo;package=com.popomobile;end`;
+        // 카카오톡 인앱 브라우저: 외부 브라우저로 강제 이동
+        if (isKakao) {
+          location.href =
+            'kakaotalk://web/openExternal?url=' +
+            encodeURIComponent(window.location.href);
+          return;
         }
 
-        // 2️⃣ fallback: 일정 시간 후 스토어 이동
+        // 앱 열기 함수
+        function openApp() {
+          if (isIOS) {
+            window.location.href = `popo://room/${roomUuid}`;
+          } else if (isAndroid) {
+            window.location.href =
+              `intent://room/${roomUuid}` +
+              `#Intent;scheme=popo;package=com.popomobile;end`;
+          }
+        }
+
+        // 앱이 열렸는지 감지 (페이지가 백그라운드로 가면 성공)
+        let appOpened = false;
+        document.addEventListener('visibilitychange', function () {
+          if (document.hidden) appOpened = true;
+        });
+
+        // 1️⃣ 앱 열기 자동 시도
+        if (isIOS || isAndroid) {
+          openApp();
+        }
+
+        // 2️⃣ 자동 시도 실패 대비: "앱에서 열기" 버튼 표시
         const fallbackDelay = isIOS ? 2000 : 1500;
 
         setTimeout(() => {
-          const statusEl = document.getElementById('status');
-          if (statusEl) {
-            statusEl.textContent =
-              '앱을 열 수 없습니다. 앱 스토어로 이동합니다...';
-          }
+          if (appOpened) return; // 앱이 열렸으면 아무것도 안 함
 
-          if (isIOS) {
-            window.location.href = iosStoreUrl;
-          } else if (isAndroid) {
-            window.location.href = androidStoreUrl;
+          const statusEl = document.getElementById('status');
+          const spinner = document.querySelector('.spinner');
+          const openAppBtn = document.getElementById('open-app-btn');
+          const storeSection = document.getElementById('store-section');
+
+          if (spinner) spinner.style.display = 'none';
+
+          if (isIOS || isAndroid) {
+            if (statusEl) {
+              statusEl.textContent =
+                '자동으로 열리지 않았다면 아래 버튼을 눌러주세요.';
+            }
+            if (openAppBtn) {
+              openAppBtn.style.display = 'inline-block';
+              openAppBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                openApp();
+              });
+            }
+            if (storeSection) storeSection.style.display = 'block';
           } else {
             // 데스크톱
             if (statusEl) {
               statusEl.textContent = '이 링크는 모바일 기기에서 열어주세요.';
             }
-            const spinner = document.querySelector('.spinner');
-            if (spinner) spinner.style.display = 'none';
           }
         }, fallbackDelay);
       });
@@ -160,8 +280,21 @@
     <h1>Paxi 택시팟 참여하기</h1>
     <p id="status">앱에서 열기를 시도 중입니다...</p>
 
-    <div style="margin-top: 28px">
-      <p style="font-size: 13px">수동으로 열기</p>
+    <a
+      id="open-app-btn"
+      href="#"
+      class="button"
+      style="
+        display: none;
+        font-size: 17px;
+        padding: 14px 36px;
+        margin-top: 16px;
+      ">
+      앱에서 열기
+    </a>
+
+    <div id="store-section" style="margin-top: 28px; display: none">
+      <p style="font-size: 13px">앱이 설치되어 있지 않다면</p>
       <a
         href="https://apps.apple.com/us/app/popo-%ED%8F%AC%EC%8A%A4%ED%85%8C%ED%82%A4%EC%95%88%EC%9D%98-%ED%95%84%EC%88%98-%EC%95%B1/id6743666761"
         class="button">
@@ -173,10 +306,5 @@
         Android 앱 다운로드
       </a>
     </div>
-
-    <p style="font-size: 12px; margin-top: 26px; opacity: 0.7">
-      앱이 설치되어 있다면 자동으로 열립니다.<br />
-      열리지 않는 경우 위 버튼을 눌러주세요.
-    </p>
   </body>
 </html>
