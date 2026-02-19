@@ -1,0 +1,4 @@
+// ReleaseDev 환경 설정 (Release 빌드 + Dev 환경)
+// Archive 시 dev API를 사용하면서 App Store 제출 가능
+ENV_CONFIG = Debug
+APP_URL_SCHEME = popo-dev

@@ -13,6 +13,13 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+# ReleaseDev 빌드 설정을 Release 기반으로 매핑
+project 'popoMobile', {
+  'Debug' => :debug,
+  'Release' => :release,
+  'ReleaseDev' => :release,
+}
+
 # Firebase requires use_frameworks
 # https://rnfirebase.io/#altering-cocoapods-to-use-frameworks
 use_frameworks! :linkage => :static

@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   View,
   TouchableOpacity,
@@ -5,17 +6,14 @@ import {
   StyleSheet,
   useColorScheme,
   Platform,
-  ToastAndroid,
-  Alert,
+  Share,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import Svg, {Line} from 'react-native-svg';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
-import Clipboard from '@react-native-clipboard/clipboard';
 import Config from 'react-native-config';
-
 import {ChatRoomInfo} from '@interfaces/paxi';
 import {textColor} from '@styles/default';
 
@@ -35,17 +33,22 @@ const RoomInfoBox = ({
   const isOwner = myUuid === roomData.ownerUuid;
   const isDarkMode = useColorScheme() === 'dark';
 
-  const handleShare = () => {
-    const isProduction = Config.ENV === 'prod';
-    const domain = isProduction ? 'popo.poapper.club' : 'popo-dev.poapper.club';
-    const shareUrl = `https://${domain}/room/${roomData.uuid}`;
+  const isProduction = Config.ENV === 'prod';
+  const domain = isProduction ? 'popo.poapper.club' : 'popo-dev.poapper.club';
+  const shareUrl = `https://${domain}/room/${roomData.uuid}`;
 
-    Clipboard.setString(shareUrl);
-
-    if (Platform.OS === 'android') {
-      ToastAndroid.show('방 공유 링크가 복사되었습니다', ToastAndroid.SHORT);
-    } else {
-      Alert.alert('공유', '방 공유 링크가 복사되었습니다.');
+  const handleShare = async () => {
+    try {
+      await Share.share(
+        Platform.OS === 'ios'
+          ? {title: 'Paxi 택시팟 공유', url: shareUrl}
+          : {title: 'Paxi 택시팟 공유', message: shareUrl},
+      );
+    } catch (error: any) {
+      // 사용자가 공유를 취소한 경우 에러를 무시
+      if (error.message !== 'User did not share') {
+        console.error('공유 오류:', error);
+      }
     }
   };
 
