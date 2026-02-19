@@ -39,6 +39,12 @@ cd android
 ./gradlew assembleRelease
 
 # AAB 빌드 (Google Play 제출용)
+# dev 환경으로 빌드(내부 테스트 시 사용)
+npm run android:aab:dev
+cd android/app/build/outputs/bundle/devRelease
+open .
+
+# prod 환경으로 빌드(실제 사용자 배포)
 npm run android:aab:prod
 cd android/app/build/outputs/bundle/prodRelease
 open .
@@ -90,6 +96,16 @@ cd android
 
 ```bash
 rm -rf node_modules && npm install
+```
+
+#### 6. 에뮬레이터 저장 공간 부족
+
+`INSTALL_FAILED_INSUFFICIENT_STORAGE: Failed to override installation location`
+라는 에러는 컴퓨터가 아닌 에뮬레이터의 저장 공간이 부족한 것입니다. 에뮬레이터 안에 안드로이드 앱을 삭제하고 재설치하면 해결됩니다.
+
+```bash
+adb uninstall com.popomobile.dev
+npm run android
 ```
 
 #### 6. 위에 것들 안먹히면 시도

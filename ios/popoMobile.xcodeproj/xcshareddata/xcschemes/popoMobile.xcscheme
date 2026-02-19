@@ -10,7 +10,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# &#xd604;&#xc7ac; Build Configuration&#xc5d0; &#xb530;&#xb77c; &#xb2e4;&#xb978; .env &#xd30c;&#xc77c;&#xc744; &#xbcf5;&#xc0ac;&#xd569;&#xb2c8;&#xb2e4;.&#10;if [ &quot;${CONFIGURATION}&quot; == &quot;Debug&quot; ]; then&#10;  echo &quot;Using .env.dev for Debug configuration&quot;&#10;  cp &quot;${SRCROOT}/../.env.dev&quot; &quot;${SRCROOT}/../.env&quot;&#10;else&#10;  echo &quot;Using .env.prod for Release configuration&quot;&#10;  cp &quot;${SRCROOT}/../.env.prod&quot; &quot;${SRCROOT}/../.env&quot;&#10;fi&#10;">
+               scriptText = "# Build Configuration&#xc5d0; &#xb530;&#xb77c; .env &#xd30c;&#xc77c;&#xc5d0; ENV &#xc124;&#xc815;&#10;sed -i &apos;&apos; &apos;/^ENV=/d&apos; &quot;${SRCROOT}/../.env&quot;&#10;if [ &quot;${CONFIGURATION}&quot; == &quot;Debug&quot; ] || [ &quot;${CONFIGURATION}&quot; == &quot;ReleaseDev&quot; ]; then&#10;  echo &quot;ENV=dev&quot; &gt;&gt; &quot;${SRCROOT}/../.env&quot;&#10;else&#10;  echo &quot;ENV=prod&quot; &gt;&gt; &quot;${SRCROOT}/../.env&quot;&#10;fi&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
@@ -59,7 +59,7 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -100,7 +100,7 @@
       buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release"
+      buildConfiguration = "ReleaseDev"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
