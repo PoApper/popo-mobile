@@ -926,18 +926,14 @@ const placeConfig: ReservationConfig<PlaceReservation> = {
   renderModalDetails: (item, {labelColor, valueColor}) => (
     <>
       <View style={styles.modalDetailSection}>
-        <Text style={[styles.modalLabel, {color: labelColor}]}>
-          {'장소'}
-        </Text>
+        <Text style={[styles.modalLabel, {color: labelColor}]}>{'장소'}</Text>
         <Text style={[styles.modalValue, {color: valueColor}]}>
           {item.place?.name || '장소 이름 없음'}
         </Text>
       </View>
       {item.place?.location && (
         <View style={styles.modalDetailSection}>
-          <Text style={[styles.modalLabel, {color: labelColor}]}>
-            {'위치'}
-          </Text>
+          <Text style={[styles.modalLabel, {color: labelColor}]}>{'위치'}</Text>
           <Text style={[styles.modalValue, {color: valueColor}]}>
             {item.place.location}
           </Text>
