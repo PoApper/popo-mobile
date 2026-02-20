@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, ReactNode} from 'react';
 import {
   StyleSheet,
   Text,
@@ -26,6 +26,44 @@ import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import {getAxiosErrorInfo} from '@utils/axios-error';
 
+// --- Exported Generic Interfaces ---
+
+export interface BaseReservation {
+  uuid: string;
+  bookerId: string;
+  phone: string;
+  title: string;
+  description: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  status: '\uc2ec\uc0ac\uc911' | '\ud1b5\uacfc' | '\uac70\uc808';
+  createdAt: Date;
+}
+
+export interface ModalColors {
+  labelColor: string;
+  valueColor: string;
+}
+
+export interface ReservationConfig<T> {
+  fetchEndpoint: string;
+  deleteEndpoint: string;
+  getSubtitle: (item: T) => string;
+  renderModalDetails: (item: T, colors: ModalColors) => ReactNode;
+  emptyText: string;
+}
+
+export interface ReservationListProps<T extends BaseReservation> {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
+  config: ReservationConfig<T>;
+  refreshKey?: number;
+  refreshing?: boolean;
+  onRefresh?: () => void;
+}
+
+// --- Place-specific Types ---
+
 interface Place {
   uuid: string;
   name: string;
@@ -36,50 +74,39 @@ interface Place {
   imageUrl: string;
 }
 
-interface PlaceReservation {
-  uuid: string;
+export interface PlaceReservation extends BaseReservation {
   placeId: string;
-  bookerId: string;
-  phone: string;
-  title: string;
-  description: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  status: '심사중' | '통과' | '거절';
-  createdAt: Date;
   place: Place;
 }
 
-interface PaginatedResponse {
-  items: PlaceReservation[];
+// --- Internal Types ---
+
+interface PaginatedResponse<T> {
+  items: T[];
   total: number;
 }
 
-interface ReservationListProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
-  refreshKey?: number;
-  refreshing?: boolean;
-  onRefresh?: () => void;
-}
+// --- Generic Component ---
 
-const ReservationList: React.FC<ReservationListProps> = ({
+export function ReservationList<T extends BaseReservation>({
   navigation,
+  config,
   refreshKey,
   refreshing,
   onRefresh,
-}) => {
+}: ReservationListProps<T>) {
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [reservations, setReservations] = useState<PlaceReservation[]>([]);
+  const [reservations, setReservations] = useState<T[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedReservation, setSelectedReservation] =
-    useState<PlaceReservation | null>(null);
+  const [selectedReservation, setSelectedReservation] = useState<T | null>(
+    null,
+  );
   const listRef = useRef<FlatList>(null);
   const itemsPerPage = 10;
 
@@ -106,8 +133,8 @@ const ReservationList: React.FC<ReservationListProps> = ({
         setIsLoading(true);
       }
 
-      const response = await api.get<PaginatedResponse>(
-        '/reservation-place/user',
+      const response = await api.get<PaginatedResponse<T>>(
+        config.fetchEndpoint,
         {
           params: {
             skip: (pageNum - 1) * itemsPerPage,
@@ -131,17 +158,17 @@ const ReservationList: React.FC<ReservationListProps> = ({
       }
       setPage(pageNum);
     } catch (err) {
-      console.error('예약 정보 조회 오류:', err);
+      console.error('\uc608\uc57d \uc815\ubcf4 \uc870\ud68c \uc624\ub958:', err);
       if (axios.isAxiosError(err)) {
         if (err.response?.status === 401) {
-          Alert.alert('인증 만료', '다시 로그인해주세요.', [
-            {text: '확인', onPress: () => navigation.navigate('Login')},
+          Alert.alert('\uc778\uc99d \ub9cc\ub8cc', '\ub2e4\uc2dc \ub85c\uadf8\uc778\ud574\uc8fc\uc138\uc694.', [
+            {text: '\ud655\uc778', onPress: () => navigation.navigate('Login')},
           ]);
         } else {
-          setError('예약 정보를 불러오는데 실패했습니다.');
+          setError('\uc608\uc57d \uc815\ubcf4\ub97c \ubd88\ub7ec\uc624\ub294\ub370 \uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4.');
         }
       } else {
-        setError('네트워크 오류가 발생했습니다.');
+        setError('\ub124\ud2b8\uc6cc\ud06c \uc624\ub958\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4.');
       }
     } finally {
       setIsLoading(false);
@@ -187,33 +214,33 @@ const ReservationList: React.FC<ReservationListProps> = ({
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case '통과':
-        return '예약 통과';
-      case '심사중':
-        return '대기중';
-      case '거절':
-        return '예약 거절';
+      case '\ud1b5\uacfc':
+        return '\uc608\uc57d \ud1b5\uacfc';
+      case '\uc2ec\uc0ac\uc911':
+        return '\ub300\uae30\uc911';
+      case '\uac70\uc808':
+        return '\uc608\uc57d \uac70\uc808';
       default:
-        return status || '상태 없음';
+        return status || '\uc0c1\ud0dc \uc5c6\uc74c';
     }
   };
 
   const handleCancelReservation = (id: string) => {
     Alert.alert(
-      '예약 취소',
-      '정말로 이 예약을 취소하시겠습니까?',
+      '\uc608\uc57d \ucde8\uc18c',
+      '\uc815\ub9d0\ub85c \uc774 \uc608\uc57d\uc744 \ucde8\uc18c\ud558\uc2dc\uaca0\uc2b5\ub2c8\uae4c?',
       [
         {
-          text: '취소',
+          text: '\ucde8\uc18c',
           style: 'cancel',
         },
         {
-          text: '확인',
+          text: '\ud655\uc778',
           onPress: async () => {
             setIsLoading(true);
             try {
-              await api.delete(`/reservation-place/${id}`);
-              Alert.alert('완료', '예약이 취소되었습니다.');
+              await api.delete(`${config.deleteEndpoint}/${id}`);
+              Alert.alert('\uc644\ub8cc', '\uc608\uc57d\uc774 \ucde8\uc18c\ub418\uc5c8\uc2b5\ub2c8\ub2e4.');
               closeModal();
               fetchReservations();
             } catch (err) {
@@ -227,9 +254,9 @@ const ReservationList: React.FC<ReservationListProps> = ({
                 detail === 'Cannot delete past reservation'
               ) {
                 setTimeout(() => {
-                  Alert.alert('오류', '과거 예약은 취소할 수 없습니다.', [
+                  Alert.alert('\uc624\ub958', '\uacfc\uac70 \uc608\uc57d\uc740 \ucde8\uc18c\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.', [
                     {
-                      text: '확인',
+                      text: '\ud655\uc778',
                       onPress: () => {
                         if (itemToReopen) {
                           openModal(itemToReopen);
@@ -239,16 +266,16 @@ const ReservationList: React.FC<ReservationListProps> = ({
                   ]);
                 }, 300);
               } else {
-                console.error('예약 취소 오류:', err);
+                console.error('\uc608\uc57d \ucde8\uc18c \uc624\ub958:', err);
                 setTimeout(() => {
                   Alert.alert(
-                    '오류',
+                    '\uc624\ub958',
                     detail
                       ? String(detail)
-                      : '예약 취소 중 문제가 발생했습니다.',
+                      : '\uc608\uc57d \ucde8\uc18c \uc911 \ubb38\uc81c\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4.',
                     [
                       {
-                        text: '확인',
+                        text: '\ud655\uc778',
                         onPress: () => {
                           if (itemToReopen) {
                             openModal(itemToReopen);
@@ -271,18 +298,18 @@ const ReservationList: React.FC<ReservationListProps> = ({
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case '통과':
+      case '\ud1b5\uacfc':
         return {name: 'check-circle', color: '#10B981'};
-      case '심사중':
+      case '\uc2ec\uc0ac\uc911':
         return {name: 'access-time', color: '#F59E0B'};
-      case '거절':
+      case '\uac70\uc808':
         return {name: 'cancel', color: '#EF4444'};
       default:
         return {name: 'help', color: '#6B7280'};
     }
   };
 
-  const openModal = (item: PlaceReservation) => {
+  const openModal = (item: T) => {
     setSelectedReservation(item);
     setModalVisible(true);
 
@@ -325,15 +352,15 @@ const ReservationList: React.FC<ReservationListProps> = ({
     });
   };
 
-  // drag-to-close 제거(사이드바와 동일 패턴)
+  // drag-to-close \uc81c\uac70(\uc0ac\uc774\ub4dc\ubc14\uc640 \ub3d9\uc77c \ud328\ud134)
 
-  const handleLongPress = (item: PlaceReservation) => {
-    if (item.status !== '거절') {
+  const handleLongPress = (item: T) => {
+    if (item.status !== '\uac70\uc808') {
       handleCancelReservation(item.uuid);
     }
   };
 
-  const renderReservationItem = ({item}: {item: PlaceReservation}) => {
+  const renderReservationItem = ({item}: {item: T}) => {
     const statusIcon = getStatusIcon(item.status);
     const subtitleColor = isDarkMode ? '#BBBBBB' : '#6B7280';
     const iconBgColor = isDarkMode ? '#2A2A2A' : '#F3F4F6';
@@ -349,13 +376,13 @@ const ReservationList: React.FC<ReservationListProps> = ({
             style={[styles.itemTitle, {color: textColor}]}
             numberOfLines={1}
             ellipsizeMode="tail">
-            {item.title || '제목 없음'}
+            {item.title || '\uc81c\ubaa9 \uc5c6\uc74c'}
           </Text>
           <Text
             style={[styles.itemSubtitle, {color: subtitleColor}]}
             numberOfLines={1}
             ellipsizeMode="tail">
-            {item.place?.name || '장소 이름 없음'}
+            {config.getSubtitle(item)}
           </Text>
           <Text style={[styles.itemDateTime, {color: subtitleColor}]}>
             {new Date(formatDate(item.date)).toLocaleDateString('ko-KR', {
@@ -389,7 +416,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={textColor} />
         <Text style={[styles.loadingText, {color: textColor}]}>
-          예약 정보를 불러오는 중...
+          {'\uc608\uc57d \uc815\ubcf4\ub97c \ubd88\ub7ec\uc624\ub294 \uc911...'}
         </Text>
       </View>
     );
@@ -402,7 +429,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
         <TouchableOpacity
           style={styles.retryButton}
           onPress={() => fetchReservations(1)}>
-          <Text style={styles.retryButtonText}>다시 시도</Text>
+          <Text style={styles.retryButtonText}>{'\ub2e4\uc2dc \uc2dc\ub3c4'}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -417,7 +444,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
           resizeMode="contain"
         />
         <Text style={[styles.emptyText, {color: textColor}]}>
-          장소 예약 내역이 없습니다.
+          {config.emptyText}
         </Text>
       </View>
     );
@@ -454,7 +481,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
               : styles.scrollTopButtonLight,
           ]}
           onPress={scrollToTop}>
-          <Text style={[styles.scrollTopText, {color: textColor}]}>↑</Text>
+          <Text style={[styles.scrollTopText, {color: textColor}]}>{'\u2191'}</Text>
         </TouchableOpacity>
       )}
 
@@ -484,7 +511,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
             <View style={styles.modalHeader}>
               <View style={styles.modalHeaderContent}>
                 <Text style={[styles.modalTitle, {color: textColor}]}>
-                  예약 상세정보
+                  {'\uc608\uc57d \uc0c1\uc138\uc815\ubcf4'}
                 </Text>
               </View>
             </View>
@@ -503,18 +530,18 @@ const ReservationList: React.FC<ReservationListProps> = ({
                       <View style={styles.modalDetailSection}>
                         <Text
                           style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          제목
+                          {'\uc81c\ubaa9'}
                         </Text>
                         <Text
                           style={[styles.modalValue, {color: modalValueColor}]}>
-                          {selectedReservation.title || '제목 없음'}
+                          {selectedReservation.title || '\uc81c\ubaa9 \uc5c6\uc74c'}
                         </Text>
                       </View>
 
                       <View style={styles.modalDetailSection}>
                         <Text
                           style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          상태
+                          {'\uc0c1\ud0dc'}
                         </Text>
                         <View style={styles.statusContainer}>
                           <Icon
@@ -533,40 +560,15 @@ const ReservationList: React.FC<ReservationListProps> = ({
                         </View>
                       </View>
 
-                      <View style={styles.modalDetailSection}>
-                        <Text
-                          style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          장소
-                        </Text>
-                        <Text
-                          style={[styles.modalValue, {color: modalValueColor}]}>
-                          {selectedReservation.place?.name || '장소 이름 없음'}
-                        </Text>
-                      </View>
-
-                      {selectedReservation.place?.location && (
-                        <View style={styles.modalDetailSection}>
-                          <Text
-                            style={[
-                              styles.modalLabel,
-                              {color: modalLabelColor},
-                            ]}>
-                            위치
-                          </Text>
-                          <Text
-                            style={[
-                              styles.modalValue,
-                              {color: modalValueColor},
-                            ]}>
-                            {selectedReservation.place.location}
-                          </Text>
-                        </View>
-                      )}
+                      {config.renderModalDetails(selectedReservation, {
+                        labelColor: modalLabelColor,
+                        valueColor: modalValueColor,
+                      })}
 
                       <View style={styles.modalDetailSection}>
                         <Text
                           style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          날짜
+                          {'\ub0a0\uc9dc'}
                         </Text>
                         <Text
                           style={[styles.modalValue, {color: modalValueColor}]}>
@@ -583,7 +585,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                       <View style={styles.modalDetailSection}>
                         <Text
                           style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          시간
+                          {'\uc2dc\uac04'}
                         </Text>
                         <Text
                           style={[styles.modalValue, {color: modalValueColor}]}>
@@ -599,7 +601,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                               styles.modalLabel,
                               {color: modalLabelColor},
                             ]}>
-                            설명
+                            {'\uc124\uba85'}
                           </Text>
                           <Text
                             style={[
@@ -618,7 +620,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                               styles.modalLabel,
                               {color: modalLabelColor},
                             ]}>
-                            연락처
+                            {'\uc5f0\ub77d\ucc98'}
                           </Text>
                           <Text
                             style={[
@@ -630,7 +632,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                         </View>
                       )}
 
-                      {selectedReservation.status !== '거절' && (
+                      {selectedReservation.status !== '\uac70\uc808' && (
                         <TouchableOpacity
                           style={[
                             styles.modalCancelButton,
@@ -641,7 +643,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                           }>
                           <Icon name="cancel" size={20} color="#FFFFFF" />
                           <Text style={styles.modalCancelButtonText}>
-                            예약 취소
+                            {'\uc608\uc57d \ucde8\uc18c'}
                           </Text>
                         </TouchableOpacity>
                       )}
@@ -654,7 +656,9 @@ const ReservationList: React.FC<ReservationListProps> = ({
       </Modal>
     </>
   );
-};
+}
+
+// --- Styles ---
 
 const styles = StyleSheet.create({
   listContainer: {
@@ -909,4 +913,50 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReservationList;
+// --- Exported styles for use by wrappers ---
+
+export const reservationListStyles = styles;
+
+// --- Place Config & Default Export ---
+
+const placeConfig: ReservationConfig<PlaceReservation> = {
+  fetchEndpoint: '/reservation-place/user',
+  deleteEndpoint: '/reservation-place',
+  getSubtitle: item => item.place?.name || '\uc7a5\uc18c \uc774\ub984 \uc5c6\uc74c',
+  renderModalDetails: (item, {labelColor, valueColor}) => (
+    <>
+      <View style={styles.modalDetailSection}>
+        <Text style={[styles.modalLabel, {color: labelColor}]}>
+          {'\uc7a5\uc18c'}
+        </Text>
+        <Text style={[styles.modalValue, {color: valueColor}]}>
+          {item.place?.name || '\uc7a5\uc18c \uc774\ub984 \uc5c6\uc74c'}
+        </Text>
+      </View>
+      {item.place?.location && (
+        <View style={styles.modalDetailSection}>
+          <Text style={[styles.modalLabel, {color: labelColor}]}>
+            {'\uc704\uce58'}
+          </Text>
+          <Text style={[styles.modalValue, {color: valueColor}]}>
+            {item.place.location}
+          </Text>
+        </View>
+      )}
+    </>
+  ),
+  emptyText: '\uc7a5\uc18c \uc608\uc57d \ub0b4\uc5ed\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.',
+};
+
+interface PlaceReservationListProps {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
+  refreshKey?: number;
+  refreshing?: boolean;
+  onRefresh?: () => void;
+}
+
+const PlaceReservationList: React.FC<PlaceReservationListProps> = props => (
+  <ReservationList<PlaceReservation> config={placeConfig} {...props} />
+);
+
+export default PlaceReservationList;
