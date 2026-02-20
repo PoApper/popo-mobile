@@ -1,24 +1,33 @@
 import {StyleSheet} from 'react-native';
+import {lightPalette, darkPalette} from './theme';
 
+/** @deprecated Use `useTheme().colors.background.primary` instead */
 export const backgroundColor = (isDarkMode: boolean) =>
-  isDarkMode ? '#121212' : '#fff';
-export const textColor = (isDarkMode: boolean) =>
-  isDarkMode ? '#FFFFFF' : '#000000';
-export const borderColor = (isDarkMode: boolean) =>
-  isDarkMode ? '#2C2C2C' : '#E5E7EB';
+  isDarkMode
+    ? darkPalette.background.primary
+    : lightPalette.background.primary;
 
+/** @deprecated Use `useTheme().colors.text.primary` instead */
+export const textColor = (isDarkMode: boolean) =>
+  isDarkMode ? darkPalette.text.primary : lightPalette.text.primary;
+
+/** @deprecated Use `useTheme().colors.border.primary` instead */
+export const borderColor = (isDarkMode: boolean) =>
+  isDarkMode ? darkPalette.border.primary : lightPalette.border.primary;
+
+/** @deprecated Use `useTheme().colors` instead */
 export const colors = {
   dark: {
-    background: '#121212',
-    text: '#FFFFFF',
-    placeholder: '#888888',
-    border: '#2C2C2C',
+    background: darkPalette.background.primary,
+    text: darkPalette.text.primary,
+    placeholder: darkPalette.input.placeholder,
+    border: darkPalette.border.primary,
   },
   light: {
-    background: '#fff',
-    text: '#000000',
-    placeholder: '#AAA',
-    border: '#E5E7EB',
+    background: lightPalette.background.primary,
+    text: lightPalette.text.primary,
+    placeholder: lightPalette.input.placeholder,
+    border: lightPalette.border.primary,
   },
 };
 
