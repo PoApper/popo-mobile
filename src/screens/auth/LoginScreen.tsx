@@ -269,6 +269,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             placeholder="비밀번호"
             placeholderTextColor={placeholderColor}
             secureTextEntry
+            autoCapitalize="none"
             value={password}
             onChangeText={setPassword}
             autoComplete="password"
