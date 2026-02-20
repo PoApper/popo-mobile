@@ -15,7 +15,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import api from '../../utils/api';
 import CalendarKoreanLocales from '../../utils/calendar-locales';
 import LazyImage from '../../components/LazyImage';
@@ -106,32 +106,35 @@ const PlaceDetailReservationScreen = ({
     fetchPlaceDetail();
   }, [placeId]);
 
-  useEffect(() => {
-    const fetchReservations = async () => {
-      if (!placeDetail?.name || !selectedDate) {
-        return;
-      }
+  const fetchReservations = useCallback(async () => {
+    if (!placeDetail?.name || !selectedDate) {
+      return;
+    }
 
-      try {
-        setIsLoadingReservations(true);
-        const response = await api.get(
-          `/reservation-place/placeName/${placeDetail.name}/${selectedDate}`,
-        );
-        const sortedReservations = response.data.sort(
-          (a: Reservation, b: Reservation) =>
-            Number(a.startTime) - Number(b.startTime),
-        );
-        setReservations(sortedReservations);
-      } catch (error) {
-        console.error('예약 내역을 불러오는데 실패했습니다:', error);
-        setReservations([]);
-      } finally {
-        setIsLoadingReservations(false);
-      }
-    };
-
-    fetchReservations();
+    try {
+      setIsLoadingReservations(true);
+      const response = await api.get(
+        `/reservation-place/placeName/${placeDetail.name}/${selectedDate}`,
+      );
+      const sortedReservations = response.data.sort(
+        (a: Reservation, b: Reservation) =>
+          Number(a.startTime) - Number(b.startTime),
+      );
+      setReservations(sortedReservations);
+    } catch (error) {
+      console.error('예약 내역을 불러오는데 실패했습니다:', error);
+      setReservations([]);
+    } finally {
+      setIsLoadingReservations(false);
+    }
   }, [placeDetail?.name, selectedDate]);
+
+  // 화면이 포커스될 때마다 예약 내역을 다시 불러옴 (예약 후 돌아왔을 때 반영)
+  useFocusEffect(
+    useCallback(() => {
+      fetchReservations();
+    }, [fetchReservations]),
+  );
 
   useEffect(() => {
     // 현재 날짜를 YYYYMMDD 형식으로 설정
