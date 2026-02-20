@@ -37,7 +37,7 @@ export interface BaseReservation {
   date: string;
   startTime: string;
   endTime: string;
-  status: '\uc2ec\uc0ac\uc911' | '\ud1b5\uacfc' | '\uac70\uc808';
+  status: '심사중' | '통과' | '거절';
   createdAt: Date;
 }
 
@@ -158,17 +158,17 @@ export function ReservationList<T extends BaseReservation>({
       }
       setPage(pageNum);
     } catch (err) {
-      console.error('\uc608\uc57d \uc815\ubcf4 \uc870\ud68c \uc624\ub958:', err);
+      console.error('예약 정보 조회 오류:', err);
       if (axios.isAxiosError(err)) {
         if (err.response?.status === 401) {
-          Alert.alert('\uc778\uc99d \ub9cc\ub8cc', '\ub2e4\uc2dc \ub85c\uadf8\uc778\ud574\uc8fc\uc138\uc694.', [
-            {text: '\ud655\uc778', onPress: () => navigation.navigate('Login')},
+          Alert.alert('인증 만료', '다시 로그인해주세요.', [
+            {text: '확인', onPress: () => navigation.navigate('Login')},
           ]);
         } else {
-          setError('\uc608\uc57d \uc815\ubcf4\ub97c \ubd88\ub7ec\uc624\ub294\ub370 \uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4.');
+          setError('예약 정보를 불러오는데 실패했습니다.');
         }
       } else {
-        setError('\ub124\ud2b8\uc6cc\ud06c \uc624\ub958\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4.');
+        setError('네트워크 오류가 발생했습니다.');
       }
     } finally {
       setIsLoading(false);
@@ -214,33 +214,33 @@ export function ReservationList<T extends BaseReservation>({
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case '\ud1b5\uacfc':
-        return '\uc608\uc57d \ud1b5\uacfc';
-      case '\uc2ec\uc0ac\uc911':
-        return '\ub300\uae30\uc911';
-      case '\uac70\uc808':
-        return '\uc608\uc57d \uac70\uc808';
+      case '통과':
+        return '예약 통과';
+      case '심사중':
+        return '대기중';
+      case '거절':
+        return '예약 거절';
       default:
-        return status || '\uc0c1\ud0dc \uc5c6\uc74c';
+        return status || '상태 없음';
     }
   };
 
   const handleCancelReservation = (id: string) => {
     Alert.alert(
-      '\uc608\uc57d \ucde8\uc18c',
-      '\uc815\ub9d0\ub85c \uc774 \uc608\uc57d\uc744 \ucde8\uc18c\ud558\uc2dc\uaca0\uc2b5\ub2c8\uae4c?',
+      '예약 취소',
+      '정말로 이 예약을 취소하시겠습니까?',
       [
         {
-          text: '\ucde8\uc18c',
+          text: '취소',
           style: 'cancel',
         },
         {
-          text: '\ud655\uc778',
+          text: '확인',
           onPress: async () => {
             setIsLoading(true);
             try {
               await api.delete(`${config.deleteEndpoint}/${id}`);
-              Alert.alert('\uc644\ub8cc', '\uc608\uc57d\uc774 \ucde8\uc18c\ub418\uc5c8\uc2b5\ub2c8\ub2e4.');
+              Alert.alert('완료', '예약이 취소되었습니다.');
               closeModal();
               fetchReservations();
             } catch (err) {
@@ -254,9 +254,9 @@ export function ReservationList<T extends BaseReservation>({
                 detail === 'Cannot delete past reservation'
               ) {
                 setTimeout(() => {
-                  Alert.alert('\uc624\ub958', '\uacfc\uac70 \uc608\uc57d\uc740 \ucde8\uc18c\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.', [
+                  Alert.alert('오류', '과거 예약은 취소할 수 없습니다.', [
                     {
-                      text: '\ud655\uc778',
+                      text: '확인',
                       onPress: () => {
                         if (itemToReopen) {
                           openModal(itemToReopen);
@@ -266,16 +266,16 @@ export function ReservationList<T extends BaseReservation>({
                   ]);
                 }, 300);
               } else {
-                console.error('\uc608\uc57d \ucde8\uc18c \uc624\ub958:', err);
+                console.error('예약 취소 오류:', err);
                 setTimeout(() => {
                   Alert.alert(
-                    '\uc624\ub958',
+                    '오류',
                     detail
                       ? String(detail)
-                      : '\uc608\uc57d \ucde8\uc18c \uc911 \ubb38\uc81c\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4.',
+                      : '예약 취소 중 문제가 발생했습니다.',
                     [
                       {
-                        text: '\ud655\uc778',
+                        text: '확인',
                         onPress: () => {
                           if (itemToReopen) {
                             openModal(itemToReopen);
@@ -298,11 +298,11 @@ export function ReservationList<T extends BaseReservation>({
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case '\ud1b5\uacfc':
+      case '통과':
         return {name: 'check-circle', color: '#10B981'};
-      case '\uc2ec\uc0ac\uc911':
+      case '심사중':
         return {name: 'access-time', color: '#F59E0B'};
-      case '\uac70\uc808':
+      case '거절':
         return {name: 'cancel', color: '#EF4444'};
       default:
         return {name: 'help', color: '#6B7280'};
@@ -352,10 +352,10 @@ export function ReservationList<T extends BaseReservation>({
     });
   };
 
-  // drag-to-close \uc81c\uac70(\uc0ac\uc774\ub4dc\ubc14\uc640 \ub3d9\uc77c \ud328\ud134)
+  // drag-to-close 제거(사이드바와 동일 패턴)
 
   const handleLongPress = (item: T) => {
-    if (item.status !== '\uac70\uc808') {
+    if (item.status !== '거절') {
       handleCancelReservation(item.uuid);
     }
   };
@@ -376,7 +376,7 @@ export function ReservationList<T extends BaseReservation>({
             style={[styles.itemTitle, {color: textColor}]}
             numberOfLines={1}
             ellipsizeMode="tail">
-            {item.title || '\uc81c\ubaa9 \uc5c6\uc74c'}
+            {item.title || '제목 없음'}
           </Text>
           <Text
             style={[styles.itemSubtitle, {color: subtitleColor}]}
@@ -416,7 +416,7 @@ export function ReservationList<T extends BaseReservation>({
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={textColor} />
         <Text style={[styles.loadingText, {color: textColor}]}>
-          {'\uc608\uc57d \uc815\ubcf4\ub97c \ubd88\ub7ec\uc624\ub294 \uc911...'}
+          {'예약 정보를 불러오는 중...'}
         </Text>
       </View>
     );
@@ -429,7 +429,7 @@ export function ReservationList<T extends BaseReservation>({
         <TouchableOpacity
           style={styles.retryButton}
           onPress={() => fetchReservations(1)}>
-          <Text style={styles.retryButtonText}>{'\ub2e4\uc2dc \uc2dc\ub3c4'}</Text>
+          <Text style={styles.retryButtonText}>{'다시 시도'}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -481,7 +481,7 @@ export function ReservationList<T extends BaseReservation>({
               : styles.scrollTopButtonLight,
           ]}
           onPress={scrollToTop}>
-          <Text style={[styles.scrollTopText, {color: textColor}]}>{'\u2191'}</Text>
+          <Text style={[styles.scrollTopText, {color: textColor}]}>{'↑'}</Text>
         </TouchableOpacity>
       )}
 
@@ -511,7 +511,7 @@ export function ReservationList<T extends BaseReservation>({
             <View style={styles.modalHeader}>
               <View style={styles.modalHeaderContent}>
                 <Text style={[styles.modalTitle, {color: textColor}]}>
-                  {'\uc608\uc57d \uc0c1\uc138\uc815\ubcf4'}
+                  {'예약 상세정보'}
                 </Text>
               </View>
             </View>
@@ -530,18 +530,18 @@ export function ReservationList<T extends BaseReservation>({
                       <View style={styles.modalDetailSection}>
                         <Text
                           style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          {'\uc81c\ubaa9'}
+                          {'제목'}
                         </Text>
                         <Text
                           style={[styles.modalValue, {color: modalValueColor}]}>
-                          {selectedReservation.title || '\uc81c\ubaa9 \uc5c6\uc74c'}
+                          {selectedReservation.title || '제목 없음'}
                         </Text>
                       </View>
 
                       <View style={styles.modalDetailSection}>
                         <Text
                           style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          {'\uc0c1\ud0dc'}
+                          {'상태'}
                         </Text>
                         <View style={styles.statusContainer}>
                           <Icon
@@ -568,7 +568,7 @@ export function ReservationList<T extends BaseReservation>({
                       <View style={styles.modalDetailSection}>
                         <Text
                           style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          {'\ub0a0\uc9dc'}
+                          {'날짜'}
                         </Text>
                         <Text
                           style={[styles.modalValue, {color: modalValueColor}]}>
@@ -585,7 +585,7 @@ export function ReservationList<T extends BaseReservation>({
                       <View style={styles.modalDetailSection}>
                         <Text
                           style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          {'\uc2dc\uac04'}
+                          {'시간'}
                         </Text>
                         <Text
                           style={[styles.modalValue, {color: modalValueColor}]}>
@@ -601,7 +601,7 @@ export function ReservationList<T extends BaseReservation>({
                               styles.modalLabel,
                               {color: modalLabelColor},
                             ]}>
-                            {'\uc124\uba85'}
+                            {'설명'}
                           </Text>
                           <Text
                             style={[
@@ -620,7 +620,7 @@ export function ReservationList<T extends BaseReservation>({
                               styles.modalLabel,
                               {color: modalLabelColor},
                             ]}>
-                            {'\uc5f0\ub77d\ucc98'}
+                            {'연락처'}
                           </Text>
                           <Text
                             style={[
@@ -632,7 +632,7 @@ export function ReservationList<T extends BaseReservation>({
                         </View>
                       )}
 
-                      {selectedReservation.status !== '\uac70\uc808' && (
+                      {selectedReservation.status !== '거절' && (
                         <TouchableOpacity
                           style={[
                             styles.modalCancelButton,
@@ -643,7 +643,7 @@ export function ReservationList<T extends BaseReservation>({
                           }>
                           <Icon name="cancel" size={20} color="#FFFFFF" />
                           <Text style={styles.modalCancelButtonText}>
-                            {'\uc608\uc57d \ucde8\uc18c'}
+                            {'예약 취소'}
                           </Text>
                         </TouchableOpacity>
                       )}
@@ -922,21 +922,21 @@ export const reservationListStyles = styles;
 const placeConfig: ReservationConfig<PlaceReservation> = {
   fetchEndpoint: '/reservation-place/user',
   deleteEndpoint: '/reservation-place',
-  getSubtitle: item => item.place?.name || '\uc7a5\uc18c \uc774\ub984 \uc5c6\uc74c',
+  getSubtitle: item => item.place?.name || '장소 이름 없음',
   renderModalDetails: (item, {labelColor, valueColor}) => (
     <>
       <View style={styles.modalDetailSection}>
         <Text style={[styles.modalLabel, {color: labelColor}]}>
-          {'\uc7a5\uc18c'}
+          {'장소'}
         </Text>
         <Text style={[styles.modalValue, {color: valueColor}]}>
-          {item.place?.name || '\uc7a5\uc18c \uc774\ub984 \uc5c6\uc74c'}
+          {item.place?.name || '장소 이름 없음'}
         </Text>
       </View>
       {item.place?.location && (
         <View style={styles.modalDetailSection}>
           <Text style={[styles.modalLabel, {color: labelColor}]}>
-            {'\uc704\uce58'}
+            {'위치'}
           </Text>
           <Text style={[styles.modalValue, {color: valueColor}]}>
             {item.place.location}
@@ -945,7 +945,7 @@ const placeConfig: ReservationConfig<PlaceReservation> = {
       )}
     </>
   ),
-  emptyText: '\uc7a5\uc18c \uc608\uc57d \ub0b4\uc5ed\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.',
+  emptyText: '장소 예약 내역이 없습니다.',
 };
 
 interface PlaceReservationListProps {

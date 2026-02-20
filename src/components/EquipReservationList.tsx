@@ -29,15 +29,15 @@ const equipConfig: ReservationConfig<EquipmentReservation> = {
   deleteEndpoint: '/reservation-equip',
   getSubtitle: item => {
     const equipmentName =
-      item.equipments.length > 0 ? item.equipments[0].name : '\uc7a5\ube44 \uc815\ubcf4 \uc5c6\uc74c';
+      item.equipments.length > 0 ? item.equipments[0].name : '장비 정보 없음';
     const additionalEquipments =
-      item.equipments.length > 1 ? ` \uc678 ${item.equipments.length - 1}\uac1c` : '';
+      item.equipments.length > 1 ? ` 외 ${item.equipments.length - 1}개` : '';
     return `${equipmentName}${additionalEquipments}`;
   },
   renderModalDetails: (item, {labelColor, valueColor}) => (
     <View style={reservationListStyles.modalDetailSection}>
       <Text style={[reservationListStyles.modalLabel, {color: labelColor}]}>
-        {`\uc7a5\ube44 \ubaa9\ub85d (${item.equipments.length})`}
+        {`장비 목록 (${item.equipments.length})`}
       </Text>
       {item.equipments.map((equipment: Equipment) => (
         <Text
@@ -51,7 +51,7 @@ const equipConfig: ReservationConfig<EquipmentReservation> = {
       ))}
     </View>
   ),
-  emptyText: '\uc7a5\ube44 \uc608\uc57d \ub0b4\uc5ed\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.',
+  emptyText: '장비 예약 내역이 없습니다.',
 };
 
 interface EquipReservationListProps {
