@@ -3,9 +3,7 @@ import {lightPalette, darkPalette} from './theme';
 
 /** @deprecated Use `useTheme().colors.background.primary` instead */
 export const backgroundColor = (isDarkMode: boolean) =>
-  isDarkMode
-    ? darkPalette.background.primary
-    : lightPalette.background.primary;
+  isDarkMode ? darkPalette.background.primary : lightPalette.background.primary;
 
 /** @deprecated Use `useTheme().colors.text.primary` instead */
 export const textColor = (isDarkMode: boolean) =>
