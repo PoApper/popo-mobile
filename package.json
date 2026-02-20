@@ -20,6 +20,8 @@
     "lint": "eslint . --fix --quiet",
     "start": "react-native start",
     "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "pc": "pre-commit run --all-files"
   },
   "dependencies": {
@@ -63,6 +65,7 @@
     "@react-native/eslint-config": "0.78.0",
     "@react-native/metro-config": "0.78.0",
     "@react-native/typescript-config": "0.78.0",
+    "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.13",
     "@types/react": "^19.0.0",
     "@types/react-native-vector-icons": "^6.4.18",
