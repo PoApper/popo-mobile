@@ -46,7 +46,7 @@ module.exports = {
       '@react-native-cookies|' +
       '@react-native-clipboard|' +
       '@react-native-firebase' +
-    ')/)',
+      ')/)',
   ],
 
   // 커버리지 설정

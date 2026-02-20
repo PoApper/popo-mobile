@@ -1,5 +1,5 @@
 import {getAxiosErrorInfo} from '../axios-error';
-import axios, {AxiosError} from 'axios';
+import {AxiosError} from 'axios';
 
 describe('getAxiosErrorInfo', () => {
   it('AxiosError에서 status와 detail을 추출한다', () => {
