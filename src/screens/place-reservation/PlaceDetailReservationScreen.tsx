@@ -133,8 +133,13 @@ const PlaceDetailReservationScreen = ({
   useFocusEffect(
     useCallback(() => {
       fetchReservations();
-    }, [fetchReservations]),
+    }, []),
   );
+
+  // 날짜 또는 장소 변경 시 예약 내역을 다시 불러옴
+  useEffect(() => {
+    fetchReservations();
+  }, [fetchReservations]);
 
   useEffect(() => {
     // 현재 날짜를 YYYYMMDD 형식으로 설정
