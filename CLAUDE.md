@@ -32,19 +32,20 @@ Android uses Gradle product flavors (`dev`/`prod`) combined with build types (`D
 
 Configured in both `tsconfig.json` and `babel.config.js` (via `babel-plugin-module-resolver`):
 
-| Alias | Path |
-|-------|------|
+| Alias           | Path               |
+| --------------- | ------------------ |
 | `@components/*` | `src/components/*` |
-| `@screens/*` | `src/screens/*` |
-| `@utils/*` | `src/utils/*` |
+| `@screens/*`    | `src/screens/*`    |
+| `@utils/*`      | `src/utils/*`      |
 | `@navigation/*` | `src/navigation/*` |
 | `@interfaces/*` | `src/interfaces/*` |
-| `@styles/*` | `src/styles/*` |
-| `@assets/*` | `src/assets/*` |
+| `@styles/*`     | `src/styles/*`     |
+| `@assets/*`     | `src/assets/*`     |
 
 ## Architecture
 
 ### Navigation (`src/navigation/`)
+
 - `AppNavigator.tsx` — Root navigator; decides auth flow vs main app. Configures deep linking for `popo://` scheme and `https://popo.poapper.club`.
 - `MainNavigator.tsx` — Bottom tab navigator with 4 tabs: Home, Paxi, MyReservation, MyInfo.
 - `AuthNavigator.tsx` — Auth flow (Landing → Login → Signup).
@@ -52,6 +53,7 @@ Configured in both `tsconfig.json` and `babel.config.js` (via `babel-plugin-modu
 - `RootNavigation.ts` — Navigation ref for programmatic navigation outside React tree (used by notification handlers).
 
 ### API Layer (`src/utils/`)
+
 - `api.ts` — Main Axios instance for POPO backend. Has request/response interceptors for auth tokens.
 - `paxi_api.ts` — Separate Axios instance for the Paxi service backend.
 - `refresh.utils.ts` — Token refresh logic with request queuing during refresh.
@@ -59,19 +61,23 @@ Configured in both `tsconfig.json` and `babel.config.js` (via `babel-plugin-modu
 - `cookie.ts` — Cookie management via `@react-native-cookies/cookies`.
 
 ### Real-Time Chat (Paxi)
+
 - `socket-factory.ts` — Creates authenticated Socket.io connections with auto-reconnection.
 - `constants/socket-events.ts` — WebSocket event name constants.
 - Chat screens manage socket connections via `useRef` and clean up on unmount.
 
 ### State Management
+
 Local `useState`/`useRef` per screen. No global state library (no Redux/Zustand). Persistent data stored in `react-native-encrypted-storage`.
 
 ### Push Notifications
+
 - `firebase.ts` — FCM token registration and message handling.
 - `notifee.ts` — Local notification display via `@notifee/react-native`.
 - Notifications integrate with deep linking to route to specific screens.
 
 ### Styling (`src/styles/default.ts`)
+
 - `colors.dark` / `colors.light` objects for theme colors.
 - `backgroundColor()`, `textColor()`, `borderColor()` helper functions that take `isDarkMode` boolean.
 - `common` StyleSheet for shared layout patterns (safeArea, container, header).
