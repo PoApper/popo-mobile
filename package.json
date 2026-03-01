@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "android": "react-native run-android --mode=devDebug --appId=com.popomobile.dev",
-    "android:dev": "react-native run-android --mode=devDebug --appId=com.popomobile.dev",
-    "android:dev:release": "react-native run-android --mode=devRelease --appId=com.popomobile.dev",
+    "android": "react-native run-android --mode=devDebug --appId=com.popomobile",
+    "android:dev": "react-native run-android --mode=devDebug --appId=com.popomobile",
+    "android:dev:release": "react-native run-android --mode=devRelease --appId=com.popomobile",
     "android:prod": "react-native run-android --mode=prodDebug --appId=com.popomobile",
     "android:prod:release": "react-native run-android --mode=prodRelease --appId=com.popomobile",
     "android:log": "npx react-native log-android",
