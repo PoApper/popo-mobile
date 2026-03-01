@@ -89,3 +89,6 @@ GoogleService-info.plist
 *.apk
 
 .vscode/
+
+# Onboarding docs (local only, images too large for git)
+onboarding.md
