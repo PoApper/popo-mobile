@@ -2,6 +2,9 @@
 #
 .DS_Store
 
+# Handoff
+HANDOFF.md
+
 # Xcode
 #
 build/
@@ -89,3 +92,6 @@ GoogleService-info.plist
 *.apk
 
 .vscode/
+
+# Onboarding docs (local only, images too large for git)
+onboarding.md

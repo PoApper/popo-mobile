@@ -5,11 +5,11 @@ import {
   Text,
   StyleSheet,
   useColorScheme,
-  Platform,
   Share,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
+import 'moment/locale/ko';
 import Svg, {Line} from 'react-native-svg';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
@@ -39,11 +39,11 @@ const RoomInfoBox = ({
 
   const handleShare = async () => {
     try {
-      await Share.share(
-        Platform.OS === 'ios'
-          ? {title: 'Paxi 택시팟 공유', url: shareUrl}
-          : {title: 'Paxi 택시팟 공유', message: shareUrl},
-      );
+      const departureDate = moment(roomData.departureTime)
+        .locale('ko')
+        .format('M/D(ddd) HH:mm');
+      const shareMessage = `${departureDate} ${roomData.departureLocation}→${roomData.destinationLocation}\n${shareUrl}`;
+      await Share.share({message: shareMessage});
     } catch (error: any) {
       // 사용자가 공유를 취소한 경우 에러를 무시
       if (error.message !== 'User did not share') {
