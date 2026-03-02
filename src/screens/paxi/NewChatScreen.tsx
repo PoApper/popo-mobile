@@ -9,8 +9,9 @@ import {
   StatusBar,
   FlatList,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-import {KeyboardAvoidingView} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp, useRoute, useFocusEffect} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -384,7 +385,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         </View>
       )}
 
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={styles.container}>
         <FlatList
           data={chatList}
           renderItem={({item}) => (
