@@ -30,4 +30,9 @@ describe('extractTokenFromCookie', () => {
   it('undefined 입력에 null을 반환한다', () => {
     expect(extractTokenFromCookie(undefined, true)).toBeNull();
   });
+
+  it('쿠키 값이 비어 있으면 null을 반환한다', () => {
+    const cookies = ['Authentication=; Path=/; HttpOnly'];
+    expect(extractTokenFromCookie(cookies, true)).toBeNull();
+  });
 });

@@ -41,5 +41,11 @@ describe('LazyImage', () => {
 
     // onError 콜백이 호출되었는지 확인
     expect(onError).toHaveBeenCalled();
+
+    // 에러 이후에는 fallback 이미지로 전환되었는지 확인
+    const updatedImage = getByTestId('lazy-image');
+    expect(updatedImage.props.source).not.toEqual(
+      expect.objectContaining({uri: expect.any(String)}),
+    );
   });
 });

@@ -16,7 +16,7 @@ afterEach(() => {
 });
 
 test('renders correctly', async () => {
-  let renderer: ReactTestRenderer.ReactTestRenderer;
+  let renderer: ReactTestRenderer.ReactTestRenderer | undefined;
   await ReactTestRenderer.act(() => {
     renderer = ReactTestRenderer.create(<App />);
   });
@@ -26,6 +26,6 @@ test('renders correctly', async () => {
   });
 
   await ReactTestRenderer.act(() => {
-    renderer!.unmount();
+    renderer?.unmount();
   });
 });

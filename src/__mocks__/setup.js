@@ -186,19 +186,3 @@ jest.mock('@react-native-cookies/cookies', () => ({
   set: jest.fn(() => Promise.resolve(true)),
   clearAll: jest.fn(() => Promise.resolve()),
 }));
-
-// ──────────────────────────────────────────────
-// Silence non-critical warnings in test output
-// ──────────────────────────────────────────────
-const originalWarn = console.warn;
-console.warn = (...args) => {
-  const message = typeof args[0] === 'string' ? args[0] : '';
-  if (
-    message.includes('Animated:') ||
-    message.includes('componentWillReceiveProps') ||
-    message.includes('componentWillMount')
-  ) {
-    return;
-  }
-  originalWarn.call(console, ...args);
-};

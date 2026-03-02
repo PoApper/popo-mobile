@@ -19,6 +19,8 @@ module.exports = {
 
   // 글로벌 mock 설정 파일
   setupFiles: ['./src/__mocks__/setup.js'],
+  // Jest 프레임워크 로드 후 실행 (beforeAll/afterAll 사용 가능)
+  setupFilesAfterEnv: ['./src/__mocks__/setupAfterEnv.js'],
 
   // RN 패키지 중 ESM → CJS 변환이 필요한 것들
   transformIgnorePatterns: [
