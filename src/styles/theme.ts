@@ -120,7 +120,7 @@ export const darkPalette: ThemePalette = {
     error: '#EF4444',
     success: '#10B981',
     warning: '#F59E0B',
-    info: '#3b82f6',
+    info: '#60A5FA',
   },
   separator: '#2C2C2C',
   overlay: 'rgba(0,0,0,0.5)',
