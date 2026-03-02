@@ -2,6 +2,9 @@
 #
 .DS_Store
 
+# Handoff
+HANDOFF.md
+
 # Xcode
 #
 build/
