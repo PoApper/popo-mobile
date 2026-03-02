@@ -10,7 +10,7 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
+import {KeyboardAvoidingView} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp, useRoute, useFocusEffect} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
