@@ -31,6 +31,40 @@ Xcode 에서 진행합니다.
 
 POPO 드라이브 [iOS 빌드 및 배포](https://docs.google.com/document/d/1C1s7IaPpp15jBgNyjjILGEaj8Z3KVOKeSJ1uovLf53A/edit?tab=t.0#heading=h.ik2jb56m4d8c) 참고
 
+## App Store 제출
+
+### 방법 1: Xcode Organizer
+
+1. Xcode 메뉴 → **Window** → **Organizer** 열기
+2. 왼쪽에서 **popoMobile** 선택 → 빌드한 archive 확인
+3. **Distribute App** 클릭
+4. **App Store Connect** → **Upload** 선택
+5. 서명/프로비저닝 확인 후 업로드
+6. [App Store Connect](https://appstoreconnect.apple.com)에서 빌드 연결 후 제출
+
+> CLI로 archive를 생성한 경우 Organizer에 표시되지 않을 수 있습니다. 아래 명령어로 이동 후 Organizer를 다시 열어주세요.
+>
+> ```bash
+> mv /tmp/popoMobile.xcarchive ~/Library/Developer/Xcode/Archives/$(date +%Y-%m-%d)/popoMobile.xcarchive
+> ```
+
+### 방법 2: Transporter (Organizer에서 프로비저닝 에러가 발생할 경우)
+
+archive를 IPA로 내보낸 뒤 Transporter 앱으로 직접 업로드합니다.
+
+```bash
+# IPA 내보내기 (ExportOptions.plist는 ios/ 디렉토리에 포함되어 있음)
+# 프로젝트 루트에서 실행
+xcodebuild -exportArchive \
+  -archivePath ~/Library/Developer/Xcode/Archives/$(date +%Y-%m-%d)/popoMobile.xcarchive \
+  -exportPath . \
+  -exportOptionsPlist ios/ExportOptions.plist
+```
+
+1. **Transporter** 앱을 열고 프로젝트 루트의 `popoMobile.ipa` 파일을 드래그 앤 드롭
+2. **전송** 클릭하여 업로드
+3. [App Store Connect](https://appstoreconnect.apple.com)에서 빌드 연결 후 제출
+
 ## 캐시 제거
 
 ```bash

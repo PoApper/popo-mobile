@@ -50,6 +50,14 @@ cd android/app/build/outputs/bundle/prodRelease
 open .
 ```
 
+## Google Play Store 제출
+
+1. [Google Play Console](https://play.google.com/console) 접속 후 POPO 앱 선택
+2. 왼쪽 메뉴에서 **프로덕션** (또는 내부 테스트 등 원하는 트랙) 선택
+3. **새 버전 만들기** 클릭
+4. 위에서 빌드한 `.aab` 파일 업로드 (프로젝트 루트의 `app-prod-release.aab`)
+5. 출시 노트 작성 후 **검토 시작**
+
 ## Logging
 
 에뮬레이터의 `console.log()` 출력을 보려면:
