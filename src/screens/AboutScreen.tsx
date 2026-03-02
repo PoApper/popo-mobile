@@ -10,11 +10,24 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Svg, {Path} from 'react-native-svg';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import CommonHeader from '@components/CommonHeader';
 import DeviceInfo from 'react-native-device-info';
+
+const GitHubIcon = ({
+  size = 20,
+  color = '#000000',
+}: {
+  size?: number;
+  color?: string;
+}) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+    <Path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+  </Svg>
+);
 
 type AboutScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'About'>;
@@ -96,6 +109,26 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
           </Text>
         </View>
 
+        {/* 개발자 모집 */}
+        <TouchableOpacity
+          style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('Recruiting')}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={[styles.sectionTitle, {color: textColor}]}>
+              함께 만들어요
+            </Text>
+            <Icon
+              name="group-add"
+              size={22}
+              color={isDarkMode ? '#818CF8' : '#4F46E5'}
+            />
+          </View>
+          <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
+            POPO 개발팀에서 새로운 팀원을 찾고 있습니다
+          </Text>
+        </TouchableOpacity>
+
         {/* 앱 */}
         <View
           style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
@@ -104,8 +137,7 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
             <TouchableOpacity
               style={styles.iconButton}
               onPress={() => openLink(appRepo)}>
-              <Icon
-                name="code"
+              <GitHubIcon
                 size={20}
                 color={isDarkMode ? '#93C5FD' : '#2563EB'}
               />
@@ -143,8 +175,7 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
                 style={styles.iconButton}
                 onPress={() => openLink(backendRepo2)}
                 accessibilityLabel="POPO 백엔드">
-                <Icon
-                  name="code"
+                <GitHubIcon
                   size={20}
                   color={isDarkMode ? '#93C5FD' : '#2563EB'}
                 />
@@ -153,8 +184,7 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
                 style={styles.iconButton}
                 onPress={() => openLink(backendRepo1)}
                 accessibilityLabel="Paxi 백엔드">
-                <Icon
-                  name="code"
+                <GitHubIcon
                   size={20}
                   color={isDarkMode ? '#93C5FD' : '#2563EB'}
                 />
