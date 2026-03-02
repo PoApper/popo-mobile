@@ -92,6 +92,9 @@ GoogleService-info.plist
 *.aab
 *.apk
 
+# iOS
+*.xcarchive
+
 .vscode/
 
 # Onboarding docs (local only, images too large for git)

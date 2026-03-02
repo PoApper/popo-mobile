@@ -31,6 +31,19 @@ Xcode 에서 진행합니다.
 
 POPO 드라이브 [iOS 빌드 및 배포](https://docs.google.com/document/d/1C1s7IaPpp15jBgNyjjILGEaj8Z3KVOKeSJ1uovLf53A/edit?tab=t.0#heading=h.ik2jb56m4d8c) 참고
 
+### CLI로 빌드
+
+프로젝트 루트에서 실행합니다. archive가 프로젝트 루트에 `popoMobile.xcarchive`로 생성됩니다.
+
+```bash
+xcodebuild -workspace ios/popoMobile.xcworkspace \
+  -scheme popoMobile \
+  -configuration Release \
+  -destination 'generic/platform=iOS' \
+  -archivePath popoMobile.xcarchive \
+  archive
+```
+
 ## App Store 제출
 
 ### 방법 1: Xcode Organizer
@@ -45,7 +58,8 @@ POPO 드라이브 [iOS 빌드 및 배포](https://docs.google.com/document/d/1C1
 > CLI로 archive를 생성한 경우 Organizer에 표시되지 않을 수 있습니다. 아래 명령어로 이동 후 Organizer를 다시 열어주세요.
 >
 > ```bash
-> mv /tmp/popoMobile.xcarchive ~/Library/Developer/Xcode/Archives/$(date +%Y-%m-%d)/popoMobile.xcarchive
+> mkdir -p ~/Library/Developer/Xcode/Archives/$(date +%Y-%m-%d)
+> mv popoMobile.xcarchive ~/Library/Developer/Xcode/Archives/$(date +%Y-%m-%d)/popoMobile.xcarchive
 > ```
 
 ### 방법 2: Transporter (Organizer에서 프로비저닝 에러가 발생할 경우)
@@ -56,7 +70,7 @@ archive를 IPA로 내보낸 뒤 Transporter 앱으로 직접 업로드합니다.
 # IPA 내보내기 (ExportOptions.plist는 ios/ 디렉토리에 포함되어 있음)
 # 프로젝트 루트에서 실행
 xcodebuild -exportArchive \
-  -archivePath ~/Library/Developer/Xcode/Archives/$(date +%Y-%m-%d)/popoMobile.xcarchive \
+  -archivePath popoMobile.xcarchive \
   -exportPath . \
   -exportOptionsPlist ios/ExportOptions.plist
 ```
