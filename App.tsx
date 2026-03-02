@@ -11,6 +11,7 @@ import notifee, {EventType} from '@notifee/react-native';
 import {KeyboardProvider} from 'react-native-keyboard-controller';
 
 import AppNavigator from './src/navigation/AppNavigator';
+import {ThemeProvider} from './src/styles/theme';
 import {requestUserPermission} from './src/utils/firebase';
 import paxi_api from './src/utils/paxi_api';
 import {displayNotification} from './src/utils/notifee';
@@ -111,13 +112,15 @@ const App = () => {
   }, []);
 
   return (
-    <KeyboardProvider>
-      <GestureHandlerRootView>
-        <SafeAreaProvider>
-          <AppNavigator />
-        </SafeAreaProvider>
-      </GestureHandlerRootView>
-    </KeyboardProvider>
+    <ThemeProvider>
+      <KeyboardProvider>
+        <GestureHandlerRootView>
+          <SafeAreaProvider>
+            <AppNavigator />
+          </SafeAreaProvider>
+        </GestureHandlerRootView>
+      </KeyboardProvider>
+    </ThemeProvider>
   );
 };
 
