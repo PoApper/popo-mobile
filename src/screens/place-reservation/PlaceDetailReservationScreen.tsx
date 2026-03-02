@@ -133,7 +133,7 @@ const PlaceDetailReservationScreen = ({
   useFocusEffect(
     useCallback(() => {
       fetchReservations();
-    }, []),
+    }, [fetchReservations]),
   );
 
   // 날짜 또는 장소 변경 시 예약 내역을 다시 불러옴
