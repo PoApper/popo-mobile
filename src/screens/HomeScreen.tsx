@@ -21,6 +21,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import DdayInfoBox from '@components/DdayInfoBox';
+import RecruitingBanner from '@components/RecruitingBanner';
 import UpcomingEvents from '@components/UpcomingEvents';
 import {openURLWithFallback} from '@utils/linking';
 import {
@@ -213,6 +214,9 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       <ScrollView style={styles.container}>
         {/* D-day 정보 */}
         <DdayInfoBox />
+
+        {/* 개발자 모집 배너 */}
+        <RecruitingBanner navigation={navigation} />
 
         {/* 환영 메시지 */}
         <View style={styles.welcomeSection}>

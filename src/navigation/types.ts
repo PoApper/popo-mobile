@@ -107,4 +107,5 @@ export type OtherStackParamList = {
     selectedDate: string;
   };
   About: undefined;
+  Recruiting: undefined;
 };
