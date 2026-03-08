@@ -108,7 +108,13 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 navigation.reset({
                   index: 1,
                   routes: [
-                    {name: 'Main', params: {prevTab: 'CreatePaxiRoomScreen'}},
+                    {
+                      name: 'Main',
+                      params: {
+                        tab: 'MyReservation',
+                        prevTab: 'taxi',
+                      },
+                    },
                     {
                       name: 'NewChat',
                       params: {roomUuid: res.data.uuid as string},
