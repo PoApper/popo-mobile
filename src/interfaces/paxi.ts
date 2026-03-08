@@ -28,6 +28,7 @@ export interface ChatRoomInfo {
   payerUuid: string;
   payAmount: number;
   roomUsers: UserData[];
+  isMuted: boolean;
 }
 
 export interface MessageData {
@@ -88,6 +89,7 @@ export interface PaxiUser {
 
 export interface MyRoomData {
   hasNewMessage: boolean;
+  isMuted: boolean;
   kickedReason: string;
   userStatus: string;
   uuid: string;
