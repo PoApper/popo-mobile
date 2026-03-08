@@ -105,8 +105,15 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             {
               text: '확인',
               onPress: () => {
-                navigation.navigate('NewChat', {
-                  roomUuid: res.data.uuid as string,
+                navigation.reset({
+                  index: 1,
+                  routes: [
+                    {name: 'Main', params: {prevTab: 'CreatePaxiRoomScreen'}},
+                    {
+                      name: 'NewChat',
+                      params: {roomUuid: res.data.uuid as string},
+                    },
+                  ],
                 });
               },
             },
