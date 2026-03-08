@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import BanReasonModal from './BanReasonModal';
 import {MyRoomData, UserData} from '@interfaces/paxi';
+import {updateMuteStatus} from '@utils/mute';
 
 interface TaxiChatListProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
@@ -78,6 +79,37 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
       setIsLoading(false);
     }
   }, [navigation]);
+
+  const handleRoomLongPress = (roomData: MyRoomData) => {
+    const isMuted = roomData.isMuted;
+    Alert.alert(
+      isMuted ? '알림 켜기' : '알림 끄기',
+      isMuted
+        ? '이 채팅방의 알림을 다시 받으시겠습니까?'
+        : '이 채팅방의 알림을 끄시겠습니까?',
+      [
+        {text: '취소', style: 'cancel'},
+        {
+          text: '확인',
+          onPress: async () => {
+            try {
+              await updateMuteStatus(roomData.uuid, !isMuted);
+              setChatRooms(prev =>
+                prev.map(room =>
+                  room.uuid === roomData.uuid
+                    ? {...room, isMuted: !isMuted}
+                    : room,
+                ),
+              );
+            } catch (err) {
+              console.error('음소거 상태 변경 실패:', err);
+              Alert.alert('오류', '알림 설정 변경에 실패했습니다.');
+            }
+          },
+        },
+      ],
+    );
+  };
 
   const handleRoomClick = (roomData: MyRoomData) => {
     const roomUuid = roomData.uuid;
@@ -170,14 +202,25 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         borderBottomWidth: 1,
         borderBottomColor: borderColor,
       }}
-      onPress={() => handleRoomClick(item)}>
+      onPress={() => handleRoomClick(item)}
+      onLongPress={() => handleRoomLongPress(item)}>
       <View style={{flex: 1}}>
-        <Text
-          style={[styles.reservationTitle, {color: textColor}]}
-          numberOfLines={1}
-          ellipsizeMode="tail">
-          {item.title}
-        </Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text
+            style={[styles.reservationTitle, {color: textColor, flex: 1}]}
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {item.title}
+          </Text>
+          {item.isMuted && (
+            <Icon
+              name="notifications-off"
+              size={16}
+              color={isDarkMode ? '#888' : '#999'}
+              style={{marginLeft: 4}}
+            />
+          )}
+        </View>
         <Text
           style={[styles.fromToText, {color: textColor}]}
           numberOfLines={1}
