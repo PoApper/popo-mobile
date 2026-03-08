@@ -89,7 +89,10 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
           onPress: () =>
             navigation.canGoBack()
               ? navigation.goBack()
-              : navigation.replace('Main', {prevTab: 'DeepLinkRoom'}),
+              : navigation.reset({
+                  index: 0,
+                  routes: [{name: 'Main', params: {prevTab: 'DeepLinkRoom'}}],
+                }),
         },
       ]);
       return;
@@ -134,7 +137,10 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
             onPress: () =>
               navigation.canGoBack()
                 ? navigation.goBack()
-                : navigation.replace('Main', {prevTab: 'DeepLinkRoom'}),
+                : navigation.reset({
+                    index: 0,
+                    routes: [{name: 'Main', params: {prevTab: 'DeepLinkRoom'}}],
+                  }),
           },
         ]);
       }
@@ -165,13 +171,25 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
               '이미 참가중인 방입니다. \n방으로 입장합니다.',
               ToastAndroid.SHORT,
             );
-            navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+            navigation.reset({
+              index: 1,
+              routes: [
+                {name: 'Main', params: {prevTab: 'DeepLinkRoom'}},
+                {name: 'NewChat', params: {roomUuid, from: 'roomList'}},
+              ],
+            });
           } else {
             Alert.alert('이미 참가중인 방입니다. \n방으로 입장합니다.', '', [
               {
                 text: '확인',
                 onPress: () => {
-                  navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+                  navigation.reset({
+                    index: 1,
+                    routes: [
+                      {name: 'Main'},
+                      {name: 'NewChat', params: {roomUuid, from: 'roomList'}},
+                    ],
+                  });
                 },
               },
             ]);
@@ -216,7 +234,10 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
           onPress: () =>
             navigation.canGoBack()
               ? navigation.goBack()
-              : navigation.replace('Main', {prevTab: 'DeepLinkRoom'}),
+              : navigation.reset({
+                  index: 0,
+                  routes: [{name: 'Main', params: {prevTab: 'DeepLinkRoom'}}],
+                }),
         },
       ]);
     } else {
@@ -231,7 +252,10 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
             onPress: () =>
               navigation.canGoBack()
                 ? navigation.goBack()
-                : navigation.replace('Main', {prevTab: 'DeepLinkRoom'}),
+                : navigation.reset({
+                    index: 0,
+                    routes: [{name: 'Main', params: {prevTab: 'DeepLinkRoom'}}],
+                  }),
           },
         ],
       );
@@ -245,7 +269,13 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
     try {
       await paxi_api.post(`/room/join/${roomUuid}`);
       setShowModal(false);
-      navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+      navigation.reset({
+        index: 1,
+        routes: [
+          {name: 'Main'},
+          {name: 'NewChat', params: {roomUuid, from: 'roomList'}},
+        ],
+      });
     } catch (error) {
       const {status, detail} = getAxiosErrorInfo(error);
 
@@ -258,7 +288,10 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
         if (navigation.canGoBack()) {
           navigation.goBack();
         } else {
-          navigation.replace('Main', {prevTab: 'DeepLinkRoom'});
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Main', params: {prevTab: 'DeepLinkRoom'}}],
+          });
         }
       } else {
         Alert.alert(
@@ -271,7 +304,10 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
         if (navigation.canGoBack()) {
           navigation.goBack();
         } else {
-          navigation.replace('Main', {prevTab: 'DeepLinkRoom'});
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Main', params: {prevTab: 'DeepLinkRoom'}}],
+          });
         }
       }
     }
@@ -282,7 +318,10 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
     if (navigation.canGoBack()) {
       navigation.goBack();
     } else {
-      navigation.replace('Main', {prevTab: 'DeepLinkRoom'});
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Main', params: {prevTab: 'DeepLinkRoom'}}],
+      });
     }
   };
 
