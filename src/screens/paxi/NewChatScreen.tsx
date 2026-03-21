@@ -75,9 +75,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       .get(`/room/${roomUuid}`)
       .then(res => {
         setRoomInfo(res.data);
-        if (res.data.isMuted !== undefined) {
-          setIsMuted(res.data.isMuted);
-        }
+        setIsMuted(res.data.isMuted);
       })
       .catch(err => {
         console.error(err);
