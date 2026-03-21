@@ -8,7 +8,9 @@ export async function updateMuteStatus(
   isMuted: boolean,
 ): Promise<void> {
   await paxi_api.patch(`/room/${roomUuid}/mute`, {isMuted});
-  await updateLocalMuteCache(roomUuid, isMuted);
+  updateLocalMuteCache(roomUuid, isMuted).catch(error =>
+    console.error('Failed to update local mute cache:', error),
+  );
 }
 
 async function updateLocalMuteCache(
@@ -40,5 +42,10 @@ async function getLocalMutedRooms(): Promise<string[]> {
   if (!data) {
     return [];
   }
-  return JSON.parse(data);
+  try {
+    return JSON.parse(data);
+  } catch {
+    await EncryptedStorage.removeItem(MUTED_ROOMS_KEY);
+    return [];
+  }
 }
