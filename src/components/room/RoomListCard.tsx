@@ -20,6 +20,7 @@ interface RoomContainerProps {
   roomUuid: string;
   userUuid: string;
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
+  refreshKey: number;
 }
 
 // 방 상태 enum 정의
@@ -42,6 +43,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
   roomUuid,
   userUuid,
   navigation,
+  refreshKey,
 }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [roomData, setRoomData] = useState<ChatRoomInfo | null>(null);
@@ -56,7 +58,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
 
   useEffect(() => {
     fetchRoomData();
-  }, [roomUuid]);
+  }, [roomUuid, refreshKey]);
 
   // 방 데이터 가져오기
   const fetchRoomData = async () => {

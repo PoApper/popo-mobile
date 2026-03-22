@@ -42,6 +42,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const [roomData, setRoomData] = useState<RoomDataType[]>([]);
   const [userUuid, setUserUuid] = useState<string>('');
   const [refreshing, setRefreshing] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -107,6 +108,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
     setRefreshing(true);
     try {
       await getRoomList();
+      setRefreshKey(prev => prev + 1);
     } catch (error) {
       console.error('Refresh error:', error);
     } finally {
@@ -126,6 +128,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
               setUserUuid(res.data.uuid);
             });
             getRoomList();
+            setRefreshKey(prev => prev + 1);
           }
         })
         .catch(err => {
@@ -253,6 +256,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
             roomUuid={item.uuid}
             userUuid={userUuid}
             navigation={navigation as any}
+            refreshKey={refreshKey}
           />
         )}
         contentContainerStyle={{padding: 16, paddingBottom: 100}}
