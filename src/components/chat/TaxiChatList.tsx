@@ -81,7 +81,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   }, [navigation]);
 
   const handleRoomLongPress = (roomData: MyRoomData) => {
-    const isMuted = roomData.isMuted;
+    const isMuted = roomData.myRoomUser?.isMuted ?? false;
     Alert.alert(
       isMuted ? '알림 켜기' : '알림 끄기',
       isMuted
@@ -97,7 +97,12 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
               setChatRooms(prev =>
                 prev.map(room =>
                   room.uuid === roomData.uuid
-                    ? {...room, isMuted: !isMuted}
+                    ? {
+                        ...room,
+                        myRoomUser: room.myRoomUser
+                          ? {...room.myRoomUser, isMuted: !isMuted}
+                          : undefined,
+                      }
                     : room,
                 ),
               );
@@ -117,7 +122,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
     const clickedRoom = chatRooms.find(value => value.uuid === roomUuid);
     if (!clickedRoom) {
       return;
-    } else if (clickedRoom.userStatus === 'KICKED') {
+    } else if (clickedRoom.myRoomUser?.status === 'KICKED') {
       setShowBanReasonModal(true);
     } else {
       navigation.navigate('NewChat', {roomUuid: roomUuid});
@@ -212,7 +217,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
             ellipsizeMode="tail">
             {item.title}
           </Text>
-          {item.isMuted && (
+          {item.myRoomUser?.isMuted && (
             <Icon
               name="notifications-off"
               size={16}
@@ -232,7 +237,9 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         </Text>
       </View>
       {(() => {
-        const userStatusConfig = getUserStatusConfig(item.userStatus);
+        const userStatusConfig = getUserStatusConfig(
+          item.myRoomUser?.status ?? '',
+        );
         if (userStatusConfig) {
           const colors = isDarkMode
             ? userStatusConfig.darkMode
@@ -282,19 +289,20 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        {item.hasNewMessage && item.userStatus !== 'KICKED' && (
-          <View
-            style={{
-              position: 'absolute',
-              top: 10,
-              right: 10,
-              width: 5,
-              height: 5,
-              borderRadius: 2.5,
-              backgroundColor: 'red',
-            }}
-          />
-        )}
+        {item.myRoomUser?.hasNewMessage &&
+          item.myRoomUser?.status !== 'KICKED' && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 10,
+                right: 10,
+                width: 5,
+                height: 5,
+                borderRadius: 2.5,
+                backgroundColor: 'red',
+              }}
+            />
+          )}
         <Icon name="message" size={22} color="#222" />
       </View>
     </TouchableOpacity>
