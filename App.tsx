@@ -16,7 +16,6 @@ import {requestUserPermission} from './src/utils/firebase';
 import paxi_api from './src/utils/paxi_api';
 import {displayNotification} from './src/utils/notifee';
 import {navigationRef} from './src/navigation/RootNavigation';
-import {isRoomMuted} from './src/utils/mute';
 
 const App = () => {
   useEffect(() => {
@@ -66,12 +65,8 @@ const App = () => {
     // handle delay of `setItem` in index.js
     setTimeout(handlePendingNavigation, 100);
 
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
+    const unsubscribe = messaging().onMessage(remoteMessage => {
       // NOTE: On iOS simulator, the message is not received when Forground.
-      const roomUuid = remoteMessage.data?.roomUuid as string | undefined;
-      if (roomUuid && (await isRoomMuted(roomUuid))) {
-        return;
-      }
       displayNotification(
         remoteMessage.notification?.title as string,
         remoteMessage.notification?.body as string,
