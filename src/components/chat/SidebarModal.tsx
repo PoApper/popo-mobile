@@ -32,7 +32,8 @@ interface SidebarModalProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
   myUuid: string;
   isPaidEnd?: boolean;
-  // leaveRoom?: () => void;
+  isMuted: boolean;
+  onToggleMute: () => void;
 }
 
 const SidebarModal = ({
@@ -42,8 +43,9 @@ const SidebarModal = ({
   navigation,
   myUuid,
   isPaidEnd = false,
-}: // leaveRoom,
-SidebarModalProps) => {
+  isMuted,
+  onToggleMute,
+}: SidebarModalProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const screenWidth = Dimensions.get('window').width;
   const slideAnim = useRef(new Animated.Value(screenWidth * 0.8)).current;
@@ -416,21 +418,35 @@ SidebarModalProps) => {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}>
-                  <TouchableOpacity
-                    style={[
-                      styles.leaveRoomButton,
-                      {
-                        opacity:
-                          isSettlementRequestExist || isPaidEnd ? 0.5 : 1,
-                      },
-                    ]}
-                    onPress={() => handleLeavePress()}>
-                    <Icon
-                      name="logout"
-                      size={30}
-                      color={textColor(isDarkMode)}
-                    />
-                  </TouchableOpacity>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 16,
+                    }}>
+                    <TouchableOpacity
+                      style={[
+                        styles.leaveRoomButton,
+                        {
+                          opacity:
+                            isSettlementRequestExist || isPaidEnd ? 0.5 : 1,
+                        },
+                      ]}
+                      onPress={() => handleLeavePress()}>
+                      <Icon
+                        name="logout"
+                        size={30}
+                        color={textColor(isDarkMode)}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={onToggleMute}>
+                      <Icon
+                        name={isMuted ? 'notifications-off' : 'notifications'}
+                        size={30}
+                        color={textColor(isDarkMode)}
+                      />
+                    </TouchableOpacity>
+                  </View>
 
                   {/* 정산 완료 버튼 */}
                   {isIamPayer && !isPaidEnd && (
