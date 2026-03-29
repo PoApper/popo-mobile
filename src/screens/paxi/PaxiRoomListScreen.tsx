@@ -102,9 +102,11 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
     try {
       await getRoomList();
       setRefreshKey(prev => prev + 1);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Refresh error:', error);
-      Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + error.message);
+      const message =
+        error instanceof Error ? error.message : String(error);
+      Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + message);
     } finally {
       setRefreshing(false);
     }
@@ -122,9 +124,11 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
           await getRoomList();
           setRefreshKey(prev => prev + 1);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Error:', err);
-        Alert.alert('실패', 'Paxi 유저 확인에 실패했습니다: ' + err.message);
+        const message =
+          err instanceof Error ? err.message : String(err);
+        Alert.alert('실패', 'Paxi 유저 확인에 실패했습니다: ' + message);
       }
     });
 
