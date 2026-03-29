@@ -35,6 +35,7 @@ import SettlementInfoBox from '@components/chat/SettlementInfoBox';
 import MsgModifyModal from '@components/chat/MsgModifyModal';
 import UserInfoModal from '@components/chat/UserInfoModal';
 import {ChatEvent} from '../../constants/socket-events';
+import {updateMuteStatus} from '@utils/mute';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
@@ -67,12 +68,14 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     {} as MessageData,
   );
   const [showUserInfo, setShowUserInfo] = useState<boolean>(false);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
 
   const getRoomInfo = async () => {
     paxi_api
       .get(`/room/${roomUuid}`)
       .then(res => {
         setRoomInfo(res.data);
+        setIsMuted(res.data.myRoomUser?.isMuted ?? false);
       })
       .catch(err => {
         console.error(err);
@@ -83,6 +86,17 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
           },
         ]);
       });
+  };
+
+  const handleToggleMute = async () => {
+    const newMuted = !isMuted;
+    try {
+      await updateMuteStatus(roomUuid, newMuted);
+      setIsMuted(newMuted);
+    } catch (err) {
+      console.error('음소거 상태 변경 실패:', err);
+      Alert.alert('오류', '알림 설정 변경에 실패했습니다.');
+    }
   };
 
   const getSettlementInfo = async () => {
@@ -353,6 +367,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         myUuid={myInfo.uuid}
         navigation={navigation}
         isPaidEnd={isPaidEnd}
+        isMuted={isMuted}
+        onToggleMute={handleToggleMute}
       />
 
       <MsgModifyModal
