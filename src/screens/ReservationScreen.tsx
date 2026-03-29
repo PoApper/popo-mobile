@@ -55,8 +55,8 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
     };
     checkPaxiUser();
     if (prevTab) {
-      const validTabs: string[] = ['NewChat'];
-      if (validTabs.includes(prevTab)) {
+      const paxiPrevTabs: string[] = ['NewChat', 'taxi', 'DeepLinkRoom'];
+      if (paxiPrevTabs.includes(prevTab)) {
         setActiveTab('taxi');
       }
     }

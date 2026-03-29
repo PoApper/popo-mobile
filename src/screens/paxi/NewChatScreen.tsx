@@ -321,12 +321,21 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         style={[common.header, {borderBottomColor: borderColor(isDarkMode)}]}>
         <TouchableOpacity
           style={common.backButton}
-          onPress={() =>
-            navigation.navigate('Main', {
-              tab: 'MyReservation',
-              prevTab: 'NewChat',
-            })
-          }>
+          onPress={() => {
+            if (navigation.canGoBack()) {
+              navigation.goBack();
+            } else {
+              navigation.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: 'Main',
+                    params: {tab: 'MyReservation', prevTab: 'NewChat'},
+                  },
+                ],
+              });
+            }
+          }}>
           <Text style={[common.backButtonText, {color: textColor(isDarkMode)}]}>
             뒤로
           </Text>
