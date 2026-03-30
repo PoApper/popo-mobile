@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import {AUTH_TOKEN_KEY, IS_AUTHENTICATED_KEY} from '@utils/storage-keys';
 import Config from 'react-native-config';
 import {navigationRef} from './RootNavigation';
 
@@ -81,8 +82,8 @@ const AppNavigator = () => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const authToken = await EncryptedStorage.getItem('auth_token');
-        const isAuth = await EncryptedStorage.getItem('isAuthenticated');
+        const authToken = await EncryptedStorage.getItem(AUTH_TOKEN_KEY);
+        const isAuth = await EncryptedStorage.getItem(IS_AUTHENTICATED_KEY);
         setIsAuthenticated(!!authToken && isAuth === 'true');
       } catch (error) {
         console.error('인증 상태 확인 오류:', error);
