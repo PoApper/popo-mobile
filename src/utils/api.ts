@@ -60,6 +60,7 @@ api.interceptors.request.use(
           await CookieManager.set(POPO_API_URL, {
             name: 'Authentication',
             value: storedToken,
+            domain: COOKIE_DOMAIN,
             path: '/',
             secure: true,
             httpOnly: true,
