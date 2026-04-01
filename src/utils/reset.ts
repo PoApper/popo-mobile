@@ -4,6 +4,7 @@ import {
   AUTH_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
   IS_AUTHENTICATED_KEY,
+  LEGACY_IS_AUTHENTICATED_KEY,
   USER_INFO_KEY,
 } from './storage-keys';
 
@@ -17,6 +18,10 @@ export async function reset_auth() {
     }
     if (await EncryptedStorage.getItem(IS_AUTHENTICATED_KEY)) {
       await EncryptedStorage.removeItem(IS_AUTHENTICATED_KEY);
+    }
+    // TODO: v1.9.6 이후 제거 — legacy 'isAuthenticated' 키 정리
+    if (await EncryptedStorage.getItem(LEGACY_IS_AUTHENTICATED_KEY)) {
+      await EncryptedStorage.removeItem(LEGACY_IS_AUTHENTICATED_KEY);
     }
     if (await EncryptedStorage.getItem(USER_INFO_KEY)) {
       await EncryptedStorage.removeItem(USER_INFO_KEY);
