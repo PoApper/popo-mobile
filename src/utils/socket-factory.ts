@@ -2,6 +2,7 @@ import {io} from 'socket.io-client';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {Socket} from 'socket.io-client';
 import {PAXI_API_URL} from './paxi_api';
+import {AUTH_TOKEN_KEY} from './storage-keys';
 import {ChatEvent} from '../constants/socket-events';
 
 const SOCKET_URL = PAXI_API_URL;
@@ -10,7 +11,7 @@ export const socketFactory = async (
   onSocketConnected: () => void,
   onSocketDisconnected: () => void,
 ): Promise<Socket> => {
-  const token = (await EncryptedStorage.getItem('auth_token')) ?? '';
+  const token = (await EncryptedStorage.getItem(AUTH_TOKEN_KEY)) ?? '';
   const socket = io(`${SOCKET_URL}?Authentication=${token}`, {
     transports: ['websocket'],
     forceNew: true,
