@@ -56,7 +56,7 @@ const App = () => {
 
       // roomUuid가 있으면 NewChat 스크린으로 이동
       if (roomUuid) {
-        await joinAndNavigate(roomUuid, from);
+        await joinAndNavigate(roomUuid, 'roomList');
         EncryptedStorage.removeItem('roomUuid');
         EncryptedStorage.removeItem('pendingNavigation');
       }

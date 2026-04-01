@@ -27,6 +27,10 @@ export const POPO_API_URL = isProduction
   ? 'https://api.popo.poapper.club'
   : 'https://api.popo-dev.poapper.club';
 
+export const COOKIE_DOMAIN = isProduction
+  ? 'popo.poapper.club'
+  : 'popo-dev.poapper.club';
+
 console.log('현재 ENV:', Config.ENV, 'URL:', POPO_API_URL);
 
 // axios 인스턴스 생성
@@ -56,6 +60,7 @@ api.interceptors.request.use(
           await CookieManager.set(POPO_API_URL, {
             name: 'Authentication',
             value: storedToken,
+            domain: COOKIE_DOMAIN,
             path: '/',
             secure: true,
             httpOnly: true,
@@ -73,58 +78,6 @@ api.interceptors.request.use(
     return Promise.reject(error);
   },
 );
-
-// TEMP: removed this and check
-// // 응답 인터셉터 설정
-// api.interceptors.response.use(
-//   response => {
-//     return response;
-//   },
-//   async error => {
-//     const url = error.config.url;
-//     if (error.response && error.response.status === 401) {
-//       try {
-//         // 인증 정보 초기화
-//         if (await EncryptedStorage.getItem('auth_token')) {
-//           await EncryptedStorage.removeItem('auth_token');
-//         }
-//         if (await EncryptedStorage.getItem('isAuthenticated')) {
-//           await EncryptedStorage.removeItem('isAuthenticated');
-//         }
-//         if (await EncryptedStorage.getItem('user_info')) {
-//           await EncryptedStorage.removeItem('user_info');
-//         }
-//         await CookieManager.clearAll();
-
-//         if (error.response.data.detail) {
-//           Alert.alert('로그인 필요', error.response.data.detail + url, [
-//             {
-//               text: '확인',
-//               onPress: () => {
-//                 // 로그인 스크린으로 이동
-//                 navigationRef.current?.navigate('Login');
-//               },
-//             },
-//           ]);
-//         } else {
-//           Alert.alert('로그인 필요', '로그인이 필요한 서비스입니다.' + url, [
-//             {
-//               text: '확인',
-//               onPress: () => {
-//                 // 로그인 스크린으로 이동
-//                 navigationRef.current?.navigate('Login');
-//               },
-//             },
-//           ]);
-//         }
-//       } catch (clearError) {
-//         console.error('인증 정보 초기화 오류:', clearError);
-//       }
-//     }
-
-//     return Promise.reject(error);
-//   },
-// );
 
 // 응답 인터셉터: 401 AccessTokenExpired 처리 (popo API 자체)
 api.interceptors.response.use(

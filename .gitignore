@@ -99,3 +99,9 @@ GoogleService-info.plist
 
 # Onboarding docs (local only, images too large for git)
 onboarding.md
+
+# oh-my-claudecode
+.omc/
+
+# superset
+.superset/

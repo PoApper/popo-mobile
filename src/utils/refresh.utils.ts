@@ -1,6 +1,6 @@
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import api, {POPO_API_URL} from './api';
+import api, {POPO_API_URL, COOKIE_DOMAIN} from './api';
 import {extractTokenFromCookie} from './cookie';
 import type {AxiosInstance} from 'axios';
 import {navigationRef} from '../navigation/RootNavigation';
@@ -63,6 +63,7 @@ export const refreshAccessToken = async () => {
       await CookieManager.set(POPO_API_URL, {
         name: 'Authentication',
         value: authToken,
+        domain: COOKIE_DOMAIN,
         path: '/',
         secure: true,
         httpOnly: true,
@@ -74,6 +75,7 @@ export const refreshAccessToken = async () => {
       await CookieManager.set(POPO_API_URL, {
         name: 'Refresh',
         value: refreshToken,
+        domain: COOKIE_DOMAIN,
         path: '/',
         secure: true,
         httpOnly: true,

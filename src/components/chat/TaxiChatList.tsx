@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import BanReasonModal from './BanReasonModal';
 import {MyRoomData, UserData} from '@interfaces/paxi';
+import {updateMuteStatus} from '@utils/mute';
 
 interface TaxiChatListProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
@@ -79,13 +80,49 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
     }
   }, [navigation]);
 
+  const handleRoomLongPress = (roomData: MyRoomData) => {
+    const isMuted = roomData.myRoomUser?.isMuted ?? false;
+    Alert.alert(
+      isMuted ? '알림 켜기' : '알림 끄기',
+      isMuted
+        ? '이 채팅방의 알림을 다시 받으시겠습니까?'
+        : '이 채팅방의 알림을 끄시겠습니까?',
+      [
+        {text: '취소', style: 'cancel'},
+        {
+          text: '확인',
+          onPress: async () => {
+            try {
+              await updateMuteStatus(roomData.uuid, !isMuted);
+              setChatRooms(prev =>
+                prev.map(room =>
+                  room.uuid === roomData.uuid
+                    ? {
+                        ...room,
+                        myRoomUser: room.myRoomUser
+                          ? {...room.myRoomUser, isMuted: !isMuted}
+                          : undefined,
+                      }
+                    : room,
+                ),
+              );
+            } catch (err) {
+              console.error('음소거 상태 변경 실패:', err);
+              Alert.alert('오류', '알림 설정 변경에 실패했습니다.');
+            }
+          },
+        },
+      ],
+    );
+  };
+
   const handleRoomClick = (roomData: MyRoomData) => {
     const roomUuid = roomData.uuid;
     setSelectedRoomData(roomData);
     const clickedRoom = chatRooms.find(value => value.uuid === roomUuid);
     if (!clickedRoom) {
       return;
-    } else if (clickedRoom.userStatus === 'KICKED') {
+    } else if (clickedRoom.myRoomUser?.status === 'KICKED') {
       setShowBanReasonModal(true);
     } else {
       navigation.navigate('NewChat', {roomUuid: roomUuid});
@@ -170,14 +207,25 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         borderBottomWidth: 1,
         borderBottomColor: borderColor,
       }}
-      onPress={() => handleRoomClick(item)}>
+      onPress={() => handleRoomClick(item)}
+      onLongPress={() => handleRoomLongPress(item)}>
       <View style={{flex: 1}}>
-        <Text
-          style={[styles.reservationTitle, {color: textColor}]}
-          numberOfLines={1}
-          ellipsizeMode="tail">
-          {item.title}
-        </Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text
+            style={[styles.reservationTitle, {color: textColor, flex: 1}]}
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {item.title}
+          </Text>
+          {item.myRoomUser?.isMuted && (
+            <Icon
+              name="notifications-off"
+              size={16}
+              color={isDarkMode ? '#888' : '#999'}
+              style={{marginLeft: 4}}
+            />
+          )}
+        </View>
         <Text
           style={[styles.fromToText, {color: textColor}]}
           numberOfLines={1}
@@ -189,7 +237,9 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         </Text>
       </View>
       {(() => {
-        const userStatusConfig = getUserStatusConfig(item.userStatus);
+        const userStatusConfig = getUserStatusConfig(
+          item.myRoomUser?.status ?? '',
+        );
         if (userStatusConfig) {
           const colors = isDarkMode
             ? userStatusConfig.darkMode
@@ -239,19 +289,20 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        {item.hasNewMessage && item.userStatus !== 'KICKED' && (
-          <View
-            style={{
-              position: 'absolute',
-              top: 10,
-              right: 10,
-              width: 5,
-              height: 5,
-              borderRadius: 2.5,
-              backgroundColor: 'red',
-            }}
-          />
-        )}
+        {item.myRoomUser?.hasNewMessage &&
+          item.myRoomUser?.status !== 'KICKED' && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 10,
+                right: 10,
+                width: 5,
+                height: 5,
+                borderRadius: 2.5,
+                backgroundColor: 'red',
+              }}
+            />
+          )}
         <Icon name="message" size={22} color="#222" />
       </View>
     </TouchableOpacity>

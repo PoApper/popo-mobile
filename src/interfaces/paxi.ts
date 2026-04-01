@@ -28,6 +28,9 @@ export interface ChatRoomInfo {
   payerUuid: string;
   payAmount: number;
   roomUsers: UserData[];
+  myRoomUser?: MyRoomUser;
+  /** @deprecated use myRoomUser.isMuted */
+  isMuted: boolean;
 }
 
 export interface MessageData {
@@ -86,10 +89,25 @@ export interface PaxiUser {
   avatar?: string;
 }
 
-export interface MyRoomData {
+export interface MyRoomUser {
+  status: string;
+  isPaid: boolean;
+  isMuted: boolean;
+  lastReadChatUuid: string | null;
+  kickedReason: string | null;
   hasNewMessage: boolean;
+}
+
+export interface MyRoomData {
+  /** @deprecated use myRoomUser.hasNewMessage */
+  hasNewMessage: boolean;
+  /** @deprecated use myRoomUser.isMuted */
+  isMuted: boolean;
+  /** @deprecated use myRoomUser.kickedReason */
   kickedReason: string;
+  /** @deprecated use myRoomUser.status */
   userStatus: string;
+  myRoomUser?: MyRoomUser;
   uuid: string;
   title: string;
   ownerUuid: string;
