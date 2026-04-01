@@ -142,7 +142,9 @@ const AppNavigator = () => {
             name="PaxiReportList"
             component={PaxiReportListScreen}
           />
-          <Stack.Screen name="Developer" component={DeveloperPage} />
+          {!isProduction && (
+            <Stack.Screen name="Developer" component={DeveloperPage} />
+          )}
 
           {/* Paxi Screens */}
           <Stack.Screen name="PaxiIntro" component={PaxiIntroScreen} />

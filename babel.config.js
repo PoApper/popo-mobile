@@ -43,4 +43,9 @@ module.exports = {
     // 참고: https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/#react-native-community-cli
     'react-native-worklets/plugin',
   ],
+  env: {
+    production: {
+      plugins: [['transform-remove-console', {exclude: ['error', 'warn']}]],
+    },
+  },
 };
