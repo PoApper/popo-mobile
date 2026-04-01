@@ -42,6 +42,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const [roomData, setRoomData] = useState<RoomDataType[]>([]);
   const [userUuid, setUserUuid] = useState<string>('');
   const [refreshing, setRefreshing] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -56,15 +57,8 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   };
 
   const getRoomList = async () => {
-    paxi_api
-      .get('/room')
-      .then(res => {
-        setRoomData(res.data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + error.message);
-      });
+    const res = await paxi_api.get('/room');
+    setRoomData(res.data);
   };
 
   const filteredRoomData = useMemo(() => {
@@ -107,31 +101,33 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
     setRefreshing(true);
     try {
       await getRoomList();
-    } catch (error) {
+      setRefreshKey(prev => prev + 1);
+    } catch (error: unknown) {
       console.error('Refresh error:', error);
+      const message = error instanceof Error ? error.message : String(error);
+      Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + message);
     } finally {
       setRefreshing(false);
     }
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      paxi_api
-        .get('/user/onboarding-status')
-        .then(res => {
-          if (res.data.onboardingStatus === false) {
-            navigation.navigate('PaxiIntro');
-          } else {
-            api.get('/auth/myInfo').then(res => {
-              setUserUuid(res.data.uuid);
-            });
-            getRoomList();
-          }
-        })
-        .catch(err => {
-          console.error('Error:', err);
-          Alert.alert('실패', 'Paxi 유저 확인에 실패했습니다: ' + err.message);
-        });
+    const unsubscribe = navigation.addListener('focus', async () => {
+      try {
+        const statusRes = await paxi_api.get('/user/onboarding-status');
+        if (statusRes.data.onboardingStatus === false) {
+          navigation.navigate('PaxiIntro');
+        } else {
+          const infoRes = await api.get('/auth/myInfo');
+          setUserUuid(infoRes.data.uuid);
+          await getRoomList();
+          setRefreshKey(prev => prev + 1);
+        }
+      } catch (err: unknown) {
+        console.error('Error:', err);
+        const message = err instanceof Error ? err.message : String(err);
+        Alert.alert('실패', 'Paxi 유저 확인에 실패했습니다: ' + message);
+      }
     });
 
     return unsubscribe;
@@ -198,7 +194,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         style={styles.conditionNavigatorScroll}
         contentContainerStyle={[styles.conditionNavigatorContent]}
         showsHorizontalScrollIndicator={false}>
-        <RefreshButton onPress={() => getRoomList()} />
+        <RefreshButton onPress={onRefresh} />
 
         <DropdownFilter
           placeholderText={'출발지'}
@@ -253,6 +249,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
             roomUuid={item.uuid}
             userUuid={userUuid}
             navigation={navigation as any}
+            refreshKey={refreshKey}
           />
         )}
         contentContainerStyle={{padding: 16, paddingBottom: 100}}

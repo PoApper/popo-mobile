@@ -75,6 +75,27 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
   const [roomData, setRoomData] = useState<ChatRoomInfo | null>(null);
   const [showModal, setShowModal] = useState(false);
 
+  const goBackOrResetToMain = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Main', params: {prevTab: 'DeepLinkRoom'}}],
+      });
+    }
+  };
+
+  const resetToNewChat = () => {
+    navigation.reset({
+      index: 1,
+      routes: [
+        {name: 'Main', params: {prevTab: 'DeepLinkRoom'}},
+        {name: 'NewChat', params: {roomUuid, from: 'roomList'}},
+      ],
+    });
+  };
+
   useEffect(() => {
     handleDeepLink();
   }, [roomUuid]);
@@ -86,10 +107,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       Alert.alert('오류', '유효하지 않은 방 링크입니다.', [
         {
           text: '확인',
-          onPress: () =>
-            navigation.canGoBack()
-              ? navigation.goBack()
-              : navigation.replace('Main', {prevTab: 'DeepLinkRoom'}),
+          onPress: goBackOrResetToMain,
         },
       ]);
       return;
@@ -131,10 +149,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
         Alert.alert('오류', '사용자 정보를 불러올 수 없습니다.', [
           {
             text: '확인',
-            onPress: () =>
-              navigation.canGoBack()
-                ? navigation.goBack()
-                : navigation.replace('Main', {prevTab: 'DeepLinkRoom'}),
+            onPress: goBackOrResetToMain,
           },
         ]);
       }
@@ -165,14 +180,12 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
               '이미 참가중인 방입니다. \n방으로 입장합니다.',
               ToastAndroid.SHORT,
             );
-            navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+            resetToNewChat();
           } else {
             Alert.alert('이미 참가중인 방입니다. \n방으로 입장합니다.', '', [
               {
                 text: '확인',
-                onPress: () => {
-                  navigation.replace('NewChat', {roomUuid, from: 'roomList'});
-                },
+                onPress: resetToNewChat,
               },
             ]);
           }
@@ -213,10 +226,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       Alert.alert('오류', '방을 찾을 수 없습니다.', [
         {
           text: '확인',
-          onPress: () =>
-            navigation.canGoBack()
-              ? navigation.goBack()
-              : navigation.replace('Main', {prevTab: 'DeepLinkRoom'}),
+          onPress: goBackOrResetToMain,
         },
       ]);
     } else {
@@ -228,10 +238,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
         [
           {
             text: '확인',
-            onPress: () =>
-              navigation.canGoBack()
-                ? navigation.goBack()
-                : navigation.replace('Main', {prevTab: 'DeepLinkRoom'}),
+            onPress: goBackOrResetToMain,
           },
         ],
       );
@@ -245,7 +252,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
     try {
       await paxi_api.post(`/room/join/${roomUuid}`);
       setShowModal(false);
-      navigation.replace('NewChat', {roomUuid, from: 'roomList'});
+      resetToNewChat();
     } catch (error) {
       const {status, detail} = getAxiosErrorInfo(error);
 
@@ -255,11 +262,7 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       } else if (status === 403) {
         Alert.alert('참여 불가', '강퇴된 방에는 참여할 수 없습니다.');
         setShowModal(false);
-        if (navigation.canGoBack()) {
-          navigation.goBack();
-        } else {
-          navigation.replace('Main', {prevTab: 'DeepLinkRoom'});
-        }
+        goBackOrResetToMain();
       } else {
         Alert.alert(
           '참여 실패',
@@ -268,22 +271,14 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
             : '방 참여에 실패했습니다.',
         );
         setShowModal(false);
-        if (navigation.canGoBack()) {
-          navigation.goBack();
-        } else {
-          navigation.replace('Main', {prevTab: 'DeepLinkRoom'});
-        }
+        goBackOrResetToMain();
       }
     }
   };
 
   const handleClose = () => {
     setShowModal(false);
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    } else {
-      navigation.replace('Main', {prevTab: 'DeepLinkRoom'});
-    }
+    goBackOrResetToMain();
   };
 
   if (loading) {

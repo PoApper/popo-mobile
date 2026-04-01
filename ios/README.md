@@ -35,6 +35,8 @@ POPO 드라이브 [iOS 빌드 및 배포](https://docs.google.com/document/d/1C1
 
 프로젝트 루트에서 실행합니다. archive가 프로젝트 루트에 `popoMobile.xcarchive`로 생성됩니다.
 
+실행 과정에서 키체인 비밀번호 입력이 두 번 정도 있을 수 있습니다.
+
 ```bash
 xcodebuild -workspace ios/popoMobile.xcworkspace \
   -scheme popoMobile \
