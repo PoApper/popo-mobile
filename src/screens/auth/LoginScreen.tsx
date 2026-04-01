@@ -18,7 +18,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import axios from 'axios';
 
 import {RootStackParamList} from '@navigation/types';
-import api, {POPO_API_URL} from '@utils/api';
+import api, {POPO_API_URL, COOKIE_DOMAIN} from '@utils/api';
 import {extractTokenFromCookie} from '@utils/cookie';
 import {openURLWithFallback} from '@utils/linking';
 import {ERROR_REPORT_FORM_URL} from '../../constants/urls';
@@ -91,6 +91,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       await CookieManager.set(POPO_API_URL, {
         name: 'Authentication',
         value: authToken,
+        domain: COOKIE_DOMAIN,
         path: '/',
         secure: true,
         httpOnly: true,
@@ -107,6 +108,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       await CookieManager.set(POPO_API_URL, {
         name: 'Refresh',
         value: refreshToken,
+        domain: COOKIE_DOMAIN,
         path: '/',
         secure: true,
         httpOnly: true,

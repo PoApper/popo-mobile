@@ -2,7 +2,7 @@ import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import Config from 'react-native-config';
-import {ACCESS_TOKEN_EXPIRED_ERROR_MESSAGE} from './api';
+import {ACCESS_TOKEN_EXPIRED_ERROR_MESSAGE, COOKIE_DOMAIN} from './api';
 import {
   refreshAccessToken,
   getIsRefreshing,
@@ -56,6 +56,7 @@ paxi_api.interceptors.request.use(
           await CookieManager.set(PAXI_API_URL, {
             name: 'Authentication',
             value: storedToken,
+            domain: COOKIE_DOMAIN,
             path: '/',
             secure: true,
             httpOnly: true,

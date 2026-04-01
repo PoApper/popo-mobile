@@ -27,6 +27,10 @@ export const POPO_API_URL = isProduction
   ? 'https://api.popo.poapper.club'
   : 'https://api.popo-dev.poapper.club';
 
+export const COOKIE_DOMAIN = isProduction
+  ? 'popo.poapper.club'
+  : 'popo-dev.poapper.club';
+
 console.log('현재 ENV:', Config.ENV, 'URL:', POPO_API_URL);
 
 // axios 인스턴스 생성
@@ -56,6 +60,7 @@ api.interceptors.request.use(
           await CookieManager.set(POPO_API_URL, {
             name: 'Authentication',
             value: storedToken,
+            domain: COOKIE_DOMAIN,
             path: '/',
             secure: true,
             httpOnly: true,
