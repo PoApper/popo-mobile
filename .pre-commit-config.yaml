@@ -15,6 +15,7 @@ repos:
         entry: npx prettier --write --ignore-unknown
         language: system
         types_or: [javascript, jsx, ts, tsx, json, css, markdown, yaml]
+        exclude: ^package-lock\.json$
       - id: npm-run-lint
         name: Run ESLint
         entry: npm run lint
