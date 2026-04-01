@@ -12,9 +12,10 @@ repos:
     hooks:
       - id: npm-run-format
         name: Run Prettier
-        entry: npm run format
+        entry: npx prettier --write --ignore-unknown
         language: system
-        pass_filenames: false
+        types_or: [javascript, jsx, ts, tsx, json, css, markdown, yaml]
+        exclude: ^package-lock\.json$
       - id: npm-run-lint
         name: Run ESLint
         entry: npm run lint
