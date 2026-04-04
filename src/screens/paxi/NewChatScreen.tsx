@@ -411,7 +411,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       )}
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
         <FlatList
           data={chatList}
