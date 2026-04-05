@@ -29,7 +29,6 @@ npm run android:prod
 
 - `popo-release-key.keystore` (GooglePlay 서명)
 - `google-services.json` (Firebase 설정)
-- `.env.prod`에 `POPO_KEYSTORE_PASSWORD` 설정
 
 ### 빌드 명령어
 
