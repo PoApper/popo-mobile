@@ -12,7 +12,7 @@
 | Ruby           | >= 2.6.10                     | `Gemfile` 참고              |
 | CocoaPods      | >= 1.13 (1.15.0, 1.15.1 제외) | `Gemfile` 참고              |
 | Xcode          | 16 이상                       | React Native 0.78 기준      |
-| Android Studio | 최신 권장                     | SDK 34 이상                 |
+| Android Studio | 최신 권장                     | SDK 35 이상                 |
 | JDK            | 17                            | Android Gradle 빌드에 필요  |
 
 Firebase 설정 파일도 필요합니다. 둘 다 Firebase 콘솔에서 다운로드할 수 있고, 보안상 Git에 포함되지 않습니다.
