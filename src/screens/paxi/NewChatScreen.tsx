@@ -409,7 +409,10 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         </View>
       )}
 
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
+      <KeyboardAvoidingView
+        behavior="padding"
+        style={styles.container}
+        enabled={!sidebarVisible && !showMyChatOptions && !showUserInfo}>
         <FlatList
           data={chatList}
           renderItem={({item}) => (
