@@ -1,3 +1,4 @@
+<!-- TODO: https://github.com/PoApper/popo-mobile/pull/279 수정된 것 확인 후에 더이상 사용하지 않는 xmlns:tools ~~ 라인 제거 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.popomobile">
