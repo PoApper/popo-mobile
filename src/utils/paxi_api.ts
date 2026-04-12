@@ -66,7 +66,8 @@ paxi_api.interceptors.request.use(
       }
 
       // 쿠키를 요청 헤더에 명시적으로 설정
-      if (authToken) {
+      // has() 가드: 이미 Cookie가 있으면 덮어쓰지 않는다 (Axios v1+ has()는 case-insensitive)
+      if (authToken && !config.headers.has('Cookie')) {
         config.headers.set('Cookie', `Authentication=${authToken}`);
       }
 
