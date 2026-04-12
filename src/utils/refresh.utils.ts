@@ -1,6 +1,7 @@
+import axios from 'axios';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import api, {POPO_API_URL, COOKIE_DOMAIN} from './api';
+import {POPO_API_URL, COOKIE_DOMAIN} from './api';
 import {extractTokenFromCookie} from './cookie';
 import type {AxiosInstance} from 'axios';
 import {navigationRef} from '../navigation/RootNavigation';
@@ -59,11 +60,17 @@ export const refreshAccessToken = async () => {
       .filter(Boolean)
       .join('; ');
 
-    const response = await api.post(
-      '/auth/refresh',
+    // 인터셉터가 없는 plain axios 사용 — api 인스턴스를 쓰면
+    // 응답 인터셉터가 401을 다시 refresh 시도하여 데드락 발생
+    const response = await axios.post(
+      `${POPO_API_URL}/auth/refresh`,
       {},
       {
-        headers: cookieHeader ? {Cookie: cookieHeader} : {},
+        headers: {
+          'Content-Type': 'application/json',
+          ...(cookieHeader ? {Cookie: cookieHeader} : {}),
+        },
+        withCredentials: true,
       },
     );
 
