@@ -38,7 +38,7 @@ export const processQueue = (error: any) => {
       reject(error);
     } else {
       // 갱신 전 토큰이 담긴 stale Cookie 제거 → interceptor가 새 토큰으로 재설정
-      delete originalRequest.headers?.Cookie;
+      originalRequest.headers?.delete?.('Cookie');
       resolve(requester(originalRequest));
     }
   });

@@ -69,8 +69,8 @@ api.interceptors.request.use(
       }
 
       // 쿠키를 요청 헤더에 명시적으로 설정 (이미 설정된 경우 덮어쓰지 않음)
-      if (authToken && !config.headers.Cookie) {
-        config.headers.Cookie = `Authentication=${authToken}`;
+      if (authToken && !config.headers.has('Cookie')) {
+        config.headers.set('Cookie', `Authentication=${authToken}`);
       }
 
       return config;
@@ -109,7 +109,7 @@ api.interceptors.response.use(
         await refreshAccessToken();
         processQueue(null);
         // 갱신 전 토큰이 담긴 stale Cookie 제거 → interceptor가 새 토큰으로 재설정
-        delete originalRequest.headers?.Cookie;
+        originalRequest.headers?.delete?.('Cookie');
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);

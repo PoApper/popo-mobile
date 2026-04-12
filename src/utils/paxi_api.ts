@@ -66,7 +66,7 @@ paxi_api.interceptors.request.use(
 
       // 쿠키를 요청 헤더에 명시적으로 설정
       if (authToken) {
-        config.headers.Cookie = `Authentication=${authToken}`;
+        config.headers.set('Cookie', `Authentication=${authToken}`);
       }
 
       return config;
@@ -106,7 +106,7 @@ paxi_api.interceptors.response.use(
         await refreshAccessToken();
         processQueue(null);
         // 갱신 전 토큰이 담긴 stale Cookie 제거 → interceptor가 새 토큰으로 재설정
-        delete originalRequest.headers?.Cookie;
+        originalRequest.headers?.delete?.('Cookie');
         return paxi_api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
