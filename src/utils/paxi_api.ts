@@ -32,6 +32,7 @@ console.log('현재 Paxi ENV:', Config.ENV, 'URL:', PAXI_API_URL);
 // axios 인스턴스 생성
 const paxi_api = axios.create({
   baseURL: PAXI_API_URL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },

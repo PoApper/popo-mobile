@@ -28,14 +28,15 @@ export const POPO_API_URL = isProduction
   : 'https://api.popo-dev.poapper.club';
 
 export const COOKIE_DOMAIN = isProduction
-  ? 'popo.poapper.club'
-  : 'popo-dev.poapper.club';
+  ? '.popo.poapper.club'
+  : '.popo-dev.poapper.club';
 
 console.log('현재 ENV:', Config.ENV, 'URL:', POPO_API_URL);
 
 // axios 인스턴스 생성
 const api = axios.create({
   baseURL: POPO_API_URL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
