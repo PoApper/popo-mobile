@@ -37,6 +37,8 @@ export const processQueue = (error: any) => {
     if (error) {
       reject(error);
     } else {
+      // 갱신 전 토큰이 담긴 stale Cookie 제거 → interceptor가 새 토큰으로 재설정
+      delete originalRequest.headers?.Cookie;
       resolve(requester(originalRequest));
     }
   });
@@ -45,7 +47,25 @@ export const processQueue = (error: any) => {
 
 export const refreshAccessToken = async () => {
   try {
-    const response = await api.post('/auth/refresh', {});
+    // /auth/refresh는 Authentication + Refresh 쿠키 둘 다 필요
+    const currentAuthToken = await EncryptedStorage.getItem(AUTH_TOKEN_KEY);
+    const currentRefreshToken = await EncryptedStorage.getItem(
+      REFRESH_TOKEN_KEY,
+    );
+    const cookieHeader = [
+      currentAuthToken ? `Authentication=${currentAuthToken}` : '',
+      currentRefreshToken ? `Refresh=${currentRefreshToken}` : '',
+    ]
+      .filter(Boolean)
+      .join('; ');
+
+    const response = await api.post(
+      '/auth/refresh',
+      {},
+      {
+        headers: cookieHeader ? {Cookie: cookieHeader} : {},
+      },
+    );
 
     const ok = response.status === 200 || response.status === 201;
     if (!ok) {
@@ -57,24 +77,24 @@ export const refreshAccessToken = async () => {
       throw new Error('Set-Cookie not found');
     }
 
-    const authToken = extractTokenFromCookie(setCookie, true);
-    if (authToken) {
-      await EncryptedStorage.setItem(AUTH_TOKEN_KEY, authToken);
+    const newAuthToken = extractTokenFromCookie(setCookie, true);
+    if (newAuthToken) {
+      await EncryptedStorage.setItem(AUTH_TOKEN_KEY, newAuthToken);
       await CookieManager.set(POPO_API_URL, {
         name: 'Authentication',
-        value: authToken,
+        value: newAuthToken,
         domain: COOKIE_DOMAIN,
         path: '/',
         secure: true,
         httpOnly: true,
       });
     }
-    const refreshToken = extractTokenFromCookie(setCookie, false);
-    if (refreshToken) {
-      await EncryptedStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+    const newRefreshToken = extractTokenFromCookie(setCookie, false);
+    if (newRefreshToken) {
+      await EncryptedStorage.setItem(REFRESH_TOKEN_KEY, newRefreshToken);
       await CookieManager.set(POPO_API_URL, {
         name: 'Refresh',
-        value: refreshToken,
+        value: newRefreshToken,
         domain: COOKIE_DOMAIN,
         path: '/',
         secure: true,
