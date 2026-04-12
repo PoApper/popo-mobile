@@ -68,6 +68,13 @@ api.interceptors.request.use(
         }
       }
 
+      // 쿠키를 요청 헤더에 명시적으로 설정
+      // has() 가드: refreshAccessToken()이 Authentication+Refresh dual-cookie를
+      // 직접 설정하므로, 이미 Cookie가 있으면 덮어쓰지 않는다 (Axios v1+ has()는 case-insensitive)
+      if (authToken && !config.headers.has('Cookie')) {
+        config.headers.set('Cookie', `Authentication=${authToken}`);
+      }
+
       return config;
     } catch (error) {
       console.error('API 요청 인터셉터 오류:', error);
@@ -103,6 +110,8 @@ api.interceptors.response.use(
       try {
         await refreshAccessToken();
         processQueue(null);
+        // 갱신 전 토큰이 담긴 stale Cookie 제거 → interceptor가 새 토큰으로 재설정
+        originalRequest.headers?.delete?.('Cookie');
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);

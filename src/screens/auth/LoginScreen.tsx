@@ -127,25 +127,23 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       // 로그인 상태 저장
       await EncryptedStorage.setItem(IS_AUTHENTICATED_KEY, 'true');
 
-      // FCM 토큰 가져오기 및 저장
-      getFCMToken()
-        .then(fcmToken => {
-          if (fcmToken) {
-            paxi_api.post('/push/key/', {
-              key: fcmToken,
-            });
-          }
-        })
-        .catch(fcmError => {
-          console.error('FCM 토큰 발급 실패:', fcmError);
-        });
-
       // 사용자 상세 정보 페이지로 이동
       navigation.navigate('Main', {
         userId: data.user?.id || 'unknown',
         userData: data.user || {},
         prevTab: 'Login',
       });
+
+      // FCM 토큰 등록 (네비게이션 블로킹 방지를 위해 백그라운드 실행)
+      getFCMToken()
+        .then(fcmToken => {
+          if (fcmToken) {
+            paxi_api.post('/push/key/', {key: fcmToken});
+          }
+        })
+        .catch(fcmError => {
+          console.error('[FCM] register failed:', fcmError);
+        });
     } catch (err: unknown) {
       // axios 오류 처리
       if (axios.isAxiosError(err)) {
