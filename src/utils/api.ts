@@ -70,6 +70,8 @@ api.interceptors.request.use(
       }
 
       // 쿠키를 요청 헤더에 명시적으로 설정
+      // iOS: withCredentials가 켜져 있어 NSURLSession이 쿠키 jar에서 자동 전송하고,
+      //       수동 Cookie 헤더는 무시됨. Android: 명시적 헤더가 실제로 사용됨.
       // has() 가드: refreshAccessToken()이 Authentication+Refresh dual-cookie를
       // 직접 설정하므로, 이미 Cookie가 있으면 덮어쓰지 않는다 (Axios v1+ has()는 case-insensitive)
       if (authToken && !config.headers.has('Cookie')) {

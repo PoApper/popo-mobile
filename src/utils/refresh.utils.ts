@@ -62,6 +62,8 @@ export const refreshAccessToken = async () => {
 
     // 인터셉터가 없는 plain axios 사용 — api 인스턴스를 쓰면
     // 응답 인터셉터가 401을 다시 refresh 시도하여 데드락 발생
+    // NOTE: iOS에서는 withCredentials로 인해 쿠키 jar에서 자동 전송되고 수동 Cookie 헤더는
+    // 무시됨. 쿠키 jar가 EncryptedStorage와 동기화되지 않는 극단적 경우 refresh 실패 가능.
     const response = await axios.post(
       `${POPO_API_URL}/auth/refresh`,
       {},
