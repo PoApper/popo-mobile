@@ -56,3 +56,9 @@ API 클라이언트, 인증/토큰 관리, 푸시 알림, WebSocket 팩토리, �
 - `isRefreshing` 플래그 + `failedQueue`로 동시 리프레시 제어
 
 <!-- MANUAL: Any manually added notes below this line are preserved on regeneration -->
+
+### iOS withCredentials 쿠키 누락 이슈
+
+`withCredentials: true`로 설정하면 iOS NSURLSession이 수동 `Cookie` 헤더를 무시하고 내부 쿠키 jar에서만 쿠키를 전송한다. 앱 재시작 시 session cookie가 소멸되어 jar가 비어 있으면, request interceptor에서 EncryptedStorage/CookieManager로 수동 설정한 `Cookie` 헤더가 무시되어 쿠키 없이 요청이 전송된다.
+
+**해결:** `api.ts`, `paxi_api.ts`, `refresh.utils.ts` 모두 `withCredentials: false`로 설정하여 수동 `Cookie` 헤더가 그대로 전송되도록 변경. Android OkHttp는 이 플래그를 무시하므로 Android에는 영향 없음.
