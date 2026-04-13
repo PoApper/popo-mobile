@@ -5,6 +5,7 @@ iOS 릴리즈 빌드를 생성하고 Transporter를 통해 App Store Connect에 
 ## Step 1: 버전 확인
 
 `ios/popoMobile.xcodeproj/project.pbxproj`에서 현재 버전을 확인한다:
+
 - `MARKETING_VERSION` (x.x.x 형식, 3곳)
 - `CURRENT_PROJECT_VERSION` (빌드 번호, 3곳)
 
