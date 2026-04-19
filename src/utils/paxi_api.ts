@@ -30,8 +30,13 @@ export const PAXI_API_URL = isProduction
 console.log('현재 Paxi ENV:', Config.ENV, 'URL:', PAXI_API_URL);
 
 // axios 인스턴스 생성
+// withCredentials: false — iOS NSURLSession은 withCredentials가 켜져 있으면
+// 쿠키 jar에서 자동 전송하고 수동 Cookie 헤더를 무시한다. 앱 재시작 시
+// session cookie가 소멸되어 jar가 비므로, 수동 헤더가 전송되도록 꺼야 한다.
+// 쿠키 관리는 request interceptor에서 EncryptedStorage/CookieManager를 통해 수동 처리.
 const paxi_api = axios.create({
   baseURL: PAXI_API_URL,
+  withCredentials: false,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -64,8 +69,10 @@ paxi_api.interceptors.request.use(
         }
       }
 
-      // 쿠키를 요청 헤더에 명시적으로 설정
-      if (authToken) {
+      // 쿠키를 요청 헤더에 명시적으로 설정 (iOS/Android 공통)
+      // withCredentials: false이므로 수동 Cookie 헤더가 그대로 전송됨.
+      // has() 가드: 이미 Cookie가 있으면 덮어쓰지 않는다 (Axios v1+ has()는 case-insensitive)
+      if (authToken && !config.headers.has('Cookie')) {
         config.headers.set('Cookie', `Authentication=${authToken}`);
       }
 

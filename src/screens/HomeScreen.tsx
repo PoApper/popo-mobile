@@ -62,7 +62,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           setUserName(userData.name || '사용자');
         })
         .catch(error => {
-          if (error.response.status === 401) {
+          if (error.response?.status === 401) {
             navigation.navigate('Login');
           } else {
             console.error('사용자 정보 조회 오류:', error);

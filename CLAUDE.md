@@ -55,10 +55,14 @@ Configured in both `tsconfig.json` and `babel.config.js` (via `babel-plugin-modu
 ### API Layer (`src/utils/`)
 
 - `api.ts` — Main Axios instance for POPO backend. Has request/response interceptors for auth tokens.
-- `paxi_api.ts` — Separate Axios instance for the Paxi service backend.
-- `refresh.utils.ts` — Token refresh logic with request queuing during refresh.
+- `paxi_api.ts` — Separate Axios instance for the Paxi service backend. FCM 키 등록은 이 인스턴스로 요청.
+- `refresh.utils.ts` — Token refresh logic with request queuing during refresh. **반드시 plain `axios`(interceptor 없는)로 갱신 요청해야 데드락 방지.**
 - `auth-tokens.ts` — Token retrieval from EncryptedStorage/cookies.
 - `cookie.ts` — Cookie management via `@react-native-cookies/cookies`.
+
+**Auth contract:** 두 백엔드 모두 cookie-only auth (`request.cookies.Authentication`). `Authorization: Bearer` 헤더는 지원하지 않는다. Android OkHttp는 WebKit CookieManager와 쿠키를 공유하지 않으므로, 크로스 호스트 쿠키는 request interceptor에서 `config.headers.Cookie`로 명시 설정해야 한다.
+
+**주의:** `api.ts`와 `paxi_api.ts`는 독립된 interceptor를 가진다. interceptor 수정 시 양쪽 모두 적용해야 한다.
 
 ### Real-Time Chat (Paxi)
 
@@ -85,9 +89,27 @@ Local `useState`/`useRef` per screen. No global state library (no Redux/Zustand)
 
 ## Environment Setup
 
-Copy `.env.example` → `.env`, `.env.dev.example` → `.env.dev`, `.env.prod.example` → `.env.prod`. Environment is selected automatically by build flavor/configuration. `react-native-config` exposes `Config.ENV` at runtime.
+Copy `.env.example` → `.env`. `react-native-config`이 이 단일 파일을 로드하며, ENV 값은 빌드 flavor에 의해 결정된다.
 
 Firebase credentials are required: `google-services.json` (Android), `GoogleService-Info.plist` (iOS).
+
+## Release & Versioning
+
+### Android
+
+- `npm run android:aab:prod` → `android/app/build/outputs/bundle/prodRelease/app-prod-release.aab`.
+- `android/version.properties`는 릴리즈 커밋에만 포함. 평소 작업 중 수정되어도 커밋하지 않는다.
+- 디버깅용 prod 빌드: `./gradlew installProdDebug` (prod 환경 + console.log 가능).
+
+### iOS
+
+- 릴리즈 빌드: `xcodebuild archive` → `xcodebuild -exportArchive` → Transporter GUI로 업로드 (Transporter CLI는 인증 문제로 사용 불가).
+- `MARKETING_VERSION` (x.x.x 형식만 허용, 4자리 거부) 및 `CURRENT_PROJECT_VERSION`은 `ios/popoMobile.xcodeproj/project.pbxproj`에 3곳 존재. 매 TestFlight/App Store 제출 전 범프 필요.
+
+## Git Workflow
+
+- PR은 squash merge만 사용 (merge commit 비허용).
+- `android/version.properties`는 릴리즈 시에만 커밋.
 
 ## Code Style
 
