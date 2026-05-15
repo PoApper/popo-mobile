@@ -7,6 +7,7 @@ export type RootStackParamList = AuthStackParamList &
   PlaceReservationStackParamList &
   ClubStackParamList &
   AssociationStackParamList &
+  StudentAssociationStackParamList &
   OtherStackParamList;
 
 export type AuthStackParamList = {
@@ -66,6 +67,13 @@ export type AssociationStackParamList = {
   AssociationDetail: {
     associationId: string;
     associationName: string;
+  };
+};
+
+export type StudentAssociationStackParamList = {
+  StudentAssociation: undefined;
+  StudentAssociationDetail: {
+    studentAssociationName: string;
   };
 };
 

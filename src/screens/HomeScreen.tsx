@@ -152,20 +152,27 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
     },
     {
       id: '5',
+      icon: 'groups',
+      title: '학생단체',
+      active: true,
+      onPress: () => navigation.navigate('StudentAssociation'),
+    },
+    {
+      id: '6',
       icon: 'menu-book',
       title: '생활백서',
       active: true,
       onPress: () => navigation.navigate('Whitebook'),
     },
     {
-      id: '6',
+      id: '7',
       icon: 'store',
       title: '제휴업체',
       active: true,
       onPress: () => navigation.navigate('Benefits'),
     },
     {
-      id: '7',
+      id: '8',
       icon: 'dining',
       title: '배달업체',
       active: true,
@@ -187,7 +194,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       },
     },
     {
-      id: '8',
+      id: '9',
       icon: 'description',
       title: '기록물관리',
       active: true,
