@@ -46,6 +46,8 @@ import ClubScreen from '@screens/club/ClubScreen';
 import ClubDetailScreen from '@screens/club/ClubDetailScreen';
 import AssociationScreen from '@screens/association/AssociationScreen';
 import AssociationDetailScreen from '@screens/association/AssociationDetailScreen';
+import StudentAssociationScreen from '@screens/student-association/StudentAssociationScreen';
+import StudentAssociationDetailScreen from '@screens/student-association/StudentAssociationDetailScreen';
 
 // Other Screens
 import WhitebookScreen from '@screens/WhitebookScreen';
@@ -187,6 +189,14 @@ const AppNavigator = () => {
           <Stack.Screen
             name="AssociationDetail"
             component={AssociationDetailScreen}
+          />
+          <Stack.Screen
+            name="StudentAssociation"
+            component={StudentAssociationScreen}
+          />
+          <Stack.Screen
+            name="StudentAssociationDetail"
+            component={StudentAssociationDetailScreen}
           />
 
           {/* Other Screens */}
