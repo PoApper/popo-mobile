@@ -104,7 +104,7 @@ export interface MyRoomData {
   /** @deprecated use myRoomUser.isMuted */
   isMuted?: boolean;
   /** @deprecated use myRoomUser.kickedReason */
-  kickedReason?: string;
+  kickedReason?: string | null;
   /** @deprecated use myRoomUser.status */
   userStatus?: string;
   myRoomUser?: MyRoomUser;

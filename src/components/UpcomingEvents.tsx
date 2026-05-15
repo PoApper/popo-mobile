@@ -16,7 +16,7 @@ import {RootStackParamList} from '@navigation/types';
 
 import api from '@utils/api';
 import paxi_api from '@utils/paxi_api';
-import {MyRoomUser} from '@interfaces/paxi';
+import type {MyRoomUser} from '@interfaces/paxi';
 import moment from 'moment';
 import {formatReservationTime} from '../utils/popo-datetime';
 import {POPO_API_URL} from '@utils/api';
@@ -54,7 +54,7 @@ interface TaxiRoom {
   departureTime: string;
   status: string;
   /** @deprecated use myRoomUser.status */
-  userStatus: string;
+  userStatus?: string;
   myRoomUser?: MyRoomUser;
 }
 
