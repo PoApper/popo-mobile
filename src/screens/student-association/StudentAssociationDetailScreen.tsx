@@ -8,7 +8,6 @@ import {
   useColorScheme,
   StatusBar,
   TouchableOpacity,
-  Linking,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -17,6 +16,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
+import {openURLWithFallback} from '@utils/linking';
 import CommonHeader from '@components/CommonHeader';
 
 type StudentAssociationDetailScreenProps = {
@@ -80,18 +80,8 @@ const StudentAssociationDetailScreen: React.FC<
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
 
-  const handleLinkPress = async (url: string) => {
-    if (url) {
-      try {
-        await Linking.openURL(url);
-      } catch (error) {
-        console.error('링크 열기 오류:', error);
-      }
-    }
-  };
-
-  const isValidUrl = (url?: string) =>
-    url && url !== 'null' && url.trim() !== '';
+  const hasValue = (value?: string) =>
+    value && value !== 'null' && value.trim() !== '';
 
   if (isLoading) {
     return (
@@ -118,7 +108,7 @@ const StudentAssociationDetailScreen: React.FC<
         {data && (
           <>
             <View style={styles.imageContainer}>
-              {data.imageUrl && data.imageUrl.trim() !== '' ? (
+              {hasValue(data.imageUrl) ? (
                 <Image
                   source={{uri: data.imageUrl}}
                   style={styles.image}
@@ -151,7 +141,7 @@ const StudentAssociationDetailScreen: React.FC<
               </View>
 
               <View style={[styles.infoSection, {borderColor}]}>
-                {data.location?.trim() !== '' && (
+                {hasValue(data.location) && (
                   <View style={styles.infoRow}>
                     <Text style={[styles.infoLabel, {color: textColor}]}>
                       사무실 위치
@@ -165,7 +155,7 @@ const StudentAssociationDetailScreen: React.FC<
                     </Text>
                   </View>
                 )}
-                {data.office?.trim() !== '' && (
+                {hasValue(data.office) && (
                   <View style={styles.infoRow}>
                     <Text style={[styles.infoLabel, {color: textColor}]}>
                       협력 행정팀
@@ -207,43 +197,43 @@ const StudentAssociationDetailScreen: React.FC<
 
               <View style={[styles.infoSection, {borderColor}]}>
                 <View style={styles.socialLinks}>
-                  {isValidUrl(data.homepageUrl) && (
+                  {hasValue(data.homepageUrl) && (
                     <TouchableOpacity
                       style={[
                         styles.socialButton,
                         {backgroundColor: '#000000'},
                       ]}
-                      onPress={() => handleLinkPress(data.homepageUrl!)}>
+                      onPress={() => openURLWithFallback(data.homepageUrl!)}>
                       <Text style={styles.socialText}>홈페이지</Text>
                     </TouchableOpacity>
                   )}
-                  {isValidUrl(data.facebookUrl) && (
+                  {hasValue(data.facebookUrl) && (
                     <TouchableOpacity
                       style={[
                         styles.socialButton,
                         {backgroundColor: '#1877F2'},
                       ]}
-                      onPress={() => handleLinkPress(data.facebookUrl!)}>
+                      onPress={() => openURLWithFallback(data.facebookUrl!)}>
                       <Text style={styles.socialText}>Facebook</Text>
                     </TouchableOpacity>
                   )}
-                  {isValidUrl(data.instagramUrl) && (
+                  {hasValue(data.instagramUrl) && (
                     <TouchableOpacity
                       style={[
                         styles.socialButton,
                         {backgroundColor: '#E4405F'},
                       ]}
-                      onPress={() => handleLinkPress(data.instagramUrl!)}>
+                      onPress={() => openURLWithFallback(data.instagramUrl!)}>
                       <Text style={styles.socialText}>Instagram</Text>
                     </TouchableOpacity>
                   )}
-                  {isValidUrl(data.youtubeUrl) && (
+                  {hasValue(data.youtubeUrl) && (
                     <TouchableOpacity
                       style={[
                         styles.socialButton,
                         {backgroundColor: '#FF0000'},
                       ]}
-                      onPress={() => handleLinkPress(data.youtubeUrl!)}>
+                      onPress={() => openURLWithFallback(data.youtubeUrl!)}>
                       <Text style={styles.socialText}>YouTube</Text>
                     </TouchableOpacity>
                   )}

@@ -34,7 +34,8 @@ type Props = {
 const StudentAssociationItem: React.FC<Props> = ({item, onPress}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
-  const hasImage = item.imageUrl && item.imageUrl.trim() !== '';
+  const hasImage =
+    item.imageUrl && item.imageUrl !== 'null' && item.imageUrl.trim() !== '';
 
   return (
     <TouchableOpacity
