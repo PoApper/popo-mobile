@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
-import 'moment/locale/ko';
 import Svg, {Line} from 'react-native-svg';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
@@ -39,9 +38,9 @@ const RoomInfoBox = ({
 
   const handleShare = async () => {
     try {
-      const departureDate = moment(roomData.departureTime)
-        .locale('ko')
-        .format('M/D(ddd) HH:mm');
+      const departureDate = moment(roomData.departureTime).format(
+        'M/D(ddd) HH:mm',
+      );
       const shareMessage = `${departureDate} ${roomData.departureLocation}→${roomData.destinationLocation}\n${shareUrl}`;
       await Share.share({message: shareMessage});
     } catch (error: any) {
