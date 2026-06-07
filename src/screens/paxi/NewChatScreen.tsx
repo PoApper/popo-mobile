@@ -542,13 +542,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   socketConnection: {
+    // 헤더 바로 아래 레이아웃 흐름에 배치 (절대 위치 top 하드코딩 시
+    // 헤더 높이/노치 환경에서 어긋나던 문제 해소)
     paddingHorizontal: 10,
     marginTop: 10,
-    position: 'absolute',
-    zIndex: 1000,
-    width: '100%',
     height: 50,
-    top: 60,
   },
   socketConnectionInner: {
     borderRadius: 5,
