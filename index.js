@@ -10,8 +10,7 @@ import {name as appName} from './app.json';
 import messaging from '@react-native-firebase/messaging';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-// Moment 로케일은 앱 진입점에서 한 번만 설정한다.
-// 개별 UI 컴포넌트에서 side-effect import 하지 않도록 중앙화 (#244)
+// Moment 로케일은 앱 진입점에서 한 번만 설정
 moment.locale('ko');
 
 // NOTE: deeplink queueing
