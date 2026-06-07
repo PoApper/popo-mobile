@@ -18,6 +18,9 @@ export const socketFactory = async (
     forceNew: true,
     reconnection: true,
     reconnectionDelay: 5000,
+    // 점증 백오프: 5s에서 시작해 시도마다 늘어나 최대 30s에서 캡.
+    // 고정 5s 재시도는 장애 시 서버에 불필요한 부하를 준다.
+    reconnectionDelayMax: 30000,
     reconnectionAttempts: Infinity,
     auth: {
       token: token,
