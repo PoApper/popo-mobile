@@ -145,8 +145,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
           // 내 일정 -> 카풀에서는 강퇴된 방 확인할 수 있음
           return res.data
             .filter(
-              room =>
-                (room.myRoomUser?.status ?? room.userStatus) !== 'KICKED',
+              room => (room.myRoomUser?.status ?? room.userStatus) !== 'KICKED',
             )
             .filter(room => room.status !== 'COMPLETED');
         })
