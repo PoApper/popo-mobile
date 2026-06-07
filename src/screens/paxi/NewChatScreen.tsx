@@ -61,6 +61,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const socketRef = useRef<Socket | null>(null);
   // 토큰 만료 → 갱신 → 재연결 사이클의 중복 진입/무한 루프 방지용 가드
   const reauthGuardRef = useRef<ReauthGuard>(createReauthGuard());
+  // 최초 연결과 재연결을 구분 (최초 연결은 useFocusEffect 초기 조회와 중복되므로 재조회 생략)
+  const hasConnectedOnceRef = useRef<boolean>(false);
   const [reconnectAttempt, setReconnectAttempt] = useState<number>(0);
   const [socketConnected, setSocketConnected] = useState<boolean>(false);
 
@@ -156,6 +158,17 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     setSocketConnected(true);
     setReconnectAttempt(0);
     reauthGuardRef.current.reauthCount = 0; // 정상 연결되면 토큰 갱신 카운터 초기화
+
+    // 재연결 시 끊긴 동안 놓친 데이터를 재조회한다. 최초 연결은
+    // useFocusEffect의 초기 조회와 중복되므로 건너뛴다.
+    if (hasConnectedOnceRef.current) {
+      getRoomInfo();
+      getSettlementInfo();
+      getMyInfo();
+      getChatList();
+    }
+    hasConnectedOnceRef.current = true;
+
     paxi_api.post(`/room/join/${roomUuid}`);
   };
 
@@ -246,15 +259,6 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   };
 
   useEffect(() => {
-    if (socketRef.current?.connected) {
-      getRoomInfo();
-      getSettlementInfo();
-      getMyInfo();
-      getChatList();
-    }
-  }, [reconnectAttempt]);
-
-  useEffect(() => {
     if (!myInfo?.uuid || !Array.isArray(roomInfo?.roomUsers)) {
       return;
     }
@@ -269,6 +273,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
+      // 포커스마다 새 소켓을 생성하므로 첫 connect를 최초 연결로 취급한다.
+      hasConnectedOnceRef.current = false;
       getRoomInfo();
       getMyInfo();
       getChatList();
