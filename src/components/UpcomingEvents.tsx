@@ -53,8 +53,6 @@ interface TaxiRoom {
   destinationLocation: string;
   departureTime: string;
   status: string;
-  /** @deprecated use myRoomUser.status */
-  userStatus?: string;
   myRoomUser?: MyRoomUser;
 }
 
@@ -144,9 +142,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
           // 다가오는 일정에서는 강퇴된 카풀(KICKED) 제외함
           // 내 일정 -> 카풀에서는 강퇴된 방 확인할 수 있음
           return res.data
-            .filter(
-              room => (room.myRoomUser?.status ?? room.userStatus) !== 'KICKED',
-            )
+            .filter(room => room.myRoomUser?.status !== 'KICKED')
             .filter(room => room.status !== 'COMPLETED');
         })
         .catch(err => {
