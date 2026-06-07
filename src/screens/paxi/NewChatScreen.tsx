@@ -63,7 +63,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const reauthGuardRef = useRef<ReauthGuard>(createReauthGuard());
   // 최초 연결과 재연결을 구분 (최초 연결은 useFocusEffect 초기 조회와 중복되므로 재조회 생략)
   const hasConnectedOnceRef = useRef<boolean>(false);
-  const [reconnectAttempt, setReconnectAttempt] = useState<number>(0);
+  // 한 번이라도 끊긴 적이 있는지 (최초 연결 중에는 끊김 안내를 띄우지 않기 위함)
+  const [hasDisconnected, setHasDisconnected] = useState<boolean>(false);
   const [socketConnected, setSocketConnected] = useState<boolean>(false);
 
   const [settlementData, setSettlementData] = useState<SettlementInfoData>(
@@ -156,7 +157,6 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
   const onSocketConnected = async () => {
     setSocketConnected(true);
-    setReconnectAttempt(0);
     reauthGuardRef.current.reauthCount = 0; // 정상 연결되면 토큰 갱신 카운터 초기화
 
     // 재연결 시 끊긴 동안 놓친 데이터를 재조회한다. 최초 연결은
@@ -174,7 +174,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
   const onSocketDisconnected = () => {
     setSocketConnected(false);
-    setReconnectAttempt(prevNum => prevNum + 1);
+    setHasDisconnected(true);
   };
 
   // 웹소켓 연결 시 액세스 토큰이 만료된 경우: 리프레시 토큰으로 갱신한 뒤
@@ -377,7 +377,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      {!socketConnected && reconnectAttempt !== 0 && (
+      {!socketConnected && hasDisconnected && (
         <View style={styles.socketConnection}>
           <View
             style={[
@@ -390,7 +390,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
               color={isDarkMode ? '#FFFFFF' : '#000000'}
             />
             <Text style={{color: textColor(isDarkMode)}}>
-              서버와 접속이 끊어졌습니다. 재연결 시도 {reconnectAttempt}회
+              연결이 끊어졌습니다. 재연결 중…
             </Text>
           </View>
         </View>
