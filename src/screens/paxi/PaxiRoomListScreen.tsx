@@ -60,8 +60,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
    * 방 목록을 조회해 state에 반영한다.
    *
    * 에러를 자체적으로 처리하지 않고 그대로 throw 하므로,
-   * **호출처에서 반드시 try/catch로 감싸 처리해야 한다.**
-   * (호출 컨텍스트마다 다른 사용자 메시지를 보여주기 위해 의도적으로 위임 — #262)
+   * 호출처에서 반드시 try/catch로 감싸 처리해야 한다.
    *
    * @throws 네트워크/서버 오류 시 axios 에러를 그대로 전파
    */
