@@ -50,6 +50,9 @@ export const reconnectWithFreshToken = async (
   try {
     if (guard.reauthCount >= maxAttempts) {
       console.error('토큰 갱신 반복 실패 — 재연결 중단');
+      // releaseSocket은 리스너 제거 후 disconnect하므로 disconnect 이벤트가
+      // 발생하지 않는다. UI가 연결됨으로 남지 않도록 명시적으로 끊김 처리한다.
+      deps.setSocketConnected?.(false);
       deps.releaseSocket();
       return;
     }

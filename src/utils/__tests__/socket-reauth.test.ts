@@ -90,6 +90,19 @@ describe('reconnectWithFreshToken', () => {
     expect(guard.isReauthing).toBe(false);
   });
 
+  it('상한 도달로 중단할 때도 연결 상태를 false로 갱신한다', async () => {
+    const deps = makeDeps();
+    const guard = createReauthGuard();
+    guard.reauthCount = 2; // 이미 상한 도달 상태
+
+    await reconnectWithFreshToken(guard, {...deps, maxAttempts: 2});
+
+    // 재생성은 하지 않지만 UI가 연결됨으로 남지 않도록 끊김 처리는 한다
+    expect(deps.recreateSocket).not.toHaveBeenCalled();
+    expect(deps.setSocketConnected).toHaveBeenCalledWith(false);
+    expect(deps.releaseSocket).toHaveBeenCalledTimes(1);
+  });
+
   it('정상 연결로 카운트가 초기화되면 다시 갱신을 시도한다', async () => {
     const deps = makeDeps();
     const guard = createReauthGuard();
