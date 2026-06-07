@@ -30,7 +30,7 @@ export interface ChatRoomInfo {
   roomUsers: UserData[];
   myRoomUser?: MyRoomUser;
   /** @deprecated use myRoomUser.isMuted */
-  isMuted: boolean;
+  isMuted?: boolean;
 }
 
 export interface MessageData {
@@ -100,13 +100,13 @@ export interface MyRoomUser {
 
 export interface MyRoomData {
   /** @deprecated use myRoomUser.hasNewMessage */
-  hasNewMessage: boolean;
+  hasNewMessage?: boolean;
   /** @deprecated use myRoomUser.isMuted */
-  isMuted: boolean;
+  isMuted?: boolean;
   /** @deprecated use myRoomUser.kickedReason */
-  kickedReason: string;
+  kickedReason?: string | null;
   /** @deprecated use myRoomUser.status */
-  userStatus: string;
+  userStatus?: string;
   myRoomUser?: MyRoomUser;
   uuid: string;
   title: string;

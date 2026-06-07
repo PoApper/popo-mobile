@@ -31,8 +31,6 @@ export const COOKIE_DOMAIN = isProduction
   ? '.popo.poapper.club'
   : '.popo-dev.poapper.club';
 
-console.log('현재 ENV:', Config.ENV, 'URL:', POPO_API_URL);
-
 // axios 인스턴스 생성
 // withCredentials: false — iOS NSURLSession은 withCredentials가 켜져 있으면
 // 쿠키 jar에서 자동 전송하고 수동 Cookie 헤더를 무시한다. 앱 재시작 시

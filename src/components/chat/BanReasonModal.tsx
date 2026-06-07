@@ -126,7 +126,7 @@ const BanReasonModal = ({
                         color: textColor(isDarkMode),
                       },
                     ]}>
-                    {roomData.myRoomUser?.kickedReason ?? roomData.kickedReason}
+                    {roomData.myRoomUser?.kickedReason}
                   </Text>
                   <TextInput
                     style={[

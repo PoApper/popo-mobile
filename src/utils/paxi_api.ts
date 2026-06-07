@@ -27,8 +27,6 @@ export const PAXI_API_URL = isProduction
   ? 'https://api.paxi.popo.poapper.club'
   : 'https://api.paxi.popo-dev.poapper.club';
 
-console.log('현재 Paxi ENV:', Config.ENV, 'URL:', PAXI_API_URL);
-
 // axios 인스턴스 생성
 // withCredentials: false — iOS NSURLSession은 withCredentials가 켜져 있으면
 // 쿠키 jar에서 자동 전송하고 수동 Cookie 헤더를 무시한다. 앱 재시작 시
