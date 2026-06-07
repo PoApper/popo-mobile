@@ -25,6 +25,7 @@ import {
 import CommonHeader from '@components/CommonHeader';
 import DropdownMenu from '@components/room/DropdownMenu';
 import {RouteProp, useRoute} from '@react-navigation/native';
+import {roundUpToNearest10Minutes} from '@utils/popo-datetime';
 
 type ModifyPaxiRoomScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'ModifyPaxiRoom'>;
@@ -37,12 +38,6 @@ interface ModifyRoomBody {
   departureLocation: string;
   destinationLocation: string;
   maxParticipant: number;
-}
-
-// 10분 단위로 올림
-function roundUpToNearest10Minutes(date: Date) {
-  const ms = 1000 * 60 * 10;
-  return new Date(Math.ceil(date.getTime() / ms) * ms);
 }
 
 type SettlementScreenRouteProp = RouteProp<
