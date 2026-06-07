@@ -115,7 +115,9 @@ describe('reconnectWithFreshToken', () => {
 
   it('토큰 갱신 실패 시 소켓만 정리하고 재생성하지 않는다', async () => {
     const deps = makeDeps({
-      refreshAccessToken: jest.fn().mockRejectedValue(new Error('refresh 실패')),
+      refreshAccessToken: jest
+        .fn()
+        .mockRejectedValue(new Error('refresh 실패')),
     });
     const guard = createReauthGuard();
 

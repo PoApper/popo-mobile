@@ -38,7 +38,12 @@ const setup = async () => {
     onSocketDisconnected,
     onAccessTokenExpired,
   )) as FakeSocket;
-  return {socket, onSocketConnected, onSocketDisconnected, onAccessTokenExpired};
+  return {
+    socket,
+    onSocketConnected,
+    onSocketDisconnected,
+    onAccessTokenExpired,
+  };
 };
 
 beforeEach(async () => {
@@ -100,8 +105,12 @@ describe('socketFactory', () => {
   });
 
   it('accessTokenExpired는 일반 연결/해제 콜백을 호출하지 않는다', async () => {
-    const {socket, onSocketConnected, onSocketDisconnected, onAccessTokenExpired} =
-      await setup();
+    const {
+      socket,
+      onSocketConnected,
+      onSocketDisconnected,
+      onAccessTokenExpired,
+    } = await setup();
 
     socket.trigger(ChatEvent.ACCESS_TOKEN_EXPIRED);
 
