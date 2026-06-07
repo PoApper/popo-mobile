@@ -22,6 +22,7 @@ export const enum ChatEvent {
 
   // 에러 이벤트
   ERROR = 'error',
-  // TODO: 정말 확률이 적긴 한데, 일반적 상황이 아니라 웹소켓 연결 시 토큰 만료되었을 때 리프레시 토큰 이용해 갱신 후 웹소켓 재연결 필요
+  // 웹소켓 연결 시 액세스 토큰이 만료된 경우 서버가 내려보낸다.
+  // NewChatScreen.onAccessTokenExpired에서 리프레시 토큰으로 갱신 후 소켓을 재생성한다.
   ACCESS_TOKEN_EXPIRED = 'accessTokenExpired',
 }

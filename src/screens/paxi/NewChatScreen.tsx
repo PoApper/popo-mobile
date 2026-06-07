@@ -28,6 +28,7 @@ import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import {textColor, borderColor, backgroundColor, common} from '@styles/default';
 import {socketFactory} from '@utils/socket-factory';
+import {refreshAccessToken} from '@utils/refresh.utils';
 import ChatMessage from '@components/chat/ChatMessage';
 import SidebarModal from '@components/chat/SidebarModal';
 import SettlementInfoBox from '@components/chat/SettlementInfoBox';
@@ -53,6 +54,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const [chatList, setChatList] = useState<MessageData[]>([]);
   const [newChat, setNewChat] = useState<string>('');
   const socketRef = useRef<Socket | null>(null);
+  // 토큰 만료 → 갱신 → 재연결 사이클의 중복 진입/무한 루프 방지용
+  const isReauthingRef = useRef<boolean>(false);
+  const reauthCountRef = useRef<number>(0);
   const [reconnectAttempt, setReconnectAttempt] = useState<number>(0);
   const [socketConnected, setSocketConnected] = useState<boolean>(false);
 
@@ -147,6 +151,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const onSocketConnected = async () => {
     setSocketConnected(true);
     setReconnectAttempt(0);
+    reauthCountRef.current = 0; // 정상 연결되면 토큰 갱신 카운터 초기화
     paxi_api.post(`/room/join/${roomUuid}`);
   };
 
@@ -155,11 +160,44 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     setReconnectAttempt(prevNum => prevNum + 1);
   };
 
+  // 웹소켓 연결 시 액세스 토큰이 만료된 경우: 리프레시 토큰으로 갱신한 뒤
+  // 새 토큰으로 소켓을 재생성한다. 서버가 client.disconnect()로 끊으므로
+  // socket.io 자동 재연결은 일어나지 않고, 이 핸들러가 유일한 복구 경로다.
+  const onAccessTokenExpired = async () => {
+    if (isReauthingRef.current) {
+      return; // 이벤트 중복 수신 시 1회만 갱신
+    }
+    isReauthingRef.current = true;
+
+    // 갱신 직후 다시 만료가 반복되면(서버 시계 오차 등) 무한 루프를 끊는다.
+    if (reauthCountRef.current >= 2) {
+      console.error('토큰 갱신 반복 실패 — 재연결 중단');
+      releaseCurrentSocket();
+      isReauthingRef.current = false;
+      return;
+    }
+    reauthCountRef.current += 1;
+
+    try {
+      setSocketConnected(false);
+      releaseCurrentSocket(); // stale 토큰 소켓 정리
+      await refreshAccessToken(); // 새 access/refresh 토큰 발급 + 저장
+      await initSocket(); // 새 토큰으로 소켓 재생성
+    } catch (err) {
+      // refreshAccessToken 내부에서 reset_auth + 로그인 화면 이동까지 처리됨
+      console.error('토큰 갱신 실패, 재연결 중단:', err);
+      releaseCurrentSocket();
+    } finally {
+      isReauthingRef.current = false;
+    }
+  };
+
   const initSocket = async () => {
     console.debug('새 웹소켓 생성 중...');
     const newSocket = await socketFactory(
       onSocketConnected,
       onSocketDisconnected,
+      onAccessTokenExpired,
     );
 
     newSocket.on(ChatEvent.NEW_MESSAGE, data => {

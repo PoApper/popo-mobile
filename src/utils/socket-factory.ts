@@ -10,6 +10,7 @@ const SOCKET_URL = PAXI_API_URL;
 export const socketFactory = async (
   onSocketConnected: () => void,
   onSocketDisconnected: () => void,
+  onAccessTokenExpired: () => void,
 ): Promise<Socket> => {
   const token = (await EncryptedStorage.getItem(AUTH_TOKEN_KEY)) ?? '';
   const socket = io(`${SOCKET_URL}?Authentication=${token}`, {
@@ -31,8 +32,11 @@ export const socketFactory = async (
   });
 
   socket.on(ChatEvent.ACCESS_TOKEN_EXPIRED, () => {
-    console.error('액세스 토큰 만료');
-    // TODO: 리프레시 토큰 이용해 갱신 후 웹소켓 재연결
+    console.error('액세스 토큰 만료 — 갱신 후 웹소켓 재연결 시도');
+    // 토큰이 URL 쿼리에 박혀 생성 시점에만 읽히므로, 자동 재연결로는
+    // 만료된 토큰이 그대로 재사용된다. 소켓 소유자가 토큰을 갱신하고
+    // 소켓을 재생성하도록 위임한다.
+    onAccessTokenExpired();
   });
 
   socket.on(ChatEvent.ERROR, error => {
