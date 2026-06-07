@@ -275,6 +275,10 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     useCallback(() => {
       // 포커스마다 새 소켓을 생성하므로 첫 connect를 최초 연결로 취급한다.
       hasConnectedOnceRef.current = false;
+      // 이전 세션의 연결 상태가 남아 끊김 배너가 오표시되거나 입력창이
+      // 잘못 활성화되지 않도록, 초기 connect 전까지 연결 UI 상태를 초기화한다.
+      setSocketConnected(false);
+      setHasDisconnected(false);
       getRoomInfo();
       getMyInfo();
       getChatList();
