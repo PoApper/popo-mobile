@@ -72,12 +72,20 @@ describe('socketFactory', () => {
     );
   });
 
-  it('connect 이벤트에서 onSocketConnected를 호출한다', async () => {
+  it('connected 이벤트에서 onSocketConnected를 호출한다', async () => {
+    const {socket, onSocketConnected} = await setup();
+
+    socket.trigger(ChatEvent.CONNECTED);
+
+    expect(onSocketConnected).toHaveBeenCalledTimes(1);
+  });
+
+  it('전송 connect 이벤트로는 onSocketConnected를 호출하지 않는다', async () => {
     const {socket, onSocketConnected} = await setup();
 
     socket.trigger('connect');
 
-    expect(onSocketConnected).toHaveBeenCalledTimes(1);
+    expect(onSocketConnected).not.toHaveBeenCalled();
   });
 
   it('disconnect 이벤트에서 onSocketDisconnected를 호출한다', async () => {

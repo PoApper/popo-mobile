@@ -30,7 +30,13 @@ export const socketFactory = async (
   console.debug('웹소켓 연결 중...');
 
   socket.on('connect', () => {
-    console.debug('웹소켓 연결 완료');
+    // 전송 계층 연결일 뿐 인증 확정이 아니다. 서버가 handleConnection에서 토큰을
+    // 검증한 뒤 connected 이벤트를 보내야 실제 사용 가능 상태다.
+    console.debug('웹소켓 전송 계층 연결 (인증 확정 전)');
+  });
+
+  socket.on(ChatEvent.CONNECTED, () => {
+    console.debug('웹소켓 서버 인증 완료');
     onSocketConnected();
   });
 

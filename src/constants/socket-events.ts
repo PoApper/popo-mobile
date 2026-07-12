@@ -20,6 +20,11 @@ export const enum ChatEvent {
   // 유저 강퇴 관련 이벤트
   USER_KICKED = 'userKicked',
 
+  // 연결 관련 이벤트
+  // 서버 handleConnection이 토큰 검증에 성공하면 보낸다. 전송 계층 connect가
+  // 아니라 이 이벤트를 실제 사용 가능(인증 확정)으로 취급한다.
+  CONNECTED = 'connected',
+
   // 에러 이벤트
   ERROR = 'error',
   // 웹소켓 연결 시 액세스 토큰이 만료된 경우 서버가 내려보낸다.
