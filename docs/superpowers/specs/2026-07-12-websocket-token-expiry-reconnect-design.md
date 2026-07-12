@@ -53,8 +53,7 @@ lifecycle 훅이다(핸드셰이크 미들웨어가 아님). 따라서:
   (`'connected'`는 socket.io 예약어가 아니다 — 예약어는
   `connect`/`disconnect`/`connect_error` — 충돌 없음.)
 - `src/chat/chat.gateway.ts` `handleConnection`: 성공 경로에서
-  `await client.join(\`user-${payload.uuid}\`)` **직후**
-  `client.emit(ChatEvent.CONNECTED)`를 emit.
+  `await client.join(\`user-${payload.uuid}\`)`**직후**`client.emit(ChatEvent.CONNECTED)`를 emit.
 - 실패 경로(`accessTokenExpired` / `error` + `disconnect`)는 변경 없음.
 
 ### B. 클라이언트 배선 (popo-mobile)
@@ -74,6 +73,7 @@ lifecycle 훅이다(핸드셰이크 미들웨어가 아님). 따라서:
 
   `socketFactory` 시그니처는 그대로. 어떤 소켓 이벤트가 콜백을 호출하는지만
   바뀐다.
+
 - `NewChatScreen.onSocketConnected`의 기존 부수효과
   (`setSocketConnected(true)` / `reauthCount = 0` 리셋 / 재조회 /
   `POST /room/join`)는 유지된다(추가되는 `setReconnectFailed(false)`는 C 참조).
@@ -91,6 +91,7 @@ lifecycle 훅이다(핸드셰이크 미들웨어가 아님). 따라서:
   - `reconnectWithFreshToken(...)` deps에 `onGiveUp: () => setReconnectFailed(true)` 전달.
   - `onSocketConnected`에서 `setReconnectFailed(false)`(복구 시).
 - 배너 상태(기존 `!socketConnected && reconnectAttempt !== 0` 대체):
+
   1. **연결됨** — `socketConnected` → 배너 없음, 입력창 활성.
   2. **재연결 중** — `!socketConnected && hasDisconnected && !reconnectFailed`
      → "연결이 끊어졌습니다. 재연결 중…".
@@ -110,7 +111,7 @@ lifecycle 훅이다(핸드셰이크 미들웨어가 아님). 따라서:
   - `reauthGuardRef.current = createReauthGuard()` (또는
     `reauthCount = 0`, `isReauthing = false`),
   - `setReconnectFailed(false)`
-  를 초기화한다.
+    를 초기화한다.
 
 이것이 없으면 리마운트 없이 재포커스만 되는 경우 `reauthCount`가 상한에 남아
 첫 만료에서 즉시 다시 포기한다. 이 초기화로 재입장이 리마운트든 재포커스든
@@ -118,11 +119,11 @@ lifecycle 훅이다(핸드셰이크 미들웨어가 아님). 따라서:
 
 ## 상태 모델 요약
 
-| 상태 | 조건 | 입력창 | 배너 |
-| --- | --- | --- | --- |
-| 연결됨 | `socketConnected` | 활성 | 없음 |
-| 재연결 중 | `!socketConnected && hasDisconnected && !reconnectFailed` | 비활성 | "연결이 끊어졌습니다. 재연결 중…" |
-| 실패 | `reconnectFailed` | 비활성 | "채팅 연결에 실패했습니다. 채팅방에 다시 입장해 주세요" |
+| 상태      | 조건                                                      | 입력창 | 배너                                                    |
+| --------- | --------------------------------------------------------- | ------ | ------------------------------------------------------- |
+| 연결됨    | `socketConnected`                                         | 활성   | 없음                                                    |
+| 재연결 중 | `!socketConnected && hasDisconnected && !reconnectFailed` | 비활성 | "연결이 끊어졌습니다. 재연결 중…"                       |
+| 실패      | `reconnectFailed`                                         | 비활성 | "채팅 연결에 실패했습니다. 채팅방에 다시 입장해 주세요" |
 
 ## 정상/이상 흐름
 
