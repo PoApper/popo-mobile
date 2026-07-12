@@ -18,6 +18,8 @@ export type ReauthDeps = {
   recreateSocket: () => Promise<void>;
   // 재연결 진행 동안 연결 상태 표시 갱신 (선택)
   setSocketConnected?: (connected: boolean) => void;
+  // 재연결을 포기했을 때(상한 도달) 호출. UI에 종료 상태를 알린다. (선택)
+  onGiveUp?: () => void;
   // 정상 연결 없이 허용할 최대 갱신 횟수 (기본 2)
   maxAttempts?: number;
 };
@@ -51,9 +53,11 @@ export const reconnectWithFreshToken = async (
     if (guard.reauthCount >= maxAttempts) {
       console.error('토큰 갱신 반복 실패 — 재연결 중단');
       // releaseSocket은 리스너 제거 후 disconnect하므로 disconnect 이벤트가
-      // 발생하지 않는다. UI가 연결됨으로 남지 않도록 명시적으로 끊김 처리한다.
+      // 발생하지 않는다. UI가 연결됨으로 남지 않도록 명시적으로 끊김 처리하고,
+      // onGiveUp으로 종료 상태를 알린다(재입장으로만 복구).
       deps.setSocketConnected?.(false);
       deps.releaseSocket();
+      deps.onGiveUp?.();
       return;
     }
     guard.reauthCount += 1;

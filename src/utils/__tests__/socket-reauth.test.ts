@@ -9,6 +9,7 @@ const makeDeps = (overrides: Partial<ReauthDeps> = {}) => ({
   refreshAccessToken: jest.fn().mockResolvedValue(undefined),
   recreateSocket: jest.fn().mockResolvedValue(undefined),
   setSocketConnected: jest.fn(),
+  onGiveUp: jest.fn(),
   ...overrides,
 });
 
@@ -101,6 +102,27 @@ describe('reconnectWithFreshToken', () => {
     expect(deps.recreateSocket).not.toHaveBeenCalled();
     expect(deps.setSocketConnected).toHaveBeenCalledWith(false);
     expect(deps.releaseSocket).toHaveBeenCalledTimes(1);
+  });
+
+  it('상한 도달로 중단할 때 onGiveUp을 호출한다', async () => {
+    const deps = makeDeps();
+    const guard = createReauthGuard();
+    guard.reauthCount = 2; // 이미 상한 도달 상태
+
+    await reconnectWithFreshToken(guard, {...deps, maxAttempts: 2});
+
+    expect(deps.onGiveUp).toHaveBeenCalledTimes(1);
+    expect(deps.recreateSocket).not.toHaveBeenCalled();
+  });
+
+  it('정상 재연결 경로에서는 onGiveUp을 호출하지 않는다', async () => {
+    const deps = makeDeps();
+    const guard = createReauthGuard();
+
+    await reconnectWithFreshToken(guard, deps);
+
+    expect(deps.onGiveUp).not.toHaveBeenCalled();
+    expect(deps.recreateSocket).toHaveBeenCalledTimes(1);
   });
 
   it('정상 연결로 카운트가 초기화되면 다시 갱신을 시도한다', async () => {
