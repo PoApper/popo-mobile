@@ -65,6 +65,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const hasConnectedOnceRef = useRef<boolean>(false);
   // 한 번이라도 끊긴 적이 있는지 (최초 연결 중에는 끊김 안내를 띄우지 않기 위함)
   const [hasDisconnected, setHasDisconnected] = useState<boolean>(false);
+  // 재인증 상한 도달로 재연결을 포기한 상태 (채팅방 재입장으로만 복구)
+  const [reconnectFailed, setReconnectFailed] = useState<boolean>(false);
   const [socketConnected, setSocketConnected] = useState<boolean>(false);
 
   const [settlementData, setSettlementData] = useState<SettlementInfoData>(
@@ -157,6 +159,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
   const onSocketConnected = async () => {
     setSocketConnected(true);
+    setReconnectFailed(false); // 정상 인증되면 실패 안내 해제
     reauthGuardRef.current.reauthCount = 0; // 정상 연결되면 토큰 갱신 카운터 초기화
 
     // 재연결 시 끊긴 동안 놓친 데이터를 재조회한다. 최초 연결은
@@ -187,6 +190,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       refreshAccessToken,
       recreateSocket: initSocket,
       setSocketConnected,
+      onGiveUp: () => setReconnectFailed(true),
     });
 
   const initSocket = async () => {
@@ -275,10 +279,14 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     useCallback(() => {
       // 포커스마다 새 소켓을 생성하므로 첫 connect를 최초 연결로 취급한다.
       hasConnectedOnceRef.current = false;
-      // 이전 세션의 연결 상태가 남아 끊김 배너가 오표시되거나 입력창이
+      // 재입장이 유일한 복구 경로이므로 재인증 가드를 새로 초기화한다.
+      // (리마운트 없이 재포커스만 되는 경우에도 새 재연결 예산을 부여)
+      reauthGuardRef.current = createReauthGuard();
+      // 이전 세션의 연결 상태가 남아 끊김/실패 배너가 오표시되거나 입력창이
       // 잘못 활성화되지 않도록, 초기 connect 전까지 연결 UI 상태를 초기화한다.
       setSocketConnected(false);
       setHasDisconnected(false);
+      setReconnectFailed(false);
       getRoomInfo();
       getMyInfo();
       getChatList();
@@ -341,6 +349,12 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     setShowMyChatOptions(_ => true);
   }, []);
 
+  const connectionBannerMessage = reconnectFailed
+    ? '채팅 연결에 실패했습니다. 채팅방에 다시 입장해 주세요'
+    : !socketConnected && hasDisconnected
+    ? '연결이 끊어졌습니다. 재연결 중…'
+    : null;
+
   return (
     <SafeAreaView
       style={{backgroundColor: backgroundColor(isDarkMode), flex: 1}}>
@@ -381,7 +395,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      {!socketConnected && hasDisconnected && (
+      {connectionBannerMessage && (
         <View style={styles.socketConnection}>
           <View
             style={[
@@ -394,7 +408,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
               color={isDarkMode ? '#FFFFFF' : '#000000'}
             />
             <Text style={{color: textColor(isDarkMode)}}>
-              연결이 끊어졌습니다. 재연결 중…
+              {connectionBannerMessage}
             </Text>
           </View>
         </View>
