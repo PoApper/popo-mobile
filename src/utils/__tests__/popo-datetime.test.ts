@@ -1,4 +1,7 @@
-import {formatReservationTime} from '../popo-datetime';
+import {
+  formatReservationTime,
+  roundUpToNearest10Minutes,
+} from '../popo-datetime';
 
 describe('formatReservationTime', () => {
   it('HHMM 형식 문자열을 HH:MM으로 변환한다', () => {
@@ -20,5 +23,28 @@ describe('formatReservationTime', () => {
 
     // 숫자가 아닌 문자열인 경우
     expect(formatReservationTime('abcd')).toBe('ab:cd');
+  });
+});
+
+describe('roundUpToNearest10Minutes', () => {
+  it('10분 단위가 아닌 시각을 다음 10분 경계로 올림한다', () => {
+    expect(roundUpToNearest10Minutes(new Date('2026-06-07T10:03:00'))).toEqual(
+      new Date('2026-06-07T10:10:00'),
+    );
+    expect(roundUpToNearest10Minutes(new Date('2026-06-07T10:09:59'))).toEqual(
+      new Date('2026-06-07T10:10:00'),
+    );
+  });
+
+  it('이미 10분 경계에 있으면 그대로 유지한다', () => {
+    expect(roundUpToNearest10Minutes(new Date('2026-06-07T10:10:00'))).toEqual(
+      new Date('2026-06-07T10:10:00'),
+    );
+  });
+
+  it('시(hour) 경계를 넘겨 올림한다', () => {
+    expect(roundUpToNearest10Minutes(new Date('2026-06-07T10:55:30'))).toEqual(
+      new Date('2026-06-07T11:00:00'),
+    );
   });
 });

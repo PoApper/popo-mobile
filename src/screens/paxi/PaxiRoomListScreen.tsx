@@ -56,6 +56,14 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
     flex: 1,
   };
 
+  /**
+   * 방 목록을 조회해 state에 반영한다.
+   *
+   * 에러를 자체적으로 처리하지 않고 그대로 throw 하므로,
+   * 호출처에서 반드시 try/catch로 감싸 처리해야 한다.
+   *
+   * @throws 네트워크/서버 오류 시 axios 에러를 그대로 전파
+   */
   const getRoomList = async () => {
     const res = await paxi_api.get('/room');
     setRoomData(res.data);
