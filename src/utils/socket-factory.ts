@@ -7,6 +7,13 @@ import {ChatEvent} from '../constants/socket-events';
 
 const SOCKET_URL = PAXI_API_URL;
 
+interface WsErrorPayload {
+  status: 'error';
+  message: string;
+  timestamp: string;
+  error?: string;
+}
+
 export const socketFactory = async (
   onSocketConnected: () => void,
   onSocketDisconnected: () => void,
@@ -48,9 +55,8 @@ export const socketFactory = async (
     onAccessTokenExpired();
   });
 
-  socket.on(ChatEvent.ERROR, error => {
-    console.error('웹소켓 에러 발생:', error.message);
-    console.error(error.stack);
+  socket.on(ChatEvent.ERROR, (error: WsErrorPayload) => {
+    console.error('웹소켓 에러 발생:', error?.error, error?.message);
     onSocketDisconnected();
   });
 
