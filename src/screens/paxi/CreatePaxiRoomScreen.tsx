@@ -22,6 +22,7 @@ import {
   getPaxiDurationInfo,
   PAXI_LOCATIONS,
 } from '@utils/locations';
+import {roundUpToNearest10Minutes} from '@utils/popo-datetime';
 import CommonHeader from '@components/CommonHeader';
 import DropdownMenu from '@components/room/DropdownMenu';
 
@@ -39,12 +40,6 @@ interface NewRoomBody {
   departureLocation: string;
   destinationLocation: string;
   maxParticipant: number;
-}
-
-// 10분 단위로 올림
-function roundUpToNearest10Minutes(date: Date) {
-  const ms = 1000 * 60 * 10;
-  return new Date(Math.ceil(date.getTime() / ms) * ms);
 }
 
 const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
