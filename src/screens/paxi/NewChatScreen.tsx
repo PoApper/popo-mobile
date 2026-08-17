@@ -34,6 +34,7 @@ import {
   reconnectWithFreshToken,
   ReauthGuard,
 } from '@utils/socket-reauth';
+import {adoptFreshSocket} from '@utils/socket-adopt';
 import ChatMessage from '@components/chat/ChatMessage';
 import SidebarModal from '@components/chat/SidebarModal';
 import SettlementInfoBox from '@components/chat/SettlementInfoBox';
@@ -59,6 +60,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const [chatList, setChatList] = useState<MessageData[]>([]);
   const [newChat, setNewChat] = useState<string>('');
   const socketRef = useRef<Socket | null>(null);
+  // 화면 포커스 여부. initSocket이 await 사이에 언포커스되면 새 소켓을 버리기 위함
+  const isFocusedRef = useRef<boolean>(false);
   // 토큰 만료 → 갱신 → 재연결 사이클의 중복 진입/무한 루프 방지용 가드
   const reauthGuardRef = useRef<ReauthGuard>(createReauthGuard());
   // 최초 연결과 재연결을 구분 (최초 연결은 useFocusEffect 초기 조회와 중복되므로 재조회 생략)
@@ -146,12 +149,17 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       });
   };
 
+  const disposeSocket = (socket: Socket | null) => {
+    if (!socket) return;
+    socket.offAny();
+    socket.removeAllListeners();
+    socket.disconnect(); // reconnectionAttempts:Infinity 소켓의 백그라운드 재연결 정지
+  };
+
   const releaseCurrentSocket = () => {
     if (socketRef.current) {
       console.debug('웹소켓 삭제 중...');
-      socketRef.current.offAny();
-      socketRef.current.removeAllListeners();
-      socketRef.current.disconnect();
+      disposeSocket(socketRef.current);
       socketRef.current = null;
       console.debug('웹소켓 삭제 완료');
     }
@@ -193,7 +201,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       onGiveUp: () => setReconnectFailed(true),
     });
 
-  const initSocket = async () => {
+  // 소켓 생성 + 핸들러 등록. 채택/폐기(릭 방지) 판단은 adoptFreshSocket에 위임.
+  const createSocket = async (): Promise<Socket> => {
     console.debug('새 웹소켓 생성 중...');
     const newSocket = await socketFactory(
       onSocketConnected,
@@ -259,8 +268,19 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       });
     });
 
-    socketRef.current = newSocket;
+    return newSocket;
   };
+
+  const initSocket = () =>
+    adoptFreshSocket({
+      create: createSocket,
+      isFocused: () => isFocusedRef.current,
+      releaseCurrent: releaseCurrentSocket,
+      adopt: socket => {
+        socketRef.current = socket;
+      },
+      dispose: disposeSocket,
+    });
 
   useEffect(() => {
     if (!myInfo?.uuid || !Array.isArray(roomInfo?.roomUsers)) {
@@ -277,6 +297,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
+      isFocusedRef.current = true;
       // 포커스마다 새 소켓을 생성하므로 첫 connect를 최초 연결로 취급한다.
       hasConnectedOnceRef.current = false;
       // 재입장이 유일한 복구 경로이므로 재인증 가드를 새로 초기화한다.
@@ -294,6 +315,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       initSocket();
 
       return () => {
+        isFocusedRef.current = false;
         releaseCurrentSocket();
       };
     }, []),
