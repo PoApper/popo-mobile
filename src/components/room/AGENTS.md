@@ -17,7 +17,6 @@
 | `JoinConfirmModal.tsx`     | 방 참가 확인 모달      |
 | `RefreshButton.tsx`        | 목록 새로고침 버튼     |
 | `RoomFilterDatePicker.tsx` | 방 필터용 날짜 선택기  |
-| `RoomFilterTimePicker.tsx` | 방 필터용 시간 선택기  |
 
 ## For AI Agents
 
