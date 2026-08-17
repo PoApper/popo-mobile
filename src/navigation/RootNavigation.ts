@@ -5,6 +5,6 @@ export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
 export function navigate(name: keyof RootStackParamList, params?: any) {
   if (navigationRef.current) {
-    navigationRef.current.navigate(name, params);
+    (navigationRef.current.navigate as any)(name, params);
   }
 }

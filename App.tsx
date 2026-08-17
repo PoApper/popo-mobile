@@ -79,7 +79,7 @@ const App = () => {
       if (type === EventType.PRESS) {
         const {notification} = detail;
         if (notification?.data?.roomUuid) {
-          joinAndNavigate(notification.data.roomUuid, 'roomList');
+          joinAndNavigate(notification.data.roomUuid as string, 'roomList');
         }
       }
     });
