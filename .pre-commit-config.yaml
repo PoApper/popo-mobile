@@ -25,5 +25,5 @@ repos:
         name: Run TypeScript typecheck
         entry: npx tsc --noEmit
         language: system
-        files: \.(ts|tsx)$
+        always_run: true
         pass_filenames: false
