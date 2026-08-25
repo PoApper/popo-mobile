@@ -1,6 +1,5 @@
 import notifee, {AuthorizationStatus} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
-// import {navigate} from '../navigation/RootNavigation';
 
 // Notifee 기반 권한 요청
 export const requestUserPermission = async () => {
