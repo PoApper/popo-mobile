@@ -28,6 +28,13 @@ import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import {textColor, borderColor, backgroundColor, common} from '@styles/default';
 import {socketFactory} from '@utils/socket-factory';
+import {refreshAccessToken} from '@utils/refresh.utils';
+import {
+  createReauthGuard,
+  reconnectWithFreshToken,
+  ReauthGuard,
+} from '@utils/socket-reauth';
+import {adoptFreshSocket} from '@utils/socket-adopt';
 import ChatMessage from '@components/chat/ChatMessage';
 import SidebarModal from '@components/chat/SidebarModal';
 import SettlementInfoBox from '@components/chat/SettlementInfoBox';
@@ -53,7 +60,16 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   const [chatList, setChatList] = useState<MessageData[]>([]);
   const [newChat, setNewChat] = useState<string>('');
   const socketRef = useRef<Socket | null>(null);
-  const [reconnectAttempt, setReconnectAttempt] = useState<number>(0);
+  // 화면 포커스 여부. initSocket이 await 사이에 언포커스되면 새 소켓을 버리기 위함
+  const isFocusedRef = useRef<boolean>(false);
+  // 토큰 만료 → 갱신 → 재연결 사이클의 중복 진입/무한 루프 방지용 가드
+  const reauthGuardRef = useRef<ReauthGuard>(createReauthGuard());
+  // 최초 연결과 재연결을 구분 (최초 연결은 useFocusEffect 초기 조회와 중복되므로 재조회 생략)
+  const hasConnectedOnceRef = useRef<boolean>(false);
+  // 한 번이라도 끊긴 적이 있는지 (최초 연결 중에는 끊김 안내를 띄우지 않기 위함)
+  const [hasDisconnected, setHasDisconnected] = useState<boolean>(false);
+  // 재인증 상한 도달로 재연결을 포기한 상태 (채팅방 재입장으로만 복구)
+  const [reconnectFailed, setReconnectFailed] = useState<boolean>(false);
   const [socketConnected, setSocketConnected] = useState<boolean>(false);
 
   const [settlementData, setSettlementData] = useState<SettlementInfoData>(
@@ -133,12 +149,17 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       });
   };
 
+  const disposeSocket = (socket: Socket | null) => {
+    if (!socket) return;
+    socket.offAny();
+    socket.removeAllListeners();
+    socket.disconnect(); // reconnectionAttempts:Infinity 소켓의 백그라운드 재연결 정지
+  };
+
   const releaseCurrentSocket = () => {
     if (socketRef.current) {
       console.debug('웹소켓 삭제 중...');
-      socketRef.current.offAny();
-      socketRef.current.removeAllListeners();
-      socketRef.current.disconnect();
+      disposeSocket(socketRef.current);
       socketRef.current = null;
       console.debug('웹소켓 삭제 완료');
     }
@@ -146,20 +167,47 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
   const onSocketConnected = async () => {
     setSocketConnected(true);
-    setReconnectAttempt(0);
+    setReconnectFailed(false); // 정상 인증되면 실패 안내 해제
+    reauthGuardRef.current.reauthCount = 0; // 정상 연결되면 토큰 갱신 카운터 초기화
+
+    // 재연결 시 끊긴 동안 놓친 데이터를 재조회한다. 최초 연결은
+    // useFocusEffect의 초기 조회와 중복되므로 건너뛴다.
+    if (hasConnectedOnceRef.current) {
+      getRoomInfo();
+      getSettlementInfo();
+      getMyInfo();
+      getChatList();
+    }
+    hasConnectedOnceRef.current = true;
+
     paxi_api.post(`/room/join/${roomUuid}`);
   };
 
   const onSocketDisconnected = () => {
     setSocketConnected(false);
-    setReconnectAttempt(prevNum => prevNum + 1);
+    setHasDisconnected(true);
   };
 
-  const initSocket = async () => {
+  // 웹소켓 연결 시 액세스 토큰이 만료된 경우: 리프레시 토큰으로 갱신한 뒤
+  // 새 토큰으로 소켓을 재생성한다. 서버가 client.disconnect()로 끊으므로
+  // socket.io 자동 재연결은 일어나지 않고, 이 핸들러가 유일한 복구 경로다.
+  // 오케스트레이션 로직은 socket-reauth로 분리해 단위 테스트한다.
+  const onAccessTokenExpired = () =>
+    reconnectWithFreshToken(reauthGuardRef.current, {
+      releaseSocket: releaseCurrentSocket,
+      refreshAccessToken,
+      recreateSocket: initSocket,
+      setSocketConnected,
+      onGiveUp: () => setReconnectFailed(true),
+    });
+
+  // 소켓 생성 + 핸들러 등록. 채택/폐기(릭 방지) 판단은 adoptFreshSocket에 위임.
+  const createSocket = async (): Promise<Socket> => {
     console.debug('새 웹소켓 생성 중...');
     const newSocket = await socketFactory(
       onSocketConnected,
       onSocketDisconnected,
+      onAccessTokenExpired,
     );
 
     newSocket.on(ChatEvent.NEW_MESSAGE, data => {
@@ -220,17 +268,19 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       });
     });
 
-    socketRef.current = newSocket;
+    return newSocket;
   };
 
-  useEffect(() => {
-    if (socketRef.current?.connected) {
-      getRoomInfo();
-      getSettlementInfo();
-      getMyInfo();
-      getChatList();
-    }
-  }, [reconnectAttempt]);
+  const initSocket = () =>
+    adoptFreshSocket({
+      create: createSocket,
+      isFocused: () => isFocusedRef.current,
+      releaseCurrent: releaseCurrentSocket,
+      adopt: socket => {
+        socketRef.current = socket;
+      },
+      dispose: disposeSocket,
+    });
 
   useEffect(() => {
     if (!myInfo?.uuid || !Array.isArray(roomInfo?.roomUsers)) {
@@ -247,6 +297,17 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
+      isFocusedRef.current = true;
+      // 포커스마다 새 소켓을 생성하므로 첫 connect를 최초 연결로 취급한다.
+      hasConnectedOnceRef.current = false;
+      // 재입장이 유일한 복구 경로이므로 재인증 가드를 새로 초기화한다.
+      // (리마운트 없이 재포커스만 되는 경우에도 새 재연결 예산을 부여)
+      reauthGuardRef.current = createReauthGuard();
+      // 이전 세션의 연결 상태가 남아 끊김/실패 배너가 오표시되거나 입력창이
+      // 잘못 활성화되지 않도록, 초기 connect 전까지 연결 UI 상태를 초기화한다.
+      setSocketConnected(false);
+      setHasDisconnected(false);
+      setReconnectFailed(false);
       getRoomInfo();
       getMyInfo();
       getChatList();
@@ -254,6 +315,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       initSocket();
 
       return () => {
+        isFocusedRef.current = false;
         releaseCurrentSocket();
       };
     }, []),
@@ -309,6 +371,12 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
     setShowMyChatOptions(_ => true);
   }, []);
 
+  const connectionBannerMessage = reconnectFailed
+    ? '채팅 연결에 실패했습니다. 채팅방에 다시 입장해 주세요'
+    : !socketConnected && hasDisconnected
+    ? '연결이 끊어졌습니다. 재연결 중…'
+    : null;
+
   return (
     <SafeAreaView
       style={{backgroundColor: backgroundColor(isDarkMode), flex: 1}}>
@@ -349,7 +417,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      {!socketConnected && reconnectAttempt !== 0 && (
+      {connectionBannerMessage && (
         <View style={styles.socketConnection}>
           <View
             style={[
@@ -362,7 +430,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
               color={isDarkMode ? '#FFFFFF' : '#000000'}
             />
             <Text style={{color: textColor(isDarkMode)}}>
-              서버와 접속이 끊어졌습니다. 재연결 시도 {reconnectAttempt}회
+              {connectionBannerMessage}
             </Text>
           </View>
         </View>
@@ -514,13 +582,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   socketConnection: {
+    // 헤더 바로 아래 레이아웃 흐름에 배치 (절대 위치 top 하드코딩 시
+    // 헤더 높이/노치 환경에서 어긋나던 문제 해소)
     paddingHorizontal: 10,
     marginTop: 10,
-    position: 'absolute',
-    zIndex: 1000,
-    width: '100%',
     height: 50,
-    top: 60,
   },
   socketConnectionInner: {
     borderRadius: 5,
