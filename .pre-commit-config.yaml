@@ -21,3 +21,9 @@ repos:
         entry: npm run lint
         language: system
         pass_filenames: false
+      - id: npm-run-typecheck
+        name: Run TypeScript typecheck
+        entry: npx tsc --noEmit
+        language: system
+        always_run: true
+        pass_filenames: false
