@@ -78,8 +78,8 @@ const App = () => {
     notifee.onForegroundEvent(({type, detail}) => {
       if (type === EventType.PRESS) {
         const {notification} = detail;
-        if (notification?.data?.roomUuid) {
-          joinAndNavigate(notification.data.roomUuid as string, 'roomList');
+        if (typeof notification?.data?.roomUuid === 'string') {
+          joinAndNavigate(notification.data.roomUuid, 'roomList');
         }
       }
     });
@@ -87,8 +87,8 @@ const App = () => {
     // 백그라운드 알림 클릭(앱이 백그라운드에서 열릴 때)
     const unsubscribeOpened = messaging().onNotificationOpenedApp(
       remoteMessage => {
-        const roomUuid = remoteMessage?.data?.roomUuid as string | undefined;
-        if (roomUuid) {
+        const roomUuid = remoteMessage?.data?.roomUuid;
+        if (typeof roomUuid === 'string') {
           joinAndNavigate(roomUuid, 'roomList');
         }
       },
@@ -98,8 +98,8 @@ const App = () => {
     messaging()
       .getInitialNotification()
       .then(remoteMessage => {
-        const roomUuid = remoteMessage?.data?.roomUuid as string | undefined;
-        if (roomUuid) {
+        const roomUuid = remoteMessage?.data?.roomUuid;
+        if (typeof roomUuid === 'string') {
           joinAndNavigate(roomUuid, 'roomList');
         }
       })
