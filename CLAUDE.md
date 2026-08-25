@@ -68,7 +68,12 @@ Configured in both `tsconfig.json` and `babel.config.js` (via `babel-plugin-modu
 
 - `socket-factory.ts` — Creates authenticated Socket.io connections with auto-reconnection.
 - `constants/socket-events.ts` — WebSocket event name constants.
+- `socket-reauth.ts` / `socket-adopt.ts` — 토큰 갱신 후 재연결, 새 소켓 채택/폐기 오케스트레이션 (의존성 주입으로 단위 테스트).
 - Chat screens manage socket connections via `useRef` and clean up on unmount.
+
+**핸드셰이크 계약:** 전송 계층 `connect`는 인증 확정이 아니다. 서버가 `handleConnection`에서 토큰을 검증한 뒤 보내는 `connected` 이벤트를 받아야 사용 가능 상태다 (`NewChatScreen`의 입력창 활성화 조건). 토큰이 만료됐으면 서버는 `accessTokenExpired`를 보내고 `client.disconnect()`하므로 socket.io 자동 재연결이 동작하지 않는다 — 토큰을 갱신해 소켓을 재생성하는 것이 유일한 복구 경로다.
+
+**서버 버전 의존:** 위 두 이벤트는 `paxi-popo-nest-api` v1.2.1(PR #154)부터 emit된다. 서버를 그 이전으로 롤백하면 채팅 입력이 영구 비활성화된다.
 
 ### State Management
 
@@ -94,6 +99,12 @@ Copy `.env.example` → `.env`. `react-native-config`이 이 단일 파일을 �
 Firebase credentials are required: `google-services.json` (Android), `GoogleService-Info.plist` (iOS).
 
 ## Release & Versioning
+
+### 버전 범프 관례
+
+- `feat:` 커밋이 포함되면 **minor**, `fix:`/의존성 범프만이면 **patch**. (예: v1.11.0은 `feat: 학생단체 소개 탭 추가`, v1.10.4는 `fix:` 2건)
+- `CURRENT_PROJECT_VERSION`(iOS 빌드 번호)은 새 `MARKETING_VERSION`마다 **1로 리셋**하고, 같은 버전을 재제출할 때만 증가시킨다.
+- `ANDROID_VERSION_CODE`는 리셋하지 않고 매 릴리즈 단조 증가.
 
 ### Android
 
@@ -122,4 +133,6 @@ Firebase credentials are required: `google-services.json` (Android), `GoogleServ
 
 ## CI
 
-GitHub Actions runs `pre-commit run --all-files` on PRs to `main` (format, lint, trailing whitespace, YAML validation, large file check).
+GitHub Actions runs `pre-commit run --all-files` on PRs to `main` (format, lint, **TypeScript typecheck**, trailing whitespace, YAML validation, large file check).
+
+타입체크 훅은 `always_run: true`라 스테이징된 파일이 없어도 항상 실행된다. 오래된 PR은 이 훅이 추가되기 전에 CI가 통과했을 수 있으므로, 머지 전 `npx tsc --noEmit`을 다시 돌려 확인한다.
