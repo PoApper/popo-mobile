@@ -14,11 +14,13 @@ Android AAB와 iOS IPA 릴리즈 빌드를 한 번에 생성하는 워크플로�
 Android AAB와 iOS Archive를 **동시에** `run_in_background`로 실행한다:
 
 **Android:**
+
 ```bash
 npm run android:aab:prod
 ```
 
 **iOS:**
+
 ```bash
 xcodebuild -workspace ios/popoMobile.xcworkspace \
   -scheme popoMobile \
@@ -59,11 +61,11 @@ git log --oneline <직전-범프-커밋>..HEAD --no-merges
 
 ### 4-2. 사용자 체감 변경만 추리기
 
-| 커밋 타입 | 처리 |
-|-----------|------|
-| `feat:` | 개별 불렛 |
-| `fix:` | 사용자가 겪던 증상이면 개별 불렛, 내부 오류면 총괄로 |
-| `refactor:` `ci:` `build(deps):` `chore:` `test:` | 총괄 불렛 하나로 뭉침 |
+| 커밋 타입                                         | 처리                                                 |
+| ------------------------------------------------- | ---------------------------------------------------- |
+| `feat:`                                           | 개별 불렛                                            |
+| `fix:`                                            | 사용자가 겪던 증상이면 개별 불렛, 내부 오류면 총괄로 |
+| `refactor:` `ci:` `build(deps):` `chore:` `test:` | 총괄 불렛 하나로 뭉침                                |
 
 ### 4-3. 워딩 규칙
 

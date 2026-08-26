@@ -106,16 +106,30 @@ Firebase credentials are required: `google-services.json` (Android), `GoogleServ
 - `CURRENT_PROJECT_VERSION`(iOS 빌드 번호)은 새 `MARKETING_VERSION`마다 **1로 리셋**하고, 같은 버전을 재제출할 때만 증가시킨다.
 - `ANDROID_VERSION_CODE`는 리셋하지 않고 매 릴리즈 단조 증가.
 
+### 스토어 릴리즈 노트
+
+`git log <직전-version.properties-범프-커밋>..HEAD --no-merges`로 수집한다. git 태그는 누락된 적이 있어(v1.11.0 무태그) 태그를 기준으로 쓰지 않는다. GitHub 자동 생성 노트는 PR만 수집하므로 직접 커밋이 빠진다.
+
+`feat:`와 사용자 체감 `fix:`만 개별 항목으로, `refactor:`/`ci:`/`build(deps):`는 "앱 안정성 및 보안을 개선했습니다" 한 줄로 뭉친다. 항목당 한 줄(수동 줄바꿈 금지 — 두 스토어가 기기 폭에 맞춰 자동 줄바꿈한다), 원인이 아닌 증상, 합쇼체, 내부 용어 금지(`Paxi` 같은 노출 기능명은 허용), `•` 직접 입력(마크다운 미지원), 5개 미만이면 헤더 없이 나열. 총괄 불렛 단독 금지. Play Console 언어당 500자, iOS/Android 동일 텍스트.
+
+상세 규칙은 `README.md`의 "릴리즈 노트 작성" 및 `.claude/commands/popo-release.md` Step 4에 있다.
+
 ### Android
 
 - `npm run android:aab:prod` → `android/app/build/outputs/bundle/prodRelease/app-prod-release.aab`.
 - `android/version.properties`는 릴리즈 커밋에만 포함. 평소 작업 중 수정되어도 커밋하지 않는다.
 - 디버깅용 prod 빌드: `./gradlew installProdDebug` (prod 환경 + console.log 가능).
 
+**target API 제약:** Google Play는 2026-08-31부터 API 36 이상을 요구한다. `compileSdk`/`targetSdk`는 36, `buildToolsVersion`은 36.1.0이다. RN 0.78이 물고 오는 AGP는 **8.8.0**이라 `compileSdk 36`을 공식 지원하지 않으므로 `android/gradle.properties`의 `android.suppressUnsupportedCompileSdk=36`으로 경고를 억제한다. RN 업그레이드 시 AGP 8.9+로 옮기고 이 플래그를 제거한다.
+
 ### iOS
 
 - 릴리즈 빌드: `xcodebuild archive` → `xcodebuild -exportArchive` → Transporter GUI로 업로드 (Transporter CLI는 인증 문제로 사용 불가).
 - `MARKETING_VERSION` (x.x.x 형식만 허용, 4자리 거부) 및 `CURRENT_PROJECT_VERSION`은 `ios/popoMobile.xcodeproj/project.pbxproj`에 3곳 존재. 매 TestFlight/App Store 제출 전 범프 필요.
+
+## Claude Code 커맨드
+
+`.claude/commands/`의 릴리즈 워크플로우 커맨드는 팀 공유용으로 추적된다(`popo-release`, `android-release`, `ios-release`). `.gitignore`가 `.claude/*`를 무시하고 `!.claude/commands/`로 예외 처리하므로, 이 디렉토리 외의 `.claude/` 하위 파일은 커밋되지 않는다.
 
 ## Git Workflow
 
