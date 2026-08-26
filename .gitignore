@@ -1,6 +1,8 @@
 # OSX
 #
-.claude/
+.claude/*
+# 팀 공유 릴리즈 워크플로우 커맨드는 추적한다
+!.claude/commands/
 
 .DS_Store
 
