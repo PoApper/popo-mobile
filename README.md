@@ -37,7 +37,9 @@ npm run ios       # iOS (dev 서버 연결)
 
 iOS는 처음 받았거나 `package.json`이 바뀐 뒤에는 `cd ios && pod install`을 먼저 실행해야 합니다.
 
-프로덕션 서버에 붙이려면 `npm run android:prod`를 씁니다. iOS는 flavor가 없어 `npm run ios:prod`가 Release 빌드만 만들 뿐 서버는 바뀌지 않고, `.env`의 `ENV` 값을 따릅니다.
+프로덕션 서버에 붙이려면 `npm run android:prod`를 씁니다. iOS는 현재 불가능합니다. 
+다만, 에뮬레이션 환경은 실 기기와 동작 방식이 다르므로 에뮬레이션 환경에서는 간단하게 개발 환경에 붙여서 확인하고, 실 서버 타겟으로 빌드한 뒤 각 스토어 테스트 환경에 배포 후 실 기기에서 테스트하기를 권장합니다.
+배포 방법은 [모바일 온보딩 가이드](https://docs.google.com/document/d/1C1s7IaPpp15jBgNyjjILGEaj8Z3KVOKeSJ1uovLf53A/edit?tab=t.0) 참고
 
 플랫폼별 상세는 각 문서를 참고하세요.
 
