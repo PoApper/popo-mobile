@@ -244,8 +244,13 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
           style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}
           activeOpacity={0.8}
           onPress={() => navigation.navigate('OpenSourceLicenses')}>
-          <View style={styles.sectionHeaderRow}>
-            <Text style={[styles.sectionTitle, {color: textColor}]}>
+          <View style={[styles.sectionHeaderRow, styles.noMargin]}>
+            <Text
+              style={[
+                styles.sectionTitle,
+                styles.noMargin,
+                {color: textColor},
+              ]}>
               오픈소스 라이선스
             </Text>
             <Icon
@@ -254,9 +259,6 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
               color={isDarkMode ? '#818CF8' : '#4F46E5'}
             />
           </View>
-          <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
-            POPO가 사용하는 오픈소스 소프트웨어 목록입니다
-          </Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -291,6 +293,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 12,
+  },
+  /** 본문 없이 제목 행만 있는 카드의 아래 여백 제거 */
+  noMargin: {
+    marginBottom: 0,
   },
   row: {
     flexDirection: 'row',
