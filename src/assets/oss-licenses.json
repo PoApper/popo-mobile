@@ -1,0 +1,8352 @@
+[
+  {
+    "name": "@babel/code-frame",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/compat-data",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/core",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/generator",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-annotate-as-pure",
+    "version": "7.27.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-compilation-targets",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-create-class-features-plugin",
+    "version": "7.26.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-create-regexp-features-plugin",
+    "version": "7.26.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-define-polyfill-provider",
+    "version": "0.6.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/helper-globals",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-member-expression-to-functions",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-module-imports",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-module-transforms",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-optimise-call-expression",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-plugin-utils",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-remap-async-to-generator",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-replace-supers",
+    "version": "7.26.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-skip-transparent-expression-wrappers",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-string-parser",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-validator-identifier",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-validator-option",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helper-wrap-function",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/helpers",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/parser",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-bugfix-firefox-class-in-computed-class-key",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-bugfix-safari-class-field-initializer-scope",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-proposal-export-default-from",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-proposal-private-property-in-object",
+    "version": "7.21.0-placeholder-for-preset-env.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-syntax-async-generators",
+    "version": "7.8.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/plugin-syntax-bigint",
+    "version": "7.8.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/plugin-syntax-class-properties",
+    "version": "7.12.13",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/plugin-syntax-class-static-block",
+    "version": "7.14.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-syntax-dynamic-import",
+    "version": "7.8.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/plugin-syntax-export-default-from",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-syntax-flow",
+    "version": "7.26.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-syntax-import-assertions",
+    "version": "7.26.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-syntax-import-attributes",
+    "version": "7.26.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-syntax-import-meta",
+    "version": "7.10.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/plugin-syntax-json-strings",
+    "version": "7.8.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/plugin-syntax-jsx",
+    "version": "7.27.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-syntax-logical-assignment-operators",
+    "version": "7.10.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/plugin-syntax-nullish-coalescing-operator",
+    "version": "7.8.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/plugin-syntax-numeric-separator",
+    "version": "7.10.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/plugin-syntax-object-rest-spread",
+    "version": "7.8.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/plugin-syntax-optional-catch-binding",
+    "version": "7.8.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/plugin-syntax-optional-chaining",
+    "version": "7.8.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/plugin-syntax-private-property-in-object",
+    "version": "7.14.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-syntax-top-level-await",
+    "version": "7.14.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-syntax-typescript",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-syntax-unicode-sets-regex",
+    "version": "7.18.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-arrow-functions",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-async-generator-functions",
+    "version": "7.26.8",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-async-to-generator",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-block-scoped-functions",
+    "version": "7.26.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-block-scoping",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-class-properties",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-class-static-block",
+    "version": "7.26.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-classes",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-computed-properties",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-destructuring",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-dotall-regex",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-duplicate-keys",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-duplicate-named-capturing-groups-regex",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-dynamic-import",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-exponentiation-operator",
+    "version": "7.26.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-export-namespace-from",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-flow-strip-types",
+    "version": "7.26.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-for-of",
+    "version": "7.26.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-function-name",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-json-strings",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-literals",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-logical-assignment-operators",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-member-expression-literals",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-modules-amd",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-modules-commonjs",
+    "version": "7.26.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-modules-systemjs",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-modules-umd",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-named-capturing-groups-regex",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-new-target",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-nullish-coalescing-operator",
+    "version": "7.26.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-numeric-separator",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-object-rest-spread",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-object-super",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-optional-catch-binding",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-optional-chaining",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-parameters",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-private-methods",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-private-property-in-object",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-property-literals",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-react-display-name",
+    "version": "7.28.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-react-jsx",
+    "version": "7.27.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-react-jsx-self",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-react-jsx-source",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-regenerator",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-regexp-modifiers",
+    "version": "7.26.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-reserved-words",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-runtime",
+    "version": "7.26.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-shorthand-properties",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-spread",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-sticky-regex",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-template-literals",
+    "version": "7.26.8",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-typeof-symbol",
+    "version": "7.26.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-typescript",
+    "version": "7.26.8",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-unicode-escapes",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-unicode-property-regex",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-unicode-regex",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/plugin-transform-unicode-sets-regex",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/preset-env",
+    "version": "7.26.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/preset-flow",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/preset-modules",
+    "version": "0.1.6-no-external-plugins",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@babel/preset-typescript",
+    "version": "7.26.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/register",
+    "version": "7.25.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/runtime",
+    "version": "7.26.10",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/template",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/traverse",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/traverse",
+    "version": "7.26.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@babel/types",
+    "version": "7.29.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "The Babel Team"
+  },
+  {
+    "name": "@egjs/hammerjs",
+    "version": "2.0.17",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@firebase/analytics",
+    "version": "0.10.11",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/analytics-compat",
+    "version": "0.2.17",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/analytics-types",
+    "version": "0.8.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/app",
+    "version": "0.11.1",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/app-check",
+    "version": "0.8.11",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/app-check-compat",
+    "version": "0.3.18",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/app-check-interop-types",
+    "version": "0.3.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/app-check-types",
+    "version": "0.5.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/app-compat",
+    "version": "0.2.50",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/app-types",
+    "version": "0.9.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/auth",
+    "version": "1.9.0",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/auth-compat",
+    "version": "0.5.18",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/auth-interop-types",
+    "version": "0.2.4",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/auth-types",
+    "version": "0.13.0",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/component",
+    "version": "0.6.12",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/data-connect",
+    "version": "0.3.0",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/database",
+    "version": "1.0.12",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/database-compat",
+    "version": "2.0.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/database-types",
+    "version": "1.0.8",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/firestore",
+    "version": "4.7.8",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/firestore-compat",
+    "version": "0.3.43",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/firestore-types",
+    "version": "3.0.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/functions",
+    "version": "0.12.2",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/functions-compat",
+    "version": "0.3.19",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/functions-types",
+    "version": "0.6.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/installations",
+    "version": "0.6.12",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/installations-compat",
+    "version": "0.2.12",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/installations-types",
+    "version": "0.5.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/logger",
+    "version": "0.4.4",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/messaging",
+    "version": "0.12.16",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/messaging-compat",
+    "version": "0.2.16",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/messaging-interop-types",
+    "version": "0.2.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/performance",
+    "version": "0.7.0",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/performance-compat",
+    "version": "0.2.13",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/performance-types",
+    "version": "0.2.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/remote-config",
+    "version": "0.5.0",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/remote-config-compat",
+    "version": "0.2.12",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/remote-config-types",
+    "version": "0.4.0",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/storage",
+    "version": "0.13.6",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/storage-compat",
+    "version": "0.3.16",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/storage-types",
+    "version": "0.8.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/util",
+    "version": "1.10.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/vertexai",
+    "version": "1.0.4",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@firebase/webchannel-wrapper",
+    "version": "1.0.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "@grpc/grpc-js",
+    "version": "1.9.16",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Google Inc."
+  },
+  {
+    "name": "@grpc/proto-loader",
+    "version": "0.7.15",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Google Inc."
+  },
+  {
+    "name": "@hapi/hoek",
+    "version": "9.3.0",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@hapi/topo",
+    "version": "5.1.0",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@isaacs/ttlcache",
+    "version": "1.4.1",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Isaac Z. Schlueter"
+  },
+  {
+    "name": "@istanbuljs/load-nyc-config",
+    "version": "1.1.0",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@istanbuljs/schema",
+    "version": "0.1.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Corey Farrell"
+  },
+  {
+    "name": "@jest/create-cache-key-function",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@jest/environment",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@jest/fake-timers",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@jest/schemas",
+    "version": "29.6.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@jest/transform",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@jest/types",
+    "version": "29.6.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@jest/types",
+    "version": "26.6.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@jridgewell/gen-mapping",
+    "version": "0.3.13",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Justin Ridgewell"
+  },
+  {
+    "name": "@jridgewell/remapping",
+    "version": "2.3.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Justin Ridgewell"
+  },
+  {
+    "name": "@jridgewell/resolve-uri",
+    "version": "3.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Justin Ridgewell"
+  },
+  {
+    "name": "@jridgewell/source-map",
+    "version": "0.3.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Justin Ridgewell"
+  },
+  {
+    "name": "@jridgewell/sourcemap-codec",
+    "version": "1.5.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Rich Harris"
+  },
+  {
+    "name": "@jridgewell/trace-mapping",
+    "version": "0.3.31",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Justin Ridgewell"
+  },
+  {
+    "name": "@nodelib/fs.scandir",
+    "version": "2.1.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@nodelib/fs.stat",
+    "version": "2.0.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@nodelib/fs.walk",
+    "version": "1.2.8",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@notifee/react-native",
+    "version": "9.1.8",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Invertase"
+  },
+  {
+    "name": "@protobufjs/aspromise",
+    "version": "1.1.2",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Daniel Wirtz"
+  },
+  {
+    "name": "@protobufjs/base64",
+    "version": "1.1.2",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Daniel Wirtz"
+  },
+  {
+    "name": "@protobufjs/codegen",
+    "version": "2.0.5",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Daniel Wirtz"
+  },
+  {
+    "name": "@protobufjs/eventemitter",
+    "version": "1.1.1",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Daniel Wirtz"
+  },
+  {
+    "name": "@protobufjs/fetch",
+    "version": "1.1.1",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Daniel Wirtz"
+  },
+  {
+    "name": "@protobufjs/float",
+    "version": "1.0.2",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Daniel Wirtz"
+  },
+  {
+    "name": "@protobufjs/path",
+    "version": "1.1.2",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Daniel Wirtz"
+  },
+  {
+    "name": "@protobufjs/pool",
+    "version": "1.1.0",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Daniel Wirtz"
+  },
+  {
+    "name": "@protobufjs/utf8",
+    "version": "1.1.2",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Daniel Wirtz"
+  },
+  {
+    "name": "@react-native-clipboard/clipboard",
+    "version": "1.16.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "M.Haris Baig"
+  },
+  {
+    "name": "@react-native-community/checkbox",
+    "version": "0.5.20",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Nicholas Lee"
+  },
+  {
+    "name": "@react-native-community/cli",
+    "version": "17.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native-community/cli-clean",
+    "version": "17.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native-community/cli-config",
+    "version": "17.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native-community/cli-config-android",
+    "version": "17.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native-community/cli-config-apple",
+    "version": "17.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native-community/cli-doctor",
+    "version": "17.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native-community/cli-platform-android",
+    "version": "17.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native-community/cli-platform-apple",
+    "version": "17.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native-community/cli-platform-ios",
+    "version": "17.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native-community/cli-server-api",
+    "version": "17.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native-community/cli-tools",
+    "version": "17.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native-community/cli-types",
+    "version": "17.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native-community/datetimepicker",
+    "version": "8.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Martijn Swaagman"
+  },
+  {
+    "name": "@react-native-cookies/cookies",
+    "version": "6.2.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jason Safaiyeh"
+  },
+  {
+    "name": "@react-native-firebase/app",
+    "version": "22.2.1",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Invertase"
+  },
+  {
+    "name": "@react-native-firebase/messaging",
+    "version": "22.2.1",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Invertase"
+  },
+  {
+    "name": "@react-native/assets-registry",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native/babel-plugin-codegen",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native/babel-preset",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native/codegen",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native/community-cli-plugin",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native/debugger-frontend",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native/dev-middleware",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native/gradle-plugin",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native/js-polyfills",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native/metro-babel-transformer",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native/normalize-colors",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-native/virtualized-lists",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-navigation/bottom-tabs",
+    "version": "7.15.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-navigation/core",
+    "version": "7.17.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-navigation/elements",
+    "version": "2.9.14",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-navigation/native",
+    "version": "7.2.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-navigation/native-stack",
+    "version": "7.14.10",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-navigation/routers",
+    "version": "7.5.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@react-navigation/stack",
+    "version": "7.8.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@sideway/address",
+    "version": "4.1.5",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@sideway/formula",
+    "version": "3.0.1",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@sideway/pinpoint",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@sinclair/typebox",
+    "version": "0.27.8",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "sinclairzx81"
+  },
+  {
+    "name": "@sinonjs/commons",
+    "version": "3.0.1",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@sinonjs/fake-timers",
+    "version": "10.3.0",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Christian Johansen"
+  },
+  {
+    "name": "@socket.io/component-emitter",
+    "version": "3.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/babel__core",
+    "version": "7.20.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/babel__generator",
+    "version": "7.6.8",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/babel__template",
+    "version": "7.4.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/babel__traverse",
+    "version": "7.20.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/graceful-fs",
+    "version": "4.1.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/hammerjs",
+    "version": "2.0.46",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/istanbul-lib-coverage",
+    "version": "2.0.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/istanbul-lib-report",
+    "version": "3.0.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/istanbul-reports",
+    "version": "3.0.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/node",
+    "version": "22.13.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/node-forge",
+    "version": "1.3.14",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/react",
+    "version": "19.0.10",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/stack-utils",
+    "version": "2.0.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/yargs",
+    "version": "17.0.33",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/yargs",
+    "version": "15.0.20",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@types/yargs-parser",
+    "version": "21.0.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "@vscode/sudo-prompt",
+    "version": "9.3.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Joran Dirk Greef"
+  },
+  {
+    "name": "abort-controller",
+    "version": "3.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Toru Nagashima"
+  },
+  {
+    "name": "accepts",
+    "version": "1.3.8",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "acorn",
+    "version": "8.14.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "agent-base",
+    "version": "6.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Nathan Rajlich"
+  },
+  {
+    "name": "anser",
+    "version": "1.4.10",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Ionică Bizău"
+  },
+  {
+    "name": "ansi-fragments",
+    "version": "0.2.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Paweł Trysła"
+  },
+  {
+    "name": "ansi-regex",
+    "version": "5.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "ansi-regex",
+    "version": "4.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "ansi-styles",
+    "version": "4.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "ansi-styles",
+    "version": "5.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "ansi-styles",
+    "version": "3.2.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "anymatch",
+    "version": "3.1.3",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Elan Shanker"
+  },
+  {
+    "name": "appdirsjs",
+    "version": "1.2.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "argparse",
+    "version": "1.0.10",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "argparse",
+    "version": "2.0.1",
+    "licenses": [
+      {
+        "id": "Python-2.0",
+        "url": "https://spdx.org/licenses/Python-2.0.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "asap",
+    "version": "2.0.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "ast-types",
+    "version": "0.16.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Ben Newman"
+  },
+  {
+    "name": "astral-regex",
+    "version": "1.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Kevin Mårtensson"
+  },
+  {
+    "name": "async-limiter",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Samuel Reed"
+  },
+  {
+    "name": "asynckit",
+    "version": "0.4.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Alex Indigo"
+  },
+  {
+    "name": "axios",
+    "version": "1.18.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Matt Zabriskie"
+  },
+  {
+    "name": "babel-jest",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "babel-plugin-istanbul",
+    "version": "6.1.1",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Thai Pangsakulyanont @dtinth"
+  },
+  {
+    "name": "babel-plugin-jest-hoist",
+    "version": "29.6.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "babel-plugin-polyfill-corejs2",
+    "version": "0.4.12",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "babel-plugin-polyfill-corejs3",
+    "version": "0.11.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "babel-plugin-polyfill-corejs3",
+    "version": "0.10.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "babel-plugin-polyfill-regenerator",
+    "version": "0.6.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "babel-plugin-syntax-hermes-parser",
+    "version": "0.25.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "babel-plugin-transform-flow-enums",
+    "version": "0.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "babel-preset-current-node-syntax",
+    "version": "1.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Nicolò Ribaudo"
+  },
+  {
+    "name": "babel-preset-jest",
+    "version": "29.6.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "balanced-match",
+    "version": "1.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Julian Gruber"
+  },
+  {
+    "name": "base64-js",
+    "version": "1.5.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "T. Jameson Little"
+  },
+  {
+    "name": "bl",
+    "version": "4.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "body-parser",
+    "version": "1.20.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "boolbase",
+    "version": "1.0.0",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Felix Boehm"
+  },
+  {
+    "name": "brace-expansion",
+    "version": "1.1.18",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Julian Gruber"
+  },
+  {
+    "name": "braces",
+    "version": "3.0.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "browserslist",
+    "version": "4.24.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Andrey Sitnik"
+  },
+  {
+    "name": "bser",
+    "version": "2.1.1",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Wez Furlong"
+  },
+  {
+    "name": "buffer",
+    "version": "5.7.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Feross Aboukhadijeh"
+  },
+  {
+    "name": "buffer-from",
+    "version": "1.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "bytes",
+    "version": "3.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "TJ Holowaychuk"
+  },
+  {
+    "name": "call-bind-apply-helpers",
+    "version": "1.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "call-bound",
+    "version": "1.0.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "caller-callsite",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "caller-path",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "callsites",
+    "version": "3.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "callsites",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "camelcase",
+    "version": "6.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "camelcase",
+    "version": "5.3.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "caniuse-lite",
+    "version": "1.0.30001700",
+    "licenses": [
+      {
+        "id": "CC-BY-4.0",
+        "url": "https://spdx.org/licenses/CC-BY-4.0.html"
+      }
+    ],
+    "publisher": "Ben Briggs"
+  },
+  {
+    "name": "chalk",
+    "version": "4.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "chrome-launcher",
+    "version": "0.15.2",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "The Chromium Authors"
+  },
+  {
+    "name": "chromium-edge-launcher",
+    "version": "0.2.0",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Cezar Augusto"
+  },
+  {
+    "name": "ci-info",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Thomas Watson Steen"
+  },
+  {
+    "name": "ci-info",
+    "version": "3.9.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Thomas Watson Steen"
+  },
+  {
+    "name": "cli-cursor",
+    "version": "3.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "cli-spinners",
+    "version": "2.9.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "cliui",
+    "version": "7.0.4",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "cliui",
+    "version": "8.0.1",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "cliui",
+    "version": "6.0.0",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "clone",
+    "version": "1.0.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Paul Vorbach"
+  },
+  {
+    "name": "clone-deep",
+    "version": "4.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "color",
+    "version": "4.2.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "color-convert",
+    "version": "2.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Heather Arthur"
+  },
+  {
+    "name": "color-convert",
+    "version": "1.9.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Heather Arthur"
+  },
+  {
+    "name": "color-name",
+    "version": "1.1.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "DY"
+  },
+  {
+    "name": "color-name",
+    "version": "1.1.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "DY"
+  },
+  {
+    "name": "color-string",
+    "version": "1.9.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Heather Arthur"
+  },
+  {
+    "name": "colorette",
+    "version": "1.4.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jorge Bucaran"
+  },
+  {
+    "name": "combined-stream",
+    "version": "1.0.8",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Felix Geisendörfer"
+  },
+  {
+    "name": "command-exists",
+    "version": "1.2.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Matthew Conlen"
+  },
+  {
+    "name": "commander",
+    "version": "12.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "TJ Holowaychuk"
+  },
+  {
+    "name": "commander",
+    "version": "9.5.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "TJ Holowaychuk"
+  },
+  {
+    "name": "commander",
+    "version": "2.20.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "TJ Holowaychuk"
+  },
+  {
+    "name": "commondir",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "James Halliday"
+  },
+  {
+    "name": "compressible",
+    "version": "2.0.18",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "compression",
+    "version": "1.8.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "concat-map",
+    "version": "0.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "James Halliday"
+  },
+  {
+    "name": "connect",
+    "version": "3.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "TJ Holowaychuk"
+  },
+  {
+    "name": "content-type",
+    "version": "1.0.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Douglas Christopher Wilson"
+  },
+  {
+    "name": "convert-source-map",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Thorsten Lorenz"
+  },
+  {
+    "name": "core-js-compat",
+    "version": "3.40.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Denis Pushkarev"
+  },
+  {
+    "name": "cosmiconfig",
+    "version": "5.2.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "David Clark"
+  },
+  {
+    "name": "cosmiconfig",
+    "version": "9.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Daniel Fischer"
+  },
+  {
+    "name": "cross-spawn",
+    "version": "7.0.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "André Cruz"
+  },
+  {
+    "name": "css-select",
+    "version": "5.1.0",
+    "licenses": [
+      {
+        "id": "BSD-2-Clause",
+        "url": "https://spdx.org/licenses/BSD-2-Clause.html"
+      }
+    ],
+    "publisher": "Felix Boehm"
+  },
+  {
+    "name": "css-tree",
+    "version": "1.1.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Roman Dvornov"
+  },
+  {
+    "name": "css-what",
+    "version": "6.1.0",
+    "licenses": [
+      {
+        "id": "BSD-2-Clause",
+        "url": "https://spdx.org/licenses/BSD-2-Clause.html"
+      }
+    ],
+    "publisher": "Felix Böhm"
+  },
+  {
+    "name": "csstype",
+    "version": "3.1.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Fredrik Nicol"
+  },
+  {
+    "name": "dayjs",
+    "version": "1.11.13",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "iamkun"
+  },
+  {
+    "name": "debug",
+    "version": "4.4.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Josh Junon"
+  },
+  {
+    "name": "debug",
+    "version": "2.6.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "TJ Holowaychuk"
+  },
+  {
+    "name": "decamelize",
+    "version": "1.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "decode-uri-component",
+    "version": "0.2.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sam Verschueren"
+  },
+  {
+    "name": "deepmerge",
+    "version": "4.3.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "defaults",
+    "version": "1.0.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Elijah Insua"
+  },
+  {
+    "name": "delayed-stream",
+    "version": "1.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Felix Geisendörfer"
+  },
+  {
+    "name": "depd",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Douglas Christopher Wilson"
+  },
+  {
+    "name": "destroy",
+    "version": "1.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jonathan Ong"
+  },
+  {
+    "name": "dom-serializer",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Felix Boehm"
+  },
+  {
+    "name": "domelementtype",
+    "version": "2.3.0",
+    "licenses": [
+      {
+        "id": "BSD-2-Clause",
+        "url": "https://spdx.org/licenses/BSD-2-Clause.html"
+      }
+    ],
+    "publisher": "Felix Boehm"
+  },
+  {
+    "name": "domhandler",
+    "version": "5.0.3",
+    "licenses": [
+      {
+        "id": "BSD-2-Clause",
+        "url": "https://spdx.org/licenses/BSD-2-Clause.html"
+      }
+    ],
+    "publisher": "Felix Boehm"
+  },
+  {
+    "name": "domutils",
+    "version": "3.2.2",
+    "licenses": [
+      {
+        "id": "BSD-2-Clause",
+        "url": "https://spdx.org/licenses/BSD-2-Clause.html"
+      }
+    ],
+    "publisher": "Felix Boehm"
+  },
+  {
+    "name": "dunder-proto",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "ee-first",
+    "version": "1.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jonathan Ong"
+  },
+  {
+    "name": "electron-to-chromium",
+    "version": "1.5.103",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Kilian Valkhof"
+  },
+  {
+    "name": "emoji-regex",
+    "version": "8.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Mathias Bynens"
+  },
+  {
+    "name": "encodeurl",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "encodeurl",
+    "version": "1.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "engine.io-client",
+    "version": "6.6.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "engine.io-parser",
+    "version": "5.2.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "entities",
+    "version": "4.5.0",
+    "licenses": [
+      {
+        "id": "BSD-2-Clause",
+        "url": "https://spdx.org/licenses/BSD-2-Clause.html"
+      }
+    ],
+    "publisher": "Felix Boehm"
+  },
+  {
+    "name": "env-paths",
+    "version": "2.2.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "envinfo",
+    "version": "7.20.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "tabrindle@gmail.com"
+  },
+  {
+    "name": "error-ex",
+    "version": "1.3.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "error-stack-parser",
+    "version": "2.1.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "errorhandler",
+    "version": "1.5.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "es-define-property",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "es-errors",
+    "version": "1.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "es-object-atoms",
+    "version": "1.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "es-set-tostringtag",
+    "version": "2.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "escalade",
+    "version": "3.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Luke Edwards"
+  },
+  {
+    "name": "escape-html",
+    "version": "1.0.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "escape-string-regexp",
+    "version": "4.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "escape-string-regexp",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "esprima",
+    "version": "4.0.1",
+    "licenses": [
+      {
+        "id": "BSD-2-Clause",
+        "url": "https://spdx.org/licenses/BSD-2-Clause.html"
+      }
+    ],
+    "publisher": "Ariya Hidayat"
+  },
+  {
+    "name": "esutils",
+    "version": "2.0.3",
+    "licenses": [
+      {
+        "id": "BSD-2-Clause",
+        "url": "https://spdx.org/licenses/BSD-2-Clause.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "etag",
+    "version": "1.8.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "event-target-shim",
+    "version": "5.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Toru Nagashima"
+  },
+  {
+    "name": "execa",
+    "version": "5.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "exponential-backoff",
+    "version": "3.1.2",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Sami Sayegh"
+  },
+  {
+    "name": "fast-deep-equal",
+    "version": "3.1.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Evgeny Poberezkin"
+  },
+  {
+    "name": "fast-glob",
+    "version": "3.3.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Denis Malinochkin"
+  },
+  {
+    "name": "fast-json-stable-stringify",
+    "version": "2.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "James Halliday"
+  },
+  {
+    "name": "fast-xml-parser",
+    "version": "4.5.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Amit Gupta"
+  },
+  {
+    "name": "fastq",
+    "version": "1.19.0",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Matteo Collina"
+  },
+  {
+    "name": "faye-websocket",
+    "version": "0.11.4",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "James Coglan"
+  },
+  {
+    "name": "fb-watchman",
+    "version": "2.0.2",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Wez Furlong"
+  },
+  {
+    "name": "fill-range",
+    "version": "7.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "filter-obj",
+    "version": "1.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "finalhandler",
+    "version": "1.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Douglas Christopher Wilson"
+  },
+  {
+    "name": "find-cache-dir",
+    "version": "2.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "find-up",
+    "version": "5.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "find-up",
+    "version": "4.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "find-up",
+    "version": "3.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "firebase",
+    "version": "11.3.1",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Firebase"
+  },
+  {
+    "name": "flow-enums-runtime",
+    "version": "0.0.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "flow-parser",
+    "version": "0.261.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Flow Team"
+  },
+  {
+    "name": "follow-redirects",
+    "version": "1.16.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Ruben Verborgh"
+  },
+  {
+    "name": "form-data",
+    "version": "4.0.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Felix Geisendörfer"
+  },
+  {
+    "name": "fresh",
+    "version": "0.5.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "TJ Holowaychuk"
+  },
+  {
+    "name": "fs-extra",
+    "version": "8.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "JP Richardson"
+  },
+  {
+    "name": "fs.realpath",
+    "version": "1.0.0",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Isaac Z. Schlueter"
+  },
+  {
+    "name": "fsevents",
+    "version": "2.3.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "function-bind",
+    "version": "1.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Raynos"
+  },
+  {
+    "name": "gensync",
+    "version": "1.0.0-beta.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Logan Smyth"
+  },
+  {
+    "name": "get-caller-file",
+    "version": "2.0.5",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Stefan Penner"
+  },
+  {
+    "name": "get-intrinsic",
+    "version": "1.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "get-package-type",
+    "version": "0.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Corey Farrell"
+  },
+  {
+    "name": "get-proto",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "get-stream",
+    "version": "6.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "glob",
+    "version": "7.2.3",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Isaac Z. Schlueter"
+  },
+  {
+    "name": "glob-parent",
+    "version": "5.1.2",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Gulp Team"
+  },
+  {
+    "name": "globals",
+    "version": "11.12.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "gopd",
+    "version": "1.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "graceful-fs",
+    "version": "4.2.11",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "has-flag",
+    "version": "4.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "has-symbols",
+    "version": "1.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "has-tostringtag",
+    "version": "1.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "hasown",
+    "version": "2.0.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "hermes-estree",
+    "version": "0.25.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "hermes-parser",
+    "version": "0.25.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "hoist-non-react-statics",
+    "version": "3.3.2",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Michael Ridgway"
+  },
+  {
+    "name": "http-errors",
+    "version": "2.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jonathan Ong"
+  },
+  {
+    "name": "http-errors",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jonathan Ong"
+  },
+  {
+    "name": "http-parser-js",
+    "version": "0.5.10",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Tim Caswell"
+  },
+  {
+    "name": "https-proxy-agent",
+    "version": "5.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Nathan Rajlich"
+  },
+  {
+    "name": "human-signals",
+    "version": "2.1.0",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "ehmicky"
+  },
+  {
+    "name": "iconv-lite",
+    "version": "0.4.24",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Alexander Shtuchkin"
+  },
+  {
+    "name": "idb",
+    "version": "7.1.1",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Jake Archibald"
+  },
+  {
+    "name": "ieee754",
+    "version": "1.2.1",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Feross Aboukhadijeh"
+  },
+  {
+    "name": "image-size",
+    "version": "1.2.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "netroy"
+  },
+  {
+    "name": "import-fresh",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "import-fresh",
+    "version": "3.3.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "imurmurhash",
+    "version": "0.1.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jens Taylor"
+  },
+  {
+    "name": "inflight",
+    "version": "1.0.6",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Isaac Z. Schlueter"
+  },
+  {
+    "name": "inherits",
+    "version": "2.0.4",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "invariant",
+    "version": "2.2.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Andres Suarez"
+  },
+  {
+    "name": "is-arrayish",
+    "version": "0.3.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Qix"
+  },
+  {
+    "name": "is-arrayish",
+    "version": "0.2.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Qix"
+  },
+  {
+    "name": "is-core-module",
+    "version": "2.16.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "is-directory",
+    "version": "0.3.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "is-docker",
+    "version": "2.2.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "is-extglob",
+    "version": "2.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "is-fullwidth-code-point",
+    "version": "3.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "is-fullwidth-code-point",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "is-glob",
+    "version": "4.0.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "is-interactive",
+    "version": "1.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "is-number",
+    "version": "7.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "is-plain-object",
+    "version": "2.0.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "is-stream",
+    "version": "2.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "is-unicode-supported",
+    "version": "0.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "is-wsl",
+    "version": "2.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "is-wsl",
+    "version": "1.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "isexe",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Isaac Z. Schlueter"
+  },
+  {
+    "name": "isobject",
+    "version": "3.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "istanbul-lib-coverage",
+    "version": "3.2.2",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Krishnan Anantheswaran"
+  },
+  {
+    "name": "istanbul-lib-instrument",
+    "version": "5.2.1",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Krishnan Anantheswaran"
+  },
+  {
+    "name": "jest-environment-node",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "jest-get-type",
+    "version": "29.6.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "jest-haste-map",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "jest-message-util",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "jest-mock",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "jest-regex-util",
+    "version": "29.6.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "jest-util",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "jest-validate",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "jest-worker",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "joi",
+    "version": "17.13.4",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "js-tokens",
+    "version": "4.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Simon Lydell"
+  },
+  {
+    "name": "js-yaml",
+    "version": "3.15.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Vladimir Zapparov"
+  },
+  {
+    "name": "js-yaml",
+    "version": "4.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Vladimir Zapparov"
+  },
+  {
+    "name": "jsc-safe-url",
+    "version": "0.2.4",
+    "licenses": [
+      {
+        "id": "0BSD",
+        "url": "https://spdx.org/licenses/0BSD.html"
+      }
+    ],
+    "publisher": "Rob Hogan"
+  },
+  {
+    "name": "jscodeshift",
+    "version": "17.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Felix Kling"
+  },
+  {
+    "name": "jsesc",
+    "version": "3.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Mathias Bynens"
+  },
+  {
+    "name": "jsesc",
+    "version": "3.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Mathias Bynens"
+  },
+  {
+    "name": "json-parse-better-errors",
+    "version": "1.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Kat Marchán"
+  },
+  {
+    "name": "json-parse-even-better-errors",
+    "version": "2.3.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Kat Marchán"
+  },
+  {
+    "name": "json5",
+    "version": "2.2.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Aseem Kishore"
+  },
+  {
+    "name": "jsonfile",
+    "version": "4.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "JP Richardson"
+  },
+  {
+    "name": "kind-of",
+    "version": "6.0.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "kleur",
+    "version": "3.0.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Luke Edwards"
+  },
+  {
+    "name": "launch-editor",
+    "version": "2.14.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Evan You"
+  },
+  {
+    "name": "leven",
+    "version": "3.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "lighthouse-logger",
+    "version": "1.4.2",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "lines-and-columns",
+    "version": "1.2.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Brian Donovan"
+  },
+  {
+    "name": "locate-path",
+    "version": "6.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "locate-path",
+    "version": "5.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "locate-path",
+    "version": "3.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "lodash",
+    "version": "4.18.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "John-David Dalton"
+  },
+  {
+    "name": "lodash.camelcase",
+    "version": "4.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "John-David Dalton"
+  },
+  {
+    "name": "lodash.debounce",
+    "version": "4.0.8",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "John-David Dalton"
+  },
+  {
+    "name": "lodash.throttle",
+    "version": "4.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "John-David Dalton"
+  },
+  {
+    "name": "log-symbols",
+    "version": "4.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "logkitty",
+    "version": "0.7.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Paweł Trysła"
+  },
+  {
+    "name": "long",
+    "version": "5.3.2",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Daniel Wirtz"
+  },
+  {
+    "name": "loose-envify",
+    "version": "1.4.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Andres Suarez"
+  },
+  {
+    "name": "lru-cache",
+    "version": "5.1.1",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Isaac Z. Schlueter"
+  },
+  {
+    "name": "make-dir",
+    "version": "2.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "makeerror",
+    "version": "1.0.12",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Naitik Shah"
+  },
+  {
+    "name": "marky",
+    "version": "1.3.0",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Nolan Lawson"
+  },
+  {
+    "name": "math-intrinsics",
+    "version": "1.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "mdn-data",
+    "version": "2.0.14",
+    "licenses": [
+      {
+        "id": "CC0-1.0",
+        "url": "https://spdx.org/licenses/CC0-1.0.html"
+      }
+    ],
+    "publisher": "Mozilla Developer Network"
+  },
+  {
+    "name": "media-typer",
+    "version": "0.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Douglas Christopher Wilson"
+  },
+  {
+    "name": "memoize-one",
+    "version": "5.2.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Alex Reardon"
+  },
+  {
+    "name": "merge-stream",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Stephen Sugden"
+  },
+  {
+    "name": "merge2",
+    "version": "1.4.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-babel-transformer",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-cache",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-cache-key",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-config",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-core",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-file-map",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-minify-terser",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-resolver",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-runtime",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-source-map",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-symbolicate",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-transform-plugins",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "metro-transform-worker",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "micromatch",
+    "version": "4.0.8",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "mime",
+    "version": "2.6.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Robert Kieffer"
+  },
+  {
+    "name": "mime",
+    "version": "1.6.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Robert Kieffer"
+  },
+  {
+    "name": "mime-db",
+    "version": "1.52.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "mime-db",
+    "version": "1.54.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "mime-types",
+    "version": "2.1.35",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "mimic-fn",
+    "version": "2.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "minimatch",
+    "version": "3.1.5",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Isaac Z. Schlueter"
+  },
+  {
+    "name": "mkdirp",
+    "version": "1.0.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "moment",
+    "version": "2.30.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Iskren Ivov Chernev"
+  },
+  {
+    "name": "ms",
+    "version": "2.1.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "ms",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "nanoid",
+    "version": "3.3.18",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Andrey Sitnik"
+  },
+  {
+    "name": "negotiator",
+    "version": "0.6.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "negotiator",
+    "version": "0.6.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "neo-async",
+    "version": "2.6.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "nocache",
+    "version": "3.0.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Adam Baldwin"
+  },
+  {
+    "name": "node-forge",
+    "version": "1.4.0",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      },
+      {
+        "id": "GPL-2.0",
+        "url": "https://spdx.org/licenses/GPL-2.0.html"
+      }
+    ],
+    "publisher": "Digital Bazaar, Inc."
+  },
+  {
+    "name": "node-int64",
+    "version": "0.4.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Robert Kieffer"
+  },
+  {
+    "name": "node-releases",
+    "version": "2.0.19",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sergey Rubanov"
+  },
+  {
+    "name": "node-stream-zip",
+    "version": "1.15.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Antelle"
+  },
+  {
+    "name": "normalize-path",
+    "version": "3.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "npm-run-path",
+    "version": "4.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "nth-check",
+    "version": "2.1.1",
+    "licenses": [
+      {
+        "id": "BSD-2-Clause",
+        "url": "https://spdx.org/licenses/BSD-2-Clause.html"
+      }
+    ],
+    "publisher": "Felix Boehm"
+  },
+  {
+    "name": "nullthrows",
+    "version": "1.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Andres Suarez"
+  },
+  {
+    "name": "ob1",
+    "version": "0.81.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "object-assign",
+    "version": "4.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "object-inspect",
+    "version": "1.13.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "James Halliday"
+  },
+  {
+    "name": "on-finished",
+    "version": "2.4.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "on-finished",
+    "version": "2.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "on-headers",
+    "version": "1.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Douglas Christopher Wilson"
+  },
+  {
+    "name": "once",
+    "version": "1.4.0",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Isaac Z. Schlueter"
+  },
+  {
+    "name": "onetime",
+    "version": "5.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "open",
+    "version": "7.4.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "open",
+    "version": "6.4.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "ora",
+    "version": "5.4.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "p-limit",
+    "version": "3.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "p-limit",
+    "version": "2.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "p-locate",
+    "version": "5.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "p-locate",
+    "version": "4.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "p-locate",
+    "version": "3.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "p-try",
+    "version": "2.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "parent-module",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "parse-json",
+    "version": "4.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "parse-json",
+    "version": "5.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "parseurl",
+    "version": "1.3.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "path-exists",
+    "version": "4.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "path-exists",
+    "version": "3.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "path-is-absolute",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "path-key",
+    "version": "3.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "path-parse",
+    "version": "1.0.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Javier Blanco"
+  },
+  {
+    "name": "picocolors",
+    "version": "1.1.1",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Alexey Raspopov"
+  },
+  {
+    "name": "picomatch",
+    "version": "2.3.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "pify",
+    "version": "4.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "pirates",
+    "version": "4.0.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Ari Porad"
+  },
+  {
+    "name": "pkg-dir",
+    "version": "3.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "pretty-format",
+    "version": "29.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "James Kyle"
+  },
+  {
+    "name": "pretty-format",
+    "version": "26.6.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "James Kyle"
+  },
+  {
+    "name": "promise",
+    "version": "8.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "ForbesLindesay"
+  },
+  {
+    "name": "prompts",
+    "version": "2.4.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Terkel Gjervig"
+  },
+  {
+    "name": "prop-types",
+    "version": "15.8.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "protobufjs",
+    "version": "7.6.5",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Daniel Wirtz"
+  },
+  {
+    "name": "proxy-from-env",
+    "version": "2.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Rob Wu"
+  },
+  {
+    "name": "qs",
+    "version": "6.15.3",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "query-string",
+    "version": "7.1.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "queue",
+    "version": "6.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jesse Tane"
+  },
+  {
+    "name": "queue-microtask",
+    "version": "1.2.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Feross Aboukhadijeh"
+  },
+  {
+    "name": "range-parser",
+    "version": "1.2.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "TJ Holowaychuk"
+  },
+  {
+    "name": "raw-body",
+    "version": "2.5.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jonathan Ong"
+  },
+  {
+    "name": "react",
+    "version": "19.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "react-devtools-core",
+    "version": "6.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "react-freeze",
+    "version": "1.0.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "react-is",
+    "version": "19.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "react-is",
+    "version": "16.13.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "react-is",
+    "version": "18.3.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "react-is",
+    "version": "17.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "react-native",
+    "version": "0.78.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "react-native-calendars",
+    "version": "1.1314.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Wix.com"
+  },
+  {
+    "name": "react-native-config",
+    "version": "1.5.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Pedro Belo"
+  },
+  {
+    "name": "react-native-device-info",
+    "version": "14.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Rebecca Hughes"
+  },
+  {
+    "name": "react-native-encrypted-storage",
+    "version": "4.0.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "emeraldsanto"
+  },
+  {
+    "name": "react-native-gesture-handler",
+    "version": "2.30.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Krzysztof Magiera"
+  },
+  {
+    "name": "react-native-is-edge-to-edge",
+    "version": "1.2.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Mathieu Acthernoene"
+  },
+  {
+    "name": "react-native-keyboard-controller",
+    "version": "1.18.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Kiryl Ziusko"
+  },
+  {
+    "name": "react-native-modal-datetime-picker",
+    "version": "18.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Mazzarolo Matteo"
+  },
+  {
+    "name": "react-native-reanimated",
+    "version": "4.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Krzysztof Magiera"
+  },
+  {
+    "name": "react-native-safe-area-context",
+    "version": "5.7.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Janic Duplessis"
+  },
+  {
+    "name": "react-native-screens",
+    "version": "4.9.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Krzysztof Magiera"
+  },
+  {
+    "name": "react-native-svg",
+    "version": "15.15.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "react-native-swipe-gestures",
+    "version": "1.0.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Goran Lepur"
+  },
+  {
+    "name": "react-native-vector-icons",
+    "version": "10.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Joel Arvidsson"
+  },
+  {
+    "name": "react-native-worklets",
+    "version": "0.5.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "react-refresh",
+    "version": "0.14.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "readable-stream",
+    "version": "3.6.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "readline",
+    "version": "1.3.0",
+    "licenses": [
+      {
+        "id": "BSD",
+        "url": null
+      }
+    ],
+    "publisher": "craig brookes"
+  },
+  {
+    "name": "recast",
+    "version": "0.23.9",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Ben Newman"
+  },
+  {
+    "name": "recyclerlistview",
+    "version": "4.2.3",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "naqvitalha"
+  },
+  {
+    "name": "regenerate",
+    "version": "1.4.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Mathias Bynens"
+  },
+  {
+    "name": "regenerate-unicode-properties",
+    "version": "10.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Mathias Bynens"
+  },
+  {
+    "name": "regenerator-runtime",
+    "version": "0.13.11",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Ben Newman"
+  },
+  {
+    "name": "regenerator-runtime",
+    "version": "0.14.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Ben Newman"
+  },
+  {
+    "name": "regenerator-transform",
+    "version": "0.15.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Ben Newman"
+  },
+  {
+    "name": "regexpu-core",
+    "version": "6.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Mathias Bynens"
+  },
+  {
+    "name": "regjsgen",
+    "version": "0.8.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Benjamin Tan"
+  },
+  {
+    "name": "regjsparser",
+    "version": "0.12.0",
+    "licenses": [
+      {
+        "id": "BSD-2-Clause",
+        "url": "https://spdx.org/licenses/BSD-2-Clause.html"
+      }
+    ],
+    "publisher": "'Julian Viereck'"
+  },
+  {
+    "name": "require-directory",
+    "version": "2.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Troy Goode"
+  },
+  {
+    "name": "require-main-filename",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "resolve",
+    "version": "1.22.10",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "James Halliday"
+  },
+  {
+    "name": "resolve-from",
+    "version": "5.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "resolve-from",
+    "version": "3.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "resolve-from",
+    "version": "4.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "restore-cursor",
+    "version": "3.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "reusify",
+    "version": "1.0.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Matteo Collina"
+  },
+  {
+    "name": "rimraf",
+    "version": "3.0.2",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Isaac Z. Schlueter"
+  },
+  {
+    "name": "run-parallel",
+    "version": "1.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Feross Aboukhadijeh"
+  },
+  {
+    "name": "safe-buffer",
+    "version": "5.2.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Feross Aboukhadijeh"
+  },
+  {
+    "name": "safer-buffer",
+    "version": "2.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Nikita Skovoroda"
+  },
+  {
+    "name": "scheduler",
+    "version": "0.25.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "selfsigned",
+    "version": "2.4.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "José F. Romaniello"
+  },
+  {
+    "name": "semver",
+    "version": "7.7.2",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "GitHub Inc."
+  },
+  {
+    "name": "semver",
+    "version": "6.3.1",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "GitHub Inc."
+  },
+  {
+    "name": "semver",
+    "version": "7.7.4",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "GitHub Inc."
+  },
+  {
+    "name": "semver",
+    "version": "7.7.1",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "GitHub Inc."
+  },
+  {
+    "name": "semver",
+    "version": "7.7.3",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "GitHub Inc."
+  },
+  {
+    "name": "semver",
+    "version": "5.7.2",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "GitHub Inc."
+  },
+  {
+    "name": "send",
+    "version": "0.19.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "TJ Holowaychuk"
+  },
+  {
+    "name": "serialize-error",
+    "version": "2.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "serve-static",
+    "version": "1.16.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Douglas Christopher Wilson"
+  },
+  {
+    "name": "set-blocking",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "setprototypeof",
+    "version": "1.2.0",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Wes Todd"
+  },
+  {
+    "name": "sf-symbols-typescript",
+    "version": "2.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Fernando Rojo"
+  },
+  {
+    "name": "shallow-clone",
+    "version": "3.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "shebang-command",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Kevin Mårtensson"
+  },
+  {
+    "name": "shebang-regex",
+    "version": "3.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "shell-quote",
+    "version": "1.10.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "James Halliday"
+  },
+  {
+    "name": "side-channel",
+    "version": "1.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "side-channel-list",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "side-channel-map",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "side-channel-weakmap",
+    "version": "1.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "signal-exit",
+    "version": "4.1.0",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "signal-exit",
+    "version": "3.0.7",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "simple-swizzle",
+    "version": "0.2.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Qix"
+  },
+  {
+    "name": "sisteransi",
+    "version": "1.0.5",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Terkel Gjervig"
+  },
+  {
+    "name": "slash",
+    "version": "3.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "slice-ansi",
+    "version": "2.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "socket.io-client",
+    "version": "4.8.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "socket.io-parser",
+    "version": "4.2.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "source-map",
+    "version": "0.6.1",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Nick Fitzgerald"
+  },
+  {
+    "name": "source-map",
+    "version": "0.5.7",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Nick Fitzgerald"
+  },
+  {
+    "name": "source-map-support",
+    "version": "0.5.21",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "split-on-first",
+    "version": "1.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "sprintf-js",
+    "version": "1.0.3",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Alexandru Marasteanu"
+  },
+  {
+    "name": "stack-utils",
+    "version": "2.0.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "James Talmage"
+  },
+  {
+    "name": "stackframe",
+    "version": "1.3.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "stacktrace-parser",
+    "version": "0.1.11",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Georg Tavonius"
+  },
+  {
+    "name": "statuses",
+    "version": "1.5.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "statuses",
+    "version": "2.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "statuses",
+    "version": "2.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "strict-uri-encode",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Kevin Mårtensson"
+  },
+  {
+    "name": "string_decoder",
+    "version": "1.3.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "string-width",
+    "version": "4.2.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "strip-ansi",
+    "version": "6.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "strip-ansi",
+    "version": "5.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "strip-final-newline",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "strnum",
+    "version": "1.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Amit Gupta"
+  },
+  {
+    "name": "supports-color",
+    "version": "7.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "supports-color",
+    "version": "8.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "supports-preserve-symlinks-flag",
+    "version": "1.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jordan Harband"
+  },
+  {
+    "name": "terser",
+    "version": "5.39.2",
+    "licenses": [
+      {
+        "id": "BSD-2-Clause",
+        "url": "https://spdx.org/licenses/BSD-2-Clause.html"
+      }
+    ],
+    "publisher": "Mihai Bazon"
+  },
+  {
+    "name": "test-exclude",
+    "version": "6.0.0",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "throat",
+    "version": "5.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "ForbesLindesay"
+  },
+  {
+    "name": "tiny-invariant",
+    "version": "1.3.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Alex Reardon"
+  },
+  {
+    "name": "tmp",
+    "version": "0.2.7",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "KARASZI István"
+  },
+  {
+    "name": "tmpl",
+    "version": "1.0.5",
+    "licenses": [
+      {
+        "id": "BSD-3-Clause",
+        "url": "https://spdx.org/licenses/BSD-3-Clause.html"
+      }
+    ],
+    "publisher": "Naitik Shah"
+  },
+  {
+    "name": "to-regex-range",
+    "version": "5.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jon Schlinkert"
+  },
+  {
+    "name": "toidentifier",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Douglas Christopher Wilson"
+  },
+  {
+    "name": "ts-object-utils",
+    "version": "0.0.5",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "naqvitalha"
+  },
+  {
+    "name": "tslib",
+    "version": "2.8.1",
+    "licenses": [
+      {
+        "id": "0BSD",
+        "url": "https://spdx.org/licenses/0BSD.html"
+      }
+    ],
+    "publisher": "Microsoft Corp."
+  },
+  {
+    "name": "type-detect",
+    "version": "4.0.8",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jake Luer"
+  },
+  {
+    "name": "type-fest",
+    "version": "0.7.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      },
+      {
+        "id": "CC0-1.0",
+        "url": "https://spdx.org/licenses/CC0-1.0.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "type-is",
+    "version": "1.6.18",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "typescript",
+    "version": "5.0.4",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Microsoft Corp."
+  },
+  {
+    "name": "undici-types",
+    "version": "6.20.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "unicode-canonical-property-names-ecmascript",
+    "version": "2.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Mathias Bynens"
+  },
+  {
+    "name": "unicode-match-property-ecmascript",
+    "version": "2.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Mathias Bynens"
+  },
+  {
+    "name": "unicode-match-property-value-ecmascript",
+    "version": "2.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Mathias Bynens"
+  },
+  {
+    "name": "unicode-property-aliases-ecmascript",
+    "version": "2.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Mathias Bynens"
+  },
+  {
+    "name": "universalify",
+    "version": "0.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Ryan Zimmerman"
+  },
+  {
+    "name": "unpipe",
+    "version": "1.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Douglas Christopher Wilson"
+  },
+  {
+    "name": "update-browserslist-db",
+    "version": "1.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Andrey Sitnik"
+  },
+  {
+    "name": "use-latest-callback",
+    "version": "0.2.6",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Satyajit Sahoo"
+  },
+  {
+    "name": "use-sync-external-store",
+    "version": "1.6.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "util-deprecate",
+    "version": "1.0.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Nathan Rajlich"
+  },
+  {
+    "name": "utils-merge",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Jared Hanson"
+  },
+  {
+    "name": "vary",
+    "version": "1.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Douglas Christopher Wilson"
+  },
+  {
+    "name": "vlq",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Rich Harris"
+  },
+  {
+    "name": "walker",
+    "version": "1.0.8",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Naitik Shah"
+  },
+  {
+    "name": "warn-once",
+    "version": "0.1.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Satyajit Sahoo"
+  },
+  {
+    "name": "wcwidth",
+    "version": "1.0.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Tim Oxley"
+  },
+  {
+    "name": "web-vitals",
+    "version": "4.2.4",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "Philip Walton"
+  },
+  {
+    "name": "websocket-driver",
+    "version": "0.7.5",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "James Coglan"
+  },
+  {
+    "name": "websocket-extensions",
+    "version": "0.1.4",
+    "licenses": [
+      {
+        "id": "Apache-2.0",
+        "url": "https://spdx.org/licenses/Apache-2.0.html"
+      }
+    ],
+    "publisher": "James Coglan"
+  },
+  {
+    "name": "whatwg-fetch",
+    "version": "3.6.20",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "which",
+    "version": "2.0.2",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Isaac Z. Schlueter"
+  },
+  {
+    "name": "which-module",
+    "version": "2.0.1",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "nexdrew"
+  },
+  {
+    "name": "wrap-ansi",
+    "version": "7.0.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "wrap-ansi",
+    "version": "6.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  },
+  {
+    "name": "wrappy",
+    "version": "1.0.2",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Isaac Z. Schlueter"
+  },
+  {
+    "name": "write-file-atomic",
+    "version": "5.0.1",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "GitHub Inc."
+  },
+  {
+    "name": "write-file-atomic",
+    "version": "4.0.2",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "GitHub Inc."
+  },
+  {
+    "name": "ws",
+    "version": "6.2.4",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Einar Otto Stangvik"
+  },
+  {
+    "name": "ws",
+    "version": "7.5.11",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Einar Otto Stangvik"
+  },
+  {
+    "name": "ws",
+    "version": "8.21.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Einar Otto Stangvik"
+  },
+  {
+    "name": "xdate",
+    "version": "0.8.3",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      },
+      {
+        "id": "GPL-2.0",
+        "url": "https://spdx.org/licenses/GPL-2.0.html"
+      }
+    ],
+    "publisher": "Adam Shaw"
+  },
+  {
+    "name": "xmlhttprequest-ssl",
+    "version": "2.1.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Michael de Wit"
+  },
+  {
+    "name": "y18n",
+    "version": "5.0.8",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "y18n",
+    "version": "4.0.3",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "yallist",
+    "version": "3.1.1",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Isaac Z. Schlueter"
+  },
+  {
+    "name": "yaml",
+    "version": "2.8.3",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Eemeli Aro"
+  },
+  {
+    "name": "yargs",
+    "version": "16.2.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "yargs",
+    "version": "17.7.2",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "yargs",
+    "version": "15.4.1",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": null
+  },
+  {
+    "name": "yargs-parser",
+    "version": "20.2.9",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "yargs-parser",
+    "version": "21.1.1",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "yargs-parser",
+    "version": "18.1.3",
+    "licenses": [
+      {
+        "id": "ISC",
+        "url": "https://spdx.org/licenses/ISC.html"
+      }
+    ],
+    "publisher": "Ben Coe"
+  },
+  {
+    "name": "yocto-queue",
+    "version": "0.1.0",
+    "licenses": [
+      {
+        "id": "MIT",
+        "url": "https://spdx.org/licenses/MIT.html"
+      }
+    ],
+    "publisher": "Sindre Sorhus"
+  }
+]

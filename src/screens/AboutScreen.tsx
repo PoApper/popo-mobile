@@ -238,6 +238,28 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
             ))}
           </View>
         </View>
+
+        {/* 오픈소스 라이선스 */}
+        <TouchableOpacity
+          style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('OpenSourceLicenses')}>
+          <View style={[styles.sectionHeaderRow, styles.noMargin]}>
+            <Text
+              style={[
+                styles.sectionTitle,
+                styles.noMargin,
+                {color: textColor},
+              ]}>
+              오픈소스 라이선스
+            </Text>
+            <Icon
+              name="description"
+              size={22}
+              color={isDarkMode ? '#818CF8' : '#4F46E5'}
+            />
+          </View>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -271,6 +293,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 12,
+  },
+  /** 본문 없이 제목 행만 있는 카드의 아래 여백 제거 */
+  noMargin: {
+    marginBottom: 0,
   },
   row: {
     flexDirection: 'row',
