@@ -33,15 +33,25 @@ const listPackageDirs = () => {
   return stdout.split('\n').filter(line => line.includes('node_modules'));
 };
 
+/**
+ * 파일명 어디에든 licen[cs]e/copying이 들어가면 라이선스 파일로 본다.
+ * `MIT-LICENSE.txt`처럼 접두어가 붙는 경우가 있어 앞부분만 보면 놓친다.
+ * 듀얼 라이선스 패키지는 파일이 여러 개이므로 전부 이어 붙인다.
+ */
 const readLicenseText = dir => {
-  const file = fs
-    .readdirSync(dir)
-    .find(name => /^(licen[cs]e|copying)/i.test(name));
-  if (!file) return null;
-  const fullPath = path.join(dir, file);
-  return fs.statSync(fullPath).isFile()
-    ? fs.readFileSync(fullPath, 'utf8').trim()
-    : null;
+  const files = fs
+    .readdirSync(dir, {withFileTypes: true})
+    .filter(entry => entry.isFile() && /licen[cs]e|copying/i.test(entry.name))
+    .map(entry => entry.name)
+    .sort();
+  if (!files.length) return null;
+
+  return files
+    .map(name => {
+      const body = fs.readFileSync(path.join(dir, name), 'utf8').trim();
+      return files.length > 1 ? `[${name}]\n\n${body}` : body;
+    })
+    .join('\n\n');
 };
 
 /** package.json의 license는 문자열이거나 구형 licenses 배열이다. */
