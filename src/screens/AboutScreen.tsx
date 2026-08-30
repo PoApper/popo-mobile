@@ -238,6 +238,26 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
             ))}
           </View>
         </View>
+
+        {/* 오픈소스 라이선스 */}
+        <TouchableOpacity
+          style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('OpenSourceLicenses')}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={[styles.sectionTitle, {color: textColor}]}>
+              오픈소스 라이선스
+            </Text>
+            <Icon
+              name="description"
+              size={22}
+              color={isDarkMode ? '#818CF8' : '#4F46E5'}
+            />
+          </View>
+          <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
+            POPO가 사용하는 오픈소스 소프트웨어 목록입니다
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
