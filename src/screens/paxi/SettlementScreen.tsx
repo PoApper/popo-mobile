@@ -16,6 +16,7 @@ import {RouteProp, useRoute} from '@react-navigation/native';
 
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
+import {getAxiosErrorInfo} from '@utils/axios-error';
 import {SettlementCreateData, SettlementInfoData} from '@interfaces/paxi';
 import {PaxiUserMy} from '@interfaces/paxi';
 
@@ -93,9 +94,12 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
           }
         })
         .catch(error => {
+          const {detail} = getAxiosErrorInfo(error);
           Alert.alert(
             '실패',
-            `정산 요청에 실패했습니다: ${error.message} ${error.response.data.message}`,
+            `정산 요청에 실패했습니다: ${
+              detail ?? '알 수 없는 오류가 발생했습니다.'
+            }`,
           );
         });
     }

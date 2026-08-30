@@ -42,6 +42,7 @@ import MsgModifyModal from '@components/chat/MsgModifyModal';
 import UserInfoModal from '@components/chat/UserInfoModal';
 import {ChatEvent} from '../../constants/socket-events';
 import {updateMuteStatus} from '@utils/mute';
+import {getAxiosErrorInfo} from '@utils/axios-error';
 
 type NewChatScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'NewChat'>;
@@ -94,7 +95,8 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       })
       .catch(err => {
         console.error(err);
-        Alert.alert('Error', err.response.data.message, [
+        const {detail} = getAxiosErrorInfo(err);
+        Alert.alert('Error', detail ?? '알 수 없는 오류가 발생했습니다.', [
           {
             text: 'OK',
             onPress: () => navigation.navigate('Home'),

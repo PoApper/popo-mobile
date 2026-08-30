@@ -18,6 +18,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
+import {getAxiosErrorInfo} from '@utils/axios-error';
 import PrivacyPolicy from '@components/PrivacyPolicy';
 
 type SignupScreenProps = {
@@ -116,7 +117,11 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
         );
       })
       .catch(err => {
-        Alert.alert('회원가입 실패', err.response.data.message);
+        const {detail} = getAxiosErrorInfo(err);
+        Alert.alert(
+          '회원가입 실패',
+          detail ?? '알 수 없는 오류가 발생했습니다.',
+        );
       });
   };
 
