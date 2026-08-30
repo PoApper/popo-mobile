@@ -30,13 +30,13 @@ cp .env.example .env
 
 ## 실행
 
-Metro 번들러를 띄운 뒤, 별도 터미널에서 플랫폼 빌드를 실행합니다.
-
 ```bash
-npm run start     # Metro 번들러
 npm run android   # Android (dev 서버 연결)
 npm run ios       # iOS (dev 서버 연결)
 ```
+
+Metro 번들러는 두 명령이 알아서 띄웁니다. 이미 떠 있으면 그걸 재사용하고, 없으면 새 터미널 창에 실행합니다.
+직접 띄우려면 `npm run start`, 자동 실행을 끄려면 `--no-packager`를 붙입니다.
 
 iOS는 처음 받았거나 `package.json`이 바뀐 뒤에는 `cd ios && pod install`을 먼저 실행해야 합니다.
 
