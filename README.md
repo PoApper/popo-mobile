@@ -35,17 +35,14 @@ npm run android   # Android (dev 서버 연결)
 npm run ios       # iOS (dev 서버 연결)
 ```
 
-Metro 번들러는 두 명령이 알아서 띄웁니다. 이미 떠 있으면 그걸 재사용하고, 없으면 새 터미널 창에 실행합니다.
-직접 띄우려면 `npm run start`, 자동 실행을 끄려면 `--no-packager`를 붙입니다.
-
 iOS는 처음 받았거나 `package.json`이 바뀐 뒤에는 `cd ios && pod install`을 먼저 실행해야 합니다.
 
 프로덕션 서버에 붙이려면 `npm run android:prod`, `npm run ios:prod`를 씁니다.
 
 플랫폼별 상세는 각 문서를 참고하세요.
 
-- **[Android 가이드](./android/README.md)** — 에뮬레이터 선택(Google Play 지원 필수), 로그 확인, 빌드 트러블슈팅, 딥링크 테스트
-- **[iOS 가이드](./ios/README.md)** — CocoaPods, Xcode 빌드, 캐시 제거, 딥링크 테스트
+- **[Android 가이드](./android/README.md)**
+- **[iOS 가이드](./ios/README.md)**
 
 ## 앱 버전 변경
 
