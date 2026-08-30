@@ -115,5 +115,6 @@ export type OtherStackParamList = {
     selectedDate: string;
   };
   About: undefined;
+  OpenSourceLicenses: undefined;
   Recruiting: undefined;
 };

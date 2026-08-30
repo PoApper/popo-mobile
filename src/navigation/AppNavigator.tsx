@@ -21,6 +21,7 @@ import LeaveScreen from '@screens/auth/LeaveScreen';
 import UserDetailScreen from '@screens/auth/UserDetailScreen';
 import DeveloperPage from '@screens/auth/DeveloperPage';
 import AboutScreen from '@screens/AboutScreen';
+import OpenSourceLicensesScreen from '@screens/OpenSourceLicensesScreen';
 import RecruitingScreen from '@screens/RecruitingScreen';
 
 // Paxi Screens
@@ -194,6 +195,10 @@ const AppNavigator = () => {
             component={EquipmentReservationApplyScreen}
           />
           <Stack.Screen name="About" component={AboutScreen} />
+          <Stack.Screen
+            name="OpenSourceLicenses"
+            component={OpenSourceLicensesScreen}
+          />
           <Stack.Screen name="Recruiting" component={RecruitingScreen} />
 
           {/* Main Navigators */}
