@@ -2,6 +2,8 @@ import React, {useCallback, useState} from 'react';
 import {
   FlatList,
   Linking,
+  Modal,
+  Pressable,
   StatusBar,
   StyleSheet,
   Text,
@@ -14,9 +16,9 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import CommonHeader from '@components/CommonHeader';
 import {useTheme} from '@styles/theme';
-import ossLicenses from '@assets/oss-licenses.json';
+import packages from '@assets/oss-licenses.json';
 
-const {packages, texts} = ossLicenses;
+type OssPackage = (typeof packages)[number];
 
 type OpenSourceLicensesScreenProps = {
   navigation: NativeStackNavigationProp<
@@ -29,9 +31,9 @@ const OpenSourceLicensesScreen = ({
   navigation,
 }: OpenSourceLicensesScreenProps) => {
   const {isDarkMode, colors} = useTheme();
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [selected, setSelected] = useState<OssPackage | null>(null);
 
-  const openHomepage = useCallback(async (url: string) => {
+  const openUrl = useCallback(async (url: string) => {
     try {
       await Linking.openURL(url);
     } catch (e) {
@@ -39,69 +41,42 @@ const OpenSourceLicensesScreen = ({
     }
   }, []);
 
-  const renderItem = useCallback(
-    ({item}: {item: (typeof packages)[number]}) => {
-      const {homepage, publisher} = item;
-      const id = `${item.name}@${item.version}`;
-      const isExpanded = expandedId === id;
-      const text = item.textIndex === -1 ? null : texts[item.textIndex];
-
-      return (
-        <View style={[styles.item, {borderBottomColor: colors.border.primary}]}>
-          <TouchableOpacity
-            style={styles.itemHeader}
-            onPress={() => setExpandedId(isExpanded ? null : id)}
-            accessibilityRole="button"
-            accessibilityState={{expanded: isExpanded}}>
-            <View style={styles.itemTitle}>
-              <Text style={[styles.name, {color: colors.text.primary}]}>
-                {item.name}
-              </Text>
-              <Text style={[styles.version, {color: colors.text.tertiary}]}>
-                {item.version}
-              </Text>
-            </View>
-            <Text style={[styles.license, {color: colors.text.secondary}]}>
-              {item.license}
-            </Text>
-          </TouchableOpacity>
-
-          {isExpanded && (
-            <View style={styles.detail}>
-              {publisher && (
-                <Text
-                  style={[styles.publisher, {color: colors.text.secondary}]}>
-                  저작권자: {publisher}
-                </Text>
-              )}
-              {text ? (
-                <Text
-                  style={[styles.licenseText, {color: colors.text.secondary}]}>
-                  {text}
-                </Text>
-              ) : (
-                <Text
-                  style={[styles.licenseText, {color: colors.text.tertiary}]}>
-                  이 패키지는 라이선스 전문을 포함하고 있지 않습니다.
-                  {'\n'}
-                  아래 링크에서 원문을 확인할 수 있습니다.
-                </Text>
-              )}
-              {homepage && (
-                <TouchableOpacity
-                  onPress={() => openHomepage(homepage)}
-                  accessibilityRole="link">
-                  <Text style={[styles.homepage, {color: colors.text.link}]}>
-                    {homepage}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          )}
-        </View>
-      );
+  /** 라이선스가 하나뿐이면 바로 열고, 여러 개거나 링크가 없으면 모달로 안내한다. */
+  const handlePress = useCallback(
+    (item: OssPackage) => {
+      const [only] = item.licenses;
+      if (item.licenses.length === 1 && only.url) {
+        openUrl(only.url);
+        return;
+      }
+      setSelected(item);
     },
-    [colors, expandedId, openHomepage],
+    [openUrl],
+  );
+
+  const renderItem = useCallback(
+    ({item}: {item: OssPackage}) => (
+      <TouchableOpacity
+        style={[styles.item, {borderBottomColor: colors.border.primary}]}
+        onPress={() => handlePress(item)}
+        accessibilityRole="link"
+        accessibilityLabel={`${item.name} 라이선스 보기`}>
+        <View style={styles.itemTitle}>
+          <Text style={[styles.name, {color: colors.text.primary}]}>
+            {item.name}
+          </Text>
+          <Text style={[styles.meta, {color: colors.text.tertiary}]}>
+            {item.publisher
+              ? `${item.version} · ${item.publisher}`
+              : item.version}
+          </Text>
+        </View>
+        <Text style={[styles.license, {color: colors.text.secondary}]}>
+          {item.licenses.map(license => license.id).join(', ')}
+        </Text>
+      </TouchableOpacity>
+    ),
+    [colors, handlePress],
   );
 
   return (
@@ -117,13 +92,77 @@ const OpenSourceLicensesScreen = ({
         data={packages}
         keyExtractor={item => `${item.name}@${item.version}`}
         renderItem={renderItem}
-        ListHeaderComponent={
-          <Text style={[styles.intro, {color: colors.text.secondary}]}>
-            POPO는 아래 오픈소스 소프트웨어를 사용하고 있습니다. 각 프로젝트의
-            개발자분들께 감사드립니다.
-          </Text>
-        }
       />
+
+      <Modal
+        visible={selected !== null}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setSelected(null)}>
+        <View style={[styles.overlay, {backgroundColor: colors.overlay}]}>
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={() => setSelected(null)}
+            accessibilityLabel="닫기"
+          />
+          <View
+            style={[
+              styles.card,
+              {
+                backgroundColor: colors.background.elevated,
+                borderColor: colors.border.primary,
+              },
+            ]}>
+            <Text style={[styles.cardTitle, {color: colors.text.primary}]}>
+              {selected?.name}
+            </Text>
+
+            {selected?.licenses.map(license =>
+              license.url ? (
+                <TouchableOpacity
+                  key={license.id}
+                  style={[
+                    styles.licenseRow,
+                    {borderColor: colors.border.primary},
+                  ]}
+                  onPress={() => {
+                    setSelected(null);
+                    openUrl(license.url as string);
+                  }}
+                  accessibilityRole="link">
+                  <Text style={[styles.licenseName, {color: colors.text.link}]}>
+                    {license.id}
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <View
+                  key={license.id}
+                  style={[
+                    styles.licenseRow,
+                    {borderColor: colors.border.primary},
+                  ]}>
+                  <Text
+                    style={[styles.licenseName, {color: colors.text.tertiary}]}>
+                    {license.id}
+                  </Text>
+                  <Text
+                    style={[styles.licenseHint, {color: colors.text.tertiary}]}>
+                    표준 라이선스 페이지가 없습니다
+                  </Text>
+                </View>
+              ),
+            )}
+
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setSelected(null)}>
+              <Text style={[styles.closeText, {color: colors.text.secondary}]}>
+                닫기
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -132,19 +171,12 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  intro: {
-    fontSize: 14,
-    lineHeight: 20,
-    padding: 16,
-  },
   item: {
-    borderBottomWidth: 1,
-    paddingHorizontal: 16,
-  },
-  itemHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    paddingHorizontal: 16,
     paddingVertical: 14,
   },
   itemTitle: {
@@ -155,29 +187,48 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
   },
-  version: {
+  meta: {
     fontSize: 12,
     marginTop: 2,
   },
   license: {
     fontSize: 12,
   },
-  detail: {
-    paddingBottom: 16,
+  overlay: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
   },
-  publisher: {
-    fontSize: 12,
+  card: {
+    width: '100%',
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 20,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  licenseRow: {
+    borderTopWidth: 1,
+    paddingVertical: 14,
+  },
+  licenseName: {
+    fontSize: 15,
     fontWeight: '500',
-    marginBottom: 8,
   },
-  licenseText: {
+  licenseHint: {
     fontSize: 12,
-    lineHeight: 18,
+    marginTop: 2,
   },
-  homepage: {
-    fontSize: 12,
-    marginTop: 12,
-    textDecorationLine: 'underline',
+  closeButton: {
+    alignItems: 'center',
+    paddingTop: 16,
+  },
+  closeText: {
+    fontSize: 15,
   },
 });
 
