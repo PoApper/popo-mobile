@@ -54,6 +54,15 @@ const readLicenseText = dir => {
     .join('\n\n');
 };
 
+/** license-checker의 publisher와 같은 값으로, package.json의 author에서 온다. */
+const readPublisher = pkg => {
+  const {author} = pkg;
+  if (typeof author === 'string') {
+    return author.replace(/\s*[<(].*$/, '').trim() || null;
+  }
+  return author && author.name ? author.name.trim() : null;
+};
+
 /** package.json의 license는 문자열이거나 구형 licenses 배열이다. */
 const readLicenseId = pkg => {
   if (typeof pkg.license === 'string') return pkg.license;
@@ -96,6 +105,7 @@ const collect = () => {
       name: pkg.name,
       version: pkg.version,
       license: readLicenseId(pkg),
+      publisher: readPublisher(pkg),
       homepage: readHomepage(pkg),
       textIndex: text === null ? -1 : textIndexes.get(text),
     });

@@ -4,6 +4,7 @@
       "name": "@babel/code-frame",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-code-frame",
       "textIndex": 42
     },
@@ -11,6 +12,7 @@
       "name": "@babel/compat-data",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -18,6 +20,7 @@
       "name": "@babel/core",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-core",
       "textIndex": 42
     },
@@ -25,6 +28,7 @@
       "name": "@babel/generator",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-generator",
       "textIndex": 42
     },
@@ -32,6 +36,7 @@
       "name": "@babel/helper-annotate-as-pure",
       "version": "7.27.3",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-helper-annotate-as-pure",
       "textIndex": 42
     },
@@ -39,6 +44,7 @@
       "name": "@babel/helper-compilation-targets",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -46,6 +52,7 @@
       "name": "@babel/helper-create-class-features-plugin",
       "version": "7.26.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -53,6 +60,7 @@
       "name": "@babel/helper-create-regexp-features-plugin",
       "version": "7.26.3",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -60,6 +68,7 @@
       "name": "@babel/helper-define-polyfill-provider",
       "version": "0.6.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel-polyfills",
       "textIndex": 126
     },
@@ -67,6 +76,7 @@
       "name": "@babel/helper-globals",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -74,6 +84,7 @@
       "name": "@babel/helper-member-expression-to-functions",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-helper-member-expression-to-functions",
       "textIndex": 42
     },
@@ -81,6 +92,7 @@
       "name": "@babel/helper-module-imports",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-helper-module-imports",
       "textIndex": 42
     },
@@ -88,6 +100,7 @@
       "name": "@babel/helper-module-transforms",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-helper-module-transforms",
       "textIndex": 42
     },
@@ -95,6 +108,7 @@
       "name": "@babel/helper-optimise-call-expression",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-helper-optimise-call-expression",
       "textIndex": 42
     },
@@ -102,6 +116,7 @@
       "name": "@babel/helper-plugin-utils",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-helper-plugin-utils",
       "textIndex": 42
     },
@@ -109,6 +124,7 @@
       "name": "@babel/helper-remap-async-to-generator",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-helper-remap-async-to-generator",
       "textIndex": 42
     },
@@ -116,6 +132,7 @@
       "name": "@babel/helper-replace-supers",
       "version": "7.26.5",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-helper-replace-supers",
       "textIndex": 42
     },
@@ -123,6 +140,7 @@
       "name": "@babel/helper-skip-transparent-expression-wrappers",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -130,6 +148,7 @@
       "name": "@babel/helper-string-parser",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-helper-string-parser",
       "textIndex": 42
     },
@@ -137,6 +156,7 @@
       "name": "@babel/helper-validator-identifier",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -144,6 +164,7 @@
       "name": "@babel/helper-validator-option",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -151,6 +172,7 @@
       "name": "@babel/helper-wrap-function",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-helper-wrap-function",
       "textIndex": 42
     },
@@ -158,6 +180,7 @@
       "name": "@babel/helpers",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-helpers",
       "textIndex": 79
     },
@@ -165,6 +188,7 @@
       "name": "@babel/parser",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-parser",
       "textIndex": 80
     },
@@ -172,6 +196,7 @@
       "name": "@babel/plugin-bugfix-firefox-class-in-computed-class-key",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-bugfix-firefox-class-in-computed-class-key",
       "textIndex": 42
     },
@@ -179,6 +204,7 @@
       "name": "@babel/plugin-bugfix-safari-class-field-initializer-scope",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-bugfix-safari-class-field-initializer-scope",
       "textIndex": 42
     },
@@ -186,6 +212,7 @@
       "name": "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
       "textIndex": 42
     },
@@ -193,6 +220,7 @@
       "name": "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining",
       "textIndex": 42
     },
@@ -200,6 +228,7 @@
       "name": "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly",
       "textIndex": 42
     },
@@ -207,6 +236,7 @@
       "name": "@babel/plugin-proposal-export-default-from",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-export-default-from",
       "textIndex": 42
     },
@@ -214,6 +244,7 @@
       "name": "@babel/plugin-proposal-private-property-in-object",
       "version": "7.21.0-placeholder-for-preset-env.2",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-private-property-in-object",
       "textIndex": 42
     },
@@ -221,6 +252,7 @@
       "name": "@babel/plugin-syntax-async-generators",
       "version": "7.8.4",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-async-generators",
       "textIndex": 42
     },
@@ -228,6 +260,7 @@
       "name": "@babel/plugin-syntax-bigint",
       "version": "7.8.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-bigint",
       "textIndex": 42
     },
@@ -235,6 +268,7 @@
       "name": "@babel/plugin-syntax-class-properties",
       "version": "7.12.13",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-class-properties",
       "textIndex": 42
     },
@@ -242,6 +276,7 @@
       "name": "@babel/plugin-syntax-class-static-block",
       "version": "7.14.5",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-class-static-block",
       "textIndex": 42
     },
@@ -249,6 +284,7 @@
       "name": "@babel/plugin-syntax-dynamic-import",
       "version": "7.8.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-dynamic-import",
       "textIndex": 42
     },
@@ -256,6 +292,7 @@
       "name": "@babel/plugin-syntax-export-default-from",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-export-default-from",
       "textIndex": 42
     },
@@ -263,6 +300,7 @@
       "name": "@babel/plugin-syntax-flow",
       "version": "7.26.0",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-flow",
       "textIndex": 42
     },
@@ -270,6 +308,7 @@
       "name": "@babel/plugin-syntax-import-assertions",
       "version": "7.26.0",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -277,6 +316,7 @@
       "name": "@babel/plugin-syntax-import-attributes",
       "version": "7.26.0",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -284,6 +324,7 @@
       "name": "@babel/plugin-syntax-import-meta",
       "version": "7.10.4",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -291,6 +332,7 @@
       "name": "@babel/plugin-syntax-json-strings",
       "version": "7.8.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-json-strings",
       "textIndex": 42
     },
@@ -298,6 +340,7 @@
       "name": "@babel/plugin-syntax-jsx",
       "version": "7.27.1",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-jsx",
       "textIndex": 42
     },
@@ -305,6 +348,7 @@
       "name": "@babel/plugin-syntax-logical-assignment-operators",
       "version": "7.10.4",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -312,6 +356,7 @@
       "name": "@babel/plugin-syntax-nullish-coalescing-operator",
       "version": "7.8.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-nullish-coalescing-operator",
       "textIndex": 42
     },
@@ -319,6 +364,7 @@
       "name": "@babel/plugin-syntax-numeric-separator",
       "version": "7.10.4",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -326,6 +372,7 @@
       "name": "@babel/plugin-syntax-object-rest-spread",
       "version": "7.8.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-object-rest-spread",
       "textIndex": 42
     },
@@ -333,6 +380,7 @@
       "name": "@babel/plugin-syntax-optional-catch-binding",
       "version": "7.8.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-optional-catch-binding",
       "textIndex": 42
     },
@@ -340,6 +388,7 @@
       "name": "@babel/plugin-syntax-optional-chaining",
       "version": "7.8.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-optional-chaining",
       "textIndex": 42
     },
@@ -347,6 +396,7 @@
       "name": "@babel/plugin-syntax-private-property-in-object",
       "version": "7.14.5",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-private-property-in-object",
       "textIndex": 42
     },
@@ -354,6 +404,7 @@
       "name": "@babel/plugin-syntax-top-level-await",
       "version": "7.14.5",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-top-level-await",
       "textIndex": 42
     },
@@ -361,6 +412,7 @@
       "name": "@babel/plugin-syntax-typescript",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-typescript",
       "textIndex": 42
     },
@@ -368,6 +420,7 @@
       "name": "@babel/plugin-syntax-unicode-sets-regex",
       "version": "7.18.6",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-unicode-sets-regex",
       "textIndex": 42
     },
@@ -375,6 +428,7 @@
       "name": "@babel/plugin-transform-arrow-functions",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-arrow-functions",
       "textIndex": 42
     },
@@ -382,6 +436,7 @@
       "name": "@babel/plugin-transform-async-generator-functions",
       "version": "7.26.8",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-async-generator-functions",
       "textIndex": 42
     },
@@ -389,6 +444,7 @@
       "name": "@babel/plugin-transform-async-to-generator",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-async-to-generator",
       "textIndex": 42
     },
@@ -396,6 +452,7 @@
       "name": "@babel/plugin-transform-block-scoped-functions",
       "version": "7.26.5",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-block-scoped-functions",
       "textIndex": 42
     },
@@ -403,6 +460,7 @@
       "name": "@babel/plugin-transform-block-scoping",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-block-scoping",
       "textIndex": 42
     },
@@ -410,6 +468,7 @@
       "name": "@babel/plugin-transform-class-properties",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-class-properties",
       "textIndex": 42
     },
@@ -417,6 +476,7 @@
       "name": "@babel/plugin-transform-class-static-block",
       "version": "7.26.0",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-class-static-block",
       "textIndex": 42
     },
@@ -424,6 +484,7 @@
       "name": "@babel/plugin-transform-classes",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-classes",
       "textIndex": 42
     },
@@ -431,6 +492,7 @@
       "name": "@babel/plugin-transform-computed-properties",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-computed-properties",
       "textIndex": 42
     },
@@ -438,6 +500,7 @@
       "name": "@babel/plugin-transform-destructuring",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-destructuring",
       "textIndex": 42
     },
@@ -445,6 +508,7 @@
       "name": "@babel/plugin-transform-dotall-regex",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-dotall-regex",
       "textIndex": 42
     },
@@ -452,6 +516,7 @@
       "name": "@babel/plugin-transform-duplicate-keys",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-duplicate-keys",
       "textIndex": 42
     },
@@ -459,6 +524,7 @@
       "name": "@babel/plugin-transform-duplicate-named-capturing-groups-regex",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-duplicate-named-capturing-groups-regex",
       "textIndex": 42
     },
@@ -466,6 +532,7 @@
       "name": "@babel/plugin-transform-dynamic-import",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://github.com/babel/babel",
       "textIndex": 42
     },
@@ -473,6 +540,7 @@
       "name": "@babel/plugin-transform-exponentiation-operator",
       "version": "7.26.3",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-exponentiation-operator",
       "textIndex": 42
     },
@@ -480,6 +548,7 @@
       "name": "@babel/plugin-transform-export-namespace-from",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-export-namespace-from",
       "textIndex": 42
     },
@@ -487,6 +556,7 @@
       "name": "@babel/plugin-transform-flow-strip-types",
       "version": "7.26.5",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-flow-strip-types",
       "textIndex": 42
     },
@@ -494,6 +564,7 @@
       "name": "@babel/plugin-transform-for-of",
       "version": "7.26.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-for-of",
       "textIndex": 42
     },
@@ -501,6 +572,7 @@
       "name": "@babel/plugin-transform-function-name",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-function-name",
       "textIndex": 42
     },
@@ -508,6 +580,7 @@
       "name": "@babel/plugin-transform-json-strings",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-json-strings",
       "textIndex": 42
     },
@@ -515,6 +588,7 @@
       "name": "@babel/plugin-transform-literals",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-literals",
       "textIndex": 42
     },
@@ -522,6 +596,7 @@
       "name": "@babel/plugin-transform-logical-assignment-operators",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-logical-assignment-operators",
       "textIndex": 42
     },
@@ -529,6 +604,7 @@
       "name": "@babel/plugin-transform-member-expression-literals",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-member-expression-literals",
       "textIndex": 42
     },
@@ -536,6 +612,7 @@
       "name": "@babel/plugin-transform-modules-amd",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-modules-amd",
       "textIndex": 42
     },
@@ -543,6 +620,7 @@
       "name": "@babel/plugin-transform-modules-commonjs",
       "version": "7.26.3",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-modules-commonjs",
       "textIndex": 42
     },
@@ -550,6 +628,7 @@
       "name": "@babel/plugin-transform-modules-systemjs",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-modules-systemjs",
       "textIndex": 42
     },
@@ -557,6 +636,7 @@
       "name": "@babel/plugin-transform-modules-umd",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-modules-umd",
       "textIndex": 42
     },
@@ -564,6 +644,7 @@
       "name": "@babel/plugin-transform-named-capturing-groups-regex",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-named-capturing-groups-regex",
       "textIndex": 42
     },
@@ -571,6 +652,7 @@
       "name": "@babel/plugin-transform-new-target",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-new-target",
       "textIndex": 42
     },
@@ -578,6 +660,7 @@
       "name": "@babel/plugin-transform-nullish-coalescing-operator",
       "version": "7.26.6",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-nullish-coalescing-operator",
       "textIndex": 42
     },
@@ -585,6 +668,7 @@
       "name": "@babel/plugin-transform-numeric-separator",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-numeric-separator",
       "textIndex": 42
     },
@@ -592,6 +676,7 @@
       "name": "@babel/plugin-transform-object-rest-spread",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-object-rest-spread",
       "textIndex": 42
     },
@@ -599,6 +684,7 @@
       "name": "@babel/plugin-transform-object-super",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-object-super",
       "textIndex": 42
     },
@@ -606,6 +692,7 @@
       "name": "@babel/plugin-transform-optional-catch-binding",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-optional-catch-binding",
       "textIndex": 42
     },
@@ -613,6 +700,7 @@
       "name": "@babel/plugin-transform-optional-chaining",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-optional-chaining",
       "textIndex": 42
     },
@@ -620,6 +708,7 @@
       "name": "@babel/plugin-transform-parameters",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-parameters",
       "textIndex": 42
     },
@@ -627,6 +716,7 @@
       "name": "@babel/plugin-transform-private-methods",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-private-methods",
       "textIndex": 42
     },
@@ -634,6 +724,7 @@
       "name": "@babel/plugin-transform-private-property-in-object",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-private-property-in-object",
       "textIndex": 42
     },
@@ -641,6 +732,7 @@
       "name": "@babel/plugin-transform-property-literals",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-property-literals",
       "textIndex": 42
     },
@@ -648,6 +740,7 @@
       "name": "@babel/plugin-transform-react-display-name",
       "version": "7.28.0",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-react-display-name",
       "textIndex": 42
     },
@@ -655,6 +748,7 @@
       "name": "@babel/plugin-transform-react-jsx",
       "version": "7.27.1",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-react-jsx",
       "textIndex": 42
     },
@@ -662,6 +756,7 @@
       "name": "@babel/plugin-transform-react-jsx-self",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-react-jsx-self",
       "textIndex": 42
     },
@@ -669,6 +764,7 @@
       "name": "@babel/plugin-transform-react-jsx-source",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-react-jsx-source",
       "textIndex": 42
     },
@@ -676,6 +772,7 @@
       "name": "@babel/plugin-transform-regenerator",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-regenerator",
       "textIndex": 42
     },
@@ -683,6 +780,7 @@
       "name": "@babel/plugin-transform-regexp-modifiers",
       "version": "7.26.0",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-regexp-modifiers",
       "textIndex": 42
     },
@@ -690,6 +788,7 @@
       "name": "@babel/plugin-transform-reserved-words",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-reserved-words",
       "textIndex": 42
     },
@@ -697,6 +796,7 @@
       "name": "@babel/plugin-transform-runtime",
       "version": "7.26.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-runtime",
       "textIndex": 42
     },
@@ -704,6 +804,7 @@
       "name": "@babel/plugin-transform-shorthand-properties",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-shorthand-properties",
       "textIndex": 42
     },
@@ -711,6 +812,7 @@
       "name": "@babel/plugin-transform-spread",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-spread",
       "textIndex": 42
     },
@@ -718,6 +820,7 @@
       "name": "@babel/plugin-transform-sticky-regex",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-sticky-regex",
       "textIndex": 42
     },
@@ -725,6 +828,7 @@
       "name": "@babel/plugin-transform-template-literals",
       "version": "7.26.8",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-template-literals",
       "textIndex": 42
     },
@@ -732,6 +836,7 @@
       "name": "@babel/plugin-transform-typeof-symbol",
       "version": "7.26.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-typeof-symbol",
       "textIndex": 42
     },
@@ -739,6 +844,7 @@
       "name": "@babel/plugin-transform-typescript",
       "version": "7.26.8",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-typescript",
       "textIndex": 42
     },
@@ -746,6 +852,7 @@
       "name": "@babel/plugin-transform-unicode-escapes",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-unicode-escapes",
       "textIndex": 42
     },
@@ -753,6 +860,7 @@
       "name": "@babel/plugin-transform-unicode-property-regex",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-unicode-property-regex",
       "textIndex": 42
     },
@@ -760,6 +868,7 @@
       "name": "@babel/plugin-transform-unicode-regex",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-unicode-regex",
       "textIndex": 42
     },
@@ -767,6 +876,7 @@
       "name": "@babel/plugin-transform-unicode-sets-regex",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-unicode-sets-regex",
       "textIndex": 42
     },
@@ -774,6 +884,7 @@
       "name": "@babel/preset-env",
       "version": "7.26.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-preset-env",
       "textIndex": 42
     },
@@ -781,6 +892,7 @@
       "name": "@babel/preset-flow",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-preset-flow",
       "textIndex": 42
     },
@@ -788,6 +900,7 @@
       "name": "@babel/preset-modules",
       "version": "0.1.6-no-external-plugins",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/preset-modules",
       "textIndex": 125
     },
@@ -795,6 +908,7 @@
       "name": "@babel/preset-typescript",
       "version": "7.26.0",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-preset-typescript",
       "textIndex": 42
     },
@@ -802,6 +916,7 @@
       "name": "@babel/register",
       "version": "7.25.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-register",
       "textIndex": 42
     },
@@ -809,6 +924,7 @@
       "name": "@babel/runtime",
       "version": "7.26.10",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-runtime",
       "textIndex": 42
     },
@@ -816,6 +932,7 @@
       "name": "@babel/template",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-template",
       "textIndex": 42
     },
@@ -823,6 +940,7 @@
       "name": "@babel/traverse",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-traverse",
       "textIndex": 42
     },
@@ -830,6 +948,7 @@
       "name": "@babel/traverse",
       "version": "7.26.9",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-traverse",
       "textIndex": 42
     },
@@ -837,6 +956,7 @@
       "name": "@babel/types",
       "version": "7.29.7",
       "license": "MIT",
+      "publisher": "The Babel Team",
       "homepage": "https://babel.dev/docs/en/next/babel-types",
       "textIndex": 42
     },
@@ -844,6 +964,7 @@
       "name": "@egjs/hammerjs",
       "version": "2.0.17",
       "license": "MIT",
+      "publisher": null,
       "homepage": "http://naver.github.io/egjs",
       "textIndex": 40
     },
@@ -851,6 +972,7 @@
       "name": "@firebase/analytics",
       "version": "0.10.11",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -858,6 +980,7 @@
       "name": "@firebase/analytics-compat",
       "version": "0.2.17",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -865,6 +988,7 @@
       "name": "@firebase/analytics-types",
       "version": "0.8.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -872,6 +996,7 @@
       "name": "@firebase/app",
       "version": "0.11.1",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -879,6 +1004,7 @@
       "name": "@firebase/app-check",
       "version": "0.8.11",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -886,6 +1012,7 @@
       "name": "@firebase/app-check-compat",
       "version": "0.3.18",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -893,6 +1020,7 @@
       "name": "@firebase/app-check-interop-types",
       "version": "0.3.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -900,6 +1028,7 @@
       "name": "@firebase/app-check-types",
       "version": "0.5.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -907,6 +1036,7 @@
       "name": "@firebase/app-compat",
       "version": "0.2.50",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -914,6 +1044,7 @@
       "name": "@firebase/app-types",
       "version": "0.9.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -921,6 +1052,7 @@
       "name": "@firebase/auth",
       "version": "1.9.0",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -928,6 +1060,7 @@
       "name": "@firebase/auth-compat",
       "version": "0.5.18",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -935,6 +1068,7 @@
       "name": "@firebase/auth-interop-types",
       "version": "0.2.4",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -942,6 +1076,7 @@
       "name": "@firebase/auth-types",
       "version": "0.13.0",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -949,6 +1084,7 @@
       "name": "@firebase/component",
       "version": "0.6.12",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -956,6 +1092,7 @@
       "name": "@firebase/data-connect",
       "version": "0.3.0",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -963,6 +1100,7 @@
       "name": "@firebase/database",
       "version": "1.0.12",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -970,6 +1108,7 @@
       "name": "@firebase/database-compat",
       "version": "2.0.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -977,6 +1116,7 @@
       "name": "@firebase/database-types",
       "version": "1.0.8",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -984,6 +1124,7 @@
       "name": "@firebase/firestore",
       "version": "4.7.8",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -991,6 +1132,7 @@
       "name": "@firebase/firestore-compat",
       "version": "0.3.43",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -998,6 +1140,7 @@
       "name": "@firebase/firestore-types",
       "version": "3.0.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1005,6 +1148,7 @@
       "name": "@firebase/functions",
       "version": "0.12.2",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1012,6 +1156,7 @@
       "name": "@firebase/functions-compat",
       "version": "0.3.19",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1019,6 +1164,7 @@
       "name": "@firebase/functions-types",
       "version": "0.6.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1026,6 +1172,7 @@
       "name": "@firebase/installations",
       "version": "0.6.12",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1033,6 +1180,7 @@
       "name": "@firebase/installations-compat",
       "version": "0.2.12",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1040,6 +1188,7 @@
       "name": "@firebase/installations-types",
       "version": "0.5.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1047,6 +1196,7 @@
       "name": "@firebase/logger",
       "version": "0.4.4",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1054,6 +1204,7 @@
       "name": "@firebase/messaging",
       "version": "0.12.16",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1061,6 +1212,7 @@
       "name": "@firebase/messaging-compat",
       "version": "0.2.16",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1068,6 +1220,7 @@
       "name": "@firebase/messaging-interop-types",
       "version": "0.2.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1075,6 +1228,7 @@
       "name": "@firebase/performance",
       "version": "0.7.0",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1082,6 +1236,7 @@
       "name": "@firebase/performance-compat",
       "version": "0.2.13",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1089,6 +1244,7 @@
       "name": "@firebase/performance-types",
       "version": "0.2.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1096,6 +1252,7 @@
       "name": "@firebase/remote-config",
       "version": "0.5.0",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1103,6 +1260,7 @@
       "name": "@firebase/remote-config-compat",
       "version": "0.2.12",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1110,6 +1268,7 @@
       "name": "@firebase/remote-config-types",
       "version": "0.4.0",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1117,6 +1276,7 @@
       "name": "@firebase/storage",
       "version": "0.13.6",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1124,6 +1284,7 @@
       "name": "@firebase/storage-compat",
       "version": "0.3.16",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1131,6 +1292,7 @@
       "name": "@firebase/storage-types",
       "version": "0.8.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1138,6 +1300,7 @@
       "name": "@firebase/util",
       "version": "1.10.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1145,6 +1308,7 @@
       "name": "@firebase/vertexai",
       "version": "1.0.4",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1152,6 +1316,7 @@
       "name": "@firebase/webchannel-wrapper",
       "version": "1.0.3",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://github.com/firebase/firebase-js-sdk",
       "textIndex": -1
     },
@@ -1159,6 +1324,7 @@
       "name": "@grpc/grpc-js",
       "version": "1.9.16",
       "license": "Apache-2.0",
+      "publisher": "Google Inc.",
       "homepage": "https://grpc.io/",
       "textIndex": 38
     },
@@ -1166,6 +1332,7 @@
       "name": "@grpc/proto-loader",
       "version": "0.7.15",
       "license": "Apache-2.0",
+      "publisher": "Google Inc.",
       "homepage": "https://grpc.io/",
       "textIndex": 38
     },
@@ -1173,6 +1340,7 @@
       "name": "@hapi/hoek",
       "version": "9.3.0",
       "license": "BSD-3-Clause",
+      "publisher": null,
       "homepage": "git://github.com/hapijs/hoek",
       "textIndex": 234
     },
@@ -1180,6 +1348,7 @@
       "name": "@hapi/topo",
       "version": "5.1.0",
       "license": "BSD-3-Clause",
+      "publisher": null,
       "homepage": "git://github.com/hapijs/topo",
       "textIndex": 235
     },
@@ -1187,6 +1356,7 @@
       "name": "@isaacs/ttlcache",
       "version": "1.4.1",
       "license": "ISC",
+      "publisher": "Isaac Z. Schlueter",
       "homepage": "https://github.com/isaacs/ttlcache",
       "textIndex": 136
     },
@@ -1194,6 +1364,7 @@
       "name": "@istanbuljs/load-nyc-config",
       "version": "1.1.0",
       "license": "ISC",
+      "publisher": null,
       "homepage": "https://github.com/istanbuljs/load-nyc-config#readme",
       "textIndex": 150
     },
@@ -1201,6 +1372,7 @@
       "name": "@istanbuljs/schema",
       "version": "0.1.3",
       "license": "MIT",
+      "publisher": "Corey Farrell",
       "homepage": "https://github.com/istanbuljs/schema#readme",
       "textIndex": 151
     },
@@ -1208,6 +1380,7 @@
       "name": "@jest/create-cache-key-function",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -1215,6 +1388,7 @@
       "name": "@jest/environment",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -1222,6 +1396,7 @@
       "name": "@jest/fake-timers",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -1229,6 +1404,7 @@
       "name": "@jest/schemas",
       "version": "29.6.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -1236,6 +1412,7 @@
       "name": "@jest/transform",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -1243,6 +1420,7 @@
       "name": "@jest/types",
       "version": "29.6.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -1250,6 +1428,7 @@
       "name": "@jest/types",
       "version": "26.6.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/jest",
       "textIndex": 56
     },
@@ -1257,6 +1436,7 @@
       "name": "@jridgewell/gen-mapping",
       "version": "0.3.13",
       "license": "MIT",
+      "publisher": "Justin Ridgewell",
       "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/gen-mapping",
       "textIndex": 81
     },
@@ -1264,6 +1444,7 @@
       "name": "@jridgewell/remapping",
       "version": "2.3.5",
       "license": "MIT",
+      "publisher": "Justin Ridgewell",
       "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/remapping",
       "textIndex": 81
     },
@@ -1271,6 +1452,7 @@
       "name": "@jridgewell/resolve-uri",
       "version": "3.1.2",
       "license": "MIT",
+      "publisher": "Justin Ridgewell",
       "homepage": "https://github.com/jridgewell/resolve-uri",
       "textIndex": 169
     },
@@ -1278,6 +1460,7 @@
       "name": "@jridgewell/source-map",
       "version": "0.3.6",
       "license": "MIT",
+      "publisher": "Justin Ridgewell",
       "homepage": "https://github.com/jridgewell/source-map",
       "textIndex": 169
     },
@@ -1285,6 +1468,7 @@
       "name": "@jridgewell/sourcemap-codec",
       "version": "1.5.0",
       "license": "MIT",
+      "publisher": "Rich Harris",
       "homepage": "https://github.com/jridgewell/sourcemap-codec",
       "textIndex": 168
     },
@@ -1292,6 +1476,7 @@
       "name": "@jridgewell/trace-mapping",
       "version": "0.3.31",
       "license": "MIT",
+      "publisher": "Justin Ridgewell",
       "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/trace-mapping",
       "textIndex": 81
     },
@@ -1299,6 +1484,7 @@
       "name": "@nodelib/fs.scandir",
       "version": "2.1.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/nodelib/nodelib/tree/master/packages/fs/fs.scandir",
       "textIndex": 183
     },
@@ -1306,6 +1492,7 @@
       "name": "@nodelib/fs.stat",
       "version": "2.0.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/nodelib/nodelib/tree/master/packages/fs/fs.stat",
       "textIndex": 183
     },
@@ -1313,6 +1500,7 @@
       "name": "@nodelib/fs.walk",
       "version": "1.2.8",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/nodelib/nodelib/tree/master/packages/fs/fs.walk",
       "textIndex": 183
     },
@@ -1320,6 +1508,7 @@
       "name": "@notifee/react-native",
       "version": "9.1.8",
       "license": "Apache-2.0",
+      "publisher": "Invertase",
       "homepage": "https://github.com/invertase/notifee",
       "textIndex": 0
     },
@@ -1327,6 +1516,7 @@
       "name": "@protobufjs/aspromise",
       "version": "1.1.2",
       "license": "BSD-3-Clause",
+      "publisher": "Daniel Wirtz",
       "homepage": "https://github.com/dcodeIO/protobuf.js",
       "textIndex": 226
     },
@@ -1334,6 +1524,7 @@
       "name": "@protobufjs/base64",
       "version": "1.1.2",
       "license": "BSD-3-Clause",
+      "publisher": "Daniel Wirtz",
       "homepage": "https://github.com/dcodeIO/protobuf.js",
       "textIndex": 226
     },
@@ -1341,6 +1532,7 @@
       "name": "@protobufjs/codegen",
       "version": "2.0.5",
       "license": "BSD-3-Clause",
+      "publisher": "Daniel Wirtz",
       "homepage": "https://github.com/dcodeIO/protobuf.js",
       "textIndex": 226
     },
@@ -1348,6 +1540,7 @@
       "name": "@protobufjs/eventemitter",
       "version": "1.1.1",
       "license": "BSD-3-Clause",
+      "publisher": "Daniel Wirtz",
       "homepage": "https://github.com/dcodeIO/protobuf.js",
       "textIndex": 226
     },
@@ -1355,6 +1548,7 @@
       "name": "@protobufjs/fetch",
       "version": "1.1.1",
       "license": "BSD-3-Clause",
+      "publisher": "Daniel Wirtz",
       "homepage": "https://github.com/dcodeIO/protobuf.js",
       "textIndex": 226
     },
@@ -1362,6 +1556,7 @@
       "name": "@protobufjs/float",
       "version": "1.0.2",
       "license": "BSD-3-Clause",
+      "publisher": "Daniel Wirtz",
       "homepage": "https://github.com/dcodeIO/protobuf.js",
       "textIndex": 226
     },
@@ -1369,6 +1564,7 @@
       "name": "@protobufjs/path",
       "version": "1.1.2",
       "license": "BSD-3-Clause",
+      "publisher": "Daniel Wirtz",
       "homepage": "https://github.com/dcodeIO/protobuf.js",
       "textIndex": 226
     },
@@ -1376,6 +1572,7 @@
       "name": "@protobufjs/pool",
       "version": "1.1.0",
       "license": "BSD-3-Clause",
+      "publisher": "Daniel Wirtz",
       "homepage": "https://github.com/dcodeIO/protobuf.js",
       "textIndex": 226
     },
@@ -1383,6 +1580,7 @@
       "name": "@protobufjs/utf8",
       "version": "1.1.2",
       "license": "BSD-3-Clause",
+      "publisher": "Daniel Wirtz",
       "homepage": "https://github.com/protobufjs/protobuf.js",
       "textIndex": 226
     },
@@ -1390,6 +1588,7 @@
       "name": "@react-native-clipboard/clipboard",
       "version": "1.16.3",
       "license": "MIT",
+      "publisher": "M.Haris Baig",
       "homepage": "https://github.com/react-native-clipboard/clipboard#readme",
       "textIndex": 1
     },
@@ -1397,6 +1596,7 @@
       "name": "@react-native-community/checkbox",
       "version": "0.5.20",
       "license": "MIT",
+      "publisher": "Nicholas Lee",
       "homepage": "https://github.com/react-native-community/react-native-checkbox#readme",
       "textIndex": -1
     },
@@ -1404,6 +1604,7 @@
       "name": "@react-native-community/cli",
       "version": "17.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/cli/tree/main/packages/cli",
       "textIndex": 92
     },
@@ -1411,6 +1612,7 @@
       "name": "@react-native-community/cli-clean",
       "version": "17.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/cli/tree/main/packages/cli-clean",
       "textIndex": 92
     },
@@ -1418,6 +1620,7 @@
       "name": "@react-native-community/cli-config",
       "version": "17.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/cli/tree/main/packages/cli-config",
       "textIndex": 92
     },
@@ -1425,6 +1628,7 @@
       "name": "@react-native-community/cli-config-android",
       "version": "17.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/cli/tree/main/packages/cli-config-android",
       "textIndex": 92
     },
@@ -1432,6 +1636,7 @@
       "name": "@react-native-community/cli-config-apple",
       "version": "17.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/cli/tree/main/packages/cli-config-apple",
       "textIndex": 92
     },
@@ -1439,6 +1644,7 @@
       "name": "@react-native-community/cli-doctor",
       "version": "17.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/cli/tree/main/packages/cli-doctor",
       "textIndex": 92
     },
@@ -1446,6 +1652,7 @@
       "name": "@react-native-community/cli-platform-android",
       "version": "17.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/cli/tree/main/packages/cli-platform-android",
       "textIndex": 92
     },
@@ -1453,6 +1660,7 @@
       "name": "@react-native-community/cli-platform-apple",
       "version": "17.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/cli/tree/main/packages/cli-platform-apple",
       "textIndex": 92
     },
@@ -1460,6 +1668,7 @@
       "name": "@react-native-community/cli-platform-ios",
       "version": "17.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/cli/tree/main/packages/cli-platform-ios",
       "textIndex": 92
     },
@@ -1467,6 +1676,7 @@
       "name": "@react-native-community/cli-server-api",
       "version": "17.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/cli/tree/main/packages/cli-server-api",
       "textIndex": 92
     },
@@ -1474,6 +1684,7 @@
       "name": "@react-native-community/cli-tools",
       "version": "17.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/cli/tree/main/packages/cli-tools",
       "textIndex": 92
     },
@@ -1481,6 +1692,7 @@
       "name": "@react-native-community/cli-types",
       "version": "17.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/cli/tree/main/packages/cli-types",
       "textIndex": 92
     },
@@ -1488,6 +1700,7 @@
       "name": "@react-native-community/datetimepicker",
       "version": "8.3.0",
       "license": "MIT",
+      "publisher": "Martijn Swaagman",
       "homepage": "https://github.com/react-native-community/datetimepicker#readme",
       "textIndex": 2
     },
@@ -1495,6 +1708,7 @@
       "name": "@react-native-cookies/cookies",
       "version": "6.2.1",
       "license": "MIT",
+      "publisher": "Jason Safaiyeh",
       "homepage": "https://github.com/react-native-cookies/cookies#readme",
       "textIndex": 3
     },
@@ -1502,6 +1716,7 @@
       "name": "@react-native-firebase/app",
       "version": "22.2.1",
       "license": "Apache-2.0",
+      "publisher": "Invertase",
       "homepage": "https://github.com/invertase/react-native-firebase/tree/main/packages/app",
       "textIndex": 4
     },
@@ -1509,6 +1724,7 @@
       "name": "@react-native-firebase/messaging",
       "version": "22.2.1",
       "license": "Apache-2.0",
+      "publisher": "Invertase",
       "homepage": "https://github.com/invertase/react-native-firebase/tree/main/packages/messaging",
       "textIndex": 5
     },
@@ -1516,6 +1732,7 @@
       "name": "@react-native/assets-registry",
       "version": "0.78.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/react-native/tree/HEAD/packages/assets#readme",
       "textIndex": -1
     },
@@ -1523,6 +1740,7 @@
       "name": "@react-native/babel-plugin-codegen",
       "version": "0.78.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/react-native/tree/HEAD/packages/babel-plugin-codegen#readme",
       "textIndex": -1
     },
@@ -1530,6 +1748,7 @@
       "name": "@react-native/babel-preset",
       "version": "0.78.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "ssh://git@github.com/facebook/react-native",
       "textIndex": -1
     },
@@ -1537,6 +1756,7 @@
       "name": "@react-native/codegen",
       "version": "0.78.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/react-native/tree/HEAD/packages/react-native-codegen#readme",
       "textIndex": -1
     },
@@ -1544,6 +1764,7 @@
       "name": "@react-native/community-cli-plugin",
       "version": "0.78.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/react-native/tree/HEAD/packages/community-cli-plugin#readme",
       "textIndex": -1
     },
@@ -1551,6 +1772,7 @@
       "name": "@react-native/debugger-frontend",
       "version": "0.78.3",
       "license": "BSD-3-Clause",
+      "publisher": null,
       "homepage": "https://github.com/facebook/react-native/tree/HEAD/packages/debugger-frontend#readme",
       "textIndex": -1
     },
@@ -1558,6 +1780,7 @@
       "name": "@react-native/dev-middleware",
       "version": "0.78.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/react-native/tree/HEAD/packages/dev-middleware#readme",
       "textIndex": -1
     },
@@ -1565,6 +1788,7 @@
       "name": "@react-native/gradle-plugin",
       "version": "0.78.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/react-native/tree/HEAD/packages/gradle-plugin#readme",
       "textIndex": -1
     },
@@ -1572,6 +1796,7 @@
       "name": "@react-native/js-polyfills",
       "version": "0.78.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/react-native/tree/HEAD/packages/polyfills#readme",
       "textIndex": -1
     },
@@ -1579,6 +1804,7 @@
       "name": "@react-native/metro-babel-transformer",
       "version": "0.78.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "ssh://git@github.com/facebook/react-native",
       "textIndex": -1
     },
@@ -1586,6 +1812,7 @@
       "name": "@react-native/normalize-colors",
       "version": "0.78.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/react-native/tree/HEAD/packages/normalize-color#readme",
       "textIndex": -1
     },
@@ -1593,6 +1820,7 @@
       "name": "@react-native/virtualized-lists",
       "version": "0.78.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/react-native/tree/HEAD/packages/virtualized-lists#readme",
       "textIndex": -1
     },
@@ -1600,6 +1828,7 @@
       "name": "@react-navigation/bottom-tabs",
       "version": "7.15.9",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-navigation/react-navigation",
       "textIndex": 6
     },
@@ -1607,6 +1836,7 @@
       "name": "@react-navigation/core",
       "version": "7.17.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://reactnavigation.org",
       "textIndex": 6
     },
@@ -1614,6 +1844,7 @@
       "name": "@react-navigation/elements",
       "version": "2.9.14",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://reactnavigation.org",
       "textIndex": 6
     },
@@ -1621,6 +1852,7 @@
       "name": "@react-navigation/native",
       "version": "7.2.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://reactnavigation.org",
       "textIndex": 6
     },
@@ -1628,6 +1860,7 @@
       "name": "@react-navigation/native-stack",
       "version": "7.14.10",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/software-mansion/react-native-screens#readme",
       "textIndex": 6
     },
@@ -1635,6 +1868,7 @@
       "name": "@react-navigation/routers",
       "version": "7.5.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://reactnavigation.org/docs/custom-routers/",
       "textIndex": 6
     },
@@ -1642,6 +1876,7 @@
       "name": "@react-navigation/stack",
       "version": "7.8.9",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://reactnavigation.org/docs/stack-navigator/",
       "textIndex": 6
     },
@@ -1649,6 +1884,7 @@
       "name": "@sideway/address",
       "version": "4.1.5",
       "license": "BSD-3-Clause",
+      "publisher": null,
       "homepage": "git://github.com/sideway/address",
       "textIndex": 236
     },
@@ -1656,6 +1892,7 @@
       "name": "@sideway/formula",
       "version": "3.0.1",
       "license": "BSD-3-Clause",
+      "publisher": null,
       "homepage": "git://github.com/sideway/formula",
       "textIndex": 237
     },
@@ -1663,6 +1900,7 @@
       "name": "@sideway/pinpoint",
       "version": "2.0.0",
       "license": "BSD-3-Clause",
+      "publisher": null,
       "homepage": "git://github.com/sideway/pinpoint",
       "textIndex": 238
     },
@@ -1670,6 +1908,7 @@
       "name": "@sinclair/typebox",
       "version": "0.27.8",
       "license": "MIT",
+      "publisher": "sinclairzx81",
       "homepage": "https://github.com/sinclairzx81/typebox",
       "textIndex": 159
     },
@@ -1677,6 +1916,7 @@
       "name": "@sinonjs/commons",
       "version": "3.0.1",
       "license": "BSD-3-Clause",
+      "publisher": null,
       "homepage": "https://github.com/sinonjs/commons#readme",
       "textIndex": 221
     },
@@ -1684,6 +1924,7 @@
       "name": "@sinonjs/fake-timers",
       "version": "10.3.0",
       "license": "BSD-3-Clause",
+      "publisher": "Christian Johansen",
       "homepage": "https://github.com/sinonjs/fake-timers",
       "textIndex": 155
     },
@@ -1691,6 +1932,7 @@
       "name": "@socket.io/component-emitter",
       "version": "3.1.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/socketio/emitter",
       "textIndex": 64
     },
@@ -1698,6 +1940,7 @@
       "name": "@types/babel__core",
       "version": "7.20.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/babel__core",
       "textIndex": 49
     },
@@ -1705,6 +1948,7 @@
       "name": "@types/babel__generator",
       "version": "7.6.8",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/babel__generator",
       "textIndex": 49
     },
@@ -1712,6 +1956,7 @@
       "name": "@types/babel__template",
       "version": "7.4.4",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/babel__template",
       "textIndex": 49
     },
@@ -1719,6 +1964,7 @@
       "name": "@types/babel__traverse",
       "version": "7.20.6",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/babel__traverse",
       "textIndex": 49
     },
@@ -1726,6 +1972,7 @@
       "name": "@types/graceful-fs",
       "version": "4.1.9",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/graceful-fs",
       "textIndex": 49
     },
@@ -1733,6 +1980,7 @@
       "name": "@types/hammerjs",
       "version": "2.0.46",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/hammerjs",
       "textIndex": 49
     },
@@ -1740,6 +1988,7 @@
       "name": "@types/istanbul-lib-coverage",
       "version": "2.0.6",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-lib-coverage",
       "textIndex": 49
     },
@@ -1747,6 +1996,7 @@
       "name": "@types/istanbul-lib-report",
       "version": "3.0.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-lib-report",
       "textIndex": 49
     },
@@ -1754,6 +2004,7 @@
       "name": "@types/istanbul-reports",
       "version": "3.0.4",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-reports",
       "textIndex": 49
     },
@@ -1761,6 +2012,7 @@
       "name": "@types/node",
       "version": "22.13.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node",
       "textIndex": 49
     },
@@ -1768,6 +2020,7 @@
       "name": "@types/node-forge",
       "version": "1.3.14",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node-forge",
       "textIndex": 49
     },
@@ -1775,6 +2028,7 @@
       "name": "@types/react",
       "version": "19.0.10",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react",
       "textIndex": 49
     },
@@ -1782,6 +2036,7 @@
       "name": "@types/stack-utils",
       "version": "2.0.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/stack-utils",
       "textIndex": 49
     },
@@ -1789,6 +2044,7 @@
       "name": "@types/yargs",
       "version": "17.0.33",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/yargs",
       "textIndex": 49
     },
@@ -1796,6 +2052,7 @@
       "name": "@types/yargs",
       "version": "15.0.20",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/yargs",
       "textIndex": 49
     },
@@ -1803,6 +2060,7 @@
       "name": "@types/yargs-parser",
       "version": "21.0.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/yargs-parser",
       "textIndex": 49
     },
@@ -1810,6 +2068,7 @@
       "name": "@vscode/sudo-prompt",
       "version": "9.3.1",
       "license": "MIT",
+      "publisher": "Joran Dirk Greef",
       "homepage": "https://github.com/bpasero/sudo-prompt#readme",
       "textIndex": 192
     },
@@ -1817,6 +2076,7 @@
       "name": "abort-controller",
       "version": "3.0.0",
       "license": "MIT",
+      "publisher": "Toru Nagashima",
       "homepage": "https://github.com/mysticatea/abort-controller#readme",
       "textIndex": 50
     },
@@ -1824,6 +2084,7 @@
       "name": "accepts",
       "version": "1.3.8",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/accepts",
       "textIndex": 76
     },
@@ -1831,6 +2092,7 @@
       "name": "acorn",
       "version": "8.14.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/acornjs/acorn",
       "textIndex": 286
     },
@@ -1838,6 +2100,7 @@
       "name": "agent-base",
       "version": "6.0.2",
       "license": "MIT",
+      "publisher": "Nathan Rajlich",
       "homepage": "git://github.com/TooTallNate/node-agent-base",
       "textIndex": -1
     },
@@ -1845,6 +2108,7 @@
       "name": "anser",
       "version": "1.4.10",
       "license": "MIT",
+      "publisher": "Ionică Bizău",
       "homepage": "https://github.com/IonicaBizau/anser#readme",
       "textIndex": 51
     },
@@ -1852,6 +2116,7 @@
       "name": "ansi-fragments",
       "version": "0.2.1",
       "license": "MIT",
+      "publisher": "Paweł Trysła",
       "homepage": "https://github.com/zamotany/ansi-fragments",
       "textIndex": -1
     },
@@ -1859,6 +2124,7 @@
       "name": "ansi-regex",
       "version": "5.0.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "chalk/ansi-regex",
       "textIndex": 52
     },
@@ -1866,6 +2132,7 @@
       "name": "ansi-regex",
       "version": "4.1.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "chalk/ansi-regex",
       "textIndex": 52
     },
@@ -1873,6 +2140,7 @@
       "name": "ansi-styles",
       "version": "4.3.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "chalk/ansi-styles",
       "textIndex": 52
     },
@@ -1880,6 +2148,7 @@
       "name": "ansi-styles",
       "version": "5.2.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "chalk/ansi-styles",
       "textIndex": 52
     },
@@ -1887,6 +2156,7 @@
       "name": "ansi-styles",
       "version": "3.2.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "chalk/ansi-styles",
       "textIndex": 52
     },
@@ -1894,6 +2164,7 @@
       "name": "anymatch",
       "version": "3.1.3",
       "license": "ISC",
+      "publisher": "Elan Shanker",
       "homepage": "https://github.com/micromatch/anymatch",
       "textIndex": 216
     },
@@ -1901,6 +2172,7 @@
       "name": "appdirsjs",
       "version": "1.2.7",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/codingjerk/appdirsjs",
       "textIndex": -1
     },
@@ -1908,6 +2180,7 @@
       "name": "argparse",
       "version": "1.0.10",
       "license": "MIT",
+      "publisher": null,
       "homepage": "nodeca/argparse",
       "textIndex": 262
     },
@@ -1915,6 +2188,7 @@
       "name": "argparse",
       "version": "2.0.1",
       "license": "Python-2.0",
+      "publisher": null,
       "homepage": "nodeca/argparse",
       "textIndex": 271
     },
@@ -1922,6 +2196,7 @@
       "name": "asap",
       "version": "2.0.6",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/kriskowal/asap",
       "textIndex": 101
     },
@@ -1929,6 +2204,7 @@
       "name": "ast-types",
       "version": "0.16.1",
       "license": "MIT",
+      "publisher": "Ben Newman",
       "homepage": "http://github.com/benjamn/ast-types",
       "textIndex": 180
     },
@@ -1936,6 +2212,7 @@
       "name": "astral-regex",
       "version": "1.0.0",
       "license": "MIT",
+      "publisher": "Kevin Mårtensson",
       "homepage": "kevva/astral-regex",
       "textIndex": 256
     },
@@ -1943,6 +2220,7 @@
       "name": "async-limiter",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "Samuel Reed",
       "homepage": "https://github.com/strml/async-limiter",
       "textIndex": 103
     },
@@ -1950,6 +2228,7 @@
       "name": "asynckit",
       "version": "0.4.0",
       "license": "MIT",
+      "publisher": "Alex Indigo",
       "homepage": "https://github.com/alexindigo/asynckit#readme",
       "textIndex": 72
     },
@@ -1957,6 +2236,7 @@
       "name": "axios",
       "version": "1.18.1",
       "license": "MIT",
+      "publisher": "Matt Zabriskie",
       "homepage": "https://axios-http.com",
       "textIndex": 7
     },
@@ -1964,6 +2244,7 @@
       "name": "babel-jest",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -1971,6 +2252,7 @@
       "name": "babel-plugin-istanbul",
       "version": "6.1.1",
       "license": "BSD-3-Clause",
+      "publisher": "Thai Pangsakulyanont @dtinth",
       "homepage": "https://github.com/istanbuljs/babel-plugin-istanbul#readme",
       "textIndex": 95
     },
@@ -1978,6 +2260,7 @@
       "name": "babel-plugin-jest-hoist",
       "version": "29.6.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -1985,6 +2268,7 @@
       "name": "babel-plugin-polyfill-corejs2",
       "version": "0.4.12",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel-polyfills",
       "textIndex": 126
     },
@@ -1992,6 +2276,7 @@
       "name": "babel-plugin-polyfill-corejs3",
       "version": "0.11.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel-polyfills",
       "textIndex": 126
     },
@@ -1999,6 +2284,7 @@
       "name": "babel-plugin-polyfill-corejs3",
       "version": "0.10.6",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel-polyfills",
       "textIndex": 126
     },
@@ -2006,6 +2292,7 @@
       "name": "babel-plugin-polyfill-regenerator",
       "version": "0.6.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/babel/babel-polyfills",
       "textIndex": 126
     },
@@ -2013,6 +2300,7 @@
       "name": "babel-plugin-syntax-hermes-parser",
       "version": "0.25.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/hermes",
       "textIndex": 20
     },
@@ -2020,6 +2308,7 @@
       "name": "babel-plugin-transform-flow-enums",
       "version": "0.0.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/flow",
       "textIndex": 56
     },
@@ -2027,6 +2316,7 @@
       "name": "babel-preset-current-node-syntax",
       "version": "1.1.0",
       "license": "MIT",
+      "publisher": "Nicolò Ribaudo",
       "homepage": "https://github.com/nicolo-ribaudo/babel-preset-current-node-syntax",
       "textIndex": 153
     },
@@ -2034,6 +2324,7 @@
       "name": "babel-preset-jest",
       "version": "29.6.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -2041,6 +2332,7 @@
       "name": "balanced-match",
       "version": "1.0.2",
       "license": "MIT",
+      "publisher": "Julian Gruber",
       "homepage": "https://github.com/juliangruber/balanced-match",
       "textIndex": 219
     },
@@ -2048,6 +2340,7 @@
       "name": "base64-js",
       "version": "1.5.1",
       "license": "MIT",
+      "publisher": "T. Jameson Little",
       "homepage": "https://github.com/beatgammit/base64-js",
       "textIndex": 53
     },
@@ -2055,6 +2348,7 @@
       "name": "bl",
       "version": "4.1.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/rvagg/bl",
       "textIndex": 241
     },
@@ -2062,6 +2356,7 @@
       "name": "body-parser",
       "version": "1.20.6",
       "license": "MIT",
+      "publisher": null,
       "homepage": "expressjs/body-parser",
       "textIndex": 190
     },
@@ -2069,6 +2364,7 @@
       "name": "boolbase",
       "version": "1.0.0",
       "license": "ISC",
+      "publisher": "Felix Boehm",
       "homepage": "https://github.com/fb55/boolbase",
       "textIndex": -1
     },
@@ -2076,6 +2372,7 @@
       "name": "brace-expansion",
       "version": "1.1.18",
       "license": "MIT",
+      "publisher": "Julian Gruber",
       "homepage": "https://github.com/juliangruber/brace-expansion",
       "textIndex": 154
     },
@@ -2083,6 +2380,7 @@
       "name": "braces",
       "version": "3.0.3",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/micromatch/braces",
       "textIndex": 128
     },
@@ -2090,6 +2388,7 @@
       "name": "browserslist",
       "version": "4.24.4",
       "license": "MIT",
+      "publisher": "Andrey Sitnik",
       "homepage": "browserslist/browserslist",
       "textIndex": 123
     },
@@ -2097,6 +2396,7 @@
       "name": "bser",
       "version": "2.1.1",
       "license": "Apache-2.0",
+      "publisher": "Wez Furlong",
       "homepage": "https://facebook.github.io/watchman/docs/bser.html",
       "textIndex": -1
     },
@@ -2104,6 +2404,7 @@
       "name": "buffer",
       "version": "5.7.1",
       "license": "MIT",
+      "publisher": "Feross Aboukhadijeh",
       "homepage": "https://github.com/feross/buffer",
       "textIndex": 276
     },
@@ -2111,6 +2412,7 @@
       "name": "buffer-from",
       "version": "1.1.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "LinusU/buffer-from",
       "textIndex": 230
     },
@@ -2118,6 +2420,7 @@
       "name": "bytes",
       "version": "3.1.2",
       "license": "MIT",
+      "publisher": "TJ Holowaychuk",
       "homepage": "visionmedia/bytes.js",
       "textIndex": 243
     },
@@ -2125,6 +2428,7 @@
       "name": "call-bind-apply-helpers",
       "version": "1.0.2",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/call-bind-apply-helpers#readme",
       "textIndex": 116
     },
@@ -2132,6 +2436,7 @@
       "name": "call-bound",
       "version": "1.0.3",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/call-bound#readme",
       "textIndex": 116
     },
@@ -2139,6 +2444,7 @@
       "name": "caller-callsite",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/caller-callsite",
       "textIndex": 77
     },
@@ -2146,6 +2452,7 @@
       "name": "caller-path",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/caller-path",
       "textIndex": 77
     },
@@ -2153,6 +2460,7 @@
       "name": "callsites",
       "version": "3.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/callsites",
       "textIndex": 52
     },
@@ -2160,6 +2468,7 @@
       "name": "callsites",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/callsites",
       "textIndex": 77
     },
@@ -2167,6 +2476,7 @@
       "name": "camelcase",
       "version": "6.3.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/camelcase",
       "textIndex": 26
     },
@@ -2174,6 +2484,7 @@
       "name": "camelcase",
       "version": "5.3.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/camelcase",
       "textIndex": 52
     },
@@ -2181,6 +2492,7 @@
       "name": "caniuse-lite",
       "version": "1.0.30001700",
       "license": "CC-BY-4.0",
+      "publisher": "Ben Briggs",
       "homepage": "browserslist/caniuse-lite",
       "textIndex": 170
     },
@@ -2188,6 +2500,7 @@
       "name": "chalk",
       "version": "4.1.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "chalk/chalk",
       "textIndex": 52
     },
@@ -2195,6 +2508,7 @@
       "name": "chrome-launcher",
       "version": "0.15.2",
       "license": "Apache-2.0",
+      "publisher": "The Chromium Authors",
       "homepage": "https://github.com/GoogleChrome/chrome-launcher/",
       "textIndex": 137
     },
@@ -2202,6 +2516,7 @@
       "name": "chromium-edge-launcher",
       "version": "0.2.0",
       "license": "Apache-2.0",
+      "publisher": "Cezar Augusto",
       "homepage": "https://github.com/cezaraugusto/chromium-edge-launcher/",
       "textIndex": 137
     },
@@ -2209,6 +2524,7 @@
       "name": "ci-info",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Thomas Watson Steen",
       "homepage": "https://github.com/watson/ci-info",
       "textIndex": 143
     },
@@ -2216,6 +2532,7 @@
       "name": "ci-info",
       "version": "3.9.0",
       "license": "MIT",
+      "publisher": "Thomas Watson Steen",
       "homepage": "https://github.com/watson/ci-info",
       "textIndex": 157
     },
@@ -2223,6 +2540,7 @@
       "name": "cli-cursor",
       "version": "3.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/cli-cursor",
       "textIndex": 52
     },
@@ -2230,6 +2548,7 @@
       "name": "cli-spinners",
       "version": "2.9.2",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/cli-spinners",
       "textIndex": 26
     },
@@ -2237,6 +2556,7 @@
       "name": "cliui",
       "version": "7.0.4",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "yargs/cliui",
       "textIndex": 86
     },
@@ -2244,6 +2564,7 @@
       "name": "cliui",
       "version": "8.0.1",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "yargs/cliui",
       "textIndex": 86
     },
@@ -2251,6 +2572,7 @@
       "name": "cliui",
       "version": "6.0.0",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "http://github.com/yargs/cliui",
       "textIndex": 86
     },
@@ -2258,6 +2580,7 @@
       "name": "clone",
       "version": "1.0.4",
       "license": "MIT",
+      "publisher": "Paul Vorbach",
       "homepage": "git://github.com/pvorb/node-clone",
       "textIndex": 278
     },
@@ -2265,6 +2588,7 @@
       "name": "clone-deep",
       "version": "4.0.1",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/jonschlinkert/clone-deep",
       "textIndex": 177
     },
@@ -2272,6 +2596,7 @@
       "name": "color",
       "version": "4.2.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "Qix-/color",
       "textIndex": 23
     },
@@ -2279,6 +2604,7 @@
       "name": "color-convert",
       "version": "2.0.1",
       "license": "MIT",
+      "publisher": "Heather Arthur",
       "homepage": "Qix-/color-convert",
       "textIndex": 69
     },
@@ -2286,6 +2612,7 @@
       "name": "color-convert",
       "version": "1.9.3",
       "license": "MIT",
+      "publisher": "Heather Arthur",
       "homepage": "Qix-/color-convert",
       "textIndex": 69
     },
@@ -2293,6 +2620,7 @@
       "name": "color-name",
       "version": "1.1.4",
       "license": "MIT",
+      "publisher": "DY",
       "homepage": "https://github.com/colorjs/color-name",
       "textIndex": 112
     },
@@ -2300,6 +2628,7 @@
       "name": "color-name",
       "version": "1.1.3",
       "license": "MIT",
+      "publisher": "DY",
       "homepage": "https://github.com/dfcreative/color-name",
       "textIndex": 112
     },
@@ -2307,6 +2636,7 @@
       "name": "color-string",
       "version": "1.9.1",
       "license": "MIT",
+      "publisher": "Heather Arthur",
       "homepage": "Qix-/color-string",
       "textIndex": 70
     },
@@ -2314,6 +2644,7 @@
       "name": "colorette",
       "version": "1.4.0",
       "license": "MIT",
+      "publisher": "Jorge Bucaran",
       "homepage": "jorgebucaran/colorette",
       "textIndex": 290
     },
@@ -2321,6 +2652,7 @@
       "name": "combined-stream",
       "version": "1.0.8",
       "license": "MIT",
+      "publisher": "Felix Geisendörfer",
       "homepage": "https://github.com/felixge/node-combined-stream",
       "textIndex": 73
     },
@@ -2328,6 +2660,7 @@
       "name": "command-exists",
       "version": "1.2.9",
       "license": "MIT",
+      "publisher": "Matthew Conlen",
       "homepage": "https://github.com/mathisonian/command-exists",
       "textIndex": 185
     },
@@ -2335,6 +2668,7 @@
       "name": "commander",
       "version": "12.1.0",
       "license": "MIT",
+      "publisher": "TJ Holowaychuk",
       "homepage": "https://github.com/tj/commander.js",
       "textIndex": 54
     },
@@ -2342,6 +2676,7 @@
       "name": "commander",
       "version": "9.5.0",
       "license": "MIT",
+      "publisher": "TJ Holowaychuk",
       "homepage": "https://github.com/tj/commander.js",
       "textIndex": 54
     },
@@ -2349,6 +2684,7 @@
       "name": "commander",
       "version": "2.20.3",
       "license": "MIT",
+      "publisher": "TJ Holowaychuk",
       "homepage": "https://github.com/tj/commander.js",
       "textIndex": 54
     },
@@ -2356,6 +2692,7 @@
       "name": "commondir",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "James Halliday",
       "homepage": "http://github.com/substack/node-commondir",
       "textIndex": 102
     },
@@ -2363,6 +2700,7 @@
       "name": "compressible",
       "version": "2.0.18",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/compressible",
       "textIndex": 253
     },
@@ -2370,6 +2708,7 @@
       "name": "compression",
       "version": "1.8.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "expressjs/compression",
       "textIndex": 190
     },
@@ -2377,6 +2716,7 @@
       "name": "concat-map",
       "version": "0.0.1",
       "license": "MIT",
+      "publisher": "James Halliday",
       "homepage": "git://github.com/substack/node-concat-map",
       "textIndex": 220
     },
@@ -2384,6 +2724,7 @@
       "name": "connect",
       "version": "3.7.0",
       "license": "MIT",
+      "publisher": "TJ Holowaychuk",
       "homepage": "senchalabs/connect",
       "textIndex": 138
     },
@@ -2391,6 +2732,7 @@
       "name": "content-type",
       "version": "1.0.5",
       "license": "MIT",
+      "publisher": "Douglas Christopher Wilson",
       "homepage": "jshttp/content-type",
       "textIndex": 244
     },
@@ -2398,6 +2740,7 @@
       "name": "convert-source-map",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Thorsten Lorenz",
       "homepage": "https://github.com/thlorenz/convert-source-map",
       "textIndex": 48
     },
@@ -2405,6 +2748,7 @@
       "name": "core-js-compat",
       "version": "3.40.0",
       "license": "MIT",
+      "publisher": "Denis Pushkarev",
       "homepage": "https://github.com/zloirock/core-js",
       "textIndex": 127
     },
@@ -2412,6 +2756,7 @@
       "name": "cosmiconfig",
       "version": "5.2.1",
       "license": "MIT",
+      "publisher": "David Clark",
       "homepage": "https://github.com/davidtheclark/cosmiconfig#readme",
       "textIndex": 142
     },
@@ -2419,6 +2764,7 @@
       "name": "cosmiconfig",
       "version": "9.0.0",
       "license": "MIT",
+      "publisher": "Daniel Fischer",
       "homepage": "https://github.com/cosmiconfig/cosmiconfig#readme",
       "textIndex": 142
     },
@@ -2426,6 +2772,7 @@
       "name": "cross-spawn",
       "version": "7.0.6",
       "license": "MIT",
+      "publisher": "André Cruz",
       "homepage": "https://github.com/moxystudio/node-cross-spawn",
       "textIndex": 195
     },
@@ -2433,6 +2780,7 @@
       "name": "css-select",
       "version": "5.1.0",
       "license": "BSD-2-Clause",
+      "publisher": "Felix Boehm",
       "homepage": "git://github.com/fb55/css-select",
       "textIndex": 45
     },
@@ -2440,6 +2788,7 @@
       "name": "css-tree",
       "version": "1.1.3",
       "license": "MIT",
+      "publisher": "Roman Dvornov",
       "homepage": "csstree/csstree",
       "textIndex": 46
     },
@@ -2447,6 +2796,7 @@
       "name": "css-what",
       "version": "6.1.0",
       "license": "BSD-2-Clause",
+      "publisher": "Felix Böhm",
       "homepage": "https://github.com/fb55/css-what",
       "textIndex": 45
     },
@@ -2454,6 +2804,7 @@
       "name": "csstype",
       "version": "3.1.3",
       "license": "MIT",
+      "publisher": "Fredrik Nicol",
       "homepage": "https://github.com/frenic/csstype",
       "textIndex": 94
     },
@@ -2461,6 +2812,7 @@
       "name": "dayjs",
       "version": "1.11.13",
       "license": "MIT",
+      "publisher": "iamkun",
       "homepage": "https://day.js.org",
       "textIndex": 274
     },
@@ -2468,6 +2820,7 @@
       "name": "debug",
       "version": "4.4.3",
       "license": "MIT",
+      "publisher": "Josh Junon",
       "homepage": "git://github.com/debug-js/debug",
       "textIndex": 65
     },
@@ -2475,6 +2828,7 @@
       "name": "debug",
       "version": "2.6.9",
       "license": "MIT",
+      "publisher": "TJ Holowaychuk",
       "homepage": "git://github.com/visionmedia/debug",
       "textIndex": 93
     },
@@ -2482,6 +2836,7 @@
       "name": "decamelize",
       "version": "1.2.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/decamelize",
       "textIndex": 77
     },
@@ -2489,6 +2844,7 @@
       "name": "decode-uri-component",
       "version": "0.2.2",
       "license": "MIT",
+      "publisher": "Sam Verschueren",
       "homepage": "SamVerschueren/decode-uri-component",
       "textIndex": 114
     },
@@ -2496,6 +2852,7 @@
       "name": "deepmerge",
       "version": "4.3.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/TehShrike/deepmerge",
       "textIndex": 133
     },
@@ -2503,6 +2860,7 @@
       "name": "defaults",
       "version": "1.0.4",
       "license": "MIT",
+      "publisher": "Elijah Insua",
       "homepage": "git://github.com/sindresorhus/node-defaults",
       "textIndex": 242
     },
@@ -2510,6 +2868,7 @@
       "name": "delayed-stream",
       "version": "1.0.0",
       "license": "MIT",
+      "publisher": "Felix Geisendörfer",
       "homepage": "https://github.com/felixge/node-delayed-stream",
       "textIndex": 73
     },
@@ -2517,6 +2876,7 @@
       "name": "depd",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Douglas Christopher Wilson",
       "homepage": "dougwilson/nodejs-depd",
       "textIndex": 245
     },
@@ -2524,6 +2884,7 @@
       "name": "destroy",
       "version": "1.2.0",
       "license": "MIT",
+      "publisher": "Jonathan Ong",
       "homepage": "stream-utils/destroy",
       "textIndex": 246
     },
@@ -2531,6 +2892,7 @@
       "name": "dom-serializer",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Felix Boehm",
       "homepage": "git://github.com/cheeriojs/dom-serializer",
       "textIndex": 124
     },
@@ -2538,6 +2900,7 @@
       "name": "domelementtype",
       "version": "2.3.0",
       "license": "BSD-2-Clause",
+      "publisher": "Felix Boehm",
       "homepage": "git://github.com/fb55/domelementtype",
       "textIndex": 45
     },
@@ -2545,6 +2908,7 @@
       "name": "domhandler",
       "version": "5.0.3",
       "license": "BSD-2-Clause",
+      "publisher": "Felix Boehm",
       "homepage": "git://github.com/fb55/domhandler",
       "textIndex": 45
     },
@@ -2552,6 +2916,7 @@
       "name": "domutils",
       "version": "3.2.2",
       "license": "BSD-2-Clause",
+      "publisher": "Felix Boehm",
       "homepage": "git://github.com/fb55/domutils",
       "textIndex": 45
     },
@@ -2559,6 +2924,7 @@
       "name": "dunder-proto",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/es-shims/dunder-proto#readme",
       "textIndex": 167
     },
@@ -2566,6 +2932,7 @@
       "name": "ee-first",
       "version": "1.1.1",
       "license": "MIT",
+      "publisher": "Jonathan Ong",
       "homepage": "jonathanong/ee-first",
       "textIndex": 282
     },
@@ -2573,6 +2940,7 @@
       "name": "electron-to-chromium",
       "version": "1.5.103",
       "license": "ISC",
+      "publisher": "Kilian Valkhof",
       "homepage": "https://github.com/kilian/electron-to-chromium/",
       "textIndex": 171
     },
@@ -2580,6 +2948,7 @@
       "name": "emoji-regex",
       "version": "8.0.0",
       "license": "MIT",
+      "publisher": "Mathias Bynens",
       "homepage": "https://mths.be/emoji-regex",
       "textIndex": 122
     },
@@ -2587,6 +2956,7 @@
       "name": "encodeurl",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "pillarjs/encodeurl",
       "textIndex": 207
     },
@@ -2594,6 +2964,7 @@
       "name": "encodeurl",
       "version": "1.0.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "pillarjs/encodeurl",
       "textIndex": 207
     },
@@ -2601,6 +2972,7 @@
       "name": "engine.io-client",
       "version": "6.6.6",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/socketio/socket.io/tree/main/packages/engine.io-client#readme",
       "textIndex": 66
     },
@@ -2608,6 +2980,7 @@
       "name": "engine.io-parser",
       "version": "5.2.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/socketio/socket.io/tree/main/packages/engine.io-parser#readme",
       "textIndex": 66
     },
@@ -2615,6 +2988,7 @@
       "name": "entities",
       "version": "4.5.0",
       "license": "BSD-2-Clause",
+      "publisher": "Felix Boehm",
       "homepage": "git://github.com/fb55/entities",
       "textIndex": 45
     },
@@ -2622,6 +2996,7 @@
       "name": "env-paths",
       "version": "2.2.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/env-paths",
       "textIndex": 52
     },
@@ -2629,6 +3004,7 @@
       "name": "envinfo",
       "version": "7.20.0",
       "license": "MIT",
+      "publisher": "tabrindle@gmail.com",
       "homepage": "https://github.com/tabrindle/envinfo",
       "textIndex": 186
     },
@@ -2636,6 +3012,7 @@
       "name": "error-ex",
       "version": "1.3.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "qix-/node-error-ex",
       "textIndex": 163
     },
@@ -2643,6 +3020,7 @@
       "name": "error-stack-parser",
       "version": "2.1.4",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://www.stacktracejs.com",
       "textIndex": 144
     },
@@ -2650,6 +3028,7 @@
       "name": "errorhandler",
       "version": "1.5.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "expressjs/errorhandler",
       "textIndex": 190
     },
@@ -2657,6 +3036,7 @@
       "name": "es-define-property",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/es-define-property#readme",
       "textIndex": 116
     },
@@ -2664,6 +3044,7 @@
       "name": "es-errors",
       "version": "1.3.0",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/es-errors#readme",
       "textIndex": 116
     },
@@ -2671,6 +3052,7 @@
       "name": "es-object-atoms",
       "version": "1.1.1",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/es-object-atoms#readme",
       "textIndex": 116
     },
@@ -2678,6 +3060,7 @@
       "name": "es-set-tostringtag",
       "version": "2.1.0",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/es-shims/es-set-tostringtag#readme",
       "textIndex": 74
     },
@@ -2685,6 +3068,7 @@
       "name": "escalade",
       "version": "3.2.0",
       "license": "MIT",
+      "publisher": "Luke Edwards",
       "homepage": "lukeed/escalade",
       "textIndex": 87
     },
@@ -2692,6 +3076,7 @@
       "name": "escape-html",
       "version": "1.0.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "component/escape-html",
       "textIndex": 208
     },
@@ -2699,6 +3084,7 @@
       "name": "escape-string-regexp",
       "version": "4.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/escape-string-regexp",
       "textIndex": 26
     },
@@ -2706,6 +3092,7 @@
       "name": "escape-string-regexp",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/escape-string-regexp",
       "textIndex": 52
     },
@@ -2713,6 +3100,7 @@
       "name": "esprima",
       "version": "4.0.1",
       "license": "BSD-2-Clause",
+      "publisher": "Ariya Hidayat",
       "homepage": "http://esprima.org",
       "textIndex": 181
     },
@@ -2720,6 +3108,7 @@
       "name": "esutils",
       "version": "2.0.3",
       "license": "BSD-2-Clause",
+      "publisher": null,
       "homepage": "https://github.com/estools/esutils",
       "textIndex": 176
     },
@@ -2727,6 +3116,7 @@
       "name": "etag",
       "version": "1.8.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/etag",
       "textIndex": 259
     },
@@ -2734,6 +3124,7 @@
       "name": "event-target-shim",
       "version": "5.0.1",
       "license": "MIT",
+      "publisher": "Toru Nagashima",
       "homepage": "https://github.com/mysticatea/event-target-shim",
       "textIndex": 55
     },
@@ -2741,6 +3132,7 @@
       "name": "execa",
       "version": "5.1.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/execa",
       "textIndex": 26
     },
@@ -2748,6 +3140,7 @@
       "name": "exponential-backoff",
       "version": "3.1.2",
       "license": "Apache-2.0",
+      "publisher": "Sami Sayegh",
       "homepage": "https://github.com/coveooss/exponential-backoff#readme",
       "textIndex": 212
     },
@@ -2755,6 +3148,7 @@
       "name": "fast-deep-equal",
       "version": "3.1.3",
       "license": "MIT",
+      "publisher": "Evgeny Poberezkin",
       "homepage": "https://github.com/epoberezkin/fast-deep-equal#readme",
       "textIndex": 27
     },
@@ -2762,6 +3156,7 @@
       "name": "fast-glob",
       "version": "3.3.3",
       "license": "MIT",
+      "publisher": "Denis Malinochkin",
       "homepage": "mrmlnc/fast-glob",
       "textIndex": 183
     },
@@ -2769,6 +3164,7 @@
       "name": "fast-json-stable-stringify",
       "version": "2.1.0",
       "license": "MIT",
+      "publisher": "James Halliday",
       "homepage": "https://github.com/epoberezkin/fast-json-stable-stringify",
       "textIndex": 148
     },
@@ -2776,6 +3172,7 @@
       "name": "fast-xml-parser",
       "version": "4.5.7",
       "license": "MIT",
+      "publisher": "Amit Gupta",
       "homepage": "https://github.com/NaturalIntelligence/fast-xml-parser",
       "textIndex": 240
     },
@@ -2783,6 +3180,7 @@
       "name": "fastq",
       "version": "1.19.0",
       "license": "ISC",
+      "publisher": "Matteo Collina",
       "homepage": "https://github.com/mcollina/fastq#readme",
       "textIndex": 270
     },
@@ -2790,6 +3188,7 @@
       "name": "faye-websocket",
       "version": "0.11.4",
       "license": "Apache-2.0",
+      "publisher": "James Coglan",
       "homepage": "https://github.com/faye/faye-websocket-node",
       "textIndex": 110
     },
@@ -2797,6 +3196,7 @@
       "name": "fb-watchman",
       "version": "2.0.2",
       "license": "Apache-2.0",
+      "publisher": "Wez Furlong",
       "homepage": "https://facebook.github.io/watchman/",
       "textIndex": -1
     },
@@ -2804,6 +3204,7 @@
       "name": "fill-range",
       "version": "7.1.1",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/jonschlinkert/fill-range",
       "textIndex": 128
     },
@@ -2811,6 +3212,7 @@
       "name": "filter-obj",
       "version": "1.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/filter-obj",
       "textIndex": 77
     },
@@ -2818,6 +3220,7 @@
       "name": "finalhandler",
       "version": "1.1.2",
       "license": "MIT",
+      "publisher": "Douglas Christopher Wilson",
       "homepage": "pillarjs/finalhandler",
       "textIndex": 203
     },
@@ -2825,6 +3228,7 @@
       "name": "find-cache-dir",
       "version": "2.1.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "avajs/find-cache-dir",
       "textIndex": 178
     },
@@ -2832,6 +3236,7 @@
       "name": "find-up",
       "version": "5.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/find-up",
       "textIndex": 26
     },
@@ -2839,6 +3244,7 @@
       "name": "find-up",
       "version": "4.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/find-up",
       "textIndex": 52
     },
@@ -2846,6 +3252,7 @@
       "name": "find-up",
       "version": "3.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/find-up",
       "textIndex": 52
     },
@@ -2853,6 +3260,7 @@
       "name": "firebase",
       "version": "11.3.1",
       "license": "Apache-2.0",
+      "publisher": "Firebase",
       "homepage": "https://firebase.google.com/",
       "textIndex": -1
     },
@@ -2860,6 +3268,7 @@
       "name": "flow-enums-runtime",
       "version": "0.0.6",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/flow",
       "textIndex": 56
     },
@@ -2867,6 +3276,7 @@
       "name": "flow-parser",
       "version": "0.261.2",
       "license": "MIT",
+      "publisher": "Flow Team",
       "homepage": "https://flow.org",
       "textIndex": -1
     },
@@ -2874,6 +3284,7 @@
       "name": "follow-redirects",
       "version": "1.16.0",
       "license": "MIT",
+      "publisher": "Ruben Verborgh",
       "homepage": "https://github.com/follow-redirects/follow-redirects",
       "textIndex": 30
     },
@@ -2881,6 +3292,7 @@
       "name": "form-data",
       "version": "4.0.6",
       "license": "MIT",
+      "publisher": "Felix Geisendörfer",
       "homepage": "git://github.com/form-data/form-data",
       "textIndex": 31
     },
@@ -2888,6 +3300,7 @@
       "name": "fresh",
       "version": "0.5.2",
       "license": "MIT",
+      "publisher": "TJ Holowaychuk",
       "homepage": "jshttp/fresh",
       "textIndex": 260
     },
@@ -2895,6 +3308,7 @@
       "name": "fs-extra",
       "version": "8.1.0",
       "license": "MIT",
+      "publisher": "JP Richardson",
       "homepage": "https://github.com/jprichardson/node-fs-extra",
       "textIndex": 134
     },
@@ -2902,6 +3316,7 @@
       "name": "fs.realpath",
       "version": "1.0.0",
       "license": "ISC",
+      "publisher": "Isaac Z. Schlueter",
       "homepage": "https://github.com/isaacs/fs.realpath",
       "textIndex": 97
     },
@@ -2909,6 +3324,7 @@
       "name": "fsevents",
       "version": "2.3.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/fsevents/fsevents",
       "textIndex": 217
     },
@@ -2916,6 +3332,7 @@
       "name": "function-bind",
       "version": "1.1.2",
       "license": "MIT",
+      "publisher": "Raynos",
       "homepage": "https://github.com/Raynos/function-bind",
       "textIndex": 119
     },
@@ -2923,6 +3340,7 @@
       "name": "gensync",
       "version": "1.0.0-beta.2",
       "license": "MIT",
+      "publisher": "Logan Smyth",
       "homepage": "https://github.com/loganfsmyth/gensync",
       "textIndex": 82
     },
@@ -2930,6 +3348,7 @@
       "name": "get-caller-file",
       "version": "2.0.5",
       "license": "ISC",
+      "publisher": "Stefan Penner",
       "homepage": "https://github.com/stefanpenner/get-caller-file#readme",
       "textIndex": 88
     },
@@ -2937,6 +3356,7 @@
       "name": "get-intrinsic",
       "version": "1.3.0",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/get-intrinsic#readme",
       "textIndex": 117
     },
@@ -2944,6 +3364,7 @@
       "name": "get-package-type",
       "version": "0.1.0",
       "license": "MIT",
+      "publisher": "Corey Farrell",
       "homepage": "https://github.com/cfware/get-package-type#readme",
       "textIndex": 218
     },
@@ -2951,6 +3372,7 @@
       "name": "get-proto",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/get-proto#readme",
       "textIndex": 164
     },
@@ -2958,6 +3380,7 @@
       "name": "get-stream",
       "version": "6.0.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/get-stream",
       "textIndex": 26
     },
@@ -2965,6 +3388,7 @@
       "name": "glob",
       "version": "7.2.3",
       "license": "ISC",
+      "publisher": "Isaac Z. Schlueter",
       "homepage": "git://github.com/isaacs/node-glob",
       "textIndex": 57
     },
@@ -2972,6 +3396,7 @@
       "name": "glob-parent",
       "version": "5.1.2",
       "license": "ISC",
+      "publisher": "Gulp Team",
       "homepage": "gulpjs/glob-parent",
       "textIndex": 231
     },
@@ -2979,6 +3404,7 @@
       "name": "globals",
       "version": "11.12.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/globals",
       "textIndex": 52
     },
@@ -2986,6 +3412,7 @@
       "name": "gopd",
       "version": "1.2.0",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/gopd#readme",
       "textIndex": 165
     },
@@ -2993,6 +3420,7 @@
       "name": "graceful-fs",
       "version": "4.2.11",
       "license": "ISC",
+      "publisher": null,
       "homepage": "https://github.com/isaacs/node-graceful-fs",
       "textIndex": 96
     },
@@ -3000,6 +3428,7 @@
       "name": "has-flag",
       "version": "4.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/has-flag",
       "textIndex": 52
     },
@@ -3007,6 +3436,7 @@
       "name": "has-symbols",
       "version": "1.1.0",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/has-symbols#readme",
       "textIndex": 166
     },
@@ -3014,6 +3444,7 @@
       "name": "has-tostringtag",
       "version": "1.0.2",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/inspect-js/has-tostringtag#readme",
       "textIndex": 118
     },
@@ -3021,6 +3452,7 @@
       "name": "hasown",
       "version": "2.0.4",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/inspect-js/hasOwn#readme",
       "textIndex": 75
     },
@@ -3028,6 +3460,7 @@
       "name": "hermes-estree",
       "version": "0.25.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/hermes",
       "textIndex": 20
     },
@@ -3035,6 +3468,7 @@
       "name": "hermes-parser",
       "version": "0.25.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/hermes",
       "textIndex": 20
     },
@@ -3042,6 +3476,7 @@
       "name": "hoist-non-react-statics",
       "version": "3.3.2",
       "license": "BSD-3-Clause",
+      "publisher": "Michael Ridgway",
       "homepage": "git://github.com/mridgway/hoist-non-react-statics",
       "textIndex": 33
     },
@@ -3049,6 +3484,7 @@
       "name": "http-errors",
       "version": "2.0.1",
       "license": "MIT",
+      "publisher": "Jonathan Ong",
       "homepage": "jshttp/http-errors",
       "textIndex": 247
     },
@@ -3056,6 +3492,7 @@
       "name": "http-errors",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Jonathan Ong",
       "homepage": "jshttp/http-errors",
       "textIndex": 247
     },
@@ -3063,6 +3500,7 @@
       "name": "http-parser-js",
       "version": "0.5.10",
       "license": "MIT",
+      "publisher": "Tim Caswell",
       "homepage": "git://github.com/creationix/http-parser-js",
       "textIndex": 223
     },
@@ -3070,6 +3508,7 @@
       "name": "https-proxy-agent",
       "version": "5.0.1",
       "license": "MIT",
+      "publisher": "Nathan Rajlich",
       "homepage": "git://github.com/TooTallNate/node-https-proxy-agent",
       "textIndex": -1
     },
@@ -3077,6 +3516,7 @@
       "name": "human-signals",
       "version": "2.1.0",
       "license": "Apache-2.0",
+      "publisher": "ehmicky",
       "homepage": "https://git.io/JeluP",
       "textIndex": 196
     },
@@ -3084,6 +3524,7 @@
       "name": "iconv-lite",
       "version": "0.4.24",
       "license": "MIT",
+      "publisher": "Alexander Shtuchkin",
       "homepage": "https://github.com/ashtuchkin/iconv-lite",
       "textIndex": 248
     },
@@ -3091,6 +3532,7 @@
       "name": "idb",
       "version": "7.1.1",
       "license": "ISC",
+      "publisher": "Jake Archibald",
       "homepage": "git://github.com/jakearchibald/idb",
       "textIndex": 109
     },
@@ -3098,6 +3540,7 @@
       "name": "ieee754",
       "version": "1.2.1",
       "license": "BSD-3-Clause",
+      "publisher": "Feross Aboukhadijeh",
       "homepage": "git://github.com/feross/ieee754",
       "textIndex": 293
     },
@@ -3105,6 +3548,7 @@
       "name": "image-size",
       "version": "1.2.1",
       "license": "MIT",
+      "publisher": "netroy",
       "homepage": "git://github.com/image-size/image-size",
       "textIndex": 145
     },
@@ -3112,6 +3556,7 @@
       "name": "import-fresh",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/import-fresh",
       "textIndex": 77
     },
@@ -3119,6 +3564,7 @@
       "name": "import-fresh",
       "version": "3.3.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/import-fresh",
       "textIndex": 26
     },
@@ -3126,6 +3572,7 @@
       "name": "imurmurhash",
       "version": "0.1.4",
       "license": "MIT",
+      "publisher": "Jens Taylor",
       "homepage": "https://github.com/jensyt/imurmurhash-js",
       "textIndex": -1
     },
@@ -3133,6 +3580,7 @@
       "name": "inflight",
       "version": "1.0.6",
       "license": "ISC",
+      "publisher": "Isaac Z. Schlueter",
       "homepage": "https://github.com/isaacs/inflight",
       "textIndex": 98
     },
@@ -3140,6 +3588,7 @@
       "name": "inherits",
       "version": "2.0.4",
       "license": "ISC",
+      "publisher": null,
       "homepage": "git://github.com/isaacs/inherits",
       "textIndex": 99
     },
@@ -3147,6 +3596,7 @@
       "name": "invariant",
       "version": "2.2.4",
       "license": "MIT",
+      "publisher": "Andres Suarez",
       "homepage": "https://github.com/zertosh/invariant",
       "textIndex": 22
     },
@@ -3154,6 +3604,7 @@
       "name": "is-arrayish",
       "version": "0.3.2",
       "license": "MIT",
+      "publisher": "Qix",
       "homepage": "https://github.com/qix-/node-is-arrayish",
       "textIndex": 163
     },
@@ -3161,6 +3612,7 @@
       "name": "is-arrayish",
       "version": "0.2.1",
       "license": "MIT",
+      "publisher": "Qix",
       "homepage": "https://github.com/qix-/node-is-arrayish",
       "textIndex": 163
     },
@@ -3168,6 +3620,7 @@
       "name": "is-core-module",
       "version": "2.16.1",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/inspect-js/is-core-module",
       "textIndex": 267
     },
@@ -3175,6 +3628,7 @@
       "name": "is-directory",
       "version": "0.3.1",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/jonschlinkert/is-directory",
       "textIndex": 210
     },
@@ -3182,6 +3636,7 @@
       "name": "is-docker",
       "version": "2.2.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/is-docker",
       "textIndex": 26
     },
@@ -3189,6 +3644,7 @@
       "name": "is-extglob",
       "version": "2.1.1",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/jonschlinkert/is-extglob",
       "textIndex": 289
     },
@@ -3196,6 +3652,7 @@
       "name": "is-fullwidth-code-point",
       "version": "3.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/is-fullwidth-code-point",
       "textIndex": 52
     },
@@ -3203,6 +3660,7 @@
       "name": "is-fullwidth-code-point",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/is-fullwidth-code-point",
       "textIndex": 77
     },
@@ -3210,6 +3668,7 @@
       "name": "is-glob",
       "version": "4.0.3",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/micromatch/is-glob",
       "textIndex": 228
     },
@@ -3217,6 +3676,7 @@
       "name": "is-interactive",
       "version": "1.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/is-interactive",
       "textIndex": 52
     },
@@ -3224,6 +3684,7 @@
       "name": "is-number",
       "version": "7.0.0",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/jonschlinkert/is-number",
       "textIndex": 128
     },
@@ -3231,6 +3692,7 @@
       "name": "is-plain-object",
       "version": "2.0.4",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/jonschlinkert/is-plain-object",
       "textIndex": 228
     },
@@ -3238,6 +3700,7 @@
       "name": "is-stream",
       "version": "2.0.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/is-stream",
       "textIndex": 26
     },
@@ -3245,6 +3708,7 @@
       "name": "is-unicode-supported",
       "version": "0.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/is-unicode-supported",
       "textIndex": 26
     },
@@ -3252,6 +3716,7 @@
       "name": "is-wsl",
       "version": "2.2.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/is-wsl",
       "textIndex": 52
     },
@@ -3259,6 +3724,7 @@
       "name": "is-wsl",
       "version": "1.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/is-wsl",
       "textIndex": 77
     },
@@ -3266,6 +3732,7 @@
       "name": "isexe",
       "version": "2.0.0",
       "license": "ISC",
+      "publisher": "Isaac Z. Schlueter",
       "homepage": "https://github.com/isaacs/isexe#readme",
       "textIndex": 43
     },
@@ -3273,6 +3740,7 @@
       "name": "isobject",
       "version": "3.0.1",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/jonschlinkert/isobject",
       "textIndex": 228
     },
@@ -3280,6 +3748,7 @@
       "name": "istanbul-lib-coverage",
       "version": "3.2.2",
       "license": "BSD-3-Clause",
+      "publisher": "Krishnan Anantheswaran",
       "homepage": "https://istanbul.js.org/",
       "textIndex": 152
     },
@@ -3287,6 +3756,7 @@
       "name": "istanbul-lib-instrument",
       "version": "5.2.1",
       "license": "BSD-3-Clause",
+      "publisher": "Krishnan Anantheswaran",
       "homepage": "https://istanbul.js.org/",
       "textIndex": 152
     },
@@ -3294,6 +3764,7 @@
       "name": "jest-environment-node",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -3301,6 +3772,7 @@
       "name": "jest-get-type",
       "version": "29.6.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -3308,6 +3780,7 @@
       "name": "jest-haste-map",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -3315,6 +3788,7 @@
       "name": "jest-message-util",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -3322,6 +3796,7 @@
       "name": "jest-mock",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -3329,6 +3804,7 @@
       "name": "jest-regex-util",
       "version": "29.6.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -3336,6 +3812,7 @@
       "name": "jest-util",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -3343,6 +3820,7 @@
       "name": "jest-validate",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -3350,6 +3828,7 @@
       "name": "jest-worker",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -3357,6 +3836,7 @@
       "name": "joi",
       "version": "17.13.4",
       "license": "BSD-3-Clause",
+      "publisher": null,
       "homepage": "git://github.com/hapijs/joi",
       "textIndex": 184
     },
@@ -3364,6 +3844,7 @@
       "name": "js-tokens",
       "version": "4.0.0",
       "license": "MIT",
+      "publisher": "Simon Lydell",
       "homepage": "lydell/js-tokens",
       "textIndex": 107
     },
@@ -3371,6 +3852,7 @@
       "name": "js-yaml",
       "version": "3.15.0",
       "license": "MIT",
+      "publisher": "Vladimir Zapparov",
       "homepage": "https://github.com/nodeca/js-yaml",
       "textIndex": 211
     },
@@ -3378,6 +3860,7 @@
       "name": "js-yaml",
       "version": "4.3.0",
       "license": "MIT",
+      "publisher": "Vladimir Zapparov",
       "homepage": "nodeca/js-yaml",
       "textIndex": 211
     },
@@ -3385,6 +3868,7 @@
       "name": "jsc-safe-url",
       "version": "0.2.4",
       "license": "0BSD",
+      "publisher": "Rob Hogan",
       "homepage": "https://github.com/robhogan/jsc-safe-url#readme",
       "textIndex": 146
     },
@@ -3392,6 +3876,7 @@
       "name": "jscodeshift",
       "version": "17.1.2",
       "license": "MIT",
+      "publisher": "Felix Kling",
       "homepage": "https://github.com/facebook/jscodeshift",
       "textIndex": 56
     },
@@ -3399,6 +3884,7 @@
       "name": "jsesc",
       "version": "3.1.0",
       "license": "MIT",
+      "publisher": "Mathias Bynens",
       "homepage": "https://mths.be/jsesc",
       "textIndex": 122
     },
@@ -3406,6 +3892,7 @@
       "name": "jsesc",
       "version": "3.0.2",
       "license": "MIT",
+      "publisher": "Mathias Bynens",
       "homepage": "https://mths.be/jsesc",
       "textIndex": 122
     },
@@ -3413,6 +3900,7 @@
       "name": "json-parse-better-errors",
       "version": "1.0.2",
       "license": "MIT",
+      "publisher": "Kat Marchán",
       "homepage": "https://github.com/zkat/json-parse-better-errors",
       "textIndex": 263
     },
@@ -3420,6 +3908,7 @@
       "name": "json-parse-even-better-errors",
       "version": "2.3.1",
       "license": "MIT",
+      "publisher": "Kat Marchán",
       "homepage": "https://github.com/npm/json-parse-even-better-errors",
       "textIndex": 272
     },
@@ -3427,6 +3916,7 @@
       "name": "json5",
       "version": "2.2.3",
       "license": "MIT",
+      "publisher": "Aseem Kishore",
       "homepage": "http://json5.org/",
       "textIndex": 83
     },
@@ -3434,6 +3924,7 @@
       "name": "jsonfile",
       "version": "4.0.0",
       "license": "MIT",
+      "publisher": "JP Richardson",
       "homepage": "git@github.com:jprichardson/node-jsonfile",
       "textIndex": 199
     },
@@ -3441,6 +3932,7 @@
       "name": "kind-of",
       "version": "6.0.3",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/jonschlinkert/kind-of",
       "textIndex": 228
     },
@@ -3448,6 +3940,7 @@
       "name": "kleur",
       "version": "3.0.3",
       "license": "MIT",
+      "publisher": "Luke Edwards",
       "homepage": "lukeed/kleur",
       "textIndex": 201
     },
@@ -3455,6 +3948,7 @@
       "name": "launch-editor",
       "version": "2.14.1",
       "license": "MIT",
+      "publisher": "Evan You",
       "homepage": "https://github.com/vitejs/launch-editor#readme",
       "textIndex": 193
     },
@@ -3462,6 +3956,7 @@
       "name": "leven",
       "version": "3.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/leven",
       "textIndex": 52
     },
@@ -3469,6 +3964,7 @@
       "name": "lighthouse-logger",
       "version": "1.4.2",
       "license": "Apache-2.0",
+      "publisher": null,
       "homepage": null,
       "textIndex": 137
     },
@@ -3476,6 +3972,7 @@
       "name": "lines-and-columns",
       "version": "1.2.4",
       "license": "MIT",
+      "publisher": "Brian Donovan",
       "homepage": "https://github.com/eventualbuddha/lines-and-columns#readme",
       "textIndex": 273
     },
@@ -3483,6 +3980,7 @@
       "name": "locate-path",
       "version": "6.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/locate-path",
       "textIndex": 26
     },
@@ -3490,6 +3988,7 @@
       "name": "locate-path",
       "version": "5.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/locate-path",
       "textIndex": 52
     },
@@ -3497,6 +3996,7 @@
       "name": "locate-path",
       "version": "3.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/locate-path",
       "textIndex": 52
     },
@@ -3504,6 +4004,7 @@
       "name": "lodash",
       "version": "4.18.1",
       "license": "MIT",
+      "publisher": "John-David Dalton",
       "homepage": "https://lodash.com/",
       "textIndex": 34
     },
@@ -3511,6 +4012,7 @@
       "name": "lodash.camelcase",
       "version": "4.3.0",
       "license": "MIT",
+      "publisher": "John-David Dalton",
       "homepage": "https://lodash.com/",
       "textIndex": 78
     },
@@ -3518,6 +4020,7 @@
       "name": "lodash.debounce",
       "version": "4.0.8",
       "license": "MIT",
+      "publisher": "John-David Dalton",
       "homepage": "https://lodash.com/",
       "textIndex": 78
     },
@@ -3525,6 +4028,7 @@
       "name": "lodash.throttle",
       "version": "4.1.1",
       "license": "MIT",
+      "publisher": "John-David Dalton",
       "homepage": "https://lodash.com/",
       "textIndex": 78
     },
@@ -3532,6 +4036,7 @@
       "name": "log-symbols",
       "version": "4.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/log-symbols",
       "textIndex": 26
     },
@@ -3539,6 +4044,7 @@
       "name": "logkitty",
       "version": "0.7.1",
       "license": "MIT",
+      "publisher": "Paweł Trysła",
       "homepage": "https://github.com/zamotany/logkitty",
       "textIndex": 239
     },
@@ -3546,6 +4052,7 @@
       "name": "long",
       "version": "5.3.2",
       "license": "Apache-2.0",
+      "publisher": "Daniel Wirtz",
       "homepage": "https://github.com/dcodeIO/long.js",
       "textIndex": 161
     },
@@ -3553,6 +4060,7 @@
       "name": "loose-envify",
       "version": "1.4.0",
       "license": "MIT",
+      "publisher": "Andres Suarez",
       "homepage": "https://github.com/zertosh/loose-envify",
       "textIndex": 68
     },
@@ -3560,6 +4068,7 @@
       "name": "lru-cache",
       "version": "5.1.1",
       "license": "ISC",
+      "publisher": "Isaac Z. Schlueter",
       "homepage": "git://github.com/isaacs/node-lru-cache",
       "textIndex": 43
     },
@@ -3567,6 +4076,7 @@
       "name": "make-dir",
       "version": "2.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/make-dir",
       "textIndex": 52
     },
@@ -3574,6 +4084,7 @@
       "name": "makeerror",
       "version": "1.0.12",
       "license": "BSD-3-Clause",
+      "publisher": "Naitik Shah",
       "homepage": "https://github.com/daaku/nodejs-makeerror",
       "textIndex": 264
     },
@@ -3581,6 +4092,7 @@
       "name": "marky",
       "version": "1.3.0",
       "license": "Apache-2.0",
+      "publisher": "Nolan Lawson",
       "homepage": "https://github.com/nolanlawson/marky#readme",
       "textIndex": 257
     },
@@ -3588,6 +4100,7 @@
       "name": "math-intrinsics",
       "version": "1.1.0",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/es-shims/math-intrinsics#readme",
       "textIndex": 167
     },
@@ -3595,6 +4108,7 @@
       "name": "mdn-data",
       "version": "2.0.14",
       "license": "CC0-1.0",
+      "publisher": "Mozilla Developer Network",
       "homepage": "https://developer.mozilla.org",
       "textIndex": 84
     },
@@ -3602,6 +4116,7 @@
       "name": "media-typer",
       "version": "0.3.0",
       "license": "MIT",
+      "publisher": "Douglas Christopher Wilson",
       "homepage": "jshttp/media-typer",
       "textIndex": 254
     },
@@ -3609,6 +4124,7 @@
       "name": "memoize-one",
       "version": "5.2.1",
       "license": "MIT",
+      "publisher": "Alex Reardon",
       "homepage": "https://github.com/alexreardon/memoize-one",
       "textIndex": 35
     },
@@ -3616,6 +4132,7 @@
       "name": "merge-stream",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Stephen Sugden",
       "homepage": "grncdr/merge-stream",
       "textIndex": 197
     },
@@ -3623,6 +4140,7 @@
       "name": "merge2",
       "version": "1.4.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/teambition/merge2",
       "textIndex": 232
     },
@@ -3630,6 +4148,7 @@
       "name": "metro",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3637,6 +4156,7 @@
       "name": "metro-babel-transformer",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3644,6 +4164,7 @@
       "name": "metro-cache",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3651,6 +4172,7 @@
       "name": "metro-cache-key",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3658,6 +4180,7 @@
       "name": "metro-config",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3665,6 +4188,7 @@
       "name": "metro-core",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3672,6 +4196,7 @@
       "name": "metro-file-map",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3679,6 +4204,7 @@
       "name": "metro-minify-terser",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3686,6 +4212,7 @@
       "name": "metro-resolver",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3693,6 +4220,7 @@
       "name": "metro-runtime",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3700,6 +4228,7 @@
       "name": "metro-source-map",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3707,6 +4236,7 @@
       "name": "metro-symbolicate",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3714,6 +4244,7 @@
       "name": "metro-transform-plugins",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3721,6 +4252,7 @@
       "name": "metro-transform-worker",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3728,6 +4260,7 @@
       "name": "micromatch",
       "version": "4.0.8",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/micromatch/micromatch",
       "textIndex": 128
     },
@@ -3735,6 +4268,7 @@
       "name": "mime",
       "version": "2.6.0",
       "license": "MIT",
+      "publisher": "Robert Kieffer",
       "homepage": "https://github.com/broofa/mime",
       "textIndex": 194
     },
@@ -3742,6 +4276,7 @@
       "name": "mime",
       "version": "1.6.0",
       "license": "MIT",
+      "publisher": "Robert Kieffer",
       "homepage": "https://github.com/broofa/node-mime",
       "textIndex": 194
     },
@@ -3749,6 +4284,7 @@
       "name": "mime-db",
       "version": "1.52.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/mime-db",
       "textIndex": 120
     },
@@ -3756,6 +4292,7 @@
       "name": "mime-db",
       "version": "1.54.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/mime-db",
       "textIndex": 120
     },
@@ -3763,6 +4300,7 @@
       "name": "mime-types",
       "version": "2.1.35",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/mime-types",
       "textIndex": 76
     },
@@ -3770,6 +4308,7 @@
       "name": "mimic-fn",
       "version": "2.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/mimic-fn",
       "textIndex": 52
     },
@@ -3777,6 +4316,7 @@
       "name": "minimatch",
       "version": "3.1.5",
       "license": "ISC",
+      "publisher": "Isaac Z. Schlueter",
       "homepage": "git://github.com/isaacs/minimatch",
       "textIndex": 43
     },
@@ -3784,6 +4324,7 @@
       "name": "mkdirp",
       "version": "1.0.4",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/isaacs/node-mkdirp",
       "textIndex": 202
     },
@@ -3791,6 +4332,7 @@
       "name": "moment",
       "version": "2.30.1",
       "license": "MIT",
+      "publisher": "Iskren Ivov Chernev",
       "homepage": "https://momentjs.com",
       "textIndex": 36
     },
@@ -3798,6 +4340,7 @@
       "name": "ms",
       "version": "2.1.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "vercel/ms",
       "textIndex": 104
     },
@@ -3805,6 +4348,7 @@
       "name": "ms",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "zeit/ms",
       "textIndex": 141
     },
@@ -3812,6 +4356,7 @@
       "name": "nanoid",
       "version": "3.3.18",
       "license": "MIT",
+      "publisher": "Andrey Sitnik",
       "homepage": "ai/nanoid",
       "textIndex": 28
     },
@@ -3819,6 +4364,7 @@
       "name": "negotiator",
       "version": "0.6.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/negotiator",
       "textIndex": 213
     },
@@ -3826,6 +4372,7 @@
       "name": "negotiator",
       "version": "0.6.4",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/negotiator",
       "textIndex": 213
     },
@@ -3833,6 +4380,7 @@
       "name": "neo-async",
       "version": "2.6.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/suguru03/neo-async",
       "textIndex": 129
     },
@@ -3840,6 +4388,7 @@
       "name": "nocache",
       "version": "3.0.4",
       "license": "MIT",
+      "publisher": "Adam Baldwin",
       "homepage": "https://github.com/helmetjs/nocache",
       "textIndex": 191
     },
@@ -3847,6 +4396,7 @@
       "name": "node-forge",
       "version": "1.4.0",
       "license": "(BSD-3-Clause OR GPL-2.0)",
+      "publisher": "Digital Bazaar, Inc.",
       "homepage": "https://github.com/digitalbazaar/forge",
       "textIndex": 206
     },
@@ -3854,6 +4404,7 @@
       "name": "node-int64",
       "version": "0.4.0",
       "license": "MIT",
+      "publisher": "Robert Kieffer",
       "homepage": "https://github.com/broofa/node-int64",
       "textIndex": 285
     },
@@ -3861,6 +4412,7 @@
       "name": "node-releases",
       "version": "2.0.19",
       "license": "MIT",
+      "publisher": "Sergey Rubanov",
       "homepage": "https://github.com/chicoxyzzy/node-releases",
       "textIndex": 172
     },
@@ -3868,6 +4420,7 @@
       "name": "node-stream-zip",
       "version": "1.15.0",
       "license": "MIT",
+      "publisher": "Antelle",
       "homepage": "https://github.com/antelle/node-stream-zip",
       "textIndex": 187
     },
@@ -3875,6 +4428,7 @@
       "name": "normalize-path",
       "version": "3.0.0",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/jonschlinkert/normalize-path",
       "textIndex": 177
     },
@@ -3882,6 +4436,7 @@
       "name": "npm-run-path",
       "version": "4.0.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/npm-run-path",
       "textIndex": 52
     },
@@ -3889,6 +4444,7 @@
       "name": "nth-check",
       "version": "2.1.1",
       "license": "BSD-2-Clause",
+      "publisher": "Felix Boehm",
       "homepage": "https://github.com/fb55/nth-check",
       "textIndex": 45
     },
@@ -3896,6 +4452,7 @@
       "name": "nullthrows",
       "version": "1.1.1",
       "license": "MIT",
+      "publisher": "Andres Suarez",
       "homepage": "https://github.com/zertosh/nullthrows",
       "textIndex": 58
     },
@@ -3903,6 +4460,7 @@
       "name": "ob1",
       "version": "0.81.5",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git@github.com:facebook/metro",
       "textIndex": -1
     },
@@ -3910,6 +4468,7 @@
       "name": "object-assign",
       "version": "4.1.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/object-assign",
       "textIndex": 77
     },
@@ -3917,6 +4476,7 @@
       "name": "object-inspect",
       "version": "1.13.4",
       "license": "MIT",
+      "publisher": "James Halliday",
       "homepage": "https://github.com/inspect-js/object-inspect",
       "textIndex": 295
     },
@@ -3924,6 +4484,7 @@
       "name": "on-finished",
       "version": "2.4.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/on-finished",
       "textIndex": 249
     },
@@ -3931,6 +4492,7 @@
       "name": "on-finished",
       "version": "2.3.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/on-finished",
       "textIndex": 249
     },
@@ -3938,6 +4500,7 @@
       "name": "on-headers",
       "version": "1.1.0",
       "license": "MIT",
+      "publisher": "Douglas Christopher Wilson",
       "homepage": "jshttp/on-headers",
       "textIndex": 254
     },
@@ -3945,6 +4508,7 @@
       "name": "once",
       "version": "1.4.0",
       "license": "ISC",
+      "publisher": "Isaac Z. Schlueter",
       "homepage": "git://github.com/isaacs/once",
       "textIndex": 43
     },
@@ -3952,6 +4516,7 @@
       "name": "onetime",
       "version": "5.1.2",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/onetime",
       "textIndex": 26
     },
@@ -3959,6 +4524,7 @@
       "name": "open",
       "version": "7.4.2",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/open",
       "textIndex": 26
     },
@@ -3966,6 +4532,7 @@
       "name": "open",
       "version": "6.4.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/open",
       "textIndex": 52
     },
@@ -3973,6 +4540,7 @@
       "name": "ora",
       "version": "5.4.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/ora",
       "textIndex": 26
     },
@@ -3980,6 +4548,7 @@
       "name": "p-limit",
       "version": "3.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/p-limit",
       "textIndex": 26
     },
@@ -3987,6 +4556,7 @@
       "name": "p-limit",
       "version": "2.3.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/p-limit",
       "textIndex": 52
     },
@@ -3994,6 +4564,7 @@
       "name": "p-locate",
       "version": "5.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/p-locate",
       "textIndex": 26
     },
@@ -4001,6 +4572,7 @@
       "name": "p-locate",
       "version": "4.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/p-locate",
       "textIndex": 52
     },
@@ -4008,6 +4580,7 @@
       "name": "p-locate",
       "version": "3.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/p-locate",
       "textIndex": 52
     },
@@ -4015,6 +4588,7 @@
       "name": "p-try",
       "version": "2.2.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/p-try",
       "textIndex": 52
     },
@@ -4022,6 +4596,7 @@
       "name": "parent-module",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/parent-module",
       "textIndex": 52
     },
@@ -4029,6 +4604,7 @@
       "name": "parse-json",
       "version": "4.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/parse-json",
       "textIndex": 52
     },
@@ -4036,6 +4612,7 @@
       "name": "parse-json",
       "version": "5.2.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/parse-json",
       "textIndex": 26
     },
@@ -4043,6 +4620,7 @@
       "name": "parseurl",
       "version": "1.3.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "pillarjs/parseurl",
       "textIndex": 204
     },
@@ -4050,6 +4628,7 @@
       "name": "path-exists",
       "version": "4.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/path-exists",
       "textIndex": 52
     },
@@ -4057,6 +4636,7 @@
       "name": "path-exists",
       "version": "3.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/path-exists",
       "textIndex": 77
     },
@@ -4064,6 +4644,7 @@
       "name": "path-is-absolute",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/path-is-absolute",
       "textIndex": 77
     },
@@ -4071,6 +4652,7 @@
       "name": "path-key",
       "version": "3.1.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/path-key",
       "textIndex": 52
     },
@@ -4078,6 +4660,7 @@
       "name": "path-parse",
       "version": "1.0.7",
       "license": "MIT",
+      "publisher": "Javier Blanco",
       "homepage": "https://github.com/jbgutierrez/path-parse#readme",
       "textIndex": 268
     },
@@ -4085,6 +4668,7 @@
       "name": "picocolors",
       "version": "1.1.1",
       "license": "ISC",
+      "publisher": "Alexey Raspopov",
       "homepage": "alexeyraspopov/picocolors",
       "textIndex": 121
     },
@@ -4092,6 +4676,7 @@
       "name": "picomatch",
       "version": "2.3.2",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/micromatch/picomatch",
       "textIndex": 158
     },
@@ -4099,6 +4684,7 @@
       "name": "pify",
       "version": "4.0.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/pify",
       "textIndex": 52
     },
@@ -4106,6 +4692,7 @@
       "name": "pirates",
       "version": "4.0.6",
       "license": "MIT",
+      "publisher": "Ari Porad",
       "homepage": "https://github.com/danez/pirates#readme",
       "textIndex": 149
     },
@@ -4113,6 +4700,7 @@
       "name": "pkg-dir",
       "version": "3.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/pkg-dir",
       "textIndex": 52
     },
@@ -4120,6 +4708,7 @@
       "name": "pretty-format",
       "version": "29.7.0",
       "license": "MIT",
+      "publisher": "James Kyle",
       "homepage": "https://github.com/jestjs/jest",
       "textIndex": 20
     },
@@ -4127,6 +4716,7 @@
       "name": "pretty-format",
       "version": "26.6.2",
       "license": "MIT",
+      "publisher": "James Kyle",
       "homepage": "https://github.com/facebook/jest",
       "textIndex": 56
     },
@@ -4134,6 +4724,7 @@
       "name": "promise",
       "version": "8.3.0",
       "license": "MIT",
+      "publisher": "ForbesLindesay",
       "homepage": "https://github.com/then/promise",
       "textIndex": 59
     },
@@ -4141,6 +4732,7 @@
       "name": "prompts",
       "version": "2.4.2",
       "license": "MIT",
+      "publisher": "Terkel Gjervig",
       "homepage": "terkelg/prompts",
       "textIndex": 135
     },
@@ -4148,6 +4740,7 @@
       "name": "prop-types",
       "version": "15.8.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://facebook.github.io/react/",
       "textIndex": 22
     },
@@ -4155,6 +4748,7 @@
       "name": "protobufjs",
       "version": "7.6.5",
       "license": "BSD-3-Clause",
+      "publisher": "Daniel Wirtz",
       "homepage": "https://protobufjs.github.io/protobuf.js/",
       "textIndex": 162
     },
@@ -4162,6 +4756,7 @@
       "name": "proxy-from-env",
       "version": "2.1.0",
       "license": "MIT",
+      "publisher": "Rob Wu",
       "homepage": "https://github.com/Rob--W/proxy-from-env#readme",
       "textIndex": 32
     },
@@ -4169,6 +4764,7 @@
       "name": "qs",
       "version": "6.15.3",
       "license": "BSD-3-Clause",
+      "publisher": null,
       "homepage": "https://github.com/ljharb/qs",
       "textIndex": 250
     },
@@ -4176,6 +4772,7 @@
       "name": "query-string",
       "version": "7.1.3",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/query-string",
       "textIndex": 71
     },
@@ -4183,6 +4780,7 @@
       "name": "queue",
       "version": "6.0.2",
       "license": "MIT",
+      "publisher": "Jesse Tane",
       "homepage": "https://github.com/jessetane/queue",
       "textIndex": 214
     },
@@ -4190,6 +4788,7 @@
       "name": "queue-microtask",
       "version": "1.2.3",
       "license": "MIT",
+      "publisher": "Feross Aboukhadijeh",
       "homepage": "https://github.com/feross/queue-microtask",
       "textIndex": 287
     },
@@ -4197,6 +4796,7 @@
       "name": "range-parser",
       "version": "1.2.1",
       "license": "MIT",
+      "publisher": "TJ Holowaychuk",
       "homepage": "jshttp/range-parser",
       "textIndex": 261
     },
@@ -4204,6 +4804,7 @@
       "name": "raw-body",
       "version": "2.5.3",
       "license": "MIT",
+      "publisher": "Jonathan Ong",
       "homepage": "stream-utils/raw-body",
       "textIndex": 251
     },
@@ -4211,6 +4812,7 @@
       "name": "react",
       "version": "19.0.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://react.dev/",
       "textIndex": 20
     },
@@ -4218,6 +4820,7 @@
       "name": "react-devtools-core",
       "version": "6.1.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/react",
       "textIndex": -1
     },
@@ -4225,6 +4828,7 @@
       "name": "react-freeze",
       "version": "1.0.4",
       "license": "MIT",
+      "publisher": null,
       "homepage": "software-mansion/react-freeze",
       "textIndex": 44
     },
@@ -4232,6 +4836,7 @@
       "name": "react-is",
       "version": "19.1.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://react.dev/",
       "textIndex": 20
     },
@@ -4239,6 +4844,7 @@
       "name": "react-is",
       "version": "16.13.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://reactjs.org/",
       "textIndex": 56
     },
@@ -4246,6 +4852,7 @@
       "name": "react-is",
       "version": "18.3.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://reactjs.org/",
       "textIndex": 56
     },
@@ -4253,6 +4860,7 @@
       "name": "react-is",
       "version": "17.0.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://reactjs.org/",
       "textIndex": 56
     },
@@ -4260,6 +4868,7 @@
       "name": "react-native",
       "version": "0.78.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://reactnative.dev/",
       "textIndex": 20
     },
@@ -4267,6 +4876,7 @@
       "name": "react-native-calendars",
       "version": "1.1314.0",
       "license": "MIT",
+      "publisher": "Wix.com",
       "homepage": "https://github.com/wix/react-native-calendars",
       "textIndex": 8
     },
@@ -4274,6 +4884,7 @@
       "name": "react-native-config",
       "version": "1.5.5",
       "license": "MIT",
+      "publisher": "Pedro Belo",
       "homepage": "https://github.com/luggit/react-native-config",
       "textIndex": 9
     },
@@ -4281,6 +4892,7 @@
       "name": "react-native-device-info",
       "version": "14.1.1",
       "license": "MIT",
+      "publisher": "Rebecca Hughes",
       "homepage": "https://github.com/react-native-device-info/react-native-device-info#readme",
       "textIndex": 10
     },
@@ -4288,6 +4900,7 @@
       "name": "react-native-encrypted-storage",
       "version": "4.0.3",
       "license": "MIT",
+      "publisher": "emeraldsanto",
       "homepage": "https://github.com/emeraldsanto/react-native-encrypted-storage#readme",
       "textIndex": 11
     },
@@ -4295,6 +4908,7 @@
       "name": "react-native-gesture-handler",
       "version": "2.30.1",
       "license": "MIT",
+      "publisher": "Krzysztof Magiera",
       "homepage": "https://docs.swmansion.com/react-native-gesture-handler/",
       "textIndex": 12
     },
@@ -4302,6 +4916,7 @@
       "name": "react-native-is-edge-to-edge",
       "version": "1.2.1",
       "license": "MIT",
+      "publisher": "Mathieu Acthernoene",
       "homepage": "https://github.com/zoontek/react-native-edge-to-edge",
       "textIndex": 41
     },
@@ -4309,6 +4924,7 @@
       "name": "react-native-keyboard-controller",
       "version": "1.18.6",
       "license": "MIT",
+      "publisher": "Kiryl Ziusko",
       "homepage": "https://kirillzyusko.github.io/react-native-keyboard-controller/",
       "textIndex": 13
     },
@@ -4316,6 +4932,7 @@
       "name": "react-native-modal-datetime-picker",
       "version": "18.0.0",
       "license": "MIT",
+      "publisher": "Mazzarolo Matteo",
       "homepage": "https://github.com/mmazzarolo/react-native-modal-datetime-picker",
       "textIndex": 14
     },
@@ -4323,6 +4940,7 @@
       "name": "react-native-reanimated",
       "version": "4.1.0",
       "license": "MIT",
+      "publisher": "Krzysztof Magiera",
       "homepage": "https://docs.swmansion.com/react-native-reanimated",
       "textIndex": 12
     },
@@ -4330,6 +4948,7 @@
       "name": "react-native-safe-area-context",
       "version": "5.7.0",
       "license": "MIT",
+      "publisher": "Janic Duplessis",
       "homepage": "https://github.com/AppAndFlow/react-native-safe-area-context#readme",
       "textIndex": 15
     },
@@ -4337,6 +4956,7 @@
       "name": "react-native-screens",
       "version": "4.9.2",
       "license": "MIT",
+      "publisher": "Krzysztof Magiera",
       "homepage": "https://github.com/software-mansion/react-native-screens#readme",
       "textIndex": 16
     },
@@ -4344,6 +4964,7 @@
       "name": "react-native-svg",
       "version": "15.15.4",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/react-native-community/react-native-svg",
       "textIndex": 17
     },
@@ -4351,6 +4972,7 @@
       "name": "react-native-swipe-gestures",
       "version": "1.0.5",
       "license": "MIT",
+      "publisher": "Goran Lepur",
       "homepage": "git@github.com:glepur/react-native-swipe-gestures",
       "textIndex": 37
     },
@@ -4358,6 +4980,7 @@
       "name": "react-native-vector-icons",
       "version": "10.3.0",
       "license": "MIT",
+      "publisher": "Joel Arvidsson",
       "homepage": "https://github.com/oblador/react-native-vector-icons",
       "textIndex": 18
     },
@@ -4365,6 +4988,7 @@
       "name": "react-native-worklets",
       "version": "0.5.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://docs.swmansion.com/react-native-worklets",
       "textIndex": 19
     },
@@ -4372,6 +4996,7 @@
       "name": "react-refresh",
       "version": "0.14.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://reactjs.org/",
       "textIndex": 56
     },
@@ -4379,6 +5004,7 @@
       "name": "readable-stream",
       "version": "3.6.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "git://github.com/nodejs/readable-stream",
       "textIndex": 277
     },
@@ -4386,6 +5012,7 @@
       "name": "readline",
       "version": "1.3.0",
       "license": "BSD",
+      "publisher": "craig brookes",
       "homepage": "git@github.com:maleck13/readline",
       "textIndex": -1
     },
@@ -4393,6 +5020,7 @@
       "name": "recast",
       "version": "0.23.9",
       "license": "MIT",
+      "publisher": "Ben Newman",
       "homepage": "http://github.com/benjamn/recast",
       "textIndex": 130
     },
@@ -4400,6 +5028,7 @@
       "name": "recyclerlistview",
       "version": "4.2.3",
       "license": "Apache-2.0",
+      "publisher": "naqvitalha",
       "homepage": "https://github.com/Flipkart/recyclerlistview",
       "textIndex": 38
     },
@@ -4407,6 +5036,7 @@
       "name": "regenerate",
       "version": "1.4.2",
       "license": "MIT",
+      "publisher": "Mathias Bynens",
       "homepage": "https://mths.be/regenerate",
       "textIndex": 122
     },
@@ -4414,6 +5044,7 @@
       "name": "regenerate-unicode-properties",
       "version": "10.2.0",
       "license": "MIT",
+      "publisher": "Mathias Bynens",
       "homepage": "https://github.com/mathiasbynens/regenerate-unicode-properties",
       "textIndex": 122
     },
@@ -4421,6 +5052,7 @@
       "name": "regenerator-runtime",
       "version": "0.13.11",
       "license": "MIT",
+      "publisher": "Ben Newman",
       "homepage": "https://github.com/facebook/regenerator/tree/main/packages/runtime",
       "textIndex": 60
     },
@@ -4428,6 +5060,7 @@
       "name": "regenerator-runtime",
       "version": "0.14.1",
       "license": "MIT",
+      "publisher": "Ben Newman",
       "homepage": "https://github.com/facebook/regenerator/tree/main/packages/runtime",
       "textIndex": 60
     },
@@ -4435,6 +5068,7 @@
       "name": "regenerator-transform",
       "version": "0.15.2",
       "license": "MIT",
+      "publisher": "Ben Newman",
       "homepage": "https://github.com/facebook/regenerator/tree/main/packages/transform",
       "textIndex": 60
     },
@@ -4442,6 +5076,7 @@
       "name": "regexpu-core",
       "version": "6.2.0",
       "license": "MIT",
+      "publisher": "Mathias Bynens",
       "homepage": "https://mths.be/regexpu",
       "textIndex": 122
     },
@@ -4449,6 +5084,7 @@
       "name": "regjsgen",
       "version": "0.8.0",
       "license": "MIT",
+      "publisher": "Benjamin Tan",
       "homepage": "https://github.com/bnjmnt4n/regjsgen",
       "textIndex": 174
     },
@@ -4456,6 +5092,7 @@
       "name": "regjsparser",
       "version": "0.12.0",
       "license": "BSD-2-Clause",
+      "publisher": "'Julian Viereck'",
       "homepage": "https://github.com/jviereck/regjsparser",
       "textIndex": 175
     },
@@ -4463,6 +5100,7 @@
       "name": "require-directory",
       "version": "2.1.1",
       "license": "MIT",
+      "publisher": "Troy Goode",
       "homepage": "https://github.com/troygoode/node-require-directory/",
       "textIndex": 89
     },
@@ -4470,6 +5108,7 @@
       "name": "require-main-filename",
       "version": "2.0.0",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "https://github.com/yargs/require-main-filename#readme",
       "textIndex": 91
     },
@@ -4477,6 +5116,7 @@
       "name": "resolve",
       "version": "1.22.10",
       "license": "MIT",
+      "publisher": "James Halliday",
       "homepage": "git://github.com/browserify/resolve",
       "textIndex": 227
     },
@@ -4484,6 +5124,7 @@
       "name": "resolve-from",
       "version": "5.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/resolve-from",
       "textIndex": 52
     },
@@ -4491,6 +5132,7 @@
       "name": "resolve-from",
       "version": "3.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/resolve-from",
       "textIndex": 77
     },
@@ -4498,6 +5140,7 @@
       "name": "resolve-from",
       "version": "4.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/resolve-from",
       "textIndex": 52
     },
@@ -4505,6 +5148,7 @@
       "name": "restore-cursor",
       "version": "3.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/restore-cursor",
       "textIndex": 52
     },
@@ -4512,6 +5156,7 @@
       "name": "reusify",
       "version": "1.0.4",
       "license": "MIT",
+      "publisher": "Matteo Collina",
       "homepage": "https://github.com/mcollina/reusify#readme",
       "textIndex": 288
     },
@@ -4519,6 +5164,7 @@
       "name": "rimraf",
       "version": "3.0.2",
       "license": "ISC",
+      "publisher": "Isaac Z. Schlueter",
       "homepage": "git://github.com/isaacs/rimraf",
       "textIndex": 43
     },
@@ -4526,6 +5172,7 @@
       "name": "run-parallel",
       "version": "1.2.0",
       "license": "MIT",
+      "publisher": "Feross Aboukhadijeh",
       "homepage": "https://github.com/feross/run-parallel",
       "textIndex": 287
     },
@@ -4533,6 +5180,7 @@
       "name": "safe-buffer",
       "version": "5.2.1",
       "license": "MIT",
+      "publisher": "Feross Aboukhadijeh",
       "homepage": "https://github.com/feross/safe-buffer",
       "textIndex": 224
     },
@@ -4540,6 +5188,7 @@
       "name": "safer-buffer",
       "version": "2.1.2",
       "license": "MIT",
+      "publisher": "Nikita Skovoroda",
       "homepage": "https://github.com/ChALkeR/safer-buffer",
       "textIndex": 281
     },
@@ -4547,6 +5196,7 @@
       "name": "scheduler",
       "version": "0.25.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://react.dev/",
       "textIndex": 20
     },
@@ -4554,6 +5204,7 @@
       "name": "selfsigned",
       "version": "2.4.1",
       "license": "MIT",
+      "publisher": "José F. Romaniello",
       "homepage": "git://github.com/jfromaniello/selfsigned",
       "textIndex": 139
     },
@@ -4561,6 +5212,7 @@
       "name": "semver",
       "version": "7.7.2",
       "license": "ISC",
+      "publisher": "GitHub Inc.",
       "homepage": "https://github.com/npm/node-semver",
       "textIndex": 43
     },
@@ -4568,6 +5220,7 @@
       "name": "semver",
       "version": "6.3.1",
       "license": "ISC",
+      "publisher": "GitHub Inc.",
       "homepage": "https://github.com/npm/node-semver",
       "textIndex": 43
     },
@@ -4575,6 +5228,7 @@
       "name": "semver",
       "version": "7.7.4",
       "license": "ISC",
+      "publisher": "GitHub Inc.",
       "homepage": "https://github.com/npm/node-semver",
       "textIndex": 43
     },
@@ -4582,6 +5236,7 @@
       "name": "semver",
       "version": "7.7.1",
       "license": "ISC",
+      "publisher": "GitHub Inc.",
       "homepage": "https://github.com/npm/node-semver",
       "textIndex": 43
     },
@@ -4589,6 +5244,7 @@
       "name": "semver",
       "version": "7.7.3",
       "license": "ISC",
+      "publisher": "GitHub Inc.",
       "homepage": "https://github.com/npm/node-semver",
       "textIndex": 43
     },
@@ -4596,6 +5252,7 @@
       "name": "semver",
       "version": "5.7.2",
       "license": "ISC",
+      "publisher": "GitHub Inc.",
       "homepage": "https://github.com/npm/node-semver",
       "textIndex": 43
     },
@@ -4603,6 +5260,7 @@
       "name": "send",
       "version": "0.19.0",
       "license": "MIT",
+      "publisher": "TJ Holowaychuk",
       "homepage": "pillarjs/send",
       "textIndex": 209
     },
@@ -4610,6 +5268,7 @@
       "name": "serialize-error",
       "version": "2.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/serialize-error",
       "textIndex": 77
     },
@@ -4617,6 +5276,7 @@
       "name": "serve-static",
       "version": "1.16.2",
       "license": "MIT",
+      "publisher": "Douglas Christopher Wilson",
       "homepage": "expressjs/serve-static",
       "textIndex": 140
     },
@@ -4624,6 +5284,7 @@
       "name": "set-blocking",
       "version": "2.0.0",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "https://github.com/yargs/set-blocking#readme",
       "textIndex": 91
     },
@@ -4631,6 +5292,7 @@
       "name": "setprototypeof",
       "version": "1.2.0",
       "license": "ISC",
+      "publisher": "Wes Todd",
       "homepage": "https://github.com/wesleytodd/setprototypeof",
       "textIndex": 279
     },
@@ -4638,6 +5300,7 @@
       "name": "sf-symbols-typescript",
       "version": "2.2.0",
       "license": "MIT",
+      "publisher": "Fernando Rojo",
       "homepage": "https://github.com/nandorojo/typescript-sf-symbols",
       "textIndex": 24
     },
@@ -4645,6 +5308,7 @@
       "name": "shallow-clone",
       "version": "3.0.1",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/jonschlinkert/shallow-clone",
       "textIndex": 229
     },
@@ -4652,6 +5316,7 @@
       "name": "shebang-command",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Kevin Mårtensson",
       "homepage": "kevva/shebang-command",
       "textIndex": 256
     },
@@ -4659,6 +5324,7 @@
       "name": "shebang-regex",
       "version": "3.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/shebang-regex",
       "textIndex": 52
     },
@@ -4666,6 +5332,7 @@
       "name": "shell-quote",
       "version": "1.10.0",
       "license": "MIT",
+      "publisher": "James Halliday",
       "homepage": "https://github.com/ljharb/shell-quote",
       "textIndex": 102
     },
@@ -4673,6 +5340,7 @@
       "name": "side-channel",
       "version": "1.1.1",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/side-channel#readme",
       "textIndex": 283
     },
@@ -4680,6 +5348,7 @@
       "name": "side-channel-list",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/side-channel-list#readme",
       "textIndex": 116
     },
@@ -4687,6 +5356,7 @@
       "name": "side-channel-map",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/side-channel-map#readme",
       "textIndex": 116
     },
@@ -4694,6 +5364,7 @@
       "name": "side-channel-weakmap",
       "version": "1.0.2",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/ljharb/side-channel-weakmap#readme",
       "textIndex": 283
     },
@@ -4701,6 +5372,7 @@
       "name": "signal-exit",
       "version": "4.1.0",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "https://github.com/tapjs/signal-exit",
       "textIndex": 182
     },
@@ -4708,6 +5380,7 @@
       "name": "signal-exit",
       "version": "3.0.7",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "https://github.com/tapjs/signal-exit",
       "textIndex": 198
     },
@@ -4715,6 +5388,7 @@
       "name": "simple-swizzle",
       "version": "0.2.2",
       "license": "MIT",
+      "publisher": "Qix",
       "homepage": "qix-/node-simple-swizzle",
       "textIndex": 113
     },
@@ -4722,6 +5396,7 @@
       "name": "sisteransi",
       "version": "1.0.5",
       "license": "MIT",
+      "publisher": "Terkel Gjervig",
       "homepage": "https://github.com/terkelg/sisteransi",
       "textIndex": 135
     },
@@ -4729,6 +5404,7 @@
       "name": "slash",
       "version": "3.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/slash",
       "textIndex": 52
     },
@@ -4736,6 +5412,7 @@
       "name": "slice-ansi",
       "version": "2.1.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "chalk/slice-ansi",
       "textIndex": 291
     },
@@ -4743,6 +5420,7 @@
       "name": "socket.io-client",
       "version": "4.8.3",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/socketio/socket.io/tree/main/packages/socket.io-client#readme",
       "textIndex": 21
     },
@@ -4750,6 +5428,7 @@
       "name": "socket.io-parser",
       "version": "4.2.7",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/socketio/socket.io/tree/main/packages/socket.io-client#readme",
       "textIndex": 67
     },
@@ -4757,6 +5436,7 @@
       "name": "source-map",
       "version": "0.6.1",
       "license": "BSD-3-Clause",
+      "publisher": "Nick Fitzgerald",
       "homepage": "https://github.com/mozilla/source-map",
       "textIndex": 85
     },
@@ -4764,6 +5444,7 @@
       "name": "source-map",
       "version": "0.5.7",
       "license": "BSD-3-Clause",
+      "publisher": "Nick Fitzgerald",
       "homepage": "https://github.com/mozilla/source-map",
       "textIndex": 85
     },
@@ -4771,6 +5452,7 @@
       "name": "source-map-support",
       "version": "0.5.21",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/evanw/node-source-map-support",
       "textIndex": 179
     },
@@ -4778,6 +5460,7 @@
       "name": "split-on-first",
       "version": "1.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/split-on-first",
       "textIndex": 52
     },
@@ -4785,6 +5468,7 @@
       "name": "sprintf-js",
       "version": "1.0.3",
       "license": "BSD-3-Clause",
+      "publisher": "Alexandru Marasteanu",
       "homepage": "https://github.com/alexei/sprintf.js",
       "textIndex": 284
     },
@@ -4792,6 +5476,7 @@
       "name": "stack-utils",
       "version": "2.0.6",
       "license": "MIT",
+      "publisher": "James Talmage",
       "homepage": "tapjs/stack-utils",
       "textIndex": 222
     },
@@ -4799,6 +5484,7 @@
       "name": "stackframe",
       "version": "1.3.4",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://www.stacktracejs.com",
       "textIndex": 144
     },
@@ -4806,6 +5492,7 @@
       "name": "stacktrace-parser",
       "version": "0.1.11",
       "license": "MIT",
+      "publisher": "Georg Tavonius",
       "homepage": "https://github.com/errwischt/stacktrace-parser",
       "textIndex": 61
     },
@@ -4813,6 +5500,7 @@
       "name": "statuses",
       "version": "1.5.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/statuses",
       "textIndex": 258
     },
@@ -4820,6 +5508,7 @@
       "name": "statuses",
       "version": "2.0.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/statuses",
       "textIndex": 258
     },
@@ -4827,6 +5516,7 @@
       "name": "statuses",
       "version": "2.0.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/statuses",
       "textIndex": 258
     },
@@ -4834,6 +5524,7 @@
       "name": "strict-uri-encode",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Kevin Mårtensson",
       "homepage": "kevva/strict-uri-encode",
       "textIndex": 115
     },
@@ -4841,6 +5532,7 @@
       "name": "string_decoder",
       "version": "1.3.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/nodejs/string_decoder",
       "textIndex": 277
     },
@@ -4848,6 +5540,7 @@
       "name": "string-width",
       "version": "4.2.3",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/string-width",
       "textIndex": 52
     },
@@ -4855,6 +5548,7 @@
       "name": "strip-ansi",
       "version": "6.0.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "chalk/strip-ansi",
       "textIndex": 52
     },
@@ -4862,6 +5556,7 @@
       "name": "strip-ansi",
       "version": "5.2.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "chalk/strip-ansi",
       "textIndex": 52
     },
@@ -4869,6 +5564,7 @@
       "name": "strip-final-newline",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/strip-final-newline",
       "textIndex": 52
     },
@@ -4876,6 +5572,7 @@
       "name": "strnum",
       "version": "1.1.1",
       "license": "MIT",
+      "publisher": "Amit Gupta",
       "homepage": "https://github.com/NaturalIntelligence/strnum",
       "textIndex": 275
     },
@@ -4883,6 +5580,7 @@
       "name": "supports-color",
       "version": "7.2.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "chalk/supports-color",
       "textIndex": 52
     },
@@ -4890,6 +5588,7 @@
       "name": "supports-color",
       "version": "8.1.1",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "chalk/supports-color",
       "textIndex": 26
     },
@@ -4897,6 +5596,7 @@
       "name": "supports-preserve-symlinks-flag",
       "version": "1.0.0",
       "license": "MIT",
+      "publisher": "Jordan Harband",
       "homepage": "https://github.com/inspect-js/node-supports-preserve-symlinks-flag#readme",
       "textIndex": 269
     },
@@ -4904,6 +5604,7 @@
       "name": "terser",
       "version": "5.39.2",
       "license": "BSD-2-Clause",
+      "publisher": "Mihai Bazon",
       "homepage": "https://terser.org",
       "textIndex": 265
     },
@@ -4911,6 +5612,7 @@
       "name": "test-exclude",
       "version": "6.0.0",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "https://istanbul.js.org/",
       "textIndex": 91
     },
@@ -4918,6 +5620,7 @@
       "name": "throat",
       "version": "5.0.0",
       "license": "MIT",
+      "publisher": "ForbesLindesay",
       "homepage": "https://github.com/ForbesLindesay/throat",
       "textIndex": 147
     },
@@ -4925,6 +5628,7 @@
       "name": "tiny-invariant",
       "version": "1.3.3",
       "license": "MIT",
+      "publisher": "Alex Reardon",
       "homepage": "https://github.com/alexreardon/tiny-invariant",
       "textIndex": 35
     },
@@ -4932,6 +5636,7 @@
       "name": "tmp",
       "version": "0.2.7",
       "license": "MIT",
+      "publisher": "KARASZI István",
       "homepage": "http://github.com/raszi/node-tmp",
       "textIndex": 131
     },
@@ -4939,6 +5644,7 @@
       "name": "tmpl",
       "version": "1.0.5",
       "license": "BSD-3-Clause",
+      "publisher": "Naitik Shah",
       "homepage": "https://github.com/daaku/nodejs-tmpl",
       "textIndex": 264
     },
@@ -4946,6 +5652,7 @@
       "name": "to-regex-range",
       "version": "5.0.1",
       "license": "MIT",
+      "publisher": "Jon Schlinkert",
       "homepage": "https://github.com/micromatch/to-regex-range",
       "textIndex": 229
     },
@@ -4953,6 +5660,7 @@
       "name": "toidentifier",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "Douglas Christopher Wilson",
       "homepage": "component/toidentifier",
       "textIndex": 280
     },
@@ -4960,6 +5668,7 @@
       "name": "ts-object-utils",
       "version": "0.0.5",
       "license": "ISC",
+      "publisher": "naqvitalha",
       "homepage": "https://github.com/naqvitalha/ts-object-utils#readme",
       "textIndex": -1
     },
@@ -4967,6 +5676,7 @@
       "name": "tslib",
       "version": "2.8.1",
       "license": "0BSD",
+      "publisher": "Microsoft Corp.",
       "homepage": "https://www.typescriptlang.org/",
       "textIndex": 108
     },
@@ -4974,6 +5684,7 @@
       "name": "type-detect",
       "version": "4.0.8",
       "license": "MIT",
+      "publisher": "Jake Luer",
       "homepage": "ssh://git@github.com/chaijs/type-detect",
       "textIndex": 266
     },
@@ -4981,6 +5692,7 @@
       "name": "type-fest",
       "version": "0.7.1",
       "license": "(MIT OR CC0-1.0)",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/type-fest",
       "textIndex": 52
     },
@@ -4988,6 +5700,7 @@
       "name": "type-is",
       "version": "1.6.18",
       "license": "MIT",
+      "publisher": null,
       "homepage": "jshttp/type-is",
       "textIndex": 190
     },
@@ -4995,6 +5708,7 @@
       "name": "typescript",
       "version": "5.0.4",
       "license": "Apache-2.0",
+      "publisher": "Microsoft Corp.",
       "homepage": "https://www.typescriptlang.org/",
       "textIndex": 233
     },
@@ -5002,6 +5716,7 @@
       "name": "undici-types",
       "version": "6.20.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://undici.nodejs.org",
       "textIndex": 156
     },
@@ -5009,6 +5724,7 @@
       "name": "unicode-canonical-property-names-ecmascript",
       "version": "2.0.1",
       "license": "MIT",
+      "publisher": "Mathias Bynens",
       "homepage": "https://github.com/mathiasbynens/unicode-canonical-property-names-ecmascript",
       "textIndex": 122
     },
@@ -5016,6 +5732,7 @@
       "name": "unicode-match-property-ecmascript",
       "version": "2.0.0",
       "license": "MIT",
+      "publisher": "Mathias Bynens",
       "homepage": "https://github.com/mathiasbynens/unicode-match-property-ecmascript",
       "textIndex": 122
     },
@@ -5023,6 +5740,7 @@
       "name": "unicode-match-property-value-ecmascript",
       "version": "2.2.0",
       "license": "MIT",
+      "publisher": "Mathias Bynens",
       "homepage": "https://github.com/mathiasbynens/unicode-match-property-value-ecmascript",
       "textIndex": 122
     },
@@ -5030,6 +5748,7 @@
       "name": "unicode-property-aliases-ecmascript",
       "version": "2.1.0",
       "license": "MIT",
+      "publisher": "Mathias Bynens",
       "homepage": "https://github.com/mathiasbynens/unicode-property-aliases-ecmascript",
       "textIndex": 122
     },
@@ -5037,6 +5756,7 @@
       "name": "universalify",
       "version": "0.1.2",
       "license": "MIT",
+      "publisher": "Ryan Zimmerman",
       "homepage": "https://github.com/RyanZim/universalify#readme",
       "textIndex": 200
     },
@@ -5044,6 +5764,7 @@
       "name": "unpipe",
       "version": "1.0.0",
       "license": "MIT",
+      "publisher": "Douglas Christopher Wilson",
       "homepage": "stream-utils/unpipe",
       "textIndex": 252
     },
@@ -5051,6 +5772,7 @@
       "name": "update-browserslist-db",
       "version": "1.1.2",
       "license": "MIT",
+      "publisher": "Andrey Sitnik",
       "homepage": "browserslist/update-db",
       "textIndex": 173
     },
@@ -5058,6 +5780,7 @@
       "name": "use-latest-callback",
       "version": "0.2.6",
       "license": "MIT",
+      "publisher": "Satyajit Sahoo",
       "homepage": "https://github.com/satya164/use-latest-callback",
       "textIndex": 29
     },
@@ -5065,6 +5788,7 @@
       "name": "use-sync-external-store",
       "version": "1.6.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://github.com/facebook/react",
       "textIndex": 20
     },
@@ -5072,6 +5796,7 @@
       "name": "util-deprecate",
       "version": "1.0.2",
       "license": "MIT",
+      "publisher": "Nathan Rajlich",
       "homepage": "https://github.com/TooTallNate/util-deprecate",
       "textIndex": 294
     },
@@ -5079,6 +5804,7 @@
       "name": "utils-merge",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "Jared Hanson",
       "homepage": "git://github.com/jaredhanson/utils-merge",
       "textIndex": 205
     },
@@ -5086,6 +5812,7 @@
       "name": "vary",
       "version": "1.1.2",
       "license": "MIT",
+      "publisher": "Douglas Christopher Wilson",
       "homepage": "jshttp/vary",
       "textIndex": 255
     },
@@ -5093,6 +5820,7 @@
       "name": "vlq",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "Rich Harris",
       "homepage": "https://github.com/Rich-Harris/vlq",
       "textIndex": 100
     },
@@ -5100,6 +5828,7 @@
       "name": "walker",
       "version": "1.0.8",
       "license": "Apache-2.0",
+      "publisher": "Naitik Shah",
       "homepage": "https://github.com/daaku/nodejs-walker",
       "textIndex": 215
     },
@@ -5107,6 +5836,7 @@
       "name": "warn-once",
       "version": "0.1.1",
       "license": "MIT",
+      "publisher": "Satyajit Sahoo",
       "homepage": "https://github.com/satya164/warn-once",
       "textIndex": 25
     },
@@ -5114,6 +5844,7 @@
       "name": "wcwidth",
       "version": "1.0.1",
       "license": "MIT",
+      "publisher": "Tim Oxley",
       "homepage": "https://github.com/timoxley/wcwidth#readme",
       "textIndex": 188
     },
@@ -5121,6 +5852,7 @@
       "name": "web-vitals",
       "version": "4.2.4",
       "license": "Apache-2.0",
+      "publisher": "Philip Walton",
       "homepage": "https://github.com/GoogleChrome/web-vitals",
       "textIndex": 111
     },
@@ -5128,6 +5860,7 @@
       "name": "websocket-driver",
       "version": "0.7.5",
       "license": "Apache-2.0",
+      "publisher": "James Coglan",
       "homepage": "https://github.com/faye/websocket-driver-node",
       "textIndex": 160
     },
@@ -5135,6 +5868,7 @@
       "name": "websocket-extensions",
       "version": "0.1.4",
       "license": "Apache-2.0",
+      "publisher": "James Coglan",
       "homepage": "http://github.com/faye/websocket-extensions-node",
       "textIndex": 225
     },
@@ -5142,6 +5876,7 @@
       "name": "whatwg-fetch",
       "version": "3.6.20",
       "license": "MIT",
+      "publisher": null,
       "homepage": "github/fetch",
       "textIndex": 62
     },
@@ -5149,6 +5884,7 @@
       "name": "which",
       "version": "2.0.2",
       "license": "ISC",
+      "publisher": "Isaac Z. Schlueter",
       "homepage": "git://github.com/isaacs/node-which",
       "textIndex": 43
     },
@@ -5156,6 +5892,7 @@
       "name": "which-module",
       "version": "2.0.1",
       "license": "ISC",
+      "publisher": "nexdrew",
       "homepage": "https://github.com/nexdrew/which-module#readme",
       "textIndex": 292
     },
@@ -5163,6 +5900,7 @@
       "name": "wrap-ansi",
       "version": "7.0.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "chalk/wrap-ansi",
       "textIndex": 26
     },
@@ -5170,6 +5908,7 @@
       "name": "wrap-ansi",
       "version": "6.2.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "chalk/wrap-ansi",
       "textIndex": 52
     },
@@ -5177,6 +5916,7 @@
       "name": "wrappy",
       "version": "1.0.2",
       "license": "ISC",
+      "publisher": "Isaac Z. Schlueter",
       "homepage": "https://github.com/npm/wrappy",
       "textIndex": 43
     },
@@ -5184,6 +5924,7 @@
       "name": "write-file-atomic",
       "version": "5.0.1",
       "license": "ISC",
+      "publisher": "GitHub Inc.",
       "homepage": "https://github.com/npm/write-file-atomic",
       "textIndex": 132
     },
@@ -5191,6 +5932,7 @@
       "name": "write-file-atomic",
       "version": "4.0.2",
       "license": "ISC",
+      "publisher": "GitHub Inc.",
       "homepage": "https://github.com/npm/write-file-atomic",
       "textIndex": 132
     },
@@ -5198,6 +5940,7 @@
       "name": "ws",
       "version": "6.2.4",
       "license": "MIT",
+      "publisher": "Einar Otto Stangvik",
       "homepage": "https://github.com/websockets/ws",
       "textIndex": 63
     },
@@ -5205,6 +5948,7 @@
       "name": "ws",
       "version": "7.5.11",
       "license": "MIT",
+      "publisher": "Einar Otto Stangvik",
       "homepage": "https://github.com/websockets/ws",
       "textIndex": 63
     },
@@ -5212,6 +5956,7 @@
       "name": "ws",
       "version": "8.21.0",
       "license": "MIT",
+      "publisher": "Einar Otto Stangvik",
       "homepage": "https://github.com/websockets/ws",
       "textIndex": 105
     },
@@ -5219,6 +5964,7 @@
       "name": "xdate",
       "version": "0.8.3",
       "license": "(MIT OR GPL-2.0)",
+      "publisher": "Adam Shaw",
       "homepage": "http://arshaw.com/xdate/",
       "textIndex": 39
     },
@@ -5226,6 +5972,7 @@
       "name": "xmlhttprequest-ssl",
       "version": "2.1.2",
       "license": "MIT",
+      "publisher": "Michael de Wit",
       "homepage": "git://github.com/mjwwit/node-XMLHttpRequest",
       "textIndex": 106
     },
@@ -5233,6 +5980,7 @@
       "name": "y18n",
       "version": "5.0.8",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "https://github.com/yargs/y18n",
       "textIndex": 90
     },
@@ -5240,6 +5988,7 @@
       "name": "y18n",
       "version": "4.0.3",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "https://github.com/yargs/y18n",
       "textIndex": 90
     },
@@ -5247,6 +5996,7 @@
       "name": "yallist",
       "version": "3.1.1",
       "license": "ISC",
+      "publisher": "Isaac Z. Schlueter",
       "homepage": "https://github.com/isaacs/yallist",
       "textIndex": 43
     },
@@ -5254,6 +6004,7 @@
       "name": "yaml",
       "version": "2.8.3",
       "license": "ISC",
+      "publisher": "Eemeli Aro",
       "homepage": "https://eemeli.org/yaml/",
       "textIndex": 189
     },
@@ -5261,6 +6012,7 @@
       "name": "yargs",
       "version": "16.2.0",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://yargs.js.org/",
       "textIndex": 47
     },
@@ -5268,6 +6020,7 @@
       "name": "yargs",
       "version": "17.7.2",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://yargs.js.org/",
       "textIndex": 47
     },
@@ -5275,6 +6028,7 @@
       "name": "yargs",
       "version": "15.4.1",
       "license": "MIT",
+      "publisher": null,
       "homepage": "https://yargs.js.org/",
       "textIndex": 47
     },
@@ -5282,6 +6036,7 @@
       "name": "yargs-parser",
       "version": "20.2.9",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "https://github.com/yargs/yargs-parser",
       "textIndex": 91
     },
@@ -5289,6 +6044,7 @@
       "name": "yargs-parser",
       "version": "21.1.1",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "https://github.com/yargs/yargs-parser",
       "textIndex": 91
     },
@@ -5296,6 +6052,7 @@
       "name": "yargs-parser",
       "version": "18.1.3",
       "license": "ISC",
+      "publisher": "Ben Coe",
       "homepage": "https://github.com/yargs/yargs-parser",
       "textIndex": 91
     },
@@ -5303,6 +6060,7 @@
       "name": "yocto-queue",
       "version": "0.1.0",
       "license": "MIT",
+      "publisher": "Sindre Sorhus",
       "homepage": "sindresorhus/yocto-queue",
       "textIndex": 26
     }

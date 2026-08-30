@@ -41,7 +41,7 @@ const OpenSourceLicensesScreen = ({
 
   const renderItem = useCallback(
     ({item}: {item: (typeof packages)[number]}) => {
-      const {homepage} = item;
+      const {homepage, publisher} = item;
       const id = `${item.name}@${item.version}`;
       const isExpanded = expandedId === id;
       const text = item.textIndex === -1 ? null : texts[item.textIndex];
@@ -68,6 +68,12 @@ const OpenSourceLicensesScreen = ({
 
           {isExpanded && (
             <View style={styles.detail}>
+              {publisher && (
+                <Text
+                  style={[styles.publisher, {color: colors.text.secondary}]}>
+                  저작권자: {publisher}
+                </Text>
+              )}
               {text ? (
                 <Text
                   style={[styles.licenseText, {color: colors.text.secondary}]}>
@@ -158,6 +164,11 @@ const styles = StyleSheet.create({
   },
   detail: {
     paddingBottom: 16,
+  },
+  publisher: {
+    fontSize: 12,
+    fontWeight: '500',
+    marginBottom: 8,
   },
   licenseText: {
     fontSize: 12,
