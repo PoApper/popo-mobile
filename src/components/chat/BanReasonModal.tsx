@@ -17,6 +17,7 @@ import {MyRoomData, UserData} from '@interfaces/paxi';
 import {backgroundColor, textColor} from '@styles/default';
 import {useEffect, useState} from 'react';
 import paxi_api from '@utils/paxi_api';
+import {getAxiosErrorInfo} from '@utils/axios-error';
 
 interface BanReasonModalProps {
   modalVisible: boolean;
@@ -61,7 +62,8 @@ const BanReasonModal = ({
         );
       })
       .catch(e => {
-        Alert.alert('신고 실패', e.response.data.message);
+        const {detail} = getAxiosErrorInfo(e);
+        Alert.alert('신고 실패', detail ?? '알 수 없는 오류가 발생했습니다.');
       });
   };
 

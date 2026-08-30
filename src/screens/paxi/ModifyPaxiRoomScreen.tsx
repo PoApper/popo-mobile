@@ -17,6 +17,7 @@ import moment from 'moment';
 
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
+import {getAxiosErrorInfo} from '@utils/axios-error';
 import {
   PAXI_LOCATIONS,
   getPaxiDistanceInfo,
@@ -114,8 +115,8 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
         }
       })
       .catch(error => {
-        // const status = error.response.status;
-        const message = error.response.data.message;
+        const message =
+          getAxiosErrorInfo(error).detail ?? '알 수 없는 오류가 발생했습니다.';
         Alert.alert('실패', `방의 정보를 변경하는데 실패했습니다:\n${message}`);
       });
   }

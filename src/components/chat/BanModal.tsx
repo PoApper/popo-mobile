@@ -17,6 +17,7 @@ import {
 import {UserData} from '@interfaces/paxi';
 import {TextInput} from 'react-native-gesture-handler';
 import paxi_api from '@utils/paxi_api';
+import {getAxiosErrorInfo} from '@utils/axios-error';
 import {backgroundColor, textColor} from '@styles/default';
 
 interface BanModalProps {
@@ -58,7 +59,8 @@ const BanModal = ({
         Alert.alert('처리 완료', '추방 요청이 처리되었습니다.');
       })
       .catch(error => {
-        Alert.alert('추방 실패', error.response.data.message);
+        const {detail} = getAxiosErrorInfo(error);
+        Alert.alert('추방 실패', detail ?? '알 수 없는 오류가 발생했습니다.');
         console.error('추방 실패. 사유: ', error.response);
       });
   };
