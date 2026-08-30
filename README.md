@@ -28,7 +28,24 @@ Firebase 설정 파일도 필요합니다. 둘 다 Firebase 콘솔에서 다운�
 cp .env.example .env
 ```
 
-플랫폼별 세부 설정은 `/android`, `/ios`의 `README.md` 참고
+## 실행
+
+Metro 번들러를 띄운 뒤, 별도 터미널에서 플랫폼 빌드를 실행합니다.
+
+```bash
+npm run start     # Metro 번들러
+npm run android   # Android (dev 서버 연결)
+npm run ios       # iOS (dev 서버 연결)
+```
+
+iOS는 처음 받았거나 `package.json`이 바뀐 뒤에는 `cd ios && pod install`을 먼저 실행해야 합니다.
+
+프로덕션 서버에 붙이려면 `npm run android:prod`, `npm run ios:prod`를 씁니다.
+
+플랫폼별 상세는 각 문서를 참고하세요.
+
+- **[Android 가이드](./android/README.md)** — 에뮬레이터 선택(Google Play 지원 필수), 로그 확인, 빌드 트러블슈팅, 딥링크 테스트
+- **[iOS 가이드](./ios/README.md)** — CocoaPods, Xcode 빌드, 캐시 제거, 딥링크 테스트
 
 ## 앱 버전 변경
 
