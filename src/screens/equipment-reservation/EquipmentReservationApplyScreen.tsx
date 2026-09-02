@@ -21,6 +21,7 @@ import PoPoAxios from '../../utils/api';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {openURLWithFallback} from '../../utils/linking';
 import {DONGYEON_KAKAO_CHANNEL_URL} from '../../constants/urls';
+import {roundUpToNearest30Minutes} from '@utils/popo-datetime';
 
 interface IEquipment {
   uuid: string;
@@ -254,15 +255,6 @@ const EquipmentReservationApplyScreen = ({
   useEffect(() => {
     checkReservedEquipments();
   }, [checkReservedEquipments]);
-
-  // 30분 단위로 시간 올림
-  const roundUpToNearest30Minutes = (inputDate: Date) => {
-    const minutes = inputDate.getMinutes();
-    const roundedMinutes = Math.ceil(minutes / 30) * 30;
-    const newDate = new Date(inputDate);
-    newDate.setMinutes(roundedMinutes);
-    return newDate;
-  };
 
   // 현재 시간을 30분 단위로 올림하여 초기 시간 설정
   useEffect(() => {

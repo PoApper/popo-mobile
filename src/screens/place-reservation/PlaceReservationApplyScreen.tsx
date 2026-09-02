@@ -25,6 +25,7 @@ import {
   getNearestPossibleSlot,
 } from '../../config/restricted-time-slots';
 import {isGroupStudyRoom} from '../../constants/placeNames';
+import {roundUpToNearest30Minutes} from '@utils/popo-datetime';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';
@@ -89,15 +90,6 @@ const PlaceReservationApplyScreen = ({
   }, []);
 
   const scrollViewRef = useRef<any>(null);
-
-  // 30분 단위로 시간 올림
-  const roundUpToNearest30Minutes = (date: Date) => {
-    const minutes = date.getMinutes();
-    const roundedMinutes = Math.ceil(minutes / 30) * 30;
-    const newDate = new Date(date);
-    newDate.setMinutes(roundedMinutes);
-    return newDate;
-  };
 
   // 주어진 시간의 시/분을 유지하고 날짜(Y/M/D)만 baseDate로 재설정
   const rebaseTimeToDate = (baseDate: Date, time: Date) => {

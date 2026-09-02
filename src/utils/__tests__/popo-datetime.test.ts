@@ -1,6 +1,7 @@
 import {
   formatReservationTime,
   roundUpToNearest10Minutes,
+  roundUpToNearest30Minutes,
 } from '../popo-datetime';
 
 describe('formatReservationTime', () => {
@@ -45,6 +46,30 @@ describe('roundUpToNearest10Minutes', () => {
   it('시(hour) 경계를 넘겨 올림한다', () => {
     expect(roundUpToNearest10Minutes(new Date('2026-06-07T10:55:30'))).toEqual(
       new Date('2026-06-07T11:00:00'),
+    );
+  });
+});
+
+describe('roundUpToNearest30Minutes', () => {
+  it('30분 단위가 아닌 시각을 다음 30분 경계로 올림한다', () => {
+    expect(roundUpToNearest30Minutes(new Date('2026-06-07T10:05:00'))).toEqual(
+      new Date('2026-06-07T10:30:00'),
+    );
+    expect(roundUpToNearest30Minutes(new Date('2026-06-07T10:31:00'))).toEqual(
+      new Date('2026-06-07T11:00:00'),
+    );
+  });
+
+  it('이미 30분 경계에 있으면 그대로 유지한다', () => {
+    expect(roundUpToNearest30Minutes(new Date('2026-06-07T10:30:00'))).toEqual(
+      new Date('2026-06-07T10:30:00'),
+    );
+  });
+
+  it('초 단위를 남기지 않는다', () => {
+    // 초가 남으면 종료-시작 간격 비교가 30분에 미달해 오판정된다
+    expect(roundUpToNearest30Minutes(new Date('2026-06-07T10:00:45'))).toEqual(
+      new Date('2026-06-07T10:30:00'),
     );
   });
 });
