@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -43,6 +43,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   const [error, setError] = useState<string | null>(null);
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
+  const passwordInputRef = useRef<TextInput>(null);
 
   const canSubmit = email.trim().length > 0 && password.length > 0;
 
@@ -244,6 +245,9 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
               autoCorrect={false}
               importantForAutofill="yes" // android
               accessibilityLabel="popo.poapper.club username"
+              returnKeyType="next"
+              onSubmitEditing={() => passwordInputRef.current?.focus()}
+              blurOnSubmit={false}
             />
             {email && !email.includes('@') && (
               <Text
@@ -279,6 +283,9 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             autoCorrect={false}
             importantForAutofill="yes"
             accessibilityLabel="popo.poapper.club password"
+            ref={passwordInputRef}
+            returnKeyType="go"
+            onSubmitEditing={handleLogin}
           />
           <Text style={[styles.emailHintText, {color: placeholderColor}]}>
             POPO 가입 시 사용한 비밀번호를 입력해주세요
