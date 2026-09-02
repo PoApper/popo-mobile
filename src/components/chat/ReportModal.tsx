@@ -79,10 +79,10 @@ const ReportModal = ({
       statusBarTranslucent={Platform.OS === 'android'}
       hardwareAccelerated>
       {/* TODO: nested pressable onStartShouldSetResponder 옵션 사용으로 변경 */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={{flex: 1}}>
-        <Pressable style={styles.overlay} onPress={handleClose}>
+      <Pressable style={styles.overlay} onPress={handleClose}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={{flex: 1, width: '100%'}}>
           <SafeAreaView style={styles.modalContent}>
             {isVisible && (
               <Pressable
@@ -166,8 +166,8 @@ const ReportModal = ({
               </Pressable>
             )}
           </SafeAreaView>
-        </Pressable>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </Pressable>
     </Modal>
   );
 };
