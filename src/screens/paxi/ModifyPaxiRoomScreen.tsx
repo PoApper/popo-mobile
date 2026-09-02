@@ -61,12 +61,10 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [isTimePickerVisible, setTimePickerVisible] = useState(false);
 
-  // 날짜 범위 계산 (컴포넌트 마운트 시 1회)
-  const {minimumDate, maximumDate} = useMemo(() => {
+  // 오늘 0시부터 선택 가능 (상한 없음 - 카풀은 기간을 제한할 이유가 없다)
+  const minimumDate = useMemo(() => {
     const today = new Date();
-    const minDate = new Date(today.setHours(0, 0, 0, 0));
-    const maxDate = new Date(today.setDate(today.getDate() + 30));
-    return {minimumDate: minDate, maximumDate: maxDate};
+    return new Date(today.setHours(0, 0, 0, 0));
   }, []);
 
   useEffect(() => {
@@ -371,7 +369,6 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
             onConfirm={handleDateConfirm}
             onCancel={() => setDatePickerVisible(false)}
             minimumDate={minimumDate}
-            maximumDate={maximumDate}
             locale="ko-KR"
             confirmTextIOS="확인"
             cancelTextIOS="취소"
