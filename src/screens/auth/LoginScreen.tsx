@@ -44,6 +44,8 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
 
+  const canSubmit = email.trim().length > 0 && password.length > 0;
+
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#ffffff',
     flex: 1,
@@ -307,19 +309,21 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
               {marginTop: 11},
               isDarkMode
                 ? {
-                    backgroundColor: isLoading ? '#444' : '#fff',
+                    backgroundColor: isLoading || !canSubmit ? '#444' : '#fff',
                     borderWidth: 1,
                     borderColor: '#888',
                   }
                 : {},
-              isLoading && styles.loginButtonDisabled,
+              (isLoading || !canSubmit) && styles.loginButtonDisabled,
             ]}
             onPress={handleLogin}
-            disabled={isLoading}>
+            disabled={isLoading || !canSubmit}>
             <Text
               style={[
                 styles.loginButtonText,
-                isDarkMode ? {color: isLoading ? '#bbb' : '#000'} : {},
+                isDarkMode
+                  ? {color: isLoading || !canSubmit ? '#bbb' : '#000'}
+                  : {},
               ]}>
               {isLoading ? '로그인 중...' : '로그인'}
             </Text>
