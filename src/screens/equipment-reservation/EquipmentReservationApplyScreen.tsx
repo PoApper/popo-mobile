@@ -21,7 +21,10 @@ import PoPoAxios from '../../utils/api';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {openURLWithFallback} from '../../utils/linking';
 import {DONGYEON_KAKAO_CHANNEL_URL} from '../../constants/urls';
-import {roundUpToNearest30Minutes} from '@utils/popo-datetime';
+import {
+  MIN_RESERVATION_DURATION_MS,
+  roundUpToNearest30Minutes,
+} from '@utils/popo-datetime';
 
 interface IEquipment {
   uuid: string;
@@ -266,12 +269,11 @@ const EquipmentReservationApplyScreen = ({
     setEndTime(newEndTime);
   }, []);
 
-  // 종료 시간이 시작 시간보다 빠르면 자동 보정
-  useEffect(() => {
-    if (endTime < startTime) {
-      setEndTime(startTime);
-    }
-  }, [startTime, endTime]);
+  // 최소 예약 시간(30분)을 만족하는 가장 이른 종료 시각
+  const earliestEndTime = useMemo(
+    () => new Date(startTime.getTime() + MIN_RESERVATION_DURATION_MS),
+    [startTime],
+  );
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#1a1a1a' : '#fff',
@@ -345,6 +347,12 @@ const EquipmentReservationApplyScreen = ({
     }
     if (selectedEquipments.length === 0) {
       Alert.alert('알림', '예약할 장비를 선택해주세요.');
+      return;
+    }
+
+    // 0분 예약 방지. 안드로이드 시각 피커는 minimumDate를 무시하므로 여기서도 확인한다
+    if (endTime.getTime() - startTime.getTime() < MIN_RESERVATION_DURATION_MS) {
+      Alert.alert('알림', '예약 시간은 30분 이상이어야 합니다.');
       return;
     }
 
@@ -899,13 +907,21 @@ const EquipmentReservationApplyScreen = ({
             mode="time"
             onConfirm={time => {
               setShowEndPicker(false);
-              setEndTime(roundUpToNearest30Minutes(time));
+              const rounded = roundUpToNearest30Minutes(time);
+              if (rounded < earliestEndTime) {
+                Alert.alert(
+                  '알림',
+                  '종료 시각은 시작 시각보다 30분 이상 뒤여야 합니다.',
+                );
+                return;
+              }
+              setEndTime(rounded);
             }}
             onCancel={() => setShowEndPicker(false)}
             is24Hour
             minuteInterval={30}
             date={endTime}
-            minimumDate={startTime}
+            minimumDate={earliestEndTime}
             confirmTextIOS="확인"
             cancelTextIOS="취소"
           />
