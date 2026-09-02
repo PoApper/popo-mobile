@@ -66,12 +66,16 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       return;
     }
 
+    const trimmedEmail = email.trim();
+
     setIsLoading(true);
     setError(null);
 
     try {
       const response = await api.post('/auth/login', {
-        email: email.includes('@') ? email : `${email}@postech.ac.kr`,
+        email: trimmedEmail.includes('@')
+          ? trimmedEmail
+          : `${trimmedEmail}@postech.ac.kr`,
         password,
       });
 
@@ -285,7 +289,11 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             accessibilityLabel="popo.poapper.club password"
             ref={passwordInputRef}
             returnKeyType="go"
-            onSubmitEditing={handleLogin}
+            onSubmitEditing={() => {
+              if (canSubmit && !isLoading) {
+                handleLogin();
+              }
+            }}
           />
           <Text style={[styles.emailHintText, {color: placeholderColor}]}>
             POPO 가입 시 사용한 비밀번호를 입력해주세요
