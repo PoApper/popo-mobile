@@ -117,17 +117,16 @@ const SidebarModal = ({
   };
 
   const handleSettlementDeletePress = () => {
-    // TODO: '정산 삭제' 보다는 '정산 취소' 가 더 나은 표현일 듯
-    Alert.alert('정산 삭제', '정산 요청을 삭제하시겠습니까?', [
+    Alert.alert('정산 취소', '정산 요청을 취소하시겠습니까?', [
       {text: '취소', style: 'cancel'},
       {
-        text: '삭제',
+        text: '취소하기',
         onPress: () => {
           paxi_api.delete(`/room/${roomData.uuid}/settlement`).then(res => {
             if (res.status !== 200) {
               Alert.alert('실패', `response: ${res.status}`);
             } else {
-              Alert.alert('성공', '정산 요청을 삭제했습니다.');
+              Alert.alert('성공', '정산 요청을 취소했습니다.');
             }
           });
         },
@@ -345,7 +344,7 @@ const SidebarModal = ({
                               {backgroundColor: isDarkMode ? '#333' : '#000'},
                             ]}
                             onPress={handleSettlementDeletePress}>
-                            <Text style={[styles.buttonText]}>정산 삭제</Text>
+                            <Text style={[styles.buttonText]}>정산 취소</Text>
                           </TouchableOpacity>
                         </View>
                       )}
