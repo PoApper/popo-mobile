@@ -129,7 +129,7 @@ Firebase credentials are required: `google-services.json` (Android), `GoogleServ
 
 ## Claude Code 커맨드
 
-`.claude/commands/`의 릴리즈 워크플로우 커맨드는 팀 공유용으로 추적된다(`popo-release`, `android-release`, `ios-release`, `release-pr`). 릴리즈는 `/popo-release`(빌드·스토어 업로드) → `/release-pr`(버전 범프 커밋·PR·머지·태깅) 순서로 실행한다. `.gitignore`가 `.claude/*`를 무시하고 `!.claude/commands/`로 예외 처리하므로, 이 디렉토리 외의 `.claude/` 하위 파일은 커밋되지 않는다.
+`.claude/commands/`의 릴리즈 워크플로우 커맨드는 팀 공유용으로 추적된다(`popo-release`, `android-release`, `ios-release`, `release-pr`). 릴리즈는 `/popo-release`(빌드·스토어 업로드) → `/release-pr`(버전 범프 커밋·PR·머지·GitHub Release) 순서로 실행한다. `.gitignore`가 `.claude/*`를 무시하고 `!.claude/commands/`로 예외 처리하므로, 이 디렉토리 외의 `.claude/` 하위 파일은 커밋되지 않는다.
 
 ## Git Workflow
 

@@ -77,7 +77,7 @@ Xcode에서도 바꿀 수 있습니다: 프로젝트 선택 > General > Identity
 Claude Code에서 두 커맨드를 순서대로 실행합니다.
 
 1. **`/popo-release`** — 버전 범프 → Android AAB·iOS Archive 병렬 빌드 → IPA 내보내기 → 스토어 릴리즈 노트 초안 작성 → 업로드
-2. **`/release-pr`** — 버전 범프 커밋 → PR 생성(변경 목록·배포 전 확인 시나리오 포함) → squash merge → 릴리즈 노트를 메시지로 담은 `vX.Y.Z` 태그 생성
+2. **`/release-pr`** — 버전 범프 커밋 → PR 생성(변경 목록·배포 전 확인 시나리오 포함) → squash merge → 릴리즈 노트를 본문으로 담은 GitHub Release(`vX.Y.Z` 태그 포함) 생성
 
 버전 범프는 빌드·업로드가 성공한 뒤에 커밋합니다. 빌드가 실패하면 버전 범프 PR이 남지 않도록 `/release-pr`을 실행하지 않습니다.
 

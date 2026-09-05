@@ -1,7 +1,7 @@
-# Release PR (버전 범프 커밋 → PR → 태깅)
+# Release PR (버전 범프 커밋 → PR → GitHub Release)
 
 `/popo-release`로 빌드·스토어 업로드까지 끝낸 뒤, 로컬에 남아있는 버전 범프를
-커밋해 main에 PR로 올리고, 머지된 커밋에 릴리즈 태그를 다는 워크플로우.
+커밋해 main에 PR로 올리고, 머지된 커밋에 GitHub Release(태그 포함)를 만드는 워크플로우.
 
 **전제:** `/popo-release`가 이미 실행되어 버전 파일이 수정된 상태(uncommitted)이고,
 빌드와 스토어 업로드가 성공했다. 빌드가 실패했다면 이 커맨드를 실행하지 않는다.
@@ -145,25 +145,31 @@ EOF
 gh pr merge --squash
 ```
 
-## Step 8: 태깅
+## Step 8: GitHub Release 생성
 
-squash merge는 새 커밋을 만들므로, 브랜치가 아니라 **머지된 main 커밋**에 태그를 단다.
+squash merge는 새 커밋을 만들므로, 브랜치가 아니라 **머지된 main 커밋**을 대상으로
+Release를 만든다. `gh release create`가 태그도 함께 만들므로 `git tag`를 따로 하지 않는다.
 
-태그 메시지에는 스토어 릴리즈 노트를 넣는다. 같은 세션에서 `/popo-release`를 먼저
+본문에는 스토어 릴리즈 노트를 넣는다. 같은 세션에서 `/popo-release`를 먼저
 실행했다면 그때 Step 4에서 생성한 노트를 **그대로** 재사용한다. 세션에 없다면
 `popo-release.md` Step 4의 규칙(사용자 체감 변경만, 합쇼체, `•` 불렛)으로 다시 만든다.
+`--generate-notes`는 쓰지 않는다(직접 커밋이 빠지고, 태그 누락 구간이 섞인다).
+
+Full Changelog 링크의 시작점은 Step 6-1의 직전 범프 커밋이다(직전 태그가 없을 수 있음).
 
 ```bash
 git fetch origin main
-git tag -a vX.Y.Z origin/main -m "$(cat <<'EOF'
+gh release create vX.Y.Z --target "$(git rev-parse origin/main)" --title vX.Y.Z --latest --notes "$(cat <<'EOF'
+버그 수정
 • Paxi 채팅을 오래 켜두면 메시지가 전송되지 않던 문제를 수정했습니다.
 • 앱 안정성 및 보안을 개선했습니다.
+
+**Full Changelog**: https://github.com/PoApper/popo-mobile/compare/<직전-범프-커밋>...vX.Y.Z
 EOF
 )"
-git push origin vX.Y.Z
 ```
 
-태그 확인 후 로컬 브랜치를 정리한다.
+Release 확인 후 로컬 브랜치를 정리한다.
 
 ```bash
 git switch main && git pull
