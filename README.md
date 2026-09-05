@@ -1,7 +1,7 @@
 # POPO Mobile
 
-[![Google Play](https://img.shields.io/badge/Google%20Play-다운로드-414141?logo=googleplay&logoColor=white)](https://play.google.com/store/apps/details?id=com.popomobile)
-[![App Store](https://img.shields.io/badge/App%20Store-다운로드-0D96F6?logo=appstore&logoColor=white)](https://apps.apple.com/us/app/popo-%ED%8F%AC%EC%8A%A4%ED%85%8C%ED%82%A4%EC%95%88%EC%9D%98-%ED%95%84%EC%88%98-%EC%95%B1/id6743666761)
+[![Google Play](https://img.shields.io/badge/Google%20Play-414141?logo=googleplay&logoColor=white)](https://play.google.com/store/apps/details?id=com.popomobile)
+[![App Store](https://img.shields.io/badge/App%20Store-0D96F6?logo=appstore&logoColor=white)](https://apps.apple.com/us/app/popo-%ED%8F%AC%EC%8A%A4%ED%85%8C%ED%82%A4%EC%95%88%EC%9D%98-%ED%95%84%EC%88%98-%EC%95%B1/id6743666761)
 
 ## 가이드
 
