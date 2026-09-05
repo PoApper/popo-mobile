@@ -9,6 +9,9 @@
 # Handoff
 **/HANDOFF.md
 
+# Local-only issue/작업 계획 메모
+/.plans/
+
 # Xcode
 #
 build/
