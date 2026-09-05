@@ -25,6 +25,10 @@ import {
   getNearestPossibleSlot,
 } from '../../config/restricted-time-slots';
 import {isGroupStudyRoom} from '../../constants/placeNames';
+import {
+  MIN_RESERVATION_DURATION_MS,
+  roundUpToNearest30Minutes,
+} from '@utils/popo-datetime';
 
 LocaleConfig.locales.kr = CalendarKoreanLocales;
 LocaleConfig.defaultLocale = 'kr';
@@ -90,15 +94,6 @@ const PlaceReservationApplyScreen = ({
 
   const scrollViewRef = useRef<any>(null);
 
-  // 30분 단위로 시간 올림
-  const roundUpToNearest30Minutes = (date: Date) => {
-    const minutes = date.getMinutes();
-    const roundedMinutes = Math.ceil(minutes / 30) * 30;
-    const newDate = new Date(date);
-    newDate.setMinutes(roundedMinutes);
-    return newDate;
-  };
-
   // 주어진 시간의 시/분을 유지하고 날짜(Y/M/D)만 baseDate로 재설정
   const rebaseTimeToDate = (baseDate: Date, time: Date) => {
     const d = new Date(baseDate);
@@ -151,12 +146,11 @@ const PlaceReservationApplyScreen = ({
     return selectedDateTime > now;
   };
 
-  // 종료 시간이 시작 시간보다 빠르면 자동 보정
-  useEffect(() => {
-    if (endTime < startTime) {
-      setEndTime(startTime);
-    }
-  }, [startTime, endTime]);
+  // 최소 예약 시간(30분)을 만족하는 가장 이른 종료 시각
+  const earliestEndTime = useMemo(
+    () => new Date(startTime.getTime() + MIN_RESERVATION_DURATION_MS),
+    [startTime],
+  );
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -218,6 +212,12 @@ const PlaceReservationApplyScreen = ({
     // 시간대 제한의 경우에는 종료 시각만 확인하므로, 이 기준을 따라감
     if (endTime < new Date()) {
       Alert.alert('알림', '과거 시간대는 예약할 수 없습니다.');
+      return;
+    }
+
+    // 0분 예약 방지. 안드로이드 시각 피커는 minimumDate를 무시하므로 여기서도 확인한다
+    if (endTime.getTime() - startTime.getTime() < MIN_RESERVATION_DURATION_MS) {
+      Alert.alert('알림', '예약 시간은 30분 이상이어야 합니다.');
       return;
     }
 
@@ -624,13 +624,21 @@ const PlaceReservationApplyScreen = ({
               mode="time"
               onConfirm={time => {
                 setShowEndPicker(false);
-                setEndTime(roundUpToNearest30Minutes(time));
+                const rounded = roundUpToNearest30Minutes(time);
+                if (rounded < earliestEndTime) {
+                  Alert.alert(
+                    '알림',
+                    '종료 시각은 시작 시각보다 30분 이상 뒤여야 합니다.',
+                  );
+                  return;
+                }
+                setEndTime(rounded);
               }}
               onCancel={() => setShowEndPicker(false)}
               minuteInterval={30}
               date={endTime}
               is24Hour
-              minimumDate={startTime}
+              minimumDate={earliestEndTime}
               confirmTextIOS="확인"
               cancelTextIOS="취소"
             />

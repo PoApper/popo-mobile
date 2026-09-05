@@ -160,7 +160,7 @@ const ReportModal = ({
                       handleReport(reportText);
                       handleClose();
                     }}>
-                    <Text style={styles.reportButtonText}>신고</Text>
+                    <Text style={styles.reportButtonText}>신고하기</Text>
                   </TouchableOpacity>
                 </View>
               </Pressable>

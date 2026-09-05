@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -43,6 +43,9 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   const [error, setError] = useState<string | null>(null);
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
+  const passwordInputRef = useRef<TextInput>(null);
+
+  const canSubmit = email.trim().length > 0 && password.length > 0;
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#ffffff',
@@ -63,12 +66,16 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       return;
     }
 
+    const trimmedEmail = email.trim();
+
     setIsLoading(true);
     setError(null);
 
     try {
       const response = await api.post('/auth/login', {
-        email: email.includes('@') ? email : `${email}@postech.ac.kr`,
+        email: trimmedEmail.includes('@')
+          ? trimmedEmail
+          : `${trimmedEmail}@postech.ac.kr`,
         password,
       });
 
@@ -242,6 +249,9 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
               autoCorrect={false}
               importantForAutofill="yes" // android
               accessibilityLabel="popo.poapper.club username"
+              returnKeyType="next"
+              onSubmitEditing={() => passwordInputRef.current?.focus()}
+              blurOnSubmit={false}
             />
             {email && !email.includes('@') && (
               <Text
@@ -277,6 +287,13 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             autoCorrect={false}
             importantForAutofill="yes"
             accessibilityLabel="popo.poapper.club password"
+            ref={passwordInputRef}
+            returnKeyType="go"
+            onSubmitEditing={() => {
+              if (canSubmit && !isLoading) {
+                handleLogin();
+              }
+            }}
           />
           <Text style={[styles.emailHintText, {color: placeholderColor}]}>
             POPO 가입 시 사용한 비밀번호를 입력해주세요
@@ -307,19 +324,21 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
               {marginTop: 11},
               isDarkMode
                 ? {
-                    backgroundColor: isLoading ? '#444' : '#fff',
+                    backgroundColor: isLoading || !canSubmit ? '#444' : '#fff',
                     borderWidth: 1,
                     borderColor: '#888',
                   }
                 : {},
-              isLoading && styles.loginButtonDisabled,
+              (isLoading || !canSubmit) && styles.loginButtonDisabled,
             ]}
             onPress={handleLogin}
-            disabled={isLoading}>
+            disabled={isLoading || !canSubmit}>
             <Text
               style={[
                 styles.loginButtonText,
-                isDarkMode ? {color: isLoading ? '#bbb' : '#000'} : {},
+                isDarkMode
+                  ? {color: isLoading || !canSubmit ? '#bbb' : '#000'}
+                  : {},
               ]}>
               {isLoading ? '로그인 중...' : '로그인'}
             </Text>

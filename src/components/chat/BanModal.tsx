@@ -163,7 +163,7 @@ const BanModal = ({
                       handleBan(banText);
                       handleClose();
                     }}>
-                    <Text style={styles.banButtonText}>추방</Text>
+                    <Text style={styles.banButtonText}>추방하기</Text>
                   </TouchableOpacity>
                 </View>
               </Pressable>
