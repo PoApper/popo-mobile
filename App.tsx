@@ -28,7 +28,7 @@ const App = () => {
       if (!roomUuid) return;
       try {
         await paxi_api.post(`/room/join/${roomUuid}`);
-      } catch (e) {
+      } catch {
         // 실패해도 방으로 이동은 시도
       }
 
