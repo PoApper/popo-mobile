@@ -52,7 +52,7 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
     }
     try {
       await Linking.openURL(url);
-    } catch (e) {
+    } catch {
       // no-op
     }
   };

@@ -122,7 +122,7 @@ const EquipmentReservationScreen = ({
         // 이름순 정렬
         const sorted = res.data.sort((a, b) => a.name.localeCompare(b.name));
         setEquipmentList(sorted);
-      } catch (e) {
+      } catch {
         setEquipmentList([]);
       } finally {
         setLoading(false);

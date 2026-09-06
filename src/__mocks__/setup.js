@@ -2,8 +2,12 @@
 
 // ──────────────────────────────────────────────
 // react-native-reanimated mock
+// reanimated 4는 import 시점에 worklets 네이티브 모듈을 초기화하므로
+// 실제 모듈 대신 라이브러리가 제공하는 mock을 쓴다.
 // ──────────────────────────────────────────────
-require('react-native-reanimated').setUpTests();
+jest.mock('react-native-reanimated', () =>
+  require('react-native-reanimated/mock'),
+);
 
 // ──────────────────────────────────────────────
 // react-native-config mock
@@ -25,22 +29,24 @@ jest.mock('@react-native-firebase/app', () => ({
 
 jest.mock('@react-native-firebase/messaging', () => {
   const noop = jest.fn();
-  const messaging = () => ({
+  return {
+    __esModule: true,
+    getMessaging: jest.fn(() => ({})),
     getToken: jest.fn(() => Promise.resolve('mock-fcm-token')),
     onMessage: jest.fn(() => noop),
     onNotificationOpenedApp: jest.fn(() => noop),
+    onTokenRefresh: jest.fn(() => noop),
     getInitialNotification: jest.fn(() => Promise.resolve(null)),
     requestPermission: jest.fn(() => Promise.resolve(1)),
     registerDeviceForRemoteMessages: jest.fn(() => Promise.resolve()),
-    isDeviceRegisteredForRemoteMessages: true,
-  });
-  messaging.AuthorizationStatus = {
-    NOT_DETERMINED: -1,
-    DENIED: 0,
-    AUTHORIZED: 1,
-    PROVISIONAL: 2,
+    isDeviceRegisteredForRemoteMessages: jest.fn(() => true),
+    AuthorizationStatus: {
+      NOT_DETERMINED: -1,
+      DENIED: 0,
+      AUTHORIZED: 1,
+      PROVISIONAL: 2,
+    },
   };
-  return {__esModule: true, default: messaging};
 });
 
 // ──────────────────────────────────────────────
