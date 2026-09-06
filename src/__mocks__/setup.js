@@ -2,8 +2,12 @@
 
 // ──────────────────────────────────────────────
 // react-native-reanimated mock
+// reanimated 4는 import 시점에 worklets 네이티브 모듈을 초기화하므로
+// 실제 모듈 대신 라이브러리가 제공하는 mock을 쓴다.
 // ──────────────────────────────────────────────
-require('react-native-reanimated').setUpTests();
+jest.mock('react-native-reanimated', () =>
+  require('react-native-reanimated/mock'),
+);
 
 // ──────────────────────────────────────────────
 // react-native-config mock
