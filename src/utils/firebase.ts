@@ -1,4 +1,10 @@
-import messaging from '@react-native-firebase/messaging';
+import {
+  AuthorizationStatus,
+  getMessaging,
+  getToken,
+  registerDeviceForRemoteMessages,
+  requestPermission,
+} from '@react-native-firebase/messaging';
 import {Platform, PermissionsAndroid} from 'react-native';
 import notifee from '@notifee/react-native';
 
@@ -31,12 +37,12 @@ export const requestUserPermission = async () => {
 
     if (Platform.OS === 'ios') {
       // iOS에서 디바이스를 원격 메시지용으로 등록
-      await messaging().registerDeviceForRemoteMessages();
+      await registerDeviceForRemoteMessages(getMessaging());
 
-      const authStatus = await messaging().requestPermission();
+      const authStatus = await requestPermission(getMessaging());
       const enabled =
-        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+        authStatus === AuthorizationStatus.AUTHORIZED ||
+        authStatus === AuthorizationStatus.PROVISIONAL;
       return enabled;
     }
 
@@ -66,7 +72,7 @@ export const getFCMToken = async () => {
   // 3. FCM 토큰 가져오기 단계
   try {
     console.log('Attempting to get FCM token...');
-    const fcmToken = await messaging().getToken();
+    const fcmToken = await getToken(getMessaging());
     console.log('FCM token successfully retrieved');
     return fcmToken;
   } catch (error: any) {
