@@ -79,7 +79,7 @@ Xcode에서도 바꿀 수 있습니다: 프로젝트 선택 > General > Identity
 
 Claude Code에서 두 커맨드를 순서대로 실행합니다.
 
-1. **`/popo-release`** — 버전 범프 → Android AAB·iOS Archive 병렬 빌드 → IPA 내보내기 → 스토어 릴리즈 노트 초안 작성 → 업로드
+1. **`/popo-release`** — 버전 범프 → Android AAB·iOS Archive 병렬 빌드 → iOS 내보내기·업로드 → 스토어 릴리즈 노트 초안 작성 → 업로드
 2. **`/release-pr`** — 버전 범프 커밋 → PR 생성(변경 목록·배포 전 확인 시나리오 포함) → squash merge → 릴리즈 노트를 본문으로 담은 GitHub Release(`vX.Y.Z` 태그 포함) 생성
 
 버전 범프는 빌드·업로드가 성공한 뒤에 커밋합니다. 빌드가 실패하면 버전 범프 PR이 남지 않도록 `/release-pr`을 실행하지 않습니다.
@@ -92,17 +92,21 @@ Claude Code에서 두 커맨드를 순서대로 실행합니다.
 # 1. 빌드 (서로 독립적이므로 동시에 실행)
 npm run android:aab:prod
 # → android/app/build/outputs/bundle/prodRelease/app-prod-release.aab
+AUTH=(-allowProvisioningUpdates
+  -authenticationKeyPath ~/.keys/AuthKey_$ASC_KEY_ID.p8
+  -authenticationKeyID $ASC_KEY_ID
+  -authenticationKeyIssuerID $ASC_ISSUER_ID)
 xcodebuild -workspace ios/popoMobile.xcworkspace -scheme popoMobile \
   -configuration Release -destination 'generic/platform=iOS' \
-  -archivePath popoMobile.xcarchive archive
+  -archivePath popoMobile.xcarchive "${AUTH[@]}" archive
 
-# 2. iOS IPA 내보내기
+# 2. iOS 내보내기 + App Store Connect 업로드
 xcodebuild -exportArchive -archivePath popoMobile.xcarchive \
-  -exportPath . -exportOptionsPlist ios/ExportOptions.plist
+  -exportPath . -exportOptionsPlist ios/ExportOptions.plist "${AUTH[@]}"
 
 # 3. 업로드 후 정리
-rm -rf app-prod-release.aab popoMobile.xcarchive popoMobile.ipa
+rm -rf app-prod-release.aab popoMobile.xcarchive
 ```
 
-업로드는 [Play Console](https://play.google.com/console)에 AAB를 올리고,
-iOS는 `open -a Transporter popoMobile.ipa` 후 "전송"을 누릅니다.
+Android는 [Play Console](https://play.google.com/console)에 AAB를 올립니다.
+iOS는 2단계에서 업로드까지 끝납니다. iOS 빌드에 필요한 API 키 셋업은 [`ios/README.md`](ios/README.md#서명-셋업)를 참고하세요.

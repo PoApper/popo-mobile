@@ -1,6 +1,6 @@
 # POPO Release Build (Android + iOS)
 
-Android AAB와 iOS IPA 릴리즈 빌드를 한 번에 생성하는 워크플로우.
+Android AAB와 iOS 릴리즈 빌드를 한 번에 생성하는 워크플로우.
 
 ## Step 1: 버전 확인 및 범프
 
@@ -27,18 +27,28 @@ xcodebuild -workspace ios/popoMobile.xcworkspace \
   -configuration Release \
   -destination 'generic/platform=iOS' \
   -archivePath popoMobile.xcarchive \
+  -allowProvisioningUpdates \
+  -authenticationKeyPath ~/.keys/AuthKey_$ASC_KEY_ID.p8 \
+  -authenticationKeyID $ASC_KEY_ID \
+  -authenticationKeyIssuerID $ASC_ISSUER_ID \
   archive
 ```
 
-## Step 3: iOS IPA 내보내기
+iOS 빌드 전 `$ASC_KEY_ID`, `$ASC_ISSUER_ID`와 `~/.keys/AuthKey_$ASC_KEY_ID.p8`이 있는지 확인한다. 없으면 `ios/README.md`의 "서명 셋업"을 안내한다.
 
-iOS Archive 성공 후 IPA를 내보낸다:
+## Step 3: iOS 내보내기 및 업로드
+
+iOS Archive 성공 후 실행한다. `ExportOptions.plist`의 `destination: upload`로 인해 App Store Connect 업로드까지 함께 된다:
 
 ```bash
 xcodebuild -exportArchive \
   -archivePath popoMobile.xcarchive \
   -exportPath . \
-  -exportOptionsPlist ios/ExportOptions.plist
+  -exportOptionsPlist ios/ExportOptions.plist \
+  -allowProvisioningUpdates \
+  -authenticationKeyPath ~/.keys/AuthKey_$ASC_KEY_ID.p8 \
+  -authenticationKeyID $ASC_KEY_ID \
+  -authenticationKeyIssuerID $ASC_ISSUER_ID
 ```
 
 ## Step 4: 스토어 릴리즈 노트 초안
@@ -105,12 +115,12 @@ git log --oneline <직전-범프-커밋>..HEAD --no-merges
 Step 4에서 작성한 릴리즈 노트를 두 스토어의 "새로운 기능" 항목에 붙여넣는다.
 
 - **Android**: `open https://play.google.com/console` → `app-prod-release.aab` 수동 업로드
-- **iOS**: `open -a Transporter popoMobile.ipa` → "전송" 버튼으로 업로드
+- **iOS**: Step 3에서 업로드 완료. App Store Connect에서 빌드를 선택하고 릴리즈 노트를 붙여넣는다
 
 ## Step 6: 정리
 
 업로드 완료 후 빌드 산출물을 정리한다:
 
 ```bash
-rm -rf app-prod-release.aab popoMobile.xcarchive popoMobile.ipa
+rm -rf app-prod-release.aab popoMobile.xcarchive
 ```
