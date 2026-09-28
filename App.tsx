@@ -118,9 +118,21 @@ const App = () => {
       })
       .catch(() => {});
 
+    // FCM 토큰이 갱신되면 새 토큰을 서버에 등록
+    const unsubscribeTokenRefresh = messaging().onTokenRefresh(token => {
+      isLoggedIn()
+        .then(async loggedIn => {
+          if (loggedIn) {
+            await registerFCMToken(token);
+          }
+        })
+        .catch(error => console.error('[FCM] register failed:', error));
+    });
+
     return () => {
       unsubscribe();
       unsubscribeOpened();
+      unsubscribeTokenRefresh();
     };
   }, []);
 
