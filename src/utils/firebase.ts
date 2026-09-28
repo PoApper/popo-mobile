@@ -1,6 +1,7 @@
 import messaging from '@react-native-firebase/messaging';
 import {Platform, PermissionsAndroid} from 'react-native';
 import notifee from '@notifee/react-native';
+import paxi_api from './paxi_api';
 
 /**
  * NOTE: On iOS simulator, the message is not received when Forground.
@@ -72,6 +73,14 @@ export const getFCMToken = async () => {
   } catch (error: any) {
     console.error('Failed to get FCM token:', error);
     return null;
+  }
+};
+
+// FCM 토큰을 Paxi 서버에 등록 (이미 등록된 토큰이면 서버가 204를 반환하므로 반복 호출해도 안전)
+export const registerFCMToken = async (token?: string) => {
+  const fcmToken = token ?? (await getFCMToken());
+  if (fcmToken) {
+    await paxi_api.post('/push/key/', {key: fcmToken});
   }
 };
 
