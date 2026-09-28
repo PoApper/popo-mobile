@@ -124,8 +124,9 @@ Firebase credentials are required: `google-services.json` (Android), `GoogleServ
 
 ### iOS
 
-- 릴리즈 빌드: `xcodebuild archive` → `xcodebuild -exportArchive` → Transporter GUI로 업로드 (Transporter CLI는 인증 문제로 사용 불가).
+- 릴리즈 빌드: `xcodebuild archive` → `xcodebuild -exportArchive`. `ExportOptions.plist`의 `destination: upload`로 export 시 App Store Connect 업로드까지 된다. 두 명령 모두 API 키 인증 플래그(`-allowProvisioningUpdates -authenticationKeyPath/ID/IssuerID`)가 필요하다.
 - `MARKETING_VERSION` (x.x.x 형식만 허용, 4자리 거부) 및 `CURRENT_PROJECT_VERSION`은 `ios/popoMobile.xcodeproj/project.pbxproj`에 3곳 존재. 매 TestFlight/App Store 제출 전 범프 필요.
+- **서명:** 자동 서명 + App Store Connect API 키(Admin)로 Apple 클라우드 관리 인증서를 쓴다. 인증서·프로파일은 빌드 시 자동 생성·갱신되므로 연간 갱신 작업이 없다. 키는 `~/.keys/AuthKey_$ASC_KEY_ID.p8`과 환경변수 `ASC_KEY_ID`/`ASC_ISSUER_ID`로 두며(셋업은 `ios/README.md`), `.env`에 넣지 않는다(`react-native-config`가 앱 번들에 포함). 서명 단계에서 인증 실패 시 키 폐기 여부를 Apple Developer 계정 소유자에게 확인한다. 키·비밀번호는 절대 커밋하지 않는다.
 
 ## Claude Code 커맨드
 
