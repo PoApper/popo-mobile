@@ -18,14 +18,18 @@ describe('isBulkInput', () => {
 
 describe('isFilledTogether', () => {
   it('두 칸이 거의 동시에 채워지면 자동완성이다', () => {
-    expect(isFilledTogether(1000, 1030)).toBe(true);
+    expect(isFilledTogether(1000, 1030, 1030)).toBe(true);
   });
 
   it('한 칸만 통째로 채워졌으면 자동완성이 아니다', () => {
-    expect(isFilledTogether(0, 1000)).toBe(false);
+    expect(isFilledTogether(0, 1000, 1000)).toBe(false);
   });
 
   it('두 칸이 따로 채워졌으면 자동완성이 아니다', () => {
-    expect(isFilledTogether(1000, 5000)).toBe(false);
+    expect(isFilledTogether(1000, 5000, 5000)).toBe(false);
+  });
+
+  it('함께 채워진 지 오래됐으면 나중의 수정은 자동완성이 아니다', () => {
+    expect(isFilledTogether(1000, 1030, 60000)).toBe(false);
   });
 });

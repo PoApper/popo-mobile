@@ -199,7 +199,11 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   // 자동완성이 아이디·비밀번호를 함께 채우면 로그인 버튼을 누르지 않아도 바로 로그인한다
   useEffect(() => {
     const {email: emailAt, password: passwordAt} = bulkInputAt.current;
-    if (canSubmit && !isLoading && isFilledTogether(emailAt, passwordAt)) {
+    if (
+      canSubmit &&
+      !isLoading &&
+      isFilledTogether(emailAt, passwordAt, Date.now())
+    ) {
       bulkInputAt.current = {email: 0, password: 0};
       handleLogin();
     }

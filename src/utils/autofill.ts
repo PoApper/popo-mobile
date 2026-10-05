@@ -5,6 +5,16 @@ const AUTOFILL_WINDOW_MS = 500;
 export const isBulkInput = (prev: string, next: string): boolean =>
   next.length - prev.length > 1;
 
-/** 두 칸이 모두 통째로 입력됐고 그 시각이 거의 같으면 자동완성으로 채워진 것이다. */
-export const isFilledTogether = (aAt: number, bAt: number): boolean =>
-  aAt > 0 && bAt > 0 && Math.abs(aAt - bAt) <= AUTOFILL_WINDOW_MS;
+/**
+ * 두 칸이 모두 통째로 입력됐고 그 시각이 거의 같으며 방금 일어난 일이면 자동완성으로 채워진 것이다.
+ * 방금인지도 봐야 오래전 기록이 남아 있다가 나중의 한 글자 수정에 로그인이 걸리지 않는다.
+ */
+export const isFilledTogether = (
+  aAt: number,
+  bAt: number,
+  now: number,
+): boolean =>
+  aAt > 0 &&
+  bAt > 0 &&
+  Math.abs(aAt - bAt) <= AUTOFILL_WINDOW_MS &&
+  now - Math.max(aAt, bAt) <= AUTOFILL_WINDOW_MS;
