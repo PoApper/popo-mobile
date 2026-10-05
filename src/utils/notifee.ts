@@ -55,11 +55,17 @@ export async function displayNotification(
   body: string,
   data?: any,
 ) {
+  // Android 8+는 존재하지 않는 채널의 알림을 버린다. createChannel은 멱등이다.
+  const channelId = await notifee.createChannel({
+    id: 'default',
+    name: 'Default Channel',
+  });
+
   await notifee.displayNotification({
     title,
     body,
     android: {
-      channelId: 'default',
+      channelId,
       pressAction: {
         id: 'default',
       },
