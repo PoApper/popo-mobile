@@ -2,7 +2,6 @@ import {
   AuthorizationStatus,
   getMessaging,
   getToken,
-  registerDeviceForRemoteMessages,
   requestPermission,
 } from '@react-native-firebase/messaging';
 import {Platform, PermissionsAndroid} from 'react-native';
@@ -36,9 +35,6 @@ export const requestUserPermission = async () => {
     }
 
     if (Platform.OS === 'ios') {
-      // iOS에서 디바이스를 원격 메시지용으로 등록
-      await registerDeviceForRemoteMessages(getMessaging());
-
       const authStatus = await requestPermission(getMessaging());
       const enabled =
         authStatus === AuthorizationStatus.AUTHORIZED ||
