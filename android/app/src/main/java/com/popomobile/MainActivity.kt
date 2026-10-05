@@ -5,6 +5,7 @@ import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 import android.os.Bundle
+import android.widget.EditText
 
 class MainActivity : ReactActivity() {
 
@@ -29,5 +30,14 @@ class MainActivity : ReactActivity() {
     // import com.swmansion.rnscreens.fragment.restoration.RNScreensFragmentFactory;
     // getSupportFragmentManager().setFragmentFactory(new RNScreensFragmentFactory());
     super.onCreate(null)
+
+    // react-native-screens 아래 TextInput은 isLaidOut()이 false로 남아, Android가 포커스 시 자동완성 요청을
+    // 다음 layout()까지 미루는데 RN은 layout()을 다시 호출하지 않는다. 같은 위치로 layout()을 불러 요청을 흘려보낸다.
+    // 관련 이슈: https://github.com/software-mansion/react-native-screens/issues/3130
+    window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, focused ->
+      if (focused is EditText && !focused.isLaidOut) {
+        focused.layout(focused.left, focused.top, focused.right, focused.bottom)
+      }
+    }
   }
 }
