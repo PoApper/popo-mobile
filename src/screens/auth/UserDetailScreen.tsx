@@ -24,6 +24,7 @@ import axios from 'axios';
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import {reset_auth} from '@utils/reset';
+import {unregisterFCMToken} from '@utils/firebase';
 import paxi_api from '@utils/paxi_api';
 import {PaxiUserMy} from '@interfaces/paxi';
 
@@ -134,6 +135,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const handleLogout = async () => {
     setIsLoading(true);
     try {
+      await unregisterFCMToken();
       // 공통 API 유틸리티 사용
       await api.get('/auth/logout');
       await reset_auth();
