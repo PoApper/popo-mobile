@@ -5,7 +5,12 @@
 import React, {useEffect} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import messaging from '@react-native-firebase/messaging';
+import {
+  getMessaging,
+  onMessage,
+  onNotificationOpenedApp,
+  getInitialNotification,
+} from '@react-native-firebase/messaging';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import notifee, {EventType} from '@notifee/react-native';
 import {KeyboardProvider} from 'react-native-keyboard-controller';
@@ -28,7 +33,7 @@ const App = () => {
       if (!roomUuid) return;
       try {
         await paxi_api.post(`/room/join/${roomUuid}`);
-      } catch (e) {
+      } catch {
         // 실패해도 방으로 이동은 시도
       }
 
@@ -65,7 +70,7 @@ const App = () => {
     // handle delay of `setItem` in index.js
     setTimeout(handlePendingNavigation, 100);
 
-    const unsubscribe = messaging().onMessage(remoteMessage => {
+    const unsubscribe = onMessage(getMessaging(), remoteMessage => {
       // NOTE: On iOS simulator, the message is not received when Forground.
       displayNotification(
         remoteMessage.notification?.title as string,
@@ -85,7 +90,8 @@ const App = () => {
     });
 
     // 백그라운드 알림 클릭(앱이 백그라운드에서 열릴 때)
-    const unsubscribeOpened = messaging().onNotificationOpenedApp(
+    const unsubscribeOpened = onNotificationOpenedApp(
+      getMessaging(),
       remoteMessage => {
         const roomUuid = remoteMessage?.data?.roomUuid;
         if (typeof roomUuid === 'string') {
@@ -95,8 +101,7 @@ const App = () => {
     );
 
     // 종료 상태에서 알림 클릭으로 실행된 경우 처리
-    messaging()
-      .getInitialNotification()
+    getInitialNotification(getMessaging())
       .then(remoteMessage => {
         const roomUuid = remoteMessage?.data?.roomUuid;
         if (typeof roomUuid === 'string') {

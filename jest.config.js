@@ -1,5 +1,5 @@
 module.exports = {
-  preset: 'react-native',
+  preset: '@react-native/jest-preset',
 
   // path alias 매핑 (babel.config.js의 module-resolver와 동일)
   moduleNameMapper: {

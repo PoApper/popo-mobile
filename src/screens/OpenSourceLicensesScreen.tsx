@@ -36,7 +36,7 @@ const OpenSourceLicensesScreen = ({
   const openUrl = useCallback(async (url: string) => {
     try {
       await Linking.openURL(url);
-    } catch (e) {
+    } catch {
       // 열 수 없는 URL은 무시한다
     }
   }, []);

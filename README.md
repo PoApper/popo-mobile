@@ -11,10 +11,10 @@
 
 | 도구           | 버전                          | 비고                        |
 | -------------- | ----------------------------- | --------------------------- |
-| Node.js        | >= 18                         | `package.json` engines 참고 |
+| Node.js        | >= 22.11.0                    | `package.json` engines 참고 |
 | Ruby           | >= 2.6.10                     | `Gemfile` 참고              |
 | CocoaPods      | >= 1.13 (1.15.0, 1.15.1 제외) | `Gemfile` 참고              |
-| Xcode          | 16 이상                       | React Native 0.78 기준      |
+| Xcode          | 16.1 이상                     | React Native 0.86 기준      |
 | Android Studio | 최신 권장                     | SDK 36 이상                 |
 | JDK            | 17                            | Android Gradle 빌드에 필요  |
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-POPO Mobile is a React Native (v0.78) campus service app for POSTECH students. It provides place/equipment reservations, club/association info, campus shuttle schedules, a ride-sharing feature (Paxi) with real-time chat, and push notifications. Written in TypeScript with React 19.
+POPO Mobile is a React Native (v0.86) campus service app for POSTECH students. It provides place/equipment reservations, club/association info, campus shuttle schedules, a ride-sharing feature (Paxi) with real-time chat, and push notifications. Written in TypeScript with React 19.
 
 ## Common Commands
 
@@ -120,7 +120,7 @@ Firebase credentials are required: `google-services.json` (Android), `GoogleServ
 - `android/version.properties`는 릴리즈 커밋에만 포함. 평소 작업 중 수정되어도 커밋하지 않는다.
 - 디버깅용 prod 빌드: `./gradlew installProdDebug` (prod 환경 + console.log 가능).
 
-**target API 제약:** Google Play는 2026-08-31부터 API 36 이상을 요구한다. `compileSdk`/`targetSdk`는 36, `buildToolsVersion`은 36.1.0이다. RN 0.78이 물고 오는 AGP는 **8.8.0**이라 `compileSdk 36`을 공식 지원하지 않으므로 `android/gradle.properties`의 `android.suppressUnsupportedCompileSdk=36`으로 경고를 억제한다. RN 업그레이드 시 AGP 8.9+로 옮기고 이 플래그를 제거한다.
+**target API 제약:** Google Play는 2026-08-31부터 API 36 이상을 요구한다. `compileSdk`/`targetSdk`는 36, `buildToolsVersion`은 36.1.0이다. RN 0.86이 물고 오는 AGP 8.12.0이 `compileSdk 36`을 공식 지원하므로 별도 억제 플래그는 필요 없다.
 
 ### iOS
 

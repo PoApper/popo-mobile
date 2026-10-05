@@ -1,5 +1,9 @@
 import notifee, {AuthorizationStatus} from '@notifee/react-native';
-import messaging from '@react-native-firebase/messaging';
+import {
+  getMessaging,
+  getToken,
+  onTokenRefresh as onFcmTokenRefresh,
+} from '@react-native-firebase/messaging';
 
 // Notifee 기반 권한 요청
 export const requestUserPermission = async () => {
@@ -33,7 +37,7 @@ export const getFCMToken = async () => {
 
   try {
     console.log('Attempting to get FCM token (notifee)...');
-    const fcmToken = await messaging().getToken();
+    const fcmToken = await getToken(getMessaging());
     console.log('FCM token successfully retrieved (notifee)');
     return fcmToken;
   } catch (error: any) {
@@ -44,7 +48,7 @@ export const getFCMToken = async () => {
 
 // 토큰 갱신 이벤트 리스너 (notifee는 토큰 갱신 이벤트를 제공하지 않으므로 messaging 사용)
 export const onTokenRefresh = (callback: (token: string) => void) => {
-  return messaging().onTokenRefresh(token => {
+  return onFcmTokenRefresh(getMessaging(), token => {
     callback(token);
   });
 };

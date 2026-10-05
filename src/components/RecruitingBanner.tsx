@@ -30,7 +30,7 @@ const RecruitingBanner = ({navigation}: RecruitingBannerProps) => {
           RECRUITING_BANNER_DISMISSED_KEY,
         );
         setDismissed(value === 'true');
-      } catch (_e) {
+      } catch {
         setDismissed(false);
       }
     };
@@ -41,7 +41,7 @@ const RecruitingBanner = ({navigation}: RecruitingBannerProps) => {
     setDismissed(true);
     try {
       await EncryptedStorage.setItem(RECRUITING_BANNER_DISMISSED_KEY, 'true');
-    } catch (_e) {
+    } catch {
       // no-op
     }
   };
