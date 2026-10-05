@@ -12,14 +12,27 @@ import {KeyboardProvider} from 'react-native-keyboard-controller';
 
 import AppNavigator from './src/navigation/AppNavigator';
 import {ThemeProvider} from './src/styles/theme';
-import {requestUserPermission} from './src/utils/firebase';
+import {registerFCMToken, requestUserPermission} from './src/utils/firebase';
 import paxi_api from './src/utils/paxi_api';
 import {displayNotification} from './src/utils/notifee';
 import {navigationRef} from './src/navigation/RootNavigation';
+import {IS_AUTHENTICATED_KEY} from './src/utils/storage-keys';
 
 const App = () => {
   useEffect(() => {
-    requestUserPermission();
+    const isLoggedIn = async () =>
+      (await EncryptedStorage.getItem(IS_AUTHENTICATED_KEY)) === 'true';
+
+    // 로그인 상태면 FCM 토큰 등록(권한 요청 포함), 아니면 권한만 요청
+    isLoggedIn()
+      .then(async loggedIn => {
+        if (loggedIn) {
+          await registerFCMToken();
+        } else {
+          await requestUserPermission();
+        }
+      })
+      .catch(error => console.error('[FCM] register failed:', error));
 
     const joinAndNavigate = async (
       roomUuid?: string,
@@ -105,9 +118,21 @@ const App = () => {
       })
       .catch(() => {});
 
+    // FCM 토큰이 갱신되면 새 토큰을 서버에 등록
+    const unsubscribeTokenRefresh = messaging().onTokenRefresh(token => {
+      isLoggedIn()
+        .then(async loggedIn => {
+          if (loggedIn) {
+            await registerFCMToken(token);
+          }
+        })
+        .catch(error => console.error('[FCM] register failed:', error));
+    });
+
     return () => {
       unsubscribe();
       unsubscribeOpened();
+      unsubscribeTokenRefresh();
     };
   }, []);
 

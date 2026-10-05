@@ -1,6 +1,7 @@
 import messaging from '@react-native-firebase/messaging';
 import {Platform, PermissionsAndroid} from 'react-native';
 import notifee from '@notifee/react-native';
+import paxi_api from './paxi_api';
 
 /**
  * NOTE: On iOS simulator, the message is not received when Forground.
@@ -72,6 +73,25 @@ export const getFCMToken = async () => {
   } catch (error: any) {
     console.error('Failed to get FCM token:', error);
     return null;
+  }
+};
+
+// FCM 토큰을 Paxi 서버에 등록 (이미 등록된 토큰이면 서버가 204를 반환하므로 반복 호출해도 안전)
+export const registerFCMToken = async (token?: string) => {
+  const fcmToken = token ?? (await getFCMToken());
+  if (fcmToken) {
+    await paxi_api.post('/push/key/', {key: fcmToken});
+  }
+};
+
+// 로그아웃 시 이 기기의 FCM 토큰을 서버에서 삭제해 다음 사용자에게 이전 계정 푸시가 가지 않게 한다.
+// 인증 쿠키가 필요하므로 토큰을 지우기 전에 호출해야 하며, 실패해도 로그아웃은 막지 않는다.
+export const unregisterFCMToken = async () => {
+  try {
+    const fcmToken = await messaging().getToken();
+    await paxi_api.delete('/push/key', {params: {key: fcmToken}});
+  } catch (error) {
+    console.error('[FCM] unregister failed:', error);
   }
 };
 

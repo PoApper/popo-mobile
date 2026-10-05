@@ -23,6 +23,7 @@ import CommonHeader from '@components/CommonHeader';
 import api from '@utils/api';
 import paxi_api from '@utils/paxi_api';
 import {reset_auth} from '@utils/reset';
+import {unregisterFCMToken} from '@utils/firebase';
 
 type PaxiStartScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PaxiStart'>;
@@ -58,6 +59,7 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
               {
                 text: '확인',
                 onPress: async () => {
+                  await unregisterFCMToken();
                   await api.get('/auth/logout');
                   await reset_auth();
                   navigation.navigate('Login');
