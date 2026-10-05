@@ -6,7 +6,6 @@ import React, {useEffect} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import messaging from '@react-native-firebase/messaging';
-import EncryptedStorage from 'react-native-encrypted-storage';
 import notifee, {EventType} from '@notifee/react-native';
 import {KeyboardProvider} from 'react-native-keyboard-controller';
 
@@ -41,29 +40,6 @@ const App = () => {
       };
       go();
     };
-
-    const handlePendingNavigation = async () => {
-      const roomUuidData = await EncryptedStorage.getItem('roomUuid');
-      let roomUuid: string | undefined;
-      if (roomUuidData) {
-        try {
-          const parsed = JSON.parse(roomUuidData);
-          roomUuid = parsed.roomUuid;
-        } catch {
-          roomUuid = roomUuidData;
-        }
-      }
-
-      // roomUuid가 있으면 NewChat 스크린으로 이동
-      if (roomUuid) {
-        await joinAndNavigate(roomUuid, 'roomList');
-        EncryptedStorage.removeItem('roomUuid');
-        EncryptedStorage.removeItem('pendingNavigation');
-      }
-    };
-
-    // handle delay of `setItem` in index.js
-    setTimeout(handlePendingNavigation, 100);
 
     const unsubscribe = messaging().onMessage(remoteMessage => {
       // NOTE: On iOS simulator, the message is not received when Forground.
