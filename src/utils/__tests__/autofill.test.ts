@@ -14,6 +14,16 @@ describe('isBulkInput', () => {
   it('같은 값으로 다시 채워지면 통째 입력이 아니다', () => {
     expect(isBulkInput('khkim6040', 'khkim6040')).toBe(false);
   });
+
+  it('기존 값을 같거나 짧은 값으로 통째로 덮어쓰면 통째 입력이다', () => {
+    expect(isBulkInput('wrongpass1', 'secret12')).toBe(true);
+    expect(isBulkInput('abcdef', 'uvwxyz')).toBe(true);
+  });
+
+  it('중간에 한 글자를 넣거나 지우면 통째 입력이 아니다', () => {
+    expect(isBulkInput('abc', 'abXc')).toBe(false);
+    expect(isBulkInput('abXc', 'abc')).toBe(false);
+  });
 });
 
 describe('isFilledTogether', () => {
