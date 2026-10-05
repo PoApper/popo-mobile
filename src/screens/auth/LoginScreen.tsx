@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -30,6 +30,7 @@ import {
 } from '@utils/storage-keys';
 import {getFCMToken} from '@utils/firebase';
 import paxi_api from '@utils/paxi_api';
+import {isBulkInput, isFilledTogether} from '@utils/autofill';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -44,8 +45,23 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const passwordInputRef = useRef<TextInput>(null);
+  const bulkInputAt = useRef({email: 0, password: 0});
 
   const canSubmit = email.trim().length > 0 && password.length > 0;
+
+  const handleEmailChange = (text: string) => {
+    if (isBulkInput(email, text)) {
+      bulkInputAt.current.email = Date.now();
+    }
+    setEmail(text);
+  };
+
+  const handlePasswordChange = (text: string) => {
+    if (isBulkInput(password, text)) {
+      bulkInputAt.current.password = Date.now();
+    }
+    setPassword(text);
+  };
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#ffffff',
@@ -180,6 +196,15 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
     }
   };
 
+  // 자동완성이 아이디·비밀번호를 함께 채우면 로그인 버튼을 누르지 않아도 바로 로그인한다
+  useEffect(() => {
+    const {email: emailAt, password: passwordAt} = bulkInputAt.current;
+    if (canSubmit && !isLoading && isFilledTogether(emailAt, passwordAt)) {
+      bulkInputAt.current = {email: 0, password: 0};
+      handleLogin();
+    }
+  }, [email, password]);
+
   const handlePasswordReset = async () => {
     try {
       const targetEmail = (resetEmail || email).trim();
@@ -243,7 +268,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
               keyboardType="email-address"
               autoCapitalize="none"
               value={email}
-              onChangeText={setEmail}
+              onChangeText={handleEmailChange}
               autoComplete="username" // ios
               textContentType="username" // ios
               autoCorrect={false}
@@ -281,7 +306,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             secureTextEntry
             autoCapitalize="none"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={handlePasswordChange}
             autoComplete="password"
             textContentType="password"
             autoCorrect={false}
