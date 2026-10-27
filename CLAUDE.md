@@ -84,6 +84,7 @@ Local `useState`/`useRef` per screen. No global state library (no Redux/Zustand)
 - `firebase.ts` — FCM token registration and message handling.
 - `notifee.ts` — Local notification display via `@notifee/react-native`.
 - Notifications integrate with deep linking to route to specific screens.
+- iOS APNs는 Firebase에 만료 없는 `.p8` 인증 키(개발·프로덕션 동일)로 등록되어 있어 배포 인증서 갱신과 무관하다.
 
 ### Styling (`src/styles/default.ts`)
 
@@ -125,6 +126,7 @@ Firebase credentials are required: `google-services.json` (Android), `GoogleServ
 ### iOS
 
 - 릴리즈 빌드: `xcodebuild archive` → `xcodebuild -exportArchive` → Transporter GUI로 업로드 (Transporter CLI는 인증 문제로 사용 불가).
+- 배포 인증서·`Release` 프로파일은 매년 만료되며 계정 소유자만 재발급 가능. 절차는 `ios/README.md` "배포 인증서 갱신".
 - `MARKETING_VERSION` (x.x.x 형식만 허용, 4자리 거부) 및 `CURRENT_PROJECT_VERSION`은 `ios/popoMobile.xcodeproj/project.pbxproj`에 3곳 존재. 매 TestFlight/App Store 제출 전 범프 필요.
 
 ## Claude Code 커맨드

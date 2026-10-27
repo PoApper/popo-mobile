@@ -25,6 +25,28 @@ $ npm run ios:prod
 
 `project.pbxproj` 파일에서 `MARKETING_VERSION` 값을 변경 해준다.
 
+## 배포 인증서 갱신
+
+Apple Distribution 인증서와 `Release` 프로비저닝 프로파일은 1년마다 만료됩니다. Apple Developer 계정이 개인 멤버십이라 재발급은 계정 소유자만 할 수 있습니다. 만료 한 달 전에 아래 절차로 갱신합니다.
+
+1. **빌드하는 Mac에서** CSR을 만듭니다: 키체인 접근 → 인증서 지원 → 인증 기관에서 인증서 요청 → 디스크에 저장. 개인 키가 이 Mac에만 생기므로 `.p12`와 비밀번호를 주고받을 필요가 없습니다. 이전 갱신 때 만든 CSR이 남아 있고 그 개인 키가 키체인에 있으면 같은 파일을 다시 써도 됩니다.
+2. 계정 소유자에게 **CSR 파일을 첨부해서** 다음을 요청합니다. 메신저가 `.certSigningRequest` 확장자를 거부하면 zip으로 묶어 보냅니다.
+   - Certificates → `+` → **Apple Distribution** → **첨부한 CSR 업로드** → `.cer` 다운로드. 소유자 Mac의 CSR이나 Xcode 자동 생성으로 만든 인증서는 빌드 Mac에 개인 키가 없어 쓸 수 없습니다.
+   - Profiles → 기존 **`Release`** 프로파일 **Edit**(새로 만들지 않습니다) → 새 인증서 선택 → 저장 → **Download**. `project.pbxproj`와 `ExportOptions.plist`가 이름으로 찾으므로 **이름은 `Release`로 유지**합니다.
+3. 받은 `.cer`와 `.mobileprovision`을 더블클릭해 설치합니다. 개인 키 없이는 쓸 수 없는 파일이라 일반 메신저로 받아도 됩니다.
+4. 설치 결과를 확인합니다.
+
+   ```bash
+   # Apple Distribution identity가 "valid"로 1개 보여야 합니다
+   security find-identity -v -p codesigning
+   # 설치된 프로파일의 내부 이름이 Release 인지 확인합니다
+   security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/<UUID>.mobileprovision | plutil -extract Name raw -o - -
+   ```
+
+프로파일 이름은 파일명이 아니라 **Download 시점에 Apple이 파일 안에 서명해 넣은 `Name` 값**입니다. 포털에서 이름이나 인증서를 바꾼 뒤에는 반드시 다시 Download한 파일을 받아야 하고, 파일명을 `Release.mobileprovision`으로 바꾸는 것은 효과가 없습니다. 만료된 옛 `Release` 프로파일이 `~/Library/Developer/Xcode/UserData/Provisioning Profiles/`에 남아 있으면 Xcode가 그것을 먼저 집어 `doesn't include signing certificate` 오류가 나므로 삭제합니다.
+
+푸시 알림(APNs)은 만료가 없는 `.p8` 인증 키 하나를 Firebase의 개발·프로덕션 양쪽에 등록해 두었습니다. 배포 인증서 갱신과 무관하며 따로 갱신할 것이 없습니다.
+
 ## 앱 빌드
 
 Xcode 에서 진행합니다.
