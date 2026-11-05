@@ -26,6 +26,7 @@ import api from '@utils/api';
 import {reset_auth} from '@utils/reset';
 import paxi_api from '@utils/paxi_api';
 import {PaxiUserMy} from '@interfaces/paxi';
+import LanguageSelector from '@components/LanguageSelector';
 
 type UserDetailScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'UserDetail'>;
@@ -409,6 +410,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
             </View>
           ) : null}
         </View>
+
+        <LanguageSelector />
 
         {/* 비밀번호 수정 모달 */}
         <Modal
