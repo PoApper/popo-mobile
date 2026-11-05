@@ -71,6 +71,14 @@ jest.mock('react-native-encrypted-storage', () => ({
 }));
 
 // ──────────────────────────────────────────────
+// react-native Settings (iOS NSUserDefaults) native module mock
+// ──────────────────────────────────────────────
+jest.mock('react-native/Libraries/Settings/NativeSettingsManager', () => ({
+  __esModule: true,
+  default: {getConstants: () => ({settings: {}}), setValues: jest.fn()},
+}));
+
+// ──────────────────────────────────────────────
 // react-native-device-info mock
 // ──────────────────────────────────────────────
 jest.mock('react-native-device-info', () =>
