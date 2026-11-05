@@ -146,6 +146,37 @@
       "resetSuccess": "Your password has been reset. Check your email for the new password.",
       "resetFailedTitle": "Reset failed",
       "resetFailed": "An error occurred while processing your request."
+    },
+    "password": {
+      "mismatch": "Passwords do not match.",
+      "tooShort": "Password must be at least 8 characters.",
+      "lengthRange": "Password must be 8 to 64 characters."
+    },
+    "signup": {
+      "backToLogin": "Back to login",
+      "title": "Sign up",
+      "name": "Name",
+      "namePlaceholder": "Full name used for reservations",
+      "password": "Password",
+      "passwordPlaceholder": "8 to 16 characters",
+      "passwordConfirm": "Confirm password",
+      "passwordConfirmPlaceholder": "Re-enter your password",
+      "userType": "User type",
+      "userTypes": {
+        "student": "Student",
+        "faculty": "Faculty/Staff",
+        "others": "Other"
+      },
+      "requiredNote": "* Required",
+      "privacyAgree": "I agree to the Privacy Policy",
+      "submit": "Sign up",
+      "haveAccount": "Already have an account?",
+      "login": "Log in",
+      "missingFields": "Please fill in all required fields.",
+      "postechOnly": "Only POSTECH email addresses (@postech.ac.kr) can sign up.",
+      "successTitle": "Sign-up successful",
+      "success": "Sign-up successful! 😁\nPlease check your account activation email!\nSent to: {{email}}\n(It may take about a minute.)",
+      "failedTitle": "Sign-up failed"
     }
   }
 }

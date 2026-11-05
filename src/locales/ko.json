@@ -146,6 +146,37 @@
       "resetSuccess": "비밀번호가 초기화 되었습니다. 이메일을 통해 신규 비밀번호를 확인해주세요.",
       "resetFailedTitle": "초기화 실패",
       "resetFailed": "요청 처리 중 오류가 발생했습니다."
+    },
+    "password": {
+      "mismatch": "비밀번호가 일치하지 않습니다.",
+      "tooShort": "비밀번호는 최소 8자 이상이어야 합니다.",
+      "lengthRange": "비밀번호는 8자리 이상 64자리 이하여야 합니다."
+    },
+    "signup": {
+      "backToLogin": "로그인 페이지로",
+      "title": "회원가입",
+      "name": "이름",
+      "namePlaceholder": "예약에 사용할 실명을 입력해주세요",
+      "password": "비밀번호",
+      "passwordPlaceholder": "8자리 이상, 16자리 이하",
+      "passwordConfirm": "비밀번호 확인",
+      "passwordConfirmPlaceholder": "비밀번호를 다시 입력하세요",
+      "userType": "사용자 유형",
+      "userTypes": {
+        "student": "학생",
+        "faculty": "교직원",
+        "others": "기타"
+      },
+      "requiredNote": "* 필수 항목",
+      "privacyAgree": "개인정보 처리 방침에 동의합니다",
+      "submit": "회원가입",
+      "haveAccount": "이미 계정이 있으신가요?",
+      "login": "로그인",
+      "missingFields": "모든 필수 항목을 입력해주세요.",
+      "postechOnly": "포스텍 이메일(@postech.ac.kr)로만 회원가입이 가능합니다.",
+      "successTitle": "회원가입 성공",
+      "success": "회원가입에 성공했습니다! 😁\n계정 활성화 메일을 확인해주세요! \n발송 이메일: {{email}}\n(1분 정도 지연 될 수 있습니다.)",
+      "failedTitle": "회원가입 실패"
     }
   }
 }
