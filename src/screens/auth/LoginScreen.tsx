@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import axios from 'axios';
@@ -58,10 +59,11 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
   const secondaryButtonBg = isDarkMode ? '#2A2A2A' : '#f2f3f5';
   const secondaryTextColor = isDarkMode ? '#E0E0E0' : '#262626';
   const helpTextColor = isDarkMode ? '#60A5FA' : '#3b82f6';
+  const {t} = useTranslation();
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('오류', '이메일과 비밀번호를 모두 입력해주세요.');
+      Alert.alert(t('common.error'), t('auth.login.missingFields'));
       return;
     }
 
@@ -84,13 +86,16 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       // 서버에서 받은 쿠키 확인 및 저장
       const setCookie = response.headers['set-cookie'];
       if (!setCookie) {
-        Alert.alert('오류', '로그인 정보를 받지 못했습니다.');
+        Alert.alert(t('common.error'), t('auth.login.noCredentials'));
         return;
       }
 
       const authToken = extractTokenFromCookie(setCookie, true);
       if (!authToken) {
-        Alert.alert('오류', '로그인 정보를 받지 못했습니다(Authentication).');
+        Alert.alert(
+          t('common.error'),
+          t('auth.login.noCredentialsToken', {token: 'Authentication'}),
+        );
         return;
       }
 
@@ -107,7 +112,10 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
 
       const refreshToken = extractTokenFromCookie(setCookie, false);
       if (!refreshToken) {
-        Alert.alert('오류', '로그인 정보를 받지 못했습니다(Refresh).');
+        Alert.alert(
+          t('common.error'),
+          t('auth.login.noCredentialsToken', {token: 'Refresh'}),
+        );
         return;
       }
 
@@ -148,25 +156,24 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       // axios 오류 처리
       if (axios.isAxiosError(err)) {
         if (err.code === 'ERR_NETWORK') {
-          const errorMsg =
-            '서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.';
+          const errorMsg = t('common.serverUnreachable');
           setError(errorMsg);
-          Alert.alert('연결 오류', errorMsg);
+          Alert.alert(t('common.serverUnreachableTitle'), errorMsg);
         } else {
           // 서버 응답 오류
           const errorMsg =
             err.response?.data?.message ||
             err.message ||
-            '로그인 중 오류가 발생했습니다.';
+            t('auth.login.failed');
           setError(errorMsg);
-          Alert.alert('로그인 실패', errorMsg);
+          Alert.alert(t('auth.login.failedTitle'), errorMsg);
         }
       } else {
         // 기타 오류
         const errorMessage =
-          err instanceof Error ? err.message : '로그인 중 오류가 발생했습니다.';
+          err instanceof Error ? err.message : t('auth.login.failed');
         setError(errorMessage);
-        Alert.alert('로그인 실패', errorMessage);
+        Alert.alert(t('auth.login.failedTitle'), errorMessage);
       }
     } finally {
       setIsLoading(false);
@@ -177,7 +184,10 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
     try {
       const targetEmail = (resetEmail || email).trim();
       if (!targetEmail) {
-        Alert.alert('입력 필요', '이메일을 입력해주세요.');
+        Alert.alert(
+          t('auth.login.resetEmailRequiredTitle'),
+          t('auth.login.resetEmailRequired'),
+        );
         return;
       }
 
@@ -188,13 +198,12 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       await api.post('/auth/password/reset', {email: normalizedEmail});
       setShowResetModal(false);
       Alert.alert(
-        '비밀번호 초기화 완료',
-        '비밀번호가 초기화 되었습니다. 이메일을 통해 신규 비밀번호를 확인해주세요.',
+        t('auth.login.resetSuccessTitle'),
+        t('auth.login.resetSuccess'),
       );
     } catch (err: any) {
-      const msg =
-        err?.response?.data?.message || '요청 처리 중 오류가 발생했습니다.';
-      Alert.alert('초기화 실패', msg);
+      const msg = err?.response?.data?.message || t('auth.login.resetFailed');
+      Alert.alert(t('auth.login.resetFailedTitle'), msg);
     }
   };
 
@@ -231,7 +240,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                   paddingRight: 150,
                 },
               ]}
-              placeholder="POSTECH 이메일"
+              placeholder={t('auth.login.emailPlaceholder')}
               placeholderTextColor={placeholderColor}
               keyboardType="email-address"
               autoCapitalize="none"
@@ -256,7 +265,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             )}
           </View>
           <Text style={[styles.emailHintText, {color: placeholderColor}]}>
-            POSTECH ID를 입력하면, 자동으로 @postech.ac.kr이 붙습니다
+            {t('auth.login.emailHint')}
           </Text>
 
           <TextInput
@@ -269,7 +278,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                 color: textColor,
               },
             ]}
-            placeholder="비밀번호"
+            placeholder={t('auth.login.passwordPlaceholder')}
             placeholderTextColor={placeholderColor}
             secureTextEntry
             autoCapitalize="none"
@@ -289,7 +298,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
             }}
           />
           <Text style={[styles.emailHintText, {color: placeholderColor}]}>
-            POPO 가입 시 사용한 비밀번호를 입력해주세요
+            {t('auth.login.passwordHint')}
           </Text>
 
           {/* Forgot Password */}
@@ -299,14 +308,14 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                 styles.emailHintText,
                 {textAlign: 'center', color: placeholderColor, marginLeft: 0},
               ]}>
-              비밀번호를 잊으셨나요?{' '}
+              {t('auth.login.forgotPassword')}{' '}
               <Text
                 style={{color: helpTextColor, fontWeight: '600'}}
                 onPress={() => {
                   setResetEmail(email);
                   setShowResetModal(true);
                 }}>
-                비밀번호 찾기
+                {t('auth.login.findPassword')}
               </Text>
             </Text>
           </View>
@@ -333,7 +342,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                   ? {color: isLoading || !canSubmit ? '#bbb' : '#000'}
                   : {},
               ]}>
-              {isLoading ? '로그인 중...' : '로그인'}
+              {isLoading ? t('auth.login.submitting') : t('auth.login.submit')}
             </Text>
           </TouchableOpacity>
 
@@ -351,7 +360,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                 styles.splitterText,
                 {color: isDarkMode ? '#AAAAAA' : '#9b9b9b'},
               ]}>
-              또는
+              {t('auth.login.or')}
             </Text>
             <View
               style={[
@@ -371,7 +380,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
               disabled={isLoading}>
               <Text
                 style={[styles.signupButtonText, {color: secondaryTextColor}]}>
-                회원가입
+                {t('auth.login.signup')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -382,7 +391,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
               openURLWithFallback(ERROR_REPORT_FORM_URL);
             }}>
             <Text style={[styles.needHelpText, {color: helpTextColor}]}>
-              도움이 필요하세요?
+              {t('auth.login.needHelp')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -401,10 +410,10 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
               {backgroundColor: isDarkMode ? '#1E1E1E' : '#FFFFFF'},
             ]}>
             <Text style={[styles.modalTitle, {color: textColor}]}>
-              비밀번호 초기화
+              {t('auth.login.resetTitle')}
             </Text>
             <Text style={[styles.modalDesc, {color: placeholderColor}]}>
-              POPO 가입 때 사용한 email을 입력해주세요.
+              {t('auth.login.resetHint')}
             </Text>
             <TextInput
               style={[
@@ -416,7 +425,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                   color: textColor,
                 },
               ]}
-              placeholder="이메일"
+              placeholder={t('auth.login.resetEmailPlaceholder')}
               placeholderTextColor={placeholderColor}
               keyboardType="email-address"
               autoCapitalize="none"
@@ -429,13 +438,15 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                 onPress={() => setShowResetModal(false)}>
                 <Text
                   style={[styles.modalBtnText, {color: secondaryTextColor}]}>
-                  취소
+                  {t('common.cancel')}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.modalPrimaryBtn}
                 onPress={handlePasswordReset}>
-                <Text style={styles.modalPrimaryBtnText}>비밀번호 초기화</Text>
+                <Text style={styles.modalPrimaryBtnText}>
+                  {t('auth.login.resetTitle')}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

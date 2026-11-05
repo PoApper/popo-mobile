@@ -17,7 +17,12 @@
     "untitled": "Untitled",
     "networkError": "A network error occurred.",
     "sessionExpiredTitle": "Session expired",
-    "sessionExpiredBody": "Please log in again."
+    "sessionExpiredBody": "Please log in again.",
+    "serverUnreachableTitle": "Connection error",
+    "serverUnreachable": "Cannot connect to the server. Please check your network connection.",
+    "unknownError": "An unknown error occurred.",
+    "processing": "Processing...",
+    "noInfo": "N/A"
   },
   "nav": {
     "home": "Home",
@@ -112,6 +117,35 @@
       "place": "Places",
       "equipment": "Equipment",
       "taxi": "Taxi"
+    }
+  },
+  "auth": {
+    "login": {
+      "emailPlaceholder": "POSTECH email",
+      "emailHint": "Enter your POSTECH ID and @postech.ac.kr is added automatically",
+      "passwordPlaceholder": "Password",
+      "passwordHint": "Enter the password you used to register for POPO",
+      "forgotPassword": "Forgot your password?",
+      "findPassword": "Reset it",
+      "submit": "Log in",
+      "submitting": "Logging in...",
+      "or": "or",
+      "signup": "Sign up",
+      "needHelp": "Need help?",
+      "missingFields": "Please enter both your email and password.",
+      "noCredentials": "Did not receive login credentials.",
+      "noCredentialsToken": "Did not receive login credentials ({{token}}).",
+      "failedTitle": "Login failed",
+      "failed": "An error occurred while logging in.",
+      "resetTitle": "Reset password",
+      "resetHint": "Enter the email you used to register for POPO.",
+      "resetEmailPlaceholder": "Email",
+      "resetEmailRequiredTitle": "Input required",
+      "resetEmailRequired": "Please enter your email.",
+      "resetSuccessTitle": "Password reset",
+      "resetSuccess": "Your password has been reset. Check your email for the new password.",
+      "resetFailedTitle": "Reset failed",
+      "resetFailed": "An error occurred while processing your request."
     }
   }
 }
