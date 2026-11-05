@@ -225,5 +225,23 @@
       "developerPage": "개발자 페이지",
       "developerHint": "개발자 페이지는 에뮬레이터와 Test Flight에서만 접근 가능합니다."
     }
+  },
+  "about": {
+    "title": "앱 정보 · 만든 사람들",
+    "tagline": "포스텍 구성원을 위한 서비스 허브",
+    "versionSection": "버전 정보",
+    "appVersion": "앱 버전: {{version}}",
+    "buildNumber": "빌드 번호: {{build}}",
+    "recruitTitle": "함께 만들어요",
+    "recruitBody": "POPO 개발팀에서 새로운 팀원을 찾고 있습니다",
+    "appSection": "앱",
+    "backendSection": "백엔드",
+    "popoBackend": "POPO 백엔드",
+    "paxiBackend": "Paxi 백엔드",
+    "designerSection": "디자이너",
+    "ossLicenses": "오픈소스 라이선스",
+    "ossViewLicense": "{{name}} 라이선스 보기",
+    "ossNoStandardPage": "표준 라이선스 페이지가 없습니다",
+    "close": "닫기"
   }
 }

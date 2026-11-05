@@ -225,5 +225,23 @@
       "developerPage": "Developer page",
       "developerHint": "The developer page is only available on emulators and TestFlight."
     }
+  },
+  "about": {
+    "title": "About · Credits",
+    "tagline": "A service hub for the POSTECH community",
+    "versionSection": "Version",
+    "appVersion": "App version: {{version}}",
+    "buildNumber": "Build number: {{build}}",
+    "recruitTitle": "Build it with us",
+    "recruitBody": "The POPO dev team is looking for new members",
+    "appSection": "App",
+    "backendSection": "Backend",
+    "popoBackend": "POPO backend",
+    "paxiBackend": "Paxi backend",
+    "designerSection": "Designers",
+    "ossLicenses": "Open source licenses",
+    "ossViewLicense": "View {{name}} license",
+    "ossNoStandardPage": "No standard license page",
+    "close": "Close"
   }
 }
