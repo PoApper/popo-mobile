@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Svg, {Path} from 'react-native-svg';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {RootStackParamList} from '@navigation/types';
 import CommonHeader from '@components/CommonHeader';
 
@@ -52,25 +53,26 @@ type RecruitmentField = {
 
 const techStacks = [
   {
-    category: '백엔드',
+    field: 'backend',
     items: ['NestJS', 'TypeORM', 'MariaDB'],
   },
   {
-    category: '프론트엔드',
+    field: 'frontend',
     items: ['Next.js', 'Semantic UI React'],
   },
   {
-    category: '모바일',
+    field: 'mobile',
     items: ['React Native', 'TypeScript'],
   },
   {
-    category: '인프라',
+    field: 'infra',
     items: ['AWS', 'Docker Swarm', 'GitHub Actions'],
   },
-];
+] as const;
 
 const RecruitingScreen = ({navigation}: RecruitingScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+  const {t} = useTranslation();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -85,17 +87,17 @@ const RecruitingScreen = ({navigation}: RecruitingScreenProps) => {
 
   const recruitmentFields: RecruitmentField[] = [
     {
-      label: '백엔드',
+      label: t('recruiting.fields.backend'),
       logo: <NestJSLogo size={32} />,
       description: 'NestJS',
     },
     {
-      label: '프론트엔드',
+      label: t('recruiting.fields.frontend'),
       logo: <NextJSLogo size={32} color={isDarkMode ? '#FFFFFF' : '#000000'} />,
       description: 'Next.js',
     },
     {
-      label: '모바일',
+      label: t('recruiting.fields.mobile'),
       logo: <ReactLogo size={32} />,
       description: 'React Native',
     },
@@ -107,7 +109,7 @@ const RecruitingScreen = ({navigation}: RecruitingScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="개발자 모집" />
+      <CommonHeader navigation={navigation} title={t('recruiting.title')} />
 
       <ScrollView
         style={styles.container}
@@ -118,18 +120,15 @@ const RecruitingScreen = ({navigation}: RecruitingScreenProps) => {
           <View style={styles.titleRow}>
             <Icon name="diversity-3" size={28} color={textColor} />
             <Text style={[styles.title, {color: textColor, marginLeft: 8}]}>
-              POPO와 함께 만들어 나가요
+              {t('recruiting.headline')}
             </Text>
           </View>
           <Text style={[styles.description, {color: subTextColor}]}>
-            POPO는 포스텍 구성원을 위한 서비스 허브입니다. 장소/장비 예약,
-            동아리 관리, 택시 공유 등 캠퍼스 생활에 필요한 다양한 서비스를
-            개발하고 있습니다.
+            {t('recruiting.intro')}
           </Text>
           <Text
             style={[styles.description, {color: subTextColor, marginTop: 8}]}>
-            POPO 팀은 실제 사용자를 위한 서비스를 만들며 성장하고 싶은 개발자를
-            찾고 있습니다. 함께 포스텍 캠퍼스 생활을 더 편리하게 만들어보세요!
+            {t('recruiting.invite')}
           </Text>
         </View>
 
@@ -137,7 +136,7 @@ const RecruitingScreen = ({navigation}: RecruitingScreenProps) => {
         <View
           style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
           <Text style={[styles.sectionTitle, {color: textColor}]}>
-            모집 분야
+            {t('recruiting.fieldsSection')}
           </Text>
           <View style={styles.fieldsContainer}>
             {recruitmentFields.map(field => (
@@ -164,12 +163,12 @@ const RecruitingScreen = ({navigation}: RecruitingScreenProps) => {
         <View
           style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
           <Text style={[styles.sectionTitle, {color: textColor}]}>
-            기술 스택
+            {t('recruiting.techStackSection')}
           </Text>
           {techStacks.map(stack => (
-            <View key={stack.category} style={styles.stackRow}>
+            <View key={stack.field} style={styles.stackRow}>
               <Text style={[styles.stackCategory, {color: textColor}]}>
-                {stack.category}
+                {t(`recruiting.fields.${stack.field}`)}
               </Text>
               <View style={styles.chipsWrap}>
                 {stack.items.map(item => (
@@ -191,12 +190,12 @@ const RecruitingScreen = ({navigation}: RecruitingScreenProps) => {
         <View
           style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
           <Text style={[styles.sectionTitle, {color: textColor}]}>
-            문의 및 지원
+            {t('recruiting.contactSection')}
           </Text>
           <View style={styles.contactRow}>
             <Icon name="person" size={20} color={subTextColor} />
             <Text style={[styles.contactText, {color: textColor}]}>
-              Lead Developer: 나태양
+              {t('recruiting.leadDeveloper')}
             </Text>
           </View>
           <TouchableOpacity
@@ -210,7 +209,7 @@ const RecruitingScreen = ({navigation}: RecruitingScreenProps) => {
           <View style={[styles.contactRow, {marginTop: 8}]}>
             <Icon name="person" size={20} color={subTextColor} />
             <Text style={[styles.contactText, {color: textColor}]}>
-              Mobile Lead Developer: 김관호
+              {t('recruiting.mobileLeadDeveloper')}
             </Text>
           </View>
           <TouchableOpacity
