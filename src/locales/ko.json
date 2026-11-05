@@ -192,6 +192,38 @@
       "doneBody": "회원 탈퇴가 완료되었습니다.\n이용해 주셔서 감사합니다.",
       "failedTitle": "탈퇴 실패",
       "failed": "회원 탈퇴 중 오류가 발생했습니다."
+    },
+    "myInfo": {
+      "defaultName": "사용자",
+      "noEmail": "이메일 없음",
+      "popoSection": "POPO 계정 정보",
+      "userType": "회원 유형",
+      "accountStatus": "계정 상태",
+      "joinedAt": "가입일",
+      "changePassword": "비밀번호 변경",
+      "change": "변경",
+      "paxiSection": "Paxi 정보",
+      "nickname": "닉네임",
+      "bankAccount": "등록 계좌",
+      "edit": "수정",
+      "register": "등록",
+      "reports": "신고 관리",
+      "viewHistory": "내역 조회",
+      "newPasswordHint": "새로운 비밀번호를 입력해주세요.",
+      "newPasswordPlaceholder": "새 비밀번호 (8자리 이상)",
+      "passwordConfirmPlaceholder": "비밀번호 확인",
+      "passwordInvalid": "비밀번호를 올바르게 입력해주세요.",
+      "passwordRequired": "비밀번호를 입력해주세요.",
+      "successTitle": "성공",
+      "passwordChanged": "비밀번호 변경에 성공했습니다!",
+      "passwordChangeFailed": "비밀번호 업데이트에 실패했습니다. 😢\n\"{{message}}\"",
+      "errorOccurred": "오류가 발생했습니다.",
+      "logout": "로그아웃",
+      "logoutFailed": "로그아웃 중 오류가 발생했습니다.",
+      "leave": "회원 탈퇴",
+      "about": "앱 정보 · 만든 사람들",
+      "developerPage": "개발자 페이지",
+      "developerHint": "개발자 페이지는 에뮬레이터와 Test Flight에서만 접근 가능합니다."
     }
   }
 }
