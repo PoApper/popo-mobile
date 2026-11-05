@@ -13,6 +13,7 @@ import {
 import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import CookieManager from '@react-native-cookies/cookies';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import axios from 'axios';
@@ -26,6 +27,7 @@ type LeaveScreenProps = {
 
 const LeaveScreen = ({navigation}: LeaveScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+  const {t} = useTranslation();
   const [reason, setReason] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,23 +45,19 @@ const LeaveScreen = ({navigation}: LeaveScreenProps) => {
   const secondaryTextColor = isDarkMode ? '#E0E0E0' : '#262626';
 
   const handleLeave = async () => {
-    Alert.alert(
-      '회원 탈퇴 확인',
-      '정말로 회원 탈퇴를 하시겠습니까?\n\n이 작업은 되돌릴 수 없으며, 모든 데이터가 영구적으로 삭제됩니다.',
-      [
-        {
-          text: '취소',
-          style: 'cancel',
+    Alert.alert(t('auth.leave.confirmTitle'), t('auth.leave.confirmBody'), [
+      {
+        text: t('common.cancel'),
+        style: 'cancel',
+      },
+      {
+        text: t('auth.leave.confirmButton'),
+        style: 'destructive',
+        onPress: async () => {
+          await performLeave();
         },
-        {
-          text: '탈퇴하기',
-          style: 'destructive',
-          onPress: async () => {
-            await performLeave();
-          },
-        },
-      ],
-    );
+      },
+    ]);
   };
 
   const performLeave = async () => {
@@ -75,44 +73,37 @@ const LeaveScreen = ({navigation}: LeaveScreenProps) => {
       // 쿠키 삭제
       await CookieManager.clearAll();
 
-      Alert.alert(
-        '회원 탈퇴 완료',
-        '회원 탈퇴가 완료되었습니다.\n이용해 주셔서 감사합니다.',
-        [
-          {
-            text: '확인',
-            onPress: () => {
-              // 로그인 화면으로 이동
-              navigation.reset({
-                index: 0,
-                routes: [{name: 'Login'}],
-              });
-            },
+      Alert.alert(t('auth.leave.doneTitle'), t('auth.leave.doneBody'), [
+        {
+          text: t('common.confirm'),
+          onPress: () => {
+            // 로그인 화면으로 이동
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'Login'}],
+            });
           },
-        ],
-      );
+        },
+      ]);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         if (err.code === 'ERR_NETWORK') {
-          const errorMsg =
-            '서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.';
+          const errorMsg = t('common.serverUnreachable');
           setError(errorMsg);
-          Alert.alert('연결 오류', errorMsg);
+          Alert.alert(t('common.serverUnreachableTitle'), errorMsg);
         } else {
           const errorMsg =
             err.response?.data?.message ||
             err.message ||
-            '회원 탈퇴 중 오류가 발생했습니다.';
+            t('auth.leave.failed');
           setError(errorMsg);
-          Alert.alert('탈퇴 실패', errorMsg);
+          Alert.alert(t('auth.leave.failedTitle'), errorMsg);
         }
       } else {
         const errorMessage =
-          err instanceof Error
-            ? err.message
-            : '회원 탈퇴 중 오류가 발생했습니다.';
+          err instanceof Error ? err.message : t('auth.leave.failed');
         setError(errorMessage);
-        Alert.alert('탈퇴 실패', errorMessage);
+        Alert.alert(t('auth.leave.failedTitle'), errorMessage);
       }
     } finally {
       setIsLoading(false);
@@ -139,9 +130,11 @@ const LeaveScreen = ({navigation}: LeaveScreenProps) => {
             style={styles.logoImage}
             resizeMode="contain"
           />
-          <Text style={[styles.title, {color: textColor}]}>회원 탈퇴</Text>
+          <Text style={[styles.title, {color: textColor}]}>
+            {t('auth.leave.title')}
+          </Text>
           <Text style={[styles.subtitle, {color: placeholderColor}]}>
-            계정을 영구적으로 삭제합니다
+            {t('auth.leave.subtitle')}
           </Text>
         </View>
 
@@ -154,12 +147,10 @@ const LeaveScreen = ({navigation}: LeaveScreenProps) => {
             },
           ]}>
           <Text style={[styles.warningTitle, {color: '#EF4444'}]}>
-            ⚠️ 주의사항
+            {t('auth.leave.warningTitle')}
           </Text>
           <Text style={[styles.warningText, {color: textColor}]}>
-            • 회원 탈퇴 시 모든 개인정보가 영구적으로 삭제됩니다{'\n'}• 예약
-            내역, 채팅 기록 등 모든 데이터가 삭제됩니다{'\n'}• 이 작업은 되돌릴
-            수 없습니다{'\n'}• 탈퇴 후 동일한 이메일로 재가입이 가능합니다
+            {t('auth.leave.warningBody')}
           </Text>
         </View>
 
@@ -174,7 +165,7 @@ const LeaveScreen = ({navigation}: LeaveScreenProps) => {
                 color: textColor,
               },
             ]}
-            placeholder="탈퇴 사유 (선택사항)"
+            placeholder={t('auth.leave.reasonPlaceholder')}
             placeholderTextColor={placeholderColor}
             value={reason}
             onChangeText={setReason}
@@ -196,7 +187,7 @@ const LeaveScreen = ({navigation}: LeaveScreenProps) => {
             onPress={handleLeave}
             disabled={isLoading}>
             <Text style={styles.leaveButtonText}>
-              {isLoading ? '처리 중...' : '회원 탈퇴'}
+              {isLoading ? t('common.processing') : t('auth.leave.submit')}
             </Text>
           </TouchableOpacity>
 
@@ -206,7 +197,7 @@ const LeaveScreen = ({navigation}: LeaveScreenProps) => {
             disabled={isLoading}>
             <Text
               style={[styles.cancelButtonText, {color: secondaryTextColor}]}>
-              취소
+              {t('common.cancel')}
             </Text>
           </TouchableOpacity>
         </View>
