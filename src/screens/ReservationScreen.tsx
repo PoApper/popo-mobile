@@ -72,9 +72,9 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
 
   const tabs = [
-    {id: 'place' as TabType, label: t('eventType.place')},
-    {id: 'equipment' as TabType, label: t('eventType.equipment')},
-    {id: 'taxi' as TabType, label: t('eventType.taxi')},
+    {id: 'place' as TabType, label: t('myReservation.tabs.place')},
+    {id: 'equipment' as TabType, label: t('myReservation.tabs.equipment')},
+    {id: 'taxi' as TabType, label: t('myReservation.tabs.taxi')},
   ];
 
   useFocusEffect(
@@ -257,7 +257,6 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
   },
   typeTabWrapper: {
-    width: 70,
     paddingVertical: 5,
     marginRight: 12,
   },

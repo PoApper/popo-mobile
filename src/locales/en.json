@@ -34,7 +34,7 @@
       "placeReservation": "Places",
       "equipReservation": "Equipment",
       "club": "Clubs",
-      "association": "Organizations",
+      "association": "Unions",
       "studentAssociation": "Student Groups",
       "whitebook": "Campus Guide",
       "benefits": "Affiliates",
@@ -107,6 +107,11 @@
     "equipList": "Equipment ({{count}})",
     "paxiConsentTitle": "Paxi consent required",
     "paxiConsentBody": "To use taxi carpool,\nyou need to agree to the Paxi terms.\nPlease try again after agreeing.",
-    "paxiConsentButton": "Go to Paxi consent page"
+    "paxiConsentButton": "Go to Paxi consent page",
+    "tabs": {
+      "place": "Places",
+      "equipment": "Equipment",
+      "taxi": "Taxi"
+    }
   }
 }

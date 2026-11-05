@@ -107,6 +107,11 @@
     "equipList": "장비 목록 ({{count}})",
     "paxiConsentTitle": "Paxi 서비스 사용 동의가 필요합니다",
     "paxiConsentBody": "택시 카풀 서비스를 이용하려면\nPaxi 서비스 사용 동의가 필요합니다.\n동의 후 다시 시도해주세요.",
-    "paxiConsentButton": "Paxi 서비스 사용 동의 페이지로 이동"
+    "paxiConsentButton": "Paxi 서비스 사용 동의 페이지로 이동",
+    "tabs": {
+      "place": "장소 예약",
+      "equipment": "장비 예약",
+      "taxi": "택시 카풀"
+    }
   }
 }
