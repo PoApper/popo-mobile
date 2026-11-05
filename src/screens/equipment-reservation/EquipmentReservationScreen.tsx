@@ -18,11 +18,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import PoPoAxios from '../../utils/api'; // 실제 axios 인스턴스 경로에 맞게 수정 필요
-import {Calendar, LocaleConfig} from 'react-native-calendars';
-import CalendarKoreanLocales from '../../utils/calendar-locales';
-
-LocaleConfig.locales.kr = CalendarKoreanLocales;
-LocaleConfig.defaultLocale = 'kr';
+import {Calendar} from 'react-native-calendars';
 
 // API 타입에 맞게 수정
 interface IEquipment {

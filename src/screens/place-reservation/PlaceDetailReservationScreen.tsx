@@ -12,16 +12,12 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
+import {Calendar} from 'react-native-calendars';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
 import {RouteProp, useFocusEffect} from '@react-navigation/native';
 import api from '../../utils/api';
-import CalendarKoreanLocales from '../../utils/calendar-locales';
 import LazyImage from '../../components/LazyImage';
-
-LocaleConfig.locales.kr = CalendarKoreanLocales;
-LocaleConfig.defaultLocale = 'kr';
 
 type PlaceDetailReservationScreenProps = {
   navigation: NativeStackNavigationProp<

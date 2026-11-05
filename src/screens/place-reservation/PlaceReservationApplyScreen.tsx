@@ -16,8 +16,6 @@ import {RootStackParamList} from '../../navigation/types';
 import {RouteProp} from '@react-navigation/native';
 import api from '../../utils/api';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {LocaleConfig} from 'react-native-calendars';
-import CalendarKoreanLocales from '../../utils/calendar-locales';
 import TimeSlotPickerModal from '../../components/TimeSlotPickerModal';
 import {
   toConcreteSlots,
@@ -29,9 +27,6 @@ import {
   MIN_RESERVATION_DURATION_MS,
   roundUpToNearest30Minutes,
 } from '@utils/popo-datetime';
-
-LocaleConfig.locales.kr = CalendarKoreanLocales;
-LocaleConfig.defaultLocale = 'kr';
 
 type PlaceReservationApplyScreenProps = {
   navigation: NativeStackNavigationProp<
