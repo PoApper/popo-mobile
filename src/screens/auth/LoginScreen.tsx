@@ -28,8 +28,7 @@ import {
   USER_INFO_KEY,
   IS_AUTHENTICATED_KEY,
 } from '@utils/storage-keys';
-import {getFCMToken} from '@utils/firebase';
-import paxi_api from '@utils/paxi_api';
+import {registerPushKey} from '@utils/push-key';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -142,15 +141,9 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
       });
 
       // FCM 토큰 등록 (네비게이션 블로킹 방지를 위해 백그라운드 실행)
-      getFCMToken()
-        .then(fcmToken => {
-          if (fcmToken) {
-            paxi_api.post('/push/key/', {key: fcmToken});
-          }
-        })
-        .catch(fcmError => {
-          console.error('[FCM] register failed:', fcmError);
-        });
+      registerPushKey().catch(fcmError => {
+        console.error('[FCM] register failed:', fcmError);
+      });
     } catch (err: unknown) {
       // axios 오류 처리
       if (axios.isAxiosError(err)) {

@@ -5,6 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {useTheme} from '@styles/theme';
 import {Locale} from '@utils/locale';
 import {getLocalePreference, setLocalePreference} from '@utils/i18n';
+import {registerPushKey} from '@utils/push-key';
 
 /** null은 기기 언어를 따른다는 뜻이다. */
 type Preference = Locale | null;
@@ -27,6 +28,8 @@ const LanguageSelector = () => {
   const select = async (next: Preference) => {
     setPreference(next);
     await setLocalePreference(next);
+    // 서버가 푸시 문구 언어를 갱신하도록 다시 등록한다
+    registerPushKey().catch(() => {});
   };
 
   return (
