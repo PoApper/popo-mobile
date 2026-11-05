@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 
@@ -20,6 +21,13 @@ import type {MyRoomUser} from '@interfaces/paxi';
 import moment from 'moment';
 import {formatReservationTime} from '../utils/popo-datetime';
 import {POPO_API_URL} from '@utils/api';
+import {reservationStatusKey} from '@utils/reservation-status';
+
+const PAXI_STATUS_KEYS = {
+  IN_SETTLEMENT: 'paxiStatus.inSettlement',
+  ACTIVE: 'paxiStatus.active',
+  COMPLETED: 'paxiStatus.completed',
+} as const;
 
 interface Place {
   uuid: string;
@@ -105,6 +113,7 @@ interface UpcomingEventsProps {
 }
 
 const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [combinedEvents, setCombinedEvents] = useState<CombinedEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -196,7 +205,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
             time: `${formatReservationTime(
               reservation.startTime,
             )} - ${formatReservationTime(reservation.endTime)}`,
-            location: reservation.place?.name || '장소 미정',
+            location: reservation.place?.name || t('upcoming.placeTbd'),
             status: reservation.status,
             description: reservation.description,
             data: reservation,
@@ -218,10 +227,14 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
         );
 
         const formatEquipments = (equipments: Equipment[] | undefined) => {
-          if (!equipments || equipments.length === 0) return '장비 미정';
-          const first = equipments[0]?.name || '장비';
+          if (!equipments || equipments.length === 0) {
+            return t('upcoming.equipmentTbd');
+          }
+          const first = equipments[0]?.name || t('upcoming.equipmentFallback');
           const extra = equipments.length - 1;
-          return extra > 0 ? `${first} 외 ${extra}개` : first;
+          return extra > 0
+            ? t('reservation.equipmentWithMore', {first, count: extra})
+            : first;
         };
 
         const equipmentEvents: CombinedEvent[] = equipmentResponse.map(
@@ -274,7 +287,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
     };
 
     fetchAllEvents();
-  }, [refreshKey]);
+  }, [refreshKey, t]);
 
   const formatDate = (dateString: string) => {
     const year = dateString.substring(0, 4);
@@ -288,30 +301,17 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
     type: 'place' | 'taxi' | 'equipment',
     status: string,
   ) => {
-    switch (type) {
-      case 'place':
-        return status;
-      case 'equipment':
-        return status;
-      case 'taxi':
-        return getPaxiStatusText(status);
-      default:
-        return status;
+    if (type === 'taxi') {
+      return getPaxiStatusText(status);
     }
+    const key = reservationStatusKey(status);
+    return key ? t(`reservation.status.${key}`) : status;
   };
 
   const getPaxiStatusText = (status: string) => {
     // TODO: 방 상태 한 곳에서 관리하도록 수정
-    switch (status) {
-      case 'IN_SETTLEMENT':
-        return '정산 중';
-      case 'ACTIVE':
-        return '출발 전';
-      case 'COMPLETED':
-        return '완료';
-      default:
-        return status;
-    }
+    const key = PAXI_STATUS_KEYS[status as keyof typeof PAXI_STATUS_KEYS];
+    return key ? t(key) : status;
   };
 
   const getStatusColor = (status: string) => {
@@ -384,7 +384,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
             styles.sectionTitle,
             {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
           ]}>
-          다가오는 일정
+          {t('upcoming.title')}
         </Text>
         <View style={[styles.scheduleCard]} />
       </View>
@@ -399,16 +399,16 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
             styles.sectionTitle,
             {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
           ]}>
-          다가오는 일정
+          {t('upcoming.title')}
         </Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.scheduleScroll}>
           <View style={[styles.scheduleCard, {backgroundColor: '#4D61DD'}]}>
-            <Text style={styles.scheduleTitle}>다가오는 일정이 없습니다</Text>
+            <Text style={styles.scheduleTitle}>{t('upcoming.empty')}</Text>
             <Text style={styles.emptyDescription}>
-              일주일 내의 일정들을 보여드려요
+              {t('upcoming.emptyHint')}
             </Text>
           </View>
         </ScrollView>
@@ -423,7 +423,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
           styles.sectionTitle,
           {color: isDarkMode ? '#FFFFFF' : '#000000', paddingHorizontal: 24},
         ]}>
-        다가오는 일정
+        {t('upcoming.title')}
       </Text>
       <ScrollView
         horizontal
@@ -448,11 +448,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
                 style={styles.eventIcon}
               />
               <Text style={styles.eventType}>
-                {event.type === 'place'
-                  ? '장소 예약'
-                  : event.type === 'taxi'
-                  ? '택시 카풀'
-                  : '장비 예약'}
+                {t(`eventType.${event.type}`)}
               </Text>
               {
                 <View style={styles.statusContainer}>
@@ -525,10 +521,9 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
                           styles.modalTitle,
                           {color: isDarkMode ? '#FFFFFF' : '#000000'},
                         ]}>
-                        {selectedEvent.type === 'place'
-                          ? '장소 예약'
-                          : '장비 예약'}{' '}
-                        상세
+                        {t('upcoming.detailTitle', {
+                          type: t(`eventType.${selectedEvent.type}`),
+                        })}
                       </Text>
                     </View>
 
@@ -539,7 +534,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
                             styles.detailLabel,
                             {color: isDarkMode ? '#AAAAAA' : '#666666'},
                           ]}>
-                          제목
+                          {t('reservation.fields.title')}
                         </Text>
                         <Text
                           style={[
@@ -556,7 +551,9 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
                             styles.detailLabel,
                             {color: isDarkMode ? '#AAAAAA' : '#666666'},
                           ]}>
-                          {selectedEvent.type === 'place' ? '장소' : '장비'}
+                          {selectedEvent.type === 'place'
+                            ? t('reservation.fields.place')
+                            : t('reservation.fields.equipment')}
                         </Text>
                         <Text
                           style={[
@@ -573,7 +570,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
                             styles.detailLabel,
                             {color: isDarkMode ? '#AAAAAA' : '#666666'},
                           ]}>
-                          날짜
+                          {t('reservation.fields.date')}
                         </Text>
                         <Text
                           style={[
@@ -590,7 +587,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
                             styles.detailLabel,
                             {color: isDarkMode ? '#AAAAAA' : '#666666'},
                           ]}>
-                          시간
+                          {t('reservation.fields.time')}
                         </Text>
                         <Text
                           style={[
@@ -608,7 +605,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
                               styles.detailLabel,
                               {color: isDarkMode ? '#AAAAAA' : '#666666'},
                             ]}>
-                            설명
+                            {t('reservation.fields.description')}
                           </Text>
                           <Text
                             style={[

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   useColorScheme,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {MainTabParamList, RootStackParamList} from '@navigation/types';
 
 type CommonHeaderProps = {
@@ -25,6 +26,7 @@ const CommonHeader = ({
   isBackHome = false,
   noBackButton = false,
 }: CommonHeaderProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
@@ -44,7 +46,9 @@ const CommonHeader = ({
               navigation.goBack();
             }
           }}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+          <Text style={[styles.backButtonText, {color: textColor}]}>
+            {t('common.back')}
+          </Text>
         </TouchableOpacity>
       )}
       <Text style={[styles.headerTitle, {color: textColor}]}>{title}</Text>
