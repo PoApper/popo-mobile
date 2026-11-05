@@ -4,5 +4,14 @@
     "system": "시스템 설정",
     "ko": "한국어",
     "en": "English"
+  },
+  "common": {
+    "back": "뒤로"
+  },
+  "nav": {
+    "home": "홈",
+    "paxi": "Paxi",
+    "myReservation": "내 일정",
+    "myInfo": "내 정보"
   }
 }

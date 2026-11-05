@@ -4,5 +4,14 @@
     "system": "System default",
     "ko": "한국어",
     "en": "English"
+  },
+  "common": {
+    "back": "Back"
+  },
+  "nav": {
+    "home": "Home",
+    "paxi": "Paxi",
+    "myReservation": "My Schedule",
+    "myInfo": "My Info"
   }
 }
