@@ -6,12 +6,75 @@
     "en": "English"
   },
   "common": {
-    "back": "Back"
+    "back": "Back",
+    "confirm": "OK",
+    "cancel": "Cancel",
+    "externalLinkTitle": "Open external link",
+    "pressBackAgainToExit": "Press back again to exit"
   },
   "nav": {
     "home": "Home",
     "paxi": "Paxi",
     "myReservation": "My Schedule",
     "myInfo": "My Info"
+  },
+  "home": {
+    "greeting": "Hello, {{name}}! 👋",
+    "defaultUserName": "there",
+    "servicesTitle": "Explore services",
+    "reportIssue": "Report a bug or idea",
+    "services": {
+      "placeReservation": "Places",
+      "equipReservation": "Equipment",
+      "club": "Clubs",
+      "association": "Organizations",
+      "studentAssociation": "Student Groups",
+      "whitebook": "Campus Guide",
+      "benefits": "Affiliates",
+      "delivery": "Delivery",
+      "archive": "Archives"
+    },
+    "deliveryLinkBody": "This opens the Dormitory Union delivery page.",
+    "archiveLinkBody": "This opens the Student Council Google Drive.",
+    "recruitingBanner": "POPO is looking for app developers!",
+    "ddayLoading": "Loading schedule…"
+  },
+  "upcoming": {
+    "title": "Upcoming",
+    "empty": "No upcoming events",
+    "emptyHint": "Events within the next week show up here",
+    "detailTitle": "{{type}} details",
+    "placeTbd": "Place TBD",
+    "equipmentTbd": "Equipment TBD",
+    "equipmentFallback": "Equipment"
+  },
+  "eventType": {
+    "place": "Place Reservation",
+    "equipment": "Equipment Reservation",
+    "taxi": "Taxi Carpool"
+  },
+  "paxiStatus": {
+    "inSettlement": "Settling",
+    "active": "Before departure",
+    "completed": "Completed"
+  },
+  "reservation": {
+    "status": {
+      "pending": "Pending",
+      "passed": "Approved",
+      "rejected": "Rejected"
+    },
+    "fields": {
+      "title": "Title",
+      "status": "Status",
+      "place": "Place",
+      "equipment": "Equipment",
+      "location": "Location",
+      "date": "Date",
+      "time": "Time",
+      "description": "Description",
+      "phone": "Contact"
+    },
+    "equipmentWithMore": "{{first}} +{{count}} more"
   }
 }

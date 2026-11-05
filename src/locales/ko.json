@@ -6,12 +6,75 @@
     "en": "English"
   },
   "common": {
-    "back": "뒤로"
+    "back": "뒤로",
+    "confirm": "확인",
+    "cancel": "취소",
+    "externalLinkTitle": "외부 링크 이동",
+    "pressBackAgainToExit": "한 번 더 누르면 앱이 종료됩니다"
   },
   "nav": {
     "home": "홈",
     "paxi": "Paxi",
     "myReservation": "내 일정",
     "myInfo": "내 정보"
+  },
+  "home": {
+    "greeting": "{{name}}님, 안녕하세요! 👋",
+    "defaultUserName": "사용자",
+    "servicesTitle": "다양한 서비스 이용하기",
+    "reportIssue": "오류 및 개선점 제보",
+    "services": {
+      "placeReservation": "장소예약",
+      "equipReservation": "장비예약",
+      "club": "동아리",
+      "association": "자치단체",
+      "studentAssociation": "학생단체",
+      "whitebook": "생활백서",
+      "benefits": "제휴업체",
+      "delivery": "배달업체",
+      "archive": "기록물관리"
+    },
+    "deliveryLinkBody": "생활관자치회 배달업체 페이지로 이동합니다.",
+    "archiveLinkBody": "총학생회 구글 드라이브로 이동합니다.",
+    "recruitingBanner": "POPO 앱 개발자를 모집합니다!",
+    "ddayLoading": "일정 정보를 불러오는 중..."
+  },
+  "upcoming": {
+    "title": "다가오는 일정",
+    "empty": "다가오는 일정이 없습니다",
+    "emptyHint": "일주일 내의 일정들을 보여드려요",
+    "detailTitle": "{{type}} 상세",
+    "placeTbd": "장소 미정",
+    "equipmentTbd": "장비 미정",
+    "equipmentFallback": "장비"
+  },
+  "eventType": {
+    "place": "장소 예약",
+    "equipment": "장비 예약",
+    "taxi": "택시 카풀"
+  },
+  "paxiStatus": {
+    "inSettlement": "정산 중",
+    "active": "출발 전",
+    "completed": "완료"
+  },
+  "reservation": {
+    "status": {
+      "pending": "심사중",
+      "passed": "통과",
+      "rejected": "거절"
+    },
+    "fields": {
+      "title": "제목",
+      "status": "상태",
+      "place": "장소",
+      "equipment": "장비",
+      "location": "위치",
+      "date": "날짜",
+      "time": "시간",
+      "description": "설명",
+      "phone": "연락처"
+    },
+    "equipmentWithMore": "{{first}} 외 {{count}}개"
   }
 }
