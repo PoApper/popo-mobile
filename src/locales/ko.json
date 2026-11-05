@@ -17,7 +17,12 @@
     "untitled": "제목 없음",
     "networkError": "네트워크 오류가 발생했습니다.",
     "sessionExpiredTitle": "인증 만료",
-    "sessionExpiredBody": "다시 로그인해주세요."
+    "sessionExpiredBody": "다시 로그인해주세요.",
+    "serverUnreachableTitle": "연결 오류",
+    "serverUnreachable": "서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.",
+    "unknownError": "알 수 없는 오류가 발생했습니다.",
+    "processing": "처리 중...",
+    "noInfo": "정보 없음"
   },
   "nav": {
     "home": "홈",
@@ -112,6 +117,35 @@
       "place": "장소 예약",
       "equipment": "장비 예약",
       "taxi": "택시 카풀"
+    }
+  },
+  "auth": {
+    "login": {
+      "emailPlaceholder": "POSTECH 이메일",
+      "emailHint": "POSTECH ID를 입력하면, 자동으로 @postech.ac.kr이 붙습니다",
+      "passwordPlaceholder": "비밀번호",
+      "passwordHint": "POPO 가입 시 사용한 비밀번호를 입력해주세요",
+      "forgotPassword": "비밀번호를 잊으셨나요?",
+      "findPassword": "비밀번호 찾기",
+      "submit": "로그인",
+      "submitting": "로그인 중...",
+      "or": "또는",
+      "signup": "회원가입",
+      "needHelp": "도움이 필요하세요?",
+      "missingFields": "이메일과 비밀번호를 모두 입력해주세요.",
+      "noCredentials": "로그인 정보를 받지 못했습니다.",
+      "noCredentialsToken": "로그인 정보를 받지 못했습니다({{token}}).",
+      "failedTitle": "로그인 실패",
+      "failed": "로그인 중 오류가 발생했습니다.",
+      "resetTitle": "비밀번호 초기화",
+      "resetHint": "POPO 가입 때 사용한 email을 입력해주세요.",
+      "resetEmailPlaceholder": "이메일",
+      "resetEmailRequiredTitle": "입력 필요",
+      "resetEmailRequired": "이메일을 입력해주세요.",
+      "resetSuccessTitle": "비밀번호 초기화 완료",
+      "resetSuccess": "비밀번호가 초기화 되었습니다. 이메일을 통해 신규 비밀번호를 확인해주세요.",
+      "resetFailedTitle": "초기화 실패",
+      "resetFailed": "요청 처리 중 오류가 발생했습니다."
     }
   }
 }
