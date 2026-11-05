@@ -177,6 +177,21 @@
       "successTitle": "Sign-up successful",
       "success": "Sign-up successful! 😁\nPlease check your account activation email!\nSent to: {{email}}\n(It may take about a minute.)",
       "failedTitle": "Sign-up failed"
+    },
+    "leave": {
+      "title": "Delete account",
+      "subtitle": "Permanently delete your account",
+      "warningTitle": "⚠️ Please note",
+      "warningBody": "• All personal information is permanently deleted\n• All data, including reservations and chat history, is deleted\n• This action cannot be undone\n• You can sign up again later with the same email",
+      "reasonPlaceholder": "Reason for leaving (optional)",
+      "submit": "Delete account",
+      "confirmTitle": "Confirm account deletion",
+      "confirmBody": "Are you sure you want to delete your account?\n\nThis cannot be undone and all your data will be permanently deleted.",
+      "confirmButton": "Delete",
+      "doneTitle": "Account deleted",
+      "doneBody": "Your account has been deleted.\nThank you for using POPO.",
+      "failedTitle": "Deletion failed",
+      "failed": "An error occurred while deleting your account."
     }
   }
 }
