@@ -192,6 +192,38 @@
       "doneBody": "Your account has been deleted.\nThank you for using POPO.",
       "failedTitle": "Deletion failed",
       "failed": "An error occurred while deleting your account."
+    },
+    "myInfo": {
+      "defaultName": "User",
+      "noEmail": "No email",
+      "popoSection": "POPO account",
+      "userType": "User type",
+      "accountStatus": "Account status",
+      "joinedAt": "Joined on",
+      "changePassword": "Change password",
+      "change": "Change",
+      "paxiSection": "Paxi account",
+      "nickname": "Nickname",
+      "bankAccount": "Bank account",
+      "edit": "Edit",
+      "register": "Add",
+      "reports": "Reports",
+      "viewHistory": "View",
+      "newPasswordHint": "Enter your new password.",
+      "newPasswordPlaceholder": "New password (8+ characters)",
+      "passwordConfirmPlaceholder": "Confirm password",
+      "passwordInvalid": "Please enter a valid password.",
+      "passwordRequired": "Please enter a password.",
+      "successTitle": "Success",
+      "passwordChanged": "Password changed successfully!",
+      "passwordChangeFailed": "Failed to update password. 😢\n\"{{message}}\"",
+      "errorOccurred": "An error occurred.",
+      "logout": "Log out",
+      "logoutFailed": "An error occurred while logging out.",
+      "leave": "Delete account",
+      "about": "About · Credits",
+      "developerPage": "Developer page",
+      "developerHint": "The developer page is only available on emulators and TestFlight."
     }
   }
 }

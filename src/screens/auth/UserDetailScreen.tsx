@@ -19,10 +19,12 @@ import Config from 'react-native-config';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 import axios from 'axios';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
+import {getCurrentLocale} from '@utils/i18n';
 import {reset_auth} from '@utils/reset';
 import paxi_api from '@utils/paxi_api';
 import {PaxiUserMy} from '@interfaces/paxi';
@@ -35,6 +37,7 @@ type UserDetailScreenProps = {
 
 const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+  const {t} = useTranslation();
   const backPressCount = useRef(0);
   const [isLoading, setIsLoading] = useState(false);
   const [userDataState, setUserData] = useState<any>(null);
@@ -77,9 +80,16 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
     } catch (err) {
       console.error('프로필 정보 조회 오류:', err);
       if (axios.isAxiosError(err) && err.response?.status === 401) {
-        Alert.alert('인증 만료', '다시 로그인해주세요.', [
-          {text: '확인', onPress: () => navigation.navigate('Login')},
-        ]);
+        Alert.alert(
+          t('common.sessionExpiredTitle'),
+          t('common.sessionExpiredBody'),
+          [
+            {
+              text: t('common.confirm'),
+              onPress: () => navigation.navigate('Login'),
+            },
+          ],
+        );
       }
     }
   };
@@ -100,12 +110,12 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   // 비밀번호 업데이트 함수
   const handlePasswordUpdate = async () => {
     if (isPasswordInvalid || isPasswordAgainInvalid) {
-      Alert.alert('오류', '비밀번호를 올바르게 입력해주세요.');
+      Alert.alert(t('common.error'), t('auth.myInfo.passwordInvalid'));
       return;
     }
 
     if (password.length === 0 || passwordAgain.length === 0) {
-      Alert.alert('오류', '비밀번호를 입력해주세요.');
+      Alert.alert(t('common.error'), t('auth.myInfo.passwordRequired'));
       return;
     }
 
@@ -114,17 +124,20 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
       await api.post('/auth/password/update', {
         password: password,
       });
-      Alert.alert('성공', '비밀번호 변경에 성공했습니다!');
+      Alert.alert(
+        t('auth.myInfo.successTitle'),
+        t('auth.myInfo.passwordChanged'),
+      );
       setIsPasswordModalVisible(false);
       setPassword('');
       setPasswordAgain('');
     } catch (err: any) {
       const response = err.response;
       Alert.alert(
-        '오류',
-        `비밀번호 업데이트에 실패했습니다. 😢\n"${
-          response?.data?.message || '오류가 발생했습니다.'
-        }"`,
+        t('common.error'),
+        t('auth.myInfo.passwordChangeFailed', {
+          message: response?.data?.message || t('auth.myInfo.errorOccurred'),
+        }),
       );
     } finally {
       setIsPasswordLoading(false);
@@ -144,7 +157,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
 
       await reset_auth();
 
-      Alert.alert('오류', '로그아웃 중 오류가 발생했습니다.');
+      Alert.alert(t('common.error'), t('auth.myInfo.logoutFailed'));
       navigation.replace('Login');
     } finally {
       setIsLoading(false);
@@ -171,7 +184,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
           // 첫 번째 누름: 토스트 메시지 표시
           if (Platform.OS === 'android') {
             ToastAndroid.show(
-              '한 번 더 누르면 앱이 종료됩니다',
+              t('common.pressBackAgainToExit'),
               ToastAndroid.SHORT,
             );
           }
@@ -196,7 +209,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
         onBackPress,
       );
       return () => subscription.remove();
-    }, []),
+    }, [t]),
   );
 
   return (
@@ -234,21 +247,21 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
             )}
             <View style={styles.profileInfo}>
               <Text style={[styles.userName, {color: textColor}]}>
-                {userDataState?.name || '사용자'}
+                {userDataState?.name || t('auth.myInfo.defaultName')}
               </Text>
               <Text
                 style={[
                   styles.userEmail,
                   {color: isDarkMode ? '#AAAAAA' : '#6B7280'},
                 ]}>
-                {userDataState?.email || '이메일 없음'}
+                {userDataState?.email || t('auth.myInfo.noEmail')}
               </Text>
             </View>
           </View>
 
           <View style={styles.detailSection}>
             <Text style={[styles.sectionTitle, {color: textColor}]}>
-              POPO 계정 정보
+              {t('auth.myInfo.popoSection')}
             </Text>
             <View style={[styles.detailItem, {borderBottomColor: borderColor}]}>
               <Text
@@ -256,10 +269,10 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   styles.detailLabel,
                   {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                 ]}>
-                회원 유형
+                {t('auth.myInfo.userType')}
               </Text>
               <Text style={[styles.detailValue, {color: textColor}]}>
-                {userDataState?.userType || '정보 없음'}
+                {userDataState?.userType || t('common.noInfo')}
               </Text>
             </View>
 
@@ -269,10 +282,10 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   styles.detailLabel,
                   {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                 ]}>
-                계정 상태
+                {t('auth.myInfo.accountStatus')}
               </Text>
               <Text style={[styles.detailValue, {color: textColor}]}>
-                {userDataState?.userStatus || '정보 없음'}
+                {userDataState?.userStatus || t('common.noInfo')}
               </Text>
             </View>
 
@@ -282,19 +295,19 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   styles.detailLabel,
                   {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                 ]}>
-                가입일
+                {t('auth.myInfo.joinedAt')}
               </Text>
               <Text style={[styles.detailValue, {color: textColor}]}>
                 {userDataState?.createdAt
                   ? new Date(userDataState?.createdAt).toLocaleDateString(
-                      'ko-KR',
+                      getCurrentLocale(),
                       {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
                       },
                     )
-                  : '정보 없음'}
+                  : t('common.noInfo')}
               </Text>
             </View>
 
@@ -306,7 +319,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                     styles.detailLabel,
                     {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                   ]}>
-                  비밀번호 변경
+                  {t('auth.myInfo.changePassword')}
                 </Text>
                 <TouchableOpacity
                   style={[
@@ -319,7 +332,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                       styles.editButtonText,
                       {color: isDarkMode ? 'black' : 'white'},
                     ]}>
-                    변경
+                    {t('auth.myInfo.change')}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -329,7 +342,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
           {isPaxiUser ? (
             <View style={[styles.detailSection, {borderColor: 'transparent'}]}>
               <Text style={[styles.sectionTitle, {color: textColor}]}>
-                Paxi 정보
+                {t('auth.myInfo.paxiSection')}
               </Text>
               <View
                 style={[styles.detailItem, {borderBottomColor: borderColor}]}>
@@ -338,10 +351,10 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                     styles.detailLabel,
                     {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                   ]}>
-                  닉네임
+                  {t('auth.myInfo.nickname')}
                 </Text>
                 <Text style={[styles.detailValue, {color: textColor}]}>
-                  {paxiUserData?.nickname || '정보 없음'}
+                  {paxiUserData?.nickname || t('common.noInfo')}
                 </Text>
               </View>
 
@@ -353,7 +366,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                       styles.detailLabel,
                       {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                     ]}>
-                    등록 계좌
+                    {t('auth.myInfo.bankAccount')}
                   </Text>
                   <TouchableOpacity
                     style={[
@@ -368,14 +381,16 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                         styles.editButtonText,
                         {color: isDarkMode ? 'black' : 'white'},
                       ]}>
-                      {isPaxiAccountInfoExist ? '수정' : '등록'}
+                      {isPaxiAccountInfoExist
+                        ? t('auth.myInfo.edit')
+                        : t('auth.myInfo.register')}
                     </Text>
                   </TouchableOpacity>
                 </View>
                 <Text style={[styles.detailValue, {color: textColor}]}>
                   {isPaxiAccountInfoExist
                     ? `${paxiUserData?.bankName} ${paxiUserData?.accountNumber} (${paxiUserData?.accountHolderName})`
-                    : '정보 없음'}
+                    : t('common.noInfo')}
                 </Text>
               </View>
 
@@ -387,7 +402,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                       styles.detailLabel,
                       {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                     ]}>
-                    신고 관리
+                    {t('auth.myInfo.reports')}
                   </Text>
                   <TouchableOpacity
                     style={[
@@ -402,7 +417,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                         styles.editButtonText,
                         {color: isDarkMode ? 'black' : 'white'},
                       ]}>
-                      내역 조회
+                      {t('auth.myInfo.viewHistory')}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -422,14 +437,14 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
           <View style={styles.modalOverlay}>
             <View style={[styles.modalCard, {backgroundColor: cardBgColor}]}>
               <Text style={[styles.modalTitle, {color: textColor}]}>
-                비밀번호 변경
+                {t('auth.myInfo.changePassword')}
               </Text>
               <Text
                 style={[
                   styles.modalSubtitle,
                   {color: isDarkMode ? '#AAAAAA' : '#6B7280'},
                 ]}>
-                새로운 비밀번호를 입력해주세요.
+                {t('auth.myInfo.newPasswordHint')}
               </Text>
 
               <View style={styles.inputContainer}>
@@ -442,7 +457,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                       color: textColor,
                     },
                   ]}
-                  placeholder="새 비밀번호 (8자리 이상)"
+                  placeholder={t('auth.myInfo.newPasswordPlaceholder')}
                   placeholderTextColor={isDarkMode ? '#888888' : '#999999'}
                   secureTextEntry={true}
                   value={password}
@@ -450,7 +465,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                 />
                 {isPasswordInvalid && (
                   <Text style={styles.errorText}>
-                    비밀번호는 8자리 이상 64자리 이하여야 합니다.
+                    {t('auth.password.lengthRange')}
                   </Text>
                 )}
 
@@ -465,7 +480,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                       color: textColor,
                     },
                   ]}
-                  placeholder="비밀번호 확인"
+                  placeholder={t('auth.myInfo.passwordConfirmPlaceholder')}
                   placeholderTextColor={isDarkMode ? '#888888' : '#999999'}
                   secureTextEntry={true}
                   value={passwordAgain}
@@ -473,7 +488,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                 />
                 {isPasswordAgainInvalid && (
                   <Text style={styles.errorText}>
-                    비밀번호가 일치하지 않습니다.
+                    {t('auth.password.mismatch')}
                   </Text>
                 )}
               </View>
@@ -486,14 +501,16 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                     setPassword('');
                     setPasswordAgain('');
                   }}>
-                  <Text style={styles.cancelBtnText}>취소</Text>
+                  <Text style={styles.cancelBtnText}>{t('common.cancel')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.modalBtn, styles.submitBtn]}
                   onPress={handlePasswordUpdate}
                   disabled={isPasswordLoading}>
                   <Text style={styles.submitBtnText}>
-                    {isPasswordLoading ? '처리 중...' : '비밀번호 변경'}
+                    {isPasswordLoading
+                      ? t('common.processing')
+                      : t('auth.myInfo.changePassword')}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -513,7 +530,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
               styles.logoutButtonText,
               {color: isDarkMode ? '#FFFFFF' : '#333333'},
             ]}>
-            {isLoading ? '처리 중...' : '로그아웃'}
+            {isLoading ? t('common.processing') : t('auth.myInfo.logout')}
           </Text>
         </TouchableOpacity>
 
@@ -524,7 +541,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
           ]}
           onPress={() => navigation.navigate('Leave')}>
           <Text style={[styles.leaveButtonText, {color: '#FFFFFF'}]}>
-            회원 탈퇴
+            {t('auth.myInfo.leave')}
           </Text>
         </TouchableOpacity>
 
@@ -538,7 +555,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
           ]}
           onPress={() => navigation.navigate('About')}>
           <Text style={[styles.leaveButtonText, {color: '#FFFFFF'}]}>
-            앱 정보 · 만든 사람들
+            {t('auth.myInfo.about')}
           </Text>
         </TouchableOpacity>
 
@@ -548,10 +565,12 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
             <TouchableOpacity
               style={[styles.buttonContainer, {backgroundColor: '#4F46E5'}]}
               onPress={() => navigation.navigate('Developer')}>
-              <Text style={styles.developerButtonText}>개발자 페이지</Text>
+              <Text style={styles.developerButtonText}>
+                {t('auth.myInfo.developerPage')}
+              </Text>
             </TouchableOpacity>
             <Text style={{fontSize: 12, color: '#6B7280'}}>
-              개발자 페이지는 에뮬레이터와 Test Flight에서만 접근 가능합니다.
+              {t('auth.myInfo.developerHint')}
             </Text>
           </View>
         )}
