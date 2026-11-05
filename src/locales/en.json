@@ -243,5 +243,22 @@
     "ossViewLicense": "View {{name}} license",
     "ossNoStandardPage": "No standard license page",
     "close": "Close"
+  },
+  "recruiting": {
+    "title": "We're Hiring",
+    "headline": "Build POPO with us",
+    "intro": "POPO is a service hub for the POSTECH community. We build services for campus life, including place and equipment reservations, club management, and taxi sharing.",
+    "invite": "The POPO team is looking for developers who want to grow by building services for real users. Help us make campus life at POSTECH more convenient!",
+    "fieldsSection": "Open roles",
+    "techStackSection": "Tech stack",
+    "contactSection": "Contact & apply",
+    "fields": {
+      "backend": "Backend",
+      "frontend": "Frontend",
+      "mobile": "Mobile",
+      "infra": "Infrastructure"
+    },
+    "leadDeveloper": "Lead Developer: Taeyang Na",
+    "mobileLeadDeveloper": "Mobile Lead Developer: Gwanho Kim"
   }
 }

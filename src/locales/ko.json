@@ -243,5 +243,22 @@
     "ossViewLicense": "{{name}} 라이선스 보기",
     "ossNoStandardPage": "표준 라이선스 페이지가 없습니다",
     "close": "닫기"
+  },
+  "recruiting": {
+    "title": "개발자 모집",
+    "headline": "POPO와 함께 만들어 나가요",
+    "intro": "POPO는 포스텍 구성원을 위한 서비스 허브입니다. 장소/장비 예약, 동아리 관리, 택시 공유 등 캠퍼스 생활에 필요한 다양한 서비스를 개발하고 있습니다.",
+    "invite": "POPO 팀은 실제 사용자를 위한 서비스를 만들며 성장하고 싶은 개발자를 찾고 있습니다. 함께 포스텍 캠퍼스 생활을 더 편리하게 만들어보세요!",
+    "fieldsSection": "모집 분야",
+    "techStackSection": "기술 스택",
+    "contactSection": "문의 및 지원",
+    "fields": {
+      "backend": "백엔드",
+      "frontend": "프론트엔드",
+      "mobile": "모바일",
+      "infra": "인프라"
+    },
+    "leadDeveloper": "Lead Developer: 나태양",
+    "mobileLeadDeveloper": "Mobile Lead Developer: 김관호"
   }
 }
