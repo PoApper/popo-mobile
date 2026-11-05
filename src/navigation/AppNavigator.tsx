@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {AUTH_TOKEN_KEY, IS_AUTHENTICATED_KEY} from '@utils/storage-keys';
+import {loadStoredLocale} from '@utils/i18n';
 import Config from 'react-native-config';
 import {navigationRef} from './RootNavigation';
 
@@ -84,6 +85,8 @@ const AppNavigator = () => {
 
   useEffect(() => {
     const checkAuthStatus = async () => {
+      // 첫 렌더 전에 저장된 언어를 반영해 깜빡임을 막는다
+      await loadStoredLocale();
       try {
         const authToken = await EncryptedStorage.getItem(AUTH_TOKEN_KEY);
         const isAuth = await EncryptedStorage.getItem(IS_AUTHENTICATED_KEY);
