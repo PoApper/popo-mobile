@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Svg, {Path} from 'react-native-svg';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {RootStackParamList} from '@navigation/types';
 import CommonHeader from '@components/CommonHeader';
 import DeviceInfo from 'react-native-device-info';
@@ -35,6 +36,7 @@ type AboutScreenProps = {
 
 const AboutScreen = ({navigation}: AboutScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+  const {t} = useTranslation();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -79,7 +81,7 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="앱 정보 · 만든 사람들" />
+      <CommonHeader navigation={navigation} title={t('about.title')} />
 
       <ScrollView
         style={styles.container}
@@ -92,20 +94,20 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
               styles.subtitle,
               {color: isDarkMode ? '#AAAAAA' : '#6B7280'},
             ]}>
-            포스텍 구성원을 위한 서비스 허브
+            {t('about.tagline')}
           </Text>
         </View>
 
         <View
           style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
           <Text style={[styles.sectionTitle, {color: textColor}]}>
-            버전 정보
+            {t('about.versionSection')}
           </Text>
           <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
-            앱 버전: {appVersion}
+            {t('about.appVersion', {version: appVersion})}
           </Text>
           <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
-            빌드 번호: {buildNumber}
+            {t('about.buildNumber', {build: buildNumber})}
           </Text>
         </View>
 
@@ -116,7 +118,7 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
           onPress={() => navigation.navigate('Recruiting')}>
           <View style={styles.sectionHeaderRow}>
             <Text style={[styles.sectionTitle, {color: textColor}]}>
-              함께 만들어요
+              {t('about.recruitTitle')}
             </Text>
             <Icon
               name="group-add"
@@ -125,7 +127,7 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
             />
           </View>
           <Text style={{color: isDarkMode ? '#BBBBBB' : '#6B7280'}}>
-            POPO 개발팀에서 새로운 팀원을 찾고 있습니다
+            {t('about.recruitBody')}
           </Text>
         </TouchableOpacity>
 
@@ -133,7 +135,9 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
         <View
           style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
           <View style={styles.sectionHeaderRow}>
-            <Text style={[styles.sectionTitle, {color: textColor}]}>앱</Text>
+            <Text style={[styles.sectionTitle, {color: textColor}]}>
+              {t('about.appSection')}
+            </Text>
             <TouchableOpacity
               style={styles.iconButton}
               onPress={() => openLink(appRepo)}>
@@ -168,13 +172,13 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
           style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
           <View style={styles.sectionHeaderRow}>
             <Text style={[styles.sectionTitle, {color: textColor}]}>
-              백엔드
+              {t('about.backendSection')}
             </Text>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <TouchableOpacity
                 style={styles.iconButton}
                 onPress={() => openLink(backendRepo2)}
-                accessibilityLabel="POPO 백엔드">
+                accessibilityLabel={t('about.popoBackend')}>
                 <GitHubIcon
                   size={20}
                   color={isDarkMode ? '#93C5FD' : '#2563EB'}
@@ -183,7 +187,7 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
               <TouchableOpacity
                 style={styles.iconButton}
                 onPress={() => openLink(backendRepo1)}
-                accessibilityLabel="Paxi 백엔드">
+                accessibilityLabel={t('about.paxiBackend')}>
                 <GitHubIcon
                   size={20}
                   color={isDarkMode ? '#93C5FD' : '#2563EB'}
@@ -217,7 +221,7 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
         <View
           style={[styles.card, {backgroundColor: cardBgColor, borderColor}]}>
           <Text style={[styles.sectionTitle, {color: textColor}]}>
-            디자이너
+            {t('about.designerSection')}
           </Text>
           <View style={styles.chipsWrap}>
             {designContributors.map(h => (
@@ -251,7 +255,7 @@ const AboutScreen = ({navigation}: AboutScreenProps) => {
                 styles.noMargin,
                 {color: textColor},
               ]}>
-              오픈소스 라이선스
+              {t('about.ossLicenses')}
             </Text>
             <Icon
               name="description"
