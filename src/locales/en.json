@@ -10,7 +10,14 @@
     "confirm": "OK",
     "cancel": "Cancel",
     "externalLinkTitle": "Open external link",
-    "pressBackAgainToExit": "Press back again to exit"
+    "pressBackAgainToExit": "Press back again to exit",
+    "error": "Error",
+    "done": "Done",
+    "retry": "Try again",
+    "untitled": "Untitled",
+    "networkError": "A network error occurred.",
+    "sessionExpiredTitle": "Session expired",
+    "sessionExpiredBody": "Please log in again."
   },
   "nav": {
     "home": "Home",
@@ -76,5 +83,30 @@
       "phone": "Contact"
     },
     "equipmentWithMore": "{{first}} +{{count}} more"
+  },
+  "myReservation": {
+    "title": "My Schedule",
+    "loading": "Loading reservations…",
+    "loadFailed": "Failed to load reservations.",
+    "detailTitle": "Reservation details",
+    "cancelTitle": "Cancel reservation",
+    "cancelConfirm": "Are you sure you want to cancel this reservation?",
+    "cancelled": "Reservation cancelled.",
+    "cancelPastError": "Past reservations cannot be cancelled.",
+    "cancelFailed": "Failed to cancel the reservation.",
+    "status": {
+      "pending": "Pending",
+      "passed": "Approved",
+      "rejected": "Rejected",
+      "unknown": "Unknown"
+    },
+    "placeEmpty": "No place reservations yet.",
+    "equipEmpty": "No equipment reservations yet.",
+    "placeNameMissing": "Unnamed place",
+    "equipInfoMissing": "No equipment info",
+    "equipList": "Equipment ({{count}})",
+    "paxiConsentTitle": "Paxi consent required",
+    "paxiConsentBody": "To use taxi carpool,\nyou need to agree to the Paxi terms.\nPlease try again after agreeing.",
+    "paxiConsentButton": "Go to Paxi consent page"
   }
 }

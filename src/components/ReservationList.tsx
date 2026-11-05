@@ -21,10 +21,13 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
+import {useTranslation} from 'react-i18next';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import {getAxiosErrorInfo} from '@utils/axios-error';
+import i18next, {getCurrentLocale} from '@utils/i18n';
+import {reservationStatusKey} from '@utils/reservation-status';
 
 // --- Exported Generic Interfaces ---
 
@@ -51,7 +54,7 @@ export interface ReservationConfig<T> {
   deleteEndpoint: string;
   getSubtitle: (item: T) => string;
   renderModalDetails: (item: T, colors: ModalColors) => ReactNode;
-  emptyText: string;
+  getEmptyText: () => string;
 }
 
 export interface ReservationListProps<T extends BaseReservation> {
@@ -95,6 +98,7 @@ export function ReservationList<T extends BaseReservation>({
   refreshing,
   onRefresh,
 }: ReservationListProps<T>) {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -161,14 +165,21 @@ export function ReservationList<T extends BaseReservation>({
       console.error('예약 정보 조회 오류:', err);
       if (axios.isAxiosError(err)) {
         if (err.response?.status === 401) {
-          Alert.alert('인증 만료', '다시 로그인해주세요.', [
-            {text: '확인', onPress: () => navigation.navigate('Login')},
-          ]);
+          Alert.alert(
+            t('common.sessionExpiredTitle'),
+            t('common.sessionExpiredBody'),
+            [
+              {
+                text: t('common.confirm'),
+                onPress: () => navigation.navigate('Login'),
+              },
+            ],
+          );
         } else {
-          setError('예약 정보를 불러오는데 실패했습니다.');
+          setError(t('myReservation.loadFailed'));
         }
       } else {
-        setError('네트워크 오류가 발생했습니다.');
+        setError(t('common.networkError'));
       }
     } finally {
       setIsLoading(false);
@@ -213,34 +224,29 @@ export function ReservationList<T extends BaseReservation>({
   };
 
   const getStatusText = (status: string) => {
-    switch (status) {
-      case '통과':
-        return '예약 통과';
-      case '심사중':
-        return '대기중';
-      case '거절':
-        return '예약 거절';
-      default:
-        return status || '상태 없음';
+    const key = reservationStatusKey(status);
+    if (key) {
+      return t(`myReservation.status.${key}`);
     }
+    return status || t('myReservation.status.unknown');
   };
 
   const handleCancelReservation = (id: string) => {
     Alert.alert(
-      '예약 취소',
-      '정말로 이 예약을 취소하시겠습니까?',
+      t('myReservation.cancelTitle'),
+      t('myReservation.cancelConfirm'),
       [
         {
-          text: '취소',
+          text: t('common.cancel'),
           style: 'cancel',
         },
         {
-          text: '확인',
+          text: t('common.confirm'),
           onPress: async () => {
             setIsLoading(true);
             try {
               await api.delete(`${config.deleteEndpoint}/${id}`);
-              Alert.alert('완료', '예약이 취소되었습니다.');
+              Alert.alert(t('common.done'), t('myReservation.cancelled'));
               closeModal();
               fetchReservations();
             } catch (err) {
@@ -254,28 +260,30 @@ export function ReservationList<T extends BaseReservation>({
                 detail === 'Cannot delete past reservation'
               ) {
                 setTimeout(() => {
-                  Alert.alert('오류', '과거 예약은 취소할 수 없습니다.', [
-                    {
-                      text: '확인',
-                      onPress: () => {
-                        if (itemToReopen) {
-                          openModal(itemToReopen);
-                        }
+                  Alert.alert(
+                    t('common.error'),
+                    t('myReservation.cancelPastError'),
+                    [
+                      {
+                        text: t('common.confirm'),
+                        onPress: () => {
+                          if (itemToReopen) {
+                            openModal(itemToReopen);
+                          }
+                        },
                       },
-                    },
-                  ]);
+                    ],
+                  );
                 }, 300);
               } else {
                 console.error('예약 취소 오류:', err);
                 setTimeout(() => {
                   Alert.alert(
-                    '오류',
-                    detail
-                      ? String(detail)
-                      : '예약 취소 중 문제가 발생했습니다.',
+                    t('common.error'),
+                    detail ? String(detail) : t('myReservation.cancelFailed'),
                     [
                       {
-                        text: '확인',
+                        text: t('common.confirm'),
                         onPress: () => {
                           if (itemToReopen) {
                             openModal(itemToReopen);
@@ -376,7 +384,7 @@ export function ReservationList<T extends BaseReservation>({
             style={[styles.itemTitle, {color: textColor}]}
             numberOfLines={1}
             ellipsizeMode="tail">
-            {item.title || '제목 없음'}
+            {item.title || t('common.untitled')}
           </Text>
           <Text
             style={[styles.itemSubtitle, {color: subtitleColor}]}
@@ -385,10 +393,13 @@ export function ReservationList<T extends BaseReservation>({
             {config.getSubtitle(item)}
           </Text>
           <Text style={[styles.itemDateTime, {color: subtitleColor}]}>
-            {new Date(formatDate(item.date)).toLocaleDateString('ko-KR', {
-              month: 'short',
-              day: 'numeric',
-            })}{' '}
+            {new Date(formatDate(item.date)).toLocaleDateString(
+              getCurrentLocale(),
+              {
+                month: 'short',
+                day: 'numeric',
+              },
+            )}{' '}
             {formatTime(item.startTime)}
           </Text>
         </View>
@@ -416,7 +427,7 @@ export function ReservationList<T extends BaseReservation>({
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={textColor} />
         <Text style={[styles.loadingText, {color: textColor}]}>
-          {'예약 정보를 불러오는 중...'}
+          {t('myReservation.loading')}
         </Text>
       </View>
     );
@@ -429,7 +440,7 @@ export function ReservationList<T extends BaseReservation>({
         <TouchableOpacity
           style={styles.retryButton}
           onPress={() => fetchReservations(1)}>
-          <Text style={styles.retryButtonText}>{'다시 시도'}</Text>
+          <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -444,7 +455,7 @@ export function ReservationList<T extends BaseReservation>({
           resizeMode="contain"
         />
         <Text style={[styles.emptyText, {color: textColor}]}>
-          {config.emptyText}
+          {config.getEmptyText()}
         </Text>
       </View>
     );
@@ -511,7 +522,7 @@ export function ReservationList<T extends BaseReservation>({
             <View style={styles.modalHeader}>
               <View style={styles.modalHeaderContent}>
                 <Text style={[styles.modalTitle, {color: textColor}]}>
-                  {'예약 상세정보'}
+                  {t('myReservation.detailTitle')}
                 </Text>
               </View>
             </View>
@@ -530,18 +541,18 @@ export function ReservationList<T extends BaseReservation>({
                       <View style={styles.modalDetailSection}>
                         <Text
                           style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          {'제목'}
+                          {t('reservation.fields.title')}
                         </Text>
                         <Text
                           style={[styles.modalValue, {color: modalValueColor}]}>
-                          {selectedReservation.title || '제목 없음'}
+                          {selectedReservation.title || t('common.untitled')}
                         </Text>
                       </View>
 
                       <View style={styles.modalDetailSection}>
                         <Text
                           style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          {'상태'}
+                          {t('reservation.fields.status')}
                         </Text>
                         <View style={styles.statusContainer}>
                           <Icon
@@ -568,13 +579,13 @@ export function ReservationList<T extends BaseReservation>({
                       <View style={styles.modalDetailSection}>
                         <Text
                           style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          {'날짜'}
+                          {t('reservation.fields.date')}
                         </Text>
                         <Text
                           style={[styles.modalValue, {color: modalValueColor}]}>
                           {new Date(
                             formatDate(selectedReservation.date),
-                          ).toLocaleDateString('ko-KR', {
+                          ).toLocaleDateString(getCurrentLocale(), {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric',
@@ -585,7 +596,7 @@ export function ReservationList<T extends BaseReservation>({
                       <View style={styles.modalDetailSection}>
                         <Text
                           style={[styles.modalLabel, {color: modalLabelColor}]}>
-                          {'시간'}
+                          {t('reservation.fields.time')}
                         </Text>
                         <Text
                           style={[styles.modalValue, {color: modalValueColor}]}>
@@ -601,7 +612,7 @@ export function ReservationList<T extends BaseReservation>({
                               styles.modalLabel,
                               {color: modalLabelColor},
                             ]}>
-                            {'설명'}
+                            {t('reservation.fields.description')}
                           </Text>
                           <Text
                             style={[
@@ -620,7 +631,7 @@ export function ReservationList<T extends BaseReservation>({
                               styles.modalLabel,
                               {color: modalLabelColor},
                             ]}>
-                            {'연락처'}
+                            {t('reservation.fields.phone')}
                           </Text>
                           <Text
                             style={[
@@ -643,7 +654,7 @@ export function ReservationList<T extends BaseReservation>({
                           }>
                           <Icon name="cancel" size={20} color="#FFFFFF" />
                           <Text style={styles.modalCancelButtonText}>
-                            {'예약 취소'}
+                            {t('myReservation.cancelTitle')}
                           </Text>
                         </TouchableOpacity>
                       )}
@@ -922,18 +933,23 @@ export const reservationListStyles = styles;
 const placeConfig: ReservationConfig<PlaceReservation> = {
   fetchEndpoint: '/reservation-place/user',
   deleteEndpoint: '/reservation-place',
-  getSubtitle: item => item.place?.name || '장소 이름 없음',
+  getSubtitle: item =>
+    item.place?.name || i18next.t('myReservation.placeNameMissing'),
   renderModalDetails: (item, {labelColor, valueColor}) => (
     <>
       <View style={styles.modalDetailSection}>
-        <Text style={[styles.modalLabel, {color: labelColor}]}>{'장소'}</Text>
+        <Text style={[styles.modalLabel, {color: labelColor}]}>
+          {i18next.t('reservation.fields.place')}
+        </Text>
         <Text style={[styles.modalValue, {color: valueColor}]}>
-          {item.place?.name || '장소 이름 없음'}
+          {item.place?.name || i18next.t('myReservation.placeNameMissing')}
         </Text>
       </View>
       {item.place?.location && (
         <View style={styles.modalDetailSection}>
-          <Text style={[styles.modalLabel, {color: labelColor}]}>{'위치'}</Text>
+          <Text style={[styles.modalLabel, {color: labelColor}]}>
+            {i18next.t('reservation.fields.location')}
+          </Text>
           <Text style={[styles.modalValue, {color: valueColor}]}>
             {item.place.location}
           </Text>
@@ -941,7 +957,7 @@ const placeConfig: ReservationConfig<PlaceReservation> = {
       )}
     </>
   ),
-  emptyText: '장소 예약 내역이 없습니다.',
+  getEmptyText: () => i18next.t('myReservation.placeEmpty'),
 };
 
 interface PlaceReservationListProps {

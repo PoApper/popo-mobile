@@ -10,7 +10,14 @@
     "confirm": "확인",
     "cancel": "취소",
     "externalLinkTitle": "외부 링크 이동",
-    "pressBackAgainToExit": "한 번 더 누르면 앱이 종료됩니다"
+    "pressBackAgainToExit": "한 번 더 누르면 앱이 종료됩니다",
+    "error": "오류",
+    "done": "완료",
+    "retry": "다시 시도",
+    "untitled": "제목 없음",
+    "networkError": "네트워크 오류가 발생했습니다.",
+    "sessionExpiredTitle": "인증 만료",
+    "sessionExpiredBody": "다시 로그인해주세요."
   },
   "nav": {
     "home": "홈",
@@ -76,5 +83,30 @@
       "phone": "연락처"
     },
     "equipmentWithMore": "{{first}} 외 {{count}}개"
+  },
+  "myReservation": {
+    "title": "내 일정",
+    "loading": "예약 정보를 불러오는 중...",
+    "loadFailed": "예약 정보를 불러오는데 실패했습니다.",
+    "detailTitle": "예약 상세정보",
+    "cancelTitle": "예약 취소",
+    "cancelConfirm": "정말로 이 예약을 취소하시겠습니까?",
+    "cancelled": "예약이 취소되었습니다.",
+    "cancelPastError": "과거 예약은 취소할 수 없습니다.",
+    "cancelFailed": "예약 취소 중 문제가 발생했습니다.",
+    "status": {
+      "pending": "대기중",
+      "passed": "예약 통과",
+      "rejected": "예약 거절",
+      "unknown": "상태 없음"
+    },
+    "placeEmpty": "장소 예약 내역이 없습니다.",
+    "equipEmpty": "장비 예약 내역이 없습니다.",
+    "placeNameMissing": "장소 이름 없음",
+    "equipInfoMissing": "장비 정보 없음",
+    "equipList": "장비 목록 ({{count}})",
+    "paxiConsentTitle": "Paxi 서비스 사용 동의가 필요합니다",
+    "paxiConsentBody": "택시 카풀 서비스를 이용하려면\nPaxi 서비스 사용 동의가 필요합니다.\n동의 후 다시 시도해주세요.",
+    "paxiConsentButton": "Paxi 서비스 사용 동의 페이지로 이동"
   }
 }

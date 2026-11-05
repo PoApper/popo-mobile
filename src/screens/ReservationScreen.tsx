@@ -14,6 +14,7 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp, useFocusEffect, useRoute} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 import {RootStackParamList} from '@navigation/types';
 import ReservationList from '@components/ReservationList';
@@ -29,6 +30,7 @@ type ReservationScreenProps = {
 type TabType = 'place' | 'equipment' | 'taxi';
 
 const ReservationScreen = ({navigation}: ReservationScreenProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const route = useRoute<RouteProp<RootStackParamList, 'MyReservation'>>();
   const backPressCount = useRef(0);
@@ -70,9 +72,9 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
 
   const tabs = [
-    {id: 'place' as TabType, label: '장소 예약'},
-    {id: 'equipment' as TabType, label: '장비 예약'},
-    {id: 'taxi' as TabType, label: '택시 카풀'},
+    {id: 'place' as TabType, label: t('eventType.place')},
+    {id: 'equipment' as TabType, label: t('eventType.equipment')},
+    {id: 'taxi' as TabType, label: t('eventType.taxi')},
   ];
 
   useFocusEffect(
@@ -92,7 +94,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
           // 첫 번째 누름: 토스트 메시지 표시
           if (Platform.OS === 'android') {
             ToastAndroid.show(
-              '한 번 더 누르면 앱이 종료됩니다',
+              t('common.pressBackAgainToExit'),
               ToastAndroid.SHORT,
             );
           }
@@ -117,7 +119,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
         onBackPress,
       );
       return () => subscription.remove();
-    }, []),
+    }, [t]),
   );
 
   const onRefresh = useCallback(() => {
@@ -145,7 +147,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
             fontSize: 25,
             fontWeight: 'bold',
           }}>
-          내 일정
+          {t('myReservation.title')}
         </Text>
 
         <ScrollView
@@ -223,16 +225,14 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
             ]}>
             <View style={styles.paxiSignupContent}>
               <Text style={[styles.paxiSignupTitle, {color: textColor}]}>
-                Paxi 서비스 사용 동의가 필요합니다
+                {t('myReservation.paxiConsentTitle')}
               </Text>
               <Text
                 style={[
                   styles.paxiSignupDescription,
                   {color: isDarkMode ? '#AAAAAA' : '#666666'},
                 ]}>
-                택시 카풀 서비스를 이용하려면{'\n'}
-                Paxi 서비스 사용 동의가 필요합니다.{'\n'}
-                동의 후 다시 시도해주세요.
+                {t('myReservation.paxiConsentBody')}
               </Text>
               <TouchableOpacity
                 style={[
@@ -241,7 +241,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
                 ]}
                 onPress={() => navigation?.navigate('PaxiIntro')}>
                 <Text style={styles.paxiSignupButtonText}>
-                  Paxi 서비스 사용 동의 페이지로 이동
+                  {t('myReservation.paxiConsentButton')}
                 </Text>
               </TouchableOpacity>
             </View>
