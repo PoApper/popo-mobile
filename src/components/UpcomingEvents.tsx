@@ -24,6 +24,7 @@ import {POPO_API_URL} from '@utils/api';
 import {reservationStatusKey} from '@utils/reservation-status';
 import {getCurrentLocale} from '@utils/i18n';
 import {getLocalizedField} from '@utils/locale';
+import {getPaxiLocationLabel} from '@utils/locations';
 
 const PAXI_STATUS_KEYS = {
   IN_SETTLEMENT: 'paxiStatus.inSettlement',
@@ -227,7 +228,9 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
             title: room.title,
             date: moment(room.departureTime).format('YYYYMMDD'),
             time: moment(room.departureTime).format('HH:mm'),
-            location: `${room.departureLocation} → ${room.destinationLocation}`,
+            location: `${getPaxiLocationLabel(
+              room.departureLocation,
+            )} → ${getPaxiLocationLabel(room.destinationLocation)}`,
             status: room.status,
             description: undefined,
             data: room,
