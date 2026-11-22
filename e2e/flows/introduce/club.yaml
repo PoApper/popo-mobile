@@ -1,0 +1,29 @@
+# 동아리 목록(카테고리·정렬)과 상세. ADLIB은 dev 서버에서 영문 필드가 채워진 동아리다.
+appId: ${APP_ID}
+name: club
+---
+- runFlow: ../common/launch.yaml
+- runFlow: ../common/set-language.yaml
+- tapOn:
+    id: tab-home
+- tapOn:
+    id: home-service-club
+- extendedWaitUntil:
+    visible: 'ADLIB.*'
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: introduce-club-list-${LANGUAGE}
+- tapOn: "${LANGUAGE == 'en' ? 'Most viewed' : '조회순'}"
+- tapOn: "${LANGUAGE == 'en' ? 'Sports' : '체육'}"
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: introduce-club-list-sports-by-views-${LANGUAGE}
+- tapOn: "${LANGUAGE == 'en' ? 'Performance 1' : '공연1'}"
+- tapOn: 'ADLIB.*'
+- extendedWaitUntil:
+    visible: "${LANGUAGE == 'en' ? 'Leader' : '대표자'}"
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: introduce-club-detail-${LANGUAGE}

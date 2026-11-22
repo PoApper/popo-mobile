@@ -1,0 +1,23 @@
+# 학생단체 목록과 상세. dev 서버의 학생단체는 영문 필드가 비어 있어 한글로 폴백된다.
+appId: ${APP_ID}
+name: student-association
+---
+- runFlow: ../common/launch.yaml
+- runFlow: ../common/set-language.yaml
+- tapOn:
+    id: tab-home
+- tapOn:
+    id: home-service-student-association
+- extendedWaitUntil:
+    visible: '.*PBUD.*'
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: introduce-student-association-list-${LANGUAGE}
+- tapOn: '.*PBUD.*'
+- extendedWaitUntil:
+    visible: "${LANGUAGE == 'en' ? 'Leader' : '대표자'}"
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: introduce-student-association-detail-${LANGUAGE}
