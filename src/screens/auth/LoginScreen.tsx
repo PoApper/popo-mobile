@@ -230,6 +230,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
           {/* Email/ID input with visual domain suffix */}
           <View style={styles.inputWrapper}>
             <TextInput
+              testID="login-email"
               style={[
                 styles.input,
                 {
@@ -269,6 +270,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
           </Text>
 
           <TextInput
+            testID="login-password"
             style={[
               styles.input,
               {

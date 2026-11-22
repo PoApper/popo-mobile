@@ -48,6 +48,7 @@ const MainNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: t('nav.home'),
+          tabBarButtonTestID: 'tab-home',
           tabBarIcon: ({color, size}) => (
             <Icon name="home" size={size} color={color} />
           ),
@@ -59,6 +60,7 @@ const MainNavigator = () => {
         component={PaxiRoomListScreen}
         options={{
           tabBarLabel: t('nav.paxi'),
+          tabBarButtonTestID: 'tab-paxi',
           tabBarIcon: ({color, size}) => (
             <Icon name="local-taxi" size={size} color={color} />
           ),
@@ -70,6 +72,7 @@ const MainNavigator = () => {
         initialParams={{prevTab}}
         options={{
           tabBarLabel: t('nav.myReservation'),
+          tabBarButtonTestID: 'tab-my-reservation',
           tabBarIcon: ({color, size}) => (
             <Icon name="event" size={size} color={color} />
           ),
@@ -80,6 +83,7 @@ const MainNavigator = () => {
         component={UserDetailScreen}
         options={{
           tabBarLabel: t('nav.myInfo'),
+          tabBarButtonTestID: 'tab-my-info',
           tabBarIcon: ({color, size}) => (
             <Icon name="person" size={size} color={color} />
           ),
