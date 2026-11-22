@@ -87,7 +87,20 @@
       "description": "Description",
       "phone": "Contact"
     },
-    "equipmentWithMore": "{{first}} +{{count}} more"
+    "equipmentWithMore": "{{first}} +{{count}} more",
+    "reserve": "Reserve",
+    "place": {
+      "title": "Place Reservation",
+      "regions": {
+        "studentHall": "Student Hall",
+        "jigok": "Jigok Center",
+        "communityCenter": "Community Center",
+        "rc": "RC",
+        "others": "Other"
+      },
+      "sortAlphabetic": "A–Z",
+      "sortPopular": "Most reserved"
+    }
   },
   "myReservation": {
     "title": "My Schedule",

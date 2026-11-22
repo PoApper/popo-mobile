@@ -87,7 +87,20 @@
       "description": "설명",
       "phone": "연락처"
     },
-    "equipmentWithMore": "{{first}} 외 {{count}}개"
+    "equipmentWithMore": "{{first}} 외 {{count}}개",
+    "reserve": "예약",
+    "place": {
+      "title": "장소 예약",
+      "regions": {
+        "studentHall": "학생회관",
+        "jigok": "지곡회관",
+        "communityCenter": "커뮤니티센터",
+        "rc": "RC",
+        "others": "기타"
+      },
+      "sortAlphabetic": "가나다순",
+      "sortPopular": "조회순"
+    }
   },
   "myReservation": {
     "title": "내 일정",
