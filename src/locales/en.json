@@ -366,5 +366,20 @@
     },
     "leadDeveloper": "Lead Developer: Taeyang Na",
     "mobileLeadDeveloper": "Mobile Lead Developer: Gwanho Kim"
+  },
+  "paxi": {
+    "locations": {
+      "jigok": "Jigok Center",
+      "studentHall": "Student Hall",
+      "changeUp": "ChangeUp Ground",
+      "ktx": "KTX Pohang Station",
+      "terminal": "Pohang Bus Terminal"
+    },
+    "durationRange": "{{min}}–{{max}} min",
+    "customInput": "Enter manually",
+    "filter": {
+      "all": "All",
+      "other": "Other"
+    }
   }
 }

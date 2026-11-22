@@ -366,5 +366,20 @@
     },
     "leadDeveloper": "Lead Developer: 나태양",
     "mobileLeadDeveloper": "Mobile Lead Developer: 김관호"
+  },
+  "paxi": {
+    "locations": {
+      "jigok": "지곡회관",
+      "studentHall": "학생회관",
+      "changeUp": "체인지업 그라운드",
+      "ktx": "KTX 포항역",
+      "terminal": "포항 터미널"
+    },
+    "durationRange": "{{min}}분-{{max}}분",
+    "customInput": "직접 입력",
+    "filter": {
+      "all": "전체보기",
+      "other": "그 외"
+    }
   }
 }

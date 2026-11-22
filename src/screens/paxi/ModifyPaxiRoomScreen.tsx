@@ -19,7 +19,7 @@ import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import {getAxiosErrorInfo} from '@utils/axios-error';
 import {
-  PAXI_LOCATIONS,
+  getPaxiLocations,
   getPaxiDistanceInfo,
   getPaxiDurationInfo,
 } from '@utils/locations';
@@ -168,7 +168,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
 
   // 커스텀 입력인지 확인하는 함수
   const isCustomLocation = (location: string) => {
-    return !PAXI_LOCATIONS.some(loc => loc.id === location);
+    return !getPaxiLocations().some(loc => loc.id === location);
   };
 
   const checkInputValid = () => {
@@ -250,7 +250,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
 
                 <DropdownMenu
                   placeholderText={'어디서 출발하시나요?'}
-                  options={PAXI_LOCATIONS.filter(
+                  options={getPaxiLocations().filter(
                     item => item.id !== arrivalName,
                   )}
                   onSelect={selected => setDepartureName(selected ?? '출발지')}
@@ -269,7 +269,7 @@ const ModifyPaxiRoomScreen = ({navigation}: ModifyPaxiRoomScreenProps) => {
 
                 <DropdownMenu
                   placeholderText={'어디로 떠나시나요?'}
-                  options={PAXI_LOCATIONS.filter(
+                  options={getPaxiLocations().filter(
                     item => item.id !== departureName,
                   )}
                   onSelect={selected => setArrivalName(selected ?? '도착지')}

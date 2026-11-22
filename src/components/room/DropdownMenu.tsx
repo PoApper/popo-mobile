@@ -19,10 +19,12 @@ import {
   Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
 
 import {colors} from '@styles/default';
 
 interface Option {
+  id: string;
   name: string;
 }
 
@@ -35,7 +37,7 @@ interface DropdownMenuProps {
   maxLength?: number;
 }
 
-const CUSTOM_INPUT_ITEM = {name: '직접 입력'};
+const CUSTOM_INPUT_ID = '__custom__';
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
   placeholderText,
@@ -45,6 +47,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   onCustomModeChange,
   maxLength = 10,
 }: DropdownMenuProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [visible, setVisible] = useState(false);
   const [dropdownPosition, setDropdownPosition] =
@@ -90,7 +93,10 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const SELECTED_COLOR = '#ccc';
   const SELECTED_BG_COLOR = isDarkMode ? '#232323' : '#f8f8f8';
 
-  const listData = [...options, CUSTOM_INPUT_ITEM];
+  const listData = [
+    ...options,
+    {id: CUSTOM_INPUT_ID, name: t('paxi.customInput')},
+  ];
 
   return (
     <View style={{flex: 1}}>
@@ -156,7 +162,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
               {color: selected ? ColorStyle.text : ColorStyle.placeholder},
             ]}>
             {selected
-              ? options.find(cat => cat.name === selected)?.name || selected
+              ? options.find(cat => cat.id === selected)?.name || selected
               : placeholderText}
           </Text>
           <Animated.View style={{transform: [{rotate}]}}>
@@ -190,7 +196,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                 ]}>
                 <FlatList
                   data={listData}
-                  keyExtractor={item => item.name}
+                  keyExtractor={item => item.id}
                   renderItem={({item, index}) => (
                     <TouchableOpacity
                       style={[
@@ -200,12 +206,12 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                           borderBottomWidth:
                             index < listData.length - 1 ? 1 : 0,
                         },
-                        selected === item.name && {
+                        selected === item.id && {
                           backgroundColor: SELECTED_BG_COLOR,
                         },
                       ]}
                       onPress={() => {
-                        if (item.name === CUSTOM_INPUT_ITEM.name) {
+                        if (item.id === CUSTOM_INPUT_ID) {
                           // clear previous text and switch to input mode
                           onSelect('');
                           setVisible(false);
@@ -213,7 +219,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                           onCustomModeChange(true);
                           setTimeout(() => inputRef.current?.focus(), 0);
                         } else {
-                          onSelect(item.name);
+                          onSelect(item.id);
                           onCustomModeChange(false);
                           setVisible(false);
                         }
@@ -224,14 +230,14 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                           {
                             color: ColorStyle.text,
                           },
-                          selected === item.name && {
+                          selected === item.id && {
                             fontWeight: 'bold',
                             color: SELECTED_COLOR,
                           },
                         ]}>
                         {item.name}
                       </Text>
-                      {selected === item.name && (
+                      {selected === item.id && (
                         <Icon name="check" size={20} color={SELECTED_COLOR} />
                       )}
                     </TouchableOpacity>

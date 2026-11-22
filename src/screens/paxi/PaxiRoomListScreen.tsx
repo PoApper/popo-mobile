@@ -22,7 +22,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import api from '@utils/api';
-import {PAXI_LOCATIONS} from '@utils/locations';
+import {getPaxiLocations} from '@utils/locations';
 import {RoomDataType} from '@interfaces/paxi';
 import DropdownFilter from '@components/room/DropdownFilter';
 import {RefreshButton} from '@components/room/RefreshButton';
@@ -70,7 +70,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   };
 
   const filteredRoomData = useMemo(() => {
-    const optionIds = PAXI_LOCATIONS.map(o => o.id);
+    const optionIds: string[] = getPaxiLocations().map(o => o.id);
     const isOther = (v: string | null) => v === '__other__';
 
     return roomData
@@ -206,14 +206,18 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
         <DropdownFilter
           placeholderText={'출발지'}
-          options={PAXI_LOCATIONS.filter(item => item.id !== selectedArrival)}
+          options={getPaxiLocations().filter(
+            item => item.id !== selectedArrival,
+          )}
           selected={selectedDeparture}
           onSelect={selected => setSelectedDeparture(selected)}
         />
 
         <DropdownFilter
           placeholderText={'도착지'}
-          options={PAXI_LOCATIONS.filter(item => item.id !== selectedDeparture)}
+          options={getPaxiLocations().filter(
+            item => item.id !== selectedDeparture,
+          )}
           selected={selectedArrival}
           onSelect={selected => setSelectedArrival(selected)}
         />

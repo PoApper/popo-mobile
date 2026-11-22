@@ -20,7 +20,7 @@ import paxi_api from '@utils/paxi_api';
 import {
   getPaxiDistanceInfo,
   getPaxiDurationInfo,
-  PAXI_LOCATIONS,
+  getPaxiLocations,
 } from '@utils/locations';
 import {roundUpToNearest10Minutes} from '@utils/popo-datetime';
 import CommonHeader from '@components/CommonHeader';
@@ -215,11 +215,11 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
     arrivalName.length > 10;
 
   // 입력이 프리셋에 포함되어 있는지 여부(커스텀 입력이면 false)
-  const isDepartureInPaxiLocations = PAXI_LOCATIONS.some(
-    loc => loc.name === departureName,
+  const isDepartureInPaxiLocations = getPaxiLocations().some(
+    loc => loc.id === departureName,
   );
-  const isArrivalInPaxiLocations = PAXI_LOCATIONS.some(
-    loc => loc.name === arrivalName,
+  const isArrivalInPaxiLocations = getPaxiLocations().some(
+    loc => loc.id === arrivalName,
   );
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: C.bg}}>
@@ -270,7 +270,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 <View style={[styles.dot, {backgroundColor: C.dotBlack}]} />
                 <DropdownMenu
                   placeholderText={'어디서 출발하시나요? (최대 10자)'}
-                  options={PAXI_LOCATIONS.filter(
+                  options={getPaxiLocations().filter(
                     item => item.id !== arrivalName,
                   )}
                   onSelect={selected => setDepartureName(selected ?? '출발지')}
@@ -286,7 +286,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 <View style={[styles.dot, {backgroundColor: C.dotRed}]} />
                 <DropdownMenu
                   placeholderText={'어디로 떠나시나요? (최대 10자)'}
-                  options={PAXI_LOCATIONS.filter(
+                  options={getPaxiLocations().filter(
                     item => item.id !== departureName,
                   )}
                   onSelect={selected => setArrivalName(selected ?? '도착지')}
