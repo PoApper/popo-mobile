@@ -13,8 +13,10 @@ import Svg, {Line} from 'react-native-svg';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import Config from 'react-native-config';
+import {useTranslation} from 'react-i18next';
 import {ChatRoomInfo} from '@interfaces/paxi';
 import {textColor} from '@styles/default';
+import {formatPaxiDeparture, getPaxiLocationLabel} from '@utils/locations';
 
 interface RoomInfoBoxProps {
   roomData: ChatRoomInfo;
@@ -29,6 +31,7 @@ const RoomInfoBox = ({
   navigation,
   myUuid,
 }: RoomInfoBoxProps) => {
+  const {t} = useTranslation();
   const isOwner = myUuid === roomData.ownerUuid;
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -41,7 +44,9 @@ const RoomInfoBox = ({
       const departureDate = moment(roomData.departureTime).format(
         'M/D(ddd) HH:mm',
       );
-      const shareMessage = `${departureDate} ${roomData.departureLocation}→${roomData.destinationLocation}\n${shareUrl}`;
+      const shareMessage = `${departureDate} ${getPaxiLocationLabel(
+        roomData.departureLocation,
+      )}→${getPaxiLocationLabel(roomData.destinationLocation)}\n${shareUrl}`;
       await Share.share({message: shareMessage});
     } catch (error: any) {
       // 사용자가 공유를 취소한 경우 에러를 무시
@@ -69,19 +74,19 @@ const RoomInfoBox = ({
               });
             }}>
             <Icon name="edit" size={14} color="#999" />
-            <Text style={styles.actionText}>수정하기</Text>
+            <Text style={styles.actionText}>{t('paxi.chat.edit')}</Text>
           </TouchableOpacity>
         )}
         <TouchableOpacity style={styles.actionButton} onPress={handleShare}>
           <Icon name="share" size={14} color="#999" />
-          <Text style={styles.actionText}>공유하기</Text>
+          <Text style={styles.actionText}>{t('paxi.chat.share')}</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.labelRow}>
-        <Text style={styles.labelText}>출발지</Text>
+        <Text style={styles.labelText}>{t('paxi.departure')}</Text>
         <Text style={[styles.arrow, {opacity: 0}]}>→</Text>
-        <Text style={styles.labelText}>도착지</Text>
+        <Text style={styles.labelText}>{t('paxi.arrival')}</Text>
       </View>
       <View style={styles.routeInfo}>
         <Text
@@ -89,7 +94,7 @@ const RoomInfoBox = ({
           numberOfLines={1}
           adjustsFontSizeToFit
           minimumFontScale={0.5}>
-          {roomData?.departureLocation}
+          {getPaxiLocationLabel(roomData.departureLocation)}
         </Text>
         <Text style={[styles.arrow, {color: textColor(isDarkMode)}]}>→</Text>
         <Text
@@ -97,12 +102,12 @@ const RoomInfoBox = ({
           numberOfLines={1}
           adjustsFontSizeToFit
           minimumFontScale={0.5}>
-          {roomData?.destinationLocation}
+          {getPaxiLocationLabel(roomData.destinationLocation)}
         </Text>
       </View>
 
       <Text style={[styles.timeText, {color: isDarkMode ? '#aaa' : '#666'}]}>
-        {moment(roomData?.departureTime).format('Y년 M월 D일 HH:mm')} 출발
+        {formatPaxiDeparture(roomData.departureTime)}
       </Text>
 
       <View style={styles.dividerContainer}>

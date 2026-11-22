@@ -467,6 +467,25 @@
       "roomNotFound": "Room not found.",
       "roomLoadFailed": "Couldn't load the room.",
       "joinFailedTitle": "Join failed"
+    },
+    "chatList": {
+      "loadFailed": "Couldn't load your carpools.",
+      "muteTitle": "Mute notifications",
+      "unmuteTitle": "Unmute notifications",
+      "muteBody": "Mute notifications for this chat?",
+      "unmuteBody": "Turn notifications back on for this chat?",
+      "muteFailed": "Couldn't change notification settings.",
+      "status": {
+        "kicked": "Removed",
+        "inSettlement": "Settling",
+        "completed": "Ended"
+      },
+      "loading": "Loading carpools...",
+      "empty": "No taxi carpools yet."
+    },
+    "chat": {
+      "edit": "Edit",
+      "share": "Share"
     }
   }
 }
