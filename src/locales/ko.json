@@ -143,6 +143,20 @@
       "confirmTime": "예약 시간: {{start}} - {{end}}",
       "confirmQuestion": "예약하시겠습니까?",
       "slotPickerTitle": "시간대 선택"
+    },
+    "equipment": {
+      "title": "장비 예약",
+      "owners": {
+        "dongyeon": "동아리연합회",
+        "dormunion": "생활관자치회"
+      },
+      "viewEquipment": "장비 보기",
+      "listTitle": "장비 목록",
+      "loadingList": "장비 목록을 불러오는 중...",
+      "fee": "{{fee}}원",
+      "details": "상세정보",
+      "detailTitle": "장비 상세정보",
+      "detailBody": "이름: {{name}}\n모델명/설명: {{description}}\n가격: {{fee}}원\n최대 사용 시간: {{minutes}}분"
     }
   },
   "myReservation": {

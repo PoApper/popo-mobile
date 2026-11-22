@@ -143,6 +143,20 @@
       "confirmTime": "Time: {{start}} - {{end}}",
       "confirmQuestion": "Make this reservation?",
       "slotPickerTitle": "Select a time slot"
+    },
+    "equipment": {
+      "title": "Equipment Reservation",
+      "owners": {
+        "dongyeon": "Club Union",
+        "dormunion": "Dormitory Union"
+      },
+      "viewEquipment": "View equipment",
+      "listTitle": "Equipment list",
+      "loadingList": "Loading equipment…",
+      "fee": "{{fee}} KRW",
+      "details": "Details",
+      "detailTitle": "Equipment details",
+      "detailBody": "Name: {{name}}\nModel/description: {{description}}\nFee: {{fee}} KRW\nMax usage: {{minutes}} min"
     }
   },
   "myReservation": {
