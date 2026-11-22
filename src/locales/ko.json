@@ -138,7 +138,7 @@
       "pastTime": "과거 시간대는 예약할 수 없습니다.",
       "minDuration": "예약 시간은 30분 이상이어야 합니다.",
       "startAfterNow": "현재 시간보다 이후의 시간을 선택해주세요.",
-      "endAfterStart": "종료 시각은 시작 시각보다 30분 이상 뒤여야 합니다.",
+      "endAfterStart": "종료 시간은 시작 시간보다 30분 이상 뒤여야 합니다.",
       "confirmPlace": "예약 장소: {{name}}",
       "confirmDate": "예약 날짜: {{date}}",
       "confirmTime": "예약 시간: {{start}} - {{end}}",
