@@ -23,6 +23,9 @@ interface ReportProgressModalProps {
   reportData: ReportData;
 }
 
+// 영어 라벨("Handled by")이 한 줄에 들어가는 폭
+const LABEL_WIDTH = 90;
+
 const InfoRow = ({
   isDarkMode,
   label,
@@ -33,7 +36,12 @@ const InfoRow = ({
   value: string;
 }) => (
   <View style={{flexDirection: 'row', marginBottom: 6}}>
-    <Text style={{fontWeight: 'bold', color: textColor(isDarkMode), width: 50}}>
+    <Text
+      style={{
+        fontWeight: 'bold',
+        color: textColor(isDarkMode),
+        width: LABEL_WIDTH,
+      }}>
       {label}
     </Text>
     <Text
