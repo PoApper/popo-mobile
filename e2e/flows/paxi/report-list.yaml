@@ -1,0 +1,15 @@
+# 내 정보 > Paxi 신고 내역 목록
+appId: ${APP_ID}
+name: report-list
+---
+- runFlow: ../common/launch.yaml
+- runFlow: ../common/set-language.yaml
+- scrollUntilVisible:
+    element: "${LANGUAGE == 'en' ? 'View' : '내역 조회'}"
+- tapOn: "${LANGUAGE == 'en' ? 'View' : '내역 조회'}"
+- extendedWaitUntil:
+    visible: "${LANGUAGE == 'en' ? 'Paxi reports' : 'Paxi 신고 목록'}"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: paxi-report-list-${LANGUAGE}

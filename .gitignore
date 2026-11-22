@@ -112,3 +112,7 @@ onboarding.md
 
 # superset
 .superset/
+
+# e2e (Maestro)
+e2e/.env.local
+e2e/output/

@@ -1,0 +1,18 @@
+# 로그아웃 → 로그인 화면 → 테스트 계정으로 다시 로그인
+appId: ${APP_ID}
+name: login
+---
+- runFlow: ../common/launch.yaml
+- runFlow: ../common/set-language.yaml
+- tapOn: "${LANGUAGE == 'en' ? 'Log out' : '로그아웃'}"
+- extendedWaitUntil:
+    visible:
+      id: login-email
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: auth-login-${LANGUAGE}
+- runFlow: ../common/launch.yaml
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: auth-home-after-login-${LANGUAGE}
