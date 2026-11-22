@@ -12,11 +12,7 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
-import {
-  ClubCategoryKey,
-  ClubCategoryValue,
-  CLUB_CATEGORIES,
-} from '@interfaces/club';
+import {ClubCategoryKey, CLUB_CATEGORIES} from '@interfaces/club';
 import api from '@utils/api';
 import CommonHeader from '@components/CommonHeader';
 
@@ -24,7 +20,7 @@ type ClubScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Club'>;
 };
 
-const clubCategories = Object.values(CLUB_CATEGORIES);
+const clubCategories = Object.keys(CLUB_CATEGORIES) as ClubCategoryKey[];
 
 const sortTypes = ['가나다순', '조회순'];
 
@@ -47,9 +43,8 @@ interface ClubItem {
 
 const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [selectedCategory, setSelectedCategory] = useState<ClubCategoryValue>(
-    CLUB_CATEGORIES.performance1,
-  );
+  const [selectedCategory, setSelectedCategory] =
+    useState<ClubCategoryKey>('performance1');
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
   const [clubs, setClubs] = useState<ClubItem[]>([]);
   const [sortType, setSortType] = useState('가나다순');
@@ -86,7 +81,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
   };
 
   const filteredClubs = getSortedClubs(clubs).filter(
-    club => CLUB_CATEGORIES[club.clubType] === selectedCategory,
+    club => club.clubType === selectedCategory,
   );
 
   return (
@@ -124,7 +119,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
                     {color: textColor},
                   ],
                 ]}>
-                {category}
+                {CLUB_CATEGORIES[category]}
               </Text>
               <View
                 style={[

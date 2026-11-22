@@ -8,4 +8,3 @@ export const CLUB_CATEGORIES = {
 } as const;
 
 export type ClubCategoryKey = keyof typeof CLUB_CATEGORIES;
-export type ClubCategoryValue = (typeof CLUB_CATEGORIES)[ClubCategoryKey];
