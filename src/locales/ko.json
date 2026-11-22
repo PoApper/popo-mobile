@@ -4,5 +4,114 @@
     "system": "시스템 설정",
     "ko": "한국어",
     "en": "English"
+  },
+  "common": {
+    "back": "뒤로",
+    "confirm": "확인",
+    "cancel": "취소",
+    "externalLinkTitle": "외부 링크 이동",
+    "pressBackAgainToExit": "한 번 더 누르면 앱이 종료됩니다",
+    "error": "오류",
+    "done": "완료",
+    "retry": "다시 시도",
+    "untitled": "제목 없음",
+    "networkError": "네트워크 오류가 발생했습니다.",
+    "sessionExpiredTitle": "인증 만료",
+    "sessionExpiredBody": "다시 로그인해주세요."
+  },
+  "nav": {
+    "home": "홈",
+    "paxi": "Paxi",
+    "myReservation": "내 일정",
+    "myInfo": "내 정보"
+  },
+  "home": {
+    "greeting": "{{name}}님, 안녕하세요! 👋",
+    "defaultUserName": "사용자",
+    "servicesTitle": "다양한 서비스 이용하기",
+    "reportIssue": "오류 및 개선점 제보",
+    "services": {
+      "placeReservation": "장소예약",
+      "equipReservation": "장비예약",
+      "club": "동아리",
+      "association": "자치단체",
+      "studentAssociation": "학생단체",
+      "whitebook": "생활백서",
+      "benefits": "제휴업체",
+      "delivery": "배달업체",
+      "archive": "기록물관리"
+    },
+    "deliveryLinkBody": "생활관자치회 배달업체 페이지로 이동합니다.",
+    "archiveLinkBody": "총학생회 구글 드라이브로 이동합니다.",
+    "recruitingBanner": "POPO 앱 개발자를 모집합니다!",
+    "ddayLoading": "일정 정보를 불러오는 중..."
+  },
+  "upcoming": {
+    "title": "다가오는 일정",
+    "empty": "다가오는 일정이 없습니다",
+    "emptyHint": "일주일 내의 일정들을 보여드려요",
+    "detailTitle": "{{type}} 상세",
+    "placeTbd": "장소 미정",
+    "equipmentTbd": "장비 미정",
+    "equipmentFallback": "장비"
+  },
+  "eventType": {
+    "place": "장소 예약",
+    "equipment": "장비 예약",
+    "taxi": "택시 카풀"
+  },
+  "paxiStatus": {
+    "inSettlement": "정산 중",
+    "active": "출발 전",
+    "completed": "완료"
+  },
+  "reservation": {
+    "status": {
+      "pending": "심사중",
+      "passed": "통과",
+      "rejected": "거절"
+    },
+    "fields": {
+      "title": "제목",
+      "status": "상태",
+      "place": "장소",
+      "equipment": "장비",
+      "location": "위치",
+      "date": "날짜",
+      "time": "시간",
+      "description": "설명",
+      "phone": "연락처"
+    },
+    "equipmentWithMore": "{{first}} 외 {{count}}개"
+  },
+  "myReservation": {
+    "title": "내 일정",
+    "loading": "예약 정보를 불러오는 중...",
+    "loadFailed": "예약 정보를 불러오는데 실패했습니다.",
+    "detailTitle": "예약 상세정보",
+    "cancelTitle": "예약 취소",
+    "cancelConfirm": "정말로 이 예약을 취소하시겠습니까?",
+    "cancelled": "예약이 취소되었습니다.",
+    "cancelPastError": "과거 예약은 취소할 수 없습니다.",
+    "cancelFailed": "예약 취소 중 문제가 발생했습니다.",
+    "status": {
+      "pending": "대기중",
+      "passed": "예약 통과",
+      "rejected": "예약 거절",
+      "unknown": "상태 없음"
+    },
+    "placeEmpty": "장소 예약 내역이 없습니다.",
+    "equipEmpty": "장비 예약 내역이 없습니다.",
+    "placeNameMissing": "장소 이름 없음",
+    "equipInfoMissing": "장비 정보 없음",
+    "equipList": "장비 목록 ({{count}})",
+    "paxiConsentTitle": "Paxi 서비스 사용 동의가 필요합니다",
+    "paxiConsentBody": "택시 카풀 서비스를 이용하려면\nPaxi 서비스 사용 동의가 필요합니다.\n동의 후 다시 시도해주세요.",
+    "paxiConsentButton": "Paxi 서비스 사용 동의 페이지로 이동",
+    "tabs": {
+      "place": "장소 예약",
+      "equipment": "장비 예약",
+      "taxi": "택시 카풀"
+    }
   }
 }

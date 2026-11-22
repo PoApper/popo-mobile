@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, useColorScheme} from 'react-native';
 import axios from 'axios';
+import {useTranslation} from 'react-i18next';
 import {POPO_API_URL} from '@utils/api';
 
 type CalendarEvent = {
@@ -12,6 +13,7 @@ type CalendarEvent = {
 };
 
 const DdayInfoBox = () => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [latestEvent, setLatestEvent] = useState<CalendarEvent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -58,7 +60,7 @@ const DdayInfoBox = () => {
               styles.locationText,
               {color: isDarkMode ? '#FFFFFF' : '#000000'},
             ]}>
-            일정 정보를 불러오는 중...
+            {t('home.ddayLoading')}
           </Text>
         </View>
       </View>

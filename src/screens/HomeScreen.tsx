@@ -16,6 +16,7 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {RootStackParamList} from '@navigation/types';
@@ -43,6 +44,7 @@ type ServiceItem = {
 };
 
 const HomeScreen = ({navigation}: HomeScreenProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [userName, setUserName] = useState<string>('');
   const backPressCount = useRef(0);
@@ -59,7 +61,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
         .get('/auth/myInfo')
         .then(response => {
           const userData = response.data;
-          setUserName(userData.name || '사용자');
+          setUserName(userData.name || '');
         })
         .catch(error => {
           if (error.response?.status === 401) {
@@ -93,7 +95,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
           // 첫 번째 누름: 토스트 메시지 표시
           if (Platform.OS === 'android') {
             ToastAndroid.show(
-              '한 번 더 누르면 앱이 종료됩니다',
+              t('common.pressBackAgainToExit'),
               ToastAndroid.SHORT,
             );
           }
@@ -118,94 +120,90 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
         onBackPress,
       );
       return () => subscription.remove();
-    }, []),
+    }, [t]),
   );
 
   const services: ServiceItem[] = [
     {
       id: '1',
       icon: 'place',
-      title: '장소예약',
+      title: t('home.services.placeReservation'),
       active: true,
       onPress: () => navigation.navigate('PlaceReservation'),
     },
     {
       id: '2',
       icon: 'computer',
-      title: '장비예약',
+      title: t('home.services.equipReservation'),
       active: true,
       onPress: () => navigation.navigate('EquipmentReservation'),
     },
     {
       id: '3',
       icon: 'people',
-      title: '동아리',
+      title: t('home.services.club'),
       active: true,
       onPress: () => navigation.navigate('Club'),
     },
     {
       id: '4',
       icon: 'account-balance',
-      title: '자치단체',
+      title: t('home.services.association'),
       active: true,
       onPress: () => navigation.navigate('Association'),
     },
     {
       id: '5',
       icon: 'groups',
-      title: '학생단체',
+      title: t('home.services.studentAssociation'),
       active: true,
       onPress: () => navigation.navigate('StudentAssociation'),
     },
     {
       id: '6',
       icon: 'menu-book',
-      title: '생활백서',
+      title: t('home.services.whitebook'),
       active: true,
       onPress: () => navigation.navigate('Whitebook'),
     },
     {
       id: '7',
       icon: 'store',
-      title: '제휴업체',
+      title: t('home.services.benefits'),
       active: true,
       onPress: () => navigation.navigate('Benefits'),
     },
     {
       id: '8',
       icon: 'dining',
-      title: '배달업체',
+      title: t('home.services.delivery'),
       active: true,
       onPress: () => {
-        Alert.alert(
-          '외부 링크 이동',
-          '생활관자치회 배달업체 페이지로 이동합니다.',
-          [
-            {
-              text: '취소',
-              style: 'cancel',
-            },
-            {
-              text: '확인',
-              onPress: () => openURLWithFallback(POSTECH_DORM_DELIVERY_URL),
-            },
-          ],
-        );
+        Alert.alert(t('common.externalLinkTitle'), t('home.deliveryLinkBody'), [
+          {
+            text: t('common.cancel'),
+            style: 'cancel',
+          },
+          {
+            text: t('common.confirm'),
+            onPress: () => openURLWithFallback(POSTECH_DORM_DELIVERY_URL),
+          },
+        ]);
       },
     },
     {
       id: '9',
       icon: 'description',
-      title: '기록물관리',
+      title: t('home.services.archive'),
       active: true,
       onPress: () =>
-        Alert.alert('외부 링크 이동', '총학생회 구글 드라이브로 이동합니다.', [
+        Alert.alert(t('common.externalLinkTitle'), t('home.archiveLinkBody'), [
           {
-            text: '취소',
+            text: t('common.cancel'),
             style: 'cancel',
           },
           {
-            text: '확인',
+            text: t('common.confirm'),
             onPress: () => openURLWithFallback(RECORDS_ARCHIVE_URL),
           },
         ]),
@@ -232,7 +230,9 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
               styles.welcomeText,
               {color: isDarkMode ? '#FFFFFF' : '#000000'},
             ]}>
-            {userName}님, 안녕하세요! 👋
+            {t('home.greeting', {
+              name: userName || t('home.defaultUserName'),
+            })}
           </Text>
         </View>
 
@@ -246,7 +246,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
               styles.sectionTitle,
               {color: isDarkMode ? '#FFFFFF' : '#000000'},
             ]}>
-            다양한 서비스 이용하기
+            {t('home.servicesTitle')}
           </Text>
           <View
             style={[
@@ -303,7 +303,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
             styles.floatingText,
             {color: isDarkMode ? '#E5E7EB' : '#111827'},
           ]}>
-          오류 및 개선점 제보
+          {t('home.reportIssue')}
         </Text>
       </TouchableOpacity>
     </SafeAreaView>

@@ -7,6 +7,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -20,6 +21,7 @@ type RecruitingBannerProps = {
 };
 
 const RecruitingBanner = ({navigation}: RecruitingBannerProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [dismissed, setDismissed] = useState(true);
 
@@ -63,7 +65,7 @@ const RecruitingBanner = ({navigation}: RecruitingBannerProps) => {
         onPress={() => navigation.navigate('Recruiting')}>
         <Icon name="code" size={20} color={iconColor} />
         <Text style={[styles.text, {color: textColor}]} numberOfLines={1}>
-          POPO 앱 개발자를 모집합니다!
+          {t('home.recruitingBanner')}
         </Text>
         <TouchableOpacity
           style={styles.closeButton}
