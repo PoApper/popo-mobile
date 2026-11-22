@@ -14,6 +14,7 @@ import {
   Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
 
 interface Option {
   id: string;
@@ -31,8 +32,9 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
   options,
   selected,
   onSelect,
-  placeholderText = '필터선택',
+  placeholderText,
 }) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
 
   const [visible, setVisible] = useState(false);
@@ -82,7 +84,7 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
             ]}>
             {selected
               ? selected === '__other__'
-                ? '그 외'
+                ? t('paxi.filter.other')
                 : options.find(cat => cat.id === selected)?.name || selected
               : placeholderText}
           </Text>
@@ -122,9 +124,9 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
                 ]}>
                 <FlatList
                   data={[
-                    {id: '', name: '전체보기'},
+                    {id: '', name: t('paxi.filter.all')},
                     ...options,
-                    {id: '__other__', name: '그 외'},
+                    {id: '__other__', name: t('paxi.filter.other')},
                   ]}
                   keyExtractor={item => item.id || 'all'}
                   renderItem={({item}) => (

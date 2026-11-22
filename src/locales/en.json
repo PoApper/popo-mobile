@@ -24,7 +24,9 @@
     "processing": "Processing...",
     "noInfo": "N/A",
     "close": "Close",
-    "success": "Success"
+    "success": "Success",
+    "failure": "Failed",
+    "notice": "Notice"
   },
   "nav": {
     "home": "Home",
@@ -366,5 +368,105 @@
     },
     "leadDeveloper": "Lead Developer: Taeyang Na",
     "mobileLeadDeveloper": "Mobile Lead Developer: Gwanho Kim"
+  },
+  "paxi": {
+    "locations": {
+      "jigok": "Jigok Center",
+      "studentHall": "Student Hall",
+      "changeUp": "ChangeUp Ground",
+      "ktx": "KTX Pohang",
+      "terminal": "Pohang Terminal"
+    },
+    "durationRange": "{{min}}–{{max}} min",
+    "customInput": "Enter manually",
+    "filter": {
+      "all": "All",
+      "other": "Other"
+    },
+    "departure": "From",
+    "arrival": "To",
+    "date": "Date",
+    "departsAt": "Departs {{time}}",
+    "userCheckFailed": "Couldn't verify your Paxi account: {{message}}",
+    "roomList": {
+      "loadFailed": "Couldn't load rooms: {{message}}",
+      "hideFull": "Hide full rooms",
+      "empty": "No carpools yet."
+    },
+    "room": {
+      "status": {
+        "owner": "Host",
+        "kicked": "Removed",
+        "joined": "Joined",
+        "available": "Open",
+        "full": "Full"
+      },
+      "kickedTitle": "Removed",
+      "kickedBody": "You can't rejoin a room you were removed from.\nSee the My Schedule tab for details.",
+      "fullTitle": "Full",
+      "fullBody": "This room is full.",
+      "joinFailed": "Couldn't join the room.",
+      "joinFailedWithReason": "Couldn't join the room: {{message}}",
+      "join": "Join"
+    },
+    "form": {
+      "createTitle": "Create room",
+      "modifyTitle": "Edit room",
+      "modifySubmit": "Save",
+      "roomTitle": "Title",
+      "titlePlaceholder": "Enter a title (max 20 chars)",
+      "location": "Route",
+      "departurePlaceholder": "Where from? (max 10 chars)",
+      "arrivalPlaceholder": "Where to? (max 10 chars)",
+      "routeInfo": "{{distance}} · about {{duration}}",
+      "departureTime": "Departure time",
+      "details": "Details",
+      "optional": "(optional)",
+      "detailsPlaceholder": "I have one large suitcase!",
+      "maxParticipants": "Max participants",
+      "created": "Room created.",
+      "createFailed": "Couldn't create the room:\n{{message}}",
+      "modified": "Room updated.",
+      "modifyFailed": "Couldn't update the room:\n{{message}}",
+      "futureOnly": "Please choose a time in the future.",
+      "requiredFields": "Please fill in all required fields.",
+      "titleLength": "Title must be 2–20 characters.",
+      "departureLength": "Departure must be 2–20 characters.",
+      "arrivalLength": "Destination must be 2–20 characters.",
+      "detailsLength": "Details must be 100 characters or fewer."
+    },
+    "onboarding": {
+      "introTitle": "Meet Paxi, POSTECH's carpool service!",
+      "payTitle": "One person pays",
+      "payDesc": "The room creator pays the fare and splits it",
+      "rideTitle": "Call a taxi and ride together",
+      "rideDesc": "Save on taxi fares",
+      "privacyAgree": "I agree to the privacy policy",
+      "privacyRequired": "Please agree to the privacy policy.",
+      "agreeAndStart": "Agree and start",
+      "nicknameTitle": "Set nickname",
+      "welcome": "Welcome to PAXI! 👋",
+      "nicknamePrompt": "Choose a nickname to use.",
+      "nicknameRequired": "Please enter a nickname.",
+      "start": "Start Paxi",
+      "nicknameCreated": "Nickname created. Please log in again to continue.",
+      "nicknameExists": "You already have a nickname."
+    },
+    "deepLink": {
+      "nicknameRequiredTitle": "Nickname required",
+      "nicknameRequiredBody": "Set a nickname to use the carpool service.",
+      "loginRequiredTitle": "Login required",
+      "loginRequiredBody": "Log in to join this room.",
+      "invalidLink": "This room link is invalid.",
+      "authCheckFailed": "Couldn't check your login status.",
+      "userInfoFailed": "Couldn't load your user info.",
+      "alreadyJoined": "You're already in this room.\nTaking you there.",
+      "cannotJoinTitle": "Can't join",
+      "kicked": "You can't rejoin a room you were removed from.",
+      "enterFailed": "Couldn't enter the room.",
+      "roomNotFound": "Room not found.",
+      "roomLoadFailed": "Couldn't load the room.",
+      "joinFailedTitle": "Join failed"
+    }
   }
 }

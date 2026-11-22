@@ -9,6 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 
 import CommonHeader from '@components/CommonHeader';
 import {RootStackParamList} from '@navigation/types';
@@ -21,6 +22,7 @@ type PaxiIntroScreenProps = {
 };
 
 const PaxiIntroScreen = ({navigation}: PaxiIntroScreenProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [isPrivacyPolicyAgreed, setIsPrivacyPolicyAgreed] = useState(false);
   const [isPrivacyPolicyVisible, setIsPrivacyPolicyVisible] = useState(false);
@@ -50,22 +52,22 @@ const PaxiIntroScreen = ({navigation}: PaxiIntroScreenProps) => {
       <CommonHeader navigation={navigation} title="" isBackHome={true} />
       <View style={styles.contentContainer}>
         <Text style={[styles.title, {color: colors.text}]}>
-          포스텍 카풀 서비스, Paxi 입니다!
+          {t('paxi.onboarding.introTitle')}
         </Text>
         <View style={[styles.card, {backgroundColor: colors.cardBackground}]}>
           <Text style={[styles.cardTitle, {color: colors.cardTitle}]}>
-            한명이 한번에 결제해요
+            {t('paxi.onboarding.payTitle')}
           </Text>
           <Text style={[styles.cardDesc, {color: colors.cardDesc}]}>
-            카풀 방 생성자가 한꺼번에 결제하고 정산해요
+            {t('paxi.onboarding.payDesc')}
           </Text>
         </View>
         <View style={[styles.card, {backgroundColor: colors.cardBackground}]}>
           <Text style={[styles.cardTitle, {color: colors.cardTitle}]}>
-            택시를 한번에 부르고 같이 타요
+            {t('paxi.onboarding.rideTitle')}
           </Text>
           <Text style={[styles.cardDesc, {color: colors.cardDesc}]}>
-            택시비를 편하게 아껴요
+            {t('paxi.onboarding.rideDesc')}
           </Text>
         </View>
       </View>
@@ -89,7 +91,7 @@ const PaxiIntroScreen = ({navigation}: PaxiIntroScreenProps) => {
           onPress={() => setIsPrivacyPolicyVisible(true)}
           activeOpacity={0.7}>
           <Text style={[styles.privacyPolicyText, {color: colors.text}]}>
-            개인정보 처리 방침에 동의합니다
+            {t('paxi.onboarding.privacyAgree')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -116,10 +118,15 @@ const PaxiIntroScreen = ({navigation}: PaxiIntroScreenProps) => {
             if (isPrivacyPolicyAgreed) {
               navigation.navigate('PaxiStart');
             } else {
-              Alert.alert('안내', '개인정보 처리방침에 동의해주세요.');
+              Alert.alert(
+                t('common.notice'),
+                t('paxi.onboarding.privacyRequired'),
+              );
             }
           }}>
-          <Text style={styles.agreeButtonText}>동의하고 시작하기</Text>
+          <Text style={styles.agreeButtonText}>
+            {t('paxi.onboarding.agreeAndStart')}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

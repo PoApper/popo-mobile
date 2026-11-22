@@ -17,6 +17,7 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
 
 import {RootStackParamList} from '@navigation/types';
 import CommonHeader from '@components/CommonHeader';
@@ -29,6 +30,7 @@ type PaxiStartScreenProps = {
 };
 
 const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [nickname, setNickname] = useState('');
   const spinValue = useRef(new Animated.Value(0)).current;
@@ -52,11 +54,11 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
       .then(res => {
         if (res.status === 201) {
           Alert.alert(
-            '성공',
-            '닉네임을 성공적으로 생성했습니다. 원활한 서비스를 위해 재로그인 해주세요.',
+            t('common.success'),
+            t('paxi.onboarding.nicknameCreated'),
             [
               {
-                text: '확인',
+                text: t('common.confirm'),
                 onPress: async () => {
                   await api.get('/auth/logout');
                   await reset_auth();
@@ -74,14 +76,17 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
       .get('/user/onboarding-status')
       .then(res => {
         if (res.data.onboardingStatus === true) {
-          Alert.alert('안내', '이미 세팅된 닉네임이 있습니다.');
+          Alert.alert(t('common.notice'), t('paxi.onboarding.nicknameExists'));
           navigation.navigate('PaxiRoomList');
         }
         setNickname(res.data.nickname); // initial nickname
       })
       .catch(err => {
         console.error('Error:', err);
-        Alert.alert('실패', 'Paxi 유저 확인에 실패했습니다: ' + err.message);
+        Alert.alert(
+          t('common.failure'),
+          t('paxi.userCheckFailed', {message: err.message}),
+        );
       });
   };
 
@@ -122,18 +127,21 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
           barStyle={isDarkMode ? 'light-content' : 'dark-content'}
           backgroundColor={backgroundStyle.backgroundColor}
         />
-        <CommonHeader navigation={navigation} title="닉네임 설정하기" />
+        <CommonHeader
+          navigation={navigation}
+          title={t('paxi.onboarding.nicknameTitle')}
+        />
 
         <View style={styles.keyboardAvoidingView}>
           <View style={styles.container}>
             <View style={styles.titleContainer}>
               <Text style={[styles.titleText, {color: colors.text}]}>
-                PAXI에 오신 것을 환영합니다! 👋
+                {t('paxi.onboarding.welcome')}
               </Text>
             </View>
             <View style={styles.subTitleContainer}>
               <Text style={[styles.subTitleText, {color: colors.text}]}>
-                사용할 닉네임을 등록해주세요.
+                {t('paxi.onboarding.nicknamePrompt')}
               </Text>
             </View>
 
@@ -148,7 +156,7 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
                       color: colors.text,
                     },
                   ]}
-                  placeholder="닉네임을 입력해주세요."
+                  placeholder={t('paxi.onboarding.nicknameRequired')}
                   placeholderTextColor={colors.inputPlaceholder}
                   value={nickname}
                   onChangeText={setNickname}
@@ -193,13 +201,18 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
               ]}
               onPress={() => {
                 if (!nickname) {
-                  Alert.alert('오류', '닉네임을 입력해주세요.');
+                  Alert.alert(
+                    t('common.error'),
+                    t('paxi.onboarding.nicknameRequired'),
+                  );
                 } else {
                   setNickName();
                 }
               }}
               disabled={!nickname}>
-              <Text style={styles.nextButtonText}>Paxi 시작하기</Text>
+              <Text style={styles.nextButtonText}>
+                {t('paxi.onboarding.start')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

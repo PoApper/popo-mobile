@@ -18,11 +18,12 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
 
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
 import api from '@utils/api';
-import {PAXI_LOCATIONS} from '@utils/locations';
+import {getPaxiLocations} from '@utils/locations';
 import {RoomDataType} from '@interfaces/paxi';
 import DropdownFilter from '@components/room/DropdownFilter';
 import {RefreshButton} from '@components/room/RefreshButton';
@@ -35,6 +36,7 @@ type PaxiRoomListScreenProps = {
 };
 
 const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const backPressCount = useRef(0);
 
@@ -70,7 +72,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   };
 
   const filteredRoomData = useMemo(() => {
-    const optionIds = PAXI_LOCATIONS.map(o => o.id);
+    const optionIds: string[] = getPaxiLocations().map(o => o.id);
     const isOther = (v: string | null) => v === '__other__';
 
     return roomData
@@ -113,7 +115,10 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
     } catch (error: unknown) {
       console.error('Refresh error:', error);
       const message = error instanceof Error ? error.message : String(error);
-      Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + message);
+      Alert.alert(
+        t('common.failure'),
+        t('paxi.roomList.loadFailed', {message}),
+      );
     } finally {
       setRefreshing(false);
     }
@@ -134,12 +139,12 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       } catch (err: unknown) {
         console.error('Error:', err);
         const message = err instanceof Error ? err.message : String(err);
-        Alert.alert('실패', 'Paxi 유저 확인에 실패했습니다: ' + message);
+        Alert.alert(t('common.failure'), t('paxi.userCheckFailed', {message}));
       }
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, t]);
 
   // 뒤로가기 버튼 처리
   useFocusEffect(
@@ -151,7 +156,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
           // 첫 번째 누름: 토스트 메시지 표시
           if (Platform.OS === 'android') {
             ToastAndroid.show(
-              '한 번 더 누르면 앱이 종료됩니다',
+              t('common.pressBackAgainToExit'),
               ToastAndroid.SHORT,
             );
           }
@@ -176,7 +181,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         onBackPress,
       );
       return () => subscription.remove();
-    }, []),
+    }, [t]),
   );
 
   return (
@@ -205,15 +210,19 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         <RefreshButton onPress={onRefresh} />
 
         <DropdownFilter
-          placeholderText={'출발지'}
-          options={PAXI_LOCATIONS.filter(item => item.id !== selectedArrival)}
+          placeholderText={t('paxi.departure')}
+          options={getPaxiLocations().filter(
+            item => item.id !== selectedArrival,
+          )}
           selected={selectedDeparture}
           onSelect={selected => setSelectedDeparture(selected)}
         />
 
         <DropdownFilter
-          placeholderText={'도착지'}
-          options={PAXI_LOCATIONS.filter(item => item.id !== selectedDeparture)}
+          placeholderText={t('paxi.arrival')}
+          options={getPaxiLocations().filter(
+            item => item.id !== selectedDeparture,
+          )}
           selected={selectedArrival}
           onSelect={selected => setSelectedArrival(selected)}
         />
@@ -245,7 +254,9 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
             />
           )}
         </View>
-        <Text style={{fontSize: 15, color: textColor}}>마감된 방 숨기기</Text>
+        <Text style={{fontSize: 15, color: textColor}}>
+          {t('paxi.roomList.hideFull')}
+        </Text>
       </TouchableOpacity>
 
       <FlatList
@@ -263,7 +274,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         contentContainerStyle={{padding: 16, paddingBottom: 100}}
         ListEmptyComponent={() => (
           <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>
-            현재 등록된 카풀이 없습니다.
+            {t('paxi.roomList.empty')}
           </Text>
         )}
         showsVerticalScrollIndicator={false}

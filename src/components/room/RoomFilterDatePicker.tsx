@@ -9,6 +9,9 @@ import {
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
+
+import {getCurrentLocale} from '@utils/i18n';
 
 type RoomFilterDatePickerProps = {
   selectedDate: Date | null;
@@ -19,6 +22,7 @@ const RoomFilterDatePicker = ({
   selectedDate,
   onDateChange,
 }: RoomFilterDatePickerProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
 
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
@@ -59,7 +63,7 @@ const RoomFilterDatePicker = ({
             <Text style={{color: textColor}}>
               {selectedDate
                 ? moment(selectedDate).format('YYYY-MM-DD')
-                : '날짜'}
+                : t('paxi.date')}
             </Text>
             {selectedDate && (
               <TouchableOpacity
@@ -86,9 +90,9 @@ const RoomFilterDatePicker = ({
         onCancel={() => setDatePickerVisible(false)}
         minimumDate={minimumDate}
         maximumDate={new Date(new Date().setDate(new Date().getDate() + 30))}
-        locale="ko-KR"
-        confirmTextIOS="확인"
-        cancelTextIOS="취소"
+        locale={getCurrentLocale()}
+        confirmTextIOS={t('common.confirm')}
+        cancelTextIOS={t('common.cancel')}
       />
     </View>
   );
