@@ -14,6 +14,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
 import {RouteProp} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 import api from '../../utils/api';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TimeSlotPickerModal from '../../components/TimeSlotPickerModal';
@@ -23,6 +24,7 @@ import {
   getNearestPossibleSlot,
 } from '../../config/restricted-time-slots';
 import {isGroupStudyRoom} from '../../constants/placeNames';
+import {getCurrentLocale} from '@utils/i18n';
 import {
   MIN_RESERVATION_DURATION_MS,
   roundUpToNearest30Minutes,
@@ -40,6 +42,7 @@ const PlaceReservationApplyScreen = ({
   navigation,
   route,
 }: PlaceReservationApplyScreenProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const {buildingName, placeName, placeId, selectedDate} = route.params;
 
@@ -156,33 +159,44 @@ const PlaceReservationApplyScreen = ({
   const borderColor = isDarkMode ? '#2C2C2C' : '#E5E7EB';
   const subTextColor = isDarkMode ? '#888888' : '#6B7280';
 
-  // 날짜를 한글 형식으로 포맷 (YYYY년 MM월 DD일)
   const formatDate = (d: Date) =>
-    `${d.getFullYear()}년 ${String(d.getMonth() + 1).padStart(
-      2,
-      '0',
-    )}월 ${String(d.getDate()).padStart(2, '0')}일`;
+    d.toLocaleDateString(getCurrentLocale(), {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  const formatTime = (d: Date) =>
+    d.toLocaleTimeString(getCurrentLocale(), {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
 
   const handleReservation = () => {
     // 필수 입력값 검증
     if (!phone.trim()) {
-      Alert.alert('알림', '전화번호를 입력해주세요.');
+      Alert.alert(t('reservation.notice'), t('reservation.form.phoneRequired'));
       return;
     }
     if (!title.trim()) {
-      Alert.alert('알림', '예약 제목을 입력해주세요.');
+      Alert.alert(t('reservation.notice'), t('reservation.form.titleRequired'));
       return;
     }
     if (!desc.trim()) {
-      Alert.alert('알림', '설명을 입력해주세요.');
+      Alert.alert(
+        t('reservation.notice'),
+        t('reservation.form.descriptionRequired'),
+      );
       return;
     }
     if (title.length === 1) {
-      Alert.alert('알림', '예약 제목이 너무 짧습니다.');
+      Alert.alert(t('reservation.notice'), t('reservation.form.titleTooShort'));
       return;
     }
     if (desc.length === 1) {
-      Alert.alert('알림', '예약 설명이 너무 짧습니다.');
+      Alert.alert(
+        t('reservation.notice'),
+        t('reservation.form.descriptionTooShort'),
+      );
       return;
     }
 
@@ -199,42 +213,43 @@ const PlaceReservationApplyScreen = ({
       date.getDate(),
     );
     if (selectedStart < todayStart) {
-      Alert.alert('알림', '과거 날짜는 예약할 수 없습니다.');
+      Alert.alert(t('reservation.notice'), t('reservation.form.pastDate'));
       return;
     }
 
     // 과거 시간대 예약 금지
     // 시간대 제한의 경우에는 종료 시각만 확인하므로, 이 기준을 따라감
     if (endTime < new Date()) {
-      Alert.alert('알림', '과거 시간대는 예약할 수 없습니다.');
+      Alert.alert(t('reservation.notice'), t('reservation.form.pastTime'));
       return;
     }
 
     // 0분 예약 방지. 안드로이드 시각 피커는 minimumDate를 무시하므로 여기서도 확인한다
     if (endTime.getTime() - startTime.getTime() < MIN_RESERVATION_DURATION_MS) {
-      Alert.alert('알림', '예약 시간은 30분 이상이어야 합니다.');
+      Alert.alert(t('reservation.notice'), t('reservation.form.minDuration'));
       return;
     }
 
     // 예약 정보 확인 팝업
     Alert.alert(
       '',
-      `예약 장소: ${placeName}\n예약 날짜: ${formatDate(
-        date,
-      )}\n예약 시간: ${startTime.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      })} - ${endTime.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      })}\n\n예약하시겠습니까?`,
+      [
+        t('reservation.form.confirmPlace', {name: placeName}),
+        t('reservation.form.confirmDate', {date: formatDate(date)}),
+        t('reservation.form.confirmTime', {
+          start: formatTime(startTime),
+          end: formatTime(endTime),
+        }),
+        '',
+        t('reservation.form.confirmQuestion'),
+      ].join('\n'),
       [
         {
-          text: '취소',
+          text: t('common.cancel'),
           style: 'cancel',
         },
         {
-          text: '예약하기',
+          text: t('reservation.confirmReserve'),
           onPress: () => {
             // Format date and time according to API requirements
             const formattedDate = `${date.getFullYear()}${String(
@@ -261,20 +276,24 @@ const PlaceReservationApplyScreen = ({
                 endTime: formattedEndTime,
               })
               .then(() => {
-                Alert.alert('알림', '예약을 생성 했습니다.', [
-                  {
-                    text: '확인',
-                    onPress: () => navigation.goBack(),
-                  },
-                ]);
+                Alert.alert(
+                  t('reservation.notice'),
+                  t('reservation.place.created'),
+                  [
+                    {
+                      text: t('common.confirm'),
+                      onPress: () => navigation.goBack(),
+                    },
+                  ],
+                );
               })
               .catch(error => {
                 Alert.alert(
-                  '알림',
-                  `예약 생성에 실패했습니다: ${
-                    error.response?.data?.message ||
-                    '알 수 없는 오류가 발생했습니다.'
-                  }`,
+                  t('reservation.notice'),
+                  t('reservation.place.createFailed', {
+                    message:
+                      error.response?.data?.message || t('common.unknownError'),
+                  }),
                 );
               });
           },
@@ -346,9 +365,13 @@ const PlaceReservationApplyScreen = ({
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+          <Text style={[styles.backButtonText, {color: textColor}]}>
+            {t('common.back')}
+          </Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>장소 예약</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>
+          {t('reservation.place.title')}
+        </Text>
         <View style={styles.placeholderButton} />
       </View>
 
@@ -383,7 +406,7 @@ const PlaceReservationApplyScreen = ({
                   fontSize: 13,
                   lineHeight: 18,
                 }}>
-                {restrictedPolicy.notice}
+                {t(restrictedPolicy.noticeKey)}
               </Text>
             </View>
           )}
@@ -401,20 +424,20 @@ const PlaceReservationApplyScreen = ({
                   styles.groupStudyNoticeHeader,
                   {color: isDarkMode ? '#F87171' : '#DC2626'},
                 ]}>
-                ⚠️ 그룹스터디룸 이용 안내
+                {t('reservation.place.groupStudyHeader')}
               </Text>
               <Text
                 style={[
                   styles.groupStudyNoticeBody,
                   {color: isDarkMode ? '#E5E7EB' : '#4B5563'},
                 ]}>
-                그룹스터디룸은 과외 목적으로 예약이 불가능합니다. 학습 및 스터디
-                목적으로만 사용해주시기 바랍니다.
+                {t('reservation.place.groupStudyBody')}
               </Text>
             </View>
           )}
           <Text style={[styles.label, {color: textColor}]}>
-            사용자 <Text style={styles.requiredText}>*</Text>
+            {t('reservation.form.user')}{' '}
+            <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
             style={[
@@ -428,11 +451,12 @@ const PlaceReservationApplyScreen = ({
             ]}
             value={userName}
             editable={false}
-            placeholder="이름"
+            placeholder={t('reservation.form.namePlaceholder')}
             placeholderTextColor={subTextColor}
           />
           <Text style={[styles.label, {color: textColor}]}>
-            전화번호 <Text style={styles.requiredText}>*</Text>
+            {t('reservation.form.phone')}{' '}
+            <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
             style={[
@@ -451,7 +475,8 @@ const PlaceReservationApplyScreen = ({
             maxLength={13}
           />
           <Text style={[styles.label, {color: textColor}]}>
-            예약 제목 <Text style={styles.requiredText}>*</Text>
+            {t('reservation.form.title')}{' '}
+            <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
             style={[
@@ -464,7 +489,7 @@ const PlaceReservationApplyScreen = ({
             ]}
             value={title}
             onChangeText={setTitle}
-            placeholder="예약 제목을 입력하세요"
+            placeholder={t('reservation.form.titlePlaceholder')}
             placeholderTextColor={subTextColor}
             maxLength={50}
           />
@@ -472,7 +497,8 @@ const PlaceReservationApplyScreen = ({
             {title.length}/50
           </Text>
           <Text style={[styles.label, {color: textColor}]}>
-            설명 <Text style={styles.requiredText}>*</Text>
+            {t('reservation.form.description')}{' '}
+            <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
             style={[
@@ -487,7 +513,7 @@ const PlaceReservationApplyScreen = ({
             ]}
             value={desc}
             onChangeText={setDesc}
-            placeholder="예약에 대한 설명과 사용 인원을 꼭 작성해 주세요"
+            placeholder={t('reservation.place.descPlaceholder')}
             placeholderTextColor={subTextColor}
             multiline
             maxLength={200}
@@ -505,7 +531,8 @@ const PlaceReservationApplyScreen = ({
             <View style={{flex: 1.5}}>
               <Text
                 style={[styles.label, {color: textColor, marginBottom: 10}]}>
-                날짜 <Text style={styles.requiredText}>*</Text>
+                {t('reservation.form.date')}{' '}
+                <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 onPress={openDatePicker}
@@ -525,7 +552,8 @@ const PlaceReservationApplyScreen = ({
             <View style={{flex: 1}}>
               <Text
                 style={[styles.label, {color: textColor, marginBottom: 10}]}>
-                시작 시각 <Text style={styles.requiredText}>*</Text>
+                {t('reservation.form.startTime')}{' '}
+                <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 onPress={openStartPicker}
@@ -537,10 +565,7 @@ const PlaceReservationApplyScreen = ({
                   },
                 ]}>
                 <Text style={{color: textColor, textAlign: 'center'}}>
-                  {startTime.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
+                  {formatTime(startTime)}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -548,7 +573,8 @@ const PlaceReservationApplyScreen = ({
             <View style={{flex: 1}}>
               <Text
                 style={[styles.label, {color: textColor, marginBottom: 10}]}>
-                종료 시각 <Text style={styles.requiredText}>*</Text>
+                {t('reservation.form.endTime')}{' '}
+                <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 onPress={openEndPicker}
@@ -560,10 +586,7 @@ const PlaceReservationApplyScreen = ({
                   },
                 ]}>
                 <Text style={{color: textColor, textAlign: 'center'}}>
-                  {endTime.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
+                  {formatTime(endTime)}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -580,9 +603,9 @@ const PlaceReservationApplyScreen = ({
               onCancel={() => setShowDatePicker(false)}
               minimumDate={minimumDate}
               maximumDate={maximumDate}
-              locale="ko-KR"
-              confirmTextIOS="확인"
-              cancelTextIOS="취소"
+              locale={getCurrentLocale()}
+              confirmTextIOS={t('common.confirm')}
+              cancelTextIOS={t('common.cancel')}
             />
           )}
           {showStartPicker && !restrictedPolicy && (
@@ -599,8 +622,8 @@ const PlaceReservationApplyScreen = ({
                   setEndTime(newEndTime);
                 } else {
                   Alert.alert(
-                    '알림',
-                    '현재 시간보다 이후의 시간을 선택해주세요.',
+                    t('reservation.notice'),
+                    t('reservation.form.startAfterNow'),
                   );
                 }
               }}
@@ -609,8 +632,8 @@ const PlaceReservationApplyScreen = ({
               date={startTime}
               minimumDate={minimumDate}
               is24Hour
-              confirmTextIOS="확인"
-              cancelTextIOS="취소"
+              confirmTextIOS={t('common.confirm')}
+              cancelTextIOS={t('common.cancel')}
             />
           )}
           {showEndPicker && !restrictedPolicy && (
@@ -622,8 +645,8 @@ const PlaceReservationApplyScreen = ({
                 const rounded = roundUpToNearest30Minutes(time);
                 if (rounded < earliestEndTime) {
                   Alert.alert(
-                    '알림',
-                    '종료 시각은 시작 시각보다 30분 이상 뒤여야 합니다.',
+                    t('reservation.notice'),
+                    t('reservation.form.endAfterStart'),
                   );
                   return;
                 }
@@ -634,8 +657,8 @@ const PlaceReservationApplyScreen = ({
               date={endTime}
               is24Hour
               minimumDate={earliestEndTime}
-              confirmTextIOS="확인"
-              cancelTextIOS="취소"
+              confirmTextIOS={t('common.confirm')}
+              cancelTextIOS={t('common.cancel')}
             />
           )}
 
@@ -669,7 +692,9 @@ const PlaceReservationApplyScreen = ({
           disabled={disabledCreate}
           accessibilityState={{disabled: disabledCreate}}
           activeOpacity={disabledCreate ? 1 : 0.85}>
-          <Text style={styles.reservationButtonText}>예약하기</Text>
+          <Text style={styles.reservationButtonText}>
+            {t('reservation.confirmReserve')}
+          </Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
     </SafeAreaView>

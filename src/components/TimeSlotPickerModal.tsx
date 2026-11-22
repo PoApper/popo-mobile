@@ -7,6 +7,7 @@ import {
   StyleSheet,
   useColorScheme,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 export type ConcreteTimeSlot = {
   label: string;
@@ -28,6 +29,7 @@ const TimeSlotPickerModal: React.FC<Props> = ({
   slots,
   onSelectSlot,
 }) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const bg = isDarkMode ? 'rgba(0,0,0,0.6)' : 'rgba(0,0,0,0.35)';
   const cardBg = isDarkMode ? '#1E1E1E' : '#FFFFFF';
@@ -42,7 +44,9 @@ const TimeSlotPickerModal: React.FC<Props> = ({
       onRequestClose={onClose}>
       <View style={[styles.overlay, {backgroundColor: bg}]}>
         <View style={[styles.card, {backgroundColor: cardBg, borderColor}]}>
-          <Text style={[styles.title, {color: textColor}]}>시간대 선택</Text>
+          <Text style={[styles.title, {color: textColor}]}>
+            {t('reservation.form.slotPickerTitle')}
+          </Text>
           <View style={styles.slotList}>
             {slots.map((slot, idx) => {
               const isDisabled = slot.disabled;
@@ -76,7 +80,9 @@ const TimeSlotPickerModal: React.FC<Props> = ({
             <TouchableOpacity
               style={[styles.actionBtn, {borderColor}]}
               onPress={onClose}>
-              <Text style={[styles.actionText, {color: textColor}]}>닫기</Text>
+              <Text style={[styles.actionText, {color: textColor}]}>
+                {t('common.close')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

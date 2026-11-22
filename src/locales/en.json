@@ -22,7 +22,8 @@
     "serverUnreachable": "Cannot connect to the server. Please check your network connection.",
     "unknownError": "An unknown error occurred.",
     "processing": "Processing...",
-    "noInfo": "N/A"
+    "noInfo": "N/A",
+    "close": "Close"
   },
   "nav": {
     "home": "Home",
@@ -99,7 +100,13 @@
         "others": "Other"
       },
       "sortAlphabetic": "A–Z",
-      "sortPopular": "Most reserved"
+      "sortPopular": "Most reserved",
+      "descPlaceholder": "Describe the reservation and include the number of people",
+      "cinemaNotice": "RC Cinema Room can only be reserved in these slots:\n18:00–21:00 / 21:00–24:00 / 00:00–03:00",
+      "groupStudyHeader": "⚠️ Group study room guidelines",
+      "groupStudyBody": "Group study rooms cannot be reserved for tutoring. Please use them only for studying.",
+      "created": "Reservation created.",
+      "createFailed": "Failed to create reservation: {{message}}"
     },
     "notice": "Notice",
     "currentReservations": "Reservations",
@@ -109,7 +116,34 @@
     "selectDate": "Select a date",
     "pastDateUnavailable": "Past dates can't be reserved",
     "pastDateAlert": "Past dates can't be reserved. Please select today or a later date.",
-    "apply": "Request reservation"
+    "apply": "Request reservation",
+    "confirmReserve": "Reserve",
+    "form": {
+      "user": "User",
+      "namePlaceholder": "Name",
+      "phone": "Phone",
+      "title": "Reservation title",
+      "titlePlaceholder": "Enter a reservation title",
+      "description": "Description",
+      "date": "Date",
+      "startTime": "Start time",
+      "endTime": "End time",
+      "phoneRequired": "Please enter your phone number.",
+      "titleRequired": "Please enter a reservation title.",
+      "descriptionRequired": "Please enter a description.",
+      "titleTooShort": "Reservation title is too short.",
+      "descriptionTooShort": "Reservation description is too short.",
+      "pastDate": "Past dates can't be reserved.",
+      "pastTime": "Past time slots can't be reserved.",
+      "minDuration": "Reservations must be at least 30 minutes.",
+      "startAfterNow": "Please select a time later than now.",
+      "endAfterStart": "End time must be at least 30 minutes after the start time.",
+      "confirmPlace": "Place: {{name}}",
+      "confirmDate": "Date: {{date}}",
+      "confirmTime": "Time: {{start}} - {{end}}",
+      "confirmQuestion": "Make this reservation?",
+      "slotPickerTitle": "Select a time slot"
+    }
   },
   "myReservation": {
     "title": "My Schedule",
