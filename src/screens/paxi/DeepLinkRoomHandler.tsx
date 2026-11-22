@@ -10,6 +10,7 @@ import {
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import {useTranslation} from 'react-i18next';
 
 import paxi_api from '@utils/paxi_api';
 import api from '@utils/api';
@@ -18,6 +19,7 @@ import JoinConfirmModal from '@components/room/JoinConfirmModal';
 import {getAxiosErrorInfo} from '@utils/axios-error';
 import {reset_auth} from '@utils/reset';
 import {RootStackParamList} from '@navigation/types';
+import i18next from '@utils/i18n';
 import {AUTH_TOKEN_KEY, IS_AUTHENTICATED_KEY} from '@utils/storage-keys';
 
 /**
@@ -56,20 +58,33 @@ const handleUnauthorizedError = async (
   if (isNicknameError(detail)) {
     // No nickname - redirect to PaxiIntro
     Alert.alert(
-      '닉네임 설정 필요',
-      '카풀 서비스 이용을 위해 닉네임을 설정해주세요.',
-      [{text: '확인', onPress: () => navigation.navigate('PaxiIntro')}],
+      i18next.t('paxi.deepLink.nicknameRequiredTitle'),
+      i18next.t('paxi.deepLink.nicknameRequiredBody'),
+      [
+        {
+          text: i18next.t('common.confirm'),
+          onPress: () => navigation.navigate('PaxiIntro'),
+        },
+      ],
     );
   } else {
     // Unauthorized - clear auth and redirect to login
     await reset_auth();
-    Alert.alert('로그인 필요', '다시 로그인해주세요.', [
-      {text: '확인', onPress: () => navigation.navigate('Login')},
-    ]);
+    Alert.alert(
+      i18next.t('paxi.deepLink.loginRequiredTitle'),
+      i18next.t('common.sessionExpiredBody'),
+      [
+        {
+          text: i18next.t('common.confirm'),
+          onPress: () => navigation.navigate('Login'),
+        },
+      ],
+    );
   }
 };
 
 const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
+  const {t} = useTranslation();
   const {roomUuid} = route.params;
   const [loading, setLoading] = useState(true);
   const [roomData, setRoomData] = useState<ChatRoomInfo | null>(null);
@@ -104,9 +119,9 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
     // 0. Validate roomUuid format
     if (!roomUuid || !isValidUUID(roomUuid)) {
       setLoading(false);
-      Alert.alert('오류', '유효하지 않은 방 링크입니다.', [
+      Alert.alert(t('common.error'), t('paxi.deepLink.invalidLink'), [
         {
-          text: '확인',
+          text: t('common.confirm'),
           onPress: goBackOrResetToMain,
         },
       ]);
@@ -120,16 +135,26 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
 
       if (!authToken || isAuth !== 'true') {
         setLoading(false);
-        Alert.alert('로그인 필요', '방에 참여하려면 로그인이 필요합니다.', [
-          {text: '확인', onPress: () => navigation.navigate('Login')},
-        ]);
+        Alert.alert(
+          t('paxi.deepLink.loginRequiredTitle'),
+          t('paxi.deepLink.loginRequiredBody'),
+          [
+            {
+              text: t('common.confirm'),
+              onPress: () => navigation.navigate('Login'),
+            },
+          ],
+        );
         return;
       }
     } catch (error) {
       console.error('인증 상태 확인 오류:', error);
       setLoading(false);
-      Alert.alert('오류', '인증 상태를 확인할 수 없습니다.', [
-        {text: '확인', onPress: () => navigation.navigate('Login')},
+      Alert.alert(t('common.error'), t('paxi.deepLink.authCheckFailed'), [
+        {
+          text: t('common.confirm'),
+          onPress: () => navigation.navigate('Login'),
+        },
       ]);
       return;
     }
@@ -146,9 +171,9 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
       if (status === 401) {
         await handleUnauthorizedError(navigation, detail);
       } else {
-        Alert.alert('오류', '사용자 정보를 불러올 수 없습니다.', [
+        Alert.alert(t('common.error'), t('paxi.deepLink.userInfoFailed'), [
           {
-            text: '확인',
+            text: t('common.confirm'),
             onPress: goBackOrResetToMain,
           },
         ]);
@@ -177,14 +202,14 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
           // Show toast/alert and navigate
           if (Platform.OS === 'android') {
             ToastAndroid.show(
-              '이미 참가중인 방입니다. \n방으로 입장합니다.',
+              t('paxi.deepLink.alreadyJoined'),
               ToastAndroid.SHORT,
             );
             resetToNewChat();
           } else {
-            Alert.alert('이미 참가중인 방입니다. \n방으로 입장합니다.', '', [
+            Alert.alert(t('paxi.deepLink.alreadyJoined'), '', [
               {
-                text: '확인',
+                text: t('common.confirm'),
                 onPress: resetToNewChat,
               },
             ]);
@@ -195,13 +220,16 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
           if (status === 401) {
             await handleUnauthorizedError(navigation, detail);
           } else if (status === 403) {
-            Alert.alert('참여 불가', '강퇴된 방에는 참여할 수 없습니다.');
+            Alert.alert(
+              t('paxi.deepLink.cannotJoinTitle'),
+              t('paxi.deepLink.kicked'),
+            );
           } else {
             Alert.alert(
-              '오류',
-              detail
-                ? `방 입장에 실패했습니다.\n${detail}`
-                : '방 입장에 실패했습니다.',
+              t('common.error'),
+              [t('paxi.deepLink.enterFailed'), detail]
+                .filter(Boolean)
+                .join('\n'),
             );
           }
         }
@@ -223,21 +251,19 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
     if (status === 401) {
       await handleUnauthorizedError(navigation, detail);
     } else if (status === 404) {
-      Alert.alert('오류', '방을 찾을 수 없습니다.', [
+      Alert.alert(t('common.error'), t('paxi.deepLink.roomNotFound'), [
         {
-          text: '확인',
+          text: t('common.confirm'),
           onPress: goBackOrResetToMain,
         },
       ]);
     } else {
       Alert.alert(
-        '오류',
-        detail
-          ? `방 정보를 불러올 수 없습니다.\n${detail}`
-          : '방 정보를 불러올 수 없습니다.',
+        t('common.error'),
+        [t('paxi.deepLink.roomLoadFailed'), detail].filter(Boolean).join('\n'),
         [
           {
-            text: '확인',
+            text: t('common.confirm'),
             onPress: goBackOrResetToMain,
           },
         ],
@@ -260,15 +286,16 @@ const DeepLinkRoomHandler: React.FC<Props> = ({navigation, route}) => {
         setShowModal(false);
         await handleUnauthorizedError(navigation, detail);
       } else if (status === 403) {
-        Alert.alert('참여 불가', '강퇴된 방에는 참여할 수 없습니다.');
+        Alert.alert(
+          t('paxi.deepLink.cannotJoinTitle'),
+          t('paxi.deepLink.kicked'),
+        );
         setShowModal(false);
         goBackOrResetToMain();
       } else {
         Alert.alert(
-          '참여 실패',
-          detail
-            ? `방 참여에 실패했습니다.\n${detail}`
-            : '방 참여에 실패했습니다.',
+          t('paxi.deepLink.joinFailedTitle'),
+          [t('paxi.room.joinFailed'), detail].filter(Boolean).join('\n'),
         );
         setShowModal(false);
         goBackOrResetToMain();

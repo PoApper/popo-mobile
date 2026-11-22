@@ -451,6 +451,22 @@
       "start": "Start Paxi",
       "nicknameCreated": "Nickname created. Please log in again to continue.",
       "nicknameExists": "You already have a nickname."
+    },
+    "deepLink": {
+      "nicknameRequiredTitle": "Nickname required",
+      "nicknameRequiredBody": "Set a nickname to use the carpool service.",
+      "loginRequiredTitle": "Login required",
+      "loginRequiredBody": "Log in to join this room.",
+      "invalidLink": "This room link is invalid.",
+      "authCheckFailed": "Couldn't check your login status.",
+      "userInfoFailed": "Couldn't load your user info.",
+      "alreadyJoined": "You're already in this room.\nTaking you there.",
+      "cannotJoinTitle": "Can't join",
+      "kicked": "You can't rejoin a room you were removed from.",
+      "enterFailed": "Couldn't enter the room.",
+      "roomNotFound": "Room not found.",
+      "roomLoadFailed": "Couldn't load the room.",
+      "joinFailedTitle": "Join failed"
     }
   }
 }
