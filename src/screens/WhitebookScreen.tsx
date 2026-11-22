@@ -11,6 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {RootStackParamList} from '@navigation/types';
@@ -29,12 +30,16 @@ interface WhitebookItem {
   clickCount: number;
 }
 
+const sortTypes = ['sortAlphabetic', 'sortViews'] as const;
+
 const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
 
   // const [isLoading, setIsLoading] = useState(true);
   const [whiteBookItems, setWhiteBookItems] = useState<WhitebookItem[]>([]);
-  const [sortType, setSortType] = useState('조회순');
+  const [sortType, setSortType] =
+    useState<(typeof sortTypes)[number]>('sortViews');
 
   useEffect(() => {
     const fetchWhitebookItems = async () => {
@@ -60,38 +65,38 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
 
-  if (sortType === '조회순') {
+  if (sortType === 'sortViews') {
     whiteBookItems.sort((a, b) => b.clickCount - a.clickCount);
-  } else if (sortType === '가나다순') {
+  } else if (sortType === 'sortAlphabetic') {
     whiteBookItems.sort((a, b) => a.title.localeCompare(b.title));
   }
 
   const handleLinkPress = async (title: string, link: string) => {
     try {
       const alertTitle = link.includes('cdn.popo.poapper.club')
-        ? 'POPO 사이트로 이동 합니다'
+        ? t('whitebook.popoLinkTitle')
         : link.includes('postech.ac.kr')
-        ? 'POSTECH 사이트로 이동 합니다.'
-        : '외부 사이트로 이동 합니다.';
+        ? t('whitebook.postechLinkTitle')
+        : t('whitebook.externalLinkTitle');
       const txt =
         link.includes('cdn.popo.poapper.club') || link.includes('postech.ac.kr')
-          ? `'${title}'로 이동 합니다.`
-          : `'${link}'로 이동 합니다.`;
+          ? t('whitebook.linkBody', {target: title})
+          : t('whitebook.linkBody', {target: link});
       Alert.alert(alertTitle, txt, [
         {
-          text: '취소',
+          text: t('common.cancel'),
           style: 'cancel',
         },
         {
-          text: '확인',
+          text: t('common.confirm'),
           onPress: () => {
             Linking.openURL(link);
           },
         },
       ]);
     } catch (error) {
-      Alert.alert('오류', '링크를 여는 중 문제가 발생했습니다.', [
-        {text: '확인'},
+      Alert.alert(t('common.error'), t('whitebook.openFailed'), [
+        {text: t('common.confirm')},
       ]);
       console.error('링크 오픈 오류:', error);
     }
@@ -104,18 +109,17 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
         backgroundColor={backgroundStyle.backgroundColor}
       />
 
-      <CommonHeader navigation={navigation} title="생활백서" />
+      <CommonHeader navigation={navigation} title={t('whitebook.title')} />
 
       <View style={styles.descriptionContainer}>
         <Text style={[styles.descriptionText, {color: textColor}]}>
-          야생의 POSTECH에서 살아남기 위한 가이드! 📚{'\n'}
-          카카오톡 플러스친구 'POSTECH 생활백서'를 통해서도 이용하실 수 있습니다
+          {t('whitebook.description')}
         </Text>
       </View>
 
       {/* 정렬 버튼 */}
       <View style={styles.sortButtons}>
-        {['가나다순', '조회순'].map(type => (
+        {sortTypes.map(type => (
           <TouchableOpacity
             key={type}
             style={[
@@ -133,7 +137,7 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
                 {color: textColor},
                 sortType === type && {color: isDarkMode ? '#000' : '#fff'},
               ]}>
-              {type}
+              {t(`common.${type}`)}
             </Text>
           </TouchableOpacity>
         ))}
@@ -151,6 +155,7 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
               {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
             ]}
             onPress={() => {
+              // 서버에 저장된 항목 제목과 비교하므로 번역하지 않는다.
               if (item.title === '교내 셔틀버스 시간표') {
                 navigation.navigate('CampusShuttle');
               } else {

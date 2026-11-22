@@ -29,7 +29,8 @@
     "notice": "Notice",
     "loading": "Loading…",
     "sortAlphabetic": "A–Z",
-    "sortViews": "Most viewed"
+    "sortViews": "Most viewed",
+    "sortRecent": "Newest"
   },
   "nav": {
     "home": "Home",
@@ -660,5 +661,38 @@
   "studentAssociation": {
     "title": "Student Groups",
     "empty": "No student groups yet."
+  },
+  "whitebook": {
+    "title": "Campus Guide",
+    "description": "Your survival guide for life at POSTECH! 📚\nYou can also find the Campus Guide on KakaoTalk.",
+    "popoLinkTitle": "Opening the POPO site",
+    "postechLinkTitle": "Opening the POSTECH site",
+    "externalLinkTitle": "Opening an external site",
+    "linkBody": "You'll be taken to '{{target}}'.",
+    "openFailed": "Something went wrong while opening the link."
+  },
+  "benefits": {
+    "title": "Affiliates",
+    "types": {
+      "affiliate": "Affiliates",
+      "discount": "Discounts"
+    },
+    "region": "📍 Area:",
+    "openHours": "🕒 Hours:",
+    "phone": "📞 Phone:",
+    "collapse": "Show less ▲",
+    "showDetails": "Show details ▼",
+    "showMore": "Show more ▼"
+  },
+  "shuttle": {
+    "title": "Shuttle Schedule",
+    "facultyArea": "Faculty Apartment Area",
+    "campusArea": "POSTECH Campus Area",
+    "stops": "Shuttle Bus Stop",
+    "weekdayOnly": "Shuttle bus operates only on weekdays",
+    "noWeekend": "There is no campus shuttle bus support on holidays and weekends",
+    "period": "The campus shuttle bus support period: 2025.02.17(Mon) ~ 2025.06.05(Thu)",
+    "effectiveDate": "Implementation date: 2025.02.17(Mon)",
+    "contact": "Contact: 054-279-3536 (Vehicle Division)"
   }
 }

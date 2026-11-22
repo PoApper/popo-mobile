@@ -13,16 +13,24 @@ import {
   Platform,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
+import i18next from 'i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {RootStackParamList} from '@navigation/types';
 import CommonHeader from '@components/CommonHeader';
+import {getCurrentLocale} from '@utils/i18n';
+
+// 한국어 화면은 원래처럼 영문을 아래에 함께 적는다. 영어 화면에서는 영문만 보인다.
+const tEn = i18next.getFixedT('en');
 
 type CampusShuttleScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'CampusShuttle'>;
 };
 
 const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({navigation}) => {
+  const {t} = useTranslation();
+  const showEnglishLine = getCurrentLocale() === 'ko';
   const isDarkMode = useColorScheme() === 'dark';
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
@@ -44,15 +52,19 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({navigation}) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="셔틀버스 시간표" />
+      <CommonHeader navigation={navigation} title={t('shuttle.title')} />
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.section}>
           <View style={styles.scheduleSection}>
-            <Text style={[styles.title, {color: textColor}]}>교수 아파트</Text>
-            <Text style={[styles.subtitle, {color: textColor}]}>
-              Faculty Apartment Area
+            <Text style={[styles.title, {color: textColor}]}>
+              {t('shuttle.facultyArea')}
             </Text>
+            {showEnglishLine && (
+              <Text style={[styles.subtitle, {color: textColor}]}>
+                {tEn('shuttle.facultyArea')}
+              </Text>
+            )}
             <TouchableOpacity onPress={() => setSelectedImage(0)}>
               <Image
                 source={require('../../assets/shuttle-faculty-apartment-area.png')}
@@ -63,10 +75,14 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({navigation}) => {
           </View>
 
           <View style={[styles.scheduleSection, styles.marginTop]}>
-            <Text style={[styles.title, {color: textColor}]}>교내 셔틀</Text>
-            <Text style={[styles.subtitle, {color: textColor}]}>
-              POSTECH Campus Area
+            <Text style={[styles.title, {color: textColor}]}>
+              {t('shuttle.campusArea')}
             </Text>
+            {showEnglishLine && (
+              <Text style={[styles.subtitle, {color: textColor}]}>
+                {tEn('shuttle.campusArea')}
+              </Text>
+            )}
             <TouchableOpacity onPress={() => setSelectedImage(1)}>
               <Image
                 source={require('../../assets/shuttle-campus.png')}
@@ -78,11 +94,13 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({navigation}) => {
 
           <View style={[styles.scheduleSection, styles.marginTop]}>
             <Text style={[styles.title, {color: textColor}]}>
-              셔틀버스 정류장
+              {t('shuttle.stops')}
             </Text>
-            <Text style={[styles.subtitle, {color: textColor}]}>
-              Shuttle Bus Stop
-            </Text>
+            {showEnglishLine && (
+              <Text style={[styles.subtitle, {color: textColor}]}>
+                {tEn('shuttle.stops')}
+              </Text>
+            )}
             <TouchableOpacity onPress={() => setSelectedImage(2)}>
               <Image
                 source={require('../../assets/shuttle-bus-stop.png')}
@@ -96,44 +114,53 @@ const CampusShuttle: React.FC<CampusShuttleScreenProps> = ({navigation}) => {
         <View style={[styles.section]}>
           <View style={styles.textContainer}>
             <Text style={[styles.text, {color: textColor}]}>
-              주중(월~금)에만 운행
+              {t('shuttle.weekdayOnly')}
             </Text>
-            <Text style={[styles.englishText, {color: textColor}]}>
-              Shuttle bus operates only on weekdays
-            </Text>
+            {showEnglishLine && (
+              <Text style={[styles.englishText, {color: textColor}]}>
+                {tEn('shuttle.weekdayOnly')}
+              </Text>
+            )}
           </View>
           <View style={styles.textContainer}>
             <Text style={[styles.text, {color: textColor}]}>
-              휴일 및 주말에는 차량 운행 없음.
+              {t('shuttle.noWeekend')}
             </Text>
-            <Text style={[styles.englishText, {color: textColor}]}>
-              There is no campus shuttle bus support on holidays and weekends
-            </Text>
+            {showEnglishLine && (
+              <Text style={[styles.englishText, {color: textColor}]}>
+                {tEn('shuttle.noWeekend')}
+              </Text>
+            )}
           </View>
           <View style={styles.textContainer}>
             <Text style={[styles.text, {color: textColor}]}>
-              학기중 운행 기간: 2025.02.17(월) ~ 2025.06.05(목)
+              {t('shuttle.period')}
             </Text>
-            <Text style={[styles.englishText, {color: textColor}]}>
-              The campus shuttle bus support period: 2025.02.17(Mon) ~
-              2025.06.05(Thu)
-            </Text>
+            {showEnglishLine && (
+              <Text style={[styles.englishText, {color: textColor}]}>
+                {tEn('shuttle.period')}
+              </Text>
+            )}
           </View>
           <View style={styles.textContainer}>
             <Text style={[styles.text, {color: textColor}]}>
-              시행일자: 2025.02.17(월)
+              {t('shuttle.effectiveDate')}
             </Text>
-            <Text style={[styles.englishText, {color: textColor}]}>
-              Implementation date: 2025.02.17(Mon)
-            </Text>
+            {showEnglishLine && (
+              <Text style={[styles.englishText, {color: textColor}]}>
+                {tEn('shuttle.effectiveDate')}
+              </Text>
+            )}
           </View>
           <View style={styles.textContainer}>
             <Text style={[styles.text, {color: textColor}]}>
-              문의처: 054-279-3536 (차량반)
+              {t('shuttle.contact')}
             </Text>
-            <Text style={[styles.englishText, {color: textColor}]}>
-              Contact: 054-279-3536 (Vehicle Division)
-            </Text>
+            {showEnglishLine && (
+              <Text style={[styles.englishText, {color: textColor}]}>
+                {tEn('shuttle.contact')}
+              </Text>
+            )}
           </View>
         </View>
       </ScrollView>

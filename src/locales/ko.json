@@ -29,7 +29,8 @@
     "notice": "안내",
     "loading": "로딩중...",
     "sortAlphabetic": "가나다순",
-    "sortViews": "조회순"
+    "sortViews": "조회순",
+    "sortRecent": "등록순"
   },
   "nav": {
     "home": "홈",
@@ -660,5 +661,38 @@
   "studentAssociation": {
     "title": "학생단체",
     "empty": "등록된 학생단체가 없습니다."
+  },
+  "whitebook": {
+    "title": "생활백서",
+    "description": "야생의 POSTECH에서 살아남기 위한 가이드! 📚\n카카오톡 플러스친구 'POSTECH 생활백서'를 통해서도 이용하실 수 있습니다",
+    "popoLinkTitle": "POPO 사이트로 이동 합니다",
+    "postechLinkTitle": "POSTECH 사이트로 이동 합니다.",
+    "externalLinkTitle": "외부 사이트로 이동 합니다.",
+    "linkBody": "'{{target}}'로 이동 합니다.",
+    "openFailed": "링크를 여는 중 문제가 발생했습니다."
+  },
+  "benefits": {
+    "title": "총학 제휴업체",
+    "types": {
+      "affiliate": "제휴 업체",
+      "discount": "할인 업체"
+    },
+    "region": "📍 지역:",
+    "openHours": "🕒 영업시간:",
+    "phone": "📞 연락처:",
+    "collapse": "접기 ▲",
+    "showDetails": "상세정보 보기 ▼",
+    "showMore": "더보기 ▼"
+  },
+  "shuttle": {
+    "title": "셔틀버스 시간표",
+    "facultyArea": "교수 아파트",
+    "campusArea": "교내 셔틀",
+    "stops": "셔틀버스 정류장",
+    "weekdayOnly": "주중(월~금)에만 운행",
+    "noWeekend": "휴일 및 주말에는 차량 운행 없음.",
+    "period": "학기중 운행 기간: 2025.02.17(월) ~ 2025.06.05(목)",
+    "effectiveDate": "시행일자: 2025.02.17(월)",
+    "contact": "문의처: 054-279-3536 (차량반)"
   }
 }
