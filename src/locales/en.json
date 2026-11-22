@@ -374,8 +374,8 @@
       "jigok": "Jigok Center",
       "studentHall": "Student Hall",
       "changeUp": "ChangeUp Ground",
-      "ktx": "KTX Pohang Station",
-      "terminal": "Pohang Bus Terminal"
+      "ktx": "KTX Pohang",
+      "terminal": "Pohang Terminal"
     },
     "durationRange": "{{min}}–{{max}} min",
     "customInput": "Enter manually",
