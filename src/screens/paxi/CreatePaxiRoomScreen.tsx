@@ -14,8 +14,10 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 
 import {RootStackParamList} from '@navigation/types';
+import {getCurrentLocale} from '@utils/i18n';
 import paxi_api from '@utils/paxi_api';
 import {
   getPaxiDistanceInfo,
@@ -43,6 +45,7 @@ interface NewRoomBody {
 }
 
 const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
+  const {t} = useTranslation();
   const [roomName, setRoomName] = useState('');
   const [roomDetails, setRoomDetails] = useState('');
   const [departureName, setDepartureName] = useState('');
@@ -94,9 +97,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
       .post('room', body)
       .then(res => {
         if (res.status === 201) {
-          Alert.alert('성공', '방을 성공적으로 생성했습니다.', [
+          Alert.alert(t('common.success'), t('paxi.form.created'), [
             {
-              text: '확인',
+              text: t('common.confirm'),
               onPress: () => {
                 navigation.reset({
                   index: 1,
@@ -120,8 +123,12 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
         }
       })
       .catch(error => {
-        const message = error?.response?.data?.message ?? '알 수 없는 오류';
-        Alert.alert('실패', `방을 생성하는데 실패했습니다:\n${message}`);
+        const message =
+          error?.response?.data?.message ?? t('common.unknownError');
+        Alert.alert(
+          t('common.failure'),
+          t('paxi.form.createFailed', {message}),
+        );
       });
   }
 
@@ -138,7 +145,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
     const now = new Date();
 
     if (combined.getTime() < now.getTime()) {
-      Alert.alert('오류', '현재 이후의 시각만 선택할 수 있습니다.');
+      Alert.alert(t('common.error'), t('paxi.form.futureOnly'));
       setSelectedDateTime(roundUpToNearest10Minutes(now));
     } else {
       setSelectedDateTime(combined);
@@ -160,7 +167,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
     const now = new Date();
 
     if (combined.getTime() < now.getTime()) {
-      Alert.alert('오류', '현재 이후의 시각만 선택할 수 있습니다.');
+      Alert.alert(t('common.error'), t('paxi.form.futureOnly'));
       setSelectedDateTime(roundUpToNearest10Minutes(now));
     } else {
       setSelectedDateTime(combined);
@@ -174,19 +181,19 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
 
   const checkInputValid = () => {
     if (!roomName || !departureName || !arrivalName) {
-      Alert.alert('오류', '모든 필수 필드를 입력해주세요.');
+      Alert.alert(t('common.error'), t('paxi.form.requiredFields'));
       return;
     } else if (roomName.length < 2 || roomName.length > 20) {
-      Alert.alert('오류', '방 제목은 2자 이상 20자 이하로 입력해주세요.');
+      Alert.alert(t('common.error'), t('paxi.form.titleLength'));
       return;
     } else if (departureName.length < 2 || departureName.length > 20) {
-      Alert.alert('오류', '출발지는 2자 이상 20자 이하로 입력해주세요.');
+      Alert.alert(t('common.error'), t('paxi.form.departureLength'));
       return;
     } else if (arrivalName.length < 2 || arrivalName.length > 20) {
-      Alert.alert('오류', '도착지는 2자 이상 20자 이하로 입력해주세요.');
+      Alert.alert(t('common.error'), t('paxi.form.arrivalLength'));
       return;
     } else if (roomDetails.length > 100) {
-      Alert.alert('오류', '상세내용은 100자 이하로 입력해주세요.');
+      Alert.alert(t('common.error'), t('paxi.form.detailsLength'));
       return;
     } else {
       createNewRoom();
@@ -227,7 +234,10 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={C.bg}
       />
-      <CommonHeader navigation={navigation} title="방 생성하기" />
+      <CommonHeader
+        navigation={navigation}
+        title={t('paxi.form.createTitle')}
+      />
       <KeyboardAwareScrollView
         style={{flex: 1}}
         contentContainerStyle={[styles.container, {paddingHorizontal: 16}]}
@@ -238,16 +248,17 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
           {/* 방 제목 */}
           <View>
             <Text style={[styles.label, {color: C.text}]}>
-              방 제목 <Text style={styles.requiredText}>*</Text>
+              {t('paxi.form.roomTitle')}{' '}
+              <Text style={styles.requiredText}>*</Text>
             </Text>
             <TextInput
               style={[inputBase, {height: 45}]}
-              placeholder="제목을 입력해주세요 (최대 20자)"
+              placeholder={t('paxi.form.titlePlaceholder')}
               placeholderTextColor={C.placeholder}
               value={roomName}
               onChangeText={setRoomName}
               maxLength={20}
-              accessibilityLabel="방 제목 입력"
+              accessibilityLabel={t('paxi.form.roomTitle')}
               returnKeyType="done"
             />
             <Text style={[styles.charCount, {color: C.placeholder}]}>
@@ -258,7 +269,8 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
           {/* 위치 */}
           <View>
             <Text style={[styles.label, {color: C.text}]}>
-              위치 <Text style={styles.requiredText}>*</Text>
+              {t('paxi.form.location')}{' '}
+              <Text style={styles.requiredText}>*</Text>
             </Text>
 
             <View
@@ -269,7 +281,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               <View style={styles.row}>
                 <View style={[styles.dot, {backgroundColor: C.dotBlack}]} />
                 <DropdownMenu
-                  placeholderText={'어디서 출발하시나요? (최대 10자)'}
+                  placeholderText={t('paxi.form.departurePlaceholder')}
                   options={getPaxiLocations().filter(
                     item => item.id !== arrivalName,
                   )}
@@ -285,7 +297,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
               <View style={styles.row}>
                 <View style={[styles.dot, {backgroundColor: C.dotRed}]} />
                 <DropdownMenu
-                  placeholderText={'어디로 떠나시나요? (최대 10자)'}
+                  placeholderText={t('paxi.form.arrivalPlaceholder')}
                   options={getPaxiLocations().filter(
                     item => item.id !== departureName,
                   )}
@@ -313,8 +325,10 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                   ]}>
                   <Text
                     style={{color: C.text, fontSize: 13, fontWeight: '600'}}>
-                    거리 {getPaxiDistanceInfo(departureName, arrivalName)} ·
-                    예상 {getPaxiDurationInfo(departureName, arrivalName)}
+                    {t('paxi.form.routeInfo', {
+                      distance: getPaxiDistanceInfo(departureName, arrivalName),
+                      duration: getPaxiDurationInfo(departureName, arrivalName),
+                    })}
                   </Text>
                 </View>
               )}
@@ -324,7 +338,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
           <View style={{flexDirection: 'row', gap: 12}}>
             <View style={{flex: 1}}>
               <Text style={[styles.label, {color: C.text}]}>
-                날짜 <Text style={styles.requiredText}>*</Text>
+                {t('paxi.date')} <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 style={[
@@ -344,7 +358,8 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
 
             <View style={{flex: 1}}>
               <Text style={[styles.label, {color: C.text}]}>
-                출발 시각 <Text style={styles.requiredText}>*</Text>
+                {t('paxi.form.departureTime')}{' '}
+                <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 style={[
@@ -357,7 +372,7 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
                 onPress={() => setTimePickerVisible(true)}
                 activeOpacity={0.7}>
                 <Text style={{color: C.text, fontSize: 16, fontWeight: '600'}}>
-                  {selectedDateTime.toLocaleTimeString([], {
+                  {selectedDateTime.toLocaleTimeString(getCurrentLocale(), {
                     hour: '2-digit',
                     minute: '2-digit',
                   })}
@@ -373,9 +388,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             onConfirm={handleDateConfirm}
             onCancel={() => setDatePickerVisible(false)}
             minimumDate={minimumDate}
-            locale="ko-KR"
-            confirmTextIOS="확인"
-            cancelTextIOS="취소"
+            locale={getCurrentLocale()}
+            confirmTextIOS={t('common.confirm')}
+            cancelTextIOS={t('common.cancel')}
           />
 
           <DateTimePickerModal
@@ -385,8 +400,8 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
             onConfirm={handleTimeConfirm}
             onCancel={() => setTimePickerVisible(false)}
             is24Hour={true}
-            confirmTextIOS="확인"
-            cancelTextIOS="취소"
+            confirmTextIOS={t('common.confirm')}
+            cancelTextIOS={t('common.cancel')}
             minimumDate={roundUpToNearest10Minutes(
               isToday(selectedDateTime)
                 ? new Date()
@@ -406,13 +421,15 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
           {/* 상세내용 */}
           <View>
             <Text style={[styles.label, {color: C.text}]}>
-              상세내용{' '}
-              <Text style={{color: C.textSub, fontSize: 12}}>(선택)</Text>
+              {t('paxi.form.details')}{' '}
+              <Text style={{color: C.textSub, fontSize: 12}}>
+                {t('paxi.form.optional')}
+              </Text>
             </Text>
             <TextInput
               style={[inputBase, {height: 112}]}
               multiline
-              placeholder="캐리어 큰 거 하나 있습니다!"
+              placeholder={t('paxi.form.detailsPlaceholder')}
               placeholderTextColor={C.placeholder}
               value={roomDetails}
               onChangeText={setRoomDetails}
@@ -427,7 +444,8 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
           {/* 최대 인원 */}
           <View>
             <Text style={[styles.label, {color: C.text}]}>
-              최대 인원 <Text style={styles.requiredText}>*</Text>
+              {t('paxi.form.maxParticipants')}{' '}
+              <Text style={styles.requiredText}>*</Text>
             </Text>
             <View
               style={[
@@ -480,7 +498,9 @@ const CreatePaxiRoomScreen = ({navigation}: CreatePaxiRoomScreenProps) => {
           disabled={disabledCreate}
           accessibilityState={{disabled: disabledCreate}}
           activeOpacity={disabledCreate ? 1 : 0.85}>
-          <Text style={styles.createButtonText}>방 생성하기</Text>
+          <Text style={styles.createButtonText}>
+            {t('paxi.form.createTitle')}
+          </Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
     </SafeAreaView>
