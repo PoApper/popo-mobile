@@ -1,6 +1,9 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {textColor} from '@styles/default';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
+
+import {getCurrentLocale} from '@utils/i18n';
 
 export interface ReportData {
   id: number;
@@ -41,6 +44,7 @@ const ReportDataCard = ({
   isDarkMode,
   setReport,
 }: ReportDataCardProps) => {
+  const {t} = useTranslation();
   const itemDescriptionStyle = [
     styles.itemDescription,
     {color: isDarkMode ? '#888' : '#666'},
@@ -54,13 +58,16 @@ const ReportDataCard = ({
       onPress={() => setReport(reportData)}>
       <View style={styles.textContainer}>
         <Text style={[styles.itemTitle, {color: textColor(isDarkMode)}]}>
-          ID{reportData.id} {reportData.targetUserNickname} 신고
+          {t('paxi.report.cardTitle', {
+            id: reportData.id,
+            name: reportData.targetUserNickname,
+          })}
         </Text>
         <Text style={[itemDescriptionStyle, {color: '#cacaca'}]}>
-          사유) {reportData.reason}
+          {t('paxi.report.cardReason', {reason: reportData.reason})}
         </Text>
         <Text style={itemDescriptionStyle}>
-          {new Date(reportData.createdAt).toLocaleString()}
+          {new Date(reportData.createdAt).toLocaleString(getCurrentLocale())}
         </Text>
       </View>
       <View

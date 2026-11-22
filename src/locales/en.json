@@ -608,6 +608,25 @@
       "registerTitle": "Add account info",
       "existing": "You already have account info.\nYou can edit it below or keep it as is.",
       "notes": "• Your saved account is used by default for Paxi settlements.\n• Account info is encrypted and stored securely.\n• You can edit it on this page at any time."
+    },
+    "report": {
+      "done": "Your report has been submitted.",
+      "failed": "Couldn't submit the report.",
+      "confirm": "Are you sure you want to\nreport <name>{{name}}</name>?",
+      "listTitle": "Paxi reports",
+      "listLoadFailed": "Couldn't load reports: {{message}}",
+      "empty": "No reports yet.",
+      "infoTitle": "Report details",
+      "room": "Room",
+      "target": "User",
+      "reason": "Reason",
+      "status": "Status",
+      "pending": "In review",
+      "resolved": "Resolved",
+      "resolver": "Handled by",
+      "resolution": "Comment",
+      "cardTitle": "#{{id}} Report on {{name}}",
+      "cardReason": "Reason: {{reason}}"
     }
   }
 }

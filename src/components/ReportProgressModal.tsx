@@ -11,7 +11,9 @@ import {
   Platform,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 import {backgroundColor, textColor} from '@styles/default';
+import {getCurrentLocale} from '@utils/i18n';
 import {useEffect, useState} from 'react';
 import {ReportData} from './ReportDataCard';
 
@@ -48,6 +50,7 @@ const ReportProgressModal = ({
   setModalVisible,
   reportData,
 }: ReportProgressModalProps) => {
+  const {t} = useTranslation();
   const modalWidth = Dimensions.get('window').width * 0.85;
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -102,7 +105,7 @@ const ReportProgressModal = ({
                         styles.modalTitle,
                         {color: textColor(isDarkMode)},
                       ]}>
-                      신고 정보
+                      {t('paxi.report.infoTitle')}
                     </Text>
                   </View>
                   <InfoRow
@@ -112,29 +115,33 @@ const ReportProgressModal = ({
                   />
                   <InfoRow
                     isDarkMode={isDarkMode}
-                    label="방"
+                    label={t('paxi.report.room')}
                     value={reportData.targetRoomName}
                   />
                   <InfoRow
                     isDarkMode={isDarkMode}
-                    label="대상"
+                    label={t('paxi.report.target')}
                     value={reportData.targetUserNickname}
                   />
                   <InfoRow
                     isDarkMode={isDarkMode}
-                    label="사유"
+                    label={t('paxi.report.reason')}
                     value={reportData.reason}
                   />
                   <InfoRow
                     isDarkMode={isDarkMode}
-                    label="날짜"
-                    value={new Date(reportData.createdAt).toLocaleString()}
+                    label={t('paxi.date')}
+                    value={new Date(reportData.createdAt).toLocaleString(
+                      getCurrentLocale(),
+                    )}
                   />
                   <InfoRow
                     isDarkMode={isDarkMode}
-                    label="상태"
+                    label={t('paxi.report.status')}
                     value={
-                      reportData.status === 'PENDING' ? '처리 중' : '처리 완료'
+                      reportData.status === 'PENDING'
+                        ? t('paxi.report.pending')
+                        : t('paxi.report.resolved')
                     }
                   />
                   {reportData.status === 'COMPLETED' && (
@@ -147,12 +154,12 @@ const ReportProgressModal = ({
                       />
                       <InfoRow
                         isDarkMode={isDarkMode}
-                        label="처리자"
+                        label={t('paxi.report.resolver')}
                         value={reportData.resolverName}
                       />
                       <InfoRow
                         isDarkMode={isDarkMode}
-                        label="의견"
+                        label={t('paxi.report.resolution')}
                         value={reportData.resolutionMessage}
                       />
                     </>
@@ -168,7 +175,7 @@ const ReportProgressModal = ({
                         styles.closeButtonText,
                         {color: textColor(isDarkMode)},
                       ]}>
-                      닫기
+                      {t('common.close')}
                     </Text>
                   </TouchableOpacity>
                 </View>

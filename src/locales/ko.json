@@ -608,6 +608,25 @@
       "registerTitle": "계좌 정보 등록",
       "existing": "기존 계좌 정보가 있습니다.\n아래 정보를 수정하거나 그대로 유지할 수 있습니다.",
       "notes": "• 등록된 계좌 정보는 Paxi 정산 시 기본값으로 사용됩니다.\n• 계좌 정보는 안전하게 암호화되어 저장됩니다.\n• 언제든지 이 페이지에서 계좌 정보를 수정할 수 있습니다."
+    },
+    "report": {
+      "done": "신고 요청이 처리되었습니다.",
+      "failed": "신고 요청에 실패했습니다.",
+      "confirm": "<name>{{name}}</name>님을\n정말로 신고하실건가요?",
+      "listTitle": "Paxi 신고 목록",
+      "listLoadFailed": "신고 목록을 불러오는데 실패했습니다: {{message}}",
+      "empty": "신고 내역이 없습니다.",
+      "infoTitle": "신고 정보",
+      "room": "방",
+      "target": "대상",
+      "reason": "사유",
+      "status": "상태",
+      "pending": "처리 중",
+      "resolved": "처리 완료",
+      "resolver": "처리자",
+      "resolution": "의견",
+      "cardTitle": "ID{{id}} {{name}} 신고",
+      "cardReason": "사유) {{reason}}"
     }
   }
 }
