@@ -138,6 +138,10 @@ Firebase credentials are required: `google-services.json` (Android), `GoogleServ
 - PR은 squash merge만 사용 (merge commit 비허용).
 - `android/version.properties`는 릴리즈 시에만 커밋.
 
+## 모바일 회귀 테스트 (PR 전 필수)
+
+앱 코드(`src/`, `index.js`, `android/`, `ios/`)를 바꾼 PR은 만들기 전에 `mobile-regression` 스킬을 실행한다(요청이 없어도). Maestro 흐름은 `e2e/flows/`, 실행은 `e2e/run.sh`, PR 첨부는 `e2e/publish.sh`. 테스트 계정은 커밋하지 않는 `e2e/.env.local`에 둔다. e2e 실행 중 LogBox는 dev 빌드 전용 스위치(`index.js`)로 꺼진다.
+
 ## Code Style
 
 - Prettier: single quotes, no bracket spacing, trailing commas everywhere, avoid arrow parens

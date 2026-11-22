@@ -49,6 +49,22 @@ iOS는 처음 받았거나 `package.json`이 바뀐 뒤에는 `cd ios && pod ins
 - **[Android 가이드](./android/README.md)**
 - **[iOS 가이드](./ios/README.md)**
 
+## 회귀 테스트 (e2e)
+
+[Maestro](https://docs.maestro.dev)로 iOS 시뮬레이터와 Android 에뮬레이터에서 화면을 돌리고 스크린샷을 PR에 붙입니다. 에이전트(Claude Code, Codex)는 앱 코드를 바꾼 PR마다 이 과정을 자동으로 수행합니다(`.claude/skills/mobile-regression/SKILL.md`).
+
+```bash
+brew install mobile-dev-inc/tap/maestro
+cp e2e/.env.example e2e/.env.local   # dev 테스트 계정 입력 (커밋 금지)
+npm run start                        # Metro
+
+e2e/run.sh                           # smoke: 하단 탭 4개 × iOS/Android × 한국어/영어
+e2e/run.sh e2e/flows/<영역>/<화면>.yaml
+e2e/publish.sh                       # 현재 브랜치 PR 본문에 스크린샷 첨부
+```
+
+흐름 파일은 `e2e/flows/`에 쌓입니다. 새 화면을 만들면 흐름도 같이 추가해 주세요.
+
 ## 앱 버전 변경
 
 ### Android
