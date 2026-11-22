@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 
 import {RootStackParamList} from '@navigation/types';
 import CommonHeader from '@components/CommonHeader';
@@ -31,6 +32,7 @@ const OpenSourceLicensesScreen = ({
   navigation,
 }: OpenSourceLicensesScreenProps) => {
   const {isDarkMode, colors} = useTheme();
+  const {t} = useTranslation();
   const [selected, setSelected] = useState<OssPackage | null>(null);
 
   const openUrl = useCallback(async (url: string) => {
@@ -60,7 +62,7 @@ const OpenSourceLicensesScreen = ({
         style={[styles.item, {borderBottomColor: colors.border.primary}]}
         onPress={() => handlePress(item)}
         accessibilityRole="link"
-        accessibilityLabel={`${item.name} 라이선스 보기`}>
+        accessibilityLabel={t('about.ossViewLicense', {name: item.name})}>
         <View style={styles.itemTitle}>
           <Text style={[styles.name, {color: colors.text.primary}]}>
             {item.name}
@@ -76,7 +78,7 @@ const OpenSourceLicensesScreen = ({
         </Text>
       </TouchableOpacity>
     ),
-    [colors, handlePress],
+    [colors, handlePress, t],
   );
 
   return (
@@ -86,7 +88,7 @@ const OpenSourceLicensesScreen = ({
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={colors.background.primary}
       />
-      <CommonHeader navigation={navigation} title="오픈소스 라이선스" />
+      <CommonHeader navigation={navigation} title={t('about.ossLicenses')} />
 
       <FlatList
         data={packages}
@@ -103,7 +105,7 @@ const OpenSourceLicensesScreen = ({
           <Pressable
             style={StyleSheet.absoluteFill}
             onPress={() => setSelected(null)}
-            accessibilityLabel="닫기"
+            accessibilityLabel={t('about.close')}
           />
           <View
             style={[
@@ -147,7 +149,7 @@ const OpenSourceLicensesScreen = ({
                   </Text>
                   <Text
                     style={[styles.licenseHint, {color: colors.text.tertiary}]}>
-                    표준 라이선스 페이지가 없습니다
+                    {t('about.ossNoStandardPage')}
                   </Text>
                 </View>
               ),
@@ -157,7 +159,7 @@ const OpenSourceLicensesScreen = ({
               style={styles.closeButton}
               onPress={() => setSelected(null)}>
               <Text style={[styles.closeText, {color: colors.text.secondary}]}>
-                닫기
+                {t('about.close')}
               </Text>
             </TouchableOpacity>
           </View>

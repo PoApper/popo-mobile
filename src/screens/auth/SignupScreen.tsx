@@ -14,6 +14,7 @@ import {
 import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {RootStackParamList} from '@navigation/types';
@@ -52,6 +53,7 @@ const isOkSignup = (
 
 const SignupScreen = ({navigation}: SignupScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
+  const {t} = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -73,25 +75,25 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
   const handleSignup = () => {
     // 기본적인 유효성 검사
     if (!email || !password || !confirmPassword || !name || !userType) {
-      setError('모든 필수 항목을 입력해주세요.');
+      setError(t('auth.signup.missingFields'));
       return;
     }
 
     // 포스텍 이메일 검증 강화
     const fullEmail = email.includes('@') ? email : `${email}@postech.ac.kr`;
     if (!fullEmail.endsWith('@postech.ac.kr')) {
-      setError('포스텍 이메일(@postech.ac.kr)로만 회원가입이 가능합니다.');
+      setError(t('auth.signup.postechOnly'));
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('비밀번호가 일치하지 않습니다.');
+      setError(t('auth.password.mismatch'));
       return;
     }
 
     // 비밀번호 길이 검사
     if (password.length < 8) {
-      setError('비밀번호는 최소 8자 이상이어야 합니다.');
+      setError(t('auth.password.tooShort'));
       return;
     }
 
@@ -104,13 +106,11 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
       })
       .then(() => {
         Alert.alert(
-          '회원가입 성공',
-          '회원가입에 성공했습니다! 😁\n계정 활성화 메일을 확인해주세요! \n발송 이메일: ' +
-            fullEmail +
-            '\n(1분 정도 지연 될 수 있습니다.)',
+          t('auth.signup.successTitle'),
+          t('auth.signup.success', {email: fullEmail}),
           [
             {
-              text: '확인',
+              text: t('common.confirm'),
               onPress: () => navigation.navigate('Login'),
             },
           ],
@@ -119,8 +119,8 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
       .catch(err => {
         const {detail} = getAxiosErrorInfo(err);
         Alert.alert(
-          '회원가입 실패',
-          detail ?? '알 수 없는 오류가 발생했습니다.',
+          t('auth.signup.failedTitle'),
+          detail ?? t('common.unknownError'),
         );
       });
   };
@@ -144,7 +144,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.backButtonText,
                 {color: isDarkMode ? '#FFFFFF' : '#000000'},
               ]}>
-              {'로그인 페이지로'}
+              {t('auth.signup.backToLogin')}
             </Text>
           </TouchableOpacity>
 
@@ -161,7 +161,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
               styles.headerText,
               {color: isDarkMode ? '#FFFFFF' : '#000000'},
             ]}>
-            회원가입
+            {t('auth.signup.title')}
           </Text>
 
           <View style={styles.formContainer}>
@@ -170,7 +170,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.label,
                 {color: isDarkMode ? '#FFFFFF' : '#000000'},
               ]}>
-              이름*
+              {t('auth.signup.name')}*
             </Text>
             <TextInput
               style={[
@@ -181,7 +181,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                   borderColor: isDarkMode ? '#555555' : '#E5E7EB',
                 },
               ]}
-              placeholder="예약에 사용할 실명을 입력해주세요"
+              placeholder={t('auth.signup.namePlaceholder')}
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
               value={name}
               onChangeText={setName}
@@ -242,7 +242,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.label,
                 {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
               ]}>
-              비밀번호*
+              {t('auth.signup.password')}*
             </Text>
             <TextInput
               style={[
@@ -253,7 +253,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                   borderColor: isDarkMode ? '#555555' : '#E5E7EB',
                 },
               ]}
-              placeholder="8자리 이상, 16자리 이하"
+              placeholder={t('auth.signup.passwordPlaceholder')}
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
               secureTextEntry
               value={password}
@@ -265,7 +265,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.label,
                 {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
               ]}>
-              비밀번호 확인*
+              {t('auth.signup.passwordConfirm')}*
             </Text>
             <TextInput
               style={[
@@ -276,7 +276,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                   borderColor: isDarkMode ? '#555555' : '#E5E7EB',
                 },
               ]}
-              placeholder="비밀번호를 다시 입력하세요"
+              placeholder={t('auth.signup.passwordConfirmPlaceholder')}
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#9CA3AF'}
               secureTextEntry
               value={confirmPassword}
@@ -288,7 +288,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.label,
                 {color: isDarkMode ? '#FFFFFF' : '#000000', marginTop: 16},
               ]}>
-              사용자 유형*
+              {t('auth.signup.userType')}*
             </Text>
             <View style={styles.userTypeContainer}>
               <TouchableOpacity
@@ -318,7 +318,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                           : '#000000',
                     },
                   ]}>
-                  학생
+                  {t('auth.signup.userTypes.student')}
                 </Text>
               </TouchableOpacity>
 
@@ -349,7 +349,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                           : '#000000',
                     },
                   ]}>
-                  교직원
+                  {t('auth.signup.userTypes.faculty')}
                 </Text>
               </TouchableOpacity>
 
@@ -380,7 +380,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                           : '#000000',
                     },
                   ]}>
-                  기타
+                  {t('auth.signup.userTypes.others')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -390,7 +390,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                 styles.requiredNote,
                 {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
               ]}>
-              * 필수 항목
+              {t('auth.signup.requiredNote')}
             </Text>
 
             <TouchableOpacity
@@ -409,7 +409,7 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                   styles.privacyPolicyText,
                   {color: isDarkMode ? '#FFFFFF' : '#000000'},
                 ]}>
-                개인정보 처리 방침에 동의합니다
+                {t('auth.signup.privacyAgree')}
               </Text>
             </TouchableOpacity>
 
@@ -420,7 +420,9 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
               ]}
               onPress={handleSignup}
               disabled={!okSignup}>
-              <Text style={styles.signupButtonText}>회원가입</Text>
+              <Text style={styles.signupButtonText}>
+                {t('auth.signup.submit')}
+              </Text>
             </TouchableOpacity>
 
             {error && <Text style={styles.errorText}>{error}</Text>}
@@ -431,10 +433,10 @@ const SignupScreen = ({navigation}: SignupScreenProps) => {
                   styles.loginText,
                   {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
                 ]}>
-                이미 계정이 있으신가요?
+                {t('auth.signup.haveAccount')}
               </Text>
               <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text style={styles.loginLink}>로그인</Text>
+                <Text style={styles.loginLink}>{t('auth.signup.login')}</Text>
               </TouchableOpacity>
             </View>
           </View>
