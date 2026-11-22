@@ -37,6 +37,7 @@ PR이 바꾼 화면을 실제 앱으로 띄워 확인하고, 확인한 화면을
 - `takeScreenshot` 바로 앞에는 항상 `waitForAnimationToEnd`(timeout 5000)를 둔다. 없으면 Android에서 탭 직후 이전 화면이나 로딩 중 화면이 찍힌다. 목록처럼 불러오는 동안 빈 상태가 먼저 보이는 화면은 내용이 뜰 때까지 `extendedWaitUntil`(`optional: true`)로 기다린다.
 - 스크린샷 이름: `<영역>-<화면>-<상태>-${LANGUAGE}` (예: `paxi-report-detail-resolved-${LANGUAGE}`). 이름이 PR 캡션이 된다.
 - 선택자는 `id`(= RN `testID`) 우선. 문구는 언어마다 달라지고, iOS 탭은 접근성 라벨이 `"Home, tab, 1 of 4"`처럼 붙는다. 필요한 `testID`는 컴포넌트에 추가한다(별도 커밋).
+- iOS는 누를 수 있는 카드(`TouchableOpacity`) 안의 문구를 하나의 접근성 라벨로 합친다(예: `"ADLIB, 연극"`, 아이콘 글리프가 앞에 붙기도 함). 카드 안 문구는 `'.*ADLIB.*'`처럼 정규식으로 맞춘다. Android는 문구마다 따로 잡혀 두 플랫폼 모두 통과한다.
 - 언어별 문구가 필요하면 `"${LANGUAGE == 'en' ? 'Report' : '신고'}"`처럼 쓴다(따옴표로 감싸야 YAML이 파싱된다).
 - 참고: `smoke.yaml`, Maestro 문서 https://docs.maestro.dev . 화면 구조는 `maestro --device <id> hierarchy`로 본다.
 
