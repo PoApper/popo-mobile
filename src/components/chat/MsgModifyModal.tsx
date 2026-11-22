@@ -12,6 +12,7 @@ import {
 
 import {MessageData} from '@interfaces/paxi';
 import {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {backgroundColor, textColor} from '@styles/default';
 import paxi_api from '@utils/paxi_api';
 
@@ -26,6 +27,7 @@ const MsgModifyModal = ({
   setModalVisible,
   msgData,
 }: MsgModifyModalProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [currentMsg, setCurrentMsg] = useState<string>('');
 
@@ -34,7 +36,7 @@ const MsgModifyModal = ({
       message: currentMsg,
     });
     if (res.status !== 200) {
-      Alert.alert('실패', '메시지 수정에 실패했습니다.');
+      Alert.alert(t('common.failure'), t('paxi.chat.editFailed'));
       return;
     } else {
       handleClose();
@@ -44,7 +46,7 @@ const MsgModifyModal = ({
   const handleDeleteMsg = async () => {
     const res = await paxi_api.delete(`/chat/${msgData.uuid}`);
     if (res.status !== 200) {
-      Alert.alert('실패', '메시지 삭제에 실패했습니다.');
+      Alert.alert(t('common.failure'), t('paxi.chat.deleteFailed'));
       return;
     } else {
       handleClose();
@@ -87,7 +89,7 @@ const MsgModifyModal = ({
                     color: textColor(isDarkMode),
                   },
                 ]}>
-                메시지 수정하기
+                {t('paxi.chat.editMessageTitle')}
               </Text>
 
               <TextInput
@@ -100,7 +102,7 @@ const MsgModifyModal = ({
                 ]}
                 value={currentMsg}
                 onChangeText={setCurrentMsg}
-                placeholder="텍스트를 입력해주세요."
+                placeholder={t('paxi.chat.editPlaceholder')}
                 multiline={true}
                 placeholderTextColor="#999"
                 scrollEnabled={true}
@@ -120,7 +122,7 @@ const MsgModifyModal = ({
                     },
                   ]}
                   onPress={handleModifyMsg}>
-                  <Text style={styles.buttonText}>수정하기</Text>
+                  <Text style={styles.buttonText}>{t('paxi.chat.edit')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[
@@ -130,7 +132,7 @@ const MsgModifyModal = ({
                     },
                   ]}
                   onPress={handleDeleteMsg}>
-                  <Text style={styles.buttonText}>삭제하기</Text>
+                  <Text style={styles.buttonText}>{t('paxi.chat.delete')}</Text>
                 </TouchableOpacity>
               </View>
             </View>

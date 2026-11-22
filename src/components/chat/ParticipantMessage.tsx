@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 
 import {MessageData} from '@interfaces/paxi';
 import {textColor} from '@styles/default';
@@ -21,6 +22,7 @@ const ParticipantMessage = ({
   message,
   handleUserClick,
 }: ParticipantMessageProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
@@ -55,7 +57,7 @@ const ParticipantMessage = ({
             ]}>
             {message.isDeleted ? (
               <Text style={[styles.messageText, {color: '#9b9b9b'}]}>
-                삭제됨
+                {t('paxi.chat.deleted')}
               </Text>
             ) : (
               <>
@@ -64,7 +66,7 @@ const ParticipantMessage = ({
                   {message.message}
                 </Text>
                 {message.isEdited && (
-                  <Text style={styles.editedText}>수정됨</Text>
+                  <Text style={styles.editedText}>{t('paxi.chat.edited')}</Text>
                 )}
               </>
             )}

@@ -485,7 +485,18 @@
     },
     "chat": {
       "edit": "수정하기",
-      "share": "공유하기"
+      "share": "공유하기",
+      "sendUnavailable": "서버 연결이 불안정하여 메시지를 보낼 수 없습니다.",
+      "reconnectFailed": "채팅 연결에 실패했습니다. 채팅방에 다시 입장해 주세요",
+      "reconnecting": "연결이 끊어졌습니다. 재연결 중…",
+      "messagePlaceholder": "메시지를 입력하세요...",
+      "deleted": "삭제됨",
+      "edited": "수정됨",
+      "editMessageTitle": "메시지 수정하기",
+      "editPlaceholder": "텍스트를 입력해주세요.",
+      "delete": "삭제하기",
+      "editFailed": "메시지 수정에 실패했습니다.",
+      "deleteFailed": "메시지 삭제에 실패했습니다."
     }
   }
 }

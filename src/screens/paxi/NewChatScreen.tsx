@@ -16,6 +16,7 @@ import {RouteProp, useRoute, useFocusEffect} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Socket} from 'socket.io-client';
+import {useTranslation} from 'react-i18next';
 
 import {
   UserData,
@@ -51,6 +52,7 @@ type NewChatScreenProps = {
 type ChatScreenRouteProp = RouteProp<RootStackParamList, 'NewChat'>;
 
 const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const route = useRoute<ChatScreenRouteProp>();
   const {roomUuid} = route.params;
@@ -96,9 +98,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       .catch(err => {
         console.error(err);
         const {detail} = getAxiosErrorInfo(err);
-        Alert.alert('Error', detail ?? '알 수 없는 오류가 발생했습니다.', [
+        Alert.alert(t('common.error'), detail ?? t('common.unknownError'), [
           {
-            text: 'OK',
+            text: t('common.confirm'),
             onPress: () => navigation.navigate('Home'),
           },
         ]);
@@ -112,7 +114,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
       setIsMuted(newMuted);
     } catch (err) {
       console.error('음소거 상태 변경 실패:', err);
-      Alert.alert('오류', '알림 설정 변경에 실패했습니다.');
+      Alert.alert(t('common.error'), t('paxi.chatList.muteFailed'));
     }
   };
 
@@ -339,7 +341,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
 
   const sendChat = async () => {
     if (!socketRef.current || !socketRef.current?.connected) {
-      Alert.alert('에러', '서버 연결이 불안정하여 메시지를 보낼 수 없습니다.');
+      Alert.alert(t('common.error'), t('paxi.chat.sendUnavailable'));
       return;
     }
 
@@ -374,9 +376,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
   }, []);
 
   const connectionBannerMessage = reconnectFailed
-    ? '채팅 연결에 실패했습니다. 채팅방에 다시 입장해 주세요'
+    ? t('paxi.chat.reconnectFailed')
     : !socketConnected && hasDisconnected
-    ? '연결이 끊어졌습니다. 재연결 중…'
+    ? t('paxi.chat.reconnecting')
     : null;
 
   return (
@@ -406,7 +408,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
             }
           }}>
           <Text style={[common.backButtonText, {color: textColor(isDarkMode)}]}>
-            뒤로
+            {t('common.back')}
           </Text>
         </TouchableOpacity>
         <Text style={[common.headerTitle, {color: textColor(isDarkMode)}]}>
@@ -520,7 +522,7 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
             value={newChat}
             editable={socketConnected}
             onChangeText={setNewChat}
-            placeholder="메시지를 입력하세요..."
+            placeholder={t('paxi.chat.messagePlaceholder')}
             placeholderTextColor={backgroundColor(!isDarkMode)}
             multiline={true}
             maxLength={1000}

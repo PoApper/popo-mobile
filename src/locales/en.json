@@ -485,7 +485,18 @@
     },
     "chat": {
       "edit": "Edit",
-      "share": "Share"
+      "share": "Share",
+      "sendUnavailable": "The connection is unstable, so the message can't be sent.",
+      "reconnectFailed": "Couldn't connect to the chat. Please re-enter the room.",
+      "reconnecting": "Disconnected. Reconnecting…",
+      "messagePlaceholder": "Type a message...",
+      "deleted": "Deleted",
+      "edited": "Edited",
+      "editMessageTitle": "Edit message",
+      "editPlaceholder": "Enter text.",
+      "delete": "Delete",
+      "editFailed": "Couldn't edit the message.",
+      "deleteFailed": "Couldn't delete the message."
     }
   }
 }
