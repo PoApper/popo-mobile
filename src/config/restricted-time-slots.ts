@@ -1,3 +1,5 @@
+import type {ParseKeys} from 'i18next';
+
 import {PLACE_NAMES} from '../constants/placeNames';
 import {ConcreteTimeSlot} from '../components/TimeSlotPickerModal';
 
@@ -9,15 +11,14 @@ export type TimeSlot = {
 
 export type TimeSlotPolicy = {
   name: string; // 포함 매칭에 사용할 하드코딩 이름 상수
-  notice: string; // 안내 문구
+  noticeKey: ParseKeys; // 안내 문구
   slots: TimeSlot[];
 };
 
 export const RESTRICTED_TIME_SLOT_POLICIES: TimeSlotPolicy[] = [
   {
     name: PLACE_NAMES.CINEMA_ROOM,
-    notice:
-      'RC 시네마 룸의 예약은\n18:00 ~ 21:00 / 21:00 ~ 24:00 / 00:00 ~ 03:00\n3가지 시간대만 가능 합니다.',
+    noticeKey: 'reservation.place.cinemaNotice',
     slots: [
       {start: 0, end: 3 * 60}, // 00:00~03:00
       {start: 18 * 60, end: 21 * 60}, // 18:00~21:00

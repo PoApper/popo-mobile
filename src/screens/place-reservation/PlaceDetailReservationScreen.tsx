@@ -16,8 +16,11 @@ import {Calendar} from 'react-native-calendars';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
 import {RouteProp, useFocusEffect} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 import api from '../../utils/api';
 import LazyImage from '../../components/LazyImage';
+import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 
 type PlaceDetailReservationScreenProps = {
   navigation: NativeStackNavigationProp<
@@ -29,9 +32,12 @@ type PlaceDetailReservationScreenProps = {
 
 type PlaceDetail = {
   name: string;
+  nameEn?: string | null;
   description: string;
+  descriptionEn?: string | null;
   imageUrl: string;
   location: string;
+  locationEn?: string | null;
 };
 
 type Reservation = {
@@ -50,6 +56,7 @@ const PlaceDetailReservationScreen = ({
   navigation,
   route,
 }: PlaceDetailReservationScreenProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const {placeId} = route.params;
   const [placeDetail, setPlaceDetail] = useState<PlaceDetail | null>(null);
@@ -153,10 +160,12 @@ const PlaceDetailReservationScreen = ({
 
   const convertTime = (time: string) => {
     if (!time) {
-      return '시간 정보 없음';
+      return t('reservation.timeMissing');
     }
     return `${time.slice(0, 2)}:${time.slice(2, 4)}`;
   };
+
+  const locale = getCurrentLocale();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -212,7 +221,7 @@ const PlaceDetailReservationScreen = ({
           {item.title}
         </Text>
         <Text style={[styles.reservationUser, {color: subTextColor}]}>
-          예약자: {item.booker.name}
+          {t('reservation.booker', {name: item.booker.name})}
         </Text>
       </View>
     </View>
@@ -274,9 +283,13 @@ const PlaceDetailReservationScreen = ({
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+          <Text style={[styles.backButtonText, {color: textColor}]}>
+            {t('common.back')}
+          </Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>장소 예약</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>
+          {t('reservation.place.title')}
+        </Text>
         <View style={styles.placeholderButton} />
       </View>
 
@@ -291,13 +304,13 @@ const PlaceDetailReservationScreen = ({
           <>
             <View style={styles.infoSection}>
               <Text style={[styles.placeName, {color: textColor}]}>
-                {placeDetail.name}
+                {getLocalizedField(placeDetail, 'name', locale)}
               </Text>
               <Text style={[styles.placeLocation, {color: subTextColor}]}>
-                {placeDetail.location}
+                {getLocalizedField(placeDetail, 'location', locale)}
               </Text>
               <Text style={[styles.placeDescription, {color: textColor}]}>
-                {placeDetail.description}
+                {getLocalizedField(placeDetail, 'description', locale)}
               </Text>
             </View>
             <LazyImage
@@ -321,10 +334,13 @@ const PlaceDetailReservationScreen = ({
                 markedDates={marked}
                 dayComponent={renderDay}
                 renderHeader={date => {
-                  const year = date.getFullYear();
-                  const month = (date.getMonth() + 1)
-                    .toString()
-                    .padStart(2, '0');
+                  const monthLabel = new Date(
+                    date.getFullYear(),
+                    date.getMonth(),
+                  ).toLocaleDateString(getCurrentLocale(), {
+                    year: 'numeric',
+                    month: 'long',
+                  });
                   return (
                     <Text
                       style={{
@@ -332,7 +348,9 @@ const PlaceDetailReservationScreen = ({
                         fontWeight: 'bold',
                         margin: 10,
                         color: textColor,
-                      }}>{`${year}년 ${month}월`}</Text>
+                      }}>
+                      {monthLabel}
+                    </Text>
                   );
                 }}
                 theme={{
@@ -354,7 +372,7 @@ const PlaceDetailReservationScreen = ({
             </View>
             <View style={styles.reservationsContainer}>
               <Text style={[styles.reservationsTitle, {color: textColor}]}>
-                예약 현황
+                {t('reservation.currentReservations')}
               </Text>
               {isLoadingReservations ? (
                 <ActivityIndicator
@@ -370,7 +388,7 @@ const PlaceDetailReservationScreen = ({
                 />
               ) : (
                 <Text style={[styles.noReservations, {color: subTextColor}]}>
-                  예약된 내역이 없습니다.
+                  {t('reservation.noReservations')}
                 </Text>
               )}
             </View>
@@ -389,25 +407,30 @@ const PlaceDetailReservationScreen = ({
           onPress={() => {
             if (isPastDate) {
               Alert.alert(
-                '알림',
-                '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.',
+                t('reservation.notice'),
+                t('reservation.pastDateAlert'),
               );
               return;
             }
 
             navigation.navigate('PlaceReservationApply', {
-              buildingName: placeDetail?.location || '',
+              buildingName: placeDetail
+                ? getLocalizedField(placeDetail, 'location', locale)
+                : '',
               placeName: placeDetail?.name || '',
+              placeLabel: placeDetail
+                ? getLocalizedField(placeDetail, 'name', locale)
+                : '',
               placeId: placeId,
               selectedDate: selectedDate,
             });
           }}>
           <Text style={styles.reserveButtonText}>
             {!selectedDate
-              ? '날짜를 선택해주세요'
+              ? t('reservation.selectDate')
               : isPastDate
-              ? '과거 날짜는 예약 불가'
-              : '예약 신청하기'}
+              ? t('reservation.pastDateUnavailable')
+              : t('reservation.apply')}
           </Text>
         </TouchableOpacity>
       </View>

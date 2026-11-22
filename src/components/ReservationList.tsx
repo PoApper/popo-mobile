@@ -27,6 +27,7 @@ import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import {getAxiosErrorInfo} from '@utils/axios-error';
 import i18next, {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 import {reservationStatusKey} from '@utils/reservation-status';
 
 // --- Exported Generic Interfaces ---
@@ -70,8 +71,10 @@ export interface ReservationListProps<T extends BaseReservation> {
 interface Place {
   uuid: string;
   name: string;
+  nameEn?: string | null;
   description: string;
   location: string;
+  locationEn?: string | null;
   region: string;
   staffEmail: string;
   imageUrl: string;
@@ -934,7 +937,8 @@ const placeConfig: ReservationConfig<PlaceReservation> = {
   fetchEndpoint: '/reservation-place/user',
   deleteEndpoint: '/reservation-place',
   getSubtitle: item =>
-    item.place?.name || i18next.t('myReservation.placeNameMissing'),
+    (item.place && getLocalizedField(item.place, 'name', getCurrentLocale())) ||
+    i18next.t('myReservation.placeNameMissing'),
   renderModalDetails: (item, {labelColor, valueColor}) => (
     <>
       <View style={styles.modalDetailSection}>
@@ -942,7 +946,9 @@ const placeConfig: ReservationConfig<PlaceReservation> = {
           {i18next.t('reservation.fields.place')}
         </Text>
         <Text style={[styles.modalValue, {color: valueColor}]}>
-          {item.place?.name || i18next.t('myReservation.placeNameMissing')}
+          {(item.place &&
+            getLocalizedField(item.place, 'name', getCurrentLocale())) ||
+            i18next.t('myReservation.placeNameMissing')}
         </Text>
       </View>
       {item.place?.location && (
@@ -951,7 +957,7 @@ const placeConfig: ReservationConfig<PlaceReservation> = {
             {i18next.t('reservation.fields.location')}
           </Text>
           <Text style={[styles.modalValue, {color: valueColor}]}>
-            {item.place.location}
+            {getLocalizedField(item.place, 'location', getCurrentLocale())}
           </Text>
         </View>
       )}

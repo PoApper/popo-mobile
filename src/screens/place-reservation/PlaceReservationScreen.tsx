@@ -11,42 +11,49 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import LazyImage from '@components/LazyImage';
 import CommonHeader from '@components/CommonHeader';
+import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 
 type PlaceReservationScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PlaceReservation'>;
 };
 
-const buildings = ['학생회관', '지곡회관', '커뮤니티센터', 'RC', '기타'];
+const buildings = [
+  {region: 'STUDENT_HALL', labelKey: 'studentHall'},
+  {region: 'JIGOK_CENTER', labelKey: 'jigok'},
+  {region: 'COMMUNITY_CENTER', labelKey: 'communityCenter'},
+  {region: 'RESIDENTIAL_COLLEGE', labelKey: 'rc'},
+  {region: 'OTHERS', labelKey: 'others'},
+] as const;
 
-const sortTypes = ['가나다순', '조회순'];
+const sortTypes = ['sortAlphabetic', 'sortPopular'] as const;
+type SortType = (typeof sortTypes)[number];
 
 type Location = {
   id: string;
   name: string;
+  nameEn?: string | null;
   description: string;
+  descriptionEn?: string | null;
   image: any;
   totalReservationCount: number;
 };
 
-const buildingToRegion: {[key: string]: string} = {
-  학생회관: 'STUDENT_HALL',
-  지곡회관: 'JIGOK_CENTER',
-  커뮤니티센터: 'COMMUNITY_CENTER',
-  RC: 'RESIDENTIAL_COLLEGE',
-  기타: 'OTHERS',
-};
-
 const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
-  const [selectedBuilding, setSelectedBuilding] = useState('학생회관');
+  const [selectedRegion, setSelectedRegion] = useState<string>(
+    buildings[0].region,
+  );
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
-  const [sortType, setSortType] = useState('가나다순');
+  const [sortType, setSortType] = useState<SortType>('sortAlphabetic');
   const [locations, setLocations] = useState<Location[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -62,13 +69,13 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
     const fetchLocations = async () => {
       try {
         setIsLoading(true);
-        const response = await api.get(
-          `/place/region/${buildingToRegion[selectedBuilding]}`,
-        );
+        const response = await api.get(`/place/region/${selectedRegion}`);
         const formattedLocations = response.data.map((place: any) => ({
           id: place.uuid,
           name: place.name,
+          nameEn: place.nameEn,
           description: place.location,
+          descriptionEn: place.locationEn,
           image: {uri: place.imageUrl},
           totalReservationCount: place.totalReservationCount,
         }));
@@ -81,11 +88,14 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
     };
 
     fetchLocations();
-  }, [selectedBuilding]);
+  }, [selectedRegion]);
 
+  const locale = getCurrentLocale();
   const sortedLocations = [...locations].sort((a, b) => {
-    if (sortType === '가나다순') {
-      return a.name.localeCompare(b.name);
+    if (sortType === 'sortAlphabetic') {
+      return getLocalizedField(a, 'name', locale).localeCompare(
+        getLocalizedField(b, 'name', locale),
+      );
     } else {
       return b.totalReservationCount - a.totalReservationCount;
     }
@@ -98,44 +108,47 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
         backgroundColor={backgroundStyle.backgroundColor}
       />
 
-      <CommonHeader navigation={navigation} title="장소 예약" />
+      <CommonHeader
+        navigation={navigation}
+        title={t('reservation.place.title')}
+      />
 
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.buildingNav}
         contentContainerStyle={styles.typeNavContentContainer}>
-        {buildings.map(building => (
+        {buildings.map(({region, labelKey}) => (
           <TouchableOpacity
-            key={building}
-            onPress={() => setSelectedBuilding(building)}
+            key={region}
+            onPress={() => setSelectedRegion(region)}
             style={styles.buildingTabWrapper}>
             <View
               style={{alignItems: 'center'}}
               onLayout={e => {
                 const width = e.nativeEvent.layout.width;
-                if (textWidths[building] !== width) {
-                  setTextWidths(prev => ({...prev, [building]: width}));
+                if (textWidths[region] !== width) {
+                  setTextWidths(prev => ({...prev, [region]: width}));
                 }
               }}>
               <Text
                 style={[
                   styles.buildingTab,
                   {color: isDarkMode ? '#888' : '#999'},
-                  selectedBuilding === building && [
+                  selectedRegion === region && [
                     styles.selectedBuildingText,
                     {color: textColor},
                   ],
                 ]}>
-                {building}
+                {t(`reservation.place.regions.${labelKey}`)}
               </Text>
               <View
                 style={[
                   styles.underline,
                   {
-                    width: textWidths[building],
+                    width: textWidths[region],
                     backgroundColor:
-                      selectedBuilding === building ? textColor : 'transparent',
+                      selectedRegion === region ? textColor : 'transparent',
                   },
                 ]}
               />
@@ -164,7 +177,7 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
                 {color: textColor},
                 sortType === type && {color: isDarkMode ? '#000' : '#fff'},
               ]}>
-              {type}
+              {t(`reservation.place.${type}`)}
             </Text>
           </TouchableOpacity>
         ))}
@@ -198,14 +211,14 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
               />
               <View style={styles.locationInfo}>
                 <Text style={[styles.locationName, {color: textColor}]}>
-                  {item.name}
+                  {getLocalizedField(item, 'name', locale)}
                 </Text>
                 <Text
                   style={[
                     styles.locationDescription,
                     {color: isDarkMode ? '#888' : '#777'},
                   ]}>
-                  {item.description}
+                  {getLocalizedField(item, 'description', locale)}
                 </Text>
               </View>
               <TouchableOpacity
@@ -220,7 +233,7 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
                   })
                 }>
                 <Text style={[styles.reserveButtonText, {color: textColor}]}>
-                  예약
+                  {t('reservation.reserve')}
                 </Text>
               </TouchableOpacity>
             </View>
