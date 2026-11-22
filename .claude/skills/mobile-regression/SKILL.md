@@ -63,6 +63,7 @@ e2e/run.sh --build ...        # 네이티브 코드·매니페스트·Info.plist
 e2e/run.sh --platforms android --languages en e2e/flows/...    # 흐름 작성 중 빠른 반복
 ```
 
+- iOS와 Android는 동시에 돈다. 출력 줄은 섞여 나오므로 결과는 `summary.txt`로 본다.
 - `smoke.yaml`은 모든 PR에서 같이 돌린다.
 - 결과: `e2e/output/<platform>-<이름>.png`, `e2e/output/summary.txt`, 실패 로그 `e2e/output/.raw/*.log`.
 - 실패하면: 앱 회귀면 코드를 고친다. 선택자·타이밍 문제면 흐름을 고친다. **실패를 숨기려고 흐름에서 검사를 빼지 않는다.**

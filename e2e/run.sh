@@ -2,7 +2,7 @@
 # iOS 시뮬레이터·Android 에뮬레이터에서 Maestro 흐름을 언어별로 실행하고 스크린샷을 e2e/output/에 모은다.
 #
 # usage: e2e/run.sh [--build] [--platforms "ios android"] [--languages "ko en"] [flow.yaml ...]
-#   flow를 생략하면 e2e/flows/smoke.yaml만 실행한다.
+#   flow를 생략하면 e2e/flows/smoke.yaml만 실행한다. 플랫폼끼리는 동시에 돈다.
 #   --build: 실행 전에 dev 앱을 다시 빌드·설치한다(네이티브 코드나 매니페스트를 바꿨을 때).
 set -uo pipefail
 
@@ -77,12 +77,12 @@ android_device() {
 export PATH="$PATH:$HOME/Library/Android/sdk/emulator:$HOME/Library/Android/sdk/platform-tools"
 rm -rf "$OUT" && mkdir -p "$OUT/.raw"
 SUMMARY="$OUT/summary.txt"
-FAILED=0
 
-for platform in $PLATFORMS; do
+run_platform() { # $1=platform
+  local platform=$1 device app_id failed=0
   case "$platform" in
-    ios) device=$(ios_device) || exit 1; app_id=$IOS_APP_ID ;;
-    android) device=$(android_device) || exit 1; app_id=$ANDROID_APP_ID ;;
+    ios) device=$(ios_device) || return 1; app_id=$IOS_APP_ID ;;
+    android) device=$(android_device) || return 1; app_id=$ANDROID_APP_ID ;;
     *) die "알 수 없는 플랫폼: $platform" ;;
   esac
   for lang in $LANGUAGES; do
@@ -90,14 +90,15 @@ for platform in $PLATFORMS; do
       name="$(basename "$flow" .yaml)"
       raw="$OUT/.raw/$platform-$lang-$name"
       echo "▶ $platform / $lang / $name"
+      # 결과는 조합마다 따로 적고 마지막에 모은다(플랫폼이 동시에 돌아 한 파일에 같이 쓰면 섞인다).
       if maestro --device "$device" test --no-ansi --test-output-dir="$raw" \
         -e APP_ID="$app_id" -e LANGUAGE="$lang" \
         -e POPO_E2E_EMAIL="$POPO_E2E_EMAIL" -e POPO_E2E_PASSWORD="$POPO_E2E_PASSWORD" \
         "$flow" >"$raw.log" 2>&1; then
-        echo "PASS $platform $lang $name" >>"$SUMMARY"
+        echo "PASS $platform $lang $name" >"$raw.status"
       else
-        FAILED=1
-        echo "FAIL $platform $lang $name (log: ${raw#$ROOT/}.log)" >>"$SUMMARY"
+        failed=1
+        echo "FAIL $platform $lang $name (log: ${raw#$ROOT/}.log)" >"$raw.status"
         echo "  실패: ${raw#$ROOT/}.log" >&2
       fi
       # 실패한 흐름도 실패 직전까지의 캡처는 남긴다.
@@ -106,8 +107,20 @@ for platform in $PLATFORMS; do
       done
     done
   done
+  return $failed
+}
+
+PIDS=()
+for platform in $PLATFORMS; do
+  run_platform "$platform" &
+  PIDS+=($!)
+done
+FAILED=0
+for pid in "${PIDS[@]}"; do
+  wait "$pid" || FAILED=1
 done
 
+cat "$OUT"/.raw/*.status >"$SUMMARY" 2>/dev/null
 echo
 cat "$SUMMARY"
 echo "스크린샷: ${OUT#$ROOT/}/ ($(find "$OUT" -maxdepth 1 -name '*.png' | wc -l | tr -d ' ')장)"
