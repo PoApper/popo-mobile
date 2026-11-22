@@ -694,5 +694,14 @@
     "period": "The campus shuttle bus support period: 2025.02.17(Mon) ~ 2025.06.05(Thu)",
     "effectiveDate": "Implementation date: 2025.02.17(Mon)",
     "contact": "Contact: 054-279-3536 (Vehicle Division)"
+  },
+  "link": {
+    "openFailedTitle": "Couldn't open link",
+    "openFailedBody": "Couldn't open the browser. Copy the link below and open it in your browser:",
+    "copied": "Link copied",
+    "networkError": "Couldn't open the link. Please check your network connection.",
+    "copy": "Copy",
+    "copiedTitle": "Copied",
+    "copiedBody": "The link was copied to the clipboard."
   }
 }
