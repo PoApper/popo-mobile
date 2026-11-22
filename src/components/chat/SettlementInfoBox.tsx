@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Clipboard from '@react-native-clipboard/clipboard';
+import {useTranslation} from 'react-i18next';
 
 import {SettlementInfoData} from '@interfaces/paxi';
 import paxi_api from '@utils/paxi_api';
@@ -37,6 +38,7 @@ const SettlementInfoBox = ({
   isPaidEnd,
   settlementData,
 }: SettlementInfoBoxProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [showInfo, setShowInfo] = useState<boolean>(!isPaid);
 
@@ -47,31 +49,41 @@ const SettlementInfoBox = ({
   }, [isPaid]);
 
   const settlementSendAlert = () => {
-    Alert.alert('송금 확인', '송금을 완료하셨습니까?', [
-      {
-        text: '아니오',
-        style: 'cancel',
-      },
-      {
-        text: '네',
-        onPress: () => {
-          completeSettlement(settlementData)
-            .then(result => {
-              if (result !== 200) {
-                Alert.alert('실패', 'response: ' + result?.toString());
-              } else {
-                Alert.alert('전송 완료', '송금 완료 알림을 전송했습니다.');
-              }
-            })
-            .catch(error => {
-              Alert.alert(
-                '실패',
-                '송금 완료 알림 전송에 실패했습니다: ' + error.message,
-              );
-            });
+    Alert.alert(
+      t('paxi.settlement.sendConfirmTitle'),
+      t('paxi.settlement.sendConfirmBody'),
+      [
+        {
+          text: t('paxi.settlement.no'),
+          style: 'cancel',
         },
-      },
-    ]);
+        {
+          text: t('paxi.settlement.yes'),
+          onPress: () => {
+            completeSettlement(settlementData)
+              .then(result => {
+                if (result !== 200) {
+                  Alert.alert(
+                    t('common.failure'),
+                    'response: ' + result?.toString(),
+                  );
+                } else {
+                  Alert.alert(
+                    t('paxi.settlement.sentTitle'),
+                    t('paxi.settlement.sent'),
+                  );
+                }
+              })
+              .catch(error => {
+                Alert.alert(
+                  t('common.failure'),
+                  t('paxi.settlement.sendFailed', {message: error.message}),
+                );
+              });
+          },
+        },
+      ],
+    );
   };
 
   if (isPaid === undefined || !settlementData.payAmountPerPerson) {
@@ -97,7 +109,7 @@ const SettlementInfoBox = ({
                   fontWeight: '600',
                   color: 'green',
                 }}>
-                정산이 완료되었습니다.
+                {t('paxi.settlement.completed')}
               </Text>
             </>
           )}
@@ -115,8 +127,8 @@ const SettlementInfoBox = ({
                   color: isPaidEnd ? '#e4c45b' : '#e45b63',
                 }}>
                 {isPaidEnd
-                  ? '정산이 완료되지 않고 종료되었습니다.'
-                  : '정산이 아직 완료되지 않았습니다.'}
+                  ? t('paxi.settlement.endedUnpaid')
+                  : t('paxi.settlement.notCompleted')}
               </Text>
             </>
           )}
@@ -143,11 +155,13 @@ const SettlementInfoBox = ({
           <View style={{margin: 5, alignItems: 'center'}}>
             <View style={styles.titleContainer}>
               <Text style={[styles.titleText, {color: textColor(isDarkMode)}]}>
-                정산 안내
+                {t('paxi.settlement.infoTitle')}
               </Text>
               <Text
                 style={[styles.payAmountText, {color: textColor(isDarkMode)}]}>
-                {settlementData.payAmountPerPerson.toLocaleString()}원
+                {t('paxi.settlement.amount', {
+                  amount: settlementData.payAmountPerPerson.toLocaleString(),
+                })}
               </Text>
             </View>
             <View style={styles.payerInfoContainer}>
@@ -157,21 +171,27 @@ const SettlementInfoBox = ({
                     styles.infoText,
                     {color: isDarkMode ? '#aaa' : '#4f4f4f'},
                   ]}>
-                  총 금액: {settlementData.payAmount.toLocaleString()}원
+                  {t('paxi.settlement.totalAmount', {
+                    amount: settlementData.payAmount.toLocaleString(),
+                  })}
                 </Text>
                 <Text
                   style={[
                     styles.infoText,
                     {color: isDarkMode ? '#aaa' : '#4f4f4f'},
                   ]}>
-                  정산 요청자: {settlementData.payerNickname}
+                  {t('paxi.settlement.payer', {
+                    name: settlementData.payerNickname,
+                  })}
                 </Text>
                 <Text
                   style={[
                     styles.infoText,
                     {color: isDarkMode ? '#aaa' : '#4f4f4f'},
                   ]}>
-                  계좌주명: {settlementData.payerAccountHolderName}
+                  {t('paxi.settlement.holder', {
+                    name: settlementData.payerAccountHolderName,
+                  })}
                 </Text>
                 <TouchableOpacity
                   style={{flexDirection: 'row', gap: 5, alignItems: 'center'}}
@@ -185,8 +205,10 @@ const SettlementInfoBox = ({
                       styles.infoText,
                       {color: isDarkMode ? '#aaa' : '#4f4f4f'},
                     ]}>
-                    계좌번호: {settlementData.payerBankName}{' '}
-                    {settlementData.payerAccountNumber}
+                    {t('paxi.settlement.account', {
+                      bank: settlementData.payerBankName,
+                      number: settlementData.payerAccountNumber,
+                    })}
                   </Text>
                   <Icon
                     name={'content-copy'}
@@ -199,7 +221,7 @@ const SettlementInfoBox = ({
             {!isPaid && !isPaidEnd && (
               <>
                 <Text style={styles.warnText}>
-                  꼭! 송금 후 완료 버튼을 눌러 주세요!
+                  {t('paxi.settlement.pressAfterSend')}
                 </Text>
                 <TouchableOpacity
                   style={[
@@ -207,14 +229,16 @@ const SettlementInfoBox = ({
                     {backgroundColor: isDarkMode ? '#333' : 'black'},
                   ]}
                   onPress={settlementSendAlert}>
-                  <Text style={styles.sendBtnText}>송금 완료</Text>
+                  <Text style={styles.sendBtnText}>
+                    {t('paxi.settlement.sendDone')}
+                  </Text>
                 </TouchableOpacity>
               </>
             )}
             {!isPaid && isPaidEnd && (
               <>
                 <Text style={[styles.warnText, {color: '#e4c45b'}]}>
-                  정산이 종료되어 송금 완료 메시지를 전송할 수 없습니다.
+                  {t('paxi.settlement.endedCannotSend')}
                 </Text>
               </>
             )}

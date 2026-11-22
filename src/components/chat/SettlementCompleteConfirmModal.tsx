@@ -9,6 +9,8 @@ import {
   useColorScheme,
   Platform,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
+
 import {backgroundColor, textColor} from '@styles/default';
 
 type Props = {
@@ -22,6 +24,7 @@ const SettlementCompleteConfirmModal: React.FC<Props> = ({
   onClose,
   onConfirm,
 }) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
@@ -36,14 +39,14 @@ const SettlementCompleteConfirmModal: React.FC<Props> = ({
           style={[styles.card, {backgroundColor: backgroundColor(isDarkMode)}]}
           onStartShouldSetResponder={() => true}>
           <Text style={[styles.title, {color: textColor(isDarkMode)}]}>
-            정산을 모두 완료하셨나요?
+            {t('paxi.settlement.completeConfirmTitle')}
           </Text>
           <Text
             style={[
               styles.message,
               {color: isDarkMode ? '#A7A7AD' : '#6B6F76'},
             ]}>
-            정산이 모두 끝났다면 완료를 눌러주세요.
+            {t('paxi.settlement.completeConfirmBody')}
           </Text>
 
           <View style={styles.actions}>
@@ -54,7 +57,7 @@ const SettlementCompleteConfirmModal: React.FC<Props> = ({
               ]}
               onPress={onClose}>
               <Text style={[styles.btnText, {color: textColor(isDarkMode)}]}>
-                취소
+                {t('common.cancel')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -64,7 +67,7 @@ const SettlementCompleteConfirmModal: React.FC<Props> = ({
               ]}
               onPress={onConfirm}>
               <Text style={[styles.btnText, {color: '#FFFFFF'}]}>
-                정산 완료
+                {t('paxi.sidebar.completeSettlement')}
               </Text>
             </TouchableOpacity>
           </View>
