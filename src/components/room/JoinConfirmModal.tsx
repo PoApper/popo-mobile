@@ -10,9 +10,10 @@ import {
   Pressable,
   Platform,
 } from 'react-native';
-import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 
 import {ChatRoomInfo} from '@interfaces/paxi';
+import {formatPaxiDeparture, getPaxiLocationLabel} from '@utils/locations';
 
 type Props = {
   visible: boolean;
@@ -27,6 +28,7 @@ const JoinConfirmModal: React.FC<Props> = ({
   onClose,
   onConfirm,
 }) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
 
   const C = {
@@ -84,12 +86,12 @@ const JoinConfirmModal: React.FC<Props> = ({
           <View style={styles.routeLabelsRow}>
             <View style={styles.leftCol}>
               <Text style={[styles.routeLabel, {color: C.subText}]}>
-                출발지
+                {t('paxi.departure')}
               </Text>
             </View>
             <View style={styles.rightCol}>
               <Text style={[styles.routeLabel, {color: C.subText}]}>
-                도착지
+                {t('paxi.arrival')}
               </Text>
             </View>
           </View>
@@ -98,21 +100,21 @@ const JoinConfirmModal: React.FC<Props> = ({
               <Text
                 style={[styles.routeText, {color: C.text, textAlign: 'center'}]}
                 numberOfLines={2}>
-                {room.departureLocation}
+                {getPaxiLocationLabel(room.departureLocation)}
               </Text>
             </View>
             <View style={styles.rightCol}>
               <Text
                 style={[styles.routeText, {color: C.text, textAlign: 'center'}]}
                 numberOfLines={2}>
-                {room.destinationLocation}
+                {getPaxiLocationLabel(room.destinationLocation)}
               </Text>
             </View>
           </View>
 
           {/* Date */}
           <Text style={[styles.dateText, {color: C.subText}]}>
-            {moment(room.departureTime).format('M월 D일 HH시 mm분 출발')}
+            {formatPaxiDeparture(room.departureTime, false)}
           </Text>
 
           {/* Description */}
@@ -127,12 +129,12 @@ const JoinConfirmModal: React.FC<Props> = ({
             <TouchableOpacity
               style={[styles.btn, {backgroundColor: C.border}]}
               onPress={onClose}>
-              <Text style={{color: C.text}}>취소</Text>
+              <Text style={{color: C.text}}>{t('common.cancel')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.btn, {backgroundColor: C.primary}]}
               onPress={onConfirm}>
-              <Text style={{color: '#FFFFFF'}}>입장하기</Text>
+              <Text style={{color: '#FFFFFF'}}>{t('paxi.room.join')}</Text>
             </TouchableOpacity>
           </View>
         </View>

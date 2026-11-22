@@ -1,4 +1,4 @@
-import i18next from '@utils/i18n';
+import i18next, {getCurrentLocale} from '@utils/i18n';
 
 /** 키는 서버에 저장되는 값이라 한글을 유지하고, 표시명만 번역한다. */
 const PAXI_LOCATION_KEYS = {
@@ -25,6 +25,19 @@ export const getPaxiLocations = () =>
     id,
     name: getPaxiLocationLabel(id),
   }));
+
+/** 출발 시각 문구. 기존 표기를 따라 24시간제로 보여준다. */
+export const formatPaxiDeparture = (time: string, withYear = true) =>
+  i18next.t('paxi.departsAt', {
+    time: new Date(time).toLocaleString(getCurrentLocale(), {
+      year: withYear ? 'numeric' : undefined,
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }),
+  });
 
 // 기존 객체 형태의 PAXI_DISTANCE_INFO, PAXI_DURATION_INFO를 함수로 변경
 

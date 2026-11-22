@@ -24,7 +24,8 @@
     "processing": "Processing...",
     "noInfo": "N/A",
     "close": "Close",
-    "success": "Success"
+    "success": "Success",
+    "failure": "Failed"
   },
   "nav": {
     "home": "Home",
@@ -380,6 +381,32 @@
     "filter": {
       "all": "All",
       "other": "Other"
+    },
+    "departure": "From",
+    "arrival": "To",
+    "date": "Date",
+    "departsAt": "Departs {{time}}",
+    "userCheckFailed": "Couldn't verify your Paxi account: {{message}}",
+    "roomList": {
+      "loadFailed": "Couldn't load rooms: {{message}}",
+      "hideFull": "Hide full rooms",
+      "empty": "No carpools yet."
+    },
+    "room": {
+      "status": {
+        "owner": "Host",
+        "kicked": "Removed",
+        "joined": "Joined",
+        "available": "Open",
+        "full": "Full"
+      },
+      "kickedTitle": "Removed",
+      "kickedBody": "You can't rejoin a room you were removed from.\nSee the My Schedule tab for details.",
+      "fullTitle": "Full",
+      "fullBody": "This room is full.",
+      "joinFailed": "Couldn't join the room.",
+      "joinFailedWithReason": "Couldn't join the room: {{message}}",
+      "join": "Join"
     }
   }
 }

@@ -8,13 +8,14 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 
 import paxi_api from '@utils/paxi_api';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import {ChatRoomInfo} from '~/src/interfaces/paxi';
 import JoinConfirmModal from '@components/room/JoinConfirmModal';
+import {formatPaxiDeparture, getPaxiLocationLabel} from '@utils/locations';
 
 interface RoomContainerProps {
   roomUuid: string;
@@ -45,6 +46,7 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
   navigation,
   refreshKey,
 }) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [roomData, setRoomData] = useState<ChatRoomInfo | null>(null);
   const [joinModalVisible, setJoinModalVisible] = useState(false);
@@ -106,27 +108,27 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       [RoomStatus.OWNER]: {
         backgroundColor: isDarkMode ? 'rgba(79,70,229,0.18)' : '#EEF2FF',
         textColor: '#4F46E5',
-        statusText: '내가 방장',
+        statusText: t('paxi.room.status.owner'),
       },
       [RoomStatus.KICKED]: {
         backgroundColor: isDarkMode ? 'rgba(230,110,110,0.18)' : '#FFEEEE',
         textColor: '#E55656',
-        statusText: '강퇴된 방',
+        statusText: t('paxi.room.status.kicked'),
       },
       [RoomStatus.JOINED]: {
         backgroundColor: isDarkMode ? 'rgba(110, 230, 24, 0.18)' : '#f1ffee',
         textColor: '#46e556',
-        statusText: '참여한 방',
+        statusText: t('paxi.room.status.joined'),
       },
       [RoomStatus.AVAILABLE]: {
         backgroundColor: isDarkMode ? 'rgba(250,87,33,0.18)' : '#FFF4E6',
         textColor: '#FA5721',
-        statusText: '참여 가능',
+        statusText: t('paxi.room.status.available'),
       },
       [RoomStatus.FULL]: {
         backgroundColor: isDarkMode ? 'rgba(217,217,217,0.12)' : '#F3F4F6',
         textColor: '#909090',
-        statusText: '마감된 방',
+        statusText: t('paxi.room.status.full'),
       },
     };
 
@@ -142,16 +144,13 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
 
     // 강퇴된 방 처리
     if (status === RoomStatus.KICKED) {
-      Alert.alert(
-        '강퇴됨',
-        '강퇴된 방에는 참여할 수 없습니다. \n자세한 사유는 내 일정 탭에서 확인해주세요.',
-      );
+      Alert.alert(t('paxi.room.kickedTitle'), t('paxi.room.kickedBody'));
       return;
     }
 
     // 마감된 방 처리
     if (status === RoomStatus.FULL) {
-      Alert.alert('마감', '방이 마감되었습니다.');
+      Alert.alert(t('paxi.room.fullTitle'), t('paxi.room.fullBody'));
       return;
     }
 
@@ -175,8 +174,10 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
       .catch((error: any) => {
         console.error('방 입장 실패:', error);
         Alert.alert(
-          '실패',
-          '방 참여에 실패했습니다: ' + (error.message || '알 수 없는 오류'),
+          t('common.failure'),
+          t('paxi.room.joinFailedWithReason', {
+            message: error.message || t('common.unknownError'),
+          }),
         );
       });
   };
@@ -191,14 +192,16 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
         if (response.status === 201) {
           navigateToChat();
         } else {
-          Alert.alert('실패', '방 참여에 실패했습니다.');
+          Alert.alert(t('common.failure'), t('paxi.room.joinFailed'));
         }
       })
       .catch((error: any) => {
         console.error('방 참여 실패:', error);
         Alert.alert(
-          '실패',
-          '방 참여에 실패했습니다: ' + (error.message || '알 수 없는 오류'),
+          t('common.failure'),
+          t('paxi.room.joinFailedWithReason', {
+            message: error.message || t('common.unknownError'),
+          }),
         );
       });
   };
@@ -271,20 +274,17 @@ export const RoomListCard: React.FC<RoomContainerProps> = ({
           </View>
           <View style={styles.details}>
             <Text style={[styles.detailsText, {color: theme.text}]}>
-              {roomData.departureLocation}
+              {getPaxiLocationLabel(roomData.departureLocation)}
             </Text>
 
             <Text style={[styles.arrowText, {color: theme.text}]}>→</Text>
 
             <Text style={[styles.detailsText, {color: theme.text}]}>
-              {roomData.destinationLocation}
+              {getPaxiLocationLabel(roomData.destinationLocation)}
             </Text>
           </View>
           <Text style={[styles.departureTime, {color: theme.subText}]}>
-            {moment(roomData.departureTime).format(
-              'YYYY년 MM월 DD일 HH시 mm분',
-            )}{' '}
-            출발
+            {formatPaxiDeparture(roomData.departureTime)}
           </Text>
         </View>
       </View>

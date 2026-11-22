@@ -24,7 +24,8 @@
     "processing": "처리 중...",
     "noInfo": "정보 없음",
     "close": "닫기",
-    "success": "성공"
+    "success": "성공",
+    "failure": "실패"
   },
   "nav": {
     "home": "홈",
@@ -380,6 +381,32 @@
     "filter": {
       "all": "전체보기",
       "other": "그 외"
+    },
+    "departure": "출발지",
+    "arrival": "도착지",
+    "date": "날짜",
+    "departsAt": "{{time}} 출발",
+    "userCheckFailed": "Paxi 유저 확인에 실패했습니다: {{message}}",
+    "roomList": {
+      "loadFailed": "방을 불러오는데 실패했습니다: {{message}}",
+      "hideFull": "마감된 방 숨기기",
+      "empty": "현재 등록된 카풀이 없습니다."
+    },
+    "room": {
+      "status": {
+        "owner": "내가 방장",
+        "kicked": "강퇴된 방",
+        "joined": "참여한 방",
+        "available": "참여 가능",
+        "full": "마감된 방"
+      },
+      "kickedTitle": "강퇴됨",
+      "kickedBody": "강퇴된 방에는 참여할 수 없습니다.\n자세한 사유는 내 일정 탭에서 확인해주세요.",
+      "fullTitle": "마감",
+      "fullBody": "방이 마감되었습니다.",
+      "joinFailed": "방 참여에 실패했습니다.",
+      "joinFailedWithReason": "방 참여에 실패했습니다: {{message}}",
+      "join": "입장하기"
     }
   }
 }
