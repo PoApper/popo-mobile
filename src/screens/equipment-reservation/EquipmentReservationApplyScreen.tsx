@@ -16,6 +16,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 import {RootStackParamList} from '@navigation/types';
 import PoPoAxios from '../../utils/api';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -25,6 +26,7 @@ import {
   MIN_RESERVATION_DURATION_MS,
   roundUpToNearest30Minutes,
 } from '@utils/popo-datetime';
+import {getCurrentLocale} from '@utils/i18n';
 
 interface IEquipment {
   uuid: string;
@@ -69,12 +71,11 @@ type EquipmentReservationApplyScreenProps = {
   route: RouteProp<RootStackParamList, 'EquipmentReservationApply'>;
 };
 
-const SETTING_FALLBACK_TEXT = '정보를 불러오는 중입니다.';
-
 const EquipmentReservationApplyScreen = ({
   navigation,
   route,
 }: EquipmentReservationApplyScreenProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const association = route?.params?.association;
   const selectedDate = route?.params?.selectedDate;
@@ -287,12 +288,18 @@ const EquipmentReservationApplyScreen = ({
   const noticeBackgroundColor = isDarkMode ? '#2a2a2a' : '#FFF8F8';
   const noticeBorderColor = isDarkMode ? '#3a3a3a' : '#FFE5E5';
 
-  // 날짜를 한글 형식으로 포맷 (YYYY년 MM월 DD일)
   const formatDate = (d: Date) =>
-    `${d.getFullYear()}년 ${String(d.getMonth() + 1).padStart(
-      2,
-      '0',
-    )}월 ${String(d.getDate()).padStart(2, '0')}일`;
+    d.toLocaleDateString(getCurrentLocale(), {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  const formatTime = (d: Date) =>
+    d.toLocaleTimeString(getCurrentLocale(), {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  const settingFallback = t('reservation.equipment.settingLoading');
 
   // 장비 선택 토글
   const toggleEquipment = useCallback((equipment: IEquipment) => {
@@ -326,33 +333,36 @@ const EquipmentReservationApplyScreen = ({
       date.getDate(),
     );
     if (selectedStart < todayStart) {
-      Alert.alert(
-        '알림',
-        '과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.',
-      );
+      Alert.alert(t('reservation.notice'), t('reservation.pastDateAlert'));
       return;
     }
 
     if (!phone.trim()) {
-      Alert.alert('알림', '전화번호를 입력해주세요.');
+      Alert.alert(t('reservation.notice'), t('reservation.form.phoneRequired'));
       return;
     }
     if (!title.trim()) {
-      Alert.alert('알림', '예약 제목을 입력해주세요.');
+      Alert.alert(t('reservation.notice'), t('reservation.form.titleRequired'));
       return;
     }
     if (!desc.trim()) {
-      Alert.alert('알림', '설명을 입력해주세요.');
+      Alert.alert(
+        t('reservation.notice'),
+        t('reservation.form.descriptionRequired'),
+      );
       return;
     }
     if (selectedEquipments.length === 0) {
-      Alert.alert('알림', '예약할 장비를 선택해주세요.');
+      Alert.alert(
+        t('reservation.notice'),
+        t('reservation.equipment.selectRequired'),
+      );
       return;
     }
 
     // 0분 예약 방지. 안드로이드 시각 피커는 minimumDate를 무시하므로 여기서도 확인한다
     if (endTime.getTime() - startTime.getTime() < MIN_RESERVATION_DURATION_MS) {
-      Alert.alert('알림', '예약 시간은 30분 이상이어야 합니다.');
+      Alert.alert(t('reservation.notice'), t('reservation.form.minDuration'));
       return;
     }
 
@@ -363,8 +373,8 @@ const EquipmentReservationApplyScreen = ({
 
     if (hasReservedEquipment) {
       Alert.alert(
-        '알림',
-        '이미 예약된 장비가 포함되어 있습니다. 장비 목록을 다시 확인해주세요.',
+        t('reservation.notice'),
+        t('reservation.equipment.alreadyReserved'),
       );
       return;
     }
@@ -372,21 +382,22 @@ const EquipmentReservationApplyScreen = ({
     // 예약 정보 확인 팝업
     Alert.alert(
       '',
-      `예약 장비: ${selectedEquipments
-        .map(e => e.name)
-        .join(', ')}\n예약 날짜: ${formatDate(
-        date,
-      )}\n예약 시간: ${startTime.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      })} - ${endTime.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      })}\n\n예약하시겠습니까?`,
       [
-        {text: '취소', style: 'cancel'},
+        t('reservation.form.confirmEquipment', {
+          names: selectedEquipments.map(e => e.name).join(', '),
+        }),
+        t('reservation.form.confirmDate', {date: formatDate(date)}),
+        t('reservation.form.confirmTime', {
+          start: formatTime(startTime),
+          end: formatTime(endTime),
+        }),
+        '',
+        t('reservation.form.confirmQuestion'),
+      ].join('\n'),
+      [
+        {text: t('common.cancel'), style: 'cancel'},
         {
-          text: '예약하기',
+          text: t('reservation.confirmReserve'),
           onPress: async () => {
             try {
               // 날짜와 시간을 요구사항에 맞는 형식으로 변환
@@ -413,17 +424,21 @@ const EquipmentReservationApplyScreen = ({
                 endTime: endTimeStr,
               });
 
-              Alert.alert('성공', '예약이 성공적으로 생성되었습니다.', [
-                {
-                  text: '확인',
-                  onPress: () => navigation.goBack(),
-                },
-              ]);
+              Alert.alert(
+                t('common.success'),
+                t('reservation.equipment.created'),
+                [
+                  {
+                    text: t('common.confirm'),
+                    onPress: () => navigation.goBack(),
+                  },
+                ],
+              );
             } catch (error) {
               console.error('예약 생성 실패:', error);
               Alert.alert(
-                '오류',
-                '예약 생성에 실패했습니다. 다시 시도해주세요.',
+                t('common.error'),
+                t('reservation.equipment.createFailed'),
               );
             }
           },
@@ -550,7 +565,7 @@ const EquipmentReservationApplyScreen = ({
           {selected && <Text style={styles.checkIcon}>✔</Text>}
           {isReserved && !selected && (
             <Text style={[styles.reservedText, {color: subTextColor}]}>
-              (예약됨)
+              {t('reservation.equipment.reserved')}
             </Text>
           )}
         </TouchableOpacity>
@@ -563,6 +578,7 @@ const EquipmentReservationApplyScreen = ({
       textColor,
       subTextColor,
       toggleEquipment,
+      t,
     ],
   );
 
@@ -578,11 +594,18 @@ const EquipmentReservationApplyScreen = ({
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+          <Text style={[styles.backButtonText, {color: textColor}]}>
+            {t('common.back')}
+          </Text>
         </TouchableOpacity>
         <Text style={[styles.headerTitle, {color: textColor}]}>
-          장비 예약:{' '}
-          {association === 'dormunion' ? '생활관자치회' : '동아리연합회'}
+          {t('reservation.equipment.applyTitle', {
+            owner: t(
+              association === 'dormunion'
+                ? 'reservation.equipment.owners.dormunion'
+                : 'reservation.equipment.owners.dongyeon',
+            ),
+          })}
         </Text>
         <View style={styles.placeholderButton} />
       </View>
@@ -602,66 +625,75 @@ const EquipmentReservationApplyScreen = ({
             },
           ]}>
           <Text style={[styles.noticeTitle, {color: textColor}]}>
-            📢 예약 공지사항
+            {t('reservation.equipment.noticeTitle')}
           </Text>
           {association === 'dormunion' ? (
             <View style={styles.noticeContent}>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                예약한 장비는 생활관자치회 사무실(생활관 4동)에서 수령하실 수
-                있습니다. 🏢️
+                {t('reservation.equipment.dormunionPickup')}
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                장비가 분실되거나 예약 시간을 초과할 경우, 차후 예약에 제한을 둘
-                수 있습니다. 🚨
+                {t('reservation.equipment.penalty')}
               </Text>
             </View>
           ) : (
             <View style={styles.noticeContent}>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                <Text style={styles.noticeBold}>물품 대여 순서 :</Text> POPO
-                신청&입금 - 카카오톡 채널 입장 - 승인 - 대여&반납
+                <Text style={styles.noticeBold}>
+                  {t('reservation.equipment.dongyeon.process')}
+                </Text>{' '}
+                {t('reservation.equipment.dongyeon.processSteps')}
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                <Text style={styles.noticeBold}>예약비 입금 계좌 :</Text>{' '}
-                {getSettingValue(dongyeonBank, SETTING_FALLBACK_TEXT)}
+                <Text style={styles.noticeBold}>
+                  {t('reservation.equipment.dongyeon.bankLabel')}
+                </Text>{' '}
+                {getSettingValue(dongyeonBank, settingFallback)}
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                *입금자명은 예약자명과 동일하게 해주세요.
+                {t('reservation.equipment.dongyeon.bankNameHint')}
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                예약금 납부 후, 카카오톡 채널에 입장하여 대여자명 / 대여일 /
-                대여품목 / 송금 화면 발송
+                {t('reservation.equipment.dongyeon.afterPayment')}
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                <Text style={styles.noticeBold}>카카오톡 채널 링크 :</Text>{' '}
+                <Text style={styles.noticeBold}>
+                  {t('reservation.equipment.dongyeon.kakaoLinkLabel')}
+                </Text>{' '}
                 <Text style={styles.noticeLink} onPress={openClubUnionChannel}>
-                  동아리연합회 2025
+                  {t('reservation.equipment.dongyeon.kakaoChannel')}
                 </Text>
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                <Text style={styles.noticeBold}>예시</Text>
+                <Text style={styles.noticeBold}>
+                  {t('reservation.equipment.dongyeon.example')}
+                </Text>
                 {'\n'}
-                정종민{'\n'}
-                3월 10일 월요일{'\n'}
-                메인스피커1 / 오디오 인터페이스 / 유선 보컬 마이크 1~3
+                {t('reservation.equipment.dongyeon.exampleBody')}
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                <Text style={styles.noticeBold}>대여/반납 시간 :</Text>{' '}
-                {getSettingValue(dongyeonServiceTime, SETTING_FALLBACK_TEXT)}
+                <Text style={styles.noticeBold}>
+                  {t('reservation.equipment.dongyeon.serviceHours')}
+                </Text>{' '}
+                {getSettingValue(dongyeonServiceTime, settingFallback)}
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                *그 외 시간에 대여와 반납은 어렵습니다.
+                {t('reservation.equipment.dongyeon.serviceHoursHint')}
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                <Text style={styles.noticeBold}>수령 장소 :</Text> 동아리연합회
-                사무실(학생회관 301호)
+                <Text style={styles.noticeBold}>
+                  {t('reservation.equipment.dongyeon.pickupLabel')}
+                </Text>{' '}
+                {t('reservation.equipment.dongyeon.pickupLocation')}
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                장비 분실 및 반납 시간을 어길 시 책임을 물을 수 있습니다.
+                {t('reservation.equipment.dongyeon.liability')}
               </Text>
               <Text style={[styles.noticeText, {color: textColor}]}>
-                <Text style={styles.noticeBold}>문의 :</Text>{' '}
-                {getSettingValue(dongyeonContact, SETTING_FALLBACK_TEXT)}
+                <Text style={styles.noticeBold}>
+                  {t('reservation.equipment.dongyeon.contact')}
+                </Text>{' '}
+                {getSettingValue(dongyeonContact, settingFallback)}
               </Text>
             </View>
           )}
@@ -669,7 +701,8 @@ const EquipmentReservationApplyScreen = ({
 
         <View style={styles.formSection}>
           <Text style={[styles.label, {color: textColor}]}>
-            사용자 <Text style={styles.requiredText}>*</Text>
+            {t('reservation.form.user')}{' '}
+            <Text style={styles.requiredText}>*</Text>
           </Text>
           <View style={styles.userInfoContainer}>
             {userLoading ? (
@@ -686,13 +719,14 @@ const EquipmentReservationApplyScreen = ({
                 ]}
                 value={userName}
                 editable={false}
-                placeholder="이름"
+                placeholder={t('reservation.form.namePlaceholder')}
                 placeholderTextColor={subTextColor}
               />
             )}
           </View>
           <Text style={[styles.label, {color: textColor}]}>
-            전화번호 <Text style={styles.requiredText}>*</Text>
+            {t('reservation.form.phone')}{' '}
+            <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
             style={[
@@ -710,7 +744,8 @@ const EquipmentReservationApplyScreen = ({
             maxLength={13}
           />
           <Text style={[styles.label, {color: textColor}]}>
-            예약 제목 <Text style={styles.requiredText}>*</Text>
+            {t('reservation.form.title')}{' '}
+            <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
             style={[
@@ -722,7 +757,7 @@ const EquipmentReservationApplyScreen = ({
             ]}
             value={title}
             onChangeText={setTitle}
-            placeholder="예약 제목을 입력하세요"
+            placeholder={t('reservation.form.titlePlaceholder')}
             placeholderTextColor={subTextColor}
             maxLength={50}
           />
@@ -730,7 +765,8 @@ const EquipmentReservationApplyScreen = ({
             {title.length}/50
           </Text>
           <Text style={[styles.label, {color: textColor}]}>
-            설명 <Text style={styles.requiredText}>*</Text>
+            {t('reservation.form.description')}{' '}
+            <Text style={styles.requiredText}>*</Text>
           </Text>
           <TextInput
             style={[
@@ -743,7 +779,7 @@ const EquipmentReservationApplyScreen = ({
             ]}
             value={desc}
             onChangeText={setDesc}
-            placeholder="사용처를 반드시 작성 해주세요."
+            placeholder={t('reservation.equipment.descPlaceholder')}
             placeholderTextColor={subTextColor}
             multiline
             maxLength={200}
@@ -752,7 +788,8 @@ const EquipmentReservationApplyScreen = ({
             {desc.length}/200
           </Text>
           <Text style={[styles.label, {color: textColor}]}>
-            장비 선택 <Text style={styles.requiredText}>*</Text>
+            {t('reservation.equipment.select')}{' '}
+            <Text style={styles.requiredText}>*</Text>
           </Text>
           <TouchableOpacity
             style={[
@@ -783,7 +820,7 @@ const EquipmentReservationApplyScreen = ({
               ))
             ) : (
               <Text style={[styles.placeholderText, {color: subTextColor}]}>
-                예약할 장비들을 선택해주세요.
+                {t('reservation.equipment.selectPlaceholder')}
               </Text>
             )}
           </TouchableOpacity>
@@ -793,7 +830,8 @@ const EquipmentReservationApplyScreen = ({
             <View style={styles.datePickerWrapper}>
               <Text
                 style={[styles.label, styles.pickerLabel, {color: textColor}]}>
-                날짜 <Text style={styles.requiredText}>*</Text>
+                {t('reservation.form.date')}{' '}
+                <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 onPress={openDatePicker}
@@ -812,7 +850,8 @@ const EquipmentReservationApplyScreen = ({
             <View style={styles.timePickerWrapper}>
               <Text
                 style={[styles.label, styles.pickerLabel, {color: textColor}]}>
-                시작 시간 <Text style={styles.requiredText}>*</Text>
+                {t('reservation.form.startTime')}{' '}
+                <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 onPress={openStartPicker}
@@ -824,17 +863,15 @@ const EquipmentReservationApplyScreen = ({
                   },
                 ]}>
                 <Text style={[styles.datePickerText, {color: textColor}]}>
-                  {startTime.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
+                  {formatTime(startTime)}
                 </Text>
               </TouchableOpacity>
             </View>
             <View style={styles.timePickerWrapper}>
               <Text
                 style={[styles.label, styles.pickerLabel, {color: textColor}]}>
-                종료 시간 <Text style={styles.requiredText}>*</Text>
+                {t('reservation.form.endTime')}{' '}
+                <Text style={styles.requiredText}>*</Text>
               </Text>
               <TouchableOpacity
                 onPress={openEndPicker}
@@ -846,10 +883,7 @@ const EquipmentReservationApplyScreen = ({
                   },
                 ]}>
                 <Text style={[styles.datePickerText, {color: textColor}]}>
-                  {endTime.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
+                  {formatTime(endTime)}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -868,9 +902,9 @@ const EquipmentReservationApplyScreen = ({
             date={date}
             minimumDate={minimumDate}
             maximumDate={maximumDate}
-            locale="ko-KR"
-            confirmTextIOS="확인"
-            cancelTextIOS="취소"
+            locale={getCurrentLocale()}
+            confirmTextIOS={t('common.confirm')}
+            cancelTextIOS={t('common.cancel')}
           />
         )}
         {showStartPicker && (
@@ -887,8 +921,8 @@ const EquipmentReservationApplyScreen = ({
                 setEndTime(newEndTime);
               } else {
                 Alert.alert(
-                  '알림',
-                  '현재 시간보다 이후의 시간을 선택해주세요.',
+                  t('reservation.notice'),
+                  t('reservation.form.startAfterNow'),
                 );
               }
             }}
@@ -897,8 +931,8 @@ const EquipmentReservationApplyScreen = ({
             minuteInterval={30}
             date={startTime}
             minimumDate={minimumDate}
-            confirmTextIOS="확인"
-            cancelTextIOS="취소"
+            confirmTextIOS={t('common.confirm')}
+            cancelTextIOS={t('common.cancel')}
           />
         )}
         {showEndPicker && (
@@ -910,8 +944,8 @@ const EquipmentReservationApplyScreen = ({
               const rounded = roundUpToNearest30Minutes(time);
               if (rounded < earliestEndTime) {
                 Alert.alert(
-                  '알림',
-                  '종료 시각은 시작 시각보다 30분 이상 뒤여야 합니다.',
+                  t('reservation.notice'),
+                  t('reservation.form.endAfterStart'),
                 );
                 return;
               }
@@ -922,8 +956,8 @@ const EquipmentReservationApplyScreen = ({
             minuteInterval={30}
             date={endTime}
             minimumDate={earliestEndTime}
-            confirmTextIOS="확인"
-            cancelTextIOS="취소"
+            confirmTextIOS={t('common.confirm')}
+            cancelTextIOS={t('common.cancel')}
           />
         )}
         {/* 하단 버튼 */}
@@ -936,10 +970,12 @@ const EquipmentReservationApplyScreen = ({
             <View style={styles.totalPriceContainer}>
               <View style={styles.totalPriceWrapper}>
                 <Text style={[styles.totalPriceLabel, {color: textColor}]}>
-                  총 예약비
+                  {t('reservation.equipment.totalFee')}
                 </Text>
                 <Text style={styles.totalPriceValue}>
-                  {totalPrice.toLocaleString()}원
+                  {t('reservation.equipment.fee', {
+                    fee: totalPrice.toLocaleString(),
+                  })}
                 </Text>
               </View>
             </View>
@@ -958,7 +994,9 @@ const EquipmentReservationApplyScreen = ({
             accessibilityState={{disabled: disabledCreate}}
             activeOpacity={disabledCreate ? 1 : 0.85}>
             {/* TODO: 장소 예약이랑 색깔 및 단어 통일 */}
-            <Text style={styles.reservationButtonText}>예약 생성하기</Text>
+            <Text style={styles.reservationButtonText}>
+              {t('reservation.equipment.create')}
+            </Text>
           </TouchableOpacity>
         </View>
       </KeyboardAwareScrollView>
@@ -980,12 +1018,14 @@ const EquipmentReservationApplyScreen = ({
             <View
               style={[styles.popupHeader, {borderBottomColor: borderColor}]}>
               <Text style={[styles.popupTitle, {color: textColor}]}>
-                장비 선택
+                {t('reservation.equipment.select')}
               </Text>
               <TouchableOpacity
                 style={styles.popupCompleteButton}
                 onPress={() => setShowEquipmentModal(false)}>
-                <Text style={styles.popupCompleteText}>확인</Text>
+                <Text style={styles.popupCompleteText}>
+                  {t('common.confirm')}
+                </Text>
               </TouchableOpacity>
             </View>
 
@@ -993,7 +1033,9 @@ const EquipmentReservationApplyScreen = ({
             <View style={styles.popupBody}>
               {/* 장비 개수 표시 */}
               <Text style={[styles.popupInfoText, {color: textColor}]}>
-                ⚒️ 선택 가능한 장비: {equipmentList.length}개
+                {t('reservation.equipment.available', {
+                  count: equipmentList.length,
+                })}
               </Text>
 
               {/* 로딩 상태 표시 */}
@@ -1001,7 +1043,7 @@ const EquipmentReservationApplyScreen = ({
                 <View style={styles.loadingContainer}>
                   <ActivityIndicator size="small" color={subTextColor} />
                   <Text style={[styles.loadingText, {color: subTextColor}]}>
-                    예약 상태 확인 중...
+                    {t('reservation.equipment.checking')}
                   </Text>
                 </View>
               )}

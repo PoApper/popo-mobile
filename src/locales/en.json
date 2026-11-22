@@ -23,7 +23,8 @@
     "unknownError": "An unknown error occurred.",
     "processing": "Processing...",
     "noInfo": "N/A",
-    "close": "Close"
+    "close": "Close",
+    "success": "Success"
   },
   "nav": {
     "home": "Home",
@@ -142,7 +143,8 @@
       "confirmDate": "Date: {{date}}",
       "confirmTime": "Time: {{start}} - {{end}}",
       "confirmQuestion": "Make this reservation?",
-      "slotPickerTitle": "Select a time slot"
+      "slotPickerTitle": "Select a time slot",
+      "confirmEquipment": "Equipment: {{names}}"
     },
     "equipment": {
       "title": "Equipment Reservation",
@@ -156,7 +158,41 @@
       "fee": "{{fee}} KRW",
       "details": "Details",
       "detailTitle": "Equipment details",
-      "detailBody": "Name: {{name}}\nModel/description: {{description}}\nFee: {{fee}} KRW\nMax usage: {{minutes}} min"
+      "detailBody": "Name: {{name}}\nModel/description: {{description}}\nFee: {{fee}} KRW\nMax usage: {{minutes}} min",
+      "applyTitle": "Equipment: {{owner}}",
+      "settingLoading": "Loading…",
+      "noticeTitle": "📢 Reservation notice",
+      "dormunionPickup": "Pick up reserved equipment at the Dormitory Union office (Dorm 4). 🏢️",
+      "penalty": "Lost equipment or overtime may restrict future reservations. 🚨",
+      "dongyeon": {
+        "process": "Rental process:",
+        "processSteps": "POPO request & payment → join KakaoTalk channel → approval → pickup & return",
+        "bankLabel": "Payment account:",
+        "bankNameHint": "*Use the same name as the reservation holder.",
+        "afterPayment": "After paying, join the KakaoTalk channel and send: borrower name / rental date / items / transfer screenshot",
+        "kakaoLinkLabel": "KakaoTalk channel link:",
+        "kakaoChannel": "Club Union 2025",
+        "example": "Example",
+        "exampleBody": "Jeong Jongmin\nMonday, March 10\nMain speaker 1 / audio interface / wired vocal mics 1–3",
+        "serviceHours": "Pickup/return hours:",
+        "serviceHoursHint": "*Pickup/return outside these hours is difficult.",
+        "pickupLabel": "Pickup location:",
+        "pickupLocation": "Club Union office (Student Hall 301)",
+        "liability": "You may be held responsible for lost equipment or late returns.",
+        "contact": "Contact:"
+      },
+      "descPlaceholder": "Please describe the intended use.",
+      "select": "Select equipment",
+      "selectPlaceholder": "Select equipment to reserve.",
+      "reserved": "(Reserved)",
+      "totalFee": "Total fee",
+      "create": "Create reservation",
+      "available": "⚒️ Available equipment: {{count}}",
+      "checking": "Checking availability…",
+      "selectRequired": "Please select equipment to reserve.",
+      "alreadyReserved": "Some selected equipment is already reserved. Please check the list again.",
+      "created": "Reservation created.",
+      "createFailed": "Failed to create reservation. Please try again."
     }
   },
   "myReservation": {
