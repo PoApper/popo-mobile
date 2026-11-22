@@ -25,7 +25,8 @@
     "noInfo": "정보 없음",
     "close": "닫기",
     "success": "성공",
-    "failure": "실패"
+    "failure": "실패",
+    "notice": "안내"
   },
   "nav": {
     "home": "홈",
@@ -433,6 +434,23 @@
       "departureLength": "출발지는 2자 이상 20자 이하로 입력해주세요.",
       "arrivalLength": "도착지는 2자 이상 20자 이하로 입력해주세요.",
       "detailsLength": "상세내용은 100자 이하로 입력해주세요."
+    },
+    "onboarding": {
+      "introTitle": "포스텍 카풀 서비스, Paxi 입니다!",
+      "payTitle": "한명이 한번에 결제해요",
+      "payDesc": "카풀 방 생성자가 한꺼번에 결제하고 정산해요",
+      "rideTitle": "택시를 한번에 부르고 같이 타요",
+      "rideDesc": "택시비를 편하게 아껴요",
+      "privacyAgree": "개인정보 처리 방침에 동의합니다",
+      "privacyRequired": "개인정보 처리방침에 동의해주세요.",
+      "agreeAndStart": "동의하고 시작하기",
+      "nicknameTitle": "닉네임 설정하기",
+      "welcome": "PAXI에 오신 것을 환영합니다! 👋",
+      "nicknamePrompt": "사용할 닉네임을 등록해주세요.",
+      "nicknameRequired": "닉네임을 입력해주세요.",
+      "start": "Paxi 시작하기",
+      "nicknameCreated": "닉네임을 성공적으로 생성했습니다. 원활한 서비스를 위해 재로그인 해주세요.",
+      "nicknameExists": "이미 세팅된 닉네임이 있습니다."
     }
   }
 }

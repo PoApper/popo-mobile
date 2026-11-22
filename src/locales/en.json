@@ -25,7 +25,8 @@
     "noInfo": "N/A",
     "close": "Close",
     "success": "Success",
-    "failure": "Failed"
+    "failure": "Failed",
+    "notice": "Notice"
   },
   "nav": {
     "home": "Home",
@@ -433,6 +434,23 @@
       "departureLength": "Departure must be 2–20 characters.",
       "arrivalLength": "Destination must be 2–20 characters.",
       "detailsLength": "Details must be 100 characters or fewer."
+    },
+    "onboarding": {
+      "introTitle": "Meet Paxi, POSTECH's carpool service!",
+      "payTitle": "One person pays",
+      "payDesc": "The room creator pays the fare and splits it",
+      "rideTitle": "Call a taxi and ride together",
+      "rideDesc": "Save on taxi fares",
+      "privacyAgree": "I agree to the privacy policy",
+      "privacyRequired": "Please agree to the privacy policy.",
+      "agreeAndStart": "Agree and start",
+      "nicknameTitle": "Set nickname",
+      "welcome": "Welcome to PAXI! 👋",
+      "nicknamePrompt": "Choose a nickname to use.",
+      "nicknameRequired": "Please enter a nickname.",
+      "start": "Start Paxi",
+      "nicknameCreated": "Nickname created. Please log in again to continue.",
+      "nicknameExists": "You already have a nickname."
     }
   }
 }
