@@ -11,12 +11,15 @@ import {
   Linking,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 
 import {RootStackParamList} from '@navigation/types';
 import {ClubCategoryKey} from '@interfaces/club';
 import api from '@utils/api';
+import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 import CommonHeader from '@components/CommonHeader';
 
 type ClubDetailScreenProps = {
@@ -45,6 +48,8 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
   navigation,
   route,
 }) => {
+  const {t} = useTranslation();
+  const locale = getCurrentLocale();
   const isDarkMode = useColorScheme() === 'dark';
   const [clubData, setClubData] = useState<ClubItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -89,7 +94,7 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
       <SafeAreaView style={backgroundStyle}>
         <View style={styles.loadingContainer}>
           <Text style={[styles.loadingText, {color: textColor}]}>
-            로딩중...
+            {t('common.loading')}
           </Text>
         </View>
       </SafeAreaView>
@@ -120,14 +125,14 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
             </View>
             <View style={styles.contentContainer}>
               <Text style={[styles.clubName, {color: textColor}]}>
-                {clubData.name}
+                {getLocalizedField(clubData, 'name', locale)}
               </Text>
               <Text
                 style={[
                   styles.description,
                   {color: isDarkMode ? '#888' : '#666'},
                 ]}>
-                {clubData.shortDesc}
+                {getLocalizedField(clubData, 'shortDesc', locale)}
               </Text>
 
               <View style={[styles.infoSection, {borderColor}]}>
@@ -136,45 +141,45 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
                     styles.content,
                     {color: isDarkMode ? '#888' : '#666'},
                   ]}>
-                  {clubData.content}
+                  {getLocalizedField(clubData, 'content', locale)}
                 </Text>
               </View>
 
               <View style={[styles.infoSection, {borderColor}]}>
                 <View style={styles.infoRow}>
                   <Text style={[styles.infoLabel, {color: textColor}]}>
-                    위치
+                    {t('introduce.location')}
                   </Text>
                   <Text
                     style={[
                       styles.infoValue,
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}>
-                    {clubData.location}
+                    {getLocalizedField(clubData, 'location', locale)}
                   </Text>
                 </View>
                 <View style={styles.infoRow}>
                   <Text style={[styles.infoLabel, {color: textColor}]}>
-                    대표자
+                    {t('introduce.representative')}
                   </Text>
                   <Text
                     style={[
                       styles.infoValue,
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}>
-                    {clubData.representative}
+                    {getLocalizedField(clubData, 'representative', locale)}
                   </Text>
                 </View>
                 <View style={styles.infoRow}>
                   <Text style={[styles.infoLabel, {color: textColor}]}>
-                    연락처
+                    {t('introduce.contact')}
                   </Text>
                   <Text
                     style={[
                       styles.infoValue,
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}>
-                    {clubData.contact}
+                    {getLocalizedField(clubData, 'contact', locale)}
                   </Text>
                 </View>
               </View>
@@ -190,7 +195,9 @@ const ClubDetailScreen: React.FC<ClubDetailScreenProps> = ({
                           {backgroundColor: '#000000'},
                         ]}
                         onPress={() => handleLinkPress(clubData.homepageUrl)}>
-                        <Text style={styles.socialText}>홈페이지</Text>
+                        <Text style={styles.socialText}>
+                          {t('introduce.homepage')}
+                        </Text>
                       </TouchableOpacity>
                     )}
                   {clubData.facebookUrl != 'null' &&

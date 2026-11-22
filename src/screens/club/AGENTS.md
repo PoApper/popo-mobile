@@ -18,7 +18,7 @@
 
 ### Working In This Directory
 
-- 카테고리: `@interfaces/club.ts`의 CLUB_CATEGORIES
+- 카테고리: `@interfaces/club.ts`의 CLUB_CATEGORIES(키 목록), 표시명은 로케일 `club.categories.*`
 - API: `@utils/api.ts` (POPO 백엔드)
 
 <!-- MANUAL: Any manually added notes below this line are preserved on regeneration -->

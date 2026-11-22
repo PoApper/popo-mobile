@@ -9,6 +9,9 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
+
 export type StudentAssociationItemType = {
   uuid: string;
   name: string;
@@ -62,12 +65,12 @@ const StudentAssociationItem: React.FC<Props> = ({item, onPress}) => {
         </View>
         <View style={styles.info}>
           <Text style={[styles.name, {color: textColor}]} numberOfLines={1}>
-            {item.name}
+            {getLocalizedField(item, 'name', getCurrentLocale())}
           </Text>
           <Text
             style={[styles.description, {color: isDarkMode ? '#888' : '#666'}]}
             numberOfLines={2}>
-            {item.shortDesc}
+            {getLocalizedField(item, 'shortDesc', getCurrentLocale())}
           </Text>
         </View>
       </View>

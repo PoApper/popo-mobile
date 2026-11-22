@@ -9,10 +9,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
+import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 import CommonHeader from '@components/CommonHeader';
 import StudentAssociationItem, {
   StudentAssociationItemType,
@@ -25,13 +28,15 @@ type StudentAssociationScreenProps = {
   >;
 };
 
-const sortTypes = ['가나다순', '조회순'];
+const sortTypes = ['sortAlphabetic', 'sortViews'] as const;
 
 const StudentAssociationScreen: React.FC<StudentAssociationScreenProps> = ({
   navigation,
 }) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
-  const [sortType, setSortType] = useState('가나다순');
+  const [sortType, setSortType] =
+    useState<(typeof sortTypes)[number]>('sortAlphabetic');
   const [isLoading, setIsLoading] = useState(true);
   const [studentAssociations, setStudentAssociations] = useState<
     StudentAssociationItemType[]
@@ -45,8 +50,13 @@ const StudentAssociationScreen: React.FC<StudentAssociationScreenProps> = ({
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
 
   const getSortedItems = (items: StudentAssociationItemType[]) => {
-    if (sortType === '가나다순') {
-      return [...items].sort((a, b) => a.name.localeCompare(b.name));
+    if (sortType === 'sortAlphabetic') {
+      const locale = getCurrentLocale();
+      return [...items].sort((a, b) =>
+        getLocalizedField(a, 'name', locale).localeCompare(
+          getLocalizedField(b, 'name', locale),
+        ),
+      );
     } else {
       return [...items].sort((a, b) => b.views - a.views);
     }
@@ -90,7 +100,7 @@ const StudentAssociationScreen: React.FC<StudentAssociationScreenProps> = ({
           isDarkMode ? styles.cardDark : styles.cardLight,
         ]}>
         <Text style={[styles.emptyText, {color: textColor}]}>
-          {isLoading ? '로딩중...' : '등록된 학생단체가 없습니다.'}
+          {isLoading ? t('common.loading') : t('studentAssociation.empty')}
         </Text>
       </View>
     );
@@ -102,7 +112,10 @@ const StudentAssociationScreen: React.FC<StudentAssociationScreenProps> = ({
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="학생단체" />
+      <CommonHeader
+        navigation={navigation}
+        title={t('studentAssociation.title')}
+      />
 
       <View style={styles.sortButtons}>
         {sortTypes.map(type => (
@@ -123,7 +136,7 @@ const StudentAssociationScreen: React.FC<StudentAssociationScreenProps> = ({
                 {color: textColor},
                 sortType === type && {color: isDarkMode ? '#000' : '#fff'},
               ]}>
-              {type}
+              {t(`common.${type}`)}
             </Text>
           </TouchableOpacity>
         ))}

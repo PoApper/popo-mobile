@@ -26,7 +26,10 @@
     "close": "Close",
     "success": "Success",
     "failure": "Failed",
-    "notice": "Notice"
+    "notice": "Notice",
+    "loading": "Loading…",
+    "sortAlphabetic": "A–Z",
+    "sortViews": "Most viewed"
   },
   "nav": {
     "home": "Home",
@@ -629,5 +632,33 @@
       "cardTitle": "#{{id}} Report on {{name}}",
       "cardReason": "Reason: {{reason}}"
     }
+  },
+  "introduce": {
+    "location": "Location",
+    "representative": "Leader",
+    "contact": "Contact",
+    "homepage": "Website",
+    "office": "Office",
+    "adminTeam": "Admin team"
+  },
+  "club": {
+    "title": "Clubs",
+    "empty": "No clubs yet.",
+    "categories": {
+      "performance1": "Performance 1",
+      "performance2": "Performance 2",
+      "sports": "Sports",
+      "hobbyAndExhibition": "Hobby & Exhibition",
+      "study": "Academic",
+      "societyAndReligion": "Society & Religion"
+    }
+  },
+  "association": {
+    "title": "Unions",
+    "empty": "No unions yet."
+  },
+  "studentAssociation": {
+    "title": "Student Groups",
+    "empty": "No student groups yet."
   }
 }

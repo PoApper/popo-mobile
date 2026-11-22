@@ -8,6 +8,9 @@ import {
   useColorScheme,
 } from 'react-native';
 
+import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
+
 export type AssociationItemType = {
   uuid: string;
   name: string;
@@ -52,7 +55,7 @@ const AssociationItem: React.FC<Props> = ({item, onPress}) => {
           <Text
             style={[styles.associationName, {color: textColor}]}
             numberOfLines={1}>
-            {item.name}
+            {getLocalizedField(item, 'name', getCurrentLocale())}
           </Text>
           <Text
             style={[
@@ -60,7 +63,7 @@ const AssociationItem: React.FC<Props> = ({item, onPress}) => {
               {color: isDarkMode ? '#888' : '#666'},
             ]}
             numberOfLines={2}>
-            {item.content}
+            {getLocalizedField(item, 'content', getCurrentLocale())}
           </Text>
         </View>
       </View>

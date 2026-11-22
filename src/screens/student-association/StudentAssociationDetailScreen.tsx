@@ -10,12 +10,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
+import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 import {openURLWithFallback} from '@utils/linking';
 import CommonHeader from '@components/CommonHeader';
 
@@ -47,6 +50,8 @@ interface StudentAssociationDetail {
 const StudentAssociationDetailScreen: React.FC<
   StudentAssociationDetailScreenProps
 > = ({navigation, route}) => {
+  const {t} = useTranslation();
+  const locale = getCurrentLocale();
   const isDarkMode = useColorScheme() === 'dark';
   const [data, setData] = useState<StudentAssociationDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -89,7 +94,7 @@ const StudentAssociationDetailScreen: React.FC<
         <CommonHeader navigation={navigation} title={studentAssociationName} />
         <View style={styles.loadingContainer}>
           <Text style={[styles.loadingText, {color: textColor}]}>
-            로딩중...
+            {t('common.loading')}
           </Text>
         </View>
       </SafeAreaView>
@@ -102,7 +107,15 @@ const StudentAssociationDetailScreen: React.FC<
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title={studentAssociationName} />
+      {/* 상세 조회 키가 한글 이름이라 라우트 파라미터는 두고, 헤더만 받은 데이터로 바꾼다. */}
+      <CommonHeader
+        navigation={navigation}
+        title={
+          data
+            ? getLocalizedField(data, 'name', locale)
+            : studentAssociationName
+        }
+      />
 
       <ScrollView style={styles.container}>
         {data && (
@@ -121,13 +134,15 @@ const StudentAssociationDetailScreen: React.FC<
               )}
             </View>
             <View style={styles.contentContainer}>
-              <Text style={[styles.name, {color: textColor}]}>{data.name}</Text>
+              <Text style={[styles.name, {color: textColor}]}>
+                {getLocalizedField(data, 'name', locale)}
+              </Text>
               <Text
                 style={[
                   styles.shortDesc,
                   {color: isDarkMode ? '#999' : '#666'},
                 ]}>
-                {data.shortDesc}
+                {getLocalizedField(data, 'shortDesc', locale)}
               </Text>
 
               <View style={[styles.infoSection, {borderColor}]}>
@@ -136,7 +151,7 @@ const StudentAssociationDetailScreen: React.FC<
                     styles.content,
                     {color: isDarkMode ? '#888' : '#666'},
                   ]}>
-                  {data.content}
+                  {getLocalizedField(data, 'content', locale)}
                 </Text>
               </View>
 
@@ -144,53 +159,53 @@ const StudentAssociationDetailScreen: React.FC<
                 {hasValue(data.location) && (
                   <View style={styles.infoRow}>
                     <Text style={[styles.infoLabel, {color: textColor}]}>
-                      사무실 위치
+                      {t('introduce.office')}
                     </Text>
                     <Text
                       style={[
                         styles.infoValue,
                         {color: isDarkMode ? '#888' : '#666'},
                       ]}>
-                      {data.location}
+                      {getLocalizedField(data, 'location', locale)}
                     </Text>
                   </View>
                 )}
                 {hasValue(data.office) && (
                   <View style={styles.infoRow}>
                     <Text style={[styles.infoLabel, {color: textColor}]}>
-                      협력 행정팀
+                      {t('introduce.adminTeam')}
                     </Text>
                     <Text
                       style={[
                         styles.infoValue,
                         {color: isDarkMode ? '#888' : '#666'},
                       ]}>
-                      {data.office}
+                      {getLocalizedField(data, 'office', locale)}
                     </Text>
                   </View>
                 )}
                 <View style={styles.infoRow}>
                   <Text style={[styles.infoLabel, {color: textColor}]}>
-                    대표자
+                    {t('introduce.representative')}
                   </Text>
                   <Text
                     style={[
                       styles.infoValue,
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}>
-                    {data.representative}
+                    {getLocalizedField(data, 'representative', locale)}
                   </Text>
                 </View>
                 <View style={styles.infoRow}>
                   <Text style={[styles.infoLabel, {color: textColor}]}>
-                    연락처
+                    {t('introduce.contact')}
                   </Text>
                   <Text
                     style={[
                       styles.infoValue,
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}>
-                    {data.contact}
+                    {getLocalizedField(data, 'contact', locale)}
                   </Text>
                 </View>
               </View>
@@ -204,7 +219,9 @@ const StudentAssociationDetailScreen: React.FC<
                         {backgroundColor: '#000000'},
                       ]}
                       onPress={() => openURLWithFallback(data.homepageUrl!)}>
-                      <Text style={styles.socialText}>홈페이지</Text>
+                      <Text style={styles.socialText}>
+                        {t('introduce.homepage')}
+                      </Text>
                     </TouchableOpacity>
                   )}
                   {hasValue(data.facebookUrl) && (
@@ -305,7 +322,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   infoLabel: {
-    width: 90,
+    // 영어 라벨(Admin team)이 값과 겹치지 않는 폭
+    width: 110,
     fontSize: 16,
     fontWeight: '500',
   },

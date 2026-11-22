@@ -10,19 +10,20 @@ import {
   Image,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '@navigation/types';
 import {ClubCategoryKey, CLUB_CATEGORIES} from '@interfaces/club';
 import api from '@utils/api';
+import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 import CommonHeader from '@components/CommonHeader';
 
 type ClubScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Club'>;
 };
 
-const clubCategories = Object.keys(CLUB_CATEGORIES) as ClubCategoryKey[];
-
-const sortTypes = ['가나다순', '조회순'];
+const sortTypes = ['sortAlphabetic', 'sortViews'] as const;
 
 interface ClubItem {
   uuid: string;
@@ -42,12 +43,14 @@ interface ClubItem {
 }
 
 const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [selectedCategory, setSelectedCategory] =
     useState<ClubCategoryKey>('performance1');
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
   const [clubs, setClubs] = useState<ClubItem[]>([]);
-  const [sortType, setSortType] = useState('가나다순');
+  const [sortType, setSortType] =
+    useState<(typeof sortTypes)[number]>('sortAlphabetic');
   const [isLoading, setIsLoading] = useState(true);
 
   const backgroundStyle = {
@@ -73,8 +76,13 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
   }, []);
 
   const getSortedClubs = (clubs: ClubItem[]) => {
-    if (sortType === '가나다순') {
-      return [...clubs].sort((a, b) => a.name.localeCompare(b.name));
+    if (sortType === 'sortAlphabetic') {
+      const locale = getCurrentLocale();
+      return [...clubs].sort((a, b) =>
+        getLocalizedField(a, 'name', locale).localeCompare(
+          getLocalizedField(b, 'name', locale),
+        ),
+      );
     } else {
       return [...clubs].sort((a, b) => b.views - a.views);
     }
@@ -90,14 +98,14 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="동아리" />
+      <CommonHeader navigation={navigation} title={t('club.title')} />
 
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.typeNav}
         contentContainerStyle={styles.typeNavContentContainer}>
-        {clubCategories.map(category => (
+        {CLUB_CATEGORIES.map(category => (
           <TouchableOpacity
             key={category}
             onPress={() => setSelectedCategory(category)}
@@ -119,7 +127,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
                     {color: textColor},
                   ],
                 ]}>
-                {CLUB_CATEGORIES[category]}
+                {t(`club.categories.${category}`)}
               </Text>
               <View
                 style={[
@@ -155,7 +163,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
                 {color: textColor},
                 sortType === type && {color: isDarkMode ? '#000' : '#fff'},
               ]}>
-              {type}
+              {t(`common.${type}`)}
             </Text>
           </TouchableOpacity>
         ))}
@@ -173,7 +181,9 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
               styles.contentContainer,
               {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
             ]}>
-            <Text style={[styles.tempText, {color: textColor}]}>로딩중...</Text>
+            <Text style={[styles.tempText, {color: textColor}]}>
+              {t('common.loading')}
+            </Text>
           </View>
         ) : filteredClubs.length === 0 ? (
           <View
@@ -182,7 +192,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
               {backgroundColor: isDarkMode ? '#1A1A1A' : '#fff'},
             ]}>
             <Text style={[styles.tempText, {color: textColor}]}>
-              등록된 동아리가 없습니다.
+              {t('club.empty')}
             </Text>
           </View>
         ) : (
@@ -196,7 +206,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
               onPress={() =>
                 navigation.navigate('ClubDetail', {
                   clubId: club.uuid,
-                  clubName: club.name,
+                  clubName: getLocalizedField(club, 'name', getCurrentLocale()),
                 })
               }>
               <View style={styles.cardContent}>
@@ -215,7 +225,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
                   <Text
                     style={[styles.clubName, {color: textColor}]}
                     numberOfLines={1}>
-                    {club.name}
+                    {getLocalizedField(club, 'name', getCurrentLocale())}
                   </Text>
                   <Text
                     style={[
@@ -223,7 +233,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}
                     numberOfLines={2}>
-                    {club.shortDesc}
+                    {getLocalizedField(club, 'shortDesc', getCurrentLocale())}
                   </Text>
                 </View>
               </View>
