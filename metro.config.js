@@ -6,11 +6,15 @@ const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
+const defaultConfig = getDefaultConfig(__dirname);
+
 const config = {
   resolver: {
+    // e2e 실행 중 쓰는 스크린샷이 Metro 새로고침을 일으키지 않도록 감시에서 뺀다.
+    blockList: [defaultConfig.resolver.blockList, /\/e2e\/output\/.*/].flat(),
     // axios 1.13.x 업그레이드 후 exports 필드의 react-native 조건으로 브라우저 번들을 resolve하기 위해 필요. 제거 시 crypto 모듈 에러 발생.
     unstable_enablePackageExports: true,
   },
 };
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+module.exports = mergeConfig(defaultConfig, config);
