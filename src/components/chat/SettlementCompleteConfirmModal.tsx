@@ -67,7 +67,7 @@ const SettlementCompleteConfirmModal: React.FC<Props> = ({
               ]}
               onPress={onConfirm}>
               <Text style={[styles.btnText, {color: '#FFFFFF'}]}>
-                {t('paxi.sidebar.completeSettlement')}
+                {t('paxi.settlement.completeConfirmSubmit')}
               </Text>
             </TouchableOpacity>
           </View>
