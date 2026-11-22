@@ -28,6 +28,10 @@
                 <data
                     android:scheme="popo-dev"
                     android:host="room" />
+                <!-- Maestro e2e 실행 시 LogBox를 끄는 링크 (index.js) -->
+                <data
+                    android:scheme="popo-dev"
+                    android:host="e2e" />
             </intent-filter>
 
         </activity>
