@@ -100,7 +100,16 @@
       },
       "sortAlphabetic": "A–Z",
       "sortPopular": "Most reserved"
-    }
+    },
+    "notice": "Notice",
+    "currentReservations": "Reservations",
+    "noReservations": "No reservations on this date.",
+    "booker": "Booked by {{name}}",
+    "timeMissing": "No time info",
+    "selectDate": "Select a date",
+    "pastDateUnavailable": "Past dates can't be reserved",
+    "pastDateAlert": "Past dates can't be reserved. Please select today or a later date.",
+    "apply": "Request reservation"
   },
   "myReservation": {
     "title": "My Schedule",

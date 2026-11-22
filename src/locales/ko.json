@@ -100,7 +100,16 @@
       },
       "sortAlphabetic": "가나다순",
       "sortPopular": "조회순"
-    }
+    },
+    "notice": "알림",
+    "currentReservations": "예약 현황",
+    "noReservations": "예약된 내역이 없습니다.",
+    "booker": "예약자: {{name}}",
+    "timeMissing": "시간 정보 없음",
+    "selectDate": "날짜를 선택해주세요",
+    "pastDateUnavailable": "과거 날짜는 예약 불가",
+    "pastDateAlert": "과거 날짜는 예약할 수 없습니다. 오늘 이후의 날짜를 선택해주세요.",
+    "apply": "예약 신청하기"
   },
   "myReservation": {
     "title": "내 일정",
