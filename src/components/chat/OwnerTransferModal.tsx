@@ -17,6 +17,7 @@ import {backgroundColor, textColor} from '@styles/default';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '~/src/navigation/types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
 
 interface OwnerTransferModalProps {
   modalVisible: boolean;
@@ -33,6 +34,7 @@ const OwnerTransferModal = ({
   myUuid,
   navigation,
 }: OwnerTransferModalProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
 
   const [selectedNewOwnerUuid, setSelectedNewOwnerUuid] = useState<
@@ -49,8 +51,10 @@ const OwnerTransferModal = ({
       .catch(err => {
         console.error('채팅방 나가기 실패', err);
         Alert.alert(
-          '채팅방 나가기 실패',
-          `채팅방 나가기에 실패했습니다.\n${err.response?.data?.message || ''}`,
+          t('paxi.sidebar.leaveFailedTitle'),
+          [t('paxi.sidebar.leaveFailed'), err.response?.data?.message]
+            .filter(Boolean)
+            .join('\n'),
         );
       });
   };
@@ -62,7 +66,7 @@ const OwnerTransferModal = ({
 
   const handleConfirmTransferAndLeave = async () => {
     if (!selectedNewOwnerUuid) {
-      Alert.alert('알림', '다음 방장을 선택해주세요.');
+      Alert.alert(t('common.notice'), t('paxi.member.transferSelectRequired'));
       return;
     }
 
@@ -75,10 +79,10 @@ const OwnerTransferModal = ({
     } catch (err: any) {
       console.error('방장 위임 실패', err);
       Alert.alert(
-        '방장 위임 실패',
-        `방장 위임 중 오류가 발생했습니다.\n${
-          err.response?.data?.message || ''
-        }`,
+        t('paxi.member.transferFailedTitle'),
+        [t('paxi.member.transferFailed'), err.response?.data?.message]
+          .filter(Boolean)
+          .join('\n'),
       );
     }
   };
@@ -111,7 +115,7 @@ const OwnerTransferModal = ({
               marginBottom: 10,
               color: textColor(isDarkMode),
             }}>
-            방장 위임
+            {t('paxi.member.transferTitle')}
           </Text>
           <Text
             style={{
@@ -119,12 +123,12 @@ const OwnerTransferModal = ({
               marginBottom: 16,
               color: isDarkMode ? '#aaa' : '#666',
             }}>
-            나가기 전에 다음 방장을 선택하세요.
+            {t('paxi.member.transferBody')}
           </Text>
           <View style={{width: '100%', gap: 8, flexGrow: 0, maxHeight: 300}}>
             {eligibleNextOwners.length === 0 ? (
               <Text style={{color: textColor(isDarkMode)}}>
-                위임할 수 있는 참여자가 없습니다.
+                {t('paxi.member.transferEmpty')}
               </Text>
             ) : (
               eligibleNextOwners.map(user => (
@@ -189,7 +193,7 @@ const OwnerTransferModal = ({
               ]}
               onPress={() => setModalVisible(false)}>
               <Text style={{color: textColor(isDarkMode), fontWeight: 'bold'}}>
-                취소
+                {t('common.cancel')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -199,7 +203,9 @@ const OwnerTransferModal = ({
               ]}
               onPress={handleConfirmTransferAndLeave}
               disabled={eligibleNextOwners.length === 0}>
-              <Text style={styles.buttonText}>위임 후 나가기</Text>
+              <Text style={styles.buttonText}>
+                {t('paxi.member.transferSubmit')}
+              </Text>
             </TouchableOpacity>
           </View>
         </Pressable>

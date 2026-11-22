@@ -14,6 +14,7 @@ import {MessageData} from '@interfaces/paxi';
 import {backgroundColor, textColor} from '@styles/default';
 import {getColor} from '@utils/userchat-background';
 import paxi_api from '@utils/paxi_api';
+import {useTranslation} from 'react-i18next';
 
 interface UserInfoModalProps {
   modalVisible: boolean;
@@ -30,6 +31,7 @@ const UserInfoModal = ({
   roomUuid,
   isOwner,
 }: UserInfoModalProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
 
   const handleClose = () => {
@@ -44,11 +46,11 @@ const UserInfoModal = ({
       reason: '메시지 작성: ' + msgData.message,
     });
     if (res.status !== 201) {
-      Alert.alert('실패', '메시지 신고에 실패했습니다.');
+      Alert.alert(t('common.failure'), t('paxi.member.reportMessageFailed'));
       return;
     } else {
       handleClose();
-      Alert.alert('성공', '성공적으로 메시지를 신고했습니다.');
+      Alert.alert(t('common.success'), t('paxi.member.reportMessageDone'));
     }
   };
 
@@ -61,11 +63,11 @@ const UserInfoModal = ({
       reason: '메시지 작성: ' + msgData.message,
     });
     if (res.status !== 200) {
-      Alert.alert('실패', '유저 강퇴에 실패했습니다.');
+      Alert.alert(t('common.failure'), t('paxi.member.kickUserFailed'));
       return;
     } else {
       handleClose();
-      Alert.alert('성공', '성공적으로 유저를 강퇴했습니다.');
+      Alert.alert(t('common.success'), t('paxi.member.kickUserDone'));
     }
   };
 
@@ -113,7 +115,7 @@ const UserInfoModal = ({
                   marginBottom: 5,
                   fontWeight: '400',
                 }}>
-                선택된 메시지
+                {t('paxi.member.selectedMessage')}
               </Text>
               <Text
                 numberOfLines={3}
@@ -128,7 +130,9 @@ const UserInfoModal = ({
                     fontStyle: msgData.isDeleted ? 'italic' : 'normal',
                   },
                 ]}>
-                {msgData.isDeleted ? '삭제된 메세지입니다.' : msgData.message}
+                {msgData.isDeleted
+                  ? t('paxi.member.deletedMessage')
+                  : msgData.message}
               </Text>
 
               <View
@@ -146,7 +150,9 @@ const UserInfoModal = ({
                       backgroundColor: isDarkMode ? '#333' : 'black',
                     },
                   ]}>
-                  <Text style={styles.buttonText}>신고하기</Text>
+                  <Text style={styles.buttonText}>
+                    {t('paxi.member.reportTitle')}
+                  </Text>
                 </TouchableOpacity>
                 {isOwner && (
                   <TouchableOpacity
@@ -157,7 +163,9 @@ const UserInfoModal = ({
                         backgroundColor: isDarkMode ? '#333' : 'black',
                       },
                     ]}>
-                    <Text style={styles.buttonText}>추방하기</Text>
+                    <Text style={styles.buttonText}>
+                      {t('paxi.member.kickTitle')}
+                    </Text>
                   </TouchableOpacity>
                 )}
               </View>

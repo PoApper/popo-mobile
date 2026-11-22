@@ -8,6 +8,7 @@ import {
   Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
 
 import {UserData} from '@interfaces/paxi';
 import {textColor, backgroundColor} from '@styles/default';
@@ -30,6 +31,7 @@ const ParticipantItem = ({
   setBanModal,
   setSelectedUserData,
 }: ParticipantItemProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const isOwner = ownerUuid === userInfo.userUuid;
   const isMe = myUuid === userInfo.userUuid;
@@ -88,7 +90,9 @@ const ParticipantItem = ({
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <Text style={{fontSize: 11, color: textColor(isDarkMode)}}>나</Text>
+            <Text style={{fontSize: 11, color: textColor(isDarkMode)}}>
+              {t('paxi.member.me')}
+            </Text>
           </View>
         )}
         <View>
@@ -101,10 +105,10 @@ const ParticipantItem = ({
             <Text
               style={[styles.subText, {color: isDarkMode ? '#999' : '#666'}]}>
               {isOwner && userInfo.isPaid
-                ? '방장 & 송금 완료'
+                ? t('paxi.member.ownerPaid')
                 : isOwner
-                ? '방장'
-                : '송금 완료'}
+                ? t('paxi.member.owner')
+                : t('paxi.member.paid')}
             </Text>
           )}
         </View>
@@ -118,7 +122,9 @@ const ParticipantItem = ({
             ]}
             onPress={banUser}
             disabled={isMe}>
-            <Text style={{color: textColor(isDarkMode)}}>추방</Text>
+            <Text style={{color: textColor(isDarkMode)}}>
+              {t('paxi.member.kick')}
+            </Text>
           </TouchableOpacity>
         ) : null}
         {!isMe ? (
@@ -129,7 +135,9 @@ const ParticipantItem = ({
             ]}
             onPress={reportUser}
             disabled={isMe}>
-            <Text style={{color: textColor(isDarkMode)}}>신고</Text>
+            <Text style={{color: textColor(isDarkMode)}}>
+              {t('paxi.member.report')}
+            </Text>
           </TouchableOpacity>
         ) : null}
       </View>
