@@ -11,11 +11,14 @@ import {
   Linking,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
+import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 import CommonHeader from '@components/CommonHeader';
 
 type AssociationDetailScreenProps = {
@@ -45,6 +48,8 @@ const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({
   navigation,
   route,
 }) => {
+  const {t} = useTranslation();
+  const locale = getCurrentLocale();
   const isDarkMode = useColorScheme() === 'dark';
   const [associationData, setAssociationData] =
     useState<AssociationItem | null>(null);
@@ -92,7 +97,7 @@ const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({
       <SafeAreaView style={backgroundStyle}>
         <View style={styles.loadingContainer}>
           <Text style={[styles.loadingText, {color: textColor}]}>
-            로딩중...
+            {t('common.loading')}
           </Text>
         </View>
       </SafeAreaView>
@@ -119,7 +124,7 @@ const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({
             </View>
             <View style={styles.contentContainer}>
               <Text style={[styles.associationName, {color: textColor}]}>
-                {associationData.name}
+                {getLocalizedField(associationData, 'name', locale)}
               </Text>
 
               <View style={[styles.infoSection, {borderColor}]}>
@@ -128,45 +133,49 @@ const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({
                     styles.content,
                     {color: isDarkMode ? '#888' : '#666'},
                   ]}>
-                  {associationData.content}
+                  {getLocalizedField(associationData, 'content', locale)}
                 </Text>
               </View>
 
               <View style={[styles.infoSection, {borderColor}]}>
                 <View style={styles.infoRow}>
                   <Text style={[styles.infoLabel, {color: textColor}]}>
-                    위치
+                    {t('introduce.location')}
                   </Text>
                   <Text
                     style={[
                       styles.infoValue,
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}>
-                    {associationData.location}
+                    {getLocalizedField(associationData, 'location', locale)}
                   </Text>
                 </View>
                 <View style={styles.infoRow}>
                   <Text style={[styles.infoLabel, {color: textColor}]}>
-                    대표자
+                    {t('introduce.representative')}
                   </Text>
                   <Text
                     style={[
                       styles.infoValue,
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}>
-                    {associationData.representative}
+                    {getLocalizedField(
+                      associationData,
+                      'representative',
+                      locale,
+                    )}
                   </Text>
                 </View>
                 <View style={styles.infoRow}>
                   <Text style={[styles.infoLabel, {color: textColor}]}>
-                    연락처
+                    {t('introduce.contact')}
                   </Text>
                   <Text
                     style={[
                       styles.infoValue,
                       {color: isDarkMode ? '#888' : '#666'},
                     ]}>
-                    {associationData.contact}
+                    {getLocalizedField(associationData, 'contact', locale)}
                   </Text>
                 </View>
               </View>
@@ -184,7 +193,9 @@ const AssociationDetailScreen: React.FC<AssociationDetailScreenProps> = ({
                         onPress={() =>
                           handleLinkPress(associationData.homepageUrl)
                         }>
-                        <Text style={styles.socialText}>홈페이지</Text>
+                        <Text style={styles.socialText}>
+                          {t('introduce.homepage')}
+                        </Text>
                       </TouchableOpacity>
                     )}
                   {associationData.facebookUrl != 'null' &&

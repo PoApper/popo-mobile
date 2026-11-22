@@ -6,6 +6,7 @@ import {
   StyleSheet,
   useColorScheme,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 export type BenefitDiscountItem = {
   id: string;
@@ -22,6 +23,7 @@ type Props = {
 };
 
 const DiscountItem: React.FC<Props> = ({item}) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const subTextColor = isDarkMode ? '#888' : '#666';
@@ -45,7 +47,7 @@ const DiscountItem: React.FC<Props> = ({item}) => {
           <View style={styles.detailsContainer}>
             <View style={styles.infoContainer}>
               <Text style={[styles.infoLabel, {color: subTextColor}]}>
-                📍 지역:
+                {t('benefits.region')}
               </Text>
               <Text style={[styles.infoText, {color: textColor}]}>
                 {item.region}
@@ -53,7 +55,7 @@ const DiscountItem: React.FC<Props> = ({item}) => {
             </View>
             <View style={styles.infoContainer}>
               <Text style={[styles.infoLabel, {color: subTextColor}]}>
-                🕒 영업시간:
+                {t('benefits.openHours')}
               </Text>
               <Text style={[styles.infoText, {color: textColor}]}>
                 {item.openHour}
@@ -61,7 +63,7 @@ const DiscountItem: React.FC<Props> = ({item}) => {
             </View>
             <View style={styles.infoContainer}>
               <Text style={[styles.infoLabel, {color: subTextColor}]}>
-                📞 연락처:
+                {t('benefits.phone')}
               </Text>
               <Text style={[styles.infoText, {color: textColor}]}>
                 {item.phone}
@@ -70,7 +72,7 @@ const DiscountItem: React.FC<Props> = ({item}) => {
           </View>
         )}
         <Text style={[styles.expandIndicator, {color: subTextColor}]}>
-          {expanded ? '접기 ▲' : '상세정보 보기 ▼'}
+          {expanded ? t('benefits.collapse') : t('benefits.showDetails')}
         </Text>
       </View>
     </TouchableOpacity>

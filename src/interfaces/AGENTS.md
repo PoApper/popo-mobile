@@ -12,7 +12,7 @@ TypeScript 데이터 모델 및 타입 정의.
 | File                             | Description                                                               |
 | -------------------------------- | ------------------------------------------------------------------------- |
 | `paxi.ts`                        | Paxi 데이터 모델 (UserData, ChatRoomInfo, MessageData, SettlementData 등) |
-| `club.ts`                        | 동아리 카테고리 상수 (CLUB_CATEGORIES)                                    |
+| `club.ts`                        | 동아리 카테고리 키 목록 (CLUB_CATEGORIES)                                 |
 | `react-native-vector-icons.d.ts` | 벡터 아이콘 라이브러리 타입 선언                                          |
 
 ## For AI Agents

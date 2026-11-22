@@ -1,15 +1,15 @@
 import {Linking, Alert, Platform, ToastAndroid} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
+import i18next from 'i18next';
 
 /**
  * URL을 열고, 실패 시 복사 옵션을 제공하는 유틸리티 함수
  * @param url 열고자 하는 URL
  */
 export async function openURLWithFallback(url: string): Promise<void> {
-  const alertTitle = '링크 열기 실패';
-  const alertMessage =
-    '브라우저를 열 수 없습니다. 아래 링크를 복사하여 브라우저에서 열어주세요:';
-  const copySuccessMessage = '링크가 복사되었습니다';
+  const alertTitle = i18next.t('link.openFailedTitle');
+  const alertMessage = i18next.t('link.openFailedBody');
+  const copySuccessMessage = i18next.t('link.copied');
 
   try {
     const supported = await Linking.canOpenURL(url);
@@ -28,11 +28,9 @@ export async function openURLWithFallback(url: string): Promise<void> {
     }
   } catch (error) {
     console.error('링크 열기 오류:', error);
-    Alert.alert(
-      '오류',
-      '링크를 열 수 없습니다. 네트워크 연결을 확인해주세요.',
-      [{text: '확인', style: 'default'}],
-    );
+    Alert.alert(i18next.t('common.error'), i18next.t('link.networkError'), [
+      {text: i18next.t('common.confirm'), style: 'default'},
+    ]);
   }
 }
 
@@ -47,17 +45,20 @@ function showCopyAlert(
 ): void {
   Alert.alert(title, message + '\n\n' + url, [
     {
-      text: '복사',
+      text: i18next.t('link.copy'),
       onPress: () => {
         Clipboard.setString(url);
         if (Platform.OS === 'android') {
           ToastAndroid.show(copySuccessMessage, ToastAndroid.SHORT);
         } else {
-          Alert.alert('복사됨', '링크가 클립보드에 복사되었습니다.');
+          Alert.alert(
+            i18next.t('link.copiedTitle'),
+            i18next.t('link.copiedBody'),
+          );
         }
       },
     },
-    {text: '확인', style: 'default'},
+    {text: i18next.t('common.confirm'), style: 'default'},
   ]);
 }
 

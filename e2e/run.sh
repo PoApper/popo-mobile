@@ -62,7 +62,7 @@ android_device() {
     local avd
     avd=$(emulator -list-avds 2>/dev/null | head -1)
     [ -n "$avd" ] || die "Android AVD가 없습니다."
-    nohup emulator -avd "$avd" -no-snapshot-save -no-boot-anim >/dev/null 2>&1 &
+    nohup emulator -avd "$avd" -no-boot-anim >/dev/null 2>&1 &
     adb wait-for-device
     until [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ]; do sleep 3; done
     serial=$(adb devices | awk '/^emulator-.*device$/ {print $1; exit}')

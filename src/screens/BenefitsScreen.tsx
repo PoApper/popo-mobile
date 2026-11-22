@@ -9,6 +9,7 @@ import {
   StatusBar,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {RootStackParamList} from '@navigation/types';
@@ -27,13 +28,16 @@ type BenefitsScreenProps = {
 
 // Types imported from components
 
-const benefitTypes = ['제휴 업체', '할인 업체'];
-const sortTypes = ['등록순', '가나다순'];
+const benefitTypes = ['affiliate', 'discount'] as const;
+const sortTypes = ['sortRecent', 'sortAlphabetic'] as const;
 
 const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
-  const [selectedType, setSelectedType] = useState('제휴 업체');
-  const [sortType, setSortType] = useState('등록순');
+  const [selectedType, setSelectedType] =
+    useState<(typeof benefitTypes)[number]>('affiliate');
+  const [sortType, setSortType] =
+    useState<(typeof sortTypes)[number]>('sortRecent');
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
   // const [isLoading, setIsLoading] = useState(true);
   const [officialBenefits, setOfficialBenefits] = useState<
@@ -47,7 +51,7 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
   const getSortedBenefits = (
     benefits: BenefitAffiliateItem[] | BenefitDiscountItem[],
   ) => {
-    if (sortType === '가나다순') {
+    if (sortType === 'sortAlphabetic') {
       return [...benefits].sort((a, b) => a.title.localeCompare(b.title));
     } else {
       return [...benefits].sort(
@@ -58,7 +62,7 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
   };
 
   const dataForList = useMemo(() => {
-    return selectedType === '제휴 업체'
+    return selectedType === 'affiliate'
       ? getSortedBenefits(officialBenefits)
       : getSortedBenefits(discountBenefits);
   }, [selectedType, officialBenefits, discountBenefits, sortType]);
@@ -68,7 +72,7 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
   }: {
     item: BenefitAffiliateItem | BenefitDiscountItem;
   }) => {
-    if (selectedType === '제휴 업체') {
+    if (selectedType === 'affiliate') {
       return <AffiliateItem item={item as BenefitAffiliateItem} />;
     }
     return <DiscountItem item={item as BenefitDiscountItem} />;
@@ -108,7 +112,7 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="총학 제휴업체" />
+      <CommonHeader navigation={navigation} title={t('benefits.title')} />
 
       <View style={styles.typeNav}>
         {benefitTypes.map(type => (
@@ -131,7 +135,7 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
                     const width = e.nativeEvent.layout.width;
                     setTextWidths(prev => ({...prev, [type]: width}));
                   }}>
-                  {type}
+                  {t(`benefits.types.${type}`)}
                 </Text>
                 <View
                   style={[
@@ -168,7 +172,7 @@ const BenefitsScreen: React.FC<BenefitsScreenProps> = ({navigation}) => {
                 {color: textColor},
                 sortType === type && {color: isDarkMode ? '#000' : '#fff'},
               ]}>
-              {type}
+              {t(`common.${type}`)}
             </Text>
           </TouchableOpacity>
         ))}

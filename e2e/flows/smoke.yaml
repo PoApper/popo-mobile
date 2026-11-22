@@ -13,7 +13,12 @@ tags:
 - takeScreenshot: smoke-home-${LANGUAGE}
 - tapOn:
     id: tab-paxi
-# 목록을 불러오는 동안 빈 목록 문구가 먼저 보이므로 방 카드가 뜰 때까지 기다린다(방이 없으면 5초 뒤 진행).
+# 방 목록 조회가 끝날 때까지 기다린다.
+- extendedWaitUntil:
+    notVisible:
+      id: paxi-room-list-loading
+    timeout: 10000
+# 카드는 각자 상세를 받은 뒤에 그려지므로 카드가 뜰 때까지 기다린다(방이 없으면 5초 뒤 진행).
 - extendedWaitUntil:
     visible: '(Departs .*|.* 출발)'
     timeout: 5000

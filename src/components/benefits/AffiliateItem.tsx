@@ -6,6 +6,7 @@ import {
   StyleSheet,
   useColorScheme,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 export type BenefitAffiliateItem = {
   id: string;
@@ -20,6 +21,7 @@ type Props = {
 };
 
 const AffiliateItem: React.FC<Props> = ({item}) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const subTextColor = isDarkMode ? '#888' : '#666';
@@ -40,7 +42,7 @@ const AffiliateItem: React.FC<Props> = ({item}) => {
           {expanded ? item.content : item.contentShort}
         </Text>
         <Text style={[styles.expandIndicator, {color: subTextColor}]}>
-          {expanded ? '접기 ▲' : '더보기 ▼'}
+          {expanded ? t('benefits.collapse') : t('benefits.showMore')}
         </Text>
       </View>
     </TouchableOpacity>

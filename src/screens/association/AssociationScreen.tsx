@@ -9,10 +9,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
+import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 import CommonHeader from '@components/CommonHeader';
 import AssociationItem, {
   AssociationItemType,
@@ -24,11 +27,13 @@ type AssociationScreenProps = {
 
 // Type moved to component file for reuse
 
-const sortTypes = ['가나다순', '조회순'];
+const sortTypes = ['sortAlphabetic', 'sortViews'] as const;
 
 const AssociationScreen: React.FC<AssociationScreenProps> = ({navigation}) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
-  const [sortType, setSortType] = useState('가나다순');
+  const [sortType, setSortType] =
+    useState<(typeof sortTypes)[number]>('sortAlphabetic');
   const [isLoading, setIsLoading] = useState(true);
   const [associations, setAssociations] = useState<AssociationItemType[]>([]);
 
@@ -40,8 +45,13 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({navigation}) => {
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
 
   const getSortedAssociations = (items: AssociationItemType[]) => {
-    if (sortType === '가나다순') {
-      return [...items].sort((a, b) => a.name.localeCompare(b.name));
+    if (sortType === 'sortAlphabetic') {
+      const locale = getCurrentLocale();
+      return [...items].sort((a, b) =>
+        getLocalizedField(a, 'name', locale).localeCompare(
+          getLocalizedField(b, 'name', locale),
+        ),
+      );
     } else {
       return [...items].sort((a, b) => b.views - a.views);
     }
@@ -71,7 +81,11 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({navigation}) => {
         onPress={() =>
           navigation.navigate('AssociationDetail', {
             associationId: item.uuid,
-            associationName: item.name,
+            associationName: getLocalizedField(
+              item,
+              'name',
+              getCurrentLocale(),
+            ),
           })
         }
       />
@@ -86,7 +100,7 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({navigation}) => {
           isDarkMode ? styles.cardDark : styles.cardLight,
         ]}>
         <Text style={[styles.tempText, {color: textColor}]}>
-          {isLoading ? '로딩중...' : '등록된 자치단체가 없습니다.'}
+          {isLoading ? t('common.loading') : t('association.empty')}
         </Text>
       </View>
     );
@@ -98,7 +112,7 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({navigation}) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="자치단체" />
+      <CommonHeader navigation={navigation} title={t('association.title')} />
 
       <View style={styles.sortButtons}>
         {sortTypes.map(type => (
@@ -119,7 +133,7 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({navigation}) => {
                 {color: textColor},
                 sortType === type && {color: isDarkMode ? '#000' : '#fff'},
               ]}>
-              {type}
+              {t(`common.${type}`)}
             </Text>
           </TouchableOpacity>
         ))}

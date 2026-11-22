@@ -1,0 +1,29 @@
+# 총학 제휴·할인 업체 목록과 펼친 상세.
+appId: ${APP_ID}
+name: benefits
+---
+- runFlow: ../common/launch.yaml
+- runFlow: ../common/set-language.yaml
+- tapOn:
+    id: tab-home
+- tapOn:
+    id: home-service-benefits
+- extendedWaitUntil:
+    visible: "${LANGUAGE == 'en' ? '.*Show more ▼' : '.*더보기 ▼'}"
+    timeout: 10000
+- tapOn:
+    text: "${LANGUAGE == 'en' ? '.*Show more ▼' : '.*더보기 ▼'}"
+    index: 0
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: campus-benefits-affiliate-${LANGUAGE}
+- tapOn: "${LANGUAGE == 'en' ? 'Discounts' : '할인 업체'}"
+- extendedWaitUntil:
+    visible: "${LANGUAGE == 'en' ? '.*Show details ▼' : '.*상세정보 보기 ▼'}"
+    timeout: 10000
+- tapOn:
+    text: "${LANGUAGE == 'en' ? '.*Show details ▼' : '.*상세정보 보기 ▼'}"
+    index: 0
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: campus-benefits-discount-${LANGUAGE}

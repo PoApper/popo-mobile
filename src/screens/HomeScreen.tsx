@@ -125,56 +125,56 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
 
   const services: ServiceItem[] = [
     {
-      id: '1',
+      id: 'place-reservation',
       icon: 'place',
       title: t('home.services.placeReservation'),
       active: true,
       onPress: () => navigation.navigate('PlaceReservation'),
     },
     {
-      id: '2',
+      id: 'equip-reservation',
       icon: 'computer',
       title: t('home.services.equipReservation'),
       active: true,
       onPress: () => navigation.navigate('EquipmentReservation'),
     },
     {
-      id: '3',
+      id: 'club',
       icon: 'people',
       title: t('home.services.club'),
       active: true,
       onPress: () => navigation.navigate('Club'),
     },
     {
-      id: '4',
+      id: 'association',
       icon: 'account-balance',
       title: t('home.services.association'),
       active: true,
       onPress: () => navigation.navigate('Association'),
     },
     {
-      id: '5',
+      id: 'student-association',
       icon: 'groups',
       title: t('home.services.studentAssociation'),
       active: true,
       onPress: () => navigation.navigate('StudentAssociation'),
     },
     {
-      id: '6',
+      id: 'whitebook',
       icon: 'menu-book',
       title: t('home.services.whitebook'),
       active: true,
       onPress: () => navigation.navigate('Whitebook'),
     },
     {
-      id: '7',
+      id: 'benefits',
       icon: 'store',
       title: t('home.services.benefits'),
       active: true,
       onPress: () => navigation.navigate('Benefits'),
     },
     {
-      id: '8',
+      id: 'delivery',
       icon: 'dining',
       title: t('home.services.delivery'),
       active: true,
@@ -192,7 +192,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
       },
     },
     {
-      id: '9',
+      id: 'archive',
       icon: 'description',
       title: t('home.services.archive'),
       active: true,
@@ -256,6 +256,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
             {services.map(service => (
               <TouchableOpacity
                 key={service.id}
+                testID={`home-service-${service.id}`}
                 style={[styles.serviceItem]}
                 onPress={service.active ? service.onPress : undefined}>
                 <Icon

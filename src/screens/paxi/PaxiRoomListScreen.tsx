@@ -13,6 +13,7 @@ import {
   BackHandler,
   ToastAndroid,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -42,6 +43,8 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
 
   const [hideFullRoom, setHideFullRoom] = useState(true);
   const [roomData, setRoomData] = useState<RoomDataType[]>([]);
+  // 첫 조회가 끝나기 전에는 빈 목록 문구 대신 로딩 표시를 보인다.
+  const [hasLoaded, setHasLoaded] = useState(false);
   const [userUuid, setUserUuid] = useState<string>('');
   const [refreshing, setRefreshing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -140,6 +143,8 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
         console.error('Error:', err);
         const message = err instanceof Error ? err.message : String(err);
         Alert.alert(t('common.failure'), t('paxi.userCheckFailed', {message}));
+      } finally {
+        setHasLoaded(true);
       }
     });
 
@@ -272,11 +277,18 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
           />
         )}
         contentContainerStyle={{padding: 16, paddingBottom: 100}}
-        ListEmptyComponent={() => (
-          <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>
-            {t('paxi.roomList.empty')}
-          </Text>
-        )}
+        ListEmptyComponent={() =>
+          hasLoaded ? (
+            <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>
+              {t('paxi.roomList.empty')}
+            </Text>
+          ) : (
+            <ActivityIndicator
+              testID="paxi-room-list-loading"
+              color={textColor}
+            />
+          )
+        }
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
