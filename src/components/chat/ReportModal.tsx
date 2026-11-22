@@ -16,6 +16,7 @@ import {
 
 import {UserData} from '@interfaces/paxi';
 import {TextInput} from 'react-native-gesture-handler';
+import {Trans, useTranslation} from 'react-i18next';
 import paxi_api from '@utils/paxi_api';
 import {backgroundColor, textColor} from '@styles/default';
 
@@ -32,6 +33,7 @@ const ReportModal = ({
   roomUuid,
   userData,
 }: ReportModalProps) => {
+  const {t} = useTranslation();
   const modalWidth = Dimensions.get('window').width * 0.75;
   const modalHeight = Dimensions.get('window').height * 0.3;
   const isDarkMode = useColorScheme() === 'dark';
@@ -55,10 +57,13 @@ const ReportModal = ({
         reason: reason,
       })
       .then(() => {
-        Alert.alert('처리 완료', '신고 요청이 처리되었습니다.');
+        Alert.alert(t('paxi.member.doneTitle'), t('paxi.report.done'));
       })
       .catch(() => {
-        Alert.alert('신고 실패', '신고 요청에 실패했습니다.');
+        Alert.alert(
+          t('paxi.member.reportFailedTitle'),
+          t('paxi.report.failed'),
+        );
       });
   };
 
@@ -107,14 +112,16 @@ const ReportModal = ({
                         styles.modalTitle,
                         {color: textColor(isDarkMode)},
                       ]}>
-                      신고하기
+                      {t('paxi.member.reportTitle')}
                     </Text>
                   </View>
                   <Text
                     style={{marginBottom: 10, color: textColor(isDarkMode)}}>
-                    <Text style={{color: 'red'}}>{userData?.nickname}</Text>님을
-                    {'\n'}
-                    정말로 신고하실건가요?
+                    <Trans
+                      i18nKey="paxi.report.confirm"
+                      values={{name: userData?.nickname}}
+                      components={{name: <Text style={{color: 'red'}} />}}
+                    />
                   </Text>
                   <TextInput
                     style={[
@@ -126,7 +133,7 @@ const ReportModal = ({
                     ]}
                     value={reportText}
                     onChangeText={setReportText}
-                    placeholder="사유를 입력해주세요. (200자 이내)"
+                    placeholder={t('paxi.member.kickReasonPlaceholder')}
                     placeholderTextColor="#999"
                     multiline={true}
                     maxLength={200}
@@ -147,7 +154,7 @@ const ReportModal = ({
                         styles.cancelButtonText,
                         {color: textColor(isDarkMode)},
                       ]}>
-                      취소
+                      {t('common.cancel')}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -160,7 +167,9 @@ const ReportModal = ({
                       handleReport(reportText);
                       handleClose();
                     }}>
-                    <Text style={styles.reportButtonText}>신고하기</Text>
+                    <Text style={styles.reportButtonText}>
+                      {t('paxi.member.reportTitle')}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </Pressable>

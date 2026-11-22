@@ -8,6 +8,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {OtherStackParamList} from '@navigation/types';
@@ -21,6 +22,7 @@ type PaxiReportListScreenProps = {
 };
 
 const PaxiReportListScreen = ({navigation}: PaxiReportListScreenProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
 
   const [reportList, setReportList] = useState<ReportData[]>([]);
@@ -44,7 +46,10 @@ const PaxiReportListScreen = ({navigation}: PaxiReportListScreenProps) => {
       })
       .catch(error => {
         console.error('Error:', error);
-        Alert.alert('실패', '방을 불러오는데 실패했습니다: ' + error.message);
+        Alert.alert(
+          t('common.failure'),
+          t('paxi.report.listLoadFailed', {message: error.message}),
+        );
       });
   };
 
@@ -77,7 +82,10 @@ const PaxiReportListScreen = ({navigation}: PaxiReportListScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <CommonHeader navigation={navigation} title="Paxi 신고 목록" />
+      <CommonHeader
+        navigation={navigation}
+        title={t('paxi.report.listTitle')}
+      />
 
       <ReportProgressModal
         modalVisible={reportProgressModalVisible}
@@ -99,7 +107,7 @@ const PaxiReportListScreen = ({navigation}: PaxiReportListScreenProps) => {
         contentContainerStyle={{padding: 15}}
         ListEmptyComponent={() => (
           <Text style={{fontSize: 16, textAlign: 'center', color: textColor}}>
-            신고 내역이 없습니다.
+            {t('paxi.report.empty')}
           </Text>
         )}
         showsVerticalScrollIndicator={false}

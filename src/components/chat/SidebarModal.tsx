@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {useState, useEffect, useRef} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
 
 import {ChatRoomInfo, UserData} from '@interfaces/paxi';
 import RoomInfoBox from '@components/chat/RoomInfoBox';
@@ -46,6 +47,7 @@ const SidebarModal = ({
   isMuted,
   onToggleMute,
 }: SidebarModalProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const screenWidth = Dimensions.get('window').width;
   const slideAnim = useRef(new Animated.Value(screenWidth * 0.8)).current;
@@ -117,21 +119,28 @@ const SidebarModal = ({
   };
 
   const handleSettlementDeletePress = () => {
-    Alert.alert('정산 취소', '정산 요청을 취소하시겠습니까?', [
-      {text: '취소', style: 'cancel'},
-      {
-        text: '취소하기',
-        onPress: () => {
-          paxi_api.delete(`/room/${roomData.uuid}/settlement`).then(res => {
-            if (res.status !== 200) {
-              Alert.alert('실패', `response: ${res.status}`);
-            } else {
-              Alert.alert('성공', '정산 요청을 취소했습니다.');
-            }
-          });
+    Alert.alert(
+      t('paxi.sidebar.cancelSettlement'),
+      t('paxi.sidebar.cancelSettlementBody'),
+      [
+        {text: t('common.cancel'), style: 'cancel'},
+        {
+          text: t('paxi.sidebar.cancelSettlementConfirm'),
+          onPress: () => {
+            paxi_api.delete(`/room/${roomData.uuid}/settlement`).then(res => {
+              if (res.status !== 200) {
+                Alert.alert(t('common.failure'), `response: ${res.status}`);
+              } else {
+                Alert.alert(
+                  t('common.success'),
+                  t('paxi.sidebar.settlementCancelled'),
+                );
+              }
+            });
+          },
         },
-      },
-    ]);
+      ],
+    );
   };
 
   const performLeave = async () => {
@@ -152,10 +161,10 @@ const SidebarModal = ({
             err,
           );
           Alert.alert(
-            '채팅방 나가기 실패',
-            `채팅방 나가기에 실패했습니다.\n${
-              err.response?.data?.message || ''
-            }`,
+            t('paxi.sidebar.leaveFailedTitle'),
+            [t('paxi.sidebar.leaveFailed'), err.response?.data?.message]
+              .filter(Boolean)
+              .join('\n'),
           );
         });
     } else {
@@ -172,10 +181,10 @@ const SidebarModal = ({
         .catch(err => {
           console.error('채팅방 나가기 실패', err);
           Alert.alert(
-            '채팅방 나가기 실패',
-            `채팅방 나가기에 실패했습니다.\n${
-              err.response?.data?.message || ''
-            }`,
+            t('paxi.sidebar.leaveFailedTitle'),
+            [t('paxi.sidebar.leaveFailed'), err.response?.data?.message]
+              .filter(Boolean)
+              .join('\n'),
           );
         });
     }
@@ -185,20 +194,26 @@ const SidebarModal = ({
     paxi_api
       .patch(`/room/${roomData.uuid}/complete`)
       .then(() => {
-        Alert.alert('정산 완료', '정산이 완료되었습니다.', [
-          {
-            text: '확인',
-            onPress: () => {
-              setModalVisible(false);
+        Alert.alert(
+          t('paxi.sidebar.completeSettlement'),
+          t('paxi.sidebar.settlementCompletedBody'),
+          [
+            {
+              text: t('common.confirm'),
+              onPress: () => {
+                setModalVisible(false);
+              },
             },
-          },
-        ]);
+          ],
+        );
       })
       .catch(err => {
         console.error('정산 완료 실패', err);
         Alert.alert(
-          '정산 완료 실패',
-          `정산 완료에 실패했습니다.\n${err.response?.data?.message || ''}`,
+          t('paxi.sidebar.completeFailedTitle'),
+          [t('paxi.sidebar.completeFailed'), err.response?.data?.message]
+            .filter(Boolean)
+            .join('\n'),
         );
       });
   };
@@ -207,17 +222,17 @@ const SidebarModal = ({
     // If settlement is completed, show different message
     if (isPaidEnd) {
       Alert.alert(
-        '정산이 종료됨',
-        '정보 보존을 위해 정산이 완료된 방은 나갈 수 없습니다.',
-        [{text: '확인', style: 'default'}],
+        t('paxi.sidebar.settlementEndedTitle'),
+        t('paxi.sidebar.settlementEndedBody'),
+        [{text: t('common.confirm'), style: 'default'}],
       );
       return;
     }
 
     if (isSettlementRequestExist) {
       Alert.alert(
-        '생성된 정산 요청이 있습니다.',
-        '정산 요청이 있는 채팅방은 나갈 수 없습니다.\n정산이 완료된 후, 정산자가 채팅방을 직접 마감해주세요.',
+        t('paxi.sidebar.settlementPendingTitle'),
+        t('paxi.sidebar.settlementPendingBody'),
       );
       return;
     }
@@ -231,12 +246,12 @@ const SidebarModal = ({
     // If owner and alone, show deletion warning
     if (isIamOwner && roomPeopleCnt === 1) {
       Alert.alert(
-        '채팅방 나가기',
-        '혼자 남은 상태에서 나가시면 방이 삭제됩니다.\n정말 나가시겠습니까?',
+        t('paxi.sidebar.leaveTitle'),
+        t('paxi.sidebar.leaveAloneBody'),
         [
-          {text: '취소', style: 'cancel'},
+          {text: t('common.cancel'), style: 'cancel'},
           {
-            text: '나가기',
+            text: t('paxi.sidebar.leave'),
             style: 'destructive',
             onPress: () => {
               performLeave();
@@ -247,10 +262,10 @@ const SidebarModal = ({
       return;
     }
 
-    Alert.alert('채팅방 나가기', '채팅방을 나가시겠습니까?', [
-      {text: '취소', style: 'cancel'},
+    Alert.alert(t('paxi.sidebar.leaveTitle'), t('paxi.sidebar.leaveBody'), [
+      {text: t('common.cancel'), style: 'cancel'},
       {
-        text: '나가기',
+        text: t('paxi.sidebar.leave'),
         onPress: () => {
           performLeave();
         },
@@ -310,14 +325,16 @@ const SidebarModal = ({
                       onPress={() => {
                         if (roomData.currentParticipant === 1) {
                           Alert.alert(
-                            '혼자 있는 채팅방',
-                            '혼자 있는 채팅방은 정산 요청이 불가능합니다.',
+                            t('paxi.sidebar.aloneTitle'),
+                            t('paxi.sidebar.aloneBody'),
                           );
                         } else {
                           handleSettlementPress();
                         }
                       }}>
-                      <Text style={[styles.buttonText]}>정산 요청하기</Text>
+                      <Text style={[styles.buttonText]}>
+                        {t('paxi.sidebar.requestSettlement')}
+                      </Text>
                     </TouchableOpacity>
                   )}
                   {(roomData.payerUuid?.length ?? 0) > 0 && (
@@ -336,7 +353,9 @@ const SidebarModal = ({
                               {backgroundColor: isDarkMode ? '#333' : '#000'},
                             ]}
                             onPress={handleSettlementPress}>
-                            <Text style={[styles.buttonText]}>정산 수정</Text>
+                            <Text style={[styles.buttonText]}>
+                              {t('paxi.sidebar.editSettlement')}
+                            </Text>
                           </TouchableOpacity>
                           <TouchableOpacity
                             style={[
@@ -344,7 +363,9 @@ const SidebarModal = ({
                               {backgroundColor: isDarkMode ? '#333' : '#000'},
                             ]}
                             onPress={handleSettlementDeletePress}>
-                            <Text style={[styles.buttonText]}>정산 취소</Text>
+                            <Text style={[styles.buttonText]}>
+                              {t('paxi.sidebar.cancelSettlement')}
+                            </Text>
                           </TouchableOpacity>
                         </View>
                       )}
@@ -363,8 +384,8 @@ const SidebarModal = ({
                             ]}>
                             <Text style={[styles.buttonText]}>
                               {isPaidEnd
-                                ? '정산이 완료되었습니다'
-                                : '정산을 진행 중입니다'}
+                                ? t('paxi.sidebar.settlementCompleted')
+                                : t('paxi.sidebar.settlementInProgress')}
                             </Text>
                           </View>
                         </View>
@@ -456,7 +477,7 @@ const SidebarModal = ({
                       ]}
                       onPress={() => setSettlementConfirmVisible(true)}>
                       <Text style={styles.completeSettlementButtonText}>
-                        정산 완료
+                        {t('paxi.sidebar.completeSettlement')}
                       </Text>
                     </TouchableOpacity>
                   )}

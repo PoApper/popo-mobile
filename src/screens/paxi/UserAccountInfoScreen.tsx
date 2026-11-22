@@ -13,6 +13,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
@@ -23,6 +24,7 @@ type UserAccountInfoScreenProps = {
 };
 
 const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
+  const {t} = useTranslation();
   const [bankName, setBankName] = useState<string>('');
   const [accountNumber, setAccountNumber] = useState<string>('');
   const [accountHolderName, setAccountHolderName] = useState<string>('');
@@ -71,15 +73,18 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
 
   const validateInput = () => {
     if (!bankName.trim()) {
-      Alert.alert('오류', '은행명을 입력해주세요.');
+      Alert.alert(t('common.error'), t('paxi.account.bankNamePlaceholder'));
       return false;
     }
     if (!accountNumber.trim()) {
-      Alert.alert('오류', '계좌번호를 입력해주세요.');
+      Alert.alert(
+        t('common.error'),
+        t('paxi.account.accountNumberPlaceholder'),
+      );
       return false;
     }
     if (!accountHolderName.trim()) {
-      Alert.alert('오류', '계좌주명을 입력해주세요.');
+      Alert.alert(t('common.error'), t('paxi.account.holderPlaceholder'));
       return false;
     }
     return true;
@@ -105,13 +110,13 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
       }
 
       Alert.alert(
-        '성공',
+        t('common.success'),
         isPaxiAccountInfoExist
-          ? '계좌 정보가 수정되었습니다.'
-          : '계좌 정보가 등록되었습니다.',
+          ? t('paxi.account.updated')
+          : t('paxi.account.registered'),
         [
           {
-            text: '확인',
+            text: t('common.confirm'),
             onPress: () => navigation.goBack(),
           },
         ],
@@ -119,10 +124,10 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
     } catch (error: any) {
       console.error('계좌 정보 저장 실패:', error);
       Alert.alert(
-        '실패',
-        `계좌 정보 저장에 실패했습니다: ${
-          error.response?.data?.message || error.message
-        }`,
+        t('common.failure'),
+        t('paxi.account.saveFailed', {
+          message: error.response?.data?.message || error.message,
+        }),
       );
     } finally {
       setIsLoading(false);
@@ -139,10 +144,14 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+          <Text style={[styles.backButtonText, {color: textColor}]}>
+            {t('common.back')}
+          </Text>
         </TouchableOpacity>
         <Text style={[styles.headerTitle, {color: textColor}]}>
-          {existingData?.bankName ? '계좌 정보 수정' : '계좌 정보 등록'}
+          {existingData?.bankName
+            ? t('paxi.account.editTitle')
+            : t('paxi.account.registerTitle')}
         </Text>
         <View style={styles.placeholderButton} />
       </View>
@@ -154,14 +163,15 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
           {existingData?.bankName && (
             <View style={styles.existingInfoContainer}>
               <Text style={styles.existingInfoText}>
-                기존 계좌 정보가 있습니다.{'\n'}
-                아래 정보를 수정하거나 그대로 유지할 수 있습니다.
+                {t('paxi.account.existing')}
               </Text>
             </View>
           )}
 
           <View style={{width: '100%', marginBottom: 8}}>
-            <Text style={[styles.titleText, {color: textColor}]}>은행명</Text>
+            <Text style={[styles.titleText, {color: textColor}]}>
+              {t('paxi.account.bankName')}
+            </Text>
             <TextInput
               style={[
                 styles.input,
@@ -172,7 +182,7 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
                   color: textColor,
                 },
               ]}
-              placeholder="은행명을 입력해주세요."
+              placeholder={t('paxi.account.bankNamePlaceholder')}
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={bankName}
               onChangeText={setBankName}
@@ -180,7 +190,9 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
           </View>
 
           <View style={{width: '100%', marginBottom: 8}}>
-            <Text style={[styles.titleText, {color: textColor}]}>계좌번호</Text>
+            <Text style={[styles.titleText, {color: textColor}]}>
+              {t('paxi.account.accountNumber')}
+            </Text>
             <TextInput
               style={[
                 styles.input,
@@ -191,7 +203,7 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
                   color: textColor,
                 },
               ]}
-              placeholder="계좌번호를 입력해주세요."
+              placeholder={t('paxi.account.accountNumberPlaceholder')}
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={accountNumber}
               onChangeText={text => {
@@ -204,7 +216,9 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
           </View>
 
           <View style={{width: '100%', marginBottom: 8}}>
-            <Text style={[styles.titleText, {color: textColor}]}>계좌주명</Text>
+            <Text style={[styles.titleText, {color: textColor}]}>
+              {t('paxi.account.holder')}
+            </Text>
             <TextInput
               style={[
                 styles.input,
@@ -215,7 +229,7 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
                   color: textColor,
                 },
               ]}
-              placeholder="계좌주명을 입력해주세요."
+              placeholder={t('paxi.account.holderPlaceholder')}
               placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
               value={accountHolderName}
               onChangeText={setAccountHolderName}
@@ -228,9 +242,7 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
                 styles.infoText,
                 {color: isDarkMode ? '#BBBBBB' : '#6B7280'},
               ]}>
-              • 등록된 계좌 정보는 Paxi 정산 시 기본값으로 사용됩니다.{'\n'}•
-              계좌 정보는 안전하게 암호화되어 저장됩니다.{'\n'}• 언제든지 이
-              페이지에서 계좌 정보를 수정할 수 있습니다.
+              {t('paxi.account.notes')}
             </Text>
           </View>
         </View>
@@ -246,10 +258,10 @@ const UserAccountInfoScreen = ({navigation}: UserAccountInfoScreenProps) => {
           disabled={isLoading}>
           <Text style={styles.saveButtonText}>
             {isLoading
-              ? '처리 중...'
+              ? t('common.processing')
               : isPaxiAccountInfoExist
-              ? '계좌 정보 수정'
-              : '계좌 정보 등록'}
+              ? t('paxi.account.editTitle')
+              : t('paxi.account.registerTitle')}
           </Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>

@@ -16,6 +16,7 @@ import {
 
 import {UserData} from '@interfaces/paxi';
 import {TextInput} from 'react-native-gesture-handler';
+import {Trans, useTranslation} from 'react-i18next';
 import paxi_api from '@utils/paxi_api';
 import {getAxiosErrorInfo} from '@utils/axios-error';
 import {backgroundColor, textColor} from '@styles/default';
@@ -33,6 +34,7 @@ const BanModal = ({
   roomUuid,
   userData,
 }: BanModalProps) => {
+  const {t} = useTranslation();
   const modalWidth = Dimensions.get('window').width * 0.75;
   const modalHeight = Dimensions.get('window').height * 0.3;
   const isDarkMode = useColorScheme() === 'dark';
@@ -56,11 +58,14 @@ const BanModal = ({
       })
       .then(data => {
         console.log('추방 성공: ', data);
-        Alert.alert('처리 완료', '추방 요청이 처리되었습니다.');
+        Alert.alert(t('paxi.member.doneTitle'), t('paxi.member.kickDone'));
       })
       .catch(error => {
         const {detail} = getAxiosErrorInfo(error);
-        Alert.alert('추방 실패', detail ?? '알 수 없는 오류가 발생했습니다.');
+        Alert.alert(
+          t('paxi.member.kickFailedTitle'),
+          detail ?? t('common.unknownError'),
+        );
         console.error('추방 실패. 사유: ', error.response);
       });
   };
@@ -110,14 +115,16 @@ const BanModal = ({
                         styles.modalTitle,
                         {color: textColor(isDarkMode)},
                       ]}>
-                      추방하기
+                      {t('paxi.member.kickTitle')}
                     </Text>
                   </View>
                   <Text
                     style={{marginBottom: 10, color: textColor(isDarkMode)}}>
-                    <Text style={{color: 'red'}}>{userData?.nickname}</Text>님을
-                    {'\n'}
-                    정말로 추방하실건가요?
+                    <Trans
+                      i18nKey="paxi.member.kickConfirm"
+                      values={{name: userData?.nickname}}
+                      components={{name: <Text style={{color: 'red'}} />}}
+                    />
                   </Text>
                   <TextInput
                     style={[
@@ -129,7 +136,7 @@ const BanModal = ({
                     ]}
                     value={banText}
                     onChangeText={setBanText}
-                    placeholder="사유를 입력해주세요. (200자 이내)"
+                    placeholder={t('paxi.member.kickReasonPlaceholder')}
                     placeholderTextColor="#999"
                     multiline={true}
                     maxLength={200}
@@ -150,7 +157,7 @@ const BanModal = ({
                         styles.cancelButtonText,
                         {color: textColor(isDarkMode)},
                       ]}>
-                      취소
+                      {t('common.cancel')}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -163,7 +170,9 @@ const BanModal = ({
                       handleBan(banText);
                       handleClose();
                     }}>
-                    <Text style={styles.banButtonText}>추방하기</Text>
+                    <Text style={styles.banButtonText}>
+                      {t('paxi.member.kickTitle')}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </Pressable>

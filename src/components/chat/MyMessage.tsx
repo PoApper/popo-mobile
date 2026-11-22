@@ -8,6 +8,7 @@ import {
 import {MessageData} from '@interfaces/paxi';
 import {textColor} from '@styles/default';
 import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 
 interface MyMessageProps {
   message: MessageData;
@@ -15,6 +16,7 @@ interface MyMessageProps {
 }
 
 const MyMessage = ({message, handleMyMsgClick}: MyMessageProps) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
@@ -47,13 +49,17 @@ const MyMessage = ({message, handleMyMsgClick}: MyMessageProps) => {
           },
         ]}>
         {message.isDeleted ? (
-          <Text style={[styles.messageText, {color: '#9b9b9b'}]}>삭제됨</Text>
+          <Text style={[styles.messageText, {color: '#9b9b9b'}]}>
+            {t('paxi.chat.deleted')}
+          </Text>
         ) : (
           <>
             <Text style={[styles.messageText, {color: textColor(isDarkMode)}]}>
               {message.message}
             </Text>
-            {message.isEdited && <Text style={styles.editedText}>수정됨</Text>}
+            {message.isEdited && (
+              <Text style={styles.editedText}>{t('paxi.chat.edited')}</Text>
+            )}
           </>
         )}
       </TouchableOpacity>

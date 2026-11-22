@@ -13,6 +13,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-controller';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp, useRoute} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 import {RootStackParamList} from '@navigation/types';
 import paxi_api from '@utils/paxi_api';
@@ -27,6 +28,7 @@ type SettlementScreenProps = {
 type SettlementScreenRouteProp = RouteProp<RootStackParamList, 'Settlement'>;
 
 const SettlementScreen = ({navigation}: SettlementScreenProps) => {
+  const {t} = useTranslation();
   const route = useRoute<SettlementScreenRouteProp>();
   const {roomUuid} = route.params;
 
@@ -56,7 +58,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
 
   const checkInputValid = () => {
     if (!bankName || !accountNumber || !accountName || !totalCost) {
-      Alert.alert('오류', '모든 필수 필드를 입력해주세요.');
+      Alert.alert(t('common.error'), t('paxi.form.requiredFields'));
       return;
     }
     if (isAlreadyRequested) {
@@ -70,9 +72,12 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         } as SettlementCreateData)
         .then(res => {
           if (res.status !== 200) {
-            Alert.alert('실패', `response: ${res.status}`);
+            Alert.alert(t('common.failure'), `response: ${res.status}`);
           } else {
-            Alert.alert('성공', '정산 요청을 수정했습니다.');
+            Alert.alert(
+              t('common.success'),
+              t('paxi.settlement.requestUpdated'),
+            );
             navigation.goBack();
           }
         });
@@ -87,19 +92,19 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         } as SettlementCreateData)
         .then(res => {
           if (res.status !== 201) {
-            Alert.alert('실패', `response: ${res.status}`);
+            Alert.alert(t('common.failure'), `response: ${res.status}`);
           } else {
-            Alert.alert('성공', '정산 요청을 보냈습니다.');
+            Alert.alert(t('common.success'), t('paxi.settlement.requestSent'));
             navigation.goBack();
           }
         })
         .catch(error => {
           const {detail} = getAxiosErrorInfo(error);
           Alert.alert(
-            '실패',
-            `정산 요청에 실패했습니다: ${
-              detail ?? '알 수 없는 오류가 발생했습니다.'
-            }`,
+            t('common.failure'),
+            t('paxi.settlement.requestFailed', {
+              message: detail ?? t('common.unknownError'),
+            }),
           );
         });
     }
@@ -123,17 +128,20 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <Text style={[styles.backButtonText, {color: textColor}]}>뒤로</Text>
+          <Text style={[styles.backButtonText, {color: textColor}]}>
+            {t('common.back')}
+          </Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: textColor}]}>정산하기</Text>
+        <Text style={[styles.headerTitle, {color: textColor}]}>
+          {t('paxi.settlement.title')}
+        </Text>
         <View style={styles.placeholderButton} />
       </View>
 
       {isAlreadyRequested && (
         <View style={styles.alreadyRequestedContainer}>
           <Text style={styles.alreadyRequestedText}>
-            이미 생성된 정산 요청이 있습니다.{'\n'}
-            정산 내용을 수정하시겠습니까?
+            {t('paxi.settlement.alreadyRequested')}
           </Text>
         </View>
       )}
@@ -163,20 +171,22 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                 setAccountName(userData.accountHolderName);
               } else {
                 Alert.alert(
-                  '계좌 정보 없음',
-                  '등록된 계좌 정보가 없어서 불러 올 수 없습니다.',
+                  t('paxi.settlement.noAccountTitle'),
+                  t('paxi.settlement.noAccountBody'),
                 );
               }
             });
             console.log('내 계좌 정보 불러오기');
           }}>
           <Text style={styles.loadAccountButtonText}>
-            내 계좌 정보 불러오기
+            {t('paxi.settlement.loadMyAccount')}
           </Text>
         </TouchableOpacity>
 
         <View style={{width: '100%', marginBottom: 8}}>
-          <Text style={[styles.titleText, {color: textColor}]}>은행명</Text>
+          <Text style={[styles.titleText, {color: textColor}]}>
+            {t('paxi.account.bankName')}
+          </Text>
           <TextInput
             style={[
               styles.roomInput,
@@ -187,7 +197,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                 color: textColor,
               },
             ]}
-            placeholder="은행명을 입력해주세요."
+            placeholder={t('paxi.account.bankNamePlaceholder')}
             placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
             value={bankName}
             onChangeText={setbankName}
@@ -195,7 +205,9 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         </View>
 
         <View style={{width: '100%', marginBottom: 8}}>
-          <Text style={[styles.titleText, {color: textColor}]}>계좌번호</Text>
+          <Text style={[styles.titleText, {color: textColor}]}>
+            {t('paxi.account.accountNumber')}
+          </Text>
           <TextInput
             style={[
               styles.roomInput,
@@ -206,7 +218,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                 color: textColor,
               },
             ]}
-            placeholder="계좌번호를 입력해주세요."
+            placeholder={t('paxi.account.accountNumberPlaceholder')}
             placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
             value={accountNumber}
             onChangeText={text => {
@@ -219,7 +231,9 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         </View>
 
         <View style={{width: '100%', marginBottom: 8}}>
-          <Text style={[styles.titleText, {color: textColor}]}>계좌주명</Text>
+          <Text style={[styles.titleText, {color: textColor}]}>
+            {t('paxi.account.holder')}
+          </Text>
           <TextInput
             style={[
               styles.roomInput,
@@ -230,7 +244,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                 color: textColor,
               },
             ]}
-            placeholder="계좌주명을 입력해주세요."
+            placeholder={t('paxi.account.holderPlaceholder')}
             placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
             value={accountName}
             onChangeText={setAccountName}
@@ -238,7 +252,9 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
         </View>
 
         <View style={{width: '100%', marginBottom: 8}}>
-          <Text style={[styles.titleText, {color: textColor}]}>결제금액</Text>
+          <Text style={[styles.titleText, {color: textColor}]}>
+            {t('paxi.settlement.payAmount')}
+          </Text>
           <TextInput
             style={[
               styles.roomInput,
@@ -249,7 +265,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
                 color: textColor,
               },
             ]}
-            placeholder="정산금액을 입력해주세요."
+            placeholder={t('paxi.settlement.payAmountPlaceholder')}
             placeholderTextColor={isDarkMode ? '#555' : '#d0d0d0'}
             value={totalCost?.toString()}
             onChangeText={text => {
@@ -264,8 +280,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
             keyboardType="numeric"
           />
           <Text style={[styles.infoText]}>
-            총 금액을 입력해주세요! 자동으로 N분의 1 처리한 금액을
-            요청해드릴게요.
+            {t('paxi.settlement.payAmountHint')}
           </Text>
         </View>
 
@@ -284,7 +299,7 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
               {isUpdateAccount && <Text style={styles.checkmark}>✓</Text>}
             </View>
             <Text style={[styles.checkboxText, {color: textColor}]}>
-              이 계좌 정보를 기본값으로 업데이트
+              {t('paxi.settlement.saveAsDefault')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -298,7 +313,9 @@ const SettlementScreen = ({navigation}: SettlementScreenProps) => {
           onPress={() => checkInputValid()}
           disabled={!bankName || !accountNumber || !accountName}>
           <Text style={[styles.nextButtonText]}>
-            {isAlreadyRequested ? '정산 요청 수정' : '정산 요청하기'}
+            {isAlreadyRequested
+              ? t('paxi.settlement.updateRequest')
+              : t('paxi.sidebar.requestSettlement')}
           </Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>

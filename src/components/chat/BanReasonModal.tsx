@@ -18,6 +18,7 @@ import {backgroundColor, textColor} from '@styles/default';
 import {useEffect, useState} from 'react';
 import paxi_api from '@utils/paxi_api';
 import {getAxiosErrorInfo} from '@utils/axios-error';
+import {useTranslation} from 'react-i18next';
 
 interface BanReasonModalProps {
   modalVisible: boolean;
@@ -32,6 +33,7 @@ const BanReasonModal = ({
   roomData,
   userData,
 }: BanReasonModalProps) => {
+  const {t} = useTranslation();
   const modalWidth = Dimensions.get('window').width * 0.75;
 
   const isDarkMode = useColorScheme() === 'dark';
@@ -56,14 +58,14 @@ const BanReasonModal = ({
         reason: `추방된 유저의 신고: ${reason}`,
       })
       .then(_ => {
-        Alert.alert(
-          '처리 완료',
-          '이의 제기 요청이 정상적으로 처리되었습니다. 관리자가 신속히 대응한 후 메일로 알려드리겠습니다.',
-        );
+        Alert.alert(t('paxi.member.doneTitle'), t('paxi.member.appealDone'));
       })
       .catch(e => {
         const {detail} = getAxiosErrorInfo(e);
-        Alert.alert('신고 실패', detail ?? '알 수 없는 오류가 발생했습니다.');
+        Alert.alert(
+          t('paxi.member.reportFailedTitle'),
+          detail ?? t('common.unknownError'),
+        );
       });
   };
 
@@ -111,12 +113,12 @@ const BanReasonModal = ({
                         styles.modalTitle,
                         {color: textColor(isDarkMode)},
                       ]}>
-                      추방 사유
+                      {t('paxi.member.kickReasonTitle')}
                     </Text>
                   </View>
                   <Text
                     style={{marginBottom: 10, color: textColor(isDarkMode)}}>
-                    추방 사유는 다음과 같습니다:
+                    {t('paxi.member.kickReasonIntro')}
                   </Text>
                   <Text
                     numberOfLines={3}
@@ -140,7 +142,7 @@ const BanReasonModal = ({
                     ]}
                     value={reportText}
                     onChangeText={setReportText}
-                    placeholder="추방 이의 신고 사유를 입력해주세요. 신고는 현재 방장을 기준으로 이루어집니다. (200자 이내)"
+                    placeholder={t('paxi.member.appealPlaceholder')}
                     placeholderTextColor="#999"
                     multiline={true}
                     maxLength={200}
@@ -161,7 +163,7 @@ const BanReasonModal = ({
                         styles.cancelButtonText,
                         {color: textColor(isDarkMode)},
                       ]}>
-                      닫기
+                      {t('common.close')}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -174,7 +176,9 @@ const BanReasonModal = ({
                       handleReverseReport(reportText);
                       handleClose();
                     }}>
-                    <Text style={styles.banButtonText}>이의 제기하기</Text>
+                    <Text style={styles.banButtonText}>
+                      {t('paxi.member.appeal')}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </Pressable>

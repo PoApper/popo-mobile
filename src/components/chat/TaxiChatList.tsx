@@ -17,9 +17,11 @@ import axios from 'axios';
 import paxi_api from '../../utils/paxi_api';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 import BanReasonModal from './BanReasonModal';
 import {MyRoomData, UserData} from '@interfaces/paxi';
 import {updateMuteStatus} from '@utils/mute';
+import {getPaxiLocationLabel} from '@utils/locations';
 
 interface TaxiChatListProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
@@ -34,6 +36,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   refreshing,
   onRefresh,
 }) => {
+  const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -66,31 +69,36 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
       console.error('예약 정보 조회 오류:', err);
       if (axios.isAxiosError(err)) {
         if (err.response?.status === 401) {
-          Alert.alert('인증 만료', '다시 로그인해주세요.', [
-            {text: '확인', onPress: () => navigation.navigate('Login')},
-          ]);
+          Alert.alert(
+            t('common.sessionExpiredTitle'),
+            t('common.sessionExpiredBody'),
+            [
+              {
+                text: t('common.confirm'),
+                onPress: () => navigation.navigate('Login'),
+              },
+            ],
+          );
         } else {
-          setError('예약 정보를 불러오는데 실패했습니다.');
+          setError(t('paxi.chatList.loadFailed'));
         }
       } else {
-        setError('네트워크 오류가 발생했습니다.');
+        setError(t('common.networkError'));
       }
     } finally {
       setIsLoading(false);
     }
-  }, [navigation]);
+  }, [navigation, t]);
 
   const handleRoomLongPress = (roomData: MyRoomData) => {
     const isMuted = roomData.myRoomUser?.isMuted ?? false;
     Alert.alert(
-      isMuted ? '알림 켜기' : '알림 끄기',
-      isMuted
-        ? '이 채팅방의 알림을 다시 받으시겠습니까?'
-        : '이 채팅방의 알림을 끄시겠습니까?',
+      t(isMuted ? 'paxi.chatList.unmuteTitle' : 'paxi.chatList.muteTitle'),
+      t(isMuted ? 'paxi.chatList.unmuteBody' : 'paxi.chatList.muteBody'),
       [
-        {text: '취소', style: 'cancel'},
+        {text: t('common.cancel'), style: 'cancel'},
         {
-          text: '확인',
+          text: t('common.confirm'),
           onPress: async () => {
             try {
               await updateMuteStatus(roomData.uuid, !isMuted);
@@ -108,7 +116,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
               );
             } catch (err) {
               console.error('음소거 상태 변경 실패:', err);
-              Alert.alert('오류', '알림 설정 변경에 실패했습니다.');
+              Alert.alert(t('common.error'), t('paxi.chatList.muteFailed'));
             }
           },
         },
@@ -147,7 +155,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
       [
         'KICKED',
         {
-          text: '강퇴됨',
+          text: t('paxi.chatList.status.kicked'),
           lightMode: {
             backgroundColor: '#FFF3F3',
             textColor: '#E45B63',
@@ -167,7 +175,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
       [
         'IN_SETTLEMENT',
         {
-          text: '정산중',
+          text: t('paxi.chatList.status.inSettlement'),
           lightMode: {
             backgroundColor: '#fffcf3',
             textColor: '#e4cb5b',
@@ -181,7 +189,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
       [
         'COMPLETED',
         {
-          text: '종료됨',
+          text: t('paxi.chatList.status.completed'),
           lightMode: {
             backgroundColor: '#F0FDF4',
             textColor: '#16A34A',
@@ -230,10 +238,14 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           style={[styles.fromToText, {color: textColor}]}
           numberOfLines={1}
           ellipsizeMode="tail">
-          {`${item.departureLocation} → ${item.destinationLocation}`}
+          {`${getPaxiLocationLabel(
+            item.departureLocation,
+          )} → ${getPaxiLocationLabel(item.destinationLocation)}`}
         </Text>
         <Text style={[styles.detailValue, {color: textColor}]}>
-          {moment(item.departureTime).format('YYYY-MM-DD HH:mm')} 출발
+          {t('paxi.departsAt', {
+            time: moment(item.departureTime).format('YYYY-MM-DD HH:mm'),
+          })}
         </Text>
       </View>
       {(() => {
@@ -324,7 +336,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={textColor} />
         <Text style={[styles.loadingText, {color: textColor}]}>
-          카풀 정보를 불러오는 중...
+          {t('paxi.chatList.loading')}
         </Text>
       </View>
     );
@@ -337,7 +349,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
         <TouchableOpacity
           style={styles.retryButton}
           onPress={fetchReservations}>
-          <Text style={styles.retryButtonText}>다시 시도</Text>
+          <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -352,7 +364,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
           resizeMode="contain"
         />
         <Text style={[styles.emptyText, {color: textColor}]}>
-          택시 카풀 내역이 없습니다.
+          {t('paxi.chatList.empty')}
         </Text>
       </View>
     );
