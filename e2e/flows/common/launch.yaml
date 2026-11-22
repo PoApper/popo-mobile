@@ -1,0 +1,61 @@
+# 앱을 새로 띄워 LogBox를 끄고, 로그인 화면이면 테스트 계정으로 로그인한다.
+appId: ${APP_ID}
+---
+- launchApp:
+    stopApp: true
+    # simctl은 인자를 그대로 넘기고 NSUserDefaults는 '-키 값'만 읽으므로 대시를 붙인다.
+    arguments:
+      '-e2eMode': true
+- extendedWaitUntil:
+    visible:
+      id: '(login-email|tab-home)'
+    timeout: 60000
+# JS가 뜬 뒤에 보내야 Linking 리스너가 받는다.
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - openLink: popo-dev://e2e
+- runFlow:
+    when:
+      visible:
+        id: login-email
+    commands:
+      - tapOn:
+          id: login-email
+      - eraseText
+      - inputText: ${POPO_E2E_EMAIL}
+      # Android 자동완성 팝업이 비밀번호 칸 탭을 가로채므로 키보드 '다음'으로 이동한다.
+      - pressKey: Enter
+      # iOS '암호를 저장하겠습니까?' 시스템 대화상자가 탭을 가리면 닫는다.
+      - runFlow:
+          when:
+            platform: iOS
+          commands:
+            - extendedWaitUntil:
+                visible: '(지금 안 함|Not Now)'
+                timeout: 10000
+                optional: true
+            - tapOn:
+                text: '(지금 안 함|Not Now)'
+                optional: true
+      - eraseText
+      - inputText: ${POPO_E2E_PASSWORD}
+      # iOS 보안 입력칸은 hideKeyboard가 안 되므로 키보드 '이동'(onSubmitEditing)으로 로그인한다.
+      - pressKey: Enter
+      # iOS '암호를 저장하겠습니까?' 시스템 대화상자가 탭을 가리면 닫는다.
+      - runFlow:
+          when:
+            platform: iOS
+          commands:
+            - extendedWaitUntil:
+                visible: '(지금 안 함|Not Now)'
+                timeout: 10000
+                optional: true
+            - tapOn:
+                text: '(지금 안 함|Not Now)'
+                optional: true
+      - extendedWaitUntil:
+          visible:
+            id: tab-home
+          timeout: 60000

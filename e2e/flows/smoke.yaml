@@ -1,0 +1,33 @@
+# 모든 PR에서 도는 기본 회귀: 하단 탭 4개를 ${LANGUAGE}로 연다.
+appId: ${APP_ID}
+name: smoke
+tags:
+  - smoke
+---
+- runFlow: common/launch.yaml
+- runFlow: common/set-language.yaml
+- tapOn:
+    id: tab-home
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: smoke-home-${LANGUAGE}
+- tapOn:
+    id: tab-paxi
+# 목록을 불러오는 동안 빈 목록 문구가 먼저 보이므로 방 카드가 뜰 때까지 기다린다(방이 없으면 5초 뒤 진행).
+- extendedWaitUntil:
+    visible: '(Departs .*|.* 출발)'
+    timeout: 5000
+    optional: true
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: smoke-paxi-${LANGUAGE}
+- tapOn:
+    id: tab-my-reservation
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: smoke-my-reservation-${LANGUAGE}
+- tapOn:
+    id: tab-my-info
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: smoke-my-info-${LANGUAGE}

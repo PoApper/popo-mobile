@@ -1,8 +1,9 @@
 # OSX
 #
 .claude/*
-# 팀 공유 릴리즈 워크플로우 커맨드는 추적한다
+# 팀 공유 릴리즈 워크플로우 커맨드와 스킬은 추적한다
 !.claude/commands/
+!.claude/skills/
 
 .DS_Store
 
@@ -112,3 +113,7 @@ onboarding.md
 
 # superset
 .superset/
+
+# e2e (Maestro)
+e2e/.env.local
+e2e/output/

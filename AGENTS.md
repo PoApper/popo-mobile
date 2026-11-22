@@ -48,6 +48,7 @@ POPO Mobile은 POSTECH 학생용 캠퍼스 서비스 React Native 앱이다. 장
 - `npm run test` — Jest 단위 테스트
 - `npm run pc` — pre-commit 훅 전체 실행 (format + lint + checks)
 - PR 생성 시 GitHub Actions가 자동으로 pre-commit 검증
+- **PR 전 모바일 회귀 테스트(필수)**: 앱 코드(`src/`, `index.js`, `android/`, `ios/`)를 바꾼 PR은 만들기 전에 `.claude/skills/mobile-regression/SKILL.md` 절차를 따른다. 바뀐 화면과 신규 화면을 iOS·Android × 한국어·영어로 Maestro(`e2e/`)로 돌리고, 캡처를 모두 직접 확인한 뒤 `e2e/publish.sh`로 PR 본문에 첨부한다. 사용자가 따로 요청하지 않아도 수행한다.
 
 ### Common Patterns
 
