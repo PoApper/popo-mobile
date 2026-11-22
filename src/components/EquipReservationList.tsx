@@ -3,7 +3,8 @@ import {Text, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {RootStackParamList} from '@navigation/types';
-import i18next from '@utils/i18n';
+import i18next, {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 import {
   ReservationList,
   BaseReservation,
@@ -14,6 +15,7 @@ import {
 interface Equipment {
   uuid: string;
   name: string;
+  nameEn?: string | null;
   description: string;
   equipOwner: string;
   region: string;
@@ -31,7 +33,7 @@ const equipConfig: ReservationConfig<EquipmentReservation> = {
   getSubtitle: item => {
     const equipmentName =
       item.equipments.length > 0
-        ? item.equipments[0].name
+        ? getLocalizedField(item.equipments[0], 'name', getCurrentLocale())
         : i18next.t('myReservation.equipInfoMissing');
     const extra = item.equipments.length - 1;
     return extra > 0
@@ -53,7 +55,7 @@ const equipConfig: ReservationConfig<EquipmentReservation> = {
             reservationListStyles.modalValue,
             {marginTop: 4, color: valueColor},
           ]}>
-          - {equipment.name}
+          - {getLocalizedField(equipment, 'name', getCurrentLocale())}
         </Text>
       ))}
     </View>

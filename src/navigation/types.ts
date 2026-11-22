@@ -48,7 +48,9 @@ export type PlaceReservationStackParamList = {
   };
   PlaceReservationApply: {
     buildingName: string;
+    // 정책 매칭과 API에는 placeName(한글 원문)을 쓰고, 화면에는 placeLabel을 보여준다
     placeName: string;
+    placeLabel: string;
     placeId: string;
     selectedDate?: string;
   };

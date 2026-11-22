@@ -20,6 +20,7 @@ import {useTranslation} from 'react-i18next';
 import api from '../../utils/api';
 import LazyImage from '../../components/LazyImage';
 import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 
 type PlaceDetailReservationScreenProps = {
   navigation: NativeStackNavigationProp<
@@ -31,9 +32,12 @@ type PlaceDetailReservationScreenProps = {
 
 type PlaceDetail = {
   name: string;
+  nameEn?: string | null;
   description: string;
+  descriptionEn?: string | null;
   imageUrl: string;
   location: string;
+  locationEn?: string | null;
 };
 
 type Reservation = {
@@ -160,6 +164,8 @@ const PlaceDetailReservationScreen = ({
     }
     return `${time.slice(0, 2)}:${time.slice(2, 4)}`;
   };
+
+  const locale = getCurrentLocale();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -298,13 +304,13 @@ const PlaceDetailReservationScreen = ({
           <>
             <View style={styles.infoSection}>
               <Text style={[styles.placeName, {color: textColor}]}>
-                {placeDetail.name}
+                {getLocalizedField(placeDetail, 'name', locale)}
               </Text>
               <Text style={[styles.placeLocation, {color: subTextColor}]}>
-                {placeDetail.location}
+                {getLocalizedField(placeDetail, 'location', locale)}
               </Text>
               <Text style={[styles.placeDescription, {color: textColor}]}>
-                {placeDetail.description}
+                {getLocalizedField(placeDetail, 'description', locale)}
               </Text>
             </View>
             <LazyImage
@@ -408,8 +414,13 @@ const PlaceDetailReservationScreen = ({
             }
 
             navigation.navigate('PlaceReservationApply', {
-              buildingName: placeDetail?.location || '',
+              buildingName: placeDetail
+                ? getLocalizedField(placeDetail, 'location', locale)
+                : '',
               placeName: placeDetail?.name || '',
+              placeLabel: placeDetail
+                ? getLocalizedField(placeDetail, 'name', locale)
+                : '',
               placeId: placeId,
               selectedDate: selectedDate,
             });

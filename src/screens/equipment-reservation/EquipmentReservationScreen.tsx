@@ -21,12 +21,15 @@ import {RootStackParamList} from '@navigation/types';
 import PoPoAxios from '../../utils/api'; // 실제 axios 인스턴스 경로에 맞게 수정 필요
 import {Calendar} from 'react-native-calendars';
 import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 
 // API 타입에 맞게 수정
 interface IEquipment {
   uuid: string;
   name: string;
+  nameEn?: string | null;
   description: string;
+  descriptionEn?: string | null;
   fee: number;
   imageUrl?: string;
   maxMinutes: number;
@@ -116,7 +119,12 @@ const EquipmentReservationScreen = ({
           `equip/owner/${selectedTab}`,
         );
         // 이름순 정렬
-        const sorted = res.data.sort((a, b) => a.name.localeCompare(b.name));
+        const locale = getCurrentLocale();
+        const sorted = res.data.sort((a, b) =>
+          getLocalizedField(a, 'name', locale).localeCompare(
+            getLocalizedField(b, 'name', locale),
+          ),
+        );
         setEquipmentList(sorted);
       } catch (e) {
         setEquipmentList([]);
@@ -163,7 +171,7 @@ const EquipmentReservationScreen = ({
         )}
         <View style={styles.equipmentInfo}>
           <Text style={[styles.equipmentName, {color: textColor}]}>
-            {removeEmoji(item.name)}
+            {removeEmoji(getLocalizedField(item, 'name', getCurrentLocale()))}
           </Text>
           <Text style={[styles.equipmentPrice, {color: subTextColor}]}>
             {t('reservation.equipment.fee', {fee: item.fee.toLocaleString()})}
@@ -175,8 +183,12 @@ const EquipmentReservationScreen = ({
             Alert.alert(
               t('reservation.equipment.detailTitle'),
               t('reservation.equipment.detailBody', {
-                name: removeEmoji(item.name),
-                description: item.description || '-',
+                name: removeEmoji(
+                  getLocalizedField(item, 'name', getCurrentLocale()),
+                ),
+                description:
+                  getLocalizedField(item, 'description', getCurrentLocale()) ||
+                  '-',
                 fee: item.fee.toLocaleString(),
                 minutes: item.maxMinutes,
               }),
@@ -322,7 +334,7 @@ const EquipmentReservationScreen = ({
                   {backgroundColor: isDarkMode ? '#555' : '#E0E0E0'},
                 ]}>
                 <Text style={[styles.equipmentTagText, {color: textColor}]}>
-                  {e.name}
+                  {getLocalizedField(e, 'name', getCurrentLocale())}
                 </Text>
               </View>
             ))}

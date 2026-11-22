@@ -18,6 +18,8 @@ import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import LazyImage from '@components/LazyImage';
 import CommonHeader from '@components/CommonHeader';
+import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 
 type PlaceReservationScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PlaceReservation'>;
@@ -37,7 +39,9 @@ type SortType = (typeof sortTypes)[number];
 type Location = {
   id: string;
   name: string;
+  nameEn?: string | null;
   description: string;
+  descriptionEn?: string | null;
   image: any;
   totalReservationCount: number;
 };
@@ -69,7 +73,9 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
         const formattedLocations = response.data.map((place: any) => ({
           id: place.uuid,
           name: place.name,
+          nameEn: place.nameEn,
           description: place.location,
+          descriptionEn: place.locationEn,
           image: {uri: place.imageUrl},
           totalReservationCount: place.totalReservationCount,
         }));
@@ -84,9 +90,12 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
     fetchLocations();
   }, [selectedRegion]);
 
+  const locale = getCurrentLocale();
   const sortedLocations = [...locations].sort((a, b) => {
     if (sortType === 'sortAlphabetic') {
-      return a.name.localeCompare(b.name);
+      return getLocalizedField(a, 'name', locale).localeCompare(
+        getLocalizedField(b, 'name', locale),
+      );
     } else {
       return b.totalReservationCount - a.totalReservationCount;
     }
@@ -202,14 +211,14 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
               />
               <View style={styles.locationInfo}>
                 <Text style={[styles.locationName, {color: textColor}]}>
-                  {item.name}
+                  {getLocalizedField(item, 'name', locale)}
                 </Text>
                 <Text
                   style={[
                     styles.locationDescription,
                     {color: isDarkMode ? '#888' : '#777'},
                   ]}>
-                  {item.description}
+                  {getLocalizedField(item, 'description', locale)}
                 </Text>
               </View>
               <TouchableOpacity

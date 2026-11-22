@@ -44,7 +44,8 @@ const PlaceReservationApplyScreen = ({
 }: PlaceReservationApplyScreenProps) => {
   const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
-  const {buildingName, placeName, placeId, selectedDate} = route.params;
+  const {buildingName, placeName, placeLabel, placeId, selectedDate} =
+    route.params;
 
   // 사용자 정보
   const [userName, setUserName] = useState('');
@@ -234,7 +235,7 @@ const PlaceReservationApplyScreen = ({
     Alert.alert(
       '',
       [
-        t('reservation.form.confirmPlace', {name: placeName}),
+        t('reservation.form.confirmPlace', {name: placeLabel}),
         t('reservation.form.confirmDate', {date: formatDate(date)}),
         t('reservation.form.confirmTime', {
           start: formatTime(startTime),
@@ -382,7 +383,7 @@ const PlaceReservationApplyScreen = ({
         bottomOffset={180}>
         <View style={styles.infoSection}>
           <Text style={[styles.placeName, {color: textColor}]}>
-            {placeName}
+            {placeLabel}
           </Text>
           <Text style={[styles.placeLocation, {color: subTextColor}]}>
             {buildingName}

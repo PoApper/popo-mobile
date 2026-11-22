@@ -22,6 +22,8 @@ import moment from 'moment';
 import {formatReservationTime} from '../utils/popo-datetime';
 import {POPO_API_URL} from '@utils/api';
 import {reservationStatusKey} from '@utils/reservation-status';
+import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 
 const PAXI_STATUS_KEYS = {
   IN_SETTLEMENT: 'paxiStatus.inSettlement',
@@ -32,6 +34,7 @@ const PAXI_STATUS_KEYS = {
 interface Place {
   uuid: string;
   name: string;
+  nameEn?: string | null;
   description: string;
   location: string;
   region: string;
@@ -67,6 +70,7 @@ interface TaxiRoom {
 interface Equipment {
   uuid: string;
   name: string;
+  nameEn?: string | null;
   description: string;
   equipOwner: string;
   region: string;
@@ -196,6 +200,7 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
         const equipmentResponse = await fetchEquipmentEvents();
 
         // 데이터 합치기
+        const locale = getCurrentLocale();
         const placeEvents: CombinedEvent[] = placeResponse.map(
           (reservation: PlaceReservation) => ({
             id: `place_${reservation.uuid}`,
@@ -205,7 +210,10 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
             time: `${formatReservationTime(
               reservation.startTime,
             )} - ${formatReservationTime(reservation.endTime)}`,
-            location: reservation.place?.name || t('upcoming.placeTbd'),
+            location:
+              (reservation.place &&
+                getLocalizedField(reservation.place, 'name', locale)) ||
+              t('upcoming.placeTbd'),
             status: reservation.status,
             description: reservation.description,
             data: reservation,
@@ -230,7 +238,10 @@ const UpcomingEvents = ({refreshKey, navigation}: UpcomingEventsProps) => {
           if (!equipments || equipments.length === 0) {
             return t('upcoming.equipmentTbd');
           }
-          const first = equipments[0]?.name || t('upcoming.equipmentFallback');
+          const first =
+            (equipments[0] &&
+              getLocalizedField(equipments[0], 'name', locale)) ||
+            t('upcoming.equipmentFallback');
           const extra = equipments.length - 1;
           return extra > 0
             ? t('reservation.equipmentWithMore', {first, count: extra})

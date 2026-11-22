@@ -27,10 +27,12 @@ import {
   roundUpToNearest30Minutes,
 } from '@utils/popo-datetime';
 import {getCurrentLocale} from '@utils/i18n';
+import {getLocalizedField} from '@utils/locale';
 
 interface IEquipment {
   uuid: string;
   name: string;
+  nameEn?: string | null;
   description: string;
   fee: number;
   imageUrl?: string;
@@ -180,8 +182,12 @@ const EquipmentReservationApplyScreen = ({
         console.log('응답 데이터 길이:', res.data?.length || 0);
 
         // 장비 리스트를 가나다순으로 정렬
+        const locale = getCurrentLocale();
         const sortedEquipmentList = (res.data || []).sort((a, b) =>
-          a.name.localeCompare(b.name, 'ko-KR'),
+          getLocalizedField(a, 'name', locale).localeCompare(
+            getLocalizedField(b, 'name', locale),
+            locale,
+          ),
         );
 
         setEquipmentList(sortedEquipmentList);
@@ -384,7 +390,9 @@ const EquipmentReservationApplyScreen = ({
       '',
       [
         t('reservation.form.confirmEquipment', {
-          names: selectedEquipments.map(e => e.name).join(', '),
+          names: selectedEquipments
+            .map(e => getLocalizedField(e, 'name', getCurrentLocale()))
+            .join(', '),
         }),
         t('reservation.form.confirmDate', {date: formatDate(date)}),
         t('reservation.form.confirmTime', {
@@ -560,7 +568,7 @@ const EquipmentReservationApplyScreen = ({
               isReserved && styles.reservedEquipmentName,
               isReserved && {color: subTextColor},
             ]}>
-            {removeEmoji(item.name)}
+            {removeEmoji(getLocalizedField(item, 'name', getCurrentLocale()))}
           </Text>
           {selected && <Text style={styles.checkIcon}>✔</Text>}
           {isReserved && !selected && (
@@ -811,7 +819,7 @@ const EquipmentReservationApplyScreen = ({
                   ]}>
                   <Text
                     style={[styles.selectedEquipmentText, {color: textColor}]}>
-                    {equip.name}
+                    {getLocalizedField(equip, 'name', getCurrentLocale())}
                   </Text>
                   <TouchableOpacity onPress={() => toggleEquipment(equip)}>
                     <Text style={styles.removeButtonText}>×</Text>
