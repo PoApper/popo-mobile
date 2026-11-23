@@ -26,6 +26,7 @@ import {RootStackParamList} from '@navigation/types';
 import api from '@utils/api';
 import {getCurrentLocale} from '@utils/i18n';
 import {reset_auth} from '@utils/reset';
+import {unregisterPushKey} from '@utils/push-key';
 import paxi_api from '@utils/paxi_api';
 import {PaxiUserMy} from '@interfaces/paxi';
 import LanguageSelector from '@components/LanguageSelector';
@@ -148,6 +149,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const handleLogout = async () => {
     setIsLoading(true);
     try {
+      await unregisterPushKey();
       // 공통 API 유틸리티 사용
       await api.get('/auth/logout');
       await reset_auth();
