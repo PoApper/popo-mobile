@@ -40,6 +40,9 @@ PR이 바꾼 화면을 실제 앱으로 띄워 확인하고, 확인한 화면을
 - iOS는 누를 수 있는 카드(`TouchableOpacity`) 안의 문구를 하나의 접근성 라벨로 합친다(예: `"ADLIB, 연극"`, 아이콘 글리프가 앞에 붙기도 함). 카드 안 문구는 `'.*ADLIB.*'`처럼 정규식으로 맞춘다. Android는 문구마다 따로 잡혀 두 플랫폼 모두 통과한다.
 - 언어별 문구가 필요하면 `"${LANGUAGE == 'en' ? 'Report' : '신고'}"`처럼 쓴다(따옴표로 감싸야 YAML이 파싱된다).
 - 참고: `smoke.yaml`, Maestro 문서 https://docs.maestro.dev . 화면 구조는 `maestro --device <id> hierarchy`로 본다.
+- 흐름에서 dev 서버를 불러야 하면(예: 푸시 보내기) `runScript`의 `http`로 테스트 계정 로그인 쿠키를 받아 쓴다. `e2e/flows/push/send-push.js` 참고. 쿠키·계정은 `console.log`로 남기지 않는다.
+- 푸시를 바꾼 PR은 `e2e/flows/push/`를 `--platforms ios`로 돌린다. Android dev 디버그 빌드는 FCM 토큰 발급이 `FIS_AUTH_ERROR`로 막혀 있다. `foreground.yaml`은 #342가 고쳐지기 전까지 실패한다.
+- 에뮬레이터는 끌 때 상태를 저장하므로 알림창·대화상자를 열어 둔 채 끝내지 않는다. 다음 실행의 첫 화면을 가린다.
 
 ```yaml
 appId: ${APP_ID}
