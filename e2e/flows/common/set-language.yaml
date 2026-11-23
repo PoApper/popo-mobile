@@ -1,4 +1,4 @@
-# 내 정보 탭의 언어 스위처에서 ${LANGUAGE}(ko|en)를 고른다.
+# 내 정보 탭의 언어 스위처에서 ${LANGUAGE}(ko|en)를 고른다. 끝나면 내 정보 탭에 머문다.
 appId: ${APP_ID}
 ---
 - tapOn:
@@ -6,15 +6,20 @@ appId: ${APP_ID}
 # 내 정보는 포커스될 때 데이터를 다시 받아 그리며 스크롤이 맨 위로 돌아가므로 먼저 기다린다.
 - waitForAnimationToEnd:
     timeout: 5000
-- retry:
-    maxRetries: 2
+# 이미 그 언어면(탭 이름으로 판단) 스위처까지 스크롤하지 않는다. iOS 탭은 ', tab, 4 of 4'가 붙는다.
+- runFlow:
+    when:
+      notVisible: "${LANGUAGE == 'en' ? 'My Info' : '내 정보'}(, tab.*)?"
     commands:
-      - scrollUntilVisible:
-          element: 'English'
-          direction: DOWN
-          # 하단 탭 바에 걸리지 않게 가운데까지 올린다.
-          centerElement: true
-      # 스크롤 관성이 멈춘 뒤에 누른다.
-      - waitForAnimationToEnd:
-          timeout: 3000
-      - tapOn: "${LANGUAGE == 'en' ? 'English' : '한국어'}"
+      - retry:
+          maxRetries: 2
+          commands:
+            - scrollUntilVisible:
+                element: 'English'
+                direction: DOWN
+                # 하단 탭 바에 걸리지 않게 가운데까지 올린다.
+                centerElement: true
+            # 스크롤 관성이 멈춘 뒤에 누른다.
+            - waitForAnimationToEnd:
+                timeout: 3000
+            - tapOn: "${LANGUAGE == 'en' ? 'English' : '한국어'}"
