@@ -20,7 +20,6 @@ iOS 네이티브 빌드 설정. CocoaPods 의존성 관리, New Architecture + F
 
 | Directory                 | Purpose             |
 | ------------------------- | ------------------- |
-| `Config/`                 | 빌드 설정 파일      |
 | `popoMobile/`             | 앱 소스 및 리소스   |
 | `popoMobile.xcodeproj/`   | Xcode 프로젝트 파일 |
 | `popoMobile.xcworkspace/` | Xcode 워크스페이스  |
