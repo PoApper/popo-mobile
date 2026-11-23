@@ -24,6 +24,7 @@ import CommonHeader from '@components/CommonHeader';
 import api from '@utils/api';
 import paxi_api from '@utils/paxi_api';
 import {reset_auth} from '@utils/reset';
+import {unregisterPushKey} from '@utils/push-key';
 
 type PaxiStartScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PaxiStart'>;
@@ -60,6 +61,7 @@ const PaxiStartScreen = ({navigation}: PaxiStartScreenProps) => {
               {
                 text: t('common.confirm'),
                 onPress: async () => {
+                  await unregisterPushKey();
                   await api.get('/auth/logout');
                   await reset_auth();
                   navigation.navigate('Login');
