@@ -16,7 +16,7 @@ PR이 바꾼 화면을 실제 앱으로 띄워 확인하고, 확인한 화면을
 ## 0. 준비 (처음 한 번)
 
 - `brew install mobile-dev-inc/tap/maestro` (Java 17 필요)
-- `cp e2e/.env.example e2e/.env.local` 후 dev 서버 테스트 계정 입력. 계정을 모르면 사용자에게 묻는다. **레포가 public이므로 계정을 커밋하거나 PR·로그에 남기지 않는다.**
+- `cp e2e/.env.example e2e/.env.local` 후 dev 서버 테스트 계정을 iOS용·Android용으로 하나씩 입력. 계정을 모르면 사용자에게 묻는다. 계정을 바꾸면 기기의 앱이 이전 계정으로 로그인돼 있으니 앱에서 로그아웃하거나 앱 데이터를 지운다. **레포가 public이므로 계정을 커밋하거나 PR·로그에 남기지 않는다.**
 - Metro: `npm run start` (백그라운드)
 
 ## 1. 범위 정하기
