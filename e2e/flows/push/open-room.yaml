@@ -1,0 +1,26 @@
+# 보이는 알림(${PUSH_TITLE})을 찍고 눌러, send-push.js가 고른 채팅방이 열리는지 본다.
+appId: ${APP_ID}
+---
+- extendedWaitUntil:
+    visible: '.*${PUSH_TITLE}.*'
+    timeout: 20000
+# 배너가 내려오는 중에 찍히지 않게 기다린다(배너는 몇 초 뒤 사라지므로 짧게).
+- waitForAnimationToEnd:
+    timeout: 2000
+- takeScreenshot: push-${PUSH_STATE}-banner-${LANGUAGE}
+- tapOn: '.*${PUSH_TITLE}.*'
+# 알림으로 새로 뜬 앱은 launchApp 인자를 못 받아 LogBox가 켜지므로 링크로 끈다.
+- runFlow:
+    when:
+      true: ${PUSH_STATE == 'killed'}
+    commands:
+      - openLink: popo-dev://e2e
+      - tapOn:
+          text: '(열기|Open)'
+          optional: true
+- extendedWaitUntil:
+    visible: '.*${output.push.roomTitle}.*'
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: push-${PUSH_STATE}-open-${LANGUAGE}

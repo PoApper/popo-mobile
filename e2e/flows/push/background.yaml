@@ -1,0 +1,33 @@
+# 푸시 알림: 앱이 백그라운드·종료 상태일 때 알림이 뜨고, 누르면 해당 채팅방으로 가는지 본다.
+# dev 서버가 실제 FCM으로 보낸다. Android dev 디버그 빌드는 FCM 토큰 발급이 막혀 있어(FIS_AUTH_ERROR) 지금은 iOS만 돈다.
+appId: ${APP_ID}
+name: push-background
+tags:
+  - push
+---
+- runFlow: ../common/launch.yaml
+- runFlow: ../common/set-language.yaml
+- tapOn:
+    id: tab-home
+
+- pressKey: Home
+- runScript:
+    file: send-push.js
+    env:
+      PUSH_TITLE: e2e 백그라운드 푸시
+- runFlow:
+    file: open-room.yaml
+    env:
+      PUSH_TITLE: e2e 백그라운드 푸시
+      PUSH_STATE: background
+
+- stopApp
+- runScript:
+    file: send-push.js
+    env:
+      PUSH_TITLE: e2e 종료 상태 푸시
+- runFlow:
+    file: open-room.yaml
+    env:
+      PUSH_TITLE: e2e 종료 상태 푸시
+      PUSH_STATE: killed
