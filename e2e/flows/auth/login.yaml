@@ -4,6 +4,11 @@ name: login
 ---
 - runFlow: ../common/launch.yaml
 - runFlow: ../common/set-language.yaml
+# 언어가 이미 맞으면 set-language가 스크롤하지 않으므로 로그아웃 버튼까지 직접 내린다.
+- scrollUntilVisible:
+    element: "${LANGUAGE == 'en' ? 'Log out' : '로그아웃'}"
+    direction: DOWN
+    centerElement: true
 - tapOn: "${LANGUAGE == 'en' ? 'Log out' : '로그아웃'}"
 - extendedWaitUntil:
     visible:
