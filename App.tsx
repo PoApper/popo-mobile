@@ -19,6 +19,28 @@ import {displayNotification} from './src/utils/notifee';
 import {navigationRef} from './src/navigation/RootNavigation';
 import {IS_AUTHENTICATED_KEY} from './src/utils/storage-keys';
 
+// 알림을 누르면 방에 참여한 뒤 채팅방으로 이동한다.
+const joinAndNavigate = async (
+  roomUuid?: string,
+  from: 'roomList' | 'myReservation' = 'roomList',
+) => {
+  if (!roomUuid) return;
+  try {
+    await paxi_api.post(`/room/join/${roomUuid}`);
+  } catch (e) {
+    // 실패해도 방으로 이동은 시도
+  }
+
+  const go = () => {
+    if (navigationRef.isReady()) {
+      navigationRef.current?.navigate('NewChat', {roomUuid, from});
+    } else {
+      setTimeout(go, 100);
+    }
+  };
+  go();
+};
+
 const App = () => {
   useEffect(() => {
     const isLoggedIn = async () =>
@@ -34,27 +56,6 @@ const App = () => {
         }
       })
       .catch(error => console.error('[FCM] register failed:', error));
-
-    const joinAndNavigate = async (
-      roomUuid?: string,
-      from: 'roomList' | 'myReservation' = 'roomList',
-    ) => {
-      if (!roomUuid) return;
-      try {
-        await paxi_api.post(`/room/join/${roomUuid}`);
-      } catch (e) {
-        // 실패해도 방으로 이동은 시도
-      }
-
-      const go = () => {
-        if (navigationRef.isReady()) {
-          navigationRef.current?.navigate('NewChat', {roomUuid, from});
-        } else {
-          setTimeout(go, 100);
-        }
-      };
-      go();
-    };
 
     const handlePendingNavigation = async () => {
       const roomUuidData = await EncryptedStorage.getItem('roomUuid');
