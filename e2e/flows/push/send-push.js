@@ -18,12 +18,15 @@ const me = json(http.get(POPO_API + '/auth/myInfo', auth).body);
 const rooms = json(http.get(PAXI_API + '/room/my', auth).body);
 const room = rooms.find(r => r.status === 'ACTIVE') || rooms[0];
 
+// 알림창에 이전 실행의 알림이 남아 있어도 이번 알림만 고르도록 제목에 실행마다 다른 번호를 붙인다.
+const title = PUSH_TITLE + ' ' + (Date.now() % 100000);
+
 const sent = json(
   http.post(PAXI_API + '/push/send', {
     headers: auth.headers,
     body: JSON.stringify({
       userUuids: [me.uuid],
-      title: PUSH_TITLE,
+      title,
       body: 'e2e',
       data: {roomUuid: room.uuid},
     }),
@@ -34,4 +37,7 @@ console.log(
 );
 
 // 방 제목을 정규식 선택자로 쓰므로 특수문자를 이스케이프한다.
-output.push = {roomTitle: room.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')};
+output.push = {
+  title,
+  roomTitle: room.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+};

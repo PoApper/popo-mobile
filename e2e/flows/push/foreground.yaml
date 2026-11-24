@@ -1,5 +1,5 @@
 # 푸시 알림: 앱을 켜 둔 상태에서 앱이 직접 띄운 알림(notifee)이 보이고, 누르면 해당 채팅방으로 가는지 본다.
-# dev 서버가 실제 FCM으로 보낸다. Android는 background.yaml과 같은 이유로 지금은 iOS만 돈다.
+# dev 서버가 실제 FCM으로 보낸다.
 # iOS는 서버 푸시의 content-available 때문에 지금 실패한다(#342).
 appId: ${APP_ID}
 name: push-foreground
@@ -17,5 +17,4 @@ tags:
 - runFlow:
     file: open-room.yaml
     env:
-      PUSH_TITLE: e2e 포그라운드 푸시
       PUSH_STATE: foreground

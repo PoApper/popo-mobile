@@ -1,14 +1,23 @@
-# 보이는 알림(${PUSH_TITLE})을 찍고 눌러, send-push.js가 고른 채팅방이 열리는지 본다.
+# send-push.js가 보낸 알림을 찍고 눌러, 그 스크립트가 고른 채팅방이 열리는지 본다.
 appId: ${APP_ID}
 ---
+# Android는 알림이 배너 없이 알림창에만 쌓이므로(채널 중요도 보통) 알림창을 내려서 찾는다.
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - swipe:
+          start: 50%, 0%
+          end: 50%, 70%
+# 토큰을 막 등록한 직후의 첫 푸시는 1분 넘게 걸리기도 한다.
 - extendedWaitUntil:
-    visible: '.*${PUSH_TITLE}.*'
-    timeout: 20000
+    visible: '.*${output.push.title}.*'
+    timeout: 120000
 # 배너가 내려오는 중에 찍히지 않게 기다린다(배너는 몇 초 뒤 사라지므로 짧게).
 - waitForAnimationToEnd:
     timeout: 2000
 - takeScreenshot: push-${PUSH_STATE}-banner-${LANGUAGE}
-- tapOn: '.*${PUSH_TITLE}.*'
+- tapOn: '.*${output.push.title}.*'
 # 알림으로 새로 뜬 앱은 launchApp 인자를 못 받아 LogBox가 켜지므로 링크로 끈다.
 - runFlow:
     when:
