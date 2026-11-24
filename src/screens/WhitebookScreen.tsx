@@ -40,7 +40,8 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
   const [whiteBookItems, setWhiteBookItems] = useState<WhitebookItem[]>([]);
   const [sortType, setSortType] =
     useState<(typeof sortTypes)[number]>('sortViews');
-  // 위에 고정된 칩을 다시 누르면 목록을 맨 위로 올린다
+  // 칩을 누르면 목록을 맨 위로 올린다.
+  // 다시 누르면 부드럽게, 다른 칩이면 새 목록을 바로 맨 위부터 보여준다.
   const listRef = useRef<FlatList>(null);
 
   useEffect(() => {
@@ -133,9 +134,10 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
               ],
             ]}
             onPress={() => {
-              if (type === sortType) {
-                listRef.current?.scrollToOffset({offset: 0, animated: true});
-              }
+              listRef.current?.scrollToOffset({
+                offset: 0,
+                animated: type === sortType,
+              });
               setSortType(type);
             }}>
             <Text
