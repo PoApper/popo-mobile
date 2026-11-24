@@ -48,22 +48,3 @@ export const onTokenRefresh = (callback: (token: string) => void) => {
     callback(token);
   });
 };
-
-// 알림 표시 함수 추가
-export async function displayNotification(
-  title: string,
-  body: string,
-  data?: any,
-) {
-  await notifee.displayNotification({
-    title,
-    body,
-    android: {
-      channelId: 'default',
-      pressAction: {
-        id: 'default',
-      },
-    },
-    data, // 알림에 데이터 추가
-  });
-}
