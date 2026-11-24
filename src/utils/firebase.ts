@@ -1,6 +1,5 @@
 import messaging from '@react-native-firebase/messaging';
 import {Platform, PermissionsAndroid} from 'react-native';
-import notifee from '@notifee/react-native';
 
 /**
  * NOTE: On iOS simulator, the message is not received when Forground.
@@ -73,20 +72,4 @@ export const getFCMToken = async () => {
     console.error('Failed to get FCM token:', error);
     return null;
   }
-};
-
-export const displayNotification = async (title: string, body: string) => {
-  // Create a channel (required for Android)
-  const channelId = await notifee.createChannel({
-    id: 'default',
-    name: 'Default Channel',
-  });
-
-  await notifee.displayNotification({
-    title,
-    body,
-    android: {
-      channelId,
-    },
-  });
 };
