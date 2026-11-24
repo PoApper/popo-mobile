@@ -1,0 +1,27 @@
+# 장소 예약 목록과, 카드를 눌러 들어가는 장소 상세. 예약 신청은 하지 않는다.
+appId: ${APP_ID}
+name: place-reservation
+---
+- runFlow: ../common/launch.yaml
+- runFlow: ../common/set-language.yaml
+- tapOn:
+    id: tab-home
+- tapOn:
+    id: home-service-place-reservation
+- extendedWaitUntil:
+    visible:
+      id: place-item
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: reservation-place-list-${LANGUAGE}
+# 예약 버튼이 아니라 카드 가운데(장소 이름·위치)를 눌러도 상세로 들어간다.
+- tapOn:
+    id: place-item
+    index: 0
+- extendedWaitUntil:
+    visible: "${LANGUAGE == 'en' ? 'Request reservation' : '예약 신청하기'}"
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: reservation-place-detail-${LANGUAGE}
