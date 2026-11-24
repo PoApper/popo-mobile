@@ -60,29 +60,6 @@ const App = () => {
       })
       .catch(error => console.error('[FCM] register failed:', error));
 
-    const handlePendingNavigation = async () => {
-      const roomUuidData = await EncryptedStorage.getItem('roomUuid');
-      let roomUuid: string | undefined;
-      if (roomUuidData) {
-        try {
-          const parsed = JSON.parse(roomUuidData);
-          roomUuid = parsed.roomUuid;
-        } catch {
-          roomUuid = roomUuidData;
-        }
-      }
-
-      // roomUuid가 있으면 NewChat 스크린으로 이동
-      if (roomUuid) {
-        await joinAndNavigate(roomUuid, 'roomList');
-        EncryptedStorage.removeItem('roomUuid');
-        EncryptedStorage.removeItem('pendingNavigation');
-      }
-    };
-
-    // handle delay of `setItem` in index.js
-    setTimeout(handlePendingNavigation, 100);
-
     // 앱을 보고 있을 때는 시스템 알림 대신 인앱 배너로 보여 준다. 그 방을 이미 보고 있으면 띄우지 않는다.
     const unsubscribe = messaging().onMessage(remoteMessage => {
       const title = remoteMessage.notification?.title;
