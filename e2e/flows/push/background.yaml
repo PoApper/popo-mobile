@@ -1,0 +1,34 @@
+# 푸시 알림: 앱이 백그라운드·종료 상태일 때 알림이 뜨고, 누르면 해당 채팅방으로 가는지 본다.
+# dev 서버가 실제 FCM으로 보낸다.
+appId: ${APP_ID}
+name: push-background
+tags:
+  - push
+---
+- runFlow: ../common/launch.yaml
+- runFlow: ../common/set-language.yaml
+- tapOn:
+    id: tab-home
+
+- pressKey: Home
+- runScript:
+    file: send-push.js
+    env:
+      PUSH_TITLE: e2e 백그라운드 푸시
+- runFlow:
+    file: open-room.yaml
+    env:
+      PUSH_STATE: background
+
+# Android에서 stopApp(강제 종료)한 앱은 FCM을 받지 못하므로, 시스템이 프로세스를 정리한 것처럼 죽인다.
+# 앞에 떠 있는 앱은 killApp으로 죽지 않으므로 먼저 홈으로 나간다.
+- pressKey: Home
+- killApp
+- runScript:
+    file: send-push.js
+    env:
+      PUSH_TITLE: e2e 종료 상태 푸시
+- runFlow:
+    file: open-room.yaml
+    env:
+      PUSH_STATE: killed

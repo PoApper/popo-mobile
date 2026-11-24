@@ -1,0 +1,31 @@
+# 푸시 알림: 앱을 켜 둔 상태에서 인앱 배너가 보이고, 누르면 해당 채팅방으로 가는지 본다.
+# dev 서버가 실제 FCM으로 보낸다.
+# #345(인앱 배너)가 머지되기 전까지 실패한다. iOS는 서버 푸시의 content-available 때문에 #342가 고쳐질 때까지 실패한다.
+appId: ${APP_ID}
+name: push-foreground
+tags:
+  - push
+---
+- runFlow: ../common/launch.yaml
+- runFlow: ../common/set-language.yaml
+- tapOn:
+    id: tab-home
+- runScript:
+    file: send-push.js
+    env:
+      PUSH_TITLE: e2e 포그라운드 푸시
+# 배너는 4초 뒤 사라지므로 찍고 바로 누른다.
+- extendedWaitUntil:
+    visible:
+      id: in-app-push-banner
+      text: '.*${output.push.title}.*'
+    timeout: 120000
+- takeScreenshot: push-foreground-banner-${LANGUAGE}
+- tapOn:
+    id: in-app-push-banner
+- extendedWaitUntil:
+    visible: '.*${output.push.roomTitle}.*'
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: push-foreground-open-${LANGUAGE}

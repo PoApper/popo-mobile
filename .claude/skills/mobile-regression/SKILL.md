@@ -16,7 +16,7 @@ PR이 바꾼 화면을 실제 앱으로 띄워 확인하고, 확인한 화면을
 ## 0. 준비 (처음 한 번)
 
 - `brew install mobile-dev-inc/tap/maestro` (Java 17 필요)
-- `cp e2e/.env.example e2e/.env.local` 후 dev 서버 테스트 계정 입력. 계정을 모르면 사용자에게 묻는다. **레포가 public이므로 계정을 커밋하거나 PR·로그에 남기지 않는다.**
+- `cp e2e/.env.example e2e/.env.local` 후 dev 서버 테스트 계정을 iOS용·Android용으로 하나씩 입력. 계정을 모르면 사용자에게 묻는다. 계정을 바꾸면 기기의 앱이 이전 계정으로 로그인돼 있으니 앱에서 로그아웃하거나 앱 데이터를 지운다. **레포가 public이므로 계정을 커밋하거나 PR·로그에 남기지 않는다.**
 - Metro: `npm run start` (백그라운드)
 
 ## 1. 범위 정하기
@@ -40,6 +40,9 @@ PR이 바꾼 화면을 실제 앱으로 띄워 확인하고, 확인한 화면을
 - iOS는 누를 수 있는 카드(`TouchableOpacity`) 안의 문구를 하나의 접근성 라벨로 합친다(예: `"ADLIB, 연극"`, 아이콘 글리프가 앞에 붙기도 함). 카드 안 문구는 `'.*ADLIB.*'`처럼 정규식으로 맞춘다. Android는 문구마다 따로 잡혀 두 플랫폼 모두 통과한다.
 - 언어별 문구가 필요하면 `"${LANGUAGE == 'en' ? 'Report' : '신고'}"`처럼 쓴다(따옴표로 감싸야 YAML이 파싱된다).
 - 참고: `smoke.yaml`, Maestro 문서 https://docs.maestro.dev . 화면 구조는 `maestro --device <id> hierarchy`로 본다.
+- 흐름에서 dev 서버를 불러야 하면(예: 푸시 보내기) `runScript`의 `http`로 테스트 계정 로그인 쿠키를 받아 쓴다. `e2e/flows/push/send-push.js` 참고. 쿠키·계정은 `console.log`로 남기지 않는다.
+- 푸시를 바꾼 PR은 `e2e/flows/push/`를 돌린다. `foreground.yaml`은 인앱 배너(#345)를 찾으며, iOS는 #342가 고쳐지기 전까지 실패한다. Android 알림은 배너 없이 알림창에만 쌓이므로 흐름이 알림창을 내려서 찾는다.
+- 에뮬레이터는 끌 때 상태를 저장하므로 알림창·대화상자를 열어 둔 채 끝내지 않는다. 다음 실행의 첫 화면을 가린다.
 
 ```yaml
 appId: ${APP_ID}

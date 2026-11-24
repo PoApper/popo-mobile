@@ -40,7 +40,8 @@ command -v maestro >/dev/null || die "maestro가 없습니다: brew install mobi
 [ -f "$E2E/.env.local" ] || die "e2e/.env.local이 없습니다. e2e/.env.example을 복사해 dev 테스트 계정을 넣으세요."
 # shellcheck disable=SC1091
 set -a; . "$E2E/.env.local"; set +a
-[ -n "${POPO_E2E_EMAIL:-}" ] && [ -n "${POPO_E2E_PASSWORD:-}" ] || die "e2e/.env.local에 POPO_E2E_EMAIL, POPO_E2E_PASSWORD가 필요합니다."
+[ -n "${POPO_E2E_IOS_EMAIL:-}" ] && [ -n "${POPO_E2E_ANDROID_EMAIL:-}" ] && [ -n "${POPO_E2E_PASSWORD:-}" ] ||
+  die "e2e/.env.local에 POPO_E2E_IOS_EMAIL, POPO_E2E_ANDROID_EMAIL, POPO_E2E_PASSWORD가 필요합니다."
 curl -s "localhost:$METRO_PORT/status" | grep -q running || die "Metro가 꺼져 있습니다: npm run start"
 
 ios_device() {
@@ -82,11 +83,12 @@ export PATH="$PATH:$HOME/Library/Android/sdk/emulator:$HOME/Library/Android/sdk/
 mkdir -p "$OUT/.raw"
 SUMMARY="$OUT/summary.txt"
 
+# 두 플랫폼이 동시에 돌므로 계정을 나눠 써야 서로의 로그아웃·언어 설정·푸시 키를 건드리지 않는다.
 run_platform() { # $1=platform
-  local platform=$1 device app_id failed=0
+  local platform=$1 device app_id email failed=0
   case "$platform" in
-    ios) device=$(ios_device) || return 1; app_id=$IOS_APP_ID ;;
-    android) device=$(android_device) || return 1; app_id=$ANDROID_APP_ID ;;
+    ios) device=$(ios_device) || return 1; app_id=$IOS_APP_ID; email=$POPO_E2E_IOS_EMAIL ;;
+    android) device=$(android_device) || return 1; app_id=$ANDROID_APP_ID; email=$POPO_E2E_ANDROID_EMAIL ;;
     *) die "알 수 없는 플랫폼: $platform" ;;
   esac
   for lang in $LANGUAGES; do
@@ -98,7 +100,7 @@ run_platform() { # $1=platform
       # 결과는 조합마다 따로 적고 마지막에 모은다(플랫폼이 동시에 돌고, --keep이면 이전 결과를 덮어써야 한다).
       if maestro --device "$device" test --no-ansi --test-output-dir="$raw" \
         -e APP_ID="$app_id" -e LANGUAGE="$lang" \
-        -e POPO_E2E_EMAIL="$POPO_E2E_EMAIL" -e POPO_E2E_PASSWORD="$POPO_E2E_PASSWORD" \
+        -e POPO_E2E_EMAIL="$email" -e POPO_E2E_PASSWORD="$POPO_E2E_PASSWORD" \
         "$flow" >"$raw.log" 2>&1; then
         echo "PASS $platform $lang $name" >"$raw.status"
       else
