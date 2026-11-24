@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTranslation} from 'react-i18next';
 
@@ -40,6 +40,8 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
   const {t} = useTranslation();
   const isDarkMode = useColorScheme() === 'dark';
   const backPressCount = useRef(0);
+  const listRef = useRef<FlatList>(null);
+  useScrollToTop(listRef);
 
   const [hideFullRoom, setHideFullRoom] = useState(true);
   const [roomData, setRoomData] = useState<RoomDataType[]>([]);
@@ -265,6 +267,7 @@ const PaxiRoomListScreen = ({navigation}: PaxiRoomListScreenProps) => {
       </TouchableOpacity>
 
       <FlatList
+        ref={listRef}
         style={{flex: 1}}
         data={filteredRoomData}
         keyExtractor={item => item.uuid}

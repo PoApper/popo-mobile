@@ -11,6 +11,7 @@ import {
   Alert,
   RefreshControl,
 } from 'react-native';
+import {useScrollToTop} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
 import axios from 'axios';
@@ -48,6 +49,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   const [userInfo, setUserInfo] = useState<UserData>({} as UserData);
   const [showBanReasonModal, setShowBanReasonModal] = useState<boolean>(false);
   const listRef = useRef<FlatList>(null);
+  useScrollToTop(listRef);
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';

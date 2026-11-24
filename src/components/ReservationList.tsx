@@ -19,6 +19,7 @@ import {
 } from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useScrollToTop} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
 import {useTranslation} from 'react-i18next';
@@ -115,6 +116,7 @@ export function ReservationList<T extends BaseReservation>({
     null,
   );
   const listRef = useRef<FlatList>(null);
+  useScrollToTop(listRef);
   const itemsPerPage = 10;
 
   // Modal animation values

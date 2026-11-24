@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -48,6 +48,8 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [userName, setUserName] = useState<string>('');
   const backPressCount = useRef(0);
+  const scrollRef = useRef<ScrollView>(null);
+  useScrollToTop(scrollRef);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? '#121212' : '#fff',
@@ -216,7 +218,7 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView style={styles.container}>
+      <ScrollView ref={scrollRef} style={styles.container}>
         {/* D-day 정보 */}
         <DdayInfoBox />
 
