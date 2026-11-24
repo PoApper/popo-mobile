@@ -324,6 +324,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
                   {t('auth.myInfo.changePassword')}
                 </Text>
                 <TouchableOpacity
+                  testID="change-password-button"
                   style={[
                     styles.editButton,
                     {backgroundColor: isDarkMode ? '#ddd' : 'black'},
