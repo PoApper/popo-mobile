@@ -63,6 +63,7 @@ export interface ReservationListProps<T extends BaseReservation> {
   navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
   config: ReservationConfig<T>;
   refreshKey?: number;
+  scrollToTopKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;
 }
@@ -99,6 +100,7 @@ export function ReservationList<T extends BaseReservation>({
   navigation,
   config,
   refreshKey,
+  scrollToTopKey,
   refreshing,
   onRefresh,
 }: ReservationListProps<T>) {
@@ -210,6 +212,12 @@ export function ReservationList<T extends BaseReservation>({
   useEffect(() => {
     fetchReservations();
   }, [refreshKey]);
+
+  useEffect(() => {
+    if (scrollToTopKey) {
+      listRef.current?.scrollToOffset({offset: 0, animated: true});
+    }
+  }, [scrollToTopKey]);
 
   const formatDate = (dateStr: string): string => {
     if (!dateStr || dateStr.length !== 8) {
@@ -971,6 +979,7 @@ const placeConfig: ReservationConfig<PlaceReservation> = {
 interface PlaceReservationListProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
   refreshKey?: number;
+  scrollToTopKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;
 }

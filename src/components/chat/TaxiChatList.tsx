@@ -27,6 +27,7 @@ import {getPaxiLocationLabel} from '@utils/locations';
 interface TaxiChatListProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
   refreshKey?: number;
+  scrollToTopKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;
 }
@@ -34,6 +35,7 @@ interface TaxiChatListProps {
 const TaxiChatList: React.FC<TaxiChatListProps> = ({
   navigation,
   refreshKey,
+  scrollToTopKey,
   refreshing,
   onRefresh,
 }) => {
@@ -151,6 +153,12 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   useEffect(() => {
     fetchReservations();
   }, [refreshKey, fetchReservations]);
+
+  useEffect(() => {
+    if (scrollToTopKey) {
+      listRef.current?.scrollToOffset({offset: 0, animated: true});
+    }
+  }, [scrollToTopKey]);
 
   const getUserStatusConfig = (status: string) => {
     const statusMap = new Map([

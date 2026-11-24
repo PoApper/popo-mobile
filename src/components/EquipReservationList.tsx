@@ -66,6 +66,7 @@ const equipConfig: ReservationConfig<EquipmentReservation> = {
 interface EquipReservationListProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
   refreshKey?: number;
+  scrollToTopKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;
 }
