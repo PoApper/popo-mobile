@@ -103,6 +103,8 @@ xcodebuild -exportArchive \
 2. **전송** 클릭하여 업로드
 3. [App Store Connect](https://appstoreconnect.apple.com)에서 빌드 연결 후 제출
 
+> 업로드가 `You do not have required contracts to perform an operation (403)`으로 막히면, Apple이 바뀐 약관을 아직 수락받지 못한 것입니다. 빌드는 다시 할 필요 없습니다. 계정 소유자가 [developer.apple.com/account](https://developer.apple.com/account)의 약관 배너와 App Store Connect **비즈니스**의 새 계약을 수락한 뒤, 몇 분 지나 같은 IPA를 다시 전송합니다.
+
 ## 캐시 제거
 
 ```bash
