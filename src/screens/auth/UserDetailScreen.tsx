@@ -812,7 +812,9 @@ const styles = StyleSheet.create({
   modalBtn: {
     borderRadius: 6,
     paddingHorizontal: 12,
-    height: 36,
+    // 영어처럼 문구가 길어 두 줄이 되면 버튼이 늘어나도록 높이를 고정하지 않는다
+    minHeight: 36,
+    paddingVertical: 8,
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
@@ -825,12 +827,14 @@ const styles = StyleSheet.create({
   },
   cancelBtnText: {
     fontSize: 13,
+    textAlign: 'center',
     fontWeight: '500',
     fontFamily: 'Pretendard',
     color: '#374151',
   },
   submitBtnText: {
     fontSize: 13,
+    textAlign: 'center',
     fontWeight: '500',
     fontFamily: 'Pretendard',
     color: '#FFFFFF',
