@@ -55,6 +55,8 @@ export async function displayNotification(
   body: string,
   data?: any,
 ) {
+  // Android는 없는 채널로 띄운 알림을 버리므로 먼저 만든다(이미 있으면 그대로 둔다).
+  await notifee.createChannel({id: 'default', name: 'Default Channel'});
   await notifee.displayNotification({
     title,
     body,
