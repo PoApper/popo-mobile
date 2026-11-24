@@ -41,7 +41,7 @@ PR이 바꾼 화면을 실제 앱으로 띄워 확인하고, 확인한 화면을
 - 언어별 문구가 필요하면 `"${LANGUAGE == 'en' ? 'Report' : '신고'}"`처럼 쓴다(따옴표로 감싸야 YAML이 파싱된다).
 - 참고: `smoke.yaml`, Maestro 문서 https://docs.maestro.dev . 화면 구조는 `maestro --device <id> hierarchy`로 본다.
 - 흐름에서 dev 서버를 불러야 하면(예: 푸시 보내기) `runScript`의 `http`로 테스트 계정 로그인 쿠키를 받아 쓴다. `e2e/flows/push/send-push.js` 참고. 쿠키·계정은 `console.log`로 남기지 않는다.
-- 푸시를 바꾼 PR은 `e2e/flows/push/`를 돌린다. `foreground.yaml`은 iOS는 #342, Android는 #344가 머지되기 전까지 실패한다. Android 알림은 배너 없이 알림창에만 쌓이므로 흐름이 알림창을 내려서 찾는다.
+- 푸시를 바꾼 PR은 `e2e/flows/push/`를 돌린다. `foreground.yaml`은 인앱 배너(#345)를 찾으며, iOS는 #342가 고쳐지기 전까지 실패한다. Android 알림은 배너 없이 알림창에만 쌓이므로 흐름이 알림창을 내려서 찾는다.
 - 에뮬레이터는 끌 때 상태를 저장하므로 알림창·대화상자를 열어 둔 채 끝내지 않는다. 다음 실행의 첫 화면을 가린다.
 
 ```yaml
