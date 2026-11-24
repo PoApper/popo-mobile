@@ -1,6 +1,7 @@
 # 푸시 알림: 앱을 켜 둔 상태에서 앱이 직접 띄운 알림(notifee)이 보이고, 누르면 해당 채팅방으로 가는지 본다.
 # dev 서버가 실제 FCM으로 보낸다.
 # iOS는 서버 푸시의 content-available 때문에 지금 실패한다(#342).
+# Android는 앱이 알림 채널을 만들지 않아 알림이 버려지므로 #344가 머지되기 전까지 실패한다.
 appId: ${APP_ID}
 name: push-foreground
 tags:
