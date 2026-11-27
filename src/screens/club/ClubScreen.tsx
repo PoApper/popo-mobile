@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -48,6 +48,9 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
   const [selectedCategory, setSelectedCategory] =
     useState<ClubCategoryKey>('performance1');
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
+  // 칩을 누르면 목록을 맨 위로 올린다.
+  // 다시 누르면 부드럽게, 다른 칩이면 새 목록을 바로 맨 위부터 보여준다.
+  const listRef = useRef<ScrollView>(null);
   const [clubs, setClubs] = useState<ClubItem[]>([]);
   const [sortType, setSortType] =
     useState<(typeof sortTypes)[number]>('sortAlphabetic');
@@ -108,7 +111,13 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
         {CLUB_CATEGORIES.map(category => (
           <TouchableOpacity
             key={category}
-            onPress={() => setSelectedCategory(category)}
+            onPress={() => {
+              listRef.current?.scrollTo({
+                y: 0,
+                animated: category === selectedCategory,
+              });
+              setSelectedCategory(category);
+            }}
             style={styles.typeTabWrapper}>
             <View
               style={{alignItems: 'center'}}
@@ -156,7 +165,10 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
                 {backgroundColor: textColor},
               ],
             ]}
-            onPress={() => setSortType(type)}>
+            onPress={() => {
+              listRef.current?.scrollTo({y: 0, animated: type === sortType});
+              setSortType(type);
+            }}>
             <Text
               style={[
                 styles.sortButtonText,
@@ -170,6 +182,7 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
       </View>
 
       <ScrollView
+        ref={listRef}
         showsVerticalScrollIndicator={false}
         style={styles.container}
         contentContainerStyle={{

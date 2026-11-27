@@ -1,0 +1,49 @@
+# 동아리 목록에서 선택된 칩을 다시 누르거나 정렬을 바꾸면 목록이 맨 위로 간다.
+# dev 서버 체육(12개)·가나다순에서 CLEAR는 맨 위 근처(iOS 1번째, Android 2번째)에 온다.
+# 목록을 끝까지 내리면 화면 위로 완전히 사라지므로 CLEAR가 다시 보이는지로 맨 위를 확인한다.
+# iOS는 목록 전체 문구를 이어 붙인 라벨("CLEAR (클리어) 배드민턴 Climax …")이 따로 있어,
+# 카드 한 장(iOS "CLEAR (클리어) 배드민턴", Android "CLEAR (클리어)")까지만 맞춘다.
+appId: ${APP_ID}
+name: club-scroll-to-top
+---
+- runFlow: ../common/launch.yaml
+- runFlow: ../common/set-language.yaml
+- tapOn:
+    id: tab-home
+- tapOn:
+    id: home-service-club
+- extendedWaitUntil:
+    visible: 'ADLIB.*'
+    timeout: 10000
+- tapOn: "${LANGUAGE == 'en' ? 'Sports' : '체육'}"
+- extendedWaitUntil:
+    visible: 'CLEAR \(클리어\),? ?[^ ]*'
+    timeout: 5000
+- scroll
+- scroll
+- scroll
+- assertNotVisible: 'CLEAR \(클리어\),? ?[^ ]*'
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: introduce-club-scrolled-${LANGUAGE}
+# 선택된 칩(체육)을 다시 누르면 맨 위로 올라간다.
+- tapOn: "${LANGUAGE == 'en' ? 'Sports' : '체육'}"
+- extendedWaitUntil:
+    visible: 'CLEAR \(클리어\),? ?[^ ]*'
+    timeout: 3000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: introduce-club-chip-retap-top-${LANGUAGE}
+# 내린 채로 정렬을 바꿨다가 돌아와도 맨 위부터 보인다.
+- scroll
+- scroll
+- scroll
+- assertNotVisible: 'CLEAR \(클리어\),? ?[^ ]*'
+- tapOn: "${LANGUAGE == 'en' ? 'Most viewed' : '조회순'}"
+- tapOn: "${LANGUAGE == 'en' ? 'A–Z' : '가나다순'}"
+- extendedWaitUntil:
+    visible: 'CLEAR \(클리어\),? ?[^ ]*'
+    timeout: 3000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: introduce-club-sort-change-top-${LANGUAGE}

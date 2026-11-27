@@ -1,0 +1,18 @@
+# 하단 탭을 다시 누르면 화면 맨 위로 올라간다. 내 정보 화면으로 확인한다.
+appId: ${APP_ID}
+name: tab-scroll-to-top
+---
+- runFlow: ../common/launch.yaml
+- runFlow: ../common/set-language.yaml
+# 언어를 고르느라 내 정보 화면이 아래로 내려가 있다.
+- scrollUntilVisible:
+    element: "${LANGUAGE == 'en' ? 'Log out' : '로그아웃'}"
+- assertNotVisible: "${LANGUAGE == 'en' ? 'POPO account' : 'POPO 계정 정보'}"
+- tapOn:
+    id: tab-my-info
+- extendedWaitUntil:
+    visible: "${LANGUAGE == 'en' ? 'POPO account' : 'POPO 계정 정보'}"
+    timeout: 3000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: navigation-my-info-tab-retap-top-${LANGUAGE}

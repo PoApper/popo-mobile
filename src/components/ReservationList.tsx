@@ -19,6 +19,7 @@ import {
 } from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useScrollToTop} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
 import {useTranslation} from 'react-i18next';
@@ -62,6 +63,7 @@ export interface ReservationListProps<T extends BaseReservation> {
   navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
   config: ReservationConfig<T>;
   refreshKey?: number;
+  scrollToTopKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;
 }
@@ -98,6 +100,7 @@ export function ReservationList<T extends BaseReservation>({
   navigation,
   config,
   refreshKey,
+  scrollToTopKey,
   refreshing,
   onRefresh,
 }: ReservationListProps<T>) {
@@ -115,6 +118,7 @@ export function ReservationList<T extends BaseReservation>({
     null,
   );
   const listRef = useRef<FlatList>(null);
+  useScrollToTop(listRef);
   const itemsPerPage = 10;
 
   // Modal animation values
@@ -208,6 +212,12 @@ export function ReservationList<T extends BaseReservation>({
   useEffect(() => {
     fetchReservations();
   }, [refreshKey]);
+
+  useEffect(() => {
+    if (scrollToTopKey) {
+      listRef.current?.scrollToOffset({offset: 0, animated: true});
+    }
+  }, [scrollToTopKey]);
 
   const formatDate = (dateStr: string): string => {
     if (!dateStr || dateStr.length !== 8) {
@@ -969,6 +979,7 @@ const placeConfig: ReservationConfig<PlaceReservation> = {
 interface PlaceReservationListProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
   refreshKey?: number;
+  scrollToTopKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;
 }

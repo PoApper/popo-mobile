@@ -11,6 +11,7 @@ import {
   Alert,
   RefreshControl,
 } from 'react-native';
+import {useScrollToTop} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../navigation/types';
 import axios from 'axios';
@@ -26,6 +27,7 @@ import {getPaxiLocationLabel} from '@utils/locations';
 interface TaxiChatListProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'MyReservation'>;
   refreshKey?: number;
+  scrollToTopKey?: number;
   refreshing?: boolean;
   onRefresh?: () => void;
 }
@@ -33,6 +35,7 @@ interface TaxiChatListProps {
 const TaxiChatList: React.FC<TaxiChatListProps> = ({
   navigation,
   refreshKey,
+  scrollToTopKey,
   refreshing,
   onRefresh,
 }) => {
@@ -48,6 +51,7 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   const [userInfo, setUserInfo] = useState<UserData>({} as UserData);
   const [showBanReasonModal, setShowBanReasonModal] = useState<boolean>(false);
   const listRef = useRef<FlatList>(null);
+  useScrollToTop(listRef);
 
   const textColor = isDarkMode ? '#FFFFFF' : '#000000';
   const borderColor = isDarkMode ? '#333333' : '#E5E7EB';
@@ -149,6 +153,12 @@ const TaxiChatList: React.FC<TaxiChatListProps> = ({
   useEffect(() => {
     fetchReservations();
   }, [refreshKey, fetchReservations]);
+
+  useEffect(() => {
+    if (scrollToTopKey) {
+      listRef.current?.scrollToOffset({offset: 0, animated: true});
+    }
+  }, [scrollToTopKey]);
 
   const getUserStatusConfig = (status: string) => {
     const statusMap = new Map([

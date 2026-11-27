@@ -41,6 +41,8 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
   const [activeTab, setActiveTab] = useState<TabType>('place');
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
   const [refreshKey, setRefreshKey] = useState(0);
+  // 선택된 탭을 다시 누를 때마다 올려 목록을 맨 위로 보낸다
+  const [scrollToTopKey, setScrollToTopKey] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
 
   // 라우트 파라미터에서 prevTab을 받아서 초기 탭 설정
@@ -157,7 +159,12 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
           {tabs.map(tab => (
             <TouchableOpacity
               key={tab.id}
-              onPress={() => setActiveTab(tab.id)}
+              onPress={() => {
+                if (tab.id === activeTab) {
+                  setScrollToTopKey(key => key + 1);
+                }
+                setActiveTab(tab.id);
+              }}
               style={styles.typeTabWrapper}>
               <View style={styles.typeTabInner}>
                 <View style={{alignItems: 'center'}}>
@@ -198,6 +205,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
           <ReservationList
             navigation={navigation!}
             refreshKey={refreshKey}
+            scrollToTopKey={scrollToTopKey}
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
@@ -205,6 +213,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
           <EquipReservationList
             navigation={navigation!}
             refreshKey={refreshKey}
+            scrollToTopKey={scrollToTopKey}
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
@@ -213,6 +222,7 @@ const ReservationScreen = ({navigation}: ReservationScreenProps) => {
             <TaxiChatList
               navigation={navigation!}
               refreshKey={refreshKey}
+              scrollToTopKey={scrollToTopKey}
               refreshing={refreshing}
               onRefresh={onRefresh}
             />

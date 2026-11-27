@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -40,6 +40,9 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
   const [whiteBookItems, setWhiteBookItems] = useState<WhitebookItem[]>([]);
   const [sortType, setSortType] =
     useState<(typeof sortTypes)[number]>('sortViews');
+  // 칩을 누르면 목록을 맨 위로 올린다.
+  // 다시 누르면 부드럽게, 다른 칩이면 새 목록을 바로 맨 위부터 보여준다.
+  const listRef = useRef<FlatList>(null);
 
   useEffect(() => {
     const fetchWhitebookItems = async () => {
@@ -130,7 +133,13 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
                 {backgroundColor: textColor},
               ],
             ]}
-            onPress={() => setSortType(type)}>
+            onPress={() => {
+              listRef.current?.scrollToOffset({
+                offset: 0,
+                animated: type === sortType,
+              });
+              setSortType(type);
+            }}>
             <Text
               style={[
                 styles.sortButtonText,
@@ -144,6 +153,7 @@ const WhitebookScreen: React.FC<WhitebookScreenProps> = ({navigation}) => {
       </View>
 
       <FlatList
+        ref={listRef}
         showsVerticalScrollIndicator={false}
         data={whiteBookItems}
         keyExtractor={item => item.uuid}

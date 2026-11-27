@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -53,6 +53,9 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
     buildings[0].region,
   );
   const [textWidths, setTextWidths] = useState<{[key: string]: number}>({});
+  // 칩을 누르면 목록을 맨 위로 올린다.
+  // 다시 누르면 부드럽게, 다른 칩이면 새 목록을 바로 맨 위부터 보여준다.
+  const listRef = useRef<FlatList>(null);
   const [sortType, setSortType] = useState<SortType>('sortAlphabetic');
   const [locations, setLocations] = useState<Location[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -121,7 +124,13 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
         {buildings.map(({region, labelKey}) => (
           <TouchableOpacity
             key={region}
-            onPress={() => setSelectedRegion(region)}
+            onPress={() => {
+              listRef.current?.scrollToOffset({
+                offset: 0,
+                animated: region === selectedRegion,
+              });
+              setSelectedRegion(region);
+            }}
             style={styles.buildingTabWrapper}>
             <View
               style={{alignItems: 'center'}}
@@ -170,7 +179,13 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
                 {backgroundColor: textColor},
               ],
             ]}
-            onPress={() => setSortType(type)}>
+            onPress={() => {
+              listRef.current?.scrollToOffset({
+                offset: 0,
+                animated: type === sortType,
+              });
+              setSortType(type);
+            }}>
             <Text
               style={[
                 styles.sortButtonText,
@@ -190,6 +205,7 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
         </View>
       ) : (
         <FlatList
+          ref={listRef}
           style={{flex: 1}}
           contentContainerStyle={{
             paddingBottom: 20,

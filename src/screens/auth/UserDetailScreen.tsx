@@ -18,7 +18,7 @@ import {
 import Config from 'react-native-config';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useScrollToTop} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import axios from 'axios';
 
@@ -40,6 +40,8 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
   const isDarkMode = useColorScheme() === 'dark';
   const {t} = useTranslation();
   const backPressCount = useRef(0);
+  const scrollRef = useRef<ScrollView>(null);
+  useScrollToTop(scrollRef);
   const [isLoading, setIsLoading] = useState(false);
   const [userDataState, setUserData] = useState<any>(null);
   const [isPaxiUser, setIsPaxiUser] = useState<boolean>(false);
@@ -221,6 +223,7 @@ const UserDetailScreen = ({navigation}: UserDetailScreenProps) => {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <ScrollView
+        ref={scrollRef}
         style={styles.container}
         contentContainerStyle={{flexGrow: 1}}>
         <View

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -34,6 +34,9 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [sortType, setSortType] =
     useState<(typeof sortTypes)[number]>('sortAlphabetic');
+  // 칩을 누르면 목록을 맨 위로 올린다.
+  // 다시 누르면 부드럽게, 다른 칩이면 새 목록을 바로 맨 위부터 보여준다.
+  const listRef = useRef<FlatList>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [associations, setAssociations] = useState<AssociationItemType[]>([]);
 
@@ -126,7 +129,13 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({navigation}) => {
                 {backgroundColor: textColor},
               ],
             ]}
-            onPress={() => setSortType(type)}>
+            onPress={() => {
+              listRef.current?.scrollToOffset({
+                offset: 0,
+                animated: type === sortType,
+              });
+              setSortType(type);
+            }}>
             <Text
               style={[
                 styles.sortButtonText,
@@ -140,6 +149,7 @@ const AssociationScreen: React.FC<AssociationScreenProps> = ({navigation}) => {
       </View>
 
       <FlatList
+        ref={listRef}
         style={styles.container}
         contentContainerStyle={styles.listContent}
         data={getSortedAssociations(associations)}
