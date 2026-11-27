@@ -232,6 +232,8 @@ const ClubScreen: React.FC<ClubScreenProps> = ({navigation}) => {
                     }
                     style={styles.clubImage}
                     resizeMode="contain"
+                    // Android는 서버 이미지를 원본 크기로 디코딩하므로 표시 크기로 줄인다
+                    resizeMethod="resize"
                   />
                 </View>
                 <View style={styles.clubInfo}>

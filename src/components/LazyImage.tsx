@@ -25,6 +25,8 @@ const LazyImage: React.FC<LazyImageProps> = ({
       source={source}
       style={[styles.image, style]}
       resizeMode={resizeMode}
+      // Android는 서버 이미지를 원본 크기로 디코딩하므로 표시 크기로 줄인다
+      resizeMethod="resize"
       onError={e => {
         setFailed(true);
         onError?.(e);
