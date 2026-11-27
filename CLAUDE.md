@@ -113,7 +113,7 @@ Firebase credentials are required: `google-services.json` (Android), `GoogleServ
 
 `feat:`와 사용자 체감 `fix:`만 개별 항목으로, `refactor:`/`ci:`/`build(deps):`는 "앱 안정성 및 보안을 개선했습니다" 한 줄로 뭉친다. 항목당 한 줄(수동 줄바꿈 금지 — 두 스토어가 기기 폭에 맞춰 자동 줄바꿈한다), 원인이 아닌 증상, 합쇼체, 내부 용어 금지(`Paxi` 같은 노출 기능명은 허용), `•` 직접 입력(마크다운 미지원), 5개 미만이면 헤더 없이 나열. 총괄 불렛 단독 금지. Play Console 언어당 500자. iOS·Android 노트를 따로 쓰고, 한 플랫폼에만 해당하는 항목(전용 수정, 한쪽에서만 생기던 증상, 서버 반영 전이라 한쪽에서 아직 동작하지 않는 기능)은 다른 쪽에서 뺀다.
 
-상세 규칙은 `README.md`의 "릴리즈 노트 작성" 및 `.claude/commands/popo-release.md` Step 4에 있다.
+상세 규칙은 `.claude/commands/popo-release.md` Step 4에 있다.
 
 ### Android
 
