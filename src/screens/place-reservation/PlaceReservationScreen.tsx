@@ -199,11 +199,19 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
           data={sortedLocations}
           keyExtractor={item => item.id}
           renderItem={({item}) => (
-            <View
+            <TouchableOpacity
+              testID="place-item"
+              activeOpacity={0.7}
               style={[
                 styles.locationItem,
                 {backgroundColor: isDarkMode ? '#121212' : '#fff'},
-              ]}>
+              ]}
+              onPress={() =>
+                navigation.navigate('PlaceDetailReservation', {
+                  placeId: item.id,
+                  placeName: item.name,
+                })
+              }>
               <LazyImage
                 uri={item.image.uri}
                 style={styles.locationImage}
@@ -221,22 +229,17 @@ const PlaceReservationScreen = ({navigation}: PlaceReservationScreenProps) => {
                   {getLocalizedField(item, 'description', locale)}
                 </Text>
               </View>
-              <TouchableOpacity
+              {/* 카드 전체가 눌리고, 버튼은 눌린다는 표시로 남긴다 */}
+              <View
                 style={[
                   styles.reserveButton,
                   {backgroundColor: backgroundSecondary},
-                ]}
-                onPress={() =>
-                  navigation.navigate('PlaceDetailReservation', {
-                    placeId: item.id,
-                    placeName: item.name,
-                  })
-                }>
+                ]}>
                 <Text style={[styles.reserveButtonText, {color: textColor}]}>
                   {t('reservation.reserve')}
                 </Text>
-              </TouchableOpacity>
-            </View>
+              </View>
+            </TouchableOpacity>
           )}
         />
       )}
