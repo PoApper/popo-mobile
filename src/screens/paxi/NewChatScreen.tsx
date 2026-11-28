@@ -411,7 +411,9 @@ const NewChatScreen: React.FC<NewChatScreenProps> = ({navigation}) => {
             {t('common.back')}
           </Text>
         </TouchableOpacity>
-        <Text style={[common.headerTitle, {color: textColor(isDarkMode)}]}>
+        <Text
+          testID="chat-room-title"
+          style={[common.headerTitle, {color: textColor(isDarkMode)}]}>
           {roomInfo?.title}
         </Text>
         <TouchableOpacity
