@@ -27,8 +27,11 @@ appId: ${APP_ID}
       - tapOn:
           text: '(열기|Open)'
           optional: true
+# 문구는 대소문자를 가리지 않고 맞춰서 방 제목만으로는 홈의 다른 글자(예: 'test7님')에도 걸리므로 채팅방 제목 요소로 좁힌다.
 - extendedWaitUntil:
-    visible: '.*${output.push.roomTitle}.*'
+    visible:
+      id: chat-room-title
+      text: '${output.push.roomTitle}'
     timeout: 30000
 - waitForAnimationToEnd:
     timeout: 5000
