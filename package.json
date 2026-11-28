@@ -26,7 +26,6 @@
     "pc": "pre-commit run --all-files"
   },
   "dependencies": {
-    "@notifee/react-native": "^9.1.8",
     "@react-native-clipboard/clipboard": "^1.16.3",
     "@react-native-community/checkbox": "^0.5.20",
     "@react-native-community/datetimepicker": "^8.3.0",

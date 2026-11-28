@@ -65,7 +65,7 @@ POPO Mobile은 POSTECH 학생용 캠퍼스 서비스 React Native 앱이다. 장
 - TypeScript — 타입 안전성
 - Axios — HTTP 클라이언트
 - Socket.io — 실시간 채팅
-- Firebase/FCM + Notifee — 푸시 알림
+- Firebase/FCM — 푸시 알림
 - React Navigation — 네비게이션
 
 <!-- MANUAL: Any manually added notes below this line are preserved on regeneration -->

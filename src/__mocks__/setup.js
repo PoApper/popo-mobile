@@ -45,13 +45,6 @@ jest.mock('@react-native-firebase/messaging', () => {
 });
 
 // ──────────────────────────────────────────────
-// @notifee/react-native mock
-// ──────────────────────────────────────────────
-jest.mock('@notifee/react-native', () =>
-  require('@notifee/react-native/jest-mock'),
-);
-
-// ──────────────────────────────────────────────
 // react-native-encrypted-storage mock
 // ──────────────────────────────────────────────
 const storageCache = {};
