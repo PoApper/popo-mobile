@@ -18,7 +18,6 @@ POPO Mobile은 POSTECH 학생용 캠퍼스 서비스 React Native 앱이다. 장
 | `jest.config.js`        | Jest 테스트 설정 (경로 별칭, mock, transform 패턴)          |
 | `.prettierrc.js`        | Prettier 포맷터 (single quotes, trailing commas)            |
 | `.eslintrc.js`          | ESLint (@react-native 확장, hooks exhaustive-deps 경고)     |
-| `Gemfile`               | Ruby 의존성 (CocoaPods, iOS 빌드용)                         |
 | `CLAUDE.md`             | AI 어시스턴트 지침                                          |
 | `.env` / `.env.example` | 환경 변수 (API 엔드포인트)                                  |
 
