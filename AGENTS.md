@@ -28,7 +28,7 @@ POPO Mobile은 POSTECH 학생용 캠퍼스 서비스 React Native 앱이다. 장
 | `src/`       | 애플리케이션 소스 코드           |
 | `android/`   | Android 네이티브 빌드 설정       |
 | `ios/`       | iOS 네이티브 빌드 설정           |
-| `docs/`      | 문서 및 스크린샷                 |
+| `docs/`      | 딥링크 랜딩 페이지 참고 사본     |
 | `.github/`   | CI 워크플로우 및 이슈 템플릿     |
 | `__tests__/` | 루트 레벨 테스트                 |
 | `assets/`    | 앱 로고, 마스코트, 아이콘 이미지 |
