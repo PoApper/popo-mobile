@@ -46,18 +46,6 @@ export interface MessageData {
   isEdited: boolean;
 }
 
-export interface SettlementData {
-  payerUuid: string;
-  payerNickname: string;
-  payAmount: number;
-  currentParticipant: number;
-  payerBankName: string;
-  payerAccountNumber: string;
-  payerAccountHolderName: string;
-  updateAccount: boolean;
-  roomUuid: string;
-}
-
 export interface SettlementCreateData {
   payAmount: number;
   currentParticipant: number;

@@ -1,6 +1,6 @@
 import {Platform, Settings} from 'react-native';
 
-export const SUPPORTED_LOCALES = ['ko', 'en'] as const;
+const SUPPORTED_LOCALES = ['ko', 'en'] as const;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
 export const isLocale = (value: unknown): value is Locale =>

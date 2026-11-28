@@ -28,10 +28,7 @@ export const PLACE_NAMES = {
   THIRD_FLOOR_HALL: '3층 홀',
 } as const;
 
-export type PlaceNameKey = keyof typeof PLACE_NAMES;
-export type PlaceNameValue = (typeof PLACE_NAMES)[PlaceNameKey];
-
-export const GROUP_STUDY_ROOM_NAMES = [
+const GROUP_STUDY_ROOM_NAMES = [
   PLACE_NAMES.GROUP_STUDY_ROOM_A,
   PLACE_NAMES.GROUP_STUDY_ROOM_B,
   PLACE_NAMES.GROUP_STUDY_ROOM_C,

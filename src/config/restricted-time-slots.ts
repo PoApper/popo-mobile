@@ -3,7 +3,7 @@ import type {ParseKeys} from 'i18next';
 import {PLACE_NAMES} from '../constants/placeNames';
 import {ConcreteTimeSlot} from '../components/TimeSlotPickerModal';
 
-export type TimeSlot = {
+type TimeSlot = {
   start: number; // 분 단위(0~1439)
   end: number; // 분 단위(0~1439), 24:00은 0으로 표현 + endDayOffset=1
   endDayOffset?: number; // 자정 넘김시 다음날 처리(기본 0)
@@ -15,7 +15,7 @@ export type TimeSlotPolicy = {
   slots: TimeSlot[];
 };
 
-export const RESTRICTED_TIME_SLOT_POLICIES: TimeSlotPolicy[] = [
+const RESTRICTED_TIME_SLOT_POLICIES: TimeSlotPolicy[] = [
   {
     name: PLACE_NAMES.CINEMA_ROOM,
     noticeKey: 'reservation.place.cinemaNotice',
@@ -27,7 +27,7 @@ export const RESTRICTED_TIME_SLOT_POLICIES: TimeSlotPolicy[] = [
   },
 ];
 
-export function hasRestrictedTimeSlotPolicy(name: string): boolean {
+function hasRestrictedTimeSlotPolicy(name: string): boolean {
   return RESTRICTED_TIME_SLOT_POLICIES.some(p => p.name === name);
 }
 

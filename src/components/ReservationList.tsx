@@ -46,7 +46,7 @@ export interface BaseReservation {
   createdAt: Date;
 }
 
-export interface ModalColors {
+interface ModalColors {
   labelColor: string;
   valueColor: string;
 }
@@ -82,7 +82,7 @@ interface Place {
   imageUrl: string;
 }
 
-export interface PlaceReservation extends BaseReservation {
+interface PlaceReservation extends BaseReservation {
   placeId: string;
   place: Place;
 }

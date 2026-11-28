@@ -29,14 +29,14 @@ export type MainTabParamList = {
   };
 };
 
-export type PaxiStackParamList = {
+type PaxiStackParamList = {
   PaxiIntro: undefined;
   PaxiStart: undefined;
   PaxiRoomList: undefined;
   CreatePaxiRoomScreen: undefined;
 };
 
-export type PlaceReservationStackParamList = {
+type PlaceReservationStackParamList = {
   PlaceReservation: undefined;
   PlaceDetail: {
     placeId: string;
@@ -56,7 +56,7 @@ export type PlaceReservationStackParamList = {
   };
 };
 
-export type ClubStackParamList = {
+type ClubStackParamList = {
   Club: undefined;
   ClubDetail: {
     clubId: string;
@@ -64,7 +64,7 @@ export type ClubStackParamList = {
   };
 };
 
-export type AssociationStackParamList = {
+type AssociationStackParamList = {
   Association: undefined;
   AssociationDetail: {
     associationId: string;
@@ -72,7 +72,7 @@ export type AssociationStackParamList = {
   };
 };
 
-export type StudentAssociationStackParamList = {
+type StudentAssociationStackParamList = {
   StudentAssociation: undefined;
   StudentAssociationDetail: {
     studentAssociationName: string;
