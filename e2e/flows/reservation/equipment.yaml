@@ -1,0 +1,23 @@
+# 장비 예약 화면에서 장비 목록을 열고 끝까지 내린다. 예약 신청은 하지 않는다.
+appId: ${APP_ID}
+name: equipment-reservation
+---
+- runFlow: ../common/launch.yaml
+- runFlow: ../common/set-language.yaml
+- tapOn:
+    id: tab-home
+- tapOn:
+    id: home-service-equip-reservation
+- tapOn: "${LANGUAGE == 'en' ? 'View equipment' : '장비 보기'}"
+- extendedWaitUntil:
+    visible: "${LANGUAGE == 'en' ? 'Equipment list' : '장비 목록'}"
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: reservation-equipment-list-${LANGUAGE}
+- scroll
+- scroll
+- scroll
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: reservation-equipment-list-scrolled-${LANGUAGE}

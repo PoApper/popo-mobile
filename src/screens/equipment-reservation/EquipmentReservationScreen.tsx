@@ -162,7 +162,13 @@ const EquipmentReservationScreen = ({
     ({item}: {item: IEquipment}) => (
       <View style={styles.equipmentItem}>
         {item.imageUrl ? (
-          <Image source={{uri: item.imageUrl}} style={styles.equipmentImage} />
+          // Android는 서버 이미지를 원본(최대 4032px) 그대로 디코딩해 스크롤마다 GPU에 다시 올리느라 끊긴다.
+          // 표시 크기로 줄여 디코딩한다(iOS는 원래 표시 크기로 디코딩).
+          <Image
+            source={{uri: item.imageUrl}}
+            style={styles.equipmentImage}
+            resizeMethod="resize"
+          />
         ) : (
           <Image
             source={require('../../../assets/icon/POPO_typography_bg_removed_cropped.png')}
