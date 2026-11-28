@@ -61,34 +61,3 @@ function showCopyAlert(
     {text: i18next.t('common.confirm'), style: 'default'},
   ]);
 }
-
-/**
- * 단순히 URL을 여는 함수 (복사 기능 없음)
- * @param url 열고자 하는 URL
- * @param onError 에러 발생 시 콜백
- */
-export async function openURL(
-  url: string,
-  onError?: (error: Error) => void,
-): Promise<void> {
-  try {
-    const supported = await Linking.canOpenURL(url);
-    if (supported) {
-      await Linking.openURL(url);
-    } else {
-      const error = new Error('URL을 열 수 없습니다.');
-      if (onError) {
-        onError(error);
-      } else {
-        console.error('URL 열기 실패:', url);
-      }
-    }
-  } catch (error) {
-    const err = error instanceof Error ? error : new Error(String(error));
-    if (onError) {
-      onError(err);
-    } else {
-      console.error('URL 열기 오류:', error);
-    }
-  }
-}

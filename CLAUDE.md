@@ -82,7 +82,6 @@ Local `useState`/`useRef` per screen. No global state library (no Redux/Zustand)
 ### Push Notifications
 
 - `firebase.ts` — FCM token registration and message handling.
-- `notifee.ts` — Local notification display via `@notifee/react-native`.
 - Notifications integrate with deep linking to route to specific screens.
 - iOS APNs는 Firebase에 만료 없는 `.p8` 인증 키(개발·프로덕션 동일)로 등록되어 있어 배포 인증서 갱신과 무관하다.
 

@@ -20,13 +20,13 @@ export const getAuthToken = async () => {
   };
 };
 
-export const getAuthTokenFromCookie = async () => {
+const getAuthTokenFromCookie = async () => {
   const cookies = await CookieManager.get(POPO_API_URL);
   const authToken = cookies.Authentication?.value;
   return authToken;
 };
 
-export const getAuthTokenFromEncryptedStorage = async () => {
+const getAuthTokenFromEncryptedStorage = async () => {
   const encryptedAuthToken = await EncryptedStorage.getItem(AUTH_TOKEN_KEY);
   return encryptedAuthToken;
 };
@@ -43,13 +43,13 @@ export const getRefreshToken = async () => {
   };
 };
 
-export const getRefreshTokenFromCookie = async () => {
+const getRefreshTokenFromCookie = async () => {
   const cookies = await CookieManager.get(POPO_API_URL);
   const refreshToken = cookies.Refresh?.value;
   return refreshToken;
 };
 
-export const getRefreshTokenFromEncryptedStorage = async () => {
+const getRefreshTokenFromEncryptedStorage = async () => {
   const encryptedRefreshToken = await EncryptedStorage.getItem(
     REFRESH_TOKEN_KEY,
   );

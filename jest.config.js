@@ -27,7 +27,6 @@ module.exports = {
     'node_modules/(?!(' +
       '@react-native|react-native|' +
       '@react-navigation|' +
-      '@notifee/react-native|' +
       'react-native-reanimated|' +
       'react-native-screens|' +
       'react-native-safe-area-context|' +
