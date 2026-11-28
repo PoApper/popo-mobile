@@ -2178,17 +2178,6 @@
     "publisher": "M.Haris Baig"
   },
   {
-    "name": "@react-native-community/checkbox",
-    "version": "0.5.20",
-    "licenses": [
-      {
-        "id": "MIT",
-        "url": "https://spdx.org/licenses/MIT.html"
-      }
-    ],
-    "publisher": "Nicholas Lee"
-  },
-  {
     "name": "@react-native-community/cli",
     "version": "17.0.1",
     "licenses": [
@@ -2554,17 +2543,6 @@
   {
     "name": "@react-navigation/routers",
     "version": "7.6.6",
-    "licenses": [
-      {
-        "id": "MIT",
-        "url": "https://spdx.org/licenses/MIT.html"
-      }
-    ],
-    "publisher": null
-  },
-  {
-    "name": "@react-navigation/stack",
-    "version": "7.8.9",
     "licenses": [
       {
         "id": "MIT",
